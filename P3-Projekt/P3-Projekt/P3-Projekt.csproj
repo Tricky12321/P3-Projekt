@@ -46,6 +46,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Classes\BaseProduct.cs" />
+    <Compile Include="Classes\Product.cs" />
+    <Compile Include="Classes\Receipt.cs" />
+    <Compile Include="Classes\SaleTransaction.cs" />
+    <Compile Include="Classes\Statistics.cs" />
+    <Compile Include="Classes\OrderTransaction.cs" />
+    <Compile Include="Classes\StorageRoom.cs" />
+    <Compile Include="Classes\StorageTransaction.cs" />
+    <Compile Include="Classes\TempProduct.cs" />
+    <Compile Include="Classes\Transaction.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>
