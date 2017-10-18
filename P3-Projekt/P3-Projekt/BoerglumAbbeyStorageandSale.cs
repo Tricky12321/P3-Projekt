@@ -16,33 +16,19 @@ namespace P3_Projekt
         public BoerglumAbbeyStorageandSale()
         {
             InitializeComponent();
-            var pro1 = new Product();
-            pro1.Name = "TEST1";
-
-            var pro2 = new Product();
-            pro2.Name = "TEST2";
-
-            var pro3 = new Product();
-            pro3.Name = "TEST3";
-
-            var receipt = new Receipt();
-            receipt.AddTransaction(new SaleTransaction(pro1, 1, receipt.ID));
-            receipt.AddTransaction(new SaleTransaction(pro2, 2, receipt.ID));
-            receipt.AddTransaction(new SaleTransaction(pro3, 3, receipt.ID));
-
-            UpdateReceipt(receipt);
+            
         }
 
-        public void UpdateReceipt(Receipt receipt)
+        public void UpdateListReceipt(Receipt receipt)
         {
-            dataGridView_Receipt
             foreach (Transaction transaction in receipt.Transactions)
             {
                 dataGridView_Receipt.Rows.Add(Text = $"{transaction.Amount}  {(transaction.Product as Product).Name}");
             }
         }
 
-        private void listView1_SelectedIndexChanged(object sender, EventArgs e)
+
+        private void but_addProduct_Click(object sender, EventArgs e)
         {
 
         }

@@ -28,24 +28,20 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.ListViewItem listViewItem1 = new System.Windows.Forms.ListViewItem("");
-            System.Windows.Forms.ListViewItem listViewItem2 = new System.Windows.Forms.ListViewItem(new string[] {
-            ""}, -1, System.Drawing.Color.Empty, System.Drawing.SystemColors.Highlight, null);
-            System.Windows.Forms.ListViewItem listViewItem3 = new System.Windows.Forms.ListViewItem(new string[] {
-            ""}, -1, System.Drawing.Color.Empty, System.Drawing.Color.Maroon, null);
-            System.Windows.Forms.ListViewItem listViewItem4 = new System.Windows.Forms.ListViewItem(new string[] {
-            ""}, -1, System.Drawing.Color.Empty, System.Drawing.SystemColors.HighlightText, null);
             this.tabControl = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.numUpDown_AmountProducts = new System.Windows.Forms.NumericUpDown();
+            this.textBox_FastAddProduct = new System.Windows.Forms.TextBox();
             this.dataGridView_Receipt = new System.Windows.Forms.DataGridView();
             this.column_Product = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column_Image = new System.Windows.Forms.DataGridViewImageColumn();
-            this.button1 = new System.Windows.Forms.Button();
+            this.but_addProduct = new System.Windows.Forms.Button();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.listView1 = new System.Windows.Forms.ListView();
             this.tabControl.SuspendLayout();
             this.tabPage1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numUpDown_AmountProducts)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView_Receipt)).BeginInit();
             this.tabPage2.SuspendLayout();
             this.SuspendLayout();
@@ -70,8 +66,10 @@
             // 
             // tabPage1
             // 
+            this.tabPage1.Controls.Add(this.numUpDown_AmountProducts);
+            this.tabPage1.Controls.Add(this.textBox_FastAddProduct);
             this.tabPage1.Controls.Add(this.dataGridView_Receipt);
-            this.tabPage1.Controls.Add(this.button1);
+            this.tabPage1.Controls.Add(this.but_addProduct);
             this.tabPage1.Location = new System.Drawing.Point(4, 54);
             this.tabPage1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.tabPage1.Name = "tabPage1";
@@ -80,6 +78,20 @@
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Salg";
             this.tabPage1.UseVisualStyleBackColor = true;
+            // 
+            // numUpDown_AmountProducts
+            // 
+            this.numUpDown_AmountProducts.Location = new System.Drawing.Point(403, 12);
+            this.numUpDown_AmountProducts.Name = "numUpDown_AmountProducts";
+            this.numUpDown_AmountProducts.Size = new System.Drawing.Size(120, 41);
+            this.numUpDown_AmountProducts.TabIndex = 5;
+            // 
+            // textBox_FastAddProduct
+            // 
+            this.textBox_FastAddProduct.Location = new System.Drawing.Point(538, 12);
+            this.textBox_FastAddProduct.Name = "textBox_FastAddProduct";
+            this.textBox_FastAddProduct.Size = new System.Drawing.Size(275, 41);
+            this.textBox_FastAddProduct.TabIndex = 4;
             // 
             // dataGridView_Receipt
             // 
@@ -115,16 +127,16 @@
             this.Column_Image.ReadOnly = true;
             this.Column_Image.Width = 30;
             // 
-            // button1
+            // but_addProduct
             // 
-            this.button1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button1.Location = new System.Drawing.Point(783, 294);
-            this.button1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(105, 46);
-            this.button1.TabIndex = 0;
-            this.button1.Text = "button1";
-            this.button1.UseVisualStyleBackColor = true;
+            this.but_addProduct.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.but_addProduct.Location = new System.Drawing.Point(819, 6);
+            this.but_addProduct.Name = "but_addProduct";
+            this.but_addProduct.Size = new System.Drawing.Size(118, 58);
+            this.but_addProduct.TabIndex = 0;
+            this.but_addProduct.Text = "Tilføj";
+            this.but_addProduct.UseVisualStyleBackColor = true;
+            this.but_addProduct.Click += new System.EventHandler(this.but_addProduct_Click);
             // 
             // tabPage2
             // 
@@ -174,6 +186,8 @@
             this.Text = "Børglum Kloster Lager og Salg";
             this.tabControl.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
+            this.tabPage1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numUpDown_AmountProducts)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView_Receipt)).EndInit();
             this.tabPage2.ResumeLayout(false);
             this.ResumeLayout(false);
@@ -186,11 +200,12 @@
         private System.Windows.Forms.TabPage tabPage1;
         private System.Windows.Forms.TabPage tabPage2;
         private System.Windows.Forms.TabPage tabPage3;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button but_addProduct;
         private System.Windows.Forms.DataGridView dataGridView_Receipt;
         private System.Windows.Forms.DataGridViewTextBoxColumn column_Product;
         private System.Windows.Forms.DataGridViewImageColumn Column_Image;
-        private System.Windows.Forms.ListView listView1;
+        private System.Windows.Forms.TextBox textBox_FastAddProduct;
+        private System.Windows.Forms.NumericUpDown numUpDown_AmountProducts;
     }
 }
 
