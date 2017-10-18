@@ -14,13 +14,7 @@ namespace P3_Projekt.Classes.Utilities.Tests
         [Test()]
         public void AddSaleTransactionTest()
         {
-            Product product = new Product();
-            POSController pos = new POSController();
-            pos.StartPurchase();
-            pos.AddSaleTransaction(product, 1);
-
-
-            Assert.IsTrue(pos.PlacerholderReceipt.Transactions.First().Product == product);
+            Assert.Fail();
         }
 
         [Test()]
