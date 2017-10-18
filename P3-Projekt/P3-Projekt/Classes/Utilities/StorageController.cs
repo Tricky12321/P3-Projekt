@@ -33,10 +33,21 @@ namespace P3_Projekt.Classes.Utilities
             GroupDictionary.Remove(GroupID);
         }
 
-        public void CreateProduct(string name, string brand, decimal purchasePrice, string group, bool discount, decimal discountPrice, Image image)
+        public void CreateProduct(string name, string brand, decimal purchasePrice, string group, bool discount, decimal discountPrice, Image image, params KeyValuePair<StorageRoom, int>[] storageRoomStockInput)
         {
-            Product product = new Product(name, brand, purchasePrice, group, discount, discountPrice, image);
-            ProductDictionary.Add(product.ID, product);
+            Product newProduct = new Product(name, brand, purchasePrice, group, discount, discountPrice, image);
+            
+            foreach(StorageRoom roomDictionary in StorageRoomDictionary.Values)
+            {
+                newProduct.StorageWithAmount.Add(roomDictionary, 0);
+            }
+            
+            foreach(KeyValuePair<StorageRoom, int> roomInput in storageRoomStockInput)
+            {
+                newProduct.StorageWithAmount[roomInput.Key] = roomInput.Value;
+            }
+
+            ProductDictionary.Add(newProduct.ID, newProduct);
         }
 
         public void CreateStorageRoom(string name, string description)
