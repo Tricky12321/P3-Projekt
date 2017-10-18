@@ -14,6 +14,7 @@ namespace P3_Projekt.Classes.Utilities
 
         public Dictionary<int, Product> ProductDictionary = new Dictionary<int, Product>();
         public Dictionary<int, Group> GroupDictionary = new Dictionary<int, Group>();
+        public Dictionary<int, StorageRoom> StorageRoomDictionary = new Dictionary<int, StorageRoom>();
 
         public StorageController(BoerglumAbbeyStorageandSale boerglumAbbeyStorageandSale)
         {
@@ -29,6 +30,17 @@ namespace P3_Projekt.Classes.Utilities
         public void DeleteGroup(int GroupID)
         {
             GroupDictionary.Remove(GroupID);
+        }
+
+        public void CreateStorageRoom(string name, string description)
+        {
+            StorageRoom newRoom = new StorageRoom(name, description);
+            StorageRoomDictionary.Add(newRoom.ID, newRoom);
+
+            foreach (Product product in ProductDictionary.Values)
+            {
+                product.StorageWithAmount.Add(newRoom, 0);
+            }
         }
     }
 }
