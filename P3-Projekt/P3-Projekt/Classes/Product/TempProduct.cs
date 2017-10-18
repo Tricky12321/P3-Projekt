@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace P3_Projekt.Classes
 {
-    class TempProduct : BaseProduct
+    public class TempProduct : BaseProduct
     {
         private string _description;
         private bool _resolved;

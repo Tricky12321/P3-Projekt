@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace P3_Projekt.Classes.Utilities
 {
-    class POSController
+    public class POSController
     {
         private Receipt _placerholderReceipt;
 
@@ -24,7 +24,6 @@ namespace P3_Projekt.Classes.Utilities
 
         public void AddProduct(Product product, int amount)
         {
-
             _placerholderReceipt.AddTransaction(new SaleTransaction(product, amount, _placerholderReceipt.ID));
         }
 

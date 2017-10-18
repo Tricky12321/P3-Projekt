@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace P3_Projekt.Classes
 {
-    class Product : BaseProduct
+    public class Product : BaseProduct
     {
         private string _name;
         private string _brand;

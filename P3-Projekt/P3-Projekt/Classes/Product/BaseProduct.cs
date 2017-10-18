@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace P3_Projekt.Classes
 {
-    abstract class BaseProduct
+    public abstract class BaseProduct
     {
         public int ID;
         private decimal _salePrice;
