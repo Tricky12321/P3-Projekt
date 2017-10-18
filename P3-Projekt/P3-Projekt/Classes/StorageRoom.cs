@@ -11,13 +11,13 @@ namespace P3_Projekt.Classes
         private static int IDCounter = 0;
 
         public int ID;
-        private string _name;
-        private string _description;
+        public string Name;
+        public string Description;
 
         public StorageRoom(string name, string description)
         {
-            _name = name;
-            _description = description;
+            Name = name;
+            Description = description;
             ID = IDCounter++;
         }
     }
