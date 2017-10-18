@@ -74,15 +74,17 @@
             // 
             this.dataGridView_Receipt.AllowUserToAddRows = false;
             this.dataGridView_Receipt.AllowUserToDeleteRows = false;
+            this.dataGridView_Receipt.BackgroundColor = System.Drawing.SystemColors.ActiveBorder;
+            this.dataGridView_Receipt.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
             this.dataGridView_Receipt.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridView_Receipt.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.column_Product,
             this.Column_Image});
-            this.dataGridView_Receipt.Location = new System.Drawing.Point(830, 6);
+            this.dataGridView_Receipt.Location = new System.Drawing.Point(1087, 6);
             this.dataGridView_Receipt.Name = "dataGridView_Receipt";
             this.dataGridView_Receipt.ReadOnly = true;
             this.dataGridView_Receipt.RowTemplate.Height = 28;
-            this.dataGridView_Receipt.Size = new System.Drawing.Size(453, 318);
+            this.dataGridView_Receipt.Size = new System.Drawing.Size(689, 859);
             this.dataGridView_Receipt.TabIndex = 3;
             // 
             // column_Product
@@ -104,7 +106,7 @@
             // button1
             // 
             this.button1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button1.Location = new System.Drawing.Point(881, 368);
+            this.button1.Location = new System.Drawing.Point(881, 386);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(118, 58);
             this.button1.TabIndex = 0;
@@ -131,14 +133,14 @@
             this.tabPage3.Text = "Statistics";
             this.tabPage3.UseVisualStyleBackColor = true;
             // 
-            // boerglumAbbeyStorageandSale
+            // BoerglumAbbeyStorageandSale
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1898, 1024);
             this.Controls.Add(this.tabControl);
             this.Margin = new System.Windows.Forms.Padding(2);
-            this.Name = "boerglumAbbeyStorageandSale";
+            this.Name = "BoerglumAbbeyStorageandSale";
             this.Text = "Børglum Kloster Lager og Salg";
             this.tabControl.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);

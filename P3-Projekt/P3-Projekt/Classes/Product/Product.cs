@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using P3_Projekt.Classes.Utilities;
+using System.Drawing;
 
 namespace P3_Projekt.Classes
 {
@@ -15,9 +16,8 @@ namespace P3_Projekt.Classes
         private string _group;
         private bool _discount;
         private decimal _discountPrice;
-        private int _inStock;
-        private StorageRoom _storageRoom;
-
+        private Image _image;
+        private Dictionary<StorageRoom, int> _storageWithAmount = new Dictionary<StorageRoom, int>();
 
         public Product()
         {
