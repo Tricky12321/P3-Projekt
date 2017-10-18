@@ -11,11 +11,6 @@ namespace P3_Projekt.Classes
         private string _description;
         private bool _resolved;
 
-        public override void Delete()
-        {
-            throw new NotImplementedException();
-        }
-
         public override void Deposit()
         {
             throw new NotImplementedException();

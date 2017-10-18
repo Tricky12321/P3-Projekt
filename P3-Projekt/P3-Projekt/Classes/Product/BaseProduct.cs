@@ -15,8 +15,7 @@ namespace P3_Projekt.Classes
         {
 
         }
-
-        public abstract void Delete();
+        
         public abstract void Edit();
         public abstract void Withdraw();
         public abstract void Deposit();
