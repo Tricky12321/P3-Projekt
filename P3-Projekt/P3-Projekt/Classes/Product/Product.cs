@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using P3_Projekt.Classes.Utilities;
 
 namespace P3_Projekt.Classes
 {
@@ -23,12 +24,8 @@ namespace P3_Projekt.Classes
 
         }
 
+        /* No delete method */ 
 
-
-        public override void Delete()
-        {
-            throw new NotImplementedException();
-        }
 
         public override void Edit()
         {
