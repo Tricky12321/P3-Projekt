@@ -46,7 +46,5 @@ namespace P3_Projekt.Classes.Utilities
             }
             ReceiptList.Add(PlacerholderReceipt);
         }
-
-
     }
 }
