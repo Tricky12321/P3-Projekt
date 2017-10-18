@@ -11,7 +11,7 @@ namespace P3_Projekt.Classes
         public int ReceiptID;
         private bool _isTemp;
 
-        public SaleTransaction(Product product, int amount, int receiptID) : base(product, amount)
+        public SaleTransaction(BaseProduct product, int amount, int receiptID) : base(product, amount)
         {
             ReceiptID = receiptID;
         }
@@ -28,7 +28,23 @@ namespace P3_Projekt.Classes
 
         public override void Execute()
         {
-            throw new NotImplementedException();
+
+
+            if (Product is Product)
+            {
+                /* Finder første storage room, som altid er butikken. Butikken har ID 0.
+                 * Derefter bruger den StorageRoom delen som index,
+                 * så man kan ændre Amount */
+                var StoreStorage = (Product as Product).StorageWithAmount.Where( x => x.Key.ID == 0).First();
+
+                (Product as Product).StorageWithAmount[StoreStorage.Key] -= Amount;
+            }
+            else
+            {
+                /*Gør ingenting, fordi temp produkt ikke ved hvilket lager den er på.
+                 * Det eneste der sker ved temp produkt er resolve eller merge */
+            }
+                
         }
     }
 }

@@ -15,7 +15,7 @@ namespace P3_Projekt.Classes
         public int Amount;
         private DateTime _date;
 
-        public Transaction(Product product, int amount)
+        public Transaction(BaseProduct product, int amount)
         {
             Product = product;
             Amount = amount;

@@ -8,7 +8,7 @@ namespace P3_Projekt.Classes
 {
     public class StorageRoom
     {
-        private int _id;
+        public int ID;
         private string _name;
         private string _description;
     }
