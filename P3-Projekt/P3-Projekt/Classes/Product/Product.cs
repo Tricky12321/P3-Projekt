@@ -4,24 +4,33 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using P3_Projekt.Classes.Utilities;
+using System.Drawing;
 
 namespace P3_Projekt.Classes
 {
     public class Product : BaseProduct
     {
+        protected static int _idCounter = 0;
         public string Name;
         private string _brand;
         private decimal _purchasePrice;
         private string _group;
         private bool _discount;
         private decimal _discountPrice;
-        private int _inStock;
-        private StorageRoom _storageRoom;
+        private Image _image;
+        public Dictionary<StorageRoom, int> StorageWithAmount = new Dictionary<StorageRoom, int>();
 
-
-        public Product()
+        public Product(string name, string brand, decimal purchasePrice, string group, bool discount, decimal discountPrice, Image image)
         {
-
+            ID = _idCounter++;
+            Name = name;
+            _brand = brand;
+            _purchasePrice = purchasePrice;
+            _group = group;
+            _discount = discount;
+            _discountPrice = discountPrice;
+            _image = image;
+            
         }
 
         /* No delete method */ 

@@ -8,8 +8,17 @@ namespace P3_Projekt.Classes
 {
     public class StorageRoom
     {
-        private int _id;
-        private string _name;
-        private string _description;
+        private static int IDCounter = 0;
+
+        public int ID;
+        public string Name;
+        public string Description;
+
+        public StorageRoom(string name, string description)
+        {
+            Name = name;
+            Description = description;
+            ID = IDCounter++;
+        }
     }
 }

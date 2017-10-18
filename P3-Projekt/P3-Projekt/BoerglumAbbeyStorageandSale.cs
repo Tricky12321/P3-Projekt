@@ -35,10 +35,16 @@ namespace P3_Projekt
 
         public void UpdateReceipt(Receipt receipt)
         {
+            dataGridView_Receipt
             foreach (Transaction transaction in receipt.Transactions)
             {
-                dataGridView_Receipt.Rows.Add(Text = $"{transaction.Amount}  {(transaction.Product as Product).Name} {receipt.ID}");
+                dataGridView_Receipt.Rows.Add(Text = $"{transaction.Amount}  {(transaction.Product as Product).Name}");
             }
+        }
+
+        private void listView1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }
