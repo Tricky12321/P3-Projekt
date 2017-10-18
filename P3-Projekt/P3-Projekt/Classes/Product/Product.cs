@@ -18,7 +18,7 @@ namespace P3_Projekt.Classes
         private bool _discount;
         private decimal _discountPrice;
         private Image _image;
-        private Dictionary<StorageRoom, int> _storageWithAmount = new Dictionary<StorageRoom, int>();
+        public Dictionary<StorageRoom, int> StorageWithAmount = new Dictionary<StorageRoom, int>();
 
         public Product(string name, string brand, decimal purchasePrice, string group, bool discount, decimal discountPrice, Image image)
         {
