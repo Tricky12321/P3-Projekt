@@ -25,6 +25,5 @@ namespace P3_Projekt
                 dataGridView_Receipt.Rows.Add(Text = (transaction.Product as Product).Name);
             }
         }
-
     }
 }
