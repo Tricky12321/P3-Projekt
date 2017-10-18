@@ -20,5 +20,15 @@ namespace P3_Projekt.Classes.Utilities
             _boerglumKlosterLagerogSalg = boerglumKlosterLagerogSalg;
 
         }
+
+        public void DeleteProduct(int ProductID)
+        {
+            ProductDictionary.Remove(ProductID);
+        }
+
+        public void DeleteGroup(int GroupID)
+        {
+            GroupDictionary.Remove(GroupID);
+        }
     }
 }

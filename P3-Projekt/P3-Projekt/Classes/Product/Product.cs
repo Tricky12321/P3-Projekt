@@ -23,12 +23,8 @@ namespace P3_Projekt.Classes
 
         }
 
+        /* Ingen delete method */ 
 
-
-        public override void Delete()
-        {
-            throw new NotImplementedException();
-        }
 
         public override void Edit()
         {
