@@ -24,7 +24,7 @@ namespace P3_Projekt.Classes
 
         }
 
-        /* Ingen delete method */ 
+        /* No delete method */ 
 
 
         public override void Edit()
