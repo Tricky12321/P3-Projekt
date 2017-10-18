@@ -10,6 +10,7 @@ namespace P3_Projekt.Classes
 {
     public class Product : BaseProduct
     {
+        protected static int _idCounter = 0;
         public string Name;
         private string _brand;
         private decimal _purchasePrice;
@@ -19,9 +20,17 @@ namespace P3_Projekt.Classes
         private Image _image;
         private Dictionary<StorageRoom, int> _storageWithAmount = new Dictionary<StorageRoom, int>();
 
-        public Product()
+        public Product(string name, string brand, decimal purchasePrice, string group, bool discount, decimal discountPrice, Image image)
         {
-
+            ID = _idCounter++;
+            Name = name;
+            _brand = brand;
+            _purchasePrice = purchasePrice;
+            _group = group;
+            _discount = discount;
+            _discountPrice = discountPrice;
+            _image = image;
+            
         }
 
         /* No delete method */ 

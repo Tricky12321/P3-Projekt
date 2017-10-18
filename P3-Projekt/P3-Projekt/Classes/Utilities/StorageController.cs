@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Drawing;
 
 namespace P3_Projekt.Classes.Utilities
 {
@@ -29,6 +30,12 @@ namespace P3_Projekt.Classes.Utilities
         public void DeleteGroup(int GroupID)
         {
             GroupDictionary.Remove(GroupID);
+        }
+
+        public void CreateProduct(string name, string brand, decimal purchasePrice, string group, bool discount, decimal discountPrice, Image image)
+        {
+            Product product = new Product(name, brand, purchasePrice, group, discount, discountPrice, image);
+            ProductDictionary.Add(product.ID, product);
         }
     }
 }
