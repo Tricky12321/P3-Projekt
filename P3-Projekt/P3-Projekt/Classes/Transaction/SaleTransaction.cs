@@ -11,9 +11,9 @@ namespace P3_Projekt.Classes
         private int _receiptID;
         private bool _isTemp;
 
-        public override void Create()
+        public SaleTransaction(Product product, int amount, int receiptID) : base(product, amount)
         {
-            throw new NotImplementedException();
+            _receiptID = receiptID;
         }
 
         public override void Delete()

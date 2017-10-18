@@ -11,11 +11,6 @@ namespace P3_Projekt.Classes
         private string _description;
         private bool _resolved;
 
-        public override void Create()
-        {
-            throw new NotImplementedException();
-        }
-
         public override void Delete()
         {
             throw new NotImplementedException();
@@ -36,7 +31,7 @@ namespace P3_Projekt.Classes
             throw new NotImplementedException();
         }
 
-        public override void Sold()
+        public override void Withdraw()
         {
             throw new NotImplementedException();
         }

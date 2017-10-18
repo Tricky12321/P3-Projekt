@@ -11,9 +11,9 @@ namespace P3_Projekt.Classes
         private StorageRoom _source;
         private StorageRoom _destination;
 
-        public override void Create()
+        public StorageTransaction(Product product, int amount) : base(product, amount)
         {
-            throw new NotImplementedException();
+
         }
 
         public override void Delete()

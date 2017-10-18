@@ -11,11 +11,6 @@ namespace P3_Projekt.Classes
         private int _purchasePrice;
         private string _supplier;
 
-        public override void Create()
-        {
-            throw new NotImplementedException();
-        }
-
         public override void Delete()
         {
             throw new NotImplementedException();

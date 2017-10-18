@@ -46,6 +46,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Classes\Group.cs" />
     <Compile Include="Classes\Product\BaseProduct.cs" />
     <Compile Include="Classes\Product\Product.cs" />
     <Compile Include="Classes\Receipt.cs" />
@@ -56,8 +57,8 @@
     <Compile Include="Classes\Transaction\StorageTransaction.cs" />
     <Compile Include="Classes\Product\TempProduct.cs" />
     <Compile Include="Classes\Transaction\Transaction.cs" />
-    <Compile Include="Classes\Utilities\ControllerPOS.cs" />
-    <Compile Include="Classes\Utilities\ControllerStorage.cs" />
+    <Compile Include="Classes\Utilities\POSController.cs" />
+    <Compile Include="Classes\Utilities\StorageController.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>

@@ -6,9 +6,12 @@ using System.Threading.Tasks;
 
 namespace P3_Projekt.Classes.Utilities
 {
-    class ControllerStorage
+    class StorageController
     {
+        private int _idGroupCounter = 0;
+
         Dictionary<int, Product> ProductDictionary = new Dictionary<int, Product>();
-        
+        Dictionary<int, Group> GroupDictionary = new Dictionary<int, Group>();
+
     }
 }

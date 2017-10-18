@@ -10,17 +10,20 @@ namespace P3_Projekt.Classes
     {
         private string _name;
         private string _brand;
-        private int _purchasePrice;
+        private decimal _purchasePrice;
         private string _group;
         private bool _discount;
-        private int _discountPrice;
+        private decimal _discountPrice;
         private int _inStock;
         private StorageRoom _storageRoom;
 
-        public override void Create()
+
+        public Product()
         {
-            throw new NotImplementedException();
+
         }
+
+
 
         public override void Delete()
         {
@@ -37,7 +40,7 @@ namespace P3_Projekt.Classes
             throw new NotImplementedException();
         }
 
-        public override void Sold()
+        public override void Withdraw()
         {
             throw new NotImplementedException();
         }

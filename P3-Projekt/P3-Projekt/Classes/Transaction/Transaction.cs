@@ -8,12 +8,22 @@ namespace P3_Projekt.Classes
 {
     abstract class Transaction
     {
+        protected static int _idCounter = 0;
+
         private int _id;
-        private Product _product;
+        public BaseProduct Product;
         private int _amount;
         private DateTime _date;
 
-        public abstract void Create();
+        public Transaction(Product product, int amount)
+        {
+            Product = product;
+            _amount = amount;
+            _id = _idCounter++;
+            _date = DateTime.Now;
+        }
+        
+
         public abstract void Delete();
         public abstract void Edit();
         public abstract void Execute();
