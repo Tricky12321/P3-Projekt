@@ -12,8 +12,8 @@ namespace P3_Projekt.Classes.Utilities
 
         private int _idGroupCounter = 0;
 
-        Dictionary<int, Product> ProductDictionary = new Dictionary<int, Product>();
-        Dictionary<int, Group> GroupDictionary = new Dictionary<int, Group>();
+        public Dictionary<int, Product> ProductDictionary = new Dictionary<int, Product>();
+        public Dictionary<int, Group> GroupDictionary = new Dictionary<int, Group>();
 
         public StorageController(BoerglumKlosterLagerogSalg boerglumKlosterLagerogSalg)
         {
