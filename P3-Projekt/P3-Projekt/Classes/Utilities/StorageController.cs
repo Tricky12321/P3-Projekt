@@ -60,5 +60,20 @@ namespace P3_Projekt.Classes.Utilities
                 product.StorageWithAmount.Add(newRoom, 0);
             }
         }
+
+        public void EditStorageRoom(int ID, string name, string description)
+        {
+            StorageRoomDictionary[ID].Name = name;
+            StorageRoomDictionary[ID].Description = description;
+        }
+
+        public void DeleteStorageRoom(int ID)
+        {
+            foreach(Product product in ProductDictionary.Values)
+            {
+                product.StorageWithAmount.Remove(StorageRoomDictionary[ID]);
+            }
+            StorageRoomDictionary.Remove(ID);
+        }
     }
 }
