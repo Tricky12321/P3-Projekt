@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace P3_Projekt.Classes
 {
-    class SaleTransaction : Transaction
+    public class SaleTransaction : Transaction
     {
         private int _receiptID;
         private bool _isTemp;

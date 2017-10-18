@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using P3_Projekt.Classes.Utilities;
 
 namespace P3_Projekt
 {
@@ -14,9 +15,14 @@ namespace P3_Projekt
         [STAThread]
         static void Main()
         {
+  
+
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Form1());
+            var BoerglumKlosterLagerogSalg = new BoerglumKlosterLagerogSalg();
+            var POSController = new POSController(BoerglumKlosterLagerogSalg);
+            var StorageController = new StorageController(BoerglumKlosterLagerogSalg);
+            Application.Run(BoerglumKlosterLagerogSalg);
         }
     }
 }

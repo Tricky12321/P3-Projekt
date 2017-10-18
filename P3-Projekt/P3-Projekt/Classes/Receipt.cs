@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace P3_Projekt.Classes
 {
-    class Receipt
+    public class Receipt
     {
         private static int _idCounter = 0;
 
@@ -26,6 +26,14 @@ namespace P3_Projekt.Classes
         public void AddTransaction(Transaction transaction)
         {
             Transactions.Add(transaction);
+        }
+
+        public void Execute()
+        {
+            foreach (Transaction transaction in Transactions)
+            {
+                transaction.Execute();
+            }
         }
     }
 }

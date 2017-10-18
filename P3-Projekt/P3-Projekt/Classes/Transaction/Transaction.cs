@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace P3_Projekt.Classes
 {
-    abstract class Transaction
+    public abstract class Transaction
     {
         protected static int _idCounter = 0;
 

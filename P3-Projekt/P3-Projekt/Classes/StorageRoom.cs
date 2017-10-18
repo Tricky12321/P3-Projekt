@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace P3_Projekt.Classes
 {
-    class StorageRoom
+    public class StorageRoom
     {
         private int _id;
         private string _name;

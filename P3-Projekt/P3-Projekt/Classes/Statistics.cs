@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace P3_Projekt.Classes
 {
-    class Statistics
+    public class Statistics
     {
         private int _id;
         private DateTime _fromDate;

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace P3_Projekt.Classes
 {
-    class Group
+    public class Group
     {
         private static int _idCounter = 0;
 

@@ -8,7 +8,7 @@ namespace P3_Projekt.Classes
 {
     public class Product : BaseProduct
     {
-        private string _name;
+        public string Name;
         private string _brand;
         private decimal _purchasePrice;
         private string _group;

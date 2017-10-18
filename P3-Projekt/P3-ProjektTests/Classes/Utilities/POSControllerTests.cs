@@ -12,9 +12,27 @@ namespace P3_Projekt.Classes.Utilities.Tests
     public class POSControllerTests
     {
         [Test()]
-        public void AddProductTest()
+        public void AddSaleTransactionTest()
         {
-            Assert.IsTrue(true);
+            Product product = new Product();
+            POSController pos = new POSController();
+            pos.StartPurchase();
+            pos.AddSaleTransaction(product, 1);
+
+
+            Assert.IsTrue(pos.PlacerholderReceipt.Transactions.First().Product == product);
+        }
+
+        [Test()]
+        public void StartPurchaseTest()
+        {
+            Assert.Fail();
+        }
+
+        [Test()]
+        public void RemoveProductTest()
+        {
+            Assert.Fail();
         }
     }
 }

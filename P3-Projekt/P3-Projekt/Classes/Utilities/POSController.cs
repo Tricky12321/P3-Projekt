@@ -3,34 +3,50 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Diagnostics;
 
 namespace P3_Projekt.Classes.Utilities
 {
     public class POSController
     {
-        private Receipt _placerholderReceipt;
+        private BoerglumKlosterLagerogSalg _boerglumKlosterLagerogSalg;
+        public Receipt PlacerholderReceipt;
 
         private List<Receipt> ReceiptList = new List<Receipt>();
 
-        public POSController()
+        public POSController(BoerglumKlosterLagerogSalg boerglumKlosterLagerogSalg)
         {
-            
+            _boerglumKlosterLagerogSalg = boerglumKlosterLagerogSalg;
         }
 
         public void StartPurchase()
         {
-            _placerholderReceipt = new Receipt();
+            PlacerholderReceipt = new Receipt();
         }
 
-        public void AddProduct(Product product, int amount)
+        public void AddSaleTransaction(Product product, int amount)
         {
-            _placerholderReceipt.AddTransaction(new SaleTransaction(product, amount, _placerholderReceipt.ID));
+            PlacerholderReceipt.AddTransaction(new SaleTransaction(product, amount, PlacerholderReceipt.ID));
         }
 
         public void RemoveProduct(int productID)
         {
-            _placerholderReceipt.Transactions.RemoveAll(x => x.Product.ID == productID);
+            PlacerholderReceipt.Transactions.RemoveAll(x => x.Product.ID == productID);
         }
+
+        public void ExecuteReceipt()
+        {
+            try
+            {
+                PlacerholderReceipt.Execute();
+            }
+            catch(NullReferenceException e)
+            {
+                Debug.Print(e.Message);
+            }
+            ReceiptList.Add(PlacerholderReceipt);
+        }
+
 
     }
 }
