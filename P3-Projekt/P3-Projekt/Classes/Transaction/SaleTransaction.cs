@@ -8,12 +8,12 @@ namespace P3_Projekt.Classes
 {
     public class SaleTransaction : Transaction
     {
-        private int _receiptID;
+        public int ReceiptID;
         private bool _isTemp;
 
         public SaleTransaction(Product product, int amount, int receiptID) : base(product, amount)
         {
-            _receiptID = receiptID;
+            ReceiptID = receiptID;
         }
 
         public override void Delete()

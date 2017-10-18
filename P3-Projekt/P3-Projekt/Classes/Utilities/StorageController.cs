@@ -8,16 +8,16 @@ namespace P3_Projekt.Classes.Utilities
 {
     public class StorageController
     {
-        BoerglumKlosterLagerogSalg _boerglumKlosterLagerogSalg;
+        BoerglumAbbeyStorageandSale _boerglumAbbeyStorageandSale;
 
         private int _idGroupCounter = 0;
 
         Dictionary<int, Product> ProductDictionary = new Dictionary<int, Product>();
         Dictionary<int, Group> GroupDictionary = new Dictionary<int, Group>();
 
-        public StorageController(BoerglumKlosterLagerogSalg boerglumKlosterLagerogSalg)
+        public StorageController(BoerglumAbbeyStorageandSale boerglumAbbeyStorageandSale)
         {
-            _boerglumKlosterLagerogSalg = boerglumKlosterLagerogSalg;
+            _boerglumAbbeyStorageandSale = boerglumAbbeyStorageandSale;
 
         }
     }

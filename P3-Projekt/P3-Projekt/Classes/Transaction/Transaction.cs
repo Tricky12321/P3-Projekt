@@ -12,13 +12,13 @@ namespace P3_Projekt.Classes
 
         private int _id;
         public BaseProduct Product;
-        private int _amount;
+        public int Amount;
         private DateTime _date;
 
         public Transaction(Product product, int amount)
         {
             Product = product;
-            _amount = amount;
+            Amount = amount;
             _id = _idCounter++;
             _date = DateTime.Now;
         }

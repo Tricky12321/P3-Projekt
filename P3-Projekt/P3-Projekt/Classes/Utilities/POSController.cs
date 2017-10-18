@@ -9,14 +9,14 @@ namespace P3_Projekt.Classes.Utilities
 {
     public class POSController
     {
-        private BoerglumKlosterLagerogSalg _boerglumKlosterLagerogSalg;
+        private BoerglumAbbeyStorageandSale _boerglumAbbeyStorageandSale;
         public Receipt PlacerholderReceipt;
 
         private List<Receipt> ReceiptList = new List<Receipt>();
 
-        public POSController(BoerglumKlosterLagerogSalg boerglumKlosterLagerogSalg)
+        public POSController(BoerglumAbbeyStorageandSale boerglumAbbeyStorageandSale)
         {
-            _boerglumKlosterLagerogSalg = boerglumKlosterLagerogSalg;
+            _boerglumAbbeyStorageandSale = boerglumAbbeyStorageandSale;
         }
 
         public void StartPurchase()

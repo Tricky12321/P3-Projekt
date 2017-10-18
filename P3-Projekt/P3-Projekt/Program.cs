@@ -15,14 +15,12 @@ namespace P3_Projekt
         [STAThread]
         static void Main()
         {
-  
-
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            var BoerglumKlosterLagerogSalg = new BoerglumKlosterLagerogSalg();
-            var POSController = new POSController(BoerglumKlosterLagerogSalg);
-            var StorageController = new StorageController(BoerglumKlosterLagerogSalg);
-            Application.Run(BoerglumKlosterLagerogSalg);
+            var BoerglumAbbeyStorageandSale = new BoerglumAbbeyStorageandSale();
+            var POSController = new POSController(BoerglumAbbeyStorageandSale);
+            var StorageController = new StorageController(BoerglumAbbeyStorageandSale);
+            Application.Run(BoerglumAbbeyStorageandSale);
         }
     }
 }

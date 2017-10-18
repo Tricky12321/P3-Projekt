@@ -67,16 +67,16 @@
     <Compile Include="Classes\Utilities\POSController.cs" />
     <Compile Include="Classes\Utilities\StatisticsController.cs" />
     <Compile Include="Classes\Utilities\StorageController.cs" />
-    <Compile Include="BoerglumKlosterLagerogSalg.cs">
+    <Compile Include="BoerglumAbbeyStorageandSale.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="BoerglumKlosterLagerogSalg.Designer.cs">
-      <DependentUpon>BoerglumKlosterLagerogSalg.cs</DependentUpon>
+    <Compile Include="BoerglumAbbeyStorageandSale.Designer.cs">
+      <DependentUpon>BoerglumAbbeyStorageandSale.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="BoerglumKlosterLagerogSalg.resx">
-      <DependentUpon>BoerglumKlosterLagerogSalg.cs</DependentUpon>
+    <EmbeddedResource Include="BoerglumAbbeyStorageandSale.resx">
+      <DependentUpon>BoerglumAbbeyStorageandSale.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

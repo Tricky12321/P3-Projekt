@@ -1,6 +1,6 @@
 ﻿namespace P3_Projekt
 {
-    partial class BoerglumKlosterLagerogSalg
+    partial class BoerglumAbbeyStorageandSale
     {
         /// <summary>
         /// Required designer variable.
@@ -28,20 +28,17 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
             this.tabControl = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.dataGridView_Receipt = new System.Windows.Forms.DataGridView();
+            this.column_Product = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column_Image = new System.Windows.Forms.DataGridViewImageColumn();
             this.button1 = new System.Windows.Forms.Button();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.tabPage3 = new System.Windows.Forms.TabPage();
-            this.column_Product = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Column_Image = new System.Windows.Forms.DataGridViewImageColumn();
-            this.saleTransactionBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.tabControl.SuspendLayout();
             this.tabPage1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView_Receipt)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.saleTransactionBindingSource)).BeginInit();
             this.SuspendLayout();
             // 
             // tabControl
@@ -75,15 +72,34 @@
             // 
             // dataGridView_Receipt
             // 
+            this.dataGridView_Receipt.AllowUserToAddRows = false;
+            this.dataGridView_Receipt.AllowUserToDeleteRows = false;
             this.dataGridView_Receipt.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridView_Receipt.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.column_Product,
             this.Column_Image});
             this.dataGridView_Receipt.Location = new System.Drawing.Point(830, 6);
             this.dataGridView_Receipt.Name = "dataGridView_Receipt";
+            this.dataGridView_Receipt.ReadOnly = true;
             this.dataGridView_Receipt.RowTemplate.Height = 28;
             this.dataGridView_Receipt.Size = new System.Drawing.Size(453, 318);
             this.dataGridView_Receipt.TabIndex = 3;
+            // 
+            // column_Product
+            // 
+            this.column_Product.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.column_Product.HeaderText = "Produkt";
+            this.column_Product.Name = "column_Product";
+            this.column_Product.ReadOnly = true;
+            // 
+            // Column_Image
+            // 
+            this.Column_Image.HeaderText = "";
+            this.Column_Image.Image = global::P3_Projekt.Properties.Resources.Red_Cross;
+            this.Column_Image.ImageLayout = System.Windows.Forms.DataGridViewImageCellLayout.Stretch;
+            this.Column_Image.Name = "Column_Image";
+            this.Column_Image.ReadOnly = true;
+            this.Column_Image.Width = 30;
             // 
             // button1
             // 
@@ -115,37 +131,18 @@
             this.tabPage3.Text = "Statistics";
             this.tabPage3.UseVisualStyleBackColor = true;
             // 
-            // column_Product
-            // 
-            this.column_Product.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.column_Product.HeaderText = "Produkt";
-            this.column_Product.Name = "column_Product";
-            // 
-            // Column_Image
-            // 
-            this.Column_Image.HeaderText = "";
-            this.Column_Image.Image = global::P3_Projekt.Properties.Resources.Red_Cross;
-            this.Column_Image.ImageLayout = System.Windows.Forms.DataGridViewImageCellLayout.Stretch;
-            this.Column_Image.Name = "Column_Image";
-            this.Column_Image.Width = 30;
-            // 
-            // saleTransactionBindingSource
-            // 
-            this.saleTransactionBindingSource.DataSource = typeof(P3_Projekt.Classes.SaleTransaction);
-            // 
-            // BoerglumKlosterLagerogSalg
+            // boerglumAbbeyStorageandSale
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1898, 1024);
             this.Controls.Add(this.tabControl);
             this.Margin = new System.Windows.Forms.Padding(2);
-            this.Name = "BoerglumKlosterLagerogSalg";
+            this.Name = "boerglumAbbeyStorageandSale";
             this.Text = "Børglum Kloster Lager og Salg";
             this.tabControl.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView_Receipt)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.saleTransactionBindingSource)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -158,7 +155,6 @@
         private System.Windows.Forms.TabPage tabPage3;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.DataGridView dataGridView_Receipt;
-        private System.Windows.Forms.BindingSource saleTransactionBindingSource;
         private System.Windows.Forms.DataGridViewTextBoxColumn column_Product;
         private System.Windows.Forms.DataGridViewImageColumn Column_Image;
     }
