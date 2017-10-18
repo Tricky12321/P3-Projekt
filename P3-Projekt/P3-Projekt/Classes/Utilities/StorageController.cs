@@ -30,5 +30,86 @@ namespace P3_Projekt.Classes.Utilities
         {
             GroupDictionary.Remove(GroupID);
         }
+
+        public List<Product> SearchForProduct(string searchedString)
+        {
+            bool wordIsMatched = false;
+            List<string> produtNames = new List<string>();
+            List<Product> productsToReturn = new List<Product>();
+            
+
+            foreach(Product p in ProductDictionary.Values)
+            {
+                if(p.Name == searchedString)
+                {
+                    productsToReturn.Add(p);
+                }
+                produtNames.Add(p.Name);
+            }
+
+            if (wordIsMatched == false)
+            {
+
+                return productsToReturn;
+            }
+            else
+            {
+                return productsToReturn;
+            }
+        }
+
+        public int computeLevenshteinsDistance(string searchedString, Product productToCompare)
+        {
+            int searchStringLength = searchedString.Length;
+            int productNameLength = productToCompare.Name.Length;
+            int cost;
+            int minimum1, minimum2, minimum3;
+            int[,] d = new int[searchStringLength + 1, productNameLength + 1];
+
+            if(string.IsNullOrEmpty(searchedString))
+            {
+                if (!string.IsNullOrEmpty(productToCompare.Name))
+                {
+                    return searchStringLength;
+                }
+                return 0;
+            }
+            
+            if(string.IsNullOrEmpty(productToCompare.Name))
+            {
+                if (!string.IsNullOrEmpty(searchedString))
+                {
+                    return productNameLength;
+                }
+                return 0;
+            }
+            
+            for(int i = 0; i <= d.GetUpperBound(0); ++i)
+            {
+                d[i, 0] = i;
+            }
+
+            for (int i = 0; i <= d.GetUpperBound(0); ++i)
+            {
+                d[0, i] = i;
+            }
+
+            for (int i = 0; i <= d.GetUpperBound(0); ++i)
+            {
+                for (int j = 0; j <= d.GetUpperBound(0); ++j)
+                {
+                    cost = Convert.ToInt32(!(searchedString[i - 1] == productToCompare.Name[j - 1]));
+
+                    minimum1 = d[i - 1, j] + 1;
+                    minimum2 = d[i, j - 1] + 1;
+                    minimum3 = d[i - 1, j - 1] + cost;
+                    d[i, j] = Math.Min(Math.Min(minimum1, minimum2), minimum3);
+                }
+            }
+
+            return d[d.GetUpperBound(0), d.GetUpperBound(1)];
+
+            
+        }
     }
 }
