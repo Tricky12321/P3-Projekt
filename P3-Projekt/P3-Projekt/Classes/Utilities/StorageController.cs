@@ -157,6 +157,17 @@ namespace P3_Projekt.Classes.Utilities
             }
         }
 
+
+        /* User has already found the matching product ID.
+         * First line findes the store storage
+         * Second line subtracts the amound sold from storage*/
+        public void MergeTempProduct(SaleTransaction tempProductTransaction, int matchedProductID)
+        {
+            var StoreStorage = ProductDictionary[matchedProductID].StorageWithAmount.Where(x => x.Key.ID == 0).First();
+
+            ProductDictionary[matchedProductID].StorageWithAmount[StoreStorage.Key] -= tempProductTransaction.Amount;
+        }
+
         public void CreateStorageRoom(string name, string description)
         {
             StorageRoom newRoom = new StorageRoom(name, description);
