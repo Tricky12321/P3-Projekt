@@ -52,6 +52,10 @@ namespace P3_Projekt.Classes
             {
                 priceTotal = transaction.Amount * (transaction.Product as TempProduct).SalePrice;
             }
+            else if (transaction.Product is ServiceProduct)
+            {
+                throw new NotImplementedException();
+            }
             else
             {
                 throw new WrongProductTypeException("Transaktionens produkt har ikke en valid type!");
@@ -71,7 +75,7 @@ namespace P3_Projekt.Classes
         private void UpdateNumberOfProducts()
         {
             NumberOfProducts = 0;
-            foreach(Transaction transaction in Transactions)
+            foreach (Transaction transaction in Transactions)
             {
                 NumberOfProducts += transaction.Amount;
             }
@@ -81,6 +85,15 @@ namespace P3_Projekt.Classes
         {
             return Transactions.First(x => x.Product.ID == productID);
         }
+
+        public void Delete()
+        {
+            foreach (Transaction transaction in Transactions)
+            {
+                transaction.Delete();
+            }
+        }
+
 
         public void Execute()
         {

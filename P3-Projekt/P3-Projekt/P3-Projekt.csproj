@@ -58,6 +58,7 @@
     <Compile Include="Classes\Group.cs" />
     <Compile Include="Classes\Product\BaseProduct.cs" />
     <Compile Include="Classes\Product\Product.cs" />
+    <Compile Include="Classes\Product\ServiceProduct.cs" />
     <Compile Include="Classes\Receipt.cs" />
     <Compile Include="Classes\ReceiptPrinter.cs" />
     <Compile Include="Classes\Transaction\SaleTransaction.cs" />

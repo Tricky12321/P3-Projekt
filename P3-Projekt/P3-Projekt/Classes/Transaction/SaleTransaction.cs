@@ -28,8 +28,6 @@ namespace P3_Projekt.Classes
 
         public override void Execute()
         {
-
-
             if (Product is Product)
             {
                 /* Finder første storage room, som altid er butikken. Butikken har ID 0.
