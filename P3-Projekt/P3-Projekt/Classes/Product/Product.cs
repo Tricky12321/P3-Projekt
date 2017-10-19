@@ -10,7 +10,6 @@ namespace P3_Projekt.Classes
 {
     public class Product : BaseProduct
     {
-        protected static int _idCounter = 0;
         public string Name;
         private string _brand;
         private decimal _purchasePrice;
@@ -20,9 +19,8 @@ namespace P3_Projekt.Classes
         private Image _image;
         public Dictionary<StorageRoom, int> StorageWithAmount = new Dictionary<StorageRoom, int>();
 
-        public Product(string name, string brand, decimal purchasePrice, string group, bool discount, decimal discountPrice, Image image)
+        public Product(string name, string brand, decimal purchasePrice, string group, bool discount, decimal salePrice, decimal discountPrice, Image image) : base(salePrice)
         {
-            ID = _idCounter++;
             Name = name;
             _brand = brand;
             _purchasePrice = purchasePrice;
@@ -36,9 +34,24 @@ namespace P3_Projekt.Classes
         /* No delete method */ 
 
 
-        public override void Edit()
+        public void Edit(string name, string brand, string group, Image image)
         {
-            throw new NotImplementedException();
+            Name = name;
+            _brand = brand;
+            _group = group;
+            _image = image;
+
+        }
+
+        public void AdminEdit(string name, string brand, decimal purchasePrice, string group, bool discount, decimal discountPrice, Image image)
+        {
+            Name = name;
+            _brand = brand;
+            _purchasePrice = purchasePrice;
+            _group = group;
+            _discount = discount;
+            _discountPrice = discountPrice;
+            _image = image;
         }
 
         public override void Deposit()
