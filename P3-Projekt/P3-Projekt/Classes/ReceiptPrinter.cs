@@ -25,10 +25,10 @@ namespace P3_Projekt.Classes {
                     pd.PrintPage += new PrintPageEventHandler
                        (this.pd_PrintPage);
 
-                    /* Spørger om hvilken printer, man vil bruge */
+                    /* Asks for which printer to use */
                     PrintDialog printDialog = new PrintDialog();
                     printDialog.Document = pd;
-                    //Show Print Dialog
+
                     if (printDialog.ShowDialog() == DialogResult.OK)
                     {
                         //Print the page

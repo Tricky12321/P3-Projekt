@@ -31,16 +31,6 @@ namespace P3_Projekt.Classes
             
         }
 
-        public Product(string name, string brand, decimal purchasePrice, Group group, bool discount, decimal salePrice, decimal discountPrice) : base(salePrice)
-        {
-            Name = name;
-            _brand = brand;
-            _purchasePrice = purchasePrice;
-            _group = group;
-            DiscountBool = discount;
-            DiscountPrice = discountPrice;
-        }
-
         /* No delete method */ 
 
 

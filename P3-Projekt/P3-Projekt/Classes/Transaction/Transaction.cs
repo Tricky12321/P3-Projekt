@@ -25,7 +25,12 @@ namespace P3_Projekt.Classes
         
 
         public abstract void Delete();
-        public abstract void Edit();
+
+        public virtual void Edit(int newAmount)
+        {
+            Amount = newAmount;
+        }
+
         public abstract void Execute();
     }
 }

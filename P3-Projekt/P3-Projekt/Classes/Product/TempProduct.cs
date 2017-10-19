@@ -12,9 +12,24 @@ namespace P3_Projekt.Classes
         private bool _resolved;
 
 
-        public TempProduct (decimal salePrice) : base(salePrice)
+        public TempProduct (string description, decimal salePrice) : base(salePrice)
         {
-        
+            _description = description;
+            _resolved = false;
         }
+
+        public void Edit(string newDescription, decimal newSalePrice)
+        {
+            _description = newDescription;
+            SalePrice = newSalePrice;
+        }
+
+        public void Resolve()
+        {
+            _resolved = true;
+        }
+
+
+
     }
 }

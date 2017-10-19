@@ -52,6 +52,7 @@
     <Otherwise />
   </Choose>
   <ItemGroup>
+    <Compile Include="Classes\Product\TempProductTests.cs" />
     <Compile Include="Classes\Utilities\POSControllerTests.cs" />
     <Compile Include="Classes\Utilities\StorageControllerTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -64,6 +65,9 @@
       <Project>{B9C3E246-DA5D-4122-BBE3-68EF67B3E3E2}</Project>
       <Name>P3-Projekt</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Classes\Transaction\" />
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
