@@ -13,21 +13,23 @@ namespace P3_Projekt.Classes
 
         public int ID;
         public List<Transaction> Transactions = new List<Transaction>();
-        private int _numberOfProducts;
+        public int NumberOfProducts;
         public decimal TotalPrice = 0;
-        private decimal _paidPrice;
-        private string _paymentMethod;
-        private DateTime _date;
+        public decimal PaidPrice;
+        public bool CashOrCard;
+        public DateTime Date;
 
         public Receipt()
         {
             ID = _idCounter++;
+            Date = DateTime.Now;
         }
 
         public void AddTransaction(Transaction transaction)
         {
             Transactions.Add(transaction);
-
+            TotalPrice += FindTransactionPrice(transaction);
+            UpdateNumberOfProducts();
         }
 
         private decimal FindTransactionPrice(Transaction transaction)
@@ -60,14 +62,25 @@ namespace P3_Projekt.Classes
 
         public void RemoveTransaction(int productID)
         {
-            Transactions.RemoveAll(x => x.Product.ID == productID);
+            Transaction placeholderTransaction = FindTransactionFromProductID(productID);
+            Transactions.Remove(placeholderTransaction);
+            TotalPrice -= FindTransactionPrice(placeholderTransaction);
+            UpdateNumberOfProducts();
         }
 
-        private void FindTransactionFromProductID(int productID)
+        private void UpdateNumberOfProducts()
         {
-            throw new NotImplementedException();
+            NumberOfProducts = 0;
+            foreach(Transaction transaction in Transactions)
+            {
+                NumberOfProducts += transaction.Amount;
+            }
         }
 
+        private Transaction FindTransactionFromProductID(int productID)
+        {
+            return Transactions.First(x => x.Product.ID == productID);
+        }
 
         public void Execute()
         {
