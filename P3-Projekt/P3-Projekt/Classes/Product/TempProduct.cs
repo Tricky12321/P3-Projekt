@@ -11,24 +11,25 @@ namespace P3_Projekt.Classes
         private string _description;
         private bool _resolved;
 
-        public override void Deposit()
+
+        public TempProduct (string description, decimal salePrice) : base(salePrice)
         {
-            throw new NotImplementedException();
+            _description = description;
+            _resolved = false;
         }
 
-        public override void Edit()
+        public void Edit(string newDescription, decimal newSalePrice)
         {
-            throw new NotImplementedException();
+            _description = newDescription;
+            SalePrice = newSalePrice;
         }
 
-        public override void Move()
+        public void Resolve()
         {
-            throw new NotImplementedException();
+            _resolved = true;
         }
 
-        public override void Withdraw()
-        {
-            throw new NotImplementedException();
-        }
+
+
     }
 }

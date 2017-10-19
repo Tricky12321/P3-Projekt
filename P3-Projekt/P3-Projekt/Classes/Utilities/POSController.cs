@@ -24,15 +24,23 @@ namespace P3_Projekt.Classes.Utilities
             PlacerholderReceipt = new Receipt();
         }
 
+        public void EditReceipt(int recieptID)
+        {
+            PlacerholderReceipt = ReceiptList.First(x => x.ID == recieptID);
+            PlacerholderReceipt.Delete();
+        }
+
         public void AddSaleTransaction(Product product, int amount)
         {
             PlacerholderReceipt.AddTransaction(new SaleTransaction(product, amount, PlacerholderReceipt.ID));
         }
 
-        public void RemoveProduct(int productID)
+        public void RemoveTransaction(int productID)
         {
-            PlacerholderReceipt.Transactions.RemoveAll(x => x.Product.ID == productID);
+            PlacerholderReceipt.RemoveTransaction(productID);
         }
+
+
 
         public void ExecuteReceipt()
         {

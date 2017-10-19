@@ -10,25 +10,23 @@ namespace P3_Projekt.Classes
 {
     public class Product : BaseProduct
     {
-        protected static int _idCounter = 0;
         public string Name;
         private string _brand;
         private decimal _purchasePrice;
-        private string _group;
-        private bool _discount;
-        private decimal _discountPrice;
+        private Group _group;
+        public bool DiscountBool;
+        public decimal DiscountPrice;
         private Image _image;
         public Dictionary<StorageRoom, int> StorageWithAmount = new Dictionary<StorageRoom, int>();
 
-        public Product(string name, string brand, decimal purchasePrice, string group, bool discount, decimal discountPrice, Image image)
+        public Product(string name, string brand, decimal purchasePrice, Group group, bool discount, decimal salePrice, decimal discountPrice, Image image) : base(salePrice)
         {
-            ID = _idCounter++;
             Name = name;
             _brand = brand;
             _purchasePrice = purchasePrice;
             _group = group;
-            _discount = discount;
-            _discountPrice = discountPrice;
+            DiscountBool = discount;
+            DiscountPrice = discountPrice;
             _image = image;
             
         }
@@ -36,24 +34,41 @@ namespace P3_Projekt.Classes
         /* No delete method */ 
 
 
-        public override void Edit()
+        public void Edit(string name, string brand, Group group, Image image)
         {
-            throw new NotImplementedException();
+            Name = name;
+            _brand = brand;
+            _group = group;
+            _image = image;
+
         }
 
-        public override void Deposit()
+        public void AdminEdit(string name, string brand, decimal purchasePrice, decimal salePrice, Group group, bool discount, decimal discountPrice, Image image)
         {
-            throw new NotImplementedException();
+            Name = name;
+            _brand = brand;
+            _purchasePrice = purchasePrice;
+            _group = group;
+            DiscountBool = discount;
+            DiscountPrice = discountPrice;
+            _image = image;
+            SalePrice = salePrice;
         }
 
-        public override void Withdraw()
+        public void Deposit(StorageRoom depositRoom, int numberDeposited)
         {
-            throw new NotImplementedException();
+            StorageWithAmount[depositRoom] =+ numberDeposited;
         }
 
-        public override void Move()
+        public void Withdraw(StorageRoom withdrawnRoom, int numberWithdrawn)
         {
-            throw new NotImplementedException();
+            StorageWithAmount[withdrawnRoom] =- numberWithdrawn;
+        }
+
+        public void Move(StorageRoom moveFromRoom, StorageRoom moveToRoom, int numberMove)
+        {
+            StorageWithAmount[moveFromRoom] =- numberMove;
+            StorageWithAmount[moveToRoom] =+ numberMove;
         }
     }
 }

@@ -27,6 +27,20 @@ namespace P3_Projekt.Classes.Utilities
             ProductDictionary.Remove(ProductID);
         }
 
+        public void CreateGroup(string name, string description)
+        {
+            Group newGroup = new Group(name, description);
+            GroupDictionary.Add(newGroup.ID, newGroup);
+        }
+
+        public void EditGroup(int id, string name, string description)
+        {
+            GroupDictionary[id].Name = name;
+            GroupDictionary[id].Description = description;
+        }
+            
+        //Move products from deleted group to new group?
+        //Group with ID 0 for products with no group
         public void DeleteGroup(int GroupID)
         {
             GroupDictionary.Remove(GroupID);
@@ -177,26 +191,39 @@ namespace P3_Projekt.Classes.Utilities
 
         }
 
-
-
-
-        //----SEARCH-END----------------------------
-
-        public void CreateProduct(string name, string brand, decimal purchasePrice, string group, bool discount, decimal discountPrice, Image image, params KeyValuePair<StorageRoom, int>[] storageRoomStockInput)
+        public void CreateProduct(string name, string brand, decimal purchasePrice, Group group, bool discount, decimal discountPrice, decimal salePrice, Image image, params KeyValuePair<StorageRoom, int>[] storageRoomStockInput)
         {
-            Product newProduct = new Product(name, brand, purchasePrice, group, discount, discountPrice, image);
-
-            foreach (StorageRoom roomDictionary in StorageRoomDictionary.Values)
-            {
-                newProduct.StorageWithAmount.Add(roomDictionary, 0);
-            }
-
-            foreach (KeyValuePair<StorageRoom, int> roomInput in storageRoomStockInput)
+            Product newProduct = new Product(name, brand, purchasePrice, group, discount, salePrice, discountPrice, image);
+            
+            foreach(KeyValuePair<StorageRoom, int> roomInput in storageRoomStockInput)
             {
                 newProduct.StorageWithAmount[roomInput.Key] = roomInput.Value;
             }
 
             ProductDictionary.Add(newProduct.ID, newProduct);
+        }
+
+        public void EditProduct(bool isAdmin, Product editProduct, string name, string brand, decimal purchasePrice, decimal salePrice, Group group, bool discount, decimal discountPrice, Image image)
+        {
+            if (isAdmin)
+            {
+                editProduct.AdminEdit(name, brand, purchasePrice, salePrice, group, discount, discountPrice, image);
+            }
+            else
+            {
+                editProduct.Edit(name, brand, group, image);
+            }
+        }
+
+
+        /* User has already found the matching product ID.
+         * First line findes the store storage
+         * Second line subtracts the amound sold from storage*/
+        public void MergeTempProduct(SaleTransaction tempProductTransaction, int matchedProductID)
+        {
+            var StoreStorage = ProductDictionary[matchedProductID].StorageWithAmount.Where(x => x.Key.ID == 0).First();
+
+            ProductDictionary[matchedProductID].StorageWithAmount[StoreStorage.Key] -= tempProductTransaction.Amount;
         }
 
         public void CreateStorageRoom(string name, string description)
@@ -210,19 +237,19 @@ namespace P3_Projekt.Classes.Utilities
             }
         }
 
-        public void EditStorageRoom(int ID, string name, string description)
+        public void EditStorageRoom(int id, string name, string description)
         {
-            StorageRoomDictionary[ID].Name = name;
-            StorageRoomDictionary[ID].Description = description;
+            StorageRoomDictionary[id].Name = name;
+            StorageRoomDictionary[id].Description = description;
         }
 
-        public void DeleteStorageRoom(int ID)
+        public void DeleteStorageRoom(int id)
         {
             foreach (Product product in ProductDictionary.Values)
             {
-                product.StorageWithAmount.Remove(StorageRoomDictionary[ID]);
+                product.StorageWithAmount.Remove(StorageRoomDictionary[id]);
             }
-            StorageRoomDictionary.Remove(ID);
+            StorageRoomDictionary.Remove(id);
         }
     }
 }

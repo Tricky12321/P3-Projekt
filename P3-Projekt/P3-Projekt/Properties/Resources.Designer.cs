@@ -61,6 +61,22 @@ namespace P3_Projekt.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to | This is a test document  |
+        ///| Used to test printer     |
+        ///|      wake me up          |
+        ///|    wake me up inside     |
+        ///|     cant wake up         |
+        ///|    wake me up inside     |
+        ///|      save meeeeeee       |
+        ///|       from myself        |.
+        /// </summary>
+        internal static string PrintTest {
+            get {
+                return ResourceManager.GetString("PrintTest", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         internal static System.Drawing.Bitmap Red_Cross {
