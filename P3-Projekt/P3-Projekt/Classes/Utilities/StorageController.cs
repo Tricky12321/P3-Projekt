@@ -145,6 +145,14 @@ namespace P3_Projekt.Classes.Utilities
             ProductDictionary.Add(newProduct.ID, newProduct);
         }
 
+        public void EditProduct(bool isAdmin, )
+        {
+            if (isAdmin)
+            {
+                productEdit.Edit();
+            }
+        }
+
         public void CreateStorageRoom(string name, string description)
         {
             StorageRoom newRoom = new StorageRoom(name, description);

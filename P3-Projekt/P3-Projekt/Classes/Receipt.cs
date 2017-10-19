@@ -26,6 +26,21 @@ namespace P3_Projekt.Classes
         public void AddTransaction(Transaction transaction)
         {
             Transactions.Add(transaction);
+
+        }
+
+        public decimal FindTransactionPrice(Transaction transaction)
+        {
+            decimal priceTotal = 0;
+
+            if (transaction.Product.)
+
+            return 
+        }
+
+        public void RemoveTransaction(int productID)
+        {
+            Transactions.RemoveAll(x => x.Product.ID == productID);
         }
 
         public void Execute()
