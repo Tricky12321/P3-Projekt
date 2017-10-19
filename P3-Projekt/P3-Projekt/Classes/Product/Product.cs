@@ -14,13 +14,13 @@ namespace P3_Projekt.Classes
         public string Name;
         private string _brand;
         private decimal _purchasePrice;
-        private string _group;
+        private Group _group;
         private bool _discount;
         private decimal _discountPrice;
         private Image _image;
         public Dictionary<StorageRoom, int> StorageWithAmount = new Dictionary<StorageRoom, int>();
 
-        public Product(string name, string brand, decimal purchasePrice, string group, bool discount, decimal discountPrice, Image image)
+        public Product(string name, string brand, decimal purchasePrice, Group group, bool discount, decimal discountPrice, Image image)
         {
             ID = _idCounter++;
             Name = name;

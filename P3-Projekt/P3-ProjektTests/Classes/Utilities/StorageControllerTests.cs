@@ -38,7 +38,13 @@ namespace P3_Projekt.Classes.Utilities.Tests
         [Test()]
         public void CreateStorageRoomTest()
         {
+            var storageController = new StorageController(new BoerglumAbbeyStorageandSale());
+
+
+
             Assert.Fail();
         }
+
+
     }
 }
