@@ -9,7 +9,7 @@ namespace P3_Projekt.Classes
     public abstract class BaseProduct
     {
         public int ID;
-        private decimal _salePrice;
+        public decimal SalePrice;
 
         public BaseProduct()
         {
