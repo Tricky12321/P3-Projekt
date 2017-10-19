@@ -38,12 +38,11 @@
             this.but_addProduct = new System.Windows.Forms.Button();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.tabPage3 = new System.Windows.Forms.TabPage();
-            this.listView1 = new System.Windows.Forms.ListView();
+            this.printbutton = new System.Windows.Forms.Button();
             this.tabControl.SuspendLayout();
             this.tabPage1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numUpDown_AmountProducts)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView_Receipt)).BeginInit();
-            this.tabPage2.SuspendLayout();
             this.SuspendLayout();
             // 
             // tabControl
@@ -57,40 +56,43 @@
             this.tabControl.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.tabControl.ItemSize = new System.Drawing.Size(100, 50);
             this.tabControl.Location = new System.Drawing.Point(0, 0);
-            this.tabControl.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.tabControl.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.tabControl.Name = "tabControl";
             this.tabControl.Padding = new System.Drawing.Point(30, 3);
             this.tabControl.SelectedIndex = 0;
-            this.tabControl.Size = new System.Drawing.Size(1684, 820);
+            this.tabControl.Size = new System.Drawing.Size(1263, 666);
             this.tabControl.TabIndex = 0;
             // 
             // tabPage1
             // 
+            this.tabPage1.Controls.Add(this.printbutton);
             this.tabPage1.Controls.Add(this.numUpDown_AmountProducts);
             this.tabPage1.Controls.Add(this.textBox_FastAddProduct);
             this.tabPage1.Controls.Add(this.dataGridView_Receipt);
             this.tabPage1.Controls.Add(this.but_addProduct);
             this.tabPage1.Location = new System.Drawing.Point(4, 54);
-            this.tabPage1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.tabPage1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.tabPage1.Name = "tabPage1";
-            this.tabPage1.Padding = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.tabPage1.Size = new System.Drawing.Size(1676, 762);
+            this.tabPage1.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.tabPage1.Size = new System.Drawing.Size(1255, 608);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Salg";
             this.tabPage1.UseVisualStyleBackColor = true;
             // 
             // numUpDown_AmountProducts
             // 
-            this.numUpDown_AmountProducts.Location = new System.Drawing.Point(403, 12);
+            this.numUpDown_AmountProducts.Location = new System.Drawing.Point(302, 10);
+            this.numUpDown_AmountProducts.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.numUpDown_AmountProducts.Name = "numUpDown_AmountProducts";
-            this.numUpDown_AmountProducts.Size = new System.Drawing.Size(120, 41);
+            this.numUpDown_AmountProducts.Size = new System.Drawing.Size(90, 30);
             this.numUpDown_AmountProducts.TabIndex = 5;
             // 
             // textBox_FastAddProduct
             // 
-            this.textBox_FastAddProduct.Location = new System.Drawing.Point(538, 12);
+            this.textBox_FastAddProduct.Location = new System.Drawing.Point(404, 10);
+            this.textBox_FastAddProduct.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.textBox_FastAddProduct.Name = "textBox_FastAddProduct";
-            this.textBox_FastAddProduct.Size = new System.Drawing.Size(275, 41);
+            this.textBox_FastAddProduct.Size = new System.Drawing.Size(207, 30);
             this.textBox_FastAddProduct.TabIndex = 4;
             // 
             // dataGridView_Receipt
@@ -103,12 +105,12 @@
             this.dataGridView_Receipt.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.column_Product,
             this.Column_Image});
-            this.dataGridView_Receipt.Location = new System.Drawing.Point(738, 5);
-            this.dataGridView_Receipt.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.dataGridView_Receipt.Location = new System.Drawing.Point(554, 4);
+            this.dataGridView_Receipt.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.dataGridView_Receipt.Name = "dataGridView_Receipt";
             this.dataGridView_Receipt.ReadOnly = true;
             this.dataGridView_Receipt.RowTemplate.Height = 28;
-            this.dataGridView_Receipt.Size = new System.Drawing.Size(403, 254);
+            this.dataGridView_Receipt.Size = new System.Drawing.Size(302, 206);
             this.dataGridView_Receipt.TabIndex = 3;
             // 
             // column_Product
@@ -130,9 +132,10 @@
             // but_addProduct
             // 
             this.but_addProduct.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.but_addProduct.Location = new System.Drawing.Point(819, 6);
+            this.but_addProduct.Location = new System.Drawing.Point(614, 5);
+            this.but_addProduct.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.but_addProduct.Name = "but_addProduct";
-            this.but_addProduct.Size = new System.Drawing.Size(118, 58);
+            this.but_addProduct.Size = new System.Drawing.Size(88, 47);
             this.but_addProduct.TabIndex = 0;
             this.but_addProduct.Text = "Tilføj";
             this.but_addProduct.UseVisualStyleBackColor = true;
@@ -140,12 +143,11 @@
             // 
             // tabPage2
             // 
-            this.tabPage2.Controls.Add(this.listView1);
             this.tabPage2.Location = new System.Drawing.Point(4, 54);
-            this.tabPage2.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.tabPage2.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.tabPage2.Name = "tabPage2";
-            this.tabPage2.Padding = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.tabPage2.Size = new System.Drawing.Size(1676, 762);
+            this.tabPage2.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.tabPage2.Size = new System.Drawing.Size(1255, 608);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Lager";
             this.tabPage2.UseVisualStyleBackColor = true;
@@ -153,33 +155,19 @@
             // tabPage3
             // 
             this.tabPage3.Location = new System.Drawing.Point(4, 54);
-            this.tabPage3.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.tabPage3.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.tabPage3.Name = "tabPage3";
-            this.tabPage3.Padding = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.tabPage3.Size = new System.Drawing.Size(1676, 762);
+            this.tabPage3.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.tabPage3.Size = new System.Drawing.Size(1255, 608);
             this.tabPage3.TabIndex = 2;
             this.tabPage3.Text = "Statistics";
             this.tabPage3.UseVisualStyleBackColor = true;
             // 
-            // listView1
-            // 
-            this.listView1.Items.AddRange(new System.Windows.Forms.ListViewItem[] {
-            listViewItem1,
-            listViewItem2,
-            listViewItem3,
-            listViewItem4});
-            this.listView1.Location = new System.Drawing.Point(268, 56);
-            this.listView1.Name = "listView1";
-            this.listView1.Size = new System.Drawing.Size(605, 493);
-            this.listView1.TabIndex = 0;
-            this.listView1.UseCompatibleStateImageBehavior = false;
-            this.listView1.View = System.Windows.Forms.View.Tile;
-            // 
             // BoerglumAbbeyStorageandSale
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1687, 819);
+            this.ClientSize = new System.Drawing.Size(1016, 596);
             this.Controls.Add(this.tabControl);
             this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "BoerglumAbbeyStorageandSale";
@@ -189,8 +177,37 @@
             this.tabPage1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numUpDown_AmountProducts)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView_Receipt)).EndInit();
-            this.tabPage2.ResumeLayout(false);
             this.ResumeLayout(false);
+            //
+            // ReceiptPrinter
+            /*
+            this.components = new System.ComponentModel.Container();
+            this.printbutton = new System.Windows.Forms.Button();
+
+            this.ClientSize = new System.Drawing.Size(504, 381);
+            this.Text = "Print Example";
+
+            printbutton.ImageAlign =
+               System.Drawing.ContentAlignment.MiddleLeft;
+            printbutton.Location = new System.Drawing.Point(32, 110);
+            printbutton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            printbutton.TabIndex = 0;
+            printbutton.Text = "Print the file.";
+            printbutton.Size = new System.Drawing.Size(136, 40);
+            printbutton.Click += new System.EventHandler(printbutton_Click);
+
+            this.Controls.Add(printbutton);
+            */
+            // 
+            // printbutton
+            // 
+            this.printbutton.Location = new System.Drawing.Point(252, 184);
+            this.printbutton.Name = "printbutton";
+            this.printbutton.Size = new System.Drawing.Size(153, 37);
+            this.printbutton.TabIndex = 6;
+            this.printbutton.Text = "print example";
+            this.printbutton.UseVisualStyleBackColor = true;
+            this.printbutton.Click += new System.EventHandler(printbutton_Click);
 
         }
 
@@ -206,6 +223,7 @@
         private System.Windows.Forms.DataGridViewImageColumn Column_Image;
         private System.Windows.Forms.TextBox textBox_FastAddProduct;
         private System.Windows.Forms.NumericUpDown numUpDown_AmountProducts;
+        private System.Windows.Forms.Button printbutton;
     }
 }
 

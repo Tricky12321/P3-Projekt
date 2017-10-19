@@ -1,0 +1,8 @@
+| This is a test document  |
+| Used to test printer     |
+|      wake me up          |
+|    wake me up inside     |
+|     cant wake up         |
+|    wake me up inside     |
+|      save meeeeeee       |
+|       from myself        |

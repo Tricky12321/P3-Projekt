@@ -57,6 +57,7 @@
     <Compile Include="Classes\Product\BaseProduct.cs" />
     <Compile Include="Classes\Product\Product.cs" />
     <Compile Include="Classes\Receipt.cs" />
+    <Compile Include="Classes\ReceiptPrinter.cs" />
     <Compile Include="Classes\Transaction\SaleTransaction.cs" />
     <Compile Include="Classes\Statistics.cs" />
     <Compile Include="Classes\Transaction\OrderTransaction.cs" />
@@ -108,6 +109,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Red_Cross.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\PrintTest.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
