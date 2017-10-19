@@ -8,5 +8,17 @@ namespace P3_Projekt.Classes.Utilities
 {
     class StatisticsController
     {
+        //New name please :(
+        List<SaleTransaction> TransactionsForStatistics = new List<SaleTransaction>();
+
+        StatisticsController()
+        {
+
+        }
+
+        public void RequestStatistics(DateTime from, DateTime to)
+        {
+            //Add transactions within interval to TransactionsForStatistics
+        }
     }
 }
