@@ -49,6 +49,8 @@ namespace P3_Projekt.Classes.Utilities.Tests
         [TestCase(356, 3, ExpectedResult = 356)]
         public int CreateProductTest2(int testInput, int testRunTimes)
         {
+            
+
             int test = 0;
             StorageController storageController = new StorageController(new BoerglumAbbeyStorageandSale());
             StorageRoom testStorage = new StorageRoom("medium lager", "medium lager");
