@@ -19,8 +19,5 @@ namespace P3_Projekt.Classes
             SalePrice = salePrice;
         }
         
-        public abstract void Withdraw();
-        public abstract void Deposit();
-        public abstract void Move();
     }
 }

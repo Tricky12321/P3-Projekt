@@ -43,7 +43,7 @@ namespace P3_Projekt.Classes
 
         }
 
-        public void AdminEdit(string name, string brand, decimal purchasePrice, string group, bool discount, decimal discountPrice, Image image)
+        public void AdminEdit(string name, string brand, decimal purchasePrice, decimal salePrice, string group, bool discount, decimal discountPrice, Image image)
         {
             Name = name;
             _brand = brand;
@@ -52,21 +52,23 @@ namespace P3_Projekt.Classes
             _discount = discount;
             _discountPrice = discountPrice;
             _image = image;
+            SalePrice = salePrice;
         }
 
-        public override void Deposit()
+        public void Deposit(StorageRoom depositRoom, int numberDeposited)
         {
-            throw new NotImplementedException();
+            StorageWithAmount[depositRoom] =+ numberDeposited;
         }
 
-        public override void Withdraw()
+        public void Withdraw(StorageRoom withdrawnRoom, int numberWithdrawn)
         {
-            throw new NotImplementedException();
+            StorageWithAmount[withdrawnRoom] =- numberWithdrawn;
         }
 
-        public override void Move()
+        public void Move(StorageRoom moveFromRoom, StorageRoom moveToRoom, int numberMove)
         {
-            throw new NotImplementedException();
+            StorageWithAmount[moveFromRoom] =- numberMove;
+            StorageWithAmount[moveToRoom] =+ numberMove;
         }
     }
 }

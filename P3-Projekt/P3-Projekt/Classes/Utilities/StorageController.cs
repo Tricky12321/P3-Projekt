@@ -114,9 +114,9 @@ namespace P3_Projekt.Classes.Utilities
             
         }
 
-        public void CreateProduct(string name, string brand, decimal purchasePrice, string group, bool discount, decimal discountPrice, Image image, params KeyValuePair<StorageRoom, int>[] storageRoomStockInput)
+        public void CreateProduct(string name, string brand, decimal purchasePrice, decimal salePrice ,  string group, bool discount, decimal discountPrice, Image image, params KeyValuePair<StorageRoom, int>[] storageRoomStockInput)
         {
-            Product newProduct = new Product(name, brand, purchasePrice, group, discount, discountPrice, image);
+            Product newProduct = new Product(name, brand, purchasePrice, group, discount, salePrice, discountPrice, image);
             
             foreach(StorageRoom roomDictionary in StorageRoomDictionary.Values)
             {
@@ -131,11 +131,15 @@ namespace P3_Projekt.Classes.Utilities
             ProductDictionary.Add(newProduct.ID, newProduct);
         }
 
-        public void EditProduct(bool isAdmin, )
+        public void EditProduct(bool isAdmin, Product editProduct, string name, string brand, decimal purchasePrice, decimal salePrice, Group group, bool discount, decimal discountPrice, Image image)
         {
             if (isAdmin)
             {
-                productEdit.Edit();
+                editProduct.AdminEdit(name, brand, purchasePrice, salePrice, group, discount, discountPrice, image);
+            }
+            else
+            {
+                editProduct.Edit(name, brand, group, image);
             }
         }
 
