@@ -13,20 +13,20 @@ namespace P3_Projekt.Classes
         public string Name;
         private string _brand;
         private decimal _purchasePrice;
-        private string _group;
-        private bool _discount;
-        private decimal _discountPrice;
+        private Group _group;
+        public bool DiscountBool;
+        public decimal DiscountPrice;
         private Image _image;
         public Dictionary<StorageRoom, int> StorageWithAmount = new Dictionary<StorageRoom, int>();
 
-        public Product(string name, string brand, decimal purchasePrice, string group, bool discount, decimal salePrice, decimal discountPrice, Image image) : base(salePrice)
+        public Product(string name, string brand, decimal purchasePrice, Group group, bool discount, decimal salePrice, decimal discountPrice, Image image) : base(salePrice)
         {
             Name = name;
             _brand = brand;
             _purchasePrice = purchasePrice;
             _group = group;
-            _discount = discount;
-            _discountPrice = discountPrice;
+            DiscountBool = discount;
+            DiscountPrice = discountPrice;
             _image = image;
             
         }
