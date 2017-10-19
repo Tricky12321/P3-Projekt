@@ -21,11 +21,6 @@ namespace P3_Projekt.Classes
             throw new NotImplementedException();
         }
 
-        public override void Edit()
-        {
-            throw new NotImplementedException();
-        }
-
         public override void Execute()
         {
             if (Product is Product)
@@ -39,8 +34,8 @@ namespace P3_Projekt.Classes
             }
             else
             {
-                /*Gør ingenting, fordi temp produkt ikke ved hvilket lager den er på.
-                 * Det eneste der sker ved temp produkt er resolve eller merge */
+                /*Gør ingenting, fordi temp og service produkt ved ikke, hvilket lager de er på.
+                 * Derfor kan der ikke ændres lagerstatus */
             }
                 
         }

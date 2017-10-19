@@ -20,11 +20,6 @@ namespace P3_Projekt.Classes
             throw new NotImplementedException();
         }
 
-        public override void Edit()
-        {
-            throw new NotImplementedException();
-        }
-
         public override void Execute()
         {
             throw new NotImplementedException();
