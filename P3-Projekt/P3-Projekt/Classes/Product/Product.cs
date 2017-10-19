@@ -34,7 +34,7 @@ namespace P3_Projekt.Classes
         /* No delete method */ 
 
 
-        public void Edit(string name, string brand, string group, Image image)
+        public void Edit(string name, string brand, Group group, Image image)
         {
             Name = name;
             _brand = brand;
@@ -43,14 +43,14 @@ namespace P3_Projekt.Classes
 
         }
 
-        public void AdminEdit(string name, string brand, decimal purchasePrice, decimal salePrice, string group, bool discount, decimal discountPrice, Image image)
+        public void AdminEdit(string name, string brand, decimal purchasePrice, decimal salePrice, Group group, bool discount, decimal discountPrice, Image image)
         {
             Name = name;
             _brand = brand;
             _purchasePrice = purchasePrice;
             _group = group;
-            _discount = discount;
-            _discountPrice = discountPrice;
+            DiscountBool = discount;
+            DiscountPrice = discountPrice;
             _image = image;
             SalePrice = salePrice;
         }
