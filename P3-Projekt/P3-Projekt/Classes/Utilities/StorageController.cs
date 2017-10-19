@@ -132,11 +132,6 @@ namespace P3_Projekt.Classes.Utilities
         {
             Product newProduct = new Product(name, brand, purchasePrice, group, discount, salePrice, discountPrice, image);
             
-            foreach(StorageRoom roomDictionary in StorageRoomDictionary.Values)
-            {
-                newProduct.StorageWithAmount.Add(roomDictionary, 0);
-            }
-            
             foreach(KeyValuePair<StorageRoom, int> roomInput in storageRoomStockInput)
             {
                 newProduct.StorageWithAmount[roomInput.Key] = roomInput.Value;
