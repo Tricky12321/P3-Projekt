@@ -21,7 +21,7 @@ namespace P3_Projekt.Classes
 
         //Laver ID om til streng hvori gruppens nummer er indkluderet som de to første cifre, padding med 0'er for syns
         public string GetFullID { get {
-                int fullID = this.ID + _group.ID * 10000;
+                int fullID = this.ID + ProductGroup.ID * 10000;
                 string GetFullID = fullID.ToString().PadLeft(6, '0');
                 return GetFullID;
             } }
