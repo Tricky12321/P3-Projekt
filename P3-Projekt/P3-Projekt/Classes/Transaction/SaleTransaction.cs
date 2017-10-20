@@ -16,11 +16,6 @@ namespace P3_Projekt.Classes
             ReceiptID = receiptID;
         }
 
-        public override void Delete()
-        {
-            throw new NotImplementedException();
-        }
-
         public override void Execute()
         {
             if (Product is Product)
@@ -36,8 +31,7 @@ namespace P3_Projekt.Classes
             {
                 /*Gør ingenting, fordi temp og service produkt ved ikke, hvilket lager de er på.
                  * Derfor kan der ikke ændres lagerstatus */
-            }
-                
+            }       
         }
     }
 }

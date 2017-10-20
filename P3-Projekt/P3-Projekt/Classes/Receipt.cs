@@ -154,7 +154,7 @@ namespace P3_Projekt.Classes
         {
             foreach (Transaction transaction in Transactions)
             {
-                transaction.Delete();
+                /**/
             }
         }
 

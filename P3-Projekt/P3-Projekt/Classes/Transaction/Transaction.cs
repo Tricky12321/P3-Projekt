@@ -23,9 +23,6 @@ namespace P3_Projekt.Classes
             _id = _idCounter++;
             _date = DateTime.Now;
         }
-        
-
-        public abstract void Delete();
 
         public virtual void Edit(int newAmount)
         {
