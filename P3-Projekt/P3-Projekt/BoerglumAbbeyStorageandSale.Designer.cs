@@ -39,6 +39,10 @@
             this.but_addProduct = new System.Windows.Forms.Button();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.tabPage3 = new System.Windows.Forms.TabPage();
+            this.button2 = new System.Windows.Forms.Button();
+            this.button1 = new System.Windows.Forms.Button();
+            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.button3 = new System.Windows.Forms.Button();
             this.tabControl.SuspendLayout();
             this.tabPage1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numUpDown_AmountProducts)).BeginInit();
@@ -56,33 +60,39 @@
             this.tabControl.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.tabControl.ItemSize = new System.Drawing.Size(100, 50);
             this.tabControl.Location = new System.Drawing.Point(0, 0);
+            this.tabControl.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.tabControl.Name = "tabControl";
             this.tabControl.Padding = new System.Drawing.Point(30, 3);
             this.tabControl.SelectedIndex = 0;
-            this.tabControl.Size = new System.Drawing.Size(1894, 1025);
+            this.tabControl.Size = new System.Drawing.Size(1714, 923);
             this.tabControl.TabIndex = 0;
             // 
             // tabPage1
             // 
+            this.tabPage1.Controls.Add(this.button3);
+            this.tabPage1.Controls.Add(this.textBox1);
+            this.tabPage1.Controls.Add(this.button1);
+            this.tabPage1.Controls.Add(this.button2);
             this.tabPage1.Controls.Add(this.printbutton);
             this.tabPage1.Controls.Add(this.numUpDown_AmountProducts);
             this.tabPage1.Controls.Add(this.textBox_FastAddProduct);
             this.tabPage1.Controls.Add(this.dataGridView_Receipt);
             this.tabPage1.Controls.Add(this.but_addProduct);
             this.tabPage1.Location = new System.Drawing.Point(4, 54);
+            this.tabPage1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.tabPage1.Name = "tabPage1";
-            this.tabPage1.Padding = new System.Windows.Forms.Padding(3, 3, 3, 3);
-            this.tabPage1.Size = new System.Drawing.Size(1886, 967);
+            this.tabPage1.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.tabPage1.Size = new System.Drawing.Size(1706, 865);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Salg";
             this.tabPage1.UseVisualStyleBackColor = true;
+            this.tabPage1.Click += new System.EventHandler(this.tabPage1_Click);
             // 
             // printbutton
             // 
-            this.printbutton.Location = new System.Drawing.Point(378, 283);
-            this.printbutton.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.printbutton.Location = new System.Drawing.Point(290, 184);
             this.printbutton.Name = "printbutton";
-            this.printbutton.Size = new System.Drawing.Size(230, 57);
+            this.printbutton.Size = new System.Drawing.Size(153, 37);
             this.printbutton.TabIndex = 6;
             this.printbutton.Text = "print example";
             this.printbutton.UseVisualStyleBackColor = true;
@@ -90,16 +100,18 @@
             // 
             // numUpDown_AmountProducts
             // 
-            this.numUpDown_AmountProducts.Location = new System.Drawing.Point(218, 15);
+            this.numUpDown_AmountProducts.Location = new System.Drawing.Point(301, 44);
+            this.numUpDown_AmountProducts.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.numUpDown_AmountProducts.Name = "numUpDown_AmountProducts";
-            this.numUpDown_AmountProducts.Size = new System.Drawing.Size(135, 41);
+            this.numUpDown_AmountProducts.Size = new System.Drawing.Size(90, 30);
             this.numUpDown_AmountProducts.TabIndex = 5;
             // 
             // textBox_FastAddProduct
             // 
-            this.textBox_FastAddProduct.Location = new System.Drawing.Point(359, 15);
+            this.textBox_FastAddProduct.Location = new System.Drawing.Point(292, 99);
+            this.textBox_FastAddProduct.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.textBox_FastAddProduct.Name = "textBox_FastAddProduct";
-            this.textBox_FastAddProduct.Size = new System.Drawing.Size(308, 41);
+            this.textBox_FastAddProduct.Size = new System.Drawing.Size(207, 30);
             this.textBox_FastAddProduct.TabIndex = 4;
             // 
             // dataGridView_Receipt
@@ -112,11 +124,12 @@
             this.dataGridView_Receipt.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.column_Product,
             this.Column_Image});
-            this.dataGridView_Receipt.Location = new System.Drawing.Point(831, 6);
+            this.dataGridView_Receipt.Location = new System.Drawing.Point(518, 56);
+            this.dataGridView_Receipt.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.dataGridView_Receipt.Name = "dataGridView_Receipt";
             this.dataGridView_Receipt.ReadOnly = true;
             this.dataGridView_Receipt.RowTemplate.Height = 28;
-            this.dataGridView_Receipt.Size = new System.Drawing.Size(453, 317);
+            this.dataGridView_Receipt.Size = new System.Drawing.Size(381, 253);
             this.dataGridView_Receipt.TabIndex = 3;
             // 
             // column_Product
@@ -138,9 +151,10 @@
             // but_addProduct
             // 
             this.but_addProduct.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.but_addProduct.Location = new System.Drawing.Point(921, 8);
+            this.but_addProduct.Location = new System.Drawing.Point(355, 226);
+            this.but_addProduct.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.but_addProduct.Name = "but_addProduct";
-            this.but_addProduct.Size = new System.Drawing.Size(132, 72);
+            this.but_addProduct.Size = new System.Drawing.Size(88, 47);
             this.but_addProduct.TabIndex = 0;
             this.but_addProduct.Text = "Tilføj";
             this.but_addProduct.UseVisualStyleBackColor = true;
@@ -149,9 +163,10 @@
             // tabPage2
             // 
             this.tabPage2.Location = new System.Drawing.Point(4, 54);
+            this.tabPage2.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.tabPage2.Name = "tabPage2";
-            this.tabPage2.Padding = new System.Windows.Forms.Padding(3, 3, 3, 3);
-            this.tabPage2.Size = new System.Drawing.Size(1886, 967);
+            this.tabPage2.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.tabPage2.Size = new System.Drawing.Size(1255, 608);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Lager";
             this.tabPage2.UseVisualStyleBackColor = true;
@@ -159,19 +174,55 @@
             // tabPage3
             // 
             this.tabPage3.Location = new System.Drawing.Point(4, 54);
+            this.tabPage3.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.tabPage3.Name = "tabPage3";
-            this.tabPage3.Padding = new System.Windows.Forms.Padding(3, 3, 3, 3);
-            this.tabPage3.Size = new System.Drawing.Size(1886, 967);
+            this.tabPage3.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.tabPage3.Size = new System.Drawing.Size(1255, 608);
             this.tabPage3.TabIndex = 2;
             this.tabPage3.Text = "Statistics";
             this.tabPage3.UseVisualStyleBackColor = true;
             // 
+            // button2
+            // 
+            this.button2.Location = new System.Drawing.Point(764, 314);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(135, 35);
+            this.button2.TabIndex = 8;
+            this.button2.Text = "button2";
+            this.button2.UseVisualStyleBackColor = true;
+            // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(764, 355);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(135, 33);
+            this.button1.TabIndex = 9;
+            this.button1.Text = "button1";
+            this.button1.UseVisualStyleBackColor = true;
+            // 
+            // textBox1
+            // 
+            this.textBox1.Location = new System.Drawing.Point(609, 380);
+            this.textBox1.Name = "textBox1";
+            this.textBox1.Size = new System.Drawing.Size(149, 30);
+            this.textBox1.TabIndex = 10;
+            // 
+            // button3
+            // 
+            this.button3.Location = new System.Drawing.Point(764, 394);
+            this.button3.Name = "button3";
+            this.button3.Size = new System.Drawing.Size(75, 23);
+            this.button3.TabIndex = 11;
+            this.button3.Text = "button3";
+            this.button3.UseVisualStyleBackColor = true;
+            // 
             // BoerglumAbbeyStorageandSale
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1524, 917);
+            this.ClientSize = new System.Drawing.Size(1354, 733);
             this.Controls.Add(this.tabControl);
+            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.Name = "BoerglumAbbeyStorageandSale";
             this.Text = "Børglum Kloster Lager og Salg";
             this.tabControl.ResumeLayout(false);
@@ -196,6 +247,10 @@
         private System.Windows.Forms.TextBox textBox_FastAddProduct;
         private System.Windows.Forms.NumericUpDown numUpDown_AmountProducts;
         private System.Windows.Forms.Button printbutton;
+        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.Button button3;
+        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.Button button1;
     }
 }
 
