@@ -21,7 +21,8 @@ namespace P3_Projekt.Classes
 
         public override void Execute()
         {
-            throw new NotImplementedException();
+            (Product as Product).StorageWithAmount[_source] -= Amount;
+            (Product as Product).StorageWithAmount[_destination] += Amount;
         }
     }
 }
