@@ -40,6 +40,75 @@ namespace P3_Projekt.Classes.Utilities.Tests
             Assert.Fail();
         }
 
+        [Test()]
+        public void CreateGroupTestOneGroup()
+        {
+            var storageController = new StorageController(new BoerglumAbbeyStorageandSale());
+            storageController.CreateGroup("group", "test");
+
+            bool b1 = "group" == storageController.GroupDictionary[1].Name;
+            bool b2 = "test" == storageController.GroupDictionary[1].Description;
+
+            Assert.IsTrue(b1 && b2);
+        }
+
+        [Test()]
+        public void CreateGroupTestThreeGroups()
+        {
+            var storageController = new StorageController(new BoerglumAbbeyStorageandSale());
+            storageController.CreateGroup("group1", "test1");
+            storageController.CreateGroup("group2", "test2");
+            storageController.CreateGroup("group3", "test3");
+
+            bool b1 = "group1" == storageController.GroupDictionary[1].Name;
+            bool b2 = "test1" == storageController.GroupDictionary[1].Description;
+            bool b3 = "group2" == storageController.GroupDictionary[2].Name;
+            bool b4 = "test2" == storageController.GroupDictionary[2].Description;
+            bool b5 = "group3" == storageController.GroupDictionary[3].Name;
+            bool b6 = "test3" == storageController.GroupDictionary[3].Description;
+
+            Assert.IsTrue(b1 && b2 && b3 && b4 && b5 && b6);
+        }
+
+        [Test()]
+        public void EditGroupTestOneGroup()
+        {
+            var storageController = new StorageController(new BoerglumAbbeyStorageandSale());
+            Group newGroup = new Group("group", "test");
+            storageController.GroupDictionary.Add(newGroup.ID, newGroup);
+
+            storageController.EditGroup(1, "newgroup", "newtest");
+
+            bool b1 = "newgroup" == storageController.GroupDictionary[1].Name;
+            bool b2 = "newtest" == storageController.GroupDictionary[1].Description;
+
+            Assert.IsTrue(b1 && b2);
+        }
+
+        [Test()]
+        public void EditGroupTestThreeGroups()
+        {
+            var storageController = new StorageController(new BoerglumAbbeyStorageandSale());
+            Group newGroup1 = new Group("group1", "test1");
+            Group newGroup2 = new Group("group2", "test2");
+            Group newGroup3 = new Group("group3", "test3");
+            storageController.GroupDictionary.Add(newGroup1.ID, newGroup1);
+            storageController.GroupDictionary.Add(newGroup2.ID, newGroup2);
+            storageController.GroupDictionary.Add(newGroup3.ID, newGroup3);
+
+            storageController.EditGroup(1, "newgroup1", "newtest1");
+            storageController.EditGroup(2, "newgroup2", "newtest2");
+            storageController.EditGroup(3, "newgroup3", "newtest3");
+
+            bool b1 = "newgroup1" == storageController.GroupDictionary[1].Name;
+            bool b2 = "newtest1" == storageController.GroupDictionary[1].Description;
+            bool b3 = "newgroup2" == storageController.GroupDictionary[2].Name;
+            bool b4 = "newtest2" == storageController.GroupDictionary[2].Description;
+            bool b5 = "newgroup3" == storageController.GroupDictionary[3].Name;
+            bool b6 = "newtest3" == storageController.GroupDictionary[3].Description;
+
+            Assert.IsTrue(b1 && b2 && b3 && b4 && b5 && b6);
+        }
 
         [Test()]
         public void ProductIDTest()

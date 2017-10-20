@@ -13,7 +13,7 @@ namespace P3_Projekt.Classes
         public string Name;
         private string _brand;
         private decimal _purchasePrice;
-        private Group _group;
+        public Group ProductGroup;
         public bool DiscountBool;
         public decimal DiscountPrice;
         private Image _image;
@@ -21,7 +21,7 @@ namespace P3_Projekt.Classes
 
         
         public string GetFullID { get {
-                int fullID = this.ID + _group.ID * 10000;
+                int fullID = this.ID + ProductGroup.ID * 10000;
                 string GetFullID = fullID.ToString().PadLeft(5, '0');
                 return GetFullID;
             } }
@@ -33,7 +33,7 @@ namespace P3_Projekt.Classes
             Name = name;
             _brand = brand;
             _purchasePrice = purchasePrice;
-            _group = group;
+            ProductGroup = group;
             DiscountBool = discount;
             DiscountPrice = discountPrice;
             _image = image;
@@ -48,7 +48,7 @@ namespace P3_Projekt.Classes
         {
             Name = name;
             _brand = brand;
-            _group = group;
+            ProductGroup = group;
             _image = image;
 
         }
@@ -58,7 +58,7 @@ namespace P3_Projekt.Classes
             Name = name;
             _brand = brand;
             _purchasePrice = purchasePrice;
-            _group = group;
+            ProductGroup = group;
             DiscountBool = discount;
             DiscountPrice = discountPrice;
             _image = image;

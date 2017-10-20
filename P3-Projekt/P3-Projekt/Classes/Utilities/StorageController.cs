@@ -14,7 +14,7 @@ namespace P3_Projekt.Classes.Utilities
         private int _idGroupCounter = 0;
 
         public Dictionary<int, Product> ProductDictionary = new Dictionary<int, Product>();
-        public Dictionary<int, Group> GroupDictionary = new Dictionary<int, Group>();
+        public Dictionary<int, Group> GroupDictionary = new Dictionary<int, Group>() { { 0, new Group("Diverse", "Produkter, som ikke tilhører en specifik gruppe") } };
         public Dictionary<int, StorageRoom> StorageRoomDictionary = new Dictionary<int, StorageRoom>();
 
         public StorageController(BoerglumAbbeyStorageandSale boerglumAbbeyStorageandSale)
@@ -38,11 +38,16 @@ namespace P3_Projekt.Classes.Utilities
             GroupDictionary[id].Name = name;
             GroupDictionary[id].Description = description;
         }
-            
-        //Move products from deleted group to new group?
-        //Group with ID 0 for products with no group
+
+        //Assign group 0 to products left with no group
+        //Removes group from dictionary
         public void DeleteGroup(int GroupID)
         {
+            //Mulighed for at flytte alle produkter til en bestem gruppe???
+            foreach (Product product in ProductDictionary.Values.Where(x => x.ProductGroup == GroupDictionary[GroupID]))
+            {
+                product.ProductGroup = GroupDictionary[0];
+            }
             GroupDictionary.Remove(GroupID);
         }
 
@@ -247,6 +252,7 @@ namespace P3_Projekt.Classes.Utilities
             ProductDictionary[matchedProductID].StorageWithAmount[StoreStorage.Key] -= tempProductTransaction.Amount;
         }
 
+        //Adds new storage room to dictionary, and to all products
         public void CreateStorageRoom(string name, string description)
         {
             StorageRoom newRoom = new StorageRoom(name, description);
@@ -264,6 +270,7 @@ namespace P3_Projekt.Classes.Utilities
             StorageRoomDictionary[id].Description = description;
         }
 
+        //Removes storage room from dictionary, and all products
         public void DeleteStorageRoom(int id)
         {
             foreach (Product product in ProductDictionary.Values)
@@ -271,6 +278,7 @@ namespace P3_Projekt.Classes.Utilities
                 product.StorageWithAmount.Remove(StorageRoomDictionary[id]);
             }
             StorageRoomDictionary.Remove(id);
+
         }
     }
 }
