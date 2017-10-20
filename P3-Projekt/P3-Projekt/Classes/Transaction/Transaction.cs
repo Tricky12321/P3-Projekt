@@ -32,5 +32,11 @@ namespace P3_Projekt.Classes
         }
 
         public abstract void Execute();
+
+        public void LoadIDValue()
+        {
+            /* Should load the latest transaction ID from database.
+             * Should be called at start of program */
+        }
     }
 }
