@@ -14,7 +14,7 @@ namespace P3_Projekt.Classes
         public int ID;
         public List<Transaction> Transactions = new List<Transaction>();
         public int NumberOfProducts;
-        public decimal TotalPrice = 0;
+        public decimal TotalPrice;
         public decimal PaidPrice;
         public bool CashOrCard;
         public DateTime Date;
@@ -27,9 +27,66 @@ namespace P3_Projekt.Classes
 
         public void AddTransaction(Transaction transaction)
         {
-            Transactions.Add(transaction);
+            //Checks if product is already in reciept//
+            if (IsProductInReceipt(transaction.Product))
+            {
+                Transaction placeholderTransaction = GetTransactionWithProduct(transaction.Product);
+                placeholderTransaction.Edit(placeholderTransaction.Amount += transaction.Amount);
+            }
+            else
+            {
+                Transactions.Add(transaction);
+            }
             TotalPrice += FindTransactionPrice(transaction);
             UpdateNumberOfProducts();
+        }
+
+        private void UpdateTotalPrice()
+        {
+            decimal priceTotal = 0;
+            foreach(Transaction transaction in Transactions)
+            {
+                if (transaction.Product is Product)
+                {
+                    if ((transaction.Product as Product).DiscountBool)
+                    {
+                        priceTotal = transaction.Amount * (transaction.Product as Product).DiscountPrice;
+                    }
+                    else
+                    {
+                        priceTotal = transaction.Amount * (transaction.Product as Product).SalePrice;
+                    }
+                }
+                else if (transaction.Product is TempProduct)
+                {
+                    priceTotal = transaction.Amount * (transaction.Product as TempProduct).SalePrice;
+                }
+                else if (transaction.Product is ServiceProduct)
+                {
+                    if ((transaction.Product as ServiceProduct).GroupLimit > transaction.Amount)
+                    {
+                        priceTotal += (transaction.Product as ServiceProduct).SalePrice;
+                    }
+                    else
+                    {
+                        priceTotal += (transaction.Product as ServiceProduct).GroupPrice;
+                    }
+                }
+                else
+                {
+                    throw new WrongProductTypeException("Transaktionens produkt har ikke en valid type!");
+                }
+            }
+        }
+
+        private bool IsProductInReceipt(BaseProduct product)
+        {
+            return Transactions.Any(x => x.Product == product);
+        }
+
+        private Transaction GetTransactionWithProduct(BaseProduct product)
+        {
+            return Transactions.First(x => x.Product == product);
         }
 
         private decimal FindTransactionPrice(Transaction transaction)
@@ -42,11 +99,10 @@ namespace P3_Projekt.Classes
                 {
                     priceTotal = transaction.Amount * (transaction.Product as Product).DiscountPrice;
                 }
-                else if (!(transaction.Product as Product).DiscountBool)
+                else
                 {
                     priceTotal = transaction.Amount * (transaction.Product as Product).SalePrice;
                 }
-                throw new ProductDiscountException("Kunne ikke finde Discount Bool i Produkt!");
             }
             else if (transaction.Product is TempProduct)
             {
@@ -54,7 +110,14 @@ namespace P3_Projekt.Classes
             }
             else if (transaction.Product is ServiceProduct)
             {
-                throw new NotImplementedException();
+                if ((transaction.Product as ServiceProduct).GroupLimit > transaction.Amount)
+                {
+                    priceTotal += (transaction.Product as ServiceProduct).SalePrice;
+                }
+                else
+                {
+                    priceTotal += (transaction.Product as ServiceProduct).GroupPrice;
+                }
             }
             else
             {
