@@ -14,8 +14,9 @@ namespace P3_Projekt.Classes.Utilities
         private int _idGroupCounter = 0;
 
         public Dictionary<int, Product> ProductDictionary = new Dictionary<int, Product>();
-        public Dictionary<int, Group> GroupDictionary = new Dictionary<int, Group>();
+        public Dictionary<int, Group> GroupDictionary = new Dictionary<int, Group>() { { 0, new Group("Diverse", "Produkter, som ikke tilhører en specifik gruppe") } };
         public Dictionary<int, StorageRoom> StorageRoomDictionary = new Dictionary<int, StorageRoom>();
+        public List<TempProduct> TempProductList = new List<TempProduct>();
 
         public StorageController(BoerglumAbbeyStorageandSale boerglumAbbeyStorageandSale)
         {
@@ -38,11 +39,16 @@ namespace P3_Projekt.Classes.Utilities
             GroupDictionary[id].Name = name;
             GroupDictionary[id].Description = description;
         }
-            
-        //Move products from deleted group to new group?
-        //Group with ID 0 for products with no group
+
+        //Assign group 0 to products left with no group
+        //Removes group from dictionary
         public void DeleteGroup(int GroupID)
         {
+            //Mulighed for at flytte alle produkter til en bestem gruppe???
+            foreach (Product product in ProductDictionary.Values.Where(x => x.ProductGroup == GroupDictionary[GroupID]))
+            {
+                product.ProductGroup = GroupDictionary[0];
+            }
             GroupDictionary.Remove(GroupID);
         }
 
@@ -220,6 +226,7 @@ namespace P3_Projekt.Classes.Utilities
         }
         //----SEARCH-END---------------------
 
+        //Creates product with storage and stocka as keyvalue, then add the product to the list
         public void CreateProduct(string name, string brand, decimal purchasePrice, Group group, bool discount, decimal discountPrice, decimal salePrice, Image image, params KeyValuePair<StorageRoom, int>[] storageRoomStockInput)
         {
             Product newProduct = new Product(name, brand, purchasePrice, group, discount, salePrice, discountPrice, image);
@@ -232,8 +239,9 @@ namespace P3_Projekt.Classes.Utilities
             ProductDictionary.Add(newProduct.ID, newProduct);
         }
 
-        public void EditProduct(bool isAdmin, Product editProduct, string name, string brand, decimal purchasePrice, decimal salePrice, Group group, bool discount, decimal discountPrice, Image image)
-        {
+        //edit product, calles two different methods depending if its run by an admin
+        public void EditProduct(bool isAdmin, Product editProduct, string name, string brand, decimal purchasePrice, Group group, bool discount, decimal salePrice, decimal discountPrice, Image image)
+        {                           
             if (isAdmin)
             {
                 editProduct.AdminEdit(name, brand, purchasePrice, salePrice, group, discount, discountPrice, image);
@@ -244,6 +252,11 @@ namespace P3_Projekt.Classes.Utilities
             }
         }
 
+        public void CreateTempProduct(string description, decimal salePrice)
+        {
+            TempProduct newTempProduct = new TempProduct(description, salePrice);
+            TempProductList.Add(newTempProduct);
+        }
 
         /* User has already found the matching product ID.
          * First line findes the store storage
@@ -255,6 +268,7 @@ namespace P3_Projekt.Classes.Utilities
             ProductDictionary[matchedProductID].StorageWithAmount[StoreStorage.Key] -= tempProductTransaction.Amount;
         }
 
+        //Adds new storage room to dictionary, and to all products
         public void CreateStorageRoom(string name, string description)
         {
             StorageRoom newRoom = new StorageRoom(name, description);
@@ -272,6 +286,7 @@ namespace P3_Projekt.Classes.Utilities
             StorageRoomDictionary[id].Description = description;
         }
 
+        //Removes storage room from dictionary, and all products
         public void DeleteStorageRoom(int id)
         {
             foreach (Product product in ProductDictionary.Values)
@@ -279,6 +294,7 @@ namespace P3_Projekt.Classes.Utilities
                 product.StorageWithAmount.Remove(StorageRoomDictionary[id]);
             }
             StorageRoomDictionary.Remove(id);
+
         }
     }
 }

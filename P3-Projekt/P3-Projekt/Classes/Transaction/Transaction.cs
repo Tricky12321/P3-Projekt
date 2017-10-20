@@ -9,7 +9,8 @@ namespace P3_Projekt.Classes
     public abstract class Transaction
     {
         protected static int _idCounter = 0;
-
+        public static int IDCounter { get { return _idCounter; } set { _idCounter = value; } }
+        
         private int _id;
         public BaseProduct Product;
         public int Amount;
@@ -22,9 +23,6 @@ namespace P3_Projekt.Classes
             _id = _idCounter++;
             _date = DateTime.Now;
         }
-        
-
-        public abstract void Delete();
 
         public virtual void Edit(int newAmount)
         {
@@ -32,5 +30,11 @@ namespace P3_Projekt.Classes
         }
 
         public abstract void Execute();
+
+        public void LoadIDValue()
+        {
+            /* Should load the latest transaction ID from database.
+             * Should be called at start of program */
+        }
     }
 }

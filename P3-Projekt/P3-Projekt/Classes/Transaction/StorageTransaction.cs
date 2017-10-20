@@ -16,11 +16,6 @@ namespace P3_Projekt.Classes
 
         }
 
-        public override void Delete()
-        {
-            throw new NotImplementedException();
-        }
-
         public override void Execute()
         {
             throw new NotImplementedException();
