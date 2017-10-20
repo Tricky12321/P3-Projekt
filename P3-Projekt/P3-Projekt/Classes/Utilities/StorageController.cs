@@ -16,6 +16,7 @@ namespace P3_Projekt.Classes.Utilities
         public Dictionary<int, Product> ProductDictionary = new Dictionary<int, Product>();
         public Dictionary<int, Group> GroupDictionary = new Dictionary<int, Group>();
         public Dictionary<int, StorageRoom> StorageRoomDictionary = new Dictionary<int, StorageRoom>();
+        public List<TempProduct> TempProductList = new List<TempProduct>();
 
         public StorageController(BoerglumAbbeyStorageandSale boerglumAbbeyStorageandSale)
         {
@@ -212,6 +213,7 @@ namespace P3_Projekt.Classes.Utilities
         }
         //----SEARCH-END---------------------
 
+        //Creates product with storage and stocka as keyvalue, then add the product to the list
         public void CreateProduct(string name, string brand, decimal purchasePrice, Group group, bool discount, decimal discountPrice, decimal salePrice, Image image, params KeyValuePair<StorageRoom, int>[] storageRoomStockInput)
         {
             Product newProduct = new Product(name, brand, purchasePrice, group, discount, salePrice, discountPrice, image);
@@ -224,8 +226,9 @@ namespace P3_Projekt.Classes.Utilities
             ProductDictionary.Add(newProduct.ID, newProduct);
         }
 
-        public void EditProduct(bool isAdmin, Product editProduct, string name, string brand, decimal purchasePrice, decimal salePrice, Group group, bool discount, decimal discountPrice, Image image)
-        {
+        //edit product, calles two different methods depending if its run by an admin
+        public void EditProduct(bool isAdmin, Product editProduct, string name, string brand, decimal purchasePrice, Group group, bool discount, decimal salePrice, decimal discountPrice, Image image)
+        {                           
             if (isAdmin)
             {
                 editProduct.AdminEdit(name, brand, purchasePrice, salePrice, group, discount, discountPrice, image);
@@ -236,6 +239,11 @@ namespace P3_Projekt.Classes.Utilities
             }
         }
 
+        public void CreateTempProduct(string description, decimal salePrice)
+        {
+            TempProduct newTempProduct = new TempProduct(description, salePrice);
+            TempProductList.Add(newTempProduct);
+        }
 
         /* User has already found the matching product ID.
          * First line findes the store storage
