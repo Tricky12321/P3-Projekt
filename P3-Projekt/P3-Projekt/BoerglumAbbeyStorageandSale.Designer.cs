@@ -59,7 +59,7 @@
             this.tabControl.Name = "tabControl";
             this.tabControl.Padding = new System.Drawing.Point(30, 3);
             this.tabControl.SelectedIndex = 0;
-            this.tabControl.Size = new System.Drawing.Size(1894, 1025);
+            this.tabControl.Size = new System.Drawing.Size(2268, 1132);
             this.tabControl.TabIndex = 0;
             // 
             // tabPage1
@@ -71,8 +71,8 @@
             this.tabPage1.Controls.Add(this.but_addProduct);
             this.tabPage1.Location = new System.Drawing.Point(4, 54);
             this.tabPage1.Name = "tabPage1";
-            this.tabPage1.Padding = new System.Windows.Forms.Padding(3, 3, 3, 3);
-            this.tabPage1.Size = new System.Drawing.Size(1886, 967);
+            this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage1.Size = new System.Drawing.Size(2260, 1074);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Salg";
             this.tabPage1.UseVisualStyleBackColor = true;
@@ -150,7 +150,7 @@
             // 
             this.tabPage2.Location = new System.Drawing.Point(4, 54);
             this.tabPage2.Name = "tabPage2";
-            this.tabPage2.Padding = new System.Windows.Forms.Padding(3, 3, 3, 3);
+            this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
             this.tabPage2.Size = new System.Drawing.Size(1886, 967);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Lager";
@@ -160,7 +160,7 @@
             // 
             this.tabPage3.Location = new System.Drawing.Point(4, 54);
             this.tabPage3.Name = "tabPage3";
-            this.tabPage3.Padding = new System.Windows.Forms.Padding(3, 3, 3, 3);
+            this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
             this.tabPage3.Size = new System.Drawing.Size(1886, 967);
             this.tabPage3.TabIndex = 2;
             this.tabPage3.Text = "Statistics";
@@ -170,7 +170,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1524, 917);
+            this.ClientSize = new System.Drawing.Size(1898, 1024);
             this.Controls.Add(this.tabControl);
             this.Name = "BoerglumAbbeyStorageandSale";
             this.Text = "Børglum Kloster Lager og Salg";

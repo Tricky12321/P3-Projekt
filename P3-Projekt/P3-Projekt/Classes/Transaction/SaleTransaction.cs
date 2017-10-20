@@ -76,12 +76,34 @@ namespace P3_Projekt.Classes
             }
         }
 
-        /*public string GetTransactionString()
+        public string GetTransactionString()
         {
-            if(Product is Product)
+            if (Product is Product)
             {
-                return (Product as Product)
+                if ((Product as Product).DiscountBool)
+                {
+                    return $"{(Product as Product).Name} {(Product as Product).DiscountPrice}";
+                }
+                else
+                {
+                    return $"{(Product as Product).Name} {(Product as Product).SalePrice}";
+                }
             }
-        }*/
+            else if (Product is ServiceProduct)
+            {
+                if ((Product as ServiceProduct).GroupLimit <= Amount)
+                {
+                    return $"{(Product as ServiceProduct).Name} {(Product as ServiceProduct).GroupPrice}";
+                }
+                else
+                {
+                    return $"{(Product as ServiceProduct).Name} {(Product as ServiceProduct).SalePrice}";
+                }
+            }
+            else
+            {
+                return $"{(Product as TempProduct).Description} {(Product as TempProduct).SalePrice}";
+            }
+        }
     }
 }
