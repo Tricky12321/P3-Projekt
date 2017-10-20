@@ -44,12 +44,6 @@ namespace P3_Projekt.Classes.Utilities.Tests
         }
 
         [Test()]
-        public void DeleteGroupTest()
-        {
-            Assert.Fail();
-        }
-
-        [Test()]
         public void EditProductTest1()
         {
             StorageController storageController = new StorageController(new BoerglumAbbeyStorageandSale());

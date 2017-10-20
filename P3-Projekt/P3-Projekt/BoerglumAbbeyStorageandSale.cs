@@ -20,14 +20,14 @@ namespace P3_Projekt
         public BoerglumAbbeyStorageandSale()
         {
             InitializeComponent();
-            var test = new Receipt();
+            /*var test = new Receipt();
             test.AddTransaction(new SaleTransaction(new Product("ged", "ged", 100m, new Group("GEd", "ged"), true, 180m, 150m, default(Image)), 10, 10));
             test.AddTransaction(new SaleTransaction(new Product("ged", "ged", 100m, new Group("GEd", "ged"), false, 180m, 150m, default(Image)), 10, 10));
             test.AddTransaction(new SaleTransaction(new Product("ged", "ged", 100m, new Group("GEd", "ged"), true, 180m, 120m, default(Image)), 10, 10));
             test.AddTransaction(new SaleTransaction(new Product("ged", "ged", 100m, new Group("GEd", "ged"), true, 180m, 150m, default(Image)), 10, 10));
             test.AddTransaction(new SaleTransaction(new ServiceProduct(85m, 75m, 10,"Voksne"), 12, 10));
             test.AddTransaction(new SaleTransaction(new ServiceProduct(85m, 75m, 10, "Voksne"), 8, 10));
-            UpdateListReceipt(test);
+            UpdateListReceipt(test);*/
         }
 
         public void UpdateListReceipt(Receipt receipt)
