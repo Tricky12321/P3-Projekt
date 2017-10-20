@@ -8,7 +8,8 @@ namespace P3_Projekt.Classes
 {
     public class StorageRoom
     {
-        private static int IDCounter = 0;
+        private static int _idCounter = 0;
+        public static int IDCounter { get { return _idCounter; } set { _idCounter = value; } }
 
         public int ID;
         public string Name;
@@ -18,7 +19,7 @@ namespace P3_Projekt.Classes
         {
             Name = name;
             Description = description;
-            ID = IDCounter++;
+            ID = _idCounter++;
         }
     }
 }

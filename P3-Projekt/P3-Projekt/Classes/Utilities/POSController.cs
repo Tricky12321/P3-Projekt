@@ -9,6 +9,29 @@ namespace P3_Projekt.Classes.Utilities
 {
     public class POSController
     {
+        /*
+         * 
+         * 
+         * 
+         * 
+         * 
+         * 
+         * 
+         * 
+         * 
+         * 
+         * fiks metoden til at loade ID til transaction 
+         * 
+         * 
+         * 
+         * 
+         * 
+         * 
+         * 
+         * 
+         * 
+         * 
+         */
         private BoerglumAbbeyStorageandSale _boerglumAbbeyStorageandSale;
         public Receipt PlacerholderReceipt;
 
