@@ -10,12 +10,12 @@ namespace P3_Projekt.Classes
     {
         private int _purchasePrice;
         private string _supplier;
-        private int _storageRoomid;
+        private int _storageRoomID;
 
         public OrderTransaction(Product product, int amount, string supplier, int storageRoomID) : base(product, amount)
         {
             _supplier = supplier;
-            _storageRoomid = storageRoomID;
+            _storageRoomID = storageRoomID;
         }
 
         public override void Execute()
@@ -25,9 +25,9 @@ namespace P3_Projekt.Classes
                 /* Finder først storage room ved ID.
                  * Derefter bruger den StorageRoom delen som index,
                  * så man kan ændre Amount */
-                var StoreStorage = (Product as Product).StorageWithAmount.Where(x => x.Key.ID == _storageRoomid).First();
+                var StoreStorage = (Product as Product).StorageWithAmount.Where(x => x.Key.ID == _storageRoomID).First();
 
-                (Product as Product).StorageWithAmount[StoreStorage.Key] -= Amount;
+                (Product as Product).StorageWithAmount[StoreStorage.Key] += Amount;
             }
             else
             {

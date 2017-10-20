@@ -22,7 +22,7 @@ namespace P3_Projekt.Classes
         //Laver ID om til streng hvori gruppens nummer er indkluderet som de to første cifre, padding med 0'er for syns
         public string GetFullID { get {
                 int fullID = this.ID + ProductGroup.ID * 10000;
-                string GetFullID = fullID.ToString().PadLeft(6, '0');
+                string GetFullID = fullID.ToString().PadLeft(5, '0');
                 return GetFullID;
             } }
 
@@ -67,7 +67,7 @@ namespace P3_Projekt.Classes
         }
 
         //modtage storage transaction?
-        public void Deposit(StorageRoom depositRoom, int numberDeposited)
+        /*public void Deposit(StorageRoom depositRoom, int numberDeposited)
         {
             StorageWithAmount[depositRoom] =+ numberDeposited;
         }
@@ -83,6 +83,6 @@ namespace P3_Projekt.Classes
         {
             StorageWithAmount[moveFromRoom] =- numberMove;
             StorageWithAmount[moveToRoom] =+ numberMove;
-        }
+        }*/
     }
 }
