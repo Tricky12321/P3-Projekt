@@ -13,7 +13,7 @@ namespace P3_Projekt.Classes
         public string Name;
         private string _brand;
         private decimal _purchasePrice;
-        private Group _group;
+        public Group ProductGroup;
         public bool DiscountBool;
         public decimal DiscountPrice;
         private Image _image;
@@ -24,7 +24,7 @@ namespace P3_Projekt.Classes
             Name = name;
             _brand = brand;
             _purchasePrice = purchasePrice;
-            _group = group;
+            ProductGroup = group;
             DiscountBool = discount;
             DiscountPrice = discountPrice;
             _image = image;
@@ -38,7 +38,7 @@ namespace P3_Projekt.Classes
         {
             Name = name;
             _brand = brand;
-            _group = group;
+            ProductGroup = group;
             _image = image;
 
         }

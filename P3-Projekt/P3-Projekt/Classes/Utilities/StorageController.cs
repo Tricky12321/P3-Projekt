@@ -73,7 +73,7 @@ namespace P3_Projekt.Classes.Utilities
                     //levenshteins will try to autocorrect the string and suggest items with similar names to the string
                     LevenshteinsSearch(searchedString, p, ref productsToReturn);    
                                                                                    
-                    groupSearch(p);
+                    groupSearch(searchedString, p, ref productsToReturn);
  
                 }
                 return productsToReturn;
@@ -86,7 +86,7 @@ namespace P3_Projekt.Classes.Utilities
         }
 
         //----Levensthein---------------------
-        public void LevenshteinsSearch(string searchedString, Product productCheck, ref List<Product> productsToReturn)
+        public void LevenshteinsSearch(string searchedString, Product productCheck, ref List<Product> productsToReturn)//tested
         {//setup for levenshteins
             //getting the chardifference between the searchedstring and the productname
             int charDifference = ComputeLevenshteinsDistance(searchedString, productCheck);
@@ -206,9 +206,17 @@ namespace P3_Projekt.Classes.Utilities
         }
         //----LevenSthein-END-----------------------
 
-        public void groupSearch(Product productToMatchGroup)
+        public void groupSearch(string searchedString, Product productToMatchGroup, ref List<Product> productListToReturn)
         {
+            string[] dividedString = searchedString.Split(' ');
 
+            foreach(Group g in GroupDictionary.Values)
+            {   
+                if (dividedString.Contains(g.Name) && g == productToMatchGroup.ProductGroup)
+                {
+                    productListToReturn.Add(productToMatchGroup);
+                }
+            }
         }
         //----SEARCH-END---------------------
 
