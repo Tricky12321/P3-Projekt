@@ -12,6 +12,15 @@ namespace P3_Projekt.Classes.Utilities.Tests
     [TestFixture()]
     public class StorageControllerTests
     {
+        [TearDown] public void ResetStatic()
+        {
+            StorageRoom.IDCounter = 0;
+            BaseProduct.IDCounter = 0;
+            Group.IDCounter = 0;
+            Transaction.IDCounter = 0;
+            Receipt.IDCounter = 0;
+        }
+
         [Test()]
         public void StorageControllerTest()
         {
