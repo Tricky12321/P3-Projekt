@@ -10,12 +10,13 @@ namespace P3_Projekt.Classes
     {
         private StorageRoom _source;
         private StorageRoom _destination;
-        private int _amountMove;
-        Product _productMove = null;
 
-        public StorageTransaction(Product product, int amount) : base(product, amount)
+        public StorageTransaction(Product product, int amount, StorageRoom source, StorageRoom destiantion) : base(product, amount)
         {
-            
+            _source = source;
+            _destination = destiantion;
+            Amount = amount;
+            Product = product;
         }
 
         public override void Execute()
