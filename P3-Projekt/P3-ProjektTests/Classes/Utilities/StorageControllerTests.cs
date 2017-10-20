@@ -13,6 +13,14 @@ namespace P3_Projekt.Classes.Utilities.Tests
     [TestFixture()]
     public class StorageControllerTests
     {
+        [TearDown] public void ResetStatic()
+        {
+            StorageRoom.IDCounter = 0;
+            BaseProduct.IDCounter = 0;
+            Group.IDCounter = 0;
+            Transaction.IDCounter = 0;
+            Receipt.IDCounter = 0;
+        }
 
         [Test()]
         public void StorageControllerTest()
@@ -45,7 +53,7 @@ namespace P3_Projekt.Classes.Utilities.Tests
             StorageController storageController = new StorageController(new BoerglumAbbeyStorageandSale());
             StorageRoom testStorage1 = new StorageRoom("3", "medium lager");
             KeyValuePair<StorageRoom, int> testPair = new KeyValuePair<StorageRoom, int>(testStorage1, 10);
-             
+
             Group testGroup = new Group("drikkevarer", "wuhuu drikke");
 
             storageController.CreateProduct("mælk", "arla", Convert.ToDecimal(5), testGroup, false, Convert.ToDecimal(7), Convert.ToDecimal(10), null, testPair);
@@ -75,9 +83,9 @@ namespace P3_Projekt.Classes.Utilities.Tests
             Group testGroup = new Group("drikkevarer", "wuhuu drikke");
 
             storageController.CreateProduct("mælk", "arla", Convert.ToDecimal(5), testGroup, false, Convert.ToDecimal(7), Convert.ToDecimal(10), null, testPair);
-            
+
             return test = storageController.ProductDictionary[testRunTimes].StorageWithAmount[testStorage];
-            
+
         }
 
         [Test()]
@@ -197,6 +205,39 @@ namespace P3_Projekt.Classes.Utilities.Tests
             Assert.IsTrue(b1 && b2 && b3 && b4);
         }
 
+        [TestCase("shir with banas", 3, ExpectedResult = true)]
+        [TestCase("bok", 1, ExpectedResult = true)]
+        [TestCase("smal blu bid with gren head", 4, ExpectedResult = true)]
+        [TestCase("bana", 2, ExpectedResult = false)]
+        public bool EvaluateStringLimitTest(string searched, int charDiff)
+        {
+            StorageController strContr = new StorageController(new BoerglumAbbeyStorageandSale());
+            return strContr.EvaluateStringLimit(searched, charDiff);
+        }
 
+        [Test()]
+        public void ComputeLevenshteinsDistanceTest()
+        {
+            StorageController strContr = new StorageController(new BoerglumAbbeyStorageandSale());
+            Group testGroup = new Group("shirts", "shirts and dresses");
+            Product productToBeCompared = new Product("Running shoes", "Adidas", 100, testGroup, false, 20, 50, null);
+            string searchedString = "Runin shos";
+            int charDifference = strContr.ComputeLevenshteinsDistance(searchedString, productToBeCompared);
+            Assert.IsTrue(charDifference == 3);
+        }
+
+        [Test()]
+        public void LevenshteinsSearchTest()
+        {
+            StorageController strContr = new StorageController(new BoerglumAbbeyStorageandSale());
+            Group testGroup = new Group("shirts", "shirts and dresses");
+            Product productToBeCompared = new Product("Running shoes", "Adidas", 100, testGroup, false, 20, 50, null);
+            string searchedString = "runin shos";
+            List<Product> productList = new List<Product>();
+
+            strContr.LevenshteinsSearch(searchedString, productToBeCompared, ref productList);
+
+            Assert.IsTrue(productList.Contains(productToBeCompared));
+        }
     }
 }
