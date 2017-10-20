@@ -13,7 +13,7 @@ namespace P3_Projekt.Classes
         public static int IDCounter { get { return _idCounter; } set { _idCounter = value; } }
         
         public int ID;
-        public List<Transaction> Transactions = new List<Transaction>();
+        public List<SaleTransaction> Transactions = new List<SaleTransaction>();
         public int NumberOfProducts;
         public decimal TotalPrice;
         public decimal PaidPrice;
@@ -26,7 +26,7 @@ namespace P3_Projekt.Classes
             Date = DateTime.Now;
         }
 
-        public void AddTransaction(Transaction transaction)
+        public void AddTransaction(SaleTransaction transaction)
         {
             //Checks if product is already in reciept//
             if (IsProductInReceipt(transaction.Product))
@@ -44,39 +44,10 @@ namespace P3_Projekt.Classes
 
         private void UpdateTotalPrice()
         {
-            decimal priceTotal = 0;
-            foreach(Transaction transaction in Transactions)
+            TotalPrice = 0;
+            foreach (SaleTransaction transaction in Transactions)
             {
-                if (transaction.Product is Product)
-                {
-                    if ((transaction.Product as Product).DiscountBool)
-                    {
-                        priceTotal = transaction.Amount * (transaction.Product as Product).DiscountPrice;
-                    }
-                    else
-                    {
-                        priceTotal = transaction.Amount * (transaction.Product as Product).SalePrice;
-                    }
-                }
-                else if (transaction.Product is TempProduct)
-                {
-                    priceTotal = transaction.Amount * (transaction.Product as TempProduct).SalePrice;
-                }
-                else if (transaction.Product is ServiceProduct)
-                {
-                    if ((transaction.Product as ServiceProduct).GroupLimit > transaction.Amount)
-                    {
-                        priceTotal += (transaction.Product as ServiceProduct).SalePrice;
-                    }
-                    else
-                    {
-                        priceTotal += (transaction.Product as ServiceProduct).GroupPrice;
-                    }
-                }
-                else
-                {
-                    throw new WrongProductTypeException("Transaktionens produkt har ikke en valid type!");
-                }
+                TotalPrice += FindTransactionPrice(transaction);
             }
         }
 
@@ -85,12 +56,12 @@ namespace P3_Projekt.Classes
             return Transactions.Any(x => x.Product == product);
         }
 
-        private Transaction GetTransactionWithProduct(BaseProduct product)
+        private SaleTransaction GetTransactionWithProduct(BaseProduct product)
         {
             return Transactions.First(x => x.Product == product);
         }
 
-        private decimal FindTransactionPrice(Transaction transaction)
+        private decimal FindTransactionPrice(SaleTransaction transaction)
         {
             decimal priceTotal = 0;
 
@@ -130,9 +101,9 @@ namespace P3_Projekt.Classes
 
         public void RemoveTransaction(int productID)
         {
-            Transaction placeholderTransaction = FindTransactionFromProductID(productID);
+            SaleTransaction placeholderTransaction = FindTransactionFromProductID(productID);
             Transactions.Remove(placeholderTransaction);
-            TotalPrice -= FindTransactionPrice(placeholderTransaction);
+            UpdateTotalPrice();
             UpdateNumberOfProducts();
         }
 
@@ -145,7 +116,7 @@ namespace P3_Projekt.Classes
             }
         }
 
-        private Transaction FindTransactionFromProductID(int productID)
+        private SaleTransaction FindTransactionFromProductID(int productID)
         {
             return Transactions.First(x => x.Product.ID == productID);
         }
@@ -157,7 +128,6 @@ namespace P3_Projekt.Classes
                 /**/
             }
         }
-
 
         public void Execute()
         {

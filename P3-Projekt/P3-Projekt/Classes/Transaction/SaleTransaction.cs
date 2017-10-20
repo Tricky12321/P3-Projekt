@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using P3_Projekt.Classes.Exceptions;
 
 namespace P3_Projekt.Classes
 {
@@ -16,6 +17,11 @@ namespace P3_Projekt.Classes
             ReceiptID = receiptID;
         }
 
+        public override void Delete()
+        {
+            throw new NotImplementedException();
+        }
+
         public override void Execute()
         {
             if (Product is Product)
@@ -23,7 +29,7 @@ namespace P3_Projekt.Classes
                 /* Finder første storage room, som altid er butikken. Butikken har ID 0.
                  * Derefter bruger den StorageRoom delen som index,
                  * så man kan ændre Amount */
-                var StoreStorage = (Product as Product).StorageWithAmount.Where( x => x.Key.ID == 0).First();
+                var StoreStorage = (Product as Product).StorageWithAmount.Where(x => x.Key.ID == 0).First();
 
                 (Product as Product).StorageWithAmount[StoreStorage.Key] -= Amount;
             }
@@ -31,7 +37,51 @@ namespace P3_Projekt.Classes
             {
                 /*Gør ingenting, fordi temp og service produkt ved ikke, hvilket lager de er på.
                  * Derfor kan der ikke ændres lagerstatus */
-            }       
+            }
+
         }
+
+        //Returns the correct price according to discount, groups etc.
+        public decimal GetProductPrice()
+        {
+            if (Product is Product)
+            {
+                if ((Product as Product).DiscountBool)
+                {
+                    return (Product as Product).DiscountPrice;
+                }
+                else
+                {
+                    return (Product as Product).SalePrice;
+                }
+            }
+            else if (Product is TempProduct)
+            {
+                return (Product as TempProduct).SalePrice;
+            }
+            else if (Product is ServiceProduct)
+            {
+                if (Amount >= (Product as ServiceProduct).GroupLimit)
+                {
+                    return (Product as ServiceProduct).GroupPrice;
+                }
+                else
+                {
+                    return (Product as ServiceProduct).SalePrice;
+                }
+            }
+            else
+            {
+                throw new WrongProductTypeException();
+            }
+        }
+
+        /*public string GetTransactionString()
+        {
+            if(Product is Product)
+            {
+                return (Product as Product)
+            }
+        }*/
     }
 }

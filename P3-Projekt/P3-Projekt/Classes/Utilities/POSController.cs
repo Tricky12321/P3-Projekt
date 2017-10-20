@@ -63,8 +63,6 @@ namespace P3_Projekt.Classes.Utilities
             PlacerholderReceipt.RemoveTransaction(productID);
         }
 
-
-
         public void ExecuteReceipt()
         {
             try

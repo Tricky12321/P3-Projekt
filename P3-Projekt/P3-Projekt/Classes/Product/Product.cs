@@ -19,10 +19,10 @@ namespace P3_Projekt.Classes
         private Image _image;
         public Dictionary<StorageRoom, int> StorageWithAmount = new Dictionary<StorageRoom, int>();
 
-        
+        //Laver ID om til streng hvori gruppens nummer er indkluderet som de to første cifre, padding med 0'er for syns
         public string GetFullID { get {
-                int fullID = this.ID + ProductGroup.ID * 10000;
-                string GetFullID = fullID.ToString().PadLeft(5, '0');
+                int fullID = this.ID + _group.ID * 10000;
+                string GetFullID = fullID.ToString().PadLeft(6, '0');
                 return GetFullID;
             } }
 
@@ -43,7 +43,7 @@ namespace P3_Projekt.Classes
 
         /* No delete method */ 
 
-
+        //Regular edit without admin commands toggled
         public void Edit(string name, string brand, Group group, Image image)
         {
             Name = name;
@@ -53,6 +53,7 @@ namespace P3_Projekt.Classes
 
         }
 
+        //Admin edit with admin command toggled
         public void AdminEdit(string name, string brand, decimal purchasePrice, decimal salePrice, Group group, bool discount, decimal discountPrice, Image image)
         {
             Name = name;
@@ -65,16 +66,19 @@ namespace P3_Projekt.Classes
             SalePrice = salePrice;
         }
 
+        //modtage storage transaction?
         public void Deposit(StorageRoom depositRoom, int numberDeposited)
         {
             StorageWithAmount[depositRoom] =+ numberDeposited;
         }
 
+        //modtage sale transaction???
         public void Withdraw(StorageRoom withdrawnRoom, int numberWithdrawn)
         {
             StorageWithAmount[withdrawnRoom] =- numberWithdrawn;
         }
 
+        //modtage storage transaction?
         public void Move(StorageRoom moveFromRoom, StorageRoom moveToRoom, int numberMove)
         {
             StorageWithAmount[moveFromRoom] =- numberMove;
