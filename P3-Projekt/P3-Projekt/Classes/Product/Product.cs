@@ -19,6 +19,15 @@ namespace P3_Projekt.Classes
         private Image _image;
         public Dictionary<StorageRoom, int> StorageWithAmount = new Dictionary<StorageRoom, int>();
 
+        
+        public string GetFullID { get {
+                int fullID = this.ID + _group.ID * 10000;
+                string GetFullID = fullID.ToString().PadLeft(5, '0');
+                return GetFullID;
+            } }
+
+
+
         public Product(string name, string brand, decimal purchasePrice, Group group, bool discount, decimal salePrice, decimal discountPrice, Image image) : base(salePrice)
         {
             Name = name;
@@ -28,6 +37,7 @@ namespace P3_Projekt.Classes
             DiscountBool = discount;
             DiscountPrice = discountPrice;
             _image = image;
+
             
         }
 

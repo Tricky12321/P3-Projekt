@@ -9,9 +9,11 @@ using System.Drawing;
 
 namespace P3_Projekt.Classes.Utilities.Tests
 {
+
     [TestFixture()]
     public class StorageControllerTests
     {
+
         [Test()]
         public void StorageControllerTest()
         {
@@ -30,6 +32,13 @@ namespace P3_Projekt.Classes.Utilities.Tests
             Assert.Fail();
         }
 
+
+        [Test()]
+        public void ProductIDTest()
+        {
+            Assert.Fail();
+        }
+
         [Test()]
         public void CreateProductTest()
         {
@@ -42,6 +51,8 @@ namespace P3_Projekt.Classes.Utilities.Tests
             storageController.CreateProduct("mælk", "arla", Convert.ToDecimal(5), testGroup, false, Convert.ToDecimal(7), Convert.ToDecimal(10), null, testPair);
 
             Assert.IsTrue(storageController.ProductDictionary.ContainsKey(0));
+
+            
         }
 
         [TestCase(10, 1, ExpectedResult = 10)]
