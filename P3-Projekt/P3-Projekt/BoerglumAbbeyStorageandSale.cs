@@ -54,5 +54,10 @@ namespace P3_Projekt
         {
             Printer.pd_PrintPage(sender, ev);
         }
+
+        private void tabPage1_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }
