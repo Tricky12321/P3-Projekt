@@ -28,7 +28,6 @@ namespace P3_Projekt.Classes
             DiscountBool = discount;
             DiscountPrice = discountPrice;
             _image = image;
-            
         }
 
         /* No delete method */ 
