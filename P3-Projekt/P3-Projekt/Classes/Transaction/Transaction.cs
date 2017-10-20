@@ -9,7 +9,8 @@ namespace P3_Projekt.Classes
     public abstract class Transaction
     {
         protected static int _idCounter = 0;
-
+        public static int IDCounter { get { return _idCounter; } set { _idCounter = value; } }
+        
         private int _id;
         public BaseProduct Product;
         public int Amount;
