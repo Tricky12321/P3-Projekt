@@ -9,7 +9,7 @@ using P3_Projekt.Classes.Database;
 
 namespace P3_Projekt.Classes
 {
-    public class Product : BaseProduct
+    public class Product : BaseProduct, MysqlObject
     {
         public string Name;
         public string Brand;
@@ -83,12 +83,25 @@ namespace P3_Projekt.Classes
         {
             string sql = $"SELECT * FROM products WHERE id = {ID}";
             Mysql Connection = new Mysql();
-            CreateFromTableDecode(Connection.RunQueryWithReturn(sql));
+            CreateFromRow(Connection.RunQueryWithReturn(sql).RowData[0]);
         }
 
-        private void CreateFromTableDecode(TableDecode results)
+        public void CreateFromRow(Row results)
         {
+            // TODO: Her skal der være lidt mere ;) 
 
+            ID = Convert.ToInt32(results.Values[0]);
+        }
+
+
+        public void UploadToDatabase()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void UpdateInDatabase()
+        {
+            throw new NotImplementedException();
         }
     }
 }

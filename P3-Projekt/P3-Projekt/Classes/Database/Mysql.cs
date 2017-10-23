@@ -9,7 +9,6 @@ using System.Diagnostics;
 using P3_Projekt.Classes.Exceptions;
 namespace P3_Projekt.Classes.Database
 {
-
     public class Mysql
     {
         private const string _username = "P3";
@@ -72,7 +71,6 @@ namespace P3_Projekt.Classes.Database
                 MySqlCommand cmd = Connection.CreateCommand();
                 cmd.CommandText = Query;
                 // Åbner forbindelsen til databasen (OPEN)
-                
                 MySqlDataReader Reader = cmd.ExecuteReader();
                 // Sikre sig at der er noget at hente i databasen.
                 if (!Reader.HasRows)
@@ -81,7 +79,6 @@ namespace P3_Projekt.Classes.Database
                 }
                 TableContent = new TableDecode(Reader);
                 Reader.Close();
-
             }
             catch (Exception)
             {
