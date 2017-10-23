@@ -8,19 +8,19 @@ namespace P3_Projekt.Classes
 {
     public class TempProduct : BaseProduct
     {
-        private string _description;
+        public string Description;
         private bool _resolved;
 
 
         public TempProduct (string description, decimal salePrice) : base(salePrice)
         {
-            _description = description;
+            Description = description;
             _resolved = false;
         }
 
         public void Edit(string newDescription, decimal newSalePrice)
         {
-            _description = newDescription;
+            Description = newDescription;
             SalePrice = newSalePrice;
         }
 

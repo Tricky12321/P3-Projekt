@@ -24,7 +24,7 @@ namespace P3_Projekt.Classes {
                     printFont = new Font("Courier New", 25);
                     PrintDocument pd = new PrintDocument();
                     pd.PrintPage += new PrintPageEventHandler
-                       (this.pd_PrintPage);
+                       (pd_PrintPage);
 
                     /* Asks for which printer to use */
                     PrintDialog printDialog = new PrintDialog();
