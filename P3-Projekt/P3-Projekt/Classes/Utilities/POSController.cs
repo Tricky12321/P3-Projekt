@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Diagnostics;
+using P3_Projekt.Classes.Database;
 
 namespace P3_Projekt.Classes.Utilities
 {
@@ -61,6 +62,14 @@ namespace P3_Projekt.Classes.Utilities
         public void RemoveTransactionFromReceipt(int productID)
         {
             PlacerholderReceipt.RemoveTransaction(productID);
+        }
+
+        public void DeleteTransaction(int transactionID)
+        {
+            /* TODO: Vær sikker på hvad transactions tabellen skal hedde!! */
+            string deleteQuery = $"DELETE FROM transactions WHERE ID = {transactionID}";
+            Mysql Connection = new Mysql();
+            Connection.RunQuery(deleteQuery);
         }
 
         public void ExecuteReceipt()
