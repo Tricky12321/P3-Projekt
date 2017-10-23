@@ -12,7 +12,7 @@ namespace P3_Projekt.Classes
     public class Product : BaseProduct
     {
         public string Name;
-        private string _brand;
+        public string Brand;
         private decimal _purchasePrice;
         public Group ProductGroup;
         public bool DiscountBool;
@@ -24,7 +24,7 @@ namespace P3_Projekt.Classes
         public Product(string name, string brand, decimal purchasePrice, Group group, bool discount, decimal salePrice, decimal discountPrice, Image image) : base(salePrice)
         {
             Name = name;
-            _brand = brand;
+            Brand = brand;
             _purchasePrice = purchasePrice;
             ProductGroup = group;
             DiscountBool = discount;
@@ -40,7 +40,7 @@ namespace P3_Projekt.Classes
         public void Edit(string name, string brand, Group group, Image image)
         {
             Name = name;
-            _brand = brand;
+            Brand = brand;
             ProductGroup = group;
             _image = image;
 
@@ -50,7 +50,7 @@ namespace P3_Projekt.Classes
         public void AdminEdit(string name, string brand, decimal purchasePrice, decimal salePrice, Group group, bool discount, decimal discountPrice, Image image)
         {
             Name = name;
-            _brand = brand;
+            Brand = brand;
             _purchasePrice = purchasePrice;
             ProductGroup = group;
             DiscountBool = discount;
