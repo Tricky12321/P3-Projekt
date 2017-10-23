@@ -15,7 +15,7 @@ namespace P3_Projekt
 {
     public partial class BoerglumAbbeyStorageandSale : Form
     {
-        P3_Projekt.Classes.ReceiptPrinter Printer = new ReceiptPrinter();
+        ReceiptPrinter Printer = new ReceiptPrinter();
 
 
         public BoerglumAbbeyStorageandSale()
