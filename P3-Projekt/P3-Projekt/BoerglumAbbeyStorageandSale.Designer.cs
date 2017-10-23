@@ -30,6 +30,9 @@
         {
             this.tabControl = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.panel_FastButtons = new System.Windows.Forms.Panel();
+            this.btn_addProduct = new System.Windows.Forms.Button();
+            this.label1 = new System.Windows.Forms.Label();
             this.textBox2 = new System.Windows.Forms.TextBox();
             this.btn_cash = new System.Windows.Forms.Button();
             this.txtbox_BeloebBetalt = new System.Windows.Forms.TextBox();
@@ -38,17 +41,17 @@
             this.numUpDown_AmountProducts = new System.Windows.Forms.NumericUpDown();
             this.textBox_FastAddProduct = new System.Windows.Forms.TextBox();
             this.dataGridView_Receipt = new System.Windows.Forms.DataGridView();
+            this.column_up = new System.Windows.Forms.DataGridViewButtonColumn();
+            this.column_down = new System.Windows.Forms.DataGridViewButtonColumn();
+            this.column_Product = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column_Image = new System.Windows.Forms.DataGridViewImageColumn();
             this.panel1 = new System.Windows.Forms.Panel();
             this.btn_EditReceipt = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.tabPage3 = new System.Windows.Forms.TabPage();
-            this.column_up = new System.Windows.Forms.DataGridViewButtonColumn();
-            this.column_down = new System.Windows.Forms.DataGridViewButtonColumn();
-            this.column_Product = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Column_Image = new System.Windows.Forms.DataGridViewImageColumn();
-            this.label1 = new System.Windows.Forms.Label();
+            this.tabPage_Indstillinger = new System.Windows.Forms.TabPage();
             this.tabControl.SuspendLayout();
             this.tabPage1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numUpDown_AmountProducts)).BeginInit();
@@ -64,6 +67,7 @@
             this.tabControl.Controls.Add(this.tabPage1);
             this.tabControl.Controls.Add(this.tabPage2);
             this.tabControl.Controls.Add(this.tabPage3);
+            this.tabControl.Controls.Add(this.tabPage_Indstillinger);
             this.tabControl.Cursor = System.Windows.Forms.Cursors.SizeWE;
             this.tabControl.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.tabControl.ItemSize = new System.Drawing.Size(100, 50);
@@ -76,6 +80,8 @@
             // 
             // tabPage1
             // 
+            this.tabPage1.Controls.Add(this.panel_FastButtons);
+            this.tabPage1.Controls.Add(this.btn_addProduct);
             this.tabPage1.Controls.Add(this.label1);
             this.tabPage1.Controls.Add(this.textBox2);
             this.tabPage1.Controls.Add(this.btn_cash);
@@ -94,12 +100,43 @@
             this.tabPage1.Text = "Salg";
             this.tabPage1.UseVisualStyleBackColor = true;
             // 
+            // panel_FastButtons
+            // 
+            this.panel_FastButtons.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.panel_FastButtons.Location = new System.Drawing.Point(9, 158);
+            this.panel_FastButtons.Name = "panel_FastButtons";
+            this.panel_FastButtons.Size = new System.Drawing.Size(1093, 800);
+            this.panel_FastButtons.TabIndex = 18;
+            // 
+            // btn_addProduct
+            // 
+            this.btn_addProduct.Location = new System.Drawing.Point(408, 99);
+            this.btn_addProduct.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.btn_addProduct.Name = "btn_addProduct";
+            this.btn_addProduct.Size = new System.Drawing.Size(239, 51);
+            this.btn_addProduct.TabIndex = 17;
+            this.btn_addProduct.Text = "Tilføj Produkt";
+            this.btn_addProduct.UseVisualStyleBackColor = true;
+            // 
+            // label1
+            // 
+            this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.label1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.Location = new System.Drawing.Point(1127, 100);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(754, 68);
+            this.label1.TabIndex = 16;
+            this.label1.Text = "Kvittering";
+            // 
             // textBox2
             // 
             this.textBox2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBox2.Location = new System.Drawing.Point(1281, 731);
+            this.textBox2.Location = new System.Drawing.Point(1127, 708);
             this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(598, 41);
+            this.textBox2.Size = new System.Drawing.Size(752, 41);
             this.textBox2.TabIndex = 13;
             this.textBox2.Text = "Total: 123,-";
             this.textBox2.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
@@ -119,10 +156,10 @@
             // txtbox_BeloebBetalt
             // 
             this.txtbox_BeloebBetalt.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtbox_BeloebBetalt.Location = new System.Drawing.Point(1281, 908);
+            this.txtbox_BeloebBetalt.Location = new System.Drawing.Point(1127, 845);
             this.txtbox_BeloebBetalt.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.txtbox_BeloebBetalt.Name = "txtbox_BeloebBetalt";
-            this.txtbox_BeloebBetalt.Size = new System.Drawing.Size(309, 41);
+            this.txtbox_BeloebBetalt.Size = new System.Drawing.Size(463, 41);
             this.txtbox_BeloebBetalt.TabIndex = 10;
             this.txtbox_BeloebBetalt.Text = "Betalt Beløb";
             // 
@@ -150,22 +187,30 @@
             // 
             // numUpDown_AmountProducts
             // 
-            this.numUpDown_AmountProducts.Location = new System.Drawing.Point(265, 172);
+            this.numUpDown_AmountProducts.Location = new System.Drawing.Point(9, 100);
             this.numUpDown_AmountProducts.Name = "numUpDown_AmountProducts";
-            this.numUpDown_AmountProducts.Size = new System.Drawing.Size(135, 41);
+            this.numUpDown_AmountProducts.Size = new System.Drawing.Size(78, 41);
             this.numUpDown_AmountProducts.TabIndex = 5;
+            this.numUpDown_AmountProducts.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
             // 
             // textBox_FastAddProduct
             // 
-            this.textBox_FastAddProduct.Location = new System.Drawing.Point(438, 152);
+            this.textBox_FastAddProduct.Location = new System.Drawing.Point(93, 100);
             this.textBox_FastAddProduct.Name = "textBox_FastAddProduct";
             this.textBox_FastAddProduct.Size = new System.Drawing.Size(308, 41);
             this.textBox_FastAddProduct.TabIndex = 4;
+            this.textBox_FastAddProduct.Text = "Indtast Produkt ID";
             // 
             // dataGridView_Receipt
             // 
             this.dataGridView_Receipt.AllowUserToAddRows = false;
             this.dataGridView_Receipt.AllowUserToDeleteRows = false;
+            this.dataGridView_Receipt.AllowUserToResizeColumns = false;
+            this.dataGridView_Receipt.AllowUserToResizeRows = false;
             this.dataGridView_Receipt.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.dataGridView_Receipt.BackgroundColor = System.Drawing.SystemColors.ButtonHighlight;
@@ -178,14 +223,50 @@
             this.column_down,
             this.column_Product,
             this.Column_Image});
-            this.dataGridView_Receipt.GridColor = System.Drawing.SystemColors.ActiveCaption;
-            this.dataGridView_Receipt.Location = new System.Drawing.Point(1281, 167);
+            this.dataGridView_Receipt.Cursor = System.Windows.Forms.Cursors.Default;
+            this.dataGridView_Receipt.GridColor = System.Drawing.SystemColors.ButtonHighlight;
+            this.dataGridView_Receipt.Location = new System.Drawing.Point(1127, 167);
             this.dataGridView_Receipt.MultiSelect = false;
             this.dataGridView_Receipt.Name = "dataGridView_Receipt";
             this.dataGridView_Receipt.ReadOnly = true;
-            this.dataGridView_Receipt.RowTemplate.Height = 28;
-            this.dataGridView_Receipt.Size = new System.Drawing.Size(600, 565);
+            this.dataGridView_Receipt.RowHeadersVisible = false;
+            this.dataGridView_Receipt.RowTemplate.Height = 40;
+            this.dataGridView_Receipt.Size = new System.Drawing.Size(754, 542);
             this.dataGridView_Receipt.TabIndex = 3;
+            // 
+            // column_up
+            // 
+            this.column_up.HeaderText = "";
+            this.column_up.Name = "column_up";
+            this.column_up.ReadOnly = true;
+            this.column_up.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.column_up.Width = 40;
+            // 
+            // column_down
+            // 
+            this.column_down.HeaderText = "";
+            this.column_down.Name = "column_down";
+            this.column_down.ReadOnly = true;
+            this.column_down.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.column_down.Width = 40;
+            // 
+            // column_Product
+            // 
+            this.column_Product.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.column_Product.HeaderText = "Transaktion";
+            this.column_Product.Name = "column_Product";
+            this.column_Product.ReadOnly = true;
+            this.column_Product.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            // 
+            // Column_Image
+            // 
+            this.Column_Image.HeaderText = "";
+            this.Column_Image.Image = global::P3_Projekt.Properties.Resources.Red_Cross;
+            this.Column_Image.ImageLayout = System.Windows.Forms.DataGridViewImageCellLayout.Stretch;
+            this.Column_Image.Name = "Column_Image";
+            this.Column_Image.ReadOnly = true;
+            this.Column_Image.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.Column_Image.Width = 40;
             // 
             // panel1
             // 
@@ -195,14 +276,14 @@
             this.panel1.Controls.Add(this.btn_EditReceipt);
             this.panel1.Controls.Add(this.button1);
             this.panel1.Controls.Add(this.textBox1);
-            this.panel1.Location = new System.Drawing.Point(-29, 0);
+            this.panel1.Location = new System.Drawing.Point(-4, 0);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(1927, 83);
+            this.panel1.Size = new System.Drawing.Size(1902, 83);
             this.panel1.TabIndex = 15;
             // 
             // btn_EditReceipt
             // 
-            this.btn_EditReceipt.Location = new System.Drawing.Point(37, 7);
+            this.btn_EditReceipt.Location = new System.Drawing.Point(12, 7);
             this.btn_EditReceipt.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.btn_EditReceipt.Name = "btn_EditReceipt";
             this.btn_EditReceipt.Size = new System.Drawing.Size(300, 66);
@@ -217,19 +298,19 @@
             this.button1.BackgroundImage = global::P3_Projekt.Properties.Resources.Magnifying_glass_icon_svg;
             this.button1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.button1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F);
-            this.button1.Location = new System.Drawing.Point(1868, 17);
+            this.button1.Location = new System.Drawing.Point(1834, 19);
             this.button1.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(43, 43);
+            this.button1.Size = new System.Drawing.Size(50, 50);
             this.button1.TabIndex = 16;
             this.button1.UseVisualStyleBackColor = false;
             // 
             // textBox1
             // 
             this.textBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBox1.Location = new System.Drawing.Point(1309, 19);
+            this.textBox1.Location = new System.Drawing.Point(1130, 20);
             this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(552, 41);
+            this.textBox1.Size = new System.Drawing.Size(697, 41);
             this.textBox1.TabIndex = 14;
             // 
             // tabPage2
@@ -252,46 +333,15 @@
             this.tabPage3.Text = "Statistics";
             this.tabPage3.UseVisualStyleBackColor = true;
             // 
-            // column_up
+            // tabPage_Indstillinger
             // 
-            this.column_up.HeaderText = "";
-            this.column_up.Name = "column_up";
-            this.column_up.ReadOnly = true;
-            this.column_up.Width = 20;
-            // 
-            // column_down
-            // 
-            this.column_down.HeaderText = "";
-            this.column_down.Name = "column_down";
-            this.column_down.ReadOnly = true;
-            this.column_down.Width = 20;
-            // 
-            // column_Product
-            // 
-            this.column_Product.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.column_Product.HeaderText = "Transaktion";
-            this.column_Product.Name = "column_Product";
-            this.column_Product.ReadOnly = true;
-            // 
-            // Column_Image
-            // 
-            this.Column_Image.HeaderText = "";
-            this.Column_Image.Image = global::P3_Projekt.Properties.Resources.Red_Cross;
-            this.Column_Image.ImageLayout = System.Windows.Forms.DataGridViewImageCellLayout.Stretch;
-            this.Column_Image.Name = "Column_Image";
-            this.Column_Image.ReadOnly = true;
-            this.Column_Image.Width = 30;
-            // 
-            // label1
-            // 
-            this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.label1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(1281, 100);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(600, 68);
-            this.label1.TabIndex = 16;
-            this.label1.Text = "Kvittering";
+            this.tabPage_Indstillinger.Location = new System.Drawing.Point(4, 54);
+            this.tabPage_Indstillinger.Name = "tabPage_Indstillinger";
+            this.tabPage_Indstillinger.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage_Indstillinger.Size = new System.Drawing.Size(2430, 1258);
+            this.tabPage_Indstillinger.TabIndex = 3;
+            this.tabPage_Indstillinger.Text = "Indstillinger";
+            this.tabPage_Indstillinger.UseVisualStyleBackColor = true;
             // 
             // BoerglumAbbeyStorageandSale
             // 
@@ -331,11 +381,14 @@
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Button btn_EditReceipt;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.TabPage tabPage_Indstillinger;
+        private System.Windows.Forms.Button btn_addProduct;
         private System.Windows.Forms.DataGridViewButtonColumn column_up;
         private System.Windows.Forms.DataGridViewButtonColumn column_down;
         private System.Windows.Forms.DataGridViewTextBoxColumn column_Product;
         private System.Windows.Forms.DataGridViewImageColumn Column_Image;
-        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Panel panel_FastButtons;
     }
 }
 
