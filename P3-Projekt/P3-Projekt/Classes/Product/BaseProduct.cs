@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Drawing;
-
+using P3_Projekt.Classes.Database;
 namespace P3_Projekt.Classes
 {
     public abstract class BaseProduct
@@ -20,5 +20,14 @@ namespace P3_Projekt.Classes
             SalePrice = salePrice;
         }
         
+        public virtual void GetFromDatabase()
+        {
+
+        }
+
+        public virtual void CreateFromTableDecode(TableDecode Table)
+        {
+
+        }
     }
 }

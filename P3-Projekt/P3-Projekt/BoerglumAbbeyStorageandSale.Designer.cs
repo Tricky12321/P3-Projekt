@@ -30,6 +30,8 @@
         {
             this.tabControl = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.textBox2 = new System.Windows.Forms.TextBox();
+            this.button4 = new System.Windows.Forms.Button();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.button1 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
@@ -37,13 +39,11 @@
             this.numUpDown_AmountProducts = new System.Windows.Forms.NumericUpDown();
             this.textBox_FastAddProduct = new System.Windows.Forms.TextBox();
             this.dataGridView_Receipt = new System.Windows.Forms.DataGridView();
+            this.column_Product = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column_Image = new System.Windows.Forms.DataGridViewImageColumn();
             this.but_addProduct = new System.Windows.Forms.Button();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.tabPage3 = new System.Windows.Forms.TabPage();
-            this.button4 = new System.Windows.Forms.Button();
-            this.textBox2 = new System.Windows.Forms.TextBox();
-            this.Column_Image = new System.Windows.Forms.DataGridViewImageColumn();
-            this.column_Product = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.tabControl.SuspendLayout();
             this.tabPage1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numUpDown_AmountProducts)).BeginInit();
@@ -61,10 +61,11 @@
             this.tabControl.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.tabControl.ItemSize = new System.Drawing.Size(100, 50);
             this.tabControl.Location = new System.Drawing.Point(0, 0);
+            this.tabControl.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.tabControl.Name = "tabControl";
             this.tabControl.Padding = new System.Drawing.Point(30, 3);
             this.tabControl.SelectedIndex = 0;
-            this.tabControl.Size = new System.Drawing.Size(2438, 1316);
+            this.tabControl.Size = new System.Drawing.Size(3251, 1645);
             this.tabControl.TabIndex = 0;
             // 
             // tabPage1
@@ -79,49 +80,69 @@
             this.tabPage1.Controls.Add(this.textBox_FastAddProduct);
             this.tabPage1.Controls.Add(this.dataGridView_Receipt);
             this.tabPage1.Controls.Add(this.but_addProduct);
-            this.tabPage1.Location = new System.Drawing.Point(4, 54);
+            this.tabPage1.Location = new System.Drawing.Point(8, 58);
+            this.tabPage1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.tabPage1.Name = "tabPage1";
-            this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(2430, 1258);
+            this.tabPage1.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tabPage1.Size = new System.Drawing.Size(3235, 1579);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Salg";
             this.tabPage1.UseVisualStyleBackColor = true;
             this.tabPage1.Click += new System.EventHandler(this.tabPage1_Click);
             // 
+            // textBox2
+            // 
+            this.textBox2.Location = new System.Drawing.Point(1745, 848);
+            this.textBox2.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.textBox2.Name = "textBox2";
+            this.textBox2.Size = new System.Drawing.Size(763, 53);
+            this.textBox2.TabIndex = 13;
+            this.textBox2.Text = "Total: 123,-";
+            // 
+            // button4
+            // 
+            this.button4.Location = new System.Drawing.Point(2239, 975);
+            this.button4.Margin = new System.Windows.Forms.Padding(5, 6, 5, 6);
+            this.button4.Name = "button4";
+            this.button4.Size = new System.Drawing.Size(269, 64);
+            this.button4.TabIndex = 12;
+            this.button4.Text = "button4";
+            this.button4.UseVisualStyleBackColor = true;
+            // 
             // textBox1
             // 
-            this.textBox1.Location = new System.Drawing.Point(1449, 845);
-            this.textBox1.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.textBox1.Location = new System.Drawing.Point(1932, 1056);
+            this.textBox1.Margin = new System.Windows.Forms.Padding(5, 6, 5, 6);
             this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(222, 41);
+            this.textBox1.Size = new System.Drawing.Size(295, 53);
             this.textBox1.TabIndex = 10;
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(1679, 841);
-            this.button1.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.button1.Location = new System.Drawing.Point(2239, 1051);
+            this.button1.Margin = new System.Windows.Forms.Padding(5, 6, 5, 6);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(202, 51);
+            this.button1.Size = new System.Drawing.Size(269, 64);
             this.button1.TabIndex = 9;
             this.button1.Text = "button1";
             this.button1.UseVisualStyleBackColor = true;
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(1679, 902);
-            this.button2.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.button2.Location = new System.Drawing.Point(2239, 1128);
+            this.button2.Margin = new System.Windows.Forms.Padding(5, 6, 5, 6);
             this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(202, 54);
+            this.button2.Size = new System.Drawing.Size(269, 68);
             this.button2.TabIndex = 8;
             this.button2.Text = "button2";
             this.button2.UseVisualStyleBackColor = true;
             // 
             // printbutton
             // 
-            this.printbutton.Location = new System.Drawing.Point(435, 283);
-            this.printbutton.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.printbutton.Location = new System.Drawing.Point(580, 354);
+            this.printbutton.Margin = new System.Windows.Forms.Padding(5, 6, 5, 6);
             this.printbutton.Name = "printbutton";
-            this.printbutton.Size = new System.Drawing.Size(230, 57);
+            this.printbutton.Size = new System.Drawing.Size(307, 71);
             this.printbutton.TabIndex = 6;
             this.printbutton.Text = "print example";
             this.printbutton.UseVisualStyleBackColor = true;
@@ -129,16 +150,18 @@
             // 
             // numUpDown_AmountProducts
             // 
-            this.numUpDown_AmountProducts.Location = new System.Drawing.Point(452, 68);
+            this.numUpDown_AmountProducts.Location = new System.Drawing.Point(603, 85);
+            this.numUpDown_AmountProducts.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.numUpDown_AmountProducts.Name = "numUpDown_AmountProducts";
-            this.numUpDown_AmountProducts.Size = new System.Drawing.Size(135, 41);
+            this.numUpDown_AmountProducts.Size = new System.Drawing.Size(180, 53);
             this.numUpDown_AmountProducts.TabIndex = 5;
             // 
             // textBox_FastAddProduct
             // 
-            this.textBox_FastAddProduct.Location = new System.Drawing.Point(438, 152);
+            this.textBox_FastAddProduct.Location = new System.Drawing.Point(584, 190);
+            this.textBox_FastAddProduct.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.textBox_FastAddProduct.Name = "textBox_FastAddProduct";
-            this.textBox_FastAddProduct.Size = new System.Drawing.Size(308, 41);
+            this.textBox_FastAddProduct.Size = new System.Drawing.Size(409, 53);
             this.textBox_FastAddProduct.TabIndex = 4;
             // 
             // dataGridView_Receipt
@@ -152,61 +175,20 @@
             this.column_Product,
             this.Column_Image});
             this.dataGridView_Receipt.GridColor = System.Drawing.SystemColors.ActiveBorder;
-            this.dataGridView_Receipt.Location = new System.Drawing.Point(1309, 6);
+            this.dataGridView_Receipt.Location = new System.Drawing.Point(1745, 8);
+            this.dataGridView_Receipt.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.dataGridView_Receipt.Name = "dataGridView_Receipt";
             this.dataGridView_Receipt.ReadOnly = true;
             this.dataGridView_Receipt.RowTemplate.Height = 28;
-            this.dataGridView_Receipt.Size = new System.Drawing.Size(572, 666);
+            this.dataGridView_Receipt.Size = new System.Drawing.Size(763, 832);
             this.dataGridView_Receipt.TabIndex = 3;
             // 
-            // but_addProduct
+            // column_Product
             // 
-            this.but_addProduct.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.but_addProduct.Location = new System.Drawing.Point(532, 348);
-            this.but_addProduct.Name = "but_addProduct";
-            this.but_addProduct.Size = new System.Drawing.Size(132, 72);
-            this.but_addProduct.TabIndex = 0;
-            this.but_addProduct.Text = "Tilføj";
-            this.but_addProduct.UseVisualStyleBackColor = true;
-            this.but_addProduct.Click += new System.EventHandler(this.but_addProduct_Click);
-            // 
-            // tabPage2
-            // 
-            this.tabPage2.Location = new System.Drawing.Point(4, 54);
-            this.tabPage2.Name = "tabPage2";
-            this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(2430, 1258);
-            this.tabPage2.TabIndex = 1;
-            this.tabPage2.Text = "Lager";
-            this.tabPage2.UseVisualStyleBackColor = true;
-            // 
-            // tabPage3
-            // 
-            this.tabPage3.Location = new System.Drawing.Point(4, 54);
-            this.tabPage3.Name = "tabPage3";
-            this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage3.Size = new System.Drawing.Size(2430, 1258);
-            this.tabPage3.TabIndex = 2;
-            this.tabPage3.Text = "Statistics";
-            this.tabPage3.UseVisualStyleBackColor = true;
-            // 
-            // button4
-            // 
-            this.button4.Location = new System.Drawing.Point(1679, 780);
-            this.button4.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(202, 51);
-            this.button4.TabIndex = 12;
-            this.button4.Text = "button4";
-            this.button4.UseVisualStyleBackColor = true;
-            // 
-            // textBox2
-            // 
-            this.textBox2.Location = new System.Drawing.Point(1309, 678);
-            this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(573, 41);
-            this.textBox2.TabIndex = 13;
-            this.textBox2.Text = "Total: 123,-";
+            this.column_Product.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.column_Product.HeaderText = "Transaktion";
+            this.column_Product.Name = "column_Product";
+            this.column_Product.ReadOnly = true;
             // 
             // Column_Image
             // 
@@ -217,21 +199,50 @@
             this.Column_Image.ReadOnly = true;
             this.Column_Image.Width = 30;
             // 
-            // column_Product
+            // but_addProduct
             // 
-            this.column_Product.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.column_Product.HeaderText = "Transaktion";
-            this.column_Product.Name = "column_Product";
-            this.column_Product.ReadOnly = true;
+            this.but_addProduct.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.but_addProduct.Location = new System.Drawing.Point(709, 435);
+            this.but_addProduct.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.but_addProduct.Name = "but_addProduct";
+            this.but_addProduct.Size = new System.Drawing.Size(176, 90);
+            this.but_addProduct.TabIndex = 0;
+            this.but_addProduct.Text = "Tilføj";
+            this.but_addProduct.UseVisualStyleBackColor = true;
+            this.but_addProduct.Click += new System.EventHandler(this.but_addProduct_Click);
+            // 
+            // tabPage2
+            // 
+            this.tabPage2.Location = new System.Drawing.Point(8, 58);
+            this.tabPage2.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tabPage2.Name = "tabPage2";
+            this.tabPage2.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tabPage2.Size = new System.Drawing.Size(3235, 1579);
+            this.tabPage2.TabIndex = 1;
+            this.tabPage2.Text = "Lager";
+            this.tabPage2.UseVisualStyleBackColor = true;
+            // 
+            // tabPage3
+            // 
+            this.tabPage3.Location = new System.Drawing.Point(8, 58);
+            this.tabPage3.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tabPage3.Name = "tabPage3";
+            this.tabPage3.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tabPage3.Size = new System.Drawing.Size(3235, 1579);
+            this.tabPage3.TabIndex = 2;
+            this.tabPage3.Text = "Statistics";
+            this.tabPage3.UseVisualStyleBackColor = true;
             // 
             // BoerglumAbbeyStorageandSale
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1898, 1024);
+            this.ClientSize = new System.Drawing.Size(2531, 1280);
             this.Controls.Add(this.tabControl);
+            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.Name = "BoerglumAbbeyStorageandSale";
             this.Text = "Børglum Kloster Lager og Salg";
+            this.Load += new System.EventHandler(this.BoerglumAbbeyStorageandSale_Load);
             this.tabControl.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.tabPage1.PerformLayout();
