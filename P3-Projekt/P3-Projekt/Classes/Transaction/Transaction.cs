@@ -14,14 +14,14 @@ namespace P3_Projekt.Classes
         private int _id;
         public BaseProduct Product;
         public int Amount;
-        private DateTime _date;
+        public DateTime Date;
 
         public Transaction(BaseProduct product, int amount)
         {
             Product = product;
             Amount = amount;
             _id = _idCounter++;
-            _date = DateTime.Now;
+            Date = DateTime.Now;
         }
 
         public virtual void Edit(int newAmount)
