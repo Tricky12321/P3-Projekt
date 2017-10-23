@@ -17,11 +17,6 @@ namespace P3_Projekt.Classes
             ReceiptID = receiptID;
         }
 
-        /*public override void Delete()
-        {
-            throw new NotImplementedException();
-        }*/
-
         public override void Execute()
         {
             if (Product is Product)
