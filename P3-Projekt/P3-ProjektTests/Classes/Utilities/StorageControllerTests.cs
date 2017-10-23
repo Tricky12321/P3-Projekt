@@ -13,7 +13,8 @@ namespace P3_Projekt.Classes.Utilities.Tests
     [TestFixture()]
     public class StorageControllerTests
     {
-        [TearDown] public void ResetStatic()
+        [TearDown]
+        public void ResetStatic()
         {
             StorageRoom.IDCounter = 0;
             BaseProduct.IDCounter = 0;
@@ -143,7 +144,7 @@ namespace P3_Projekt.Classes.Utilities.Tests
 
             Assert.IsTrue(storageController.ProductDictionary[0].DiscountBool && storageController.ProductDictionary[0].SalePrice == 2 && storageController.ProductDictionary[0].DiscountPrice == 14);
         }
-        
+
         [Test()]
         public void ProductIDTest()
         {
@@ -170,6 +171,8 @@ namespace P3_Projekt.Classes.Utilities.Tests
             storageController.CreateProduct("mælk", "arla", Convert.ToDecimal(5), testGroup, false, Convert.ToDecimal(7), Convert.ToDecimal(10), null, testPair);
 
             Assert.IsTrue(storageController.ProductDictionary.ContainsKey(0));
+
+
         }
 
         [TestCase(10, ExpectedResult = 10)]
@@ -303,6 +306,9 @@ namespace P3_Projekt.Classes.Utilities.Tests
             Assert.IsTrue(b1 && b2 && b3 && b4);
         }
 
+
+
+
         [TestCase("shir with banas", 3, ExpectedResult = true)]
         [TestCase("bok", 1, ExpectedResult = true)]
         [TestCase("smal blu bid with gren head", 4, ExpectedResult = true)]
@@ -320,12 +326,12 @@ namespace P3_Projekt.Classes.Utilities.Tests
             Group testGroup = new Group("shirts", "shirts and dresses");
             Product productToBeCompared = new Product("Running shoes", "Adidas", 100, testGroup, false, 20, 50, null);
             string searchedString = "Runin shos";
-            int charDifference = strContr.ComputeLevenshteinsDistance(searchedString, productToBeCompared);
+            int charDifference = strContr.ComputeLevenshteinsDistance(searchedString, productToBeCompared.Name);
             Assert.IsTrue(charDifference == 3);
         }
 
         [Test()]
-        public void LevenshteinsSearchTest()
+        public void LevenshteinsProductSearchTest()
         {
             StorageController strContr = new StorageController(new BoerglumAbbeyStorageandSale());
             Group testGroup = new Group("shirts", "shirts and dresses");
@@ -333,7 +339,84 @@ namespace P3_Projekt.Classes.Utilities.Tests
             string searchedString = "runin shos";
             List<Product> productList = new List<Product>();
 
-            strContr.LevenshteinsSearch(searchedString, productToBeCompared, ref productList);
+            strContr.LevenshteinsProductSearch(searchedString, productToBeCompared, ref productList);
+
+            Assert.IsTrue(productList.Contains(productToBeCompared));
+        }
+
+        [Test()]
+        public void LevenshteinsGroupSearchTrueTest()
+        {
+            StorageController strContr = new StorageController(new BoerglumAbbeyStorageandSale());
+            Group testGroup = new Group("shirts", "shirts and dresses");
+            string[] searchedString = { "sirts", "random" };
+            bool groupWasMatched = strContr.LevenshteinsGroupSearch(searchedString, testGroup);
+
+            Assert.IsTrue(groupWasMatched == true);
+        }
+
+        [Test()]
+        public void LevenshteinsGroupSearchFalseTest()
+        {
+            StorageController strContr = new StorageController(new BoerglumAbbeyStorageandSale());
+            Group testGroup = new Group("shirts", "shirts and dresses");
+            string[] searchedString = { "dresses" };
+            bool groupWasMatched = strContr.LevenshteinsGroupSearch(searchedString, testGroup);
+
+            Assert.IsTrue(groupWasMatched == false);
+        }
+
+        [Test()]
+        public void LevenshteinsBrandSearchTrueTest()
+        {
+            StorageController strContr = new StorageController(new BoerglumAbbeyStorageandSale());
+            Group testGroup = new Group("shirts", "shirts and dresses");
+            Product productToBeCompared = new Product("Running shoes", "Adidas", 100, testGroup, false, 20, 50, null);
+            string[] searchedString = { "shoes", "affidas" };
+            bool brandWasMatched = strContr.LevenshteinsBrandSearch(searchedString, productToBeCompared.Brand);
+
+            Assert.IsTrue(brandWasMatched == true);
+        }
+
+        [Test()]
+        public void LevenshteinsBrandSearchFalseTest()
+        {
+            StorageController strContr = new StorageController(new BoerglumAbbeyStorageandSale());
+            Group testGroup = new Group("shirts", "shirts and dresses");
+            Product productToBeCompared = new Product("Running shoes", "Adidas", 100, testGroup, false, 20, 50, null);
+            string[] searchedString = { "shoes", "nike" };
+            bool brandWasMatched = strContr.LevenshteinsBrandSearch(searchedString, productToBeCompared.Brand);
+
+            Assert.IsTrue(brandWasMatched == false);
+        }
+
+        [Test()]
+        public void GroupSearchTest()
+        {
+            StorageController strContr = new StorageController(new BoerglumAbbeyStorageandSale());
+            Group testGroup = new Group("Adidas", "shoes and clothes");
+            strContr.GroupDictionary.Add(101, testGroup);
+            Product productToBeCompared = new Product("Running trousers", "Adidas", 100, testGroup, false, 20, 50, null);
+            strContr.ProductDictionary.Add(productToBeCompared.ID, productToBeCompared);
+            string searchedString = "trousers Affidas";
+            List<Product> productList = new List<Product>();
+
+            strContr.GroupSearch(searchedString, ref productList);
+
+            Assert.IsTrue(productList.Contains(productToBeCompared));
+        }
+
+        [Test()]
+        public void BrandSearchTest()
+        {
+            StorageController strContr = new StorageController(new BoerglumAbbeyStorageandSale());
+            Group testGroup = new Group("Adidas", "shoes and clothes");
+            Product productToBeCompared = new Product("Running shoes", "Adidas", 100, testGroup, false, 20, 50, null);
+            strContr.ProductDictionary.Add(100, productToBeCompared);
+            string searchedString = "shoes Affidas";
+            List<Product> productList = new List<Product>();
+
+            strContr.BrandSearch(searchedString, ref productList);
 
             Assert.IsTrue(productList.Contains(productToBeCompared));
         }

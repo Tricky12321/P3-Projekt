@@ -11,10 +11,10 @@ namespace P3_Projekt.Classes
         private StorageRoom _source;
         private StorageRoom _destination;
 
-        public StorageTransaction(Product product, int amount, StorageRoom source, StorageRoom destiantion) : base(product, amount)
+        public StorageTransaction(Product product, int amount, StorageRoom source, StorageRoom destination) : base(product, amount)
         {
             _source = source;
-            _destination = destiantion;
+            _destination = destination;
             Amount = amount;
             Product = product;
         }
