@@ -9,7 +9,7 @@ using P3_Projekt.Classes.Database;
 
 namespace P3_Projekt.Classes
 {
-    public class Product : BaseProduct
+    public class Product : BaseProduct, MysqlObject
     {
         public string Name;
         public string Brand;
@@ -83,12 +83,40 @@ namespace P3_Projekt.Classes
         {
             string sql = $"SELECT * FROM products WHERE id = {ID}";
             Mysql Connection = new Mysql();
-            CreateFromTableDecode(Connection.RunQueryWithReturn(sql));
+            CreateFromRow(Connection.RunQueryWithReturn(sql).RowData[0]);
         }
 
-        private void CreateFromTableDecode(TableDecode results)
+        public void CreateFromRow(Row results)
         {
+            ID = Convert.ToInt32(results.Values[0]);                        // id
+            Name = results.Values[1];                                       // name
+            Brand = results.Values[2];                                      // brand
+            ProductGroup = new Group(Convert.ToInt32(results.Values[3]));   // groups
+            SalePrice = Convert.ToInt32(results.Values[4]);                 // price
+            DiscountBool = Convert.ToBoolean(results.Values[5]);            // discount
+            DiscountPrice = Convert.ToInt32(results.Values[6]);             // discount_price
+        }
 
+        public void UploadToDatabase()
+        {
+            string sql = $"INSERT INTO `products` (`id`, `name`, `brand`, `groups`, `price`, `discount`, `discount_price`)"+
+            $"VALUES (NULL, '{Name}', '{Brand}', '{ProductGroup.ID}', '{SalePrice}', '{Convert.ToInt32(DiscountBool)}', '{DiscountPrice}');";
+            Mysql Connection = new Mysql();
+            Connection.RunQuery(sql);
+        }
+
+        public void UpdateInDatabase()
+        {
+            string sql = $"UPDATE `products` SET"+
+                $"`name` = '{Name}',"+
+                $"`brand` = '{Brand}'," +
+                $"`groups` = '{ProductGroup.ID}'," +
+                $"`price` = '{SalePrice}'," +
+                $"`discount` = '{Convert.ToInt32(DiscountBool)}'," +
+                $"`discount_price` = '{DiscountPrice}'" +
+                $"WHERE `id` = {ID};";
+            Mysql Connection = new Mysql();
+            Connection.RunQuery(sql);
         }
     }
 }
