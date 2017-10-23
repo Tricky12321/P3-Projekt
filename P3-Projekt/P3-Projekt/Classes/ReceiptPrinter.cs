@@ -3,6 +3,7 @@ using System.IO;
 using System.Drawing;
 using System.Drawing.Printing;
 using System.Windows.Forms;
+using System.Collections.Generic;
 using System.Reflection;
 namespace P3_Projekt.Classes
 {
@@ -11,15 +12,20 @@ namespace P3_Projekt.Classes
     {
         private Font printFont;
         private string PrintThisText => Properties.Resources.PrintTest;
+        Receipt ReceiptToPrint;
 
-
+        public ReceiptPrinter(Receipt receipt)
+        {
+            ReceiptToPrint = receipt;
+            setup();
+        }
 
         // The Click event is raised when the user clicks the Print button.
         public void printbutton_Click(object sender, EventArgs e)
         {
             try
             {
-                printFont = new Font("Courier New", 25);
+                printFont = new Font("Courier New", 10);
                 PrintDocument pd = new PrintDocument();
                 pd.PrintPage += new PrintPageEventHandler
                    (pd_PrintPage);
@@ -41,6 +47,31 @@ namespace P3_Projekt.Classes
             }
         }
 
+        public void setup()
+        {
+            try
+            {
+                printFont = new Font("Courier New", 10);
+                PrintDocument pd = new PrintDocument();
+                pd.PrintPage += new PrintPageEventHandler
+                   (pd_PrintPage);
+
+                /* Asks for which printer to use */
+                PrintDialog printDialog = new PrintDialog();
+                printDialog.Document = pd;
+
+                if (printDialog.ShowDialog() == DialogResult.OK)
+                {
+                    //Print the page
+                    pd.Print();
+                }
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
 
         // The PrintPage event is raised for each page to be printed.
         public void pd_PrintPage(object sender, PrintPageEventArgs ev)
@@ -51,13 +82,29 @@ namespace P3_Projekt.Classes
             float leftMargin = ev.MarginBounds.Left;
             float topMargin = ev.MarginBounds.Top;
 
+            List<SaleTransaction> transactionList = ReceiptToPrint.Transactions;
+
             // Calculate the number of lines per page.
             linesPerPage = ev.MarginBounds.Height /
                printFont.GetHeight(ev.Graphics);
 
             // Print each line of the file.
-            string[] TextToPrint = PrintThisText.Split('\n');
-            
+            List<string> TextToPrint = new List<string>();
+            string[] standardText = PrintThisText.Split('\n');
+            foreach (string s in standardText)
+            {
+                TextToPrint.Add(s);
+            }
+            TextToPrint.Add($"|   #10903      { DateTime.Now.ToString()}  |");
+            TextToPrint.Add($"|   01 Børglum kloster        000000 |");
+            TextToPrint.Add($"|                                    |");
+            foreach (Transaction t in transactionList)
+            {
+                TextToPrint.Add($"|{t.Amount}x{t.Product.SalePrice}       *{t.Amount * t.Product.SalePrice} |\n" +
+                                $"{t.Product}");
+            }
+            TextToPrint.Add($"|    SUBTOTAL           {ReceiptToPrint.TotalPrice}    |");
+
             foreach (var SingleLine in TextToPrint)
             {
                 yPos = topMargin + (count *

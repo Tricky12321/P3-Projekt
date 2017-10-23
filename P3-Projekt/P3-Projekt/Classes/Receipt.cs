@@ -20,6 +20,7 @@ namespace P3_Projekt.Classes
         public bool CashOrCard;
         public DateTime Date;
 
+        
         public Receipt()
         {
             ID = _idCounter++;
@@ -135,6 +136,7 @@ namespace P3_Projekt.Classes
             {
                 transaction.Execute();
             }
+            ReceiptPrinter printReceipt = new ReceiptPrinter(this);
         }
     }
 }
