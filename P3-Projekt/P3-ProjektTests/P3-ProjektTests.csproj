@@ -57,7 +57,9 @@
   </Choose>
   <ItemGroup>
     <Compile Include="Classes\Product\TempProductTests.cs" />
+    <Compile Include="Classes\ReceiptPrinterTests.cs" />
     <Compile Include="Classes\Utilities\POSControllerTests.cs" />
+    <Compile Include="Classes\Utilities\StatisticsControllerTests.cs" />
     <Compile Include="Classes\Utilities\StorageControllerTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

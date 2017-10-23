@@ -6,11 +6,14 @@ using System.Threading.Tasks;
 
 namespace P3_Projekt.Classes.Database
 {
-    public abstract class MysqlObject
+    public interface MysqlObject
     {
-        public void GetFromDatabase()
-        {
+        void GetFromDatabase();
 
-        }
+        void CreateFromRow(Row Table);
+
+        void UploadToDatabase();
+
+        void UpdateInDatabase();
     }
 }
