@@ -9,11 +9,12 @@ namespace P3_Projekt.Classes.Database
     public interface MysqlObject
     {
         void GetFromDatabase();
-
+        /*runquerywithreturn*/
         void CreateFromRow(Row Table);
-
+        /*creates object from mysql row */
         void UploadToDatabase();
-
+        /*insert*/
         void UpdateInDatabase();
+        /*update*/
     }
 }

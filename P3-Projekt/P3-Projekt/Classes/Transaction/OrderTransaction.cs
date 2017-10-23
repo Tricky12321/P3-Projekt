@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using P3_Projekt.Classes.Database;
 
 namespace P3_Projekt.Classes
 {
@@ -34,6 +35,29 @@ namespace P3_Projekt.Classes
                 /*Gør ingenting, fordi temp og service produkt ved ikke, hvilket lager de er på.
                  * Derfor kan der ikke ændres lagerstatus */
             }
+        }
+
+        public override void GetFromDatabase()
+        {
+            string getQuery = $"SELECT * FROM order_transactions WHERE ID = {_id}";
+            Mysql Connection = new Mysql();
+            Connection.RunQuery(getQuery);
+
+        }
+
+        public override void CreateFromRow(Row Table)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void UpdateInDatabase()
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void UploadToDatabase()
+        {
+            throw new NotImplementedException();
         }
     }
 }
