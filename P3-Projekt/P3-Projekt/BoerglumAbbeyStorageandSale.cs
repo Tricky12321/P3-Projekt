@@ -15,9 +15,6 @@ namespace P3_Projekt
 {
     public partial class BoerglumAbbeyStorageandSale : Form
     {
-        P3_Projekt.Classes.ReceiptPrinter Printer = new ReceiptPrinter();
-
-
         public BoerglumAbbeyStorageandSale()
         {
             InitializeComponent();
@@ -38,15 +35,6 @@ namespace P3_Projekt
         }
 
         // The Click event is raised when the user clicks the Print button.
-        private void printbutton_Click(object sender, EventArgs e)
-        {
-            Printer.printbutton_Click(sender, e);
-        }
-
-        private void pd_PrintPage(object sender, PrintPageEventArgs ev)
-        {
-            Printer.pd_PrintPage(sender, ev);
-        }
 
         private void btn_cash_Click(object sender, EventArgs e)
         {

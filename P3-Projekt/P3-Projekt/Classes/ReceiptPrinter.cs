@@ -14,10 +14,12 @@ namespace P3_Projekt.Classes
         private string PrintThisText => Properties.Resources.PrintTest;
         Receipt ReceiptToPrint;
 
+
         public ReceiptPrinter(Receipt receipt)
         {
             ReceiptToPrint = receipt;
             setup();
+
         }
 
         // The Click event is raised when the user clicks the Print button.
@@ -100,8 +102,8 @@ namespace P3_Projekt.Classes
             TextToPrint.Add($"|                                    |");
             foreach (Transaction t in transactionList)
             {
-                TextToPrint.Add($"|{t.Amount}x{t.Product.SalePrice}       *{t.Amount * t.Product.SalePrice} |\n" +
-                                $"{t.Product}");
+                TextToPrint.Add($"|   {t.Amount.ToString()}x{t.Product.SalePrice.ToString().PadRight(10)}        {("*"+t.Amount * t.Product.SalePrice).ToString().PadLeft(10)}   |\n");
+                TextToPrint.Add($"|   {t.Product.ID.ToString().PadRight(30)}   |\n");
             }
             TextToPrint.Add($"|    SUBTOTAL           {ReceiptToPrint.TotalPrice}    |");
 
