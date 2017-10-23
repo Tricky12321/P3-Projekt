@@ -49,15 +49,14 @@
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.tabPage3 = new System.Windows.Forms.TabPage();
-            this.checkBox1 = new System.Windows.Forms.CheckBox();
-            this.checkBox2 = new System.Windows.Forms.CheckBox();
-            this.checkBox3 = new System.Windows.Forms.CheckBox();
-            this.dateTimePicker1 = new System.Windows.Forms.DateTimePicker();
-            this.dateTimePicker2 = new System.Windows.Forms.DateTimePicker();
-            this.button2 = new System.Windows.Forms.Button();
-            this.textBox3 = new System.Windows.Forms.TextBox();
             this.textBox4 = new System.Windows.Forms.TextBox();
-            this.checkedListBox1 = new System.Windows.Forms.CheckedListBox();
+            this.textBox3 = new System.Windows.Forms.TextBox();
+            this.button2 = new System.Windows.Forms.Button();
+            this.dateTimePicker2 = new System.Windows.Forms.DateTimePicker();
+            this.dateTimePicker1 = new System.Windows.Forms.DateTimePicker();
+            this.checkBox3 = new System.Windows.Forms.CheckBox();
+            this.checkBox2 = new System.Windows.Forms.CheckBox();
+            this.checkBox1 = new System.Windows.Forms.CheckBox();
             this.tabControl.SuspendLayout();
             this.tabPage1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numUpDown_AmountProducts)).BeginInit();
@@ -132,7 +131,7 @@
             // 
             this.btn_cash.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btn_cash.Location = new System.Drawing.Point(1420, 624);
-            this.btn_cash.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btn_cash.Margin = new System.Windows.Forms.Padding(4);
             this.btn_cash.Name = "btn_cash";
             this.btn_cash.Size = new System.Drawing.Size(252, 41);
             this.btn_cash.TabIndex = 12;
@@ -144,7 +143,7 @@
             // 
             this.txtbox_BeloebBetalt.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.txtbox_BeloebBetalt.Location = new System.Drawing.Point(1139, 726);
-            this.txtbox_BeloebBetalt.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.txtbox_BeloebBetalt.Margin = new System.Windows.Forms.Padding(4);
             this.txtbox_BeloebBetalt.Name = "txtbox_BeloebBetalt";
             this.txtbox_BeloebBetalt.Size = new System.Drawing.Size(275, 36);
             this.txtbox_BeloebBetalt.TabIndex = 10;
@@ -154,7 +153,7 @@
             // 
             this.btn_creditcard.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btn_creditcard.Location = new System.Drawing.Point(1420, 673);
-            this.btn_creditcard.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btn_creditcard.Margin = new System.Windows.Forms.Padding(4);
             this.btn_creditcard.Name = "btn_creditcard";
             this.btn_creditcard.Size = new System.Drawing.Size(252, 41);
             this.btn_creditcard.TabIndex = 9;
@@ -165,7 +164,7 @@
             // 
             this.btn_mobilePay.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btn_mobilePay.Location = new System.Drawing.Point(1420, 722);
-            this.btn_mobilePay.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btn_mobilePay.Margin = new System.Windows.Forms.Padding(4);
             this.btn_mobilePay.Name = "btn_mobilePay";
             this.btn_mobilePay.Size = new System.Drawing.Size(252, 43);
             this.btn_mobilePay.TabIndex = 8;
@@ -261,7 +260,7 @@
             // btn_EditReceipt
             // 
             this.btn_EditReceipt.Location = new System.Drawing.Point(33, 6);
-            this.btn_EditReceipt.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btn_EditReceipt.Margin = new System.Windows.Forms.Padding(4);
             this.btn_EditReceipt.Name = "btn_EditReceipt";
             this.btn_EditReceipt.Size = new System.Drawing.Size(267, 53);
             this.btn_EditReceipt.TabIndex = 16;
@@ -276,7 +275,7 @@
             this.button1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.button1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F);
             this.button1.Location = new System.Drawing.Point(1660, 14);
-            this.button1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.button1.Margin = new System.Windows.Forms.Padding(4);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(38, 39);
             this.button1.TabIndex = 16;
@@ -305,7 +304,6 @@
             // 
             // tabPage3
             // 
-            this.tabPage3.Controls.Add(this.checkedListBox1);
             this.tabPage3.Controls.Add(this.textBox4);
             this.tabPage3.Controls.Add(this.textBox3);
             this.tabPage3.Controls.Add(this.button2);
@@ -323,25 +321,42 @@
             this.tabPage3.Text = "Statistics";
             this.tabPage3.UseVisualStyleBackColor = true;
             // 
-            // checkBox1
+            // textBox4
             // 
-            this.checkBox1.AutoSize = true;
-            this.checkBox1.Location = new System.Drawing.Point(22, 127);
-            this.checkBox1.Name = "checkBox1";
-            this.checkBox1.Size = new System.Drawing.Size(159, 33);
-            this.checkBox1.TabIndex = 0;
-            this.checkBox1.Text = "checkBox1";
-            this.checkBox1.UseVisualStyleBackColor = true;
+            this.textBox4.Location = new System.Drawing.Point(22, 74);
+            this.textBox4.Name = "textBox4";
+            this.textBox4.Size = new System.Drawing.Size(100, 36);
+            this.textBox4.TabIndex = 6;
             // 
-            // checkBox2
+            // textBox3
             // 
-            this.checkBox2.AutoSize = true;
-            this.checkBox2.Location = new System.Drawing.Point(22, 176);
-            this.checkBox2.Name = "checkBox2";
-            this.checkBox2.Size = new System.Drawing.Size(159, 33);
-            this.checkBox2.TabIndex = 1;
-            this.checkBox2.Text = "checkBox2";
-            this.checkBox2.UseVisualStyleBackColor = true;
+            this.textBox3.Location = new System.Drawing.Point(22, 21);
+            this.textBox3.Name = "textBox3";
+            this.textBox3.Size = new System.Drawing.Size(100, 36);
+            this.textBox3.TabIndex = 6;
+            // 
+            // button2
+            // 
+            this.button2.Location = new System.Drawing.Point(74, 407);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(283, 44);
+            this.button2.TabIndex = 5;
+            this.button2.Text = "button2";
+            this.button2.UseVisualStyleBackColor = true;
+            // 
+            // dateTimePicker2
+            // 
+            this.dateTimePicker2.Location = new System.Drawing.Point(139, 74);
+            this.dateTimePicker2.Name = "dateTimePicker2";
+            this.dateTimePicker2.Size = new System.Drawing.Size(253, 36);
+            this.dateTimePicker2.TabIndex = 4;
+            // 
+            // dateTimePicker1
+            // 
+            this.dateTimePicker1.Location = new System.Drawing.Point(139, 21);
+            this.dateTimePicker1.Name = "dateTimePicker1";
+            this.dateTimePicker1.Size = new System.Drawing.Size(253, 36);
+            this.dateTimePicker1.TabIndex = 3;
             // 
             // checkBox3
             // 
@@ -353,50 +368,25 @@
             this.checkBox3.Text = "checkBox3";
             this.checkBox3.UseVisualStyleBackColor = true;
             // 
-            // dateTimePicker1
+            // checkBox2
             // 
-            this.dateTimePicker1.Location = new System.Drawing.Point(139, 21);
-            this.dateTimePicker1.Name = "dateTimePicker1";
-            this.dateTimePicker1.Size = new System.Drawing.Size(253, 36);
-            this.dateTimePicker1.TabIndex = 3;
+            this.checkBox2.AutoSize = true;
+            this.checkBox2.Location = new System.Drawing.Point(22, 176);
+            this.checkBox2.Name = "checkBox2";
+            this.checkBox2.Size = new System.Drawing.Size(159, 33);
+            this.checkBox2.TabIndex = 1;
+            this.checkBox2.Text = "checkBox2";
+            this.checkBox2.UseVisualStyleBackColor = true;
             // 
-            // dateTimePicker2
+            // checkBox1
             // 
-            this.dateTimePicker2.Location = new System.Drawing.Point(139, 74);
-            this.dateTimePicker2.Name = "dateTimePicker2";
-            this.dateTimePicker2.Size = new System.Drawing.Size(253, 36);
-            this.dateTimePicker2.TabIndex = 4;
-            // 
-            // button2
-            // 
-            this.button2.Location = new System.Drawing.Point(74, 407);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(283, 44);
-            this.button2.TabIndex = 5;
-            this.button2.Text = "button2";
-            this.button2.UseVisualStyleBackColor = true;
-            // 
-            // textBox3
-            // 
-            this.textBox3.Location = new System.Drawing.Point(22, 21);
-            this.textBox3.Name = "textBox3";
-            this.textBox3.Size = new System.Drawing.Size(100, 36);
-            this.textBox3.TabIndex = 6;
-            // 
-            // textBox4
-            // 
-            this.textBox4.Location = new System.Drawing.Point(22, 74);
-            this.textBox4.Name = "textBox4";
-            this.textBox4.Size = new System.Drawing.Size(100, 36);
-            this.textBox4.TabIndex = 6;
-            // 
-            // checkedListBox1
-            // 
-            this.checkedListBox1.FormattingEnabled = true;
-            this.checkedListBox1.Location = new System.Drawing.Point(283, 199);
-            this.checkedListBox1.Name = "checkedListBox1";
-            this.checkedListBox1.Size = new System.Drawing.Size(245, 97);
-            this.checkedListBox1.TabIndex = 7;
+            this.checkBox1.AutoSize = true;
+            this.checkBox1.Location = new System.Drawing.Point(22, 127);
+            this.checkBox1.Name = "checkBox1";
+            this.checkBox1.Size = new System.Drawing.Size(159, 33);
+            this.checkBox1.TabIndex = 0;
+            this.checkBox1.Text = "checkBox1";
+            this.checkBox1.UseVisualStyleBackColor = true;
             // 
             // BoerglumAbbeyStorageandSale
             // 
@@ -444,7 +434,6 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn column_Product;
         private System.Windows.Forms.DataGridViewImageColumn Column_Image;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.CheckedListBox checkedListBox1;
         private System.Windows.Forms.TextBox textBox4;
         private System.Windows.Forms.TextBox textBox3;
         private System.Windows.Forms.Button button2;
