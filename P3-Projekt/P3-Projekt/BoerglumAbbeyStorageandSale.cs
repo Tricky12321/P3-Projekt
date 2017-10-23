@@ -37,15 +37,6 @@ namespace P3_Projekt
         }
 
         // The Click event is raised when the user clicks the Print button.
-        private void printbutton_Click(object sender, EventArgs e)
-        {
-            //Printer.printbutton_Click(sender, e);
-        }
-
-        private void pd_PrintPage(object sender, PrintPageEventArgs ev)
-        {
-            //Printer.pd_PrintPage(sender, ev);
-        }
 
         private void btn_cash_Click(object sender, EventArgs e)
         {
@@ -57,6 +48,21 @@ namespace P3_Projekt
             Mysql DatabaseConnection = new Mysql();
             TableDecode Results = DatabaseConnection.RunQueryWithReturn("SELECT * FROM test");
             Debug.WriteLine("test");
+        }
+
+        private void textBox1_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void tabPage3_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label2_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }
