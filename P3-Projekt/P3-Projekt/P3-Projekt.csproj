@@ -53,6 +53,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Classes\Database\Mysql.cs" />
     <Compile Include="Classes\Exceptions\ProductDiscountException.cs" />
     <Compile Include="Classes\Exceptions\WrongProductTypeException.cs" />
     <Compile Include="Classes\Group.cs" />
