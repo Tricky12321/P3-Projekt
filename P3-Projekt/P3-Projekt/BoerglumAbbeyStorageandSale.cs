@@ -59,5 +59,10 @@ namespace P3_Projekt
             TableDecode Results = DatabaseConnection.RunQueryWithReturn("SELECT * FROM test");
             Debug.WriteLine("test");
         }
+
+        private void textBox1_TextChanged(object sender, EventArgs e)
+        {
+
+        }
     }
 }
