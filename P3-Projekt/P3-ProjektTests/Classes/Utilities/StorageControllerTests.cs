@@ -151,11 +151,12 @@ namespace P3_Projekt.Classes.Utilities.Tests
             StorageController storageController = new StorageController(new BoerglumAbbeyStorageandSale());
             StorageRoom testStorage1 = new StorageRoom("3", "medium lager");
             KeyValuePair<StorageRoom, int> testPair = new KeyValuePair<StorageRoom, int>(testStorage1, 10);
+
             Group testGroup = new Group("drikkevarer", "wuhuu drikke");
 
             storageController.CreateProduct("mælk", "arla", Convert.ToDecimal(5), testGroup, false, Convert.ToDecimal(7), Convert.ToDecimal(10), null, testPair);
 
-            Assert.IsTrue(storageController.ProductDictionary[0].GetFullID == "000000");
+            Assert.IsTrue(storageController.ProductDictionary[0].GetFullID == "010000");
         }
 
         [Test()]

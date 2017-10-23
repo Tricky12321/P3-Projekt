@@ -16,6 +16,7 @@ namespace P3_Projekt.Classes {
         {
             try
             {
+                //TODO: Dette skal laves om så den bare peger på resoursen istedet for en path
                 streamToPrint = new StreamReader
                    (Path.Combine(System.IO.Path.GetFullPath(@"..\..\"), "Resources\\PrintTest.txt"));
                 try
