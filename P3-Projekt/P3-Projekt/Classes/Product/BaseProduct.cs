@@ -20,14 +20,6 @@ namespace P3_Projekt.Classes
             SalePrice = salePrice;
         }
         
-        public virtual void GetFromDatabase()
-        {
-
-        }
-
-        public virtual void CreateFromTableDecode(TableDecode Table)
-        {
-
-        }
+        
     }
 }
