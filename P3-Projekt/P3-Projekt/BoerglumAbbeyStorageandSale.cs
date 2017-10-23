@@ -9,7 +9,8 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using P3_Projekt.Classes;
 using System.Drawing.Printing;
-
+using P3_Projekt.Classes.Database;
+using System.Diagnostics;
 namespace P3_Projekt
 {
     public partial class BoerglumAbbeyStorageandSale : Form
@@ -58,6 +59,13 @@ namespace P3_Projekt
         private void btn_cash_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void BoerglumAbbeyStorageandSale_Load(object sender, EventArgs e)
+        {
+            Mysql DatabaseConnection = new Mysql();
+            TableDecode Results = DatabaseConnection.RunQueryWithReturn("SELECT * FROM test");
+            Debug.WriteLine("test");
         }
     }
 }

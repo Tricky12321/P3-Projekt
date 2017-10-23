@@ -47,9 +47,9 @@ namespace P3_Projekt.Classes.Utilities
             PlacerholderReceipt = new Receipt();
         }
 
-        public void EditReceipt(int recieptID)
+        public void EditReceipt(int receiptID)
         {
-            PlacerholderReceipt = ReceiptList.First(x => x.ID == recieptID);
+            PlacerholderReceipt = ReceiptList.First(x => x.ID == receiptID);
             PlacerholderReceipt.Delete();
         }
 
@@ -58,7 +58,7 @@ namespace P3_Projekt.Classes.Utilities
             PlacerholderReceipt.AddTransaction(new SaleTransaction(product, amount, PlacerholderReceipt.ID));
         }
 
-        public void RemoveTransaction(int productID)
+        public void RemoveTransactionFromReceipt(int productID)
         {
             PlacerholderReceipt.RemoveTransaction(productID);
         }
@@ -74,6 +74,7 @@ namespace P3_Projekt.Classes.Utilities
                 Debug.Print(e.Message);
             }
             ReceiptList.Add(PlacerholderReceipt);
+            PlacerholderReceipt = null;
         }
     }
 }
