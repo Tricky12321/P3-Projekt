@@ -45,15 +45,8 @@ namespace P3_Projekt_WPF.Classes
 
         }
 
-        public BaseProduct CreateProduct(int ProductID, int type)
-        {
-            //TODO: SKal lige laves færdig til at tage alle slags produkter.
-            return new Product(ProductID);
-        }
-
         public override void CreateFromRow(Row Table)
         {
-            //TODO: SKal lige kedes sammen med CreateProduct ^^ 
             //TODO: Datetime skal lige implementeres korrekt
             _id = Convert.ToInt32(Table.Values[0]);
             Product = new Product(Convert.ToInt32(Table.Values[1]));

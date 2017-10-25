@@ -159,9 +159,8 @@ namespace P3_Projekt_WPF.Classes
             Transactions = new List<SaleTransaction>();
             foreach (var item in Results.RowData)
             {
-                //TODO: SaleTransaction skal have ny constructor som tager en Row.
-                //SaleTransaction newSaleTransaction = new SaleTransaction();
-                //Transactions.Add(newSaleTransaction);
+                SaleTransaction newSaleTransaction = new SaleTransaction(item);
+                Transactions.Add(newSaleTransaction);
             }
 
             //TODO: Datetime skal lige implementeres korrekt (Lasse?)
@@ -177,7 +176,6 @@ namespace P3_Projekt_WPF.Classes
 
         public void UpdateInDatabase()
         {
-            //TODO: Skal lige testes... Og mangler unit tests
             string sql = $"UPDATE `receipt` SET" +
                 $"`number_of_products` = '{NumberOfProducts}'," +
                 $"`total_price` = '{TotalPrice}'," +

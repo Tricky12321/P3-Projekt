@@ -47,7 +47,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
 
         public void DeleteTransaction(int transactionID)
         {
-            /* TODO: Vær sikker på hvad transactions tabellen skal hedde!! */
+            // TODO: Vær sikker på hvad transactions tabellen skal hedde!!
             string deleteQuery = $"DELETE FROM transactions WHERE ID = {transactionID}";
             Mysql Connection = new Mysql();
             Connection.RunQuery(deleteQuery);

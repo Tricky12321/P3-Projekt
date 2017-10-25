@@ -1,20 +1,23 @@
 ﻿using System;
 using System.IO;
-using System.Drawing;
 using System.Windows;
-using System.Windows.Controls;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Windows.Media;
 using System.Drawing.Printing;
+using System.Windows.Controls;
+using System.Drawing;
+using System.Windows.Xps.Packaging;
+using System.Windows.Documents;
 
 namespace P3_Projekt_WPF.Classes
 {
     //TODO: ReceiptPrinter virker slet ikke mere, alt er kommenteret ud.
-    /*
+    
     public class ReceiptPrinter
     {
-        private FontStyle printFont;
+        //TODO: Skal laves om til WPF font
+        //private System.Drawing.FontStyle printFont;
         private string PrintThisText => Properties.Resources.PrintTest;
         Receipt ReceiptToPrint;
 
@@ -22,7 +25,7 @@ namespace P3_Projekt_WPF.Classes
         public ReceiptPrinter(Receipt receipt)
         {
             ReceiptToPrint = receipt;
-            setup();
+            //setup();
 
         }
 
@@ -31,47 +34,25 @@ namespace P3_Projekt_WPF.Classes
         {
             try
             {
-                printFont = new Font("Courier New", 10);
+                //TODO: SKal lige fixet med WPF font istedet for System.Windows Font
+                //printFont = new Font("Courier New", 10);
                 PrintDocument pd = new PrintDocument();
                 pd.PrintPage += new PrintPageEventHandler
                    (pd_PrintPage);
 
                 // Asks for which printer to use
                 PrintDialog printDialog = new PrintDialog();
-                printDialog.Document = pd;
-
-                if (printDialog.ShowDialog() == DialogResult.OK)
+                printDialog.PageRangeSelection = PageRangeSelection.AllPages;
+                printDialog.UserPageRangeEnabled = true;
+                // Display the dialog. This returns true if the user presses the Print button.
+                Nullable<Boolean> print = printDialog.ShowDialog();
+                if (print == true)
                 {
-                    //Print the page
-                    pd.Print();
+                    XpsDocument xpsDocument = new XpsDocument("C:\\FixedDocumentSequence.xps", FileAccess.ReadWrite);
+                    FixedDocumentSequence fixedDocSeq = xpsDocument.GetFixedDocumentSequence();
+                    
+                    printDialog.PrintDocument(fixedDocSeq.DocumentPaginator, "Test print job");
                 }
-
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-            }
-        }
-
-        public void setup()
-        {
-            try
-            {
-                printFont = new Font("Courier New", 10);
-                PrintDocument pd = new PrintDocument();
-                pd.PrintPage += new PrintPageEventHandler
-                   (pd_PrintPage);
-
-                // Asks for which printer to use
-                PrintDialog printDialog = new PrintDialog();
-                printDialog.Document = pd;
-
-                if (printDialog.ShowDialog() == DialogResult.OK)
-                {
-                    //Print the page
-                    pd.Print();
-                }
-
             }
             catch (Exception ex)
             {
@@ -91,10 +72,11 @@ namespace P3_Projekt_WPF.Classes
             List<SaleTransaction> transactionList = ReceiptToPrint.Transactions;
 
             // Calculate the number of lines per page.
-            linesPerPage = ev.MarginBounds.Height /
-               printFont.GetHeight(ev.Graphics);
+            //TODO: Virker ikke mere skal laves efter XPS standard. 
+            //linesPerPage = ev.MarginBounds.Height / printFont.GetHeight(ev.Graphics);
 
             // Print each line of the file.
+            /*
             List<string> TextToPrint = new List<string>();
             string[] standardText = PrintThisText.Split('\n');
             foreach (string s in standardText)
@@ -119,7 +101,7 @@ namespace P3_Projekt_WPF.Classes
                    leftMargin, yPos, new StringFormat());
                 count++;
             }
+            */
         }
     }
-*/
 }

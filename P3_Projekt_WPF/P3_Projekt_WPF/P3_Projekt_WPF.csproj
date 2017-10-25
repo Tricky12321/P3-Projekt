@@ -42,6 +42,7 @@
     <Reference Include="P3-Projekt">
       <HintPath>..\..\P3-Projekt\P3-Projekt\bin\Debug\P3-Projekt.exe</HintPath>
     </Reference>
+    <Reference Include="ReachFramework" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
