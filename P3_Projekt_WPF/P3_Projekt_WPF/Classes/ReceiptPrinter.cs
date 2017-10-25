@@ -10,6 +10,7 @@ using System.Drawing.Printing;
 
 namespace P3_Projekt_WPF.Classes
 {
+    //TODO: ReceiptPrinter virker slet ikke mere, alt er kommenteret ud.
     /*
     public class ReceiptPrinter
     {
