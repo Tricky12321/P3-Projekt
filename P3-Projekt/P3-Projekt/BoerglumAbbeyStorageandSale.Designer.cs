@@ -30,9 +30,8 @@
         {
             this.tabControl = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
-            this.panel_FastButtons = new System.Windows.Forms.Panel();
             this.btn_addProduct = new System.Windows.Forms.Button();
-            this.label1 = new System.Windows.Forms.Label();
+            this.label5 = new System.Windows.Forms.Label();
             this.textBox2 = new System.Windows.Forms.TextBox();
             this.btn_cash = new System.Windows.Forms.Button();
             this.txtbox_BeloebBetalt = new System.Windows.Forms.TextBox();
@@ -51,6 +50,10 @@
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.tabPage3 = new System.Windows.Forms.TabPage();
+            this.label3 = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
+            this.comboBox2 = new System.Windows.Forms.ComboBox();
+            this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.panel2 = new System.Windows.Forms.Panel();
             this.textBox5 = new System.Windows.Forms.TextBox();
             this.button2 = new System.Windows.Forms.Button();
@@ -59,10 +62,6 @@
             this.checkBox3 = new System.Windows.Forms.CheckBox();
             this.checkBox2 = new System.Windows.Forms.CheckBox();
             this.checkBox1 = new System.Windows.Forms.CheckBox();
-            this.comboBox1 = new System.Windows.Forms.ComboBox();
-            this.comboBox2 = new System.Windows.Forms.ComboBox();
-            this.label2 = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
             this.tabControl.SuspendLayout();
             this.tabPage1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numUpDown_AmountProducts)).BeginInit();
@@ -79,7 +78,6 @@
             this.tabControl.Controls.Add(this.tabPage1);
             this.tabControl.Controls.Add(this.tabPage2);
             this.tabControl.Controls.Add(this.tabPage3);
-            this.tabControl.Controls.Add(this.tabPage_Indstillinger);
             this.tabControl.Cursor = System.Windows.Forms.Cursors.SizeWE;
             this.tabControl.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.tabControl.ItemSize = new System.Drawing.Size(100, 50);
@@ -93,9 +91,8 @@
             // 
             // tabPage1
             // 
-            this.tabPage1.Controls.Add(this.panel_FastButtons);
             this.tabPage1.Controls.Add(this.btn_addProduct);
-            this.tabPage1.Controls.Add(this.label1);
+            this.tabPage1.Controls.Add(this.label5);
             this.tabPage1.Controls.Add(this.textBox2);
             this.tabPage1.Controls.Add(this.btn_cash);
             this.tabPage1.Controls.Add(this.txtbox_BeloebBetalt);
@@ -114,43 +111,33 @@
             this.tabPage1.Text = "Salg";
             this.tabPage1.UseVisualStyleBackColor = true;
             // 
-            // panel_FastButtons
-            // 
-            this.panel_FastButtons.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.panel_FastButtons.Location = new System.Drawing.Point(9, 158);
-            this.panel_FastButtons.Name = "panel_FastButtons";
-            this.panel_FastButtons.Size = new System.Drawing.Size(1093, 800);
-            this.panel_FastButtons.TabIndex = 18;
-            // 
             // btn_addProduct
             // 
-            this.btn_addProduct.Location = new System.Drawing.Point(408, 99);
+            this.btn_addProduct.Location = new System.Drawing.Point(374, 100);
             this.btn_addProduct.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.btn_addProduct.Name = "btn_addProduct";
-            this.btn_addProduct.Size = new System.Drawing.Size(239, 51);
+            this.btn_addProduct.Size = new System.Drawing.Size(234, 36);
             this.btn_addProduct.TabIndex = 17;
             this.btn_addProduct.Text = "Tilføj Produkt";
             this.btn_addProduct.UseVisualStyleBackColor = true;
             // 
-            // label1
+            // label5
             // 
-            this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.label1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(1127, 100);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(754, 68);
-            this.label1.TabIndex = 16;
-            this.label1.Text = "Kvittering";
+            this.label5.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.label5.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label5.Location = new System.Drawing.Point(1127, 100);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(754, 68);
+            this.label5.TabIndex = 16;
+            this.label5.Text = "Kvittering";
             // 
             // textBox2
             // 
             this.textBox2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.textBox2.Location = new System.Drawing.Point(1127, 708);
             this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(752, 41);
+            this.textBox2.Size = new System.Drawing.Size(752, 36);
             this.textBox2.TabIndex = 13;
             this.textBox2.Text = "Total: 123,-";
             this.textBox2.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
@@ -173,7 +160,7 @@
             this.txtbox_BeloebBetalt.Location = new System.Drawing.Point(1127, 845);
             this.txtbox_BeloebBetalt.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.txtbox_BeloebBetalt.Name = "txtbox_BeloebBetalt";
-            this.txtbox_BeloebBetalt.Size = new System.Drawing.Size(463, 41);
+            this.txtbox_BeloebBetalt.Size = new System.Drawing.Size(463, 36);
             this.txtbox_BeloebBetalt.TabIndex = 10;
             this.txtbox_BeloebBetalt.Text = "Betalt Beløb";
             // 
@@ -203,7 +190,7 @@
             // 
             this.numUpDown_AmountProducts.Location = new System.Drawing.Point(9, 100);
             this.numUpDown_AmountProducts.Name = "numUpDown_AmountProducts";
-            this.numUpDown_AmountProducts.Size = new System.Drawing.Size(78, 41);
+            this.numUpDown_AmountProducts.Size = new System.Drawing.Size(78, 36);
             this.numUpDown_AmountProducts.TabIndex = 5;
             this.numUpDown_AmountProducts.Value = new decimal(new int[] {
             1,
@@ -324,7 +311,7 @@
             this.textBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.textBox1.Location = new System.Drawing.Point(1130, 20);
             this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(697, 41);
+            this.textBox1.Size = new System.Drawing.Size(697, 36);
             this.textBox1.TabIndex = 14;
             this.textBox1.TextChanged += new System.EventHandler(this.textBox1_TextChanged);
             // 
@@ -362,6 +349,41 @@
             this.tabPage3.Text = "Statistics";
             this.tabPage3.UseVisualStyleBackColor = true;
             this.tabPage3.Click += new System.EventHandler(this.tabPage3_Click);
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(42, 178);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(113, 29);
+            this.label3.TabIndex = 14;
+            this.label3.Text = "Slut dato";
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(42, 126);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(122, 29);
+            this.label2.TabIndex = 13;
+            this.label2.Text = "Start dato";
+            this.label2.Click += new System.EventHandler(this.label2_Click);
+            // 
+            // comboBox2
+            // 
+            this.comboBox2.FormattingEnabled = true;
+            this.comboBox2.Location = new System.Drawing.Point(81, 323);
+            this.comboBox2.Name = "comboBox2";
+            this.comboBox2.Size = new System.Drawing.Size(361, 37);
+            this.comboBox2.TabIndex = 12;
+            // 
+            // comboBox1
+            // 
+            this.comboBox1.FormattingEnabled = true;
+            this.comboBox1.Location = new System.Drawing.Point(81, 274);
+            this.comboBox1.Name = "comboBox1";
+            this.comboBox1.Size = new System.Drawing.Size(361, 37);
+            this.comboBox1.TabIndex = 11;
             // 
             // panel2
             // 
@@ -435,41 +457,6 @@
             this.checkBox1.TabIndex = 0;
             this.checkBox1.UseVisualStyleBackColor = true;
             // 
-            // comboBox1
-            // 
-            this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Location = new System.Drawing.Point(81, 274);
-            this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(361, 37);
-            this.comboBox1.TabIndex = 11;
-            // 
-            // comboBox2
-            // 
-            this.comboBox2.FormattingEnabled = true;
-            this.comboBox2.Location = new System.Drawing.Point(81, 323);
-            this.comboBox2.Name = "comboBox2";
-            this.comboBox2.Size = new System.Drawing.Size(361, 37);
-            this.comboBox2.TabIndex = 12;
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(42, 126);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(122, 29);
-            this.label2.TabIndex = 13;
-            this.label2.Text = "Start dato";
-            this.label2.Click += new System.EventHandler(this.label2_Click);
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(42, 178);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(113, 29);
-            this.label3.TabIndex = 14;
-            this.label3.Text = "Slut dato";
-            // 
             // BoerglumAbbeyStorageandSale
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -518,7 +505,7 @@
         private System.Windows.Forms.DataGridViewButtonColumn column_down;
         private System.Windows.Forms.DataGridViewTextBoxColumn column_Product;
         private System.Windows.Forms.DataGridViewImageColumn Column_Image;
-        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.DateTimePicker dateTimePicker2;
         private System.Windows.Forms.DateTimePicker dateTimePicker1;
