@@ -35,8 +35,16 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="MySql.Data, Version=6.9.10.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
+      <HintPath>..\packages\MySql.Data.6.9.10\lib\net45\MySql.Data.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="P3-Projekt">
+      <HintPath>..\..\P3-Projekt\P3-Projekt\bin\Debug\P3-Projekt.exe</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -55,6 +63,31 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Classes\Database\Mysql.cs" />
+    <Compile Include="Classes\Database\MysqlObject.cs" />
+    <Compile Include="Classes\Database\Row.cs" />
+    <Compile Include="Classes\Database\TableDecode.cs" />
+    <Compile Include="Classes\Exceptions\EmptyTableException.cs" />
+    <Compile Include="Classes\Exceptions\NotConnectedException.cs" />
+    <Compile Include="Classes\Exceptions\ProductDiscountException.cs" />
+    <Compile Include="Classes\Exceptions\WrongProductTypeException.cs" />
+    <Compile Include="Classes\Group.cs" />
+    <Compile Include="Classes\Product\BaseProduct.cs" />
+    <Compile Include="Classes\Product\Product.cs" />
+    <Compile Include="Classes\Product\ServiceProduct.cs" />
+    <Compile Include="Classes\Product\TempProduct.cs" />
+    <Compile Include="Classes\Receipt.cs" />
+    <Compile Include="Classes\ReceiptPrinter.cs" />
+    <Compile Include="Classes\Statistics.cs" />
+    <Compile Include="Classes\StorageRoom.cs" />
+    <Compile Include="Classes\Transaction\OrderTransaction.cs" />
+    <Compile Include="Classes\Transaction\SaleTransaction.cs" />
+    <Compile Include="Classes\Transaction\StorageTransaction.cs" />
+    <Compile Include="Classes\Transaction\Transaction.cs" />
+    <Compile Include="Classes\Utilities\POSController.cs" />
+    <Compile Include="Classes\Utilities\StatisticsController.cs" />
+    <Compile Include="Classes\Utilities\StorageController.cs" />
+    <Compile Include="Resources\Class1.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -86,6 +119,7 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -94,6 +128,13 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Resources\Magnifying_glass_icon.svg" />
+    <Resource Include="Resources\Magnifying_glass_icon.svg.png" />
+    <Resource Include="Resources\PrintTest.txt" />
+    <Resource Include="Resources\Red_Cross.png" />
+    <Resource Include="Resources\Search_Icon.bmp" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

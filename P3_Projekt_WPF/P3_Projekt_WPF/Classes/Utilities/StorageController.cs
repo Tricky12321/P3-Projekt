@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Drawing;
+using System.Windows.Controls;
 
-namespace P3_Projekt.Classes.Utilities
+namespace P3_Projekt_WPF.Classes.Utilities
 {
     public class StorageController
     {
-        BoerglumAbbeyStorageandSale _boerglumAbbeyStorageandSale;
+        // TODO: SKal lige fixes
+        // BoerglumAbbeyStorageandSale _boerglumAbbeyStorageandSale;
 
         private int _idGroupCounter = 0;
 
@@ -17,12 +18,13 @@ namespace P3_Projekt.Classes.Utilities
         public Dictionary<int, Group> GroupDictionary = new Dictionary<int, Group>() { { 0, new Group("Diverse", "Produkter, som ikke tilhører en specifik gruppe") } };
         public Dictionary<int, StorageRoom> StorageRoomDictionary = new Dictionary<int, StorageRoom>();
         public List<TempProduct> TempProductList = new List<TempProduct>();
-
+        /*
+         * TODO: Skal lige fixes...
         public StorageController(BoerglumAbbeyStorageandSale boerglumAbbeyStorageandSale)
         {
             _boerglumAbbeyStorageandSale = boerglumAbbeyStorageandSale;
         }
-
+        */
         public void DeleteProduct(int ProductID)
         {
             ProductDictionary.Remove(ProductID);

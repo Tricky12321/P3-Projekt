@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using P3_Projekt.Classes.Database;
-using P3_Projekt.Classes.Exceptions;
+using P3_Projekt_WPF.Classes.Database;
+using P3_Projekt_WPF.Classes.Exceptions;
 
-namespace P3_Projekt.Classes
+namespace P3_Projekt_WPF.Classes
 {
     public class SaleTransaction : Transaction
     {
