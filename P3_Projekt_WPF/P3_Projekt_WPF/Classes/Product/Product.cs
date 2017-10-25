@@ -29,8 +29,17 @@ namespace P3_Projekt_WPF.Classes
             DiscountBool = discount;
             DiscountPrice = discountPrice;
             _image = image;
+        }
 
-            
+        public Product(int id) : base(0)
+        {
+            this.ID = id;
+            GetFromDatabase();
+        }
+
+        public override string GetName()
+        {
+            return Name;
         }
 
         /* No delete method */ 
@@ -91,7 +100,7 @@ namespace P3_Projekt_WPF.Classes
             Name = results.Values[1];                                       // name
             Brand = results.Values[2];                                      // brand
             ProductGroup = new Group(Convert.ToInt32(results.Values[3]));   // groups
-            SalePrice = Convert.ToInt32(results.Values[4]);                 // price
+            SalePrice = Convert.ToDecimal(results.Values[4]);                 // price
             DiscountBool = Convert.ToBoolean(results.Values[5]);            // discount
             DiscountPrice = Convert.ToInt32(results.Values[6]);             // discount_price
         }
@@ -107,7 +116,7 @@ namespace P3_Projekt_WPF.Classes
         public void UpdateInDatabase()
         {
             string sql = $"UPDATE `products` SET"+
-                $"`name` = '{Name}',"+
+                $"`name` = '{GetName()}',"+
                 $"`brand` = '{Brand}'," +
                 $"`groups` = '{ProductGroup.ID}'," +
                 $"`price` = '{SalePrice}'," +

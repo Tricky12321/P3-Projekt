@@ -9,7 +9,7 @@ namespace P3_Projekt_WPF.Classes
 {
     public class OrderTransaction : Transaction
     {
-        private int _purchasePrice;
+        private decimal _purchasePrice;
         private string _supplier;
         private int _storageRoomID;
 
@@ -39,25 +39,54 @@ namespace P3_Projekt_WPF.Classes
 
         public override void GetFromDatabase()
         {
-            string getQuery = $"SELECT * FROM order_transactions WHERE ID = {_id}";
+            string getQuery = $"SELECT * FROM `order_transactions` WHERE `id` = {_id}";
             Mysql Connection = new Mysql();
             Connection.RunQuery(getQuery);
 
         }
 
-        public override void CreateFromRow(Row Table)
+        public BaseProduct CreateProduct(int ProductID, int type)
         {
-            throw new NotImplementedException();
+            //TODO: SKal lige laves færdig til at tage alle slags produkter.
+            return new Product(ProductID);
         }
 
-        public override void UpdateInDatabase()
+        public override void CreateFromRow(Row Table)
         {
-            throw new NotImplementedException();
+            //TODO: SKal lige kedes sammen med CreateProduct ^^ 
+            //TODO: Datetime skal lige implementeres korrekt
+            _id = Convert.ToInt32(Table.Values[0]);
+            Product = new Product(Convert.ToInt32(Table.Values[1]));
+            Amount = Convert.ToInt32(Table.Values[2]);
+            //Datetime = ???Table.Values[3]
+            _purchasePrice = Convert.ToDecimal(Table.Values[4]);
+            _supplier = Table.Values[5];
+            _storageRoomID = Convert.ToInt32(Table.Values[5]);
+
         }
 
         public override void UploadToDatabase()
         {
-            throw new NotImplementedException();
+            //TODO: Datetime skal lige implementeres korrekt her
+            string sql = "INSERT INTO `order_transactions` (`id`, `product_id`, `amount`, `datetime`, `purchase_price`, `supplier`, `storageroom_id`)"+
+                $" VALUES (NULL, '{Product.ID}', '{Amount}', CURRENT_TIMESTAMP, '{_purchasePrice}', '{_supplier}', '{_storageRoomID}');";
         }
+
+        public override void UpdateInDatabase()
+        {
+            //TODO: Datetime skal implementeres rigtigt her. 
+            string sql = $"UPDATE `order_transaction` SET" +
+               $"`product_id` = '{Product.ID}'," +
+               $"`amount` = '{Amount}'," +
+               //$"`datetime` = '{DateTime??}'," +
+               $"`purchase_price` = '{_purchasePrice}'," +
+               $"`supplier` = '{_supplier}'," +
+               $"`storageroom_id` = '{_storageRoomID}'" +
+               $"WHERE `id` = {_id};";
+            Mysql Connection = new Mysql();
+            Connection.RunQuery(sql);
+        }
+
+
     }
 }

@@ -19,7 +19,8 @@ namespace P3_Projekt_WPF.Classes
             ID = _idCounter++;
             SalePrice = salePrice;
         }
-        
+
+        public abstract string GetName();
         
     }
 }

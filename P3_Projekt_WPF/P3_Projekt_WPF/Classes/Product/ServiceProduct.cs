@@ -19,6 +19,16 @@ namespace P3_Projekt_WPF.Classes
             Name = name;
         }
 
+        public ServiceProduct(int id) : base(0)
+        {
+            ID = id;
+            GetFromDatabase();
+        }
+        public override string GetName()
+        {
+            return Name;
+        }
+
         public void GetFromDatabase()
         {
             string sql = $"SELECT * FROM service_products WHERE id = {ID}";
@@ -49,7 +59,7 @@ namespace P3_Projekt_WPF.Classes
                 $"`name` = '{Name}'," +
                 $"`price` = '{SalePrice}'," +
                 $"`group_price` = '{GroupPrice}'," +
-                $"`group_limit` = '{GroupLimit}'," +
+                $"`group_limit` = '{GroupLimit}'" +
                 $"WHERE `id` = {ID};";
             Mysql Connection = new Mysql();
             Connection.RunQuery(sql);
