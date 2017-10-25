@@ -1,16 +1,19 @@
 ﻿using System;
 using System.IO;
 using System.Drawing;
-using System.Drawing.Printing;
-using System.Windows.Forms;
+using System.Windows;
+using System.Windows.Controls;
 using System.Collections.Generic;
 using System.Reflection;
-namespace P3_Projekt.Classes
-{
+using System.Windows.Media;
+using System.Drawing.Printing;
 
+namespace P3_Projekt_WPF.Classes
+{
+    /*
     public class ReceiptPrinter
     {
-        private Font printFont;
+        private FontStyle printFont;
         private string PrintThisText => Properties.Resources.PrintTest;
         Receipt ReceiptToPrint;
 
@@ -32,7 +35,7 @@ namespace P3_Projekt.Classes
                 pd.PrintPage += new PrintPageEventHandler
                    (pd_PrintPage);
 
-                /* Asks for which printer to use */
+                // Asks for which printer to use
                 PrintDialog printDialog = new PrintDialog();
                 printDialog.Document = pd;
 
@@ -58,7 +61,7 @@ namespace P3_Projekt.Classes
                 pd.PrintPage += new PrintPageEventHandler
                    (pd_PrintPage);
 
-                /* Asks for which printer to use */
+                // Asks for which printer to use
                 PrintDialog printDialog = new PrintDialog();
                 printDialog.Document = pd;
 
@@ -117,4 +120,5 @@ namespace P3_Projekt.Classes
             }
         }
     }
+*/
 }

@@ -68,9 +68,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\P3-Projekt\P3-Projekt.csproj">
-      <Project>{B9C3E246-DA5D-4122-BBE3-68EF67B3E3E2}</Project>
-      <Name>P3-Projekt</Name>
+    <ProjectReference Include="..\..\P3_Projekt_WPF\P3_Projekt_WPF\P3_Projekt_WPF.csproj">
+      <Project>{e90a8d89-bdeb-4261-b2d3-c23a6d9c0568}</Project>
+      <Name>P3_Projekt_WPF</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
