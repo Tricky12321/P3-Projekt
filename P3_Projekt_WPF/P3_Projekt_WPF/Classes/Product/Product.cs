@@ -100,7 +100,7 @@ namespace P3_Projekt_WPF.Classes
             Name = results.Values[1];                                       // name
             Brand = results.Values[2];                                      // brand
             ProductGroup = new Group(Convert.ToInt32(results.Values[3]));   // groups
-            SalePrice = Convert.ToInt32(results.Values[4]);                 // price
+            SalePrice = Convert.ToDecimal(results.Values[4]);                 // price
             DiscountBool = Convert.ToBoolean(results.Values[5]);            // discount
             DiscountPrice = Convert.ToInt32(results.Values[6]);             // discount_price
         }

@@ -12,7 +12,6 @@ namespace P3_Projekt_WPF.Classes
         public string Description;
         private bool _resolved;
 
-
         public TempProduct (string description, decimal salePrice) : base(salePrice)
         {
             Description = description;
@@ -29,8 +28,6 @@ namespace P3_Projekt_WPF.Classes
             Description = newDescription;
             SalePrice = newSalePrice;
         }
-
-        
 
         public void Resolve()
         {
