@@ -3,15 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using P3_Projekt.Classes.Database;
 
 namespace P3_Projekt.Classes
 {
-    public abstract class Transaction
+    public abstract class Transaction : MysqlObject
     {
         protected static int _idCounter = 0;
         public static int IDCounter { get { return _idCounter; } set { _idCounter = value; } }
         
-        private int _id;
+        protected int _id;
         public BaseProduct Product;
         public int Amount;
         public DateTime Date;
@@ -36,5 +37,10 @@ namespace P3_Projekt.Classes
             /* Should load the latest transaction ID from database.
              * Should be called at start of program */
         }
+
+        public abstract void GetFromDatabase();
+        public abstract void CreateFromRow(Row Table);
+        public abstract void UploadToDatabase();
+        public abstract void UpdateInDatabase();
     }
 }

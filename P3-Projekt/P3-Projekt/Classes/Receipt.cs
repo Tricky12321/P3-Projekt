@@ -4,14 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using P3_Projekt.Classes.Exceptions;
-
+using P3_Projekt.Classes.Database;
 namespace P3_Projekt.Classes
 {
-    public class Receipt
+    public class Receipt : MysqlObject
     {
         private static int _idCounter = 0;
         public static int IDCounter { get { return _idCounter; } set { _idCounter = value; } }
-        
         public int ID;
         public List<SaleTransaction> Transactions = new List<SaleTransaction>();
         public int NumberOfProducts;
@@ -137,6 +136,47 @@ namespace P3_Projekt.Classes
                 transaction.Execute();
             }
             ReceiptPrinter printReceipt = new ReceiptPrinter(this);
+        }
+
+        public void GetFromDatabase()
+        {
+            string sql = $"SELECT * FROM receipts WHERE id = {ID}";
+            Mysql Connection = new Mysql();
+            CreateFromRow(Connection.RunQueryWithReturn(sql).RowData[0]);
+        }
+
+        /*
+        private static int _idCounter = 0;
+        public static int IDCounter { get { return _idCounter; } set { _idCounter = value; } }
+        public int ID;
+        public List<SaleTransaction> Transactions = new List<SaleTransaction>();
+        public int NumberOfProducts;
+        public decimal TotalPrice;
+        public decimal PaidPrice;
+        public bool CashOrCard;
+        public DateTime Date;
+
+
+            ID
+            Number of Products
+            TotalPrice
+            PaidPrice
+            CashOrCard
+            DateTime
+           */
+        public void CreateFromRow(Row Table)
+        {
+            
+        }
+
+        public void UploadToDatabase()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void UpdateInDatabase()
+        {
+            throw new NotImplementedException();
         }
     }
 }

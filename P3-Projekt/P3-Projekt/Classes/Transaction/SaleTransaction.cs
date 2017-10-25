@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using P3_Projekt.Classes.Database;
 using P3_Projekt.Classes.Exceptions;
 
 namespace P3_Projekt.Classes
@@ -10,12 +11,12 @@ namespace P3_Projekt.Classes
     public class SaleTransaction : Transaction
     {
         public int ReceiptID;
-        private bool _isTemp;
 
         public SaleTransaction(BaseProduct product, int amount, int receiptID) : base(product, amount)
         {
             ReceiptID = receiptID;
         }
+
 
         public override void Execute()
         {
@@ -35,6 +36,7 @@ namespace P3_Projekt.Classes
             }
 
         }
+
 
         //Returns the correct price according to discount, groups etc.
         public decimal GetProductPrice()
@@ -99,6 +101,29 @@ namespace P3_Projekt.Classes
             {
                 return $"{(Product as TempProduct).Description} {(Product as TempProduct).SalePrice}";
             }
+        }
+
+        public override void GetFromDatabase()
+        {
+            string getQuery = $"SELECT * FROM sale_transactions WHERE ID = {_id}";
+            Mysql Connection = new Mysql();
+            Connection.RunQuery(getQuery);
+
+        }
+
+        public override void CreateFromRow(Row Table)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void UpdateInDatabase()
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void UploadToDatabase()
+        {
+            throw new NotImplementedException();
         }
 
         public string GetProductNameString()
