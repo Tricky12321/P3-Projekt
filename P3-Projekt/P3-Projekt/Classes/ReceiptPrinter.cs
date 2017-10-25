@@ -100,10 +100,10 @@ namespace P3_Projekt.Classes
             TextToPrint.Add($"|   #10903      { DateTime.Now.ToString()}  |");
             TextToPrint.Add($"|   01 Børglum kloster        000000 |");
             TextToPrint.Add($"|                                    |");
-            foreach (Transaction t in transactionList)
+            foreach (SaleTransaction t in transactionList)
             {
                 TextToPrint.Add($"|   {t.Amount.ToString()}x{t.Product.SalePrice.ToString().PadRight(10)}        {("*"+t.Amount * t.Product.SalePrice).ToString().PadLeft(10)}   |\n");
-                TextToPrint.Add($"|   {t.Product.ID.ToString().PadRight(30)}   |\n");
+                TextToPrint.Add($"|   {t.GetProductNameString().PadRight(30)}   |\n");
             }
             TextToPrint.Add($"|    SUBTOTAL           {ReceiptToPrint.TotalPrice}    |");
 

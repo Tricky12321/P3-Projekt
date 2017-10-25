@@ -59,38 +59,47 @@ namespace P3_Projekt.Classes.Utilities
             List<string> produtNames = new List<string>();
             List<Product> productsToReturn = new List<Product>();
 
-            //checks if the searched string is
-            //matching with a product name.
-            foreach (Product p in ProductDictionary.Values)
+            int isNumber;
+            if (Int32.TryParse(searchedString, out isNumber))
             {
-                if (p.Name == searchedString)
-                {
-                    productsToReturn.Add(p);
-                }
-                produtNames.Add(p.Name);
-            }
-
-            //if af matching name is not found the string will undergo different searching methods.
-            if (!wordIsMatched)
-            {
-                foreach (Product p in ProductDictionary.Values)
-                {
-                    //levenshteins will try to autocorrect the string and suggest items with similar names to the string
-                    LevenshteinsProductSearch(searchedString, p, ref productsToReturn);
-                }
-                //will add all the matching brands to the productlist
-                BrandSearch(searchedString, ref productsToReturn);
-                //will add all th matching groups to the produclist
-                GroupSearch(searchedString, ref productsToReturn);
-
-                //removes duplicates from the list. 
-                productsToReturn = productsToReturn.Distinct().ToList();
+                productsToReturn.Add(ProductDictionary[isNumber]);
                 return productsToReturn;
             }
             else
             {
-                //will be called if a matching word is found
-                return productsToReturn;
+                //checks if the searched string is
+                //matching with a product name.
+                foreach (Product p in ProductDictionary.Values)
+                {
+                    if (p.Name == searchedString)
+                    {
+                        productsToReturn.Add(p);
+                    }
+                    produtNames.Add(p.Name);
+                }
+
+                //if af matching name is not found the string will undergo different searching methods.
+                if (!wordIsMatched)
+                {
+                    foreach (Product p in ProductDictionary.Values)
+                    {
+                        //levenshteins will try to autocorrect the string and suggest items with similar names to the string
+                        LevenshteinsProductSearch(searchedString, p, ref productsToReturn);
+                    }
+                    //will add all the matching brands to the productlist
+                    BrandSearch(searchedString, ref productsToReturn);
+                    //will add all th matching groups to the produclist
+                    GroupSearch(searchedString, ref productsToReturn);
+
+                    //removes duplicates from the list. 
+                    productsToReturn = productsToReturn.Distinct().ToList();
+                    return productsToReturn;
+                }
+                else
+                {
+                    //will be called if a matching word is found
+                    return productsToReturn;
+                }
             }
         }
 
