@@ -19,7 +19,10 @@ namespace P3_Projekt_WPF.Classes
             _resolved = false;
         }
 
-        
+        public override string GetName()
+        {
+            return Description;
+        }
 
         public void Edit(string newDescription, decimal newSalePrice)
         {
@@ -52,17 +55,17 @@ namespace P3_Projekt_WPF.Classes
         public void UploadToDatabase()
         {
             string sql = "INSERT INTO `temp_products` (`id`, `sale_price`, `description`, `resolved`)"+
-                $"VALUES (NULL, '{SalePrice}', '{Description}', '{Utils.ConvertBoolToInt(_resolved)}');";
+                $"VALUES (NULL, '{SalePrice}', '{GetName()}', '{Utils.ConvertBoolToInt(_resolved)}');";
             Mysql Connection = new Mysql();
             Connection.RunQuery(sql);
         }
 
         public void UpdateInDatabase()
         {
-            string sql = $"UPDATE `receipt` SET" +
+            string sql = $"UPDATE `temp_products` SET" +
                 $"`sale_price` = '{SalePrice}'," +
-                $"`description` = '{Description}'," +
-                $"`resolved` = '{Utils.ConvertBoolToInt(_resolved)}'," +
+                $"`description` = '{GetName()}'," +
+                $"`resolved` = '{Convert.ToInt32(_resolved)}'" +
                 $"WHERE `id` = {ID};";
             Mysql Connection = new Mysql();
             Connection.RunQuery(sql);

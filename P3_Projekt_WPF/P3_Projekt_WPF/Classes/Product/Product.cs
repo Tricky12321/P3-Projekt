@@ -29,8 +29,17 @@ namespace P3_Projekt_WPF.Classes
             DiscountBool = discount;
             DiscountPrice = discountPrice;
             _image = image;
+        }
 
-            
+        public Product(int id) : base(0)
+        {
+            this.ID = id;
+            GetFromDatabase();
+        }
+
+        public override string GetName()
+        {
+            return Name;
         }
 
         /* No delete method */ 
@@ -107,7 +116,7 @@ namespace P3_Projekt_WPF.Classes
         public void UpdateInDatabase()
         {
             string sql = $"UPDATE `products` SET"+
-                $"`name` = '{Name}',"+
+                $"`name` = '{GetName()}',"+
                 $"`brand` = '{Brand}'," +
                 $"`groups` = '{ProductGroup.ID}'," +
                 $"`price` = '{SalePrice}'," +

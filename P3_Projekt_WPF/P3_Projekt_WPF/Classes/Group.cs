@@ -45,12 +45,19 @@ namespace P3_Projekt_WPF.Classes
 
         public void UploadToDatabase()
         {
-            throw new NotImplementedException();
+            string sql = $"INSERT INTO `groups` (`id`, `name`, `description`) VALUES (NULL, '{Name}', '{Description}');";
+            Mysql Connection = new Mysql();
+            Connection.RunQuery(sql);
         }
 
         public void UpdateInDatabase()
         {
-            throw new NotImplementedException();
+            string sql = $"UPDATE `groups` SET" +
+                $"`name` = '{Name}'," +
+                $"`description` = '{Description}'," +
+                $"WHERE `id` = {ID};";
+            Mysql Connection = new Mysql();
+            Connection.RunQuery(sql);
         }
     }
 }

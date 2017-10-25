@@ -10,11 +10,19 @@ namespace P3_Projekt_WPF.Classes
 {
     public class SaleTransaction : Transaction
     {
-        public int ReceiptID;
 
+        public int ReceiptID;
+        public decimal Price;
+        public bool Discount;
+        public decimal TotalPrice => GetProductPrice() * Amount;
         public SaleTransaction(BaseProduct product, int amount, int receiptID) : base(product, amount)
         {
             ReceiptID = receiptID;
+        }
+
+        public SaleTransaction(Row RowData) : base(new Product(Convert.ToInt32(RowData.Values[1])),Convert.ToInt32(RowData.Values[2]))
+        {
+            CreateFromRow(RowData);
         }
 
         public override void Execute()
@@ -35,7 +43,6 @@ namespace P3_Projekt_WPF.Classes
             }
 
         }
-
 
         //Returns the correct price according to discount, groups etc.
         public decimal GetProductPrice()
@@ -112,47 +119,39 @@ namespace P3_Projekt_WPF.Classes
 
         public override void CreateFromRow(Row Table)
         {
-            throw new NotImplementedException();
-        }
-
-        public override void UpdateInDatabase()
-        {
-            throw new NotImplementedException();
+            _id = Convert.ToInt32(Table.Values[0]);
+            Product = new Product(Convert.ToInt32(Table.Values[1]));
+            Amount = Convert.ToInt32(Table.Values[2]);
+            //TODO: Datatime skal laves her Table.Values[3]
+            ReceiptID = Convert.ToInt32(Table.Values[4]);
+            Price = Convert.ToDecimal(Table.Values[5]);
+            //TotalPrice = Convert.ToDecimal(Table.Values[6]);
+            Discount = Convert.ToBoolean(Table.Values[7]);
         }
 
         public override void UploadToDatabase()
         {
-            throw new NotImplementedException();
+            //TODO: Der skal laves datetime i den her query
+            string sql = "INSERT INTO `sale_transactions` (`id`, `product_id`, `amount`, `datetime`, `receipt_id`, `price`, `total_price`, `discount`)"+
+                $" VALUES (NULL, '{Product.ID}', '{Amount}', '2017-10-25 00:00:00', '{ReceiptID}', '{GetProductPrice()}', '{TotalPrice}', '{Discount}');";
+            Mysql Connection = new Mysql();
+            Connection.RunQuery(sql);
         }
 
-        public string GetProductNameString()
-        {
-            if (Product is Product)
-            {
-                if ((Product as Product).DiscountBool)
-                {
-                    return $"{(Product as Product).Name}";
-                }
-                else
-                {
-                    return $"{(Product as Product).Name}";
-                }
-            }
-            else if (Product is ServiceProduct)
-            {
-                if ((Product as ServiceProduct).GroupLimit <= Amount)
-                {
-                    return $"{(Product as ServiceProduct).Name}";
-                }
-                else
-                {
-                    return $"{(Product as ServiceProduct).Name}";
-                }
-            }
-            else
-            {
-                return $"{(Product as TempProduct).Description}";
-            }
+        public override void UpdateInDatabase()
+        {   
+            //TODO: Der skal laves Datatime her
+            string sql = $"UPDATE `sale_transactions` SET" +
+                $"`product_id` = '{Product.ID}'," +
+                $"`amount` = '{Amount}'," +
+                //$"`datetime` = '{DateTime??}'," +
+                $"`receipt_id` = '{ReceiptID}'," +
+                $"`price` = '{GetProductPrice()}'," +
+                $"`total_price` = '{TotalPrice}'," +
+                $"`discount` = '{Convert.ToInt32(Discount)}'" +
+                $"WHERE `id` = {_id};";
+            Mysql Connection = new Mysql();
+            Connection.RunQuery(sql);
         }
     }
 }
