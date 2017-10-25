@@ -19,6 +19,11 @@ namespace P3_Projekt_WPF.Classes
             Name = name;
         }
 
+        public ServiceProduct(int id) : base(0)
+        {
+            ID = id;
+            GetFromDatabase();
+        }
         public override string GetName()
         {
             return Name;

@@ -120,20 +120,49 @@ namespace P3_Projekt_WPF.Classes
         public override void CreateFromRow(Row Table)
         {
             _id = Convert.ToInt32(Table.Values[0]);
-            Product = new Product(Convert.ToInt32(Table.Values[1]));
-            Amount = Convert.ToInt32(Table.Values[2]);
-            //TODO: Datatime skal laves her Table.Values[3]
-            ReceiptID = Convert.ToInt32(Table.Values[4]);
-            Price = Convert.ToDecimal(Table.Values[5]);
-            //TotalPrice = Convert.ToDecimal(Table.Values[6]);
-            Discount = Convert.ToBoolean(Table.Values[7]);
+            Product = _getProduct(Convert.ToInt32(Table.Values[1]), Table.Values[2]);
+            Amount = Convert.ToInt32(Table.Values[3]);
+            //TODO: Datatime skal laves her Table.Values[4]
+            ReceiptID = Convert.ToInt32(Table.Values[5]);
+            Price = Convert.ToDecimal(Table.Values[6]);
+            Discount = Convert.ToBoolean(Table.Values[8]);
+        }
+
+        private BaseProduct _getProduct(int id, string Type)
+        {
+            if (Type == "product")
+            {
+                return new Product(id);
+            } else if(Type == "temp_product")
+            {
+                return new TempProduct(id);
+            } else if(Type == "service_product")
+            {
+                return new ServiceProduct(id);
+            } else
+            {
+                throw new UnknownProductTypeException("This product is not known by the program");
+            }
+        }
+
+        private string _getProductType()
+        {
+            if (Product is ServiceProduct)
+            {
+                return "service_product";
+            }
+            if (Product is TempProduct)
+            {
+                return "temp_product";
+            }
+            return "product";
         }
 
         public override void UploadToDatabase()
         {
             //TODO: Der skal laves datetime i den her query
-            string sql = "INSERT INTO `sale_transactions` (`id`, `product_id`, `amount`, `datetime`, `receipt_id`, `price`, `total_price`, `discount`)"+
-                $" VALUES (NULL, '{Product.ID}', '{Amount}', '2017-10-25 00:00:00', '{ReceiptID}', '{GetProductPrice()}', '{TotalPrice}', '{Discount}');";
+            string sql = "INSERT INTO `sale_transactions` (`id`, `product_id`, `product_type`,`amount`, `datetime`, `receipt_id`, `price`, `total_price`, `discount`)"+
+                $" VALUES (NULL, '{Product.ID}', '{_getProductType()}','{Amount}', '2017-10-25 00:00:00', '{ReceiptID}', '{GetProductPrice()}', '{TotalPrice}', '{Discount}');";
             Mysql Connection = new Mysql();
             Connection.RunQuery(sql);
         }
@@ -143,6 +172,7 @@ namespace P3_Projekt_WPF.Classes
             //TODO: Der skal laves Datatime her
             string sql = $"UPDATE `sale_transactions` SET" +
                 $"`product_id` = '{Product.ID}'," +
+                $"`product_type` = '{_getProductType()}'," +
                 $"`amount` = '{Amount}'," +
                 //$"`datetime` = '{DateTime??}'," +
                 $"`receipt_id` = '{ReceiptID}'," +

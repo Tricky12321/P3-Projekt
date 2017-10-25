@@ -70,6 +70,7 @@
     <Compile Include="Classes\Exceptions\EmptyTableException.cs" />
     <Compile Include="Classes\Exceptions\NotConnectedException.cs" />
     <Compile Include="Classes\Exceptions\ProductDiscountException.cs" />
+    <Compile Include="Classes\Exceptions\UnknownProductTypeException.cs" />
     <Compile Include="Classes\Exceptions\WrongProductTypeException.cs" />
     <Compile Include="Classes\Group.cs" />
     <Compile Include="Classes\Product\BaseProduct.cs" />

@@ -18,6 +18,12 @@ namespace P3_Projekt_WPF.Classes
             _resolved = false;
         }
 
+        public TempProduct(int id) : base(0)
+        {
+            ID = id;
+            GetFromDatabase();
+        }
+
         public override string GetName()
         {
             return Description;
