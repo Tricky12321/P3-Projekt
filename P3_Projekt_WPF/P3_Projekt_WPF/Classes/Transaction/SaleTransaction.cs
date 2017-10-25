@@ -17,7 +17,6 @@ namespace P3_Projekt_WPF.Classes
             ReceiptID = receiptID;
         }
 
-
         public override void Execute()
         {
             if (Product is Product)

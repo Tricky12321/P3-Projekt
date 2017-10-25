@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using P3_Projekt_WPF.Classes.Database;
-
+using P3_Projekt_WPF.Classes.Utilities;
 namespace P3_Projekt_WPF.Classes
 {
     public class TempProduct : BaseProduct, MysqlObject
@@ -36,22 +36,36 @@ namespace P3_Projekt_WPF.Classes
 
         public void GetFromDatabase()
         {
-            throw new NotImplementedException();
+            string sql = $"SELECT * FROM `temp_product` where `id` = '{ID}'";
+            Mysql Connection = new Mysql();
+            CreateFromRow(Connection.RunQueryWithReturn(sql).RowData[0]);
         }
 
         public void CreateFromRow(Row Table)
         {
-            throw new NotImplementedException();
+            ID = Convert.ToInt32(Table.Values[0]);
+            SalePrice = Convert.ToInt32(Table.Values[1]);
+            Description = Table.Values[2];
+            _resolved = Utils.ConvertIntToBool(Convert.ToInt32(Table.Values[3]));
         }
 
         public void UploadToDatabase()
         {
-            throw new NotImplementedException();
+            string sql = "INSERT INTO `temp_products` (`id`, `sale_price`, `description`, `resolved`)"+
+                $"VALUES (NULL, '{SalePrice}', '{Description}', '{Utils.ConvertBoolToInt(_resolved)}');";
+            Mysql Connection = new Mysql();
+            Connection.RunQuery(sql);
         }
 
         public void UpdateInDatabase()
         {
-            throw new NotImplementedException();
+            string sql = $"UPDATE `receipt` SET" +
+                $"`sale_price` = '{SalePrice}'," +
+                $"`description` = '{Description}'," +
+                $"`resolved` = '{Utils.ConvertBoolToInt(_resolved)}'," +
+                $"WHERE `id` = {ID};";
+            Mysql Connection = new Mysql();
+            Connection.RunQuery(sql);
         }
 
     }
