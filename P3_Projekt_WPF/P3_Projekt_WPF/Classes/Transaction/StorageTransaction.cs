@@ -36,10 +36,8 @@ namespace P3_Projekt_WPF.Classes
 
         public override void CreateFromRow(Row Table)
         {
-            //TODO: Der skal implementeres en korrekt version af product der tager hensyn til hvilken slags produkt der er tale om
-
             _id = Convert.ToInt32(Table.Values[0]);
-            //Product = new Product() (Table.Values[1]);
+            Product = new Product(Convert.ToInt32(Table.Values[1]));
             Amount = Convert.ToInt32(Table.Values[2]);
             //TODO: Der skal implementeres en korrekt version af datetime her.
             //Datetime = Convert.ToInt32(Table.Values[3]);

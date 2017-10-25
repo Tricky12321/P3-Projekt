@@ -56,7 +56,7 @@ namespace P3_Projekt_WPF.Classes
             //TODO: SKal lige kedes sammen med CreateProduct ^^ 
             //TODO: Datetime skal lige implementeres korrekt
             _id = Convert.ToInt32(Table.Values[0]);
-            //Product = new Product(Convert.ToInt(Table.Values[1]));
+            Product = new Product(Convert.ToInt32(Table.Values[1]));
             Amount = Convert.ToInt32(Table.Values[2]);
             //Datetime = ???Table.Values[3]
             _purchasePrice = Convert.ToDecimal(Table.Values[4]);
