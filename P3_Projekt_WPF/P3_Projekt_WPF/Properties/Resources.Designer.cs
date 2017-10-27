@@ -22,7 +22,7 @@ namespace P3_Projekt_WPF.Properties {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class Resources {
+    public class Resources {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
@@ -36,7 +36,7 @@ namespace P3_Projekt_WPF.Properties {
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Resources.ResourceManager ResourceManager {
+        public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("P3_Projekt_WPF.Properties.Resources", typeof(Resources).Assembly);
@@ -51,7 +51,7 @@ namespace P3_Projekt_WPF.Properties {
         ///   resource lookups using this strongly typed resource class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Globalization.CultureInfo Culture {
+        public static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
@@ -61,19 +61,9 @@ namespace P3_Projekt_WPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized resource of type System.Byte[].
-        /// </summary>
-        internal static byte[] Magnifying_glass_icon {
-            get {
-                object obj = ResourceManager.GetObject("Magnifying_glass_icon", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap Magnifying_glass_icon_svg {
+        public static System.Drawing.Bitmap Magnifying_glass_icon_svg {
             get {
                 object obj = ResourceManager.GetObject("Magnifying_glass_icon_svg", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -83,7 +73,7 @@ namespace P3_Projekt_WPF.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap Magnifying_glass_icon_svg1 {
+        public static System.Drawing.Bitmap Magnifying_glass_icon_svg1 {
             get {
                 object obj = ResourceManager.GetObject("Magnifying_glass_icon_svg1", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -91,53 +81,9 @@ namespace P3_Projekt_WPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized resource of type System.Byte[].
-        /// </summary>
-        internal static byte[] Magnifying_glass_icon1 {
-            get {
-                object obj = ResourceManager.GetObject("Magnifying_glass_icon1", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to |                                    |
-        ///|                                    |
-        ///|          BØRGLUM KLOSTER           |
-        ///|          TLF. 98 99 40 11          |
-        ///|         CVR. NR. 77653414          |
-        ///|                                    |
-        ///|      INFO@BOERGLUMKLOSTER.DK       |
-        ///|       WWW.BOERGLUMKLOSTER.DK       |
-        ///|                                    |.
-        /// </summary>
-        internal static string PrintTest {
-            get {
-                return ResourceManager.GetString("PrintTest", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to |                                    |
-        ///|                                    |
-        ///|          BØRGLUM KLOSTER           |
-        ///|          TLF. 98 99 40 11          |
-        ///|         CVR. NR. 77653414          |
-        ///|                                    |
-        ///|      INFO@BOERGLUMKLOSTER.DK       |
-        ///|       WWW.BOERGLUMKLOSTER.DK       |
-        ///|                                    |.
-        /// </summary>
-        internal static string PrintTest1 {
-            get {
-                return ResourceManager.GetString("PrintTest1", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap Red_Cross {
+        public static System.Drawing.Bitmap Red_Cross {
             get {
                 object obj = ResourceManager.GetObject("Red_Cross", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -147,29 +93,9 @@ namespace P3_Projekt_WPF.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap Red_Cross1 {
+        public static System.Drawing.Bitmap Red_Cross1 {
             get {
                 object obj = ResourceManager.GetObject("Red_Cross1", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap Search_Icon {
-            get {
-                object obj = ResourceManager.GetObject("Search_Icon", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap Search_Icon1 {
-            get {
-                object obj = ResourceManager.GetObject("Search_Icon1", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

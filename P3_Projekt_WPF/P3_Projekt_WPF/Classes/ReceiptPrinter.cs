@@ -9,7 +9,8 @@ using System.Windows.Controls;
 using System.Drawing;
 using System.Windows.Xps.Packaging;
 using System.Windows.Documents;
-
+using P3_Projekt_WPF.Properties;
+using P3_Projekt_WPF.Resources;
 namespace P3_Projekt_WPF.Classes
 {
     //TODO: ReceiptPrinter virker slet ikke mere, alt er kommenteret ud.
@@ -18,7 +19,7 @@ namespace P3_Projekt_WPF.Classes
     {
         //TODO: Skal laves om til WPF font
         //private System.Drawing.FontStyle printFont;
-        private string PrintThisText => Properties.Resources.PrintTest;
+        //private string PrintThisText => .PrintTest;
         Receipt ReceiptToPrint;
 
 
