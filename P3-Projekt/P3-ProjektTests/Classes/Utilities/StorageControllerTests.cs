@@ -59,8 +59,8 @@ namespace P3_Projekt_WPF.Classes.Utilities.Tests
             var storageController = new StorageController();
             storageController.CreateGroup("group", "test");
 
-            bool b1 = "group" == storageController.GroupDictionary[1].Name;
-            bool b2 = "test" == storageController.GroupDictionary[1].Description;
+            bool b1 = "group" == storageController.GroupDictionary[2].Name;
+            bool b2 = "test" == storageController.GroupDictionary[2].Description;
 
             Assert.IsTrue(b1 && b2);
         }
@@ -73,12 +73,12 @@ namespace P3_Projekt_WPF.Classes.Utilities.Tests
             storageController.CreateGroup("group2", "test2");
             storageController.CreateGroup("group3", "test3");
 
-            bool b1 = "group1" == storageController.GroupDictionary[1].Name;
-            bool b2 = "test1" == storageController.GroupDictionary[1].Description;
-            bool b3 = "group2" == storageController.GroupDictionary[2].Name;
-            bool b4 = "test2" == storageController.GroupDictionary[2].Description;
-            bool b5 = "group3" == storageController.GroupDictionary[3].Name;
-            bool b6 = "test3" == storageController.GroupDictionary[3].Description;
+            bool b1 = "group1" == storageController.GroupDictionary[2].Name;
+            bool b2 = "test1" == storageController.GroupDictionary[2].Description;
+            bool b3 = "group2" == storageController.GroupDictionary[3].Name;
+            bool b4 = "test2" == storageController.GroupDictionary[3].Description;
+            bool b5 = "group3" == storageController.GroupDictionary[4].Name;
+            bool b6 = "test3" == storageController.GroupDictionary[4].Description;
 
             Assert.IsTrue(b1 && b2 && b3 && b4 && b5 && b6);
         }
@@ -136,7 +136,7 @@ namespace P3_Projekt_WPF.Classes.Utilities.Tests
             storageController.ProductDictionary.Add(testProduct2.ID, testProduct2);
             storageController.ProductDictionary.Add(testProduct3.ID, testProduct3);
 
-            storageController.DeleteGroup(1);
+            storageController.DeleteGroup(2);
 
             bool b1 = storageController.ProductDictionary[0].ProductGroup == storageController.GroupDictionary[0];
             bool b2 = storageController.ProductDictionary[1].ProductGroup == storageController.GroupDictionary[0];
@@ -160,9 +160,9 @@ namespace P3_Projekt_WPF.Classes.Utilities.Tests
             storageController.ProductDictionary.Add(testProduct2.ID, testProduct2);
             storageController.ProductDictionary.Add(testProduct3.ID, testProduct3);
 
-            storageController.DeleteGroup(2);
+            storageController.DeleteGroup(3);
 
-            bool b1 = storageController.ProductDictionary[0].ProductGroup == storageController.GroupDictionary[1];
+            bool b1 = storageController.ProductDictionary[0].ProductGroup == storageController.GroupDictionary[2];
             bool b2 = storageController.ProductDictionary[1].ProductGroup == storageController.GroupDictionary[0];
             bool b3 = storageController.ProductDictionary[2].ProductGroup == storageController.GroupDictionary[0];
 

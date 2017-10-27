@@ -33,7 +33,7 @@ namespace P3_Projekt_WPF.Classes
 
         public override void GetFromDatabase()
         {
-            string sql = $"SELECT * FROM service_products WHERE id = {ID}";
+            string sql = $"SELECT * FROM `service_products` WHERE `id` = {ID}";
             Mysql Connection = new Mysql();
             CreateFromRow(Connection.RunQueryWithReturn(sql).RowData[0]);
         }
