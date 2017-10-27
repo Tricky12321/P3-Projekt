@@ -81,6 +81,23 @@ namespace P3_Projekt_WPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to |                                    |
+        ///|                                    |
+        ///|          BØRGLUM KLOSTER           |
+        ///|          TLF. 98 99 40 11          |
+        ///|         CVR. NR. 77653414          |
+        ///|                                    |
+        ///|      INFO@BOERGLUMKLOSTER.DK       |
+        ///|       WWW.BOERGLUMKLOSTER.DK       |
+        ///|                                    |.
+        /// </summary>
+        public static string PrintTest {
+            get {
+                return ResourceManager.GetString("PrintTest", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         public static System.Drawing.Bitmap Red_Cross {
