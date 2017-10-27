@@ -54,6 +54,17 @@ namespace P3_Projekt_WPF.Classes.Utilities
             GroupDictionary.Remove(GroupID);
         }
 
+        //Assign new group to products left with no group
+        //Removes group from dictionary
+        public void DeleteGroupAndMove(int removeID, int moveID)
+        {
+            foreach (Product product in ProductDictionary.Values.Where(x => x.ProductGroup == GroupDictionary[removeID]))
+            {
+                product.ProductGroup = GroupDictionary[moveID];
+            }
+            GroupDictionary.Remove(removeID);
+        }
+
         /////////--------------------SEARCH---------------------------------
         public List<Product> SearchForProduct(string searchedString)
         {
