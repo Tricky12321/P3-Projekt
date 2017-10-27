@@ -18,15 +18,22 @@ namespace P3_Projekt_WPF.Classes.Utilities
          * TODO: Fix constructoren så den ikke kræver BoerglumAbbeyStorageandSale
          */
         public Receipt PlacerholderReceipt;
-        public Dictionary<int, Product> ProductList;
+        private StorageController _storageController;
 
         private List<Receipt> ReceiptList = new List<Receipt>();
         
-        public POSController(Dictionary<int, Product> ProductListe)
+        public POSController(StorageController storageController)
+        {
+            _storageController = storageController;
+        }
+        
+        // TODO: Denne funktion fylder ProductList med alle produkterne fra databasen. 
+        /*
+        public POSController(Dictionary<int, Product> ProductListe )
         {
             ProductList = ProductListe;
         }
-
+        */
         public void StartPurchase()
         {
             PlacerholderReceipt = new Receipt();
