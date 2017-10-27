@@ -133,11 +133,9 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Resources\Magnifying_glass_icon.svg" />
     <Resource Include="Resources\Magnifying_glass_icon.svg.png" />
     <Resource Include="Resources\PrintTest.txt" />
     <Resource Include="Resources\Red_Cross.png" />
-    <Resource Include="Resources\Search_Icon.bmp" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
