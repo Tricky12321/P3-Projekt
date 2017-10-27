@@ -42,9 +42,8 @@ namespace P3_Projekt_WPF
 
         public void Start()
         {
-            Transaction Test = new StorageTransaction(1);
-
-            Debug.Print("Done");
+            StorageController StorageControl = new StorageController(this);
+            POSController POSControl = new POSController(this, StorageControl.ProductDictionary);
         }
     }
 }

@@ -38,6 +38,11 @@ namespace P3_Projekt_WPF.Classes
             GetFromDatabase();
         }
 
+        public Product(Row information) : base(0m)
+        {
+            CreateFromRow(information);
+        }
+
         public override string GetName()
         {
             return Name;

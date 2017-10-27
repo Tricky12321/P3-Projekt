@@ -81,7 +81,7 @@ namespace P3_Projekt_WPF.Classes
             //linesPerPage = ev.MarginBounds.Height / printFont.GetHeight(ev.Graphics);
 
             StringBuilder textToPrint = new StringBuilder();
-            string[] standardText = Properties.Resources.PrintTest.Split('\n');
+            string[] standardText = { "asdf","asdf"} ;
             int i;
             for (i = 0; i <= standardText.Length; i++)
             {
