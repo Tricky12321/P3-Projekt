@@ -117,6 +117,18 @@ namespace P3_Projekt_WPF.Classes
             }
         }
 
+        //Returns a list of the products present in the receipt
+        public List<Product> Products()
+        {
+            var products = new List<Product>();
+
+            foreach(Transaction transaction in Transactions)
+            {
+                products.Add(transaction.Product as Product);
+            }
+            return products;
+        }
+
         private SaleTransaction FindTransactionFromProductID(int productID)
         {
             return Transactions.First(x => x.Product.ID == productID);

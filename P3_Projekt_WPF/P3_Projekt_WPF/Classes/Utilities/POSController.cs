@@ -9,6 +9,8 @@ using P3_Projekt;
 
 namespace P3_Projekt_WPF.Classes.Utilities
 {
+    public delegate void LowStorageNotification(Product product);
+
     public class POSController
     {
         /*
@@ -58,6 +60,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
             try
             {
                 PlacerholderReceipt.Execute();
+                CheckStorageLevel();
             }
             catch(NullReferenceException e)
             {
@@ -65,6 +68,22 @@ namespace P3_Projekt_WPF.Classes.Utilities
             }
             ReceiptList.Add(PlacerholderReceipt);
             PlacerholderReceipt = null;
+        }
+
+        //Event for when the amount of a product in storage drops below a certain limit
+        public event LowStorageNotification LowStorageWarning;
+
+        //Checks the updated products after execution of receipt, to see if storage amount drops below limit
+        private void CheckStorageLevel()
+        {
+            foreach (Product product in PlacerholderReceipt.Products())
+            {
+                //Limit??
+                if (product.StorageWithAmount.Values.Sum() < 5)
+                {
+                    LowStorageWarning(product);
+                }
+            }
         }
     }
 }
