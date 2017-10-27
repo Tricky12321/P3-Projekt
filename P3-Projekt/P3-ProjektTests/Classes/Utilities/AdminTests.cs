@@ -19,7 +19,7 @@ namespace P3_Projekt_WPF.Classes.Utilities.Tests
 
             string manuallyHashedAndSaltedPwd = "B20ABA938CE60A9959080D92A32FD4424A2BB1ECA0493C5D9B7B5D1CD08BD5B879F133C2EF0317624733CF7125414720ACBEE7BDB19AE6B3EC2D5301A7BE62BF";
 
-            string hashedAndSaltedpwd = P3_Projekt_WPF.Classes.Utilities.Admin.SaltAndHashPassword("testpassword");
+            string hashedAndSaltedpwd = Admin.SaltAndHashPassword("testpassword");
 
             Assert.AreEqual(manuallyHashedAndSaltedPwd, hashedAndSaltedpwd);
         }

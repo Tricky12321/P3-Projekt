@@ -24,9 +24,5 @@ namespace P3_Projekt_WPF.Classes.Utilities
 
             TransactionsForStatistics = DatabaseTransactions.Where(x => (Utils.GetUnixTime(x.Date) > fromUnixTime && Utils.GetUnixTime(x.Date) < toUnixTime)).ToList();
         }
-
-        
-        
-
     }
 }
