@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using P3_Projekt_WPF.Classes.Database;
-
+using P3_Projekt_WPF.Classes.Utilities;
 namespace P3_Projekt_WPF.Classes
 {
     public class OrderTransaction : Transaction
@@ -17,6 +17,12 @@ namespace P3_Projekt_WPF.Classes
         {
             _supplier = supplier;
             _storageRoomID = storageRoomID;
+        }
+
+        public OrderTransaction(int id) : base(null, 0)
+        {
+            _id = id;
+            GetFromDatabase();
         }
 
         public override void Execute()
@@ -39,39 +45,35 @@ namespace P3_Projekt_WPF.Classes
 
         public override void GetFromDatabase()
         {
-            string getQuery = $"SELECT * FROM `order_transactions` WHERE `id` = {_id}";
+            string sql = $"SELECT * FROM `order_transactions` WHERE `id` = {_id}";
             Mysql Connection = new Mysql();
-            Connection.RunQuery(getQuery);
-
+            CreateFromRow(Connection.RunQueryWithReturn(sql).RowData[0]);
         }
 
         public override void CreateFromRow(Row Table)
         {
-            //TODO: Datetime skal lige implementeres korrekt
             _id = Convert.ToInt32(Table.Values[0]);
             Product = new Product(Convert.ToInt32(Table.Values[1]));
             Amount = Convert.ToInt32(Table.Values[2]);
-            //Datetime = ???Table.Values[3]
+            Date = Convert.ToDateTime(Table.Values[3]);
             _purchasePrice = Convert.ToDecimal(Table.Values[4]);
             _supplier = Table.Values[5];
-            _storageRoomID = Convert.ToInt32(Table.Values[5]);
+            _storageRoomID = Convert.ToInt32(Table.Values[6]);
 
         }
 
         public override void UploadToDatabase()
         {
-            //TODO: Datetime skal lige implementeres korrekt her
             string sql = "INSERT INTO `order_transactions` (`id`, `product_id`, `amount`, `datetime`, `purchase_price`, `supplier`, `storageroom_id`)"+
-                $" VALUES (NULL, '{Product.ID}', '{Amount}', CURRENT_TIMESTAMP, '{_purchasePrice}', '{_supplier}', '{_storageRoomID}');";
+                $" VALUES (NULL, '{Product.ID}', '{Amount}', FROM_UNIXTIME('{Utils.GetUnixTime(Date)}'), '{_purchasePrice}', '{_supplier}', '{_storageRoomID}');";
         }
 
         public override void UpdateInDatabase()
         {
-            //TODO: Datetime skal implementeres rigtigt her. 
             string sql = $"UPDATE `order_transaction` SET" +
                $"`product_id` = '{Product.ID}'," +
                $"`amount` = '{Amount}'," +
-               //$"`datetime` = '{DateTime??}'," +
+               $"`datetime` = FROM_UNIXTIME('{Utils.GetUnixTime(Date)}')," +
                $"`purchase_price` = '{_purchasePrice}'," +
                $"`supplier` = '{_supplier}'," +
                $"`storageroom_id` = '{_storageRoomID}'" +

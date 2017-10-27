@@ -69,6 +69,7 @@
     <Compile Include="Classes\Database\Row.cs" />
     <Compile Include="Classes\Database\TableDecode.cs" />
     <Compile Include="Classes\Exceptions\EmptyTableException.cs" />
+    <Compile Include="Classes\Exceptions\NoInternetConnectionException.cs" />
     <Compile Include="Classes\Exceptions\NotConnectedException.cs" />
     <Compile Include="Classes\Exceptions\ProductDiscountException.cs" />
     <Compile Include="Classes\Exceptions\UnknownProductTypeException.cs" />
@@ -86,6 +87,7 @@
     <Compile Include="Classes\Transaction\SaleTransaction.cs" />
     <Compile Include="Classes\Transaction\StorageTransaction.cs" />
     <Compile Include="Classes\Transaction\Transaction.cs" />
+    <Compile Include="Classes\Utilities\Admin.cs" />
     <Compile Include="Classes\Utilities\Utils.cs" />
     <Compile Include="Classes\Utilities\POSController.cs" />
     <Compile Include="Classes\Utilities\StatisticsController.cs" />

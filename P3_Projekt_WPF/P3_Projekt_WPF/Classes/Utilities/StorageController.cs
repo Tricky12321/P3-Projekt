@@ -4,27 +4,38 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls;
-
+using P3_Projekt_WPF.Classes.Database;
 namespace P3_Projekt_WPF.Classes.Utilities
 {
     public class StorageController
     {
         // TODO: SKal lige fixes
-        // BoerglumAbbeyStorageandSale _boerglumAbbeyStorageandSale;
 
         private int _idGroupCounter = 0;
 
         public Dictionary<int, Product> ProductDictionary = new Dictionary<int, Product>();
-        public Dictionary<int, Group> GroupDictionary = new Dictionary<int, Group>() { { 0, new Group("Diverse", "Produkter, som ikke tilhører en specifik gruppe") } };
+        public Dictionary<int, Group> GroupDictionary = new Dictionary<int, Group>() { { 0, new Group("Diverse", "Produkter, som ikke tilhører en specifik gruppe") }, { 1, new Group("Is", "Is af alle varianter") } };
         public Dictionary<int, StorageRoom> StorageRoomDictionary = new Dictionary<int, StorageRoom>();
         public List<TempProduct> TempProductList = new List<TempProduct>();
-        /*
-         * TODO: Skal lige fixes...
-        public StorageController(BoerglumAbbeyStorageandSale boerglumAbbeyStorageandSale)
+
+        public StorageController()
         {
-            _boerglumAbbeyStorageandSale = boerglumAbbeyStorageandSale;
+            //GetAllProductsFromDatabase();
         }
-        */
+        
+
+        private void GetAllProductsFromDatabase()
+        {
+            string sql = "SELECT * FROM `products`";
+            Mysql Connection = new Mysql();
+            TableDecode Results = Connection.RunQueryWithReturn(sql);
+            foreach (var row in Results.RowData)
+            {
+                Product NewProduct = new Product(row);
+                ProductDictionary.Add(NewProduct.ID, NewProduct);
+            }
+        }
+
         public void DeleteProduct(int ProductID)
         {
             ProductDictionary.Remove(ProductID);
@@ -52,6 +63,17 @@ namespace P3_Projekt_WPF.Classes.Utilities
                 product.ProductGroup = GroupDictionary[0];
             }
             GroupDictionary.Remove(GroupID);
+        }
+
+        //Assign new group to products left with no group
+        //Removes group from dictionary
+        public void DeleteGroupAndMove(int removeID, int moveID)
+        {
+            foreach (Product product in ProductDictionary.Values.Where(x => x.ProductGroup == GroupDictionary[removeID]))
+            {
+                product.ProductGroup = GroupDictionary[moveID];
+            }
+            GroupDictionary.Remove(removeID);
         }
 
         /////////--------------------SEARCH---------------------------------
@@ -343,11 +365,18 @@ namespace P3_Projekt_WPF.Classes.Utilities
         /* User has already found the matching product ID.
          * First line findes the store storage
          * Second line subtracts the amound sold from storage*/
-        public void MergeTempProduct(SaleTransaction tempProductTransaction, int matchedProductID)
+        public void MergeTempProduct(TempProduct tempProductToMerge, int matchedProductID)
         {
+            SaleTransaction tempProductsTransaction = tempProductToMerge.GetTempProductsSaleTransaction();
             var StoreStorage = ProductDictionary[matchedProductID].StorageWithAmount.Where(x => x.Key.ID == 0).First();
 
-            ProductDictionary[matchedProductID].StorageWithAmount[StoreStorage.Key] -= tempProductTransaction.Amount;
+            ProductDictionary[matchedProductID].StorageWithAmount[StoreStorage.Key] -= tempProductsTransaction.Amount;
+            tempProductsTransaction.EditSaleTransactionFromTempProduct(ProductDictionary[matchedProductID]);
+        }
+
+        public void EditTempProduct(TempProduct tempProductToEdit, string description, decimal salePrice)
+        {
+            tempProductToEdit.Edit(description, salePrice);
         }
 
         //Adds new storage room to dictionary, and to all products

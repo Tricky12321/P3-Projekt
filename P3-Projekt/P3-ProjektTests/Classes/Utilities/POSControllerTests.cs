@@ -28,5 +28,58 @@ namespace P3_Projekt_WPF.Classes.Utilities.Tests
         {
             Assert.Fail();
         }
+
+        [Test()]
+        public void POSControllerTest()
+        {
+            Assert.Fail();
+        }
+
+        [Test()]
+        public void StartPurchaseTest1()
+        {
+            Assert.Fail();
+        }
+
+        [Test()]
+        public void EditReceiptTest()
+        {
+            Assert.Fail();
+        }
+
+        [Test()]
+        public void AddSaleTransactionTest1()
+        {
+            Assert.Fail();
+        }
+
+        [Test()]
+        public void AddIcecreamTransactionTest()
+        {
+            StorageController SC = new StorageController();
+            POSController POSC = new POSController(SC);
+
+            POSC.AddIcecreamTransaction(25);
+
+            Assert.IsTrue((POSC.PlacerholderReceipt.Transactions.First().Product as ServiceProduct).ServiceProductGroup.Name == "Is");
+        }
+
+        [Test()]
+        public void RemoveTransactionFromReceiptTest()
+        {
+            Assert.Fail();
+        }
+
+        [Test()]
+        public void DeleteTransactionTest()
+        {
+            Assert.Fail();
+        }
+
+        [Test()]
+        public void ExecuteReceiptTest()
+        {
+            Assert.Fail();
+        }
     }
 }

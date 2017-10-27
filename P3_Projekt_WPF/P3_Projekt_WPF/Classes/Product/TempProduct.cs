@@ -33,11 +33,23 @@ namespace P3_Projekt_WPF.Classes
         {
             Description = newDescription;
             SalePrice = newSalePrice;
+            UpdateInDatabase();
         }
 
         public void Resolve()
         {
             _resolved = true;
+            UpdateInDatabase();
+        }
+
+        public SaleTransaction GetTempProductsSaleTransaction()
+        {
+            string sql = $"SELECT * FROM `sale_transactions` WHERE `product_type` = temp_products AND product_id = {this.ID}";
+            Mysql connection = new Mysql();
+            TableDecode getTransaction = connection.RunQueryWithReturn(sql);
+            SaleTransaction saleTrans = new SaleTransaction(getTransaction.RowData[0]);
+            Resolve();
+            return saleTrans;
         }
 
         public override void GetFromDatabase()
@@ -52,13 +64,13 @@ namespace P3_Projekt_WPF.Classes
             ID = Convert.ToInt32(Table.Values[0]);
             SalePrice = Convert.ToInt32(Table.Values[1]);
             Description = Table.Values[2];
-            _resolved = Utils.ConvertIntToBool(Convert.ToInt32(Table.Values[3]));
+            _resolved = Convert.ToBoolean(Table.Values[3]);
         }
 
         public override void UploadToDatabase()
         {
             string sql = "INSERT INTO `temp_products` (`id`, `sale_price`, `description`, `resolved`)"+
-                $"VALUES (NULL, '{SalePrice}', '{GetName()}', '{Utils.ConvertBoolToInt(_resolved)}');";
+                $"VALUES (NULL, '{SalePrice}', '{GetName()}', '{Convert.ToInt32(_resolved)}');";
             Mysql Connection = new Mysql();
             Connection.RunQuery(sql);
         }

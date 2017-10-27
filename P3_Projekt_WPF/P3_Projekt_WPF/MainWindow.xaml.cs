@@ -12,7 +12,11 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-
+using P3_Projekt_WPF.Classes.Database;
+using P3_Projekt_WPF.Classes.Utilities;
+using P3_Projekt_WPF.Classes.Exceptions;
+using P3_Projekt_WPF.Classes;
+using System.Diagnostics;
 namespace P3_Projekt_WPF
 {
     /// <summary>
@@ -68,6 +72,12 @@ namespace P3_Projekt_WPF
         private void tabControl_SelectionChanged_1(object sender, SelectionChangedEventArgs e)
         {
 
+        }
+
+        public void Start()
+        {
+            StorageController StorageControl = new StorageController();
+            POSController POSControl = new POSController(StorageControl);
         }
 
         private void but_MobilePay_Click(object sender, RoutedEventArgs e)
