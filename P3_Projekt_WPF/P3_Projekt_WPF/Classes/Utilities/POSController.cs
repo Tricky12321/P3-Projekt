@@ -17,21 +17,12 @@ namespace P3_Projekt_WPF.Classes.Utilities
          * TODO: fiks metoden til at loade ID til transaction
          * TODO: Fix constructoren så den ikke kræver BoerglumAbbeyStorageandSale
          */
-        private MainWindow _boerglumAbbeyStorageandSale;
         public Receipt PlacerholderReceipt;
         public Dictionary<int, Product> ProductList;
 
         private List<Receipt> ReceiptList = new List<Receipt>();
         
-        public POSController(MainWindow boerglumAbbeyStorageandSale, Dictionary<int, Product> ProductListe)
-        {
-            _boerglumAbbeyStorageandSale = boerglumAbbeyStorageandSale;
-            ProductList = ProductListe;
-        }
-        
-        // TODO: Denne funktion fylder ProductList med alle produkterne fra databasen. 
-        
-        public POSController(Dictionary<int, Product> ProductListe )
+        public POSController(Dictionary<int, Product> ProductListe)
         {
             ProductList = ProductListe;
         }
