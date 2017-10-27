@@ -4,27 +4,39 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls;
-
+using P3_Projekt_WPF.Classes.Database;
 namespace P3_Projekt_WPF.Classes.Utilities
 {
     public class StorageController
     {
         // TODO: SKal lige fixes
-        // BoerglumAbbeyStorageandSale _boerglumAbbeyStorageandSale;
+        MainWindow _boerglumAbbeyStorageandSale;
 
         private int _idGroupCounter = 0;
 
         public Dictionary<int, Product> ProductDictionary = new Dictionary<int, Product>();
-        public Dictionary<int, Group> GroupDictionary = new Dictionary<int, Group>() { { 0, new Group("Diverse", "Produkter, som ikke tilhører en specifik gruppe") } };
+        public Dictionary<int, Group> GroupDictionary = new Dictionary<int, Group>() { { 0, new Group("Diverse", "Produkter, som ikke tilhører en specifik gruppe") }, { 1, new Group("Is", "Is af alle varianter") } };
         public Dictionary<int, StorageRoom> StorageRoomDictionary = new Dictionary<int, StorageRoom>();
         public List<TempProduct> TempProductList = new List<TempProduct>();
-        /*
-         * TODO: Skal lige fixes...
-        public StorageController(BoerglumAbbeyStorageandSale boerglumAbbeyStorageandSale)
+
+        public StorageController(MainWindow boerglumAbbeyStorageandSale)
         {
             _boerglumAbbeyStorageandSale = boerglumAbbeyStorageandSale;
         }
-        */
+        
+
+        private void GetAllProductsFromDatabase()
+        {
+            string sql = "SELECT * FROM `products`";
+            Mysql Connection = new Mysql();
+            TableDecode Results = Connection.RunQueryWithReturn(sql);
+            foreach (var row in Results.RowData)
+            {
+                Product NewProduct = new Product(row);
+                ProductDictionary.Add(NewProduct.ID, NewProduct);
+            }
+        }
+
         public void DeleteProduct(int ProductID)
         {
             ProductDictionary.Remove(ProductID);

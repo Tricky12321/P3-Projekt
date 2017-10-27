@@ -5,25 +5,35 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Diagnostics;
 using P3_Projekt_WPF.Classes.Database;
-using P3_Projekt;
-
+using P3_Projekt_WPF;
 namespace P3_Projekt_WPF.Classes.Utilities
 {
     public delegate void LowStorageNotification(Product product);
 
+    
     public class POSController
     {
         /*
          * TODO: fiks metoden til at loade ID til transaction
+         * TODO: Fix constructoren så den ikke kræver BoerglumAbbeyStorageandSale
          */
-        private BoerglumAbbeyStorageandSale _boerglumAbbeyStorageandSale;
+        private MainWindow _boerglumAbbeyStorageandSale;
         public Receipt PlacerholderReceipt;
+        public Dictionary<int, Product> ProductList;
 
         private List<Receipt> ReceiptList = new List<Receipt>();
-
-        public POSController(BoerglumAbbeyStorageandSale boerglumAbbeyStorageandSale)
+        
+        public POSController(MainWindow boerglumAbbeyStorageandSale, Dictionary<int, Product> ProductListe)
         {
             _boerglumAbbeyStorageandSale = boerglumAbbeyStorageandSale;
+            ProductList = ProductListe;
+        }
+        
+        // TODO: Denne funktion fylder ProductList med alle produkterne fra databasen. 
+        
+        public POSController(Dictionary<int, Product> ProductListe )
+        {
+            ProductList = ProductListe;
         }
 
         public void StartPurchase()
@@ -40,6 +50,11 @@ namespace P3_Projekt_WPF.Classes.Utilities
         public void AddSaleTransaction(Product product, int amount)
         {
             PlacerholderReceipt.AddTransaction(new SaleTransaction(product, amount, PlacerholderReceipt.ID));
+        }
+
+        public void AddIcecreamTransaction(decimal price)
+        {
+            PlacerholderReceipt.AddTransaction(new SaleTransaction(new ServiceProduct(price,price,0,"Is"), 1, PlacerholderReceipt.ID));
         }
 
         public void RemoveTransactionFromReceipt(int productID)

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using MySql.Data.MySqlClient;
 using System.Diagnostics;
 using P3_Projekt_WPF.Classes.Exceptions;
+using P3_Projekt_WPF.Classes.Utilities;
 namespace P3_Projekt_WPF.Classes.Database
 {
     public class Mysql
@@ -20,6 +21,7 @@ namespace P3_Projekt_WPF.Classes.Database
 
         public void Disconnect()
         {
+            Connection.Close();
             Connection = null;
         }
 
@@ -50,6 +52,7 @@ namespace P3_Projekt_WPF.Classes.Database
 
         public void RunQuery(string Query)
         {
+            Utils.CheckInternetConnection();
             Connect();
             MySqlCommand cmd = Connection.CreateCommand();
             cmd.CommandText = Query;    
@@ -62,6 +65,7 @@ namespace P3_Projekt_WPF.Classes.Database
 
         public TableDecode RunQueryWithReturn(string Query)
         {
+            Utils.CheckInternetConnection();
             TableDecode TableContent;
             try
             {
@@ -90,5 +94,7 @@ namespace P3_Projekt_WPF.Classes.Database
             }
             return TableContent;
         }
+        
+        
     }
 }

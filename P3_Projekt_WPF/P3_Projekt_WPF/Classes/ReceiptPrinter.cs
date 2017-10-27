@@ -2,6 +2,7 @@
 using System.IO;
 using System.Windows;
 using System.Collections.Generic;
+using System.Text;
 using System.Reflection;
 using System.Windows.Media;
 using System.Drawing.Printing;
@@ -11,10 +12,12 @@ using System.Windows.Xps.Packaging;
 using System.Windows.Documents;
 using P3_Projekt_WPF.Properties;
 using P3_Projekt_WPF.Resources;
+using System.Diagnostics;
+using System.Windows.Xps;
 namespace P3_Projekt_WPF.Classes
 {
     //TODO: ReceiptPrinter virker slet ikke mere, alt er kommenteret ud.
-    
+
     public class ReceiptPrinter
     {
         //TODO: Skal laves om til WPF font
@@ -51,7 +54,7 @@ namespace P3_Projekt_WPF.Classes
                 {
                     XpsDocument xpsDocument = new XpsDocument("C:\\FixedDocumentSequence.xps", FileAccess.ReadWrite);
                     FixedDocumentSequence fixedDocSeq = xpsDocument.GetFixedDocumentSequence();
-                    
+
                     printDialog.PrintDocument(fixedDocSeq.DocumentPaginator, "Test print job");
                 }
             }
@@ -60,6 +63,7 @@ namespace P3_Projekt_WPF.Classes
                 MessageBox.Show(ex.Message);
             }
         }
+
 
         // The PrintPage event is raised for each page to be printed.
         public void pd_PrintPage(object sender, PrintPageEventArgs ev)
@@ -76,24 +80,28 @@ namespace P3_Projekt_WPF.Classes
             //TODO: Virker ikke mere skal laves efter XPS standard. 
             //linesPerPage = ev.MarginBounds.Height / printFont.GetHeight(ev.Graphics);
 
-            // Print each line of the file.
-            /*
-            List<string> TextToPrint = new List<string>();
-            string[] standardText = PrintThisText.Split('\n');
-            foreach (string s in standardText)
+            StringBuilder textToPrint = new StringBuilder();
+            string[] standardText = { "asdf","asdf"} ;
+            int i;
+            for (i = 0; i <= standardText.Length; i++)
             {
-                TextToPrint.Add(s);
+                textToPrint.Insert(i, standardText[i]);
             }
-            TextToPrint.Add($"|   #10903      { DateTime.Now.ToString()}  |");
-            TextToPrint.Add($"|   01 Børglum kloster        000000 |");
-            TextToPrint.Add($"|                                    |");
+            
+            textToPrint.Append($"|   {("#"+10903).PadRight(5)}  { DateTime.Now.ToString().PadLeft(10)}  |\n");
+            textToPrint.Append($"|   {("01" + "Børglum kloster").PadRight(5)} {000000.ToString().PadLeft(10)} |\n");
+            textToPrint.Append($"|{" ".PadRight(35)}|\n");
+
             foreach (SaleTransaction t in transactionList)
             {
-                TextToPrint.Add($"|   {t.Amount.ToString()}x{t.Product.SalePrice.ToString().PadRight(10)}        {("*"+t.Amount * t.Product.SalePrice).ToString().PadLeft(10)}   |\n");
-                TextToPrint.Add($"|   {t.GetProductNameString().PadRight(30)}   |\n");
+                textToPrint.Append($"|   {t.Amount}x{t.Product.SalePrice.ToString().PadRight(10)} {("*" + (t.Amount * t.Product.SalePrice)).ToString().PadLeft(10)}\n");
+                textToPrint.Append($"|   {t.Product.GetName().PadRight(30)}   |\n");
             }
-            TextToPrint.Add($"|    SUBTOTAL           {ReceiptToPrint.TotalPrice}    |");
+            textToPrint.Append($"|    {"SUBTOTAL".PadRight(10)}{ReceiptToPrint.TotalPrice.ToString().PadLeft(10)}\n|");
 
+            Debug.Print(textToPrint.ToString());
+
+            /*
             foreach (var SingleLine in TextToPrint)
             {
                 yPos = topMargin + (count *
