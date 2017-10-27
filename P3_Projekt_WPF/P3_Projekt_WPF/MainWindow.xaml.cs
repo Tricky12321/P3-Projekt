@@ -42,8 +42,8 @@ namespace P3_Projekt_WPF
 
         public void Start()
         {
-            StorageController StorageControl = new StorageController(this);
-            POSController POSControl = new POSController(this, StorageControl.ProductDictionary);
+            StorageController StorageControl = new StorageController();
+            POSController POSControl = new POSController(StorageControl);
         }
     }
 }

@@ -19,9 +19,8 @@ namespace P3_Projekt_WPF.Classes.Utilities
         public Dictionary<int, StorageRoom> StorageRoomDictionary = new Dictionary<int, StorageRoom>();
         public List<TempProduct> TempProductList = new List<TempProduct>();
 
-        public StorageController(MainWindow boerglumAbbeyStorageandSale)
+        public StorageController()
         {
-            _boerglumAbbeyStorageandSale = boerglumAbbeyStorageandSale;
         }
         
 
