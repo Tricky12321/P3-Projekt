@@ -102,7 +102,7 @@ namespace P3_Projekt_WPF.Classes
             ProductGroup = new Group(Convert.ToInt32(results.Values[3]));   // groups
             SalePrice = Convert.ToDecimal(results.Values[4]);                 // price
             DiscountBool = Convert.ToBoolean(results.Values[5]);            // discount
-            DiscountPrice = Convert.ToInt32(results.Values[6]);             // discount_price
+            DiscountPrice = Convert.ToDecimal(results.Values[6]);             // discount_price
         }
 
         public override void UploadToDatabase()

@@ -19,17 +19,10 @@ namespace P3_Projekt_WPF.Classes.Utilities
 
         public void RequestStatistics(DateTime from, DateTime to)
         {
-            int fromUnixTime = GetUnixTime(from);
-            int toUnixTime = GetUnixTime(to);
+            int fromUnixTime = Utils.GetUnixTime(from);
+            int toUnixTime = Utils.GetUnixTime(to);
 
-            TransactionsForStatistics = DatabaseTransactions.Where(x => (GetUnixTime(x.Date) > fromUnixTime && GetUnixTime(x.Date) < toUnixTime)).ToList();
+            TransactionsForStatistics = DatabaseTransactions.Where(x => (Utils.GetUnixTime(x.Date) > fromUnixTime && Utils.GetUnixTime(x.Date) < toUnixTime)).ToList();
         }
-
-        public int GetUnixTime(DateTime Tid)
-        {
-            int unixTimestamp = (int)(Tid.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
-            return unixTimestamp;
-        }
-
     }
 }

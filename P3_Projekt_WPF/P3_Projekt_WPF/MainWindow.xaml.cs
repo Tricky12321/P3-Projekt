@@ -12,8 +12,11 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using P3_Projekt_WPF.Classes.Database;
+using P3_Projekt_WPF.Classes.Utilities;
+using P3_Projekt_WPF.Classes.Exceptions;
 using P3_Projekt_WPF.Classes;
-
+using System.Diagnostics;
 namespace P3_Projekt_WPF
 {
     /// <summary>
@@ -24,6 +27,7 @@ namespace P3_Projekt_WPF
         public MainWindow()
         {
             InitializeComponent();
+            Start();
         }
 
         private void tabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -34,6 +38,13 @@ namespace P3_Projekt_WPF
         private void tabControl_SelectionChanged_1(object sender, SelectionChangedEventArgs e)
         {
 
+        }
+
+        public void Start()
+        {
+            Transaction Test = new StorageTransaction(1);
+
+            Debug.Print("Done");
         }
     }
 }
