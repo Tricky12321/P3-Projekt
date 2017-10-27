@@ -20,7 +20,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
 
         public StorageController()
         {
-            GetAllProductsFromDatabase();
+            //GetAllProductsFromDatabase();
         }
         
 
