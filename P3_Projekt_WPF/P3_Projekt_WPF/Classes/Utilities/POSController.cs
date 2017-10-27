@@ -42,6 +42,11 @@ namespace P3_Projekt_WPF.Classes.Utilities
             PlacerholderReceipt.AddTransaction(new SaleTransaction(product, amount, PlacerholderReceipt.ID));
         }
 
+        public void AddIcecreamTransaction(decimal price)
+        {
+            PlacerholderReceipt.AddTransaction(new SaleTransaction(new ServiceProduct(price,price,0,"Is"), 1, PlacerholderReceipt.ID));
+        }
+
         public void RemoveTransactionFromReceipt(int productID)
         {
             PlacerholderReceipt.RemoveTransaction(productID);

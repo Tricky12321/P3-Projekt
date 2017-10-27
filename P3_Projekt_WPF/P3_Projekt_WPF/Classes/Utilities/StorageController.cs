@@ -15,7 +15,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
         private int _idGroupCounter = 0;
 
         public Dictionary<int, Product> ProductDictionary = new Dictionary<int, Product>();
-        public Dictionary<int, Group> GroupDictionary = new Dictionary<int, Group>() { { 0, new Group("Diverse", "Produkter, som ikke tilhører en specifik gruppe") } };
+        public Dictionary<int, Group> GroupDictionary = new Dictionary<int, Group>() { { 0, new Group("Diverse", "Produkter, som ikke tilhører en specifik gruppe") }, { 1, new Group("Is", "Is af alle varianter") } };
         public Dictionary<int, StorageRoom> StorageRoomDictionary = new Dictionary<int, StorageRoom>();
         public List<TempProduct> TempProductList = new List<TempProduct>();
         /*
@@ -24,7 +24,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
         {
             _boerglumAbbeyStorageandSale = boerglumAbbeyStorageandSale;
         }
-        */
+        */  
         public void DeleteProduct(int ProductID)
         {
             ProductDictionary.Remove(ProductID);
