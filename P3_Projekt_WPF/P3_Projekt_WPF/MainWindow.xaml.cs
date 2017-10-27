@@ -27,6 +27,7 @@ namespace P3_Projekt_WPF
         public MainWindow()
         {
             InitializeComponent();
+            
             Start();
         }
 

@@ -10,7 +10,6 @@ namespace P3_Projekt_WPF.Classes.Utilities
     public class StorageController
     {
         // TODO: SKal lige fixes
-        MainWindow _boerglumAbbeyStorageandSale;
 
         private int _idGroupCounter = 0;
 
@@ -21,6 +20,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
 
         public StorageController()
         {
+            GetAllProductsFromDatabase();
         }
         
 
