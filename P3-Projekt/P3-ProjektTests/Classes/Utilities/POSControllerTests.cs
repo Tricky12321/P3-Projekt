@@ -56,7 +56,12 @@ namespace P3_Projekt_WPF.Classes.Utilities.Tests
         [Test()]
         public void AddIcecreamTransactionTest()
         {
-            Assert.Fail();
+            StorageController SC = new StorageController();
+            POSController POSC = new POSController(SC);
+
+            POSC.AddIcecreamTransaction(25);
+
+            Assert.IsTrue((POSC.PlacerholderReceipt.Transactions.First().Product as ServiceProduct).ServiceProductGroup.Name == "Is");
         }
 
         [Test()]
