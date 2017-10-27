@@ -34,7 +34,7 @@ namespace P3_Projekt_WPF.Classes
 
         public override void GetFromDatabase()
         {
-            string sql = $"SELECT * FROM `storage_transactions` WHERE `id` = {_id}";
+            string sql = $"SELECT * FROM `storage_transaction` WHERE `id` = '{_id}'";
             Mysql Connection = new Mysql();
             CreateFromRow(Connection.RunQueryWithReturn(sql).RowData[0]);
 
