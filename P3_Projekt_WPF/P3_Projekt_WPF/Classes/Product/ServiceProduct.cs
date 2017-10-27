@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using P3_Projekt_WPF.Classes.Database;
 namespace P3_Projekt_WPF.Classes
 {
-    public class ServiceProduct : BaseProduct, MysqlObject
+    public class ServiceProduct : BaseProduct
     {
         public string Name;
         public decimal GroupPrice;
@@ -29,14 +29,14 @@ namespace P3_Projekt_WPF.Classes
             return Name;
         }
 
-        public void GetFromDatabase()
+        public override void GetFromDatabase()
         {
             string sql = $"SELECT * FROM service_products WHERE id = {ID}";
             Mysql Connection = new Mysql();
             CreateFromRow(Connection.RunQueryWithReturn(sql).RowData[0]);
         }
 
-        public void CreateFromRow(Row results)
+        public override void CreateFromRow(Row results)
         {
             ID = Convert.ToInt32(results.Values[0]);                         // id
             Name = results.Values[1];                                        // name
@@ -45,7 +45,7 @@ namespace P3_Projekt_WPF.Classes
             GroupLimit = Convert.ToInt32(results.Values[4]);                 // price
         }
 
-        public void UploadToDatabase()
+        public override void UploadToDatabase()
         {
             string sql = $"INSERT INTO `service_products` (`id`, `name`, `price`, `group_price`, `group_limit`)" +
             $"VALUES (NULL, '{Name}', '{SalePrice}','{GroupPrice}','{GroupLimit}');";
@@ -53,7 +53,7 @@ namespace P3_Projekt_WPF.Classes
             Connection.RunQuery(sql);
         }
 
-        public void UpdateInDatabase()
+        public override void UpdateInDatabase()
         {
             string sql = $"UPDATE `service_products` SET" +
                 $"`name` = '{Name}'," +

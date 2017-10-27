@@ -7,7 +7,7 @@ using P3_Projekt_WPF.Classes.Database;
 using P3_Projekt_WPF.Classes.Utilities;
 namespace P3_Projekt_WPF.Classes
 {
-    public class TempProduct : BaseProduct, MysqlObject
+    public class TempProduct : BaseProduct
     {
         public string Description;
         private bool _resolved;
@@ -40,14 +40,14 @@ namespace P3_Projekt_WPF.Classes
             _resolved = true;
         }
 
-        public void GetFromDatabase()
+        public override void GetFromDatabase()
         {
             string sql = $"SELECT * FROM `temp_product` where `id` = '{ID}'";
             Mysql Connection = new Mysql();
             CreateFromRow(Connection.RunQueryWithReturn(sql).RowData[0]);
         }
 
-        public void CreateFromRow(Row Table)
+        public override void CreateFromRow(Row Table)
         {
             ID = Convert.ToInt32(Table.Values[0]);
             SalePrice = Convert.ToInt32(Table.Values[1]);
@@ -55,7 +55,7 @@ namespace P3_Projekt_WPF.Classes
             _resolved = Utils.ConvertIntToBool(Convert.ToInt32(Table.Values[3]));
         }
 
-        public void UploadToDatabase()
+        public override void UploadToDatabase()
         {
             string sql = "INSERT INTO `temp_products` (`id`, `sale_price`, `description`, `resolved`)"+
                 $"VALUES (NULL, '{SalePrice}', '{GetName()}', '{Utils.ConvertBoolToInt(_resolved)}');";
@@ -63,7 +63,7 @@ namespace P3_Projekt_WPF.Classes
             Connection.RunQuery(sql);
         }
 
-        public void UpdateInDatabase()
+        public override void UpdateInDatabase()
         {
             string sql = $"UPDATE `temp_products` SET" +
                 $"`sale_price` = '{SalePrice}'," +

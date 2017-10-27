@@ -7,7 +7,7 @@ using System.Drawing;
 using P3_Projekt_WPF.Classes.Database;
 namespace P3_Projekt_WPF.Classes
 {
-    public abstract class BaseProduct
+    public abstract class BaseProduct : MysqlObject
     {
         public int ID;
         public decimal SalePrice;
@@ -21,6 +21,9 @@ namespace P3_Projekt_WPF.Classes
         }
 
         public abstract string GetName();
-        
+        public abstract void GetFromDatabase();
+        public abstract void CreateFromRow(Row Table);
+        public abstract void UploadToDatabase();
+        public abstract void UpdateInDatabase();
     }
 }
