@@ -11,12 +11,14 @@ namespace P3_Projekt_WPF.Classes
         public string Name;
         public decimal GroupPrice;
         public int GroupLimit;
+        public Group ServiceProductGroup;
 
-        public ServiceProduct(decimal salePrice, decimal groupPrice, int groupLimit, string name) : base(salePrice)
+        public ServiceProduct(decimal salePrice, decimal groupPrice, int groupLimit, string name, Group serviceProductGroup) : base(salePrice)
         {
             GroupPrice = groupPrice;
             GroupLimit = groupLimit;
             Name = name;
+            ServiceProductGroup = serviceProductGroup;
         }
 
         public ServiceProduct(int id) : base(0)
@@ -31,7 +33,7 @@ namespace P3_Projekt_WPF.Classes
 
         public override void GetFromDatabase()
         {
-            string sql = $"SELECT * FROM service_products WHERE id = {ID}";
+            string sql = $"SELECT * FROM `service_products` WHERE `id` = {ID}";
             Mysql Connection = new Mysql();
             CreateFromRow(Connection.RunQueryWithReturn(sql).RowData[0]);
         }

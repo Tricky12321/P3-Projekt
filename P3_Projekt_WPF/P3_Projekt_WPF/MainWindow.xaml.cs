@@ -27,6 +27,7 @@ namespace P3_Projekt_WPF
         public MainWindow()
         {
             InitializeComponent();
+            
             Start();
         }
 
@@ -42,9 +43,8 @@ namespace P3_Projekt_WPF
 
         public void Start()
         {
-            Transaction Test = new StorageTransaction(1);
-
-            Debug.Print("Done");
+            StorageController StorageControl = new StorageController();
+            POSController POSControl = new POSController(StorageControl);
         }
     }
 }
