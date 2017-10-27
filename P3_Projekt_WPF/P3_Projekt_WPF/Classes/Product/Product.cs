@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Windows.Controls;
 using P3_Projekt_WPF.Classes.Utilities;
 using P3_Projekt_WPF.Classes.Database;
+using P3_Projekt_WPF.Classes.Exceptions;
 namespace P3_Projekt_WPF.Classes
 {
     public class Product : BaseProduct
@@ -18,7 +19,7 @@ namespace P3_Projekt_WPF.Classes
         public decimal DiscountPrice;
         private Image _image;
         public Dictionary<StorageRoom, int> StorageWithAmount = new Dictionary<StorageRoom, int>();
- 
+
 
         public Product(string name, string brand, decimal purchasePrice, Group group, bool discount, decimal salePrice, decimal discountPrice, Image image) : base(salePrice)
         {
@@ -42,7 +43,7 @@ namespace P3_Projekt_WPF.Classes
             return Name;
         }
 
-        /* No delete method */ 
+        /* No delete method */
 
         //Regular edit without admin commands toggled
         public void Edit(string name, string brand, Group group, Image image)
@@ -86,7 +87,7 @@ namespace P3_Projekt_WPF.Classes
             StorageWithAmount[moveToRoom] =+ numberMove;
         }*/
 
-
+        // Database stuff
         public override void GetFromDatabase()
         {
             string sql = $"SELECT * FROM products WHERE id = {ID}";
@@ -103,20 +104,55 @@ namespace P3_Projekt_WPF.Classes
             SalePrice = Convert.ToDecimal(results.Values[4]);                 // price
             DiscountBool = Convert.ToBoolean(results.Values[5]);            // discount
             DiscountPrice = Convert.ToDecimal(results.Values[6]);             // discount_price
+            GetStorageStatus();
+        }
+        // Henter storage status fra databasen om hvilke lagere der har hvilket antal af produkter
+        private void GetStorageStatus()
+        {
+            string sql = $"SELECT * FROM `storage_status` WHERE `product_id` = '{ID}'";
+            Mysql Connection = new Mysql();
+            TableDecode Results = Connection.RunQueryWithReturn(sql);
+            foreach (var row in Results.RowData)
+            {
+                int StorageRoomID = Convert.ToInt32(row.Values[1]);
+                int Amount = Convert.ToInt32(row.Values[3]);
+                StorageRoom storgeRoom = new StorageRoom(StorageRoomID);
+                StorageWithAmount.Add(storgeRoom, Amount);
+            }
+        }
+        // Sletter lige alt storage information i datbasen inden der bliver uploadet noget nyt. 
+        private void DeleteAllStorageData()
+        {
+            string sql = $"DELETE FROM `storage_status` WHERE `product_id` = '{ID}'";
+            Mysql Connection = new Mysql();
+            Connection.RunQuery(sql);
+        }
+        // Uploader alt information fra databasen om hvilke lagere der har hvilket antal af produkterne.
+        private void UpdateStorageStatus()
+        {
+            Mysql Connection = new Mysql();
+            DeleteAllStorageData();
+            foreach (var Storage_Room in StorageWithAmount)
+            {
+                string sql = "INSERT INTO `storage_status` (`id`, `product_id`, `storageroom`, `amount`)" +
+                        $" VALUES (NULL, '{ID}', '{Storage_Room.Key.ID}', '{Storage_Room.Value}');";
+                Connection.RunQuery(sql);
+            }
         }
 
         public override void UploadToDatabase()
         {
-            string sql = $"INSERT INTO `products` (`id`, `name`, `brand`, `groups`, `price`, `discount`, `discount_price`)"+
+            string sql = $"INSERT INTO `products` (`id`, `name`, `brand`, `groups`, `price`, `discount`, `discount_price`)" +
             $"VALUES (NULL, '{Name}', '{Brand}', '{ProductGroup.ID}', '{SalePrice}', '{Convert.ToInt32(DiscountBool)}', '{DiscountPrice}');";
             Mysql Connection = new Mysql();
             Connection.RunQuery(sql);
+            UpdateStorageStatus();
         }
 
         public override void UpdateInDatabase()
         {
-            string sql = $"UPDATE `products` SET"+
-                $"`name` = '{GetName()}',"+
+            string sql = $"UPDATE `products` SET" +
+                $"`name` = '{GetName()}'," +
                 $"`brand` = '{Brand}'," +
                 $"`groups` = '{ProductGroup.ID}'," +
                 $"`price` = '{SalePrice}'," +
@@ -125,6 +161,9 @@ namespace P3_Projekt_WPF.Classes
                 $"WHERE `id` = {ID};";
             Mysql Connection = new Mysql();
             Connection.RunQuery(sql);
+            UpdateStorageStatus();
+
+
         }
     }
 }
