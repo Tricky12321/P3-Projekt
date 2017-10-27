@@ -69,6 +69,7 @@
     <Compile Include="Classes\Database\Row.cs" />
     <Compile Include="Classes\Database\TableDecode.cs" />
     <Compile Include="Classes\Exceptions\EmptyTableException.cs" />
+    <Compile Include="Classes\Exceptions\NoInternetConnectionException.cs" />
     <Compile Include="Classes\Exceptions\NotConnectedException.cs" />
     <Compile Include="Classes\Exceptions\ProductDiscountException.cs" />
     <Compile Include="Classes\Exceptions\UnknownProductTypeException.cs" />
