@@ -25,7 +25,7 @@ namespace P3_Projekt_WPF.Classes
             CreateFromRow(RowData);
         }
 
-        public SaleTransaction(int id) : base(null,1)
+        public SaleTransaction(int id) : base(null, 1)
         {
             _id = id;
             GetFromDatabase();
@@ -146,6 +146,12 @@ namespace P3_Projekt_WPF.Classes
                 return "temp_product";
             }
             return "product";
+        }
+
+        public void EditSaleTransactionFromTempProduct(Product productToResolve)
+        {
+            this.Product = productToResolve;
+            UpdateInDatabase();
         }
 
         public override void GetFromDatabase()

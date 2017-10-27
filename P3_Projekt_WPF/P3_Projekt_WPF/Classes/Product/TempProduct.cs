@@ -33,11 +33,23 @@ namespace P3_Projekt_WPF.Classes
         {
             Description = newDescription;
             SalePrice = newSalePrice;
+            UpdateInDatabase();
         }
 
         public void Resolve()
         {
             _resolved = true;
+            UpdateInDatabase();
+        }
+
+        public SaleTransaction GetTempProductsSaleTransaction()
+        {
+            string sql = $"SELECT * FROM `sale_transactions` WHERE `product_type` = temp_products AND product_id = {this.ID}";
+            Mysql connection = new Mysql();
+            TableDecode getTransaction = connection.RunQueryWithReturn(sql);
+            SaleTransaction saleTrans = new SaleTransaction(getTransaction.RowData[0]);
+            Resolve();
+            return saleTrans;
         }
 
         public override void GetFromDatabase()

@@ -343,11 +343,18 @@ namespace P3_Projekt_WPF.Classes.Utilities
         /* User has already found the matching product ID.
          * First line findes the store storage
          * Second line subtracts the amound sold from storage*/
-        public void MergeTempProduct(SaleTransaction tempProductTransaction, int matchedProductID)
+        public void MergeTempProduct(TempProduct tempProductToMerge, int matchedProductID)
         {
+            SaleTransaction tempProductsTransaction = tempProductToMerge.GetTempProductsSaleTransaction();
             var StoreStorage = ProductDictionary[matchedProductID].StorageWithAmount.Where(x => x.Key.ID == 0).First();
 
-            ProductDictionary[matchedProductID].StorageWithAmount[StoreStorage.Key] -= tempProductTransaction.Amount;
+            ProductDictionary[matchedProductID].StorageWithAmount[StoreStorage.Key] -= tempProductsTransaction.Amount;
+            tempProductsTransaction.EditSaleTransactionFromTempProduct(ProductDictionary[matchedProductID]);
+        }
+
+        public void EditTempProduct(TempProduct tempProductToEdit, string description, decimal salePrice)
+        {
+            tempProductToEdit.Edit(description, salePrice);
         }
 
         //Adds new storage room to dictionary, and to all products
