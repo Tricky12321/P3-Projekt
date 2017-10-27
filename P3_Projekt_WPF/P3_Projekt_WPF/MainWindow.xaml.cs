@@ -42,9 +42,9 @@ namespace P3_Projekt_WPF
 
         public void Start()
         {
-            Transaction Test = new OrderTransaction(1);
-            Debug.Print("Done");
+            Transaction Test = new StorageTransaction(1);
 
+            Debug.Print("Done");
         }
     }
 }

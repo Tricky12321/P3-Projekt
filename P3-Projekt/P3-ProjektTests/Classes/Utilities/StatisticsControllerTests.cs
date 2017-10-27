@@ -25,8 +25,8 @@ namespace P3_Projekt_WPF.Classes.Utilities.Tests
             StatisticsController controller = new StatisticsController();
             DateTime date1 = new DateTime(y1, m1, d1);
             DateTime date2 = new DateTime(y2, m2, d2);
-            int unixDate1 = controller.GetUnixTime(date1);
-            int unixDate2 = controller.GetUnixTime(date2);
+            int unixDate1 = Utils.GetUnixTime(date1);
+            int unixDate2 = Utils.GetUnixTime(date2);
 
             Assert.IsTrue(unixDate1 < unixDate2);
         }*/
