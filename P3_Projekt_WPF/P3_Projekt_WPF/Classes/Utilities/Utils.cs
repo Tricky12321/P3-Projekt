@@ -8,20 +8,17 @@ namespace P3_Projekt_WPF.Classes.Utilities
 {
     public static class Utils
     {
-        public static int ConvertBoolToInt(bool booleanValue)
+        public static DateTime UnixTimeStampToDateTime(double unixTimeStamp)
         {
-            if (booleanValue)
-            {
-                return 1;
-            } else
-            {
-                return 0;
-            }
+            // Unix timestamp is seconds past epoch
+            System.DateTime dtDateTime = new DateTime(1970, 1, 1, 0, 0, 0, 0, System.DateTimeKind.Utc);
+            dtDateTime = dtDateTime.AddSeconds(unixTimeStamp).ToLocalTime();
+            return dtDateTime;
         }
-
-        public static bool ConvertIntToBool(int intVal)
+        public static int GetUnixTime(DateTime Tid)
         {
-            return (intVal != 0);
+            int unixTimestamp = (int)(Tid.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
+            return unixTimestamp;
         }
     }
 }

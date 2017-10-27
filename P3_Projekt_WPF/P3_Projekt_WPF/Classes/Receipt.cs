@@ -174,16 +174,14 @@ namespace P3_Projekt_WPF.Classes
                 SaleTransaction newSaleTransaction = new SaleTransaction(item);
                 Transactions.Add(newSaleTransaction);
             }
-
-            //TODO: Datetime skal lige implementeres korrekt (Lasse?)
-            //Date = Convert.ToInt32(Table.Values[5]);
+            Date = Convert.ToDateTime(Table.Values[5]);
         }
 
         public void UploadToDatabase()
         {
 
             string sql = "INSERT INTO `receipt` (`id`, `number_of_products`, `total_price`, `paid_price`, `payment_method`, `datetime`)"+
-                $" VALUES (NULL, '{NumberOfProducts}', '{TotalPrice}', '{PaidPrice}', '{Utils.ConvertBoolToInt(CashOrCard)}', '2017-10-25 00:00:00');";
+                $" VALUES (NULL, '{NumberOfProducts}', '{TotalPrice}', '{PaidPrice}', '{Convert.ToBoolean(CashOrCard)}', FROM_UNIXTIME('{Utils.GetUnixTime(Date)}'));";
         }
 
         public void UpdateInDatabase()
@@ -192,7 +190,8 @@ namespace P3_Projekt_WPF.Classes
                 $"`number_of_products` = '{NumberOfProducts}'," +
                 $"`total_price` = '{TotalPrice}'," +
                 $"`paid_price` = '{PaidPrice}'," +
-                $"`payment_method` = '{Utils.ConvertBoolToInt(CashOrCard)}'," +
+                $"`payment_method` = '{Convert.ToBoolean(CashOrCard)}'," +
+                $"`datetime` = FROM_UNIXTIME('{Utils.GetUnixTime(Date)}'"+
                 $"WHERE `id` = {ID};";
             Mysql Connection = new Mysql();
             Connection.RunQuery(sql);

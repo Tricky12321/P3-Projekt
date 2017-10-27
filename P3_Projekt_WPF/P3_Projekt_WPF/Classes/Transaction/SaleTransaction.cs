@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using P3_Projekt_WPF.Classes.Database;
 using P3_Projekt_WPF.Classes.Exceptions;
-
+using P3_Projekt_WPF.Classes.Utilities;
 namespace P3_Projekt_WPF.Classes
 {
     public class SaleTransaction : Transaction
@@ -20,9 +20,15 @@ namespace P3_Projekt_WPF.Classes
             ReceiptID = receiptID;
         }
 
-        public SaleTransaction(Row RowData) : base(new Product(Convert.ToInt32(RowData.Values[1])),Convert.ToInt32(RowData.Values[2]))
+        public SaleTransaction(Row RowData) : base(new Product(Convert.ToInt32(RowData.Values[1])), Convert.ToInt32(RowData.Values[2]))
         {
             CreateFromRow(RowData);
+        }
+
+        public SaleTransaction(int id) : base(null,1)
+        {
+            _id = id;
+            GetFromDatabase();
         }
 
         public override void Execute()
@@ -109,37 +115,21 @@ namespace P3_Projekt_WPF.Classes
             }
         }
 
-        public override void GetFromDatabase()
-        {
-            string getQuery = $"SELECT * FROM sale_transactions WHERE ID = {_id}";
-            Mysql Connection = new Mysql();
-            Connection.RunQuery(getQuery);
-
-        }
-
-        public override void CreateFromRow(Row Table)
-        {
-            _id = Convert.ToInt32(Table.Values[0]);
-            Product = _getProduct(Convert.ToInt32(Table.Values[1]), Table.Values[2]);
-            Amount = Convert.ToInt32(Table.Values[3]);
-            //TODO: Datatime skal laves her Table.Values[4]
-            ReceiptID = Convert.ToInt32(Table.Values[5]);
-            Price = Convert.ToDecimal(Table.Values[6]);
-            Discount = Convert.ToBoolean(Table.Values[8]);
-        }
-
         private BaseProduct _getProduct(int id, string Type)
         {
             if (Type == "product")
             {
                 return new Product(id);
-            } else if(Type == "temp_product")
+            }
+            else if (Type == "temp_product")
             {
                 return new TempProduct(id);
-            } else if(Type == "service_product")
+            }
+            else if (Type == "service_product")
             {
                 return new ServiceProduct(id);
-            } else
+            }
+            else
             {
                 throw new UnknownProductTypeException("This product is not known by the program");
             }
@@ -158,23 +148,39 @@ namespace P3_Projekt_WPF.Classes
             return "product";
         }
 
+        public override void GetFromDatabase()
+        {
+            string getQuery = $"SELECT * FROM `sale_transactions` WHERE `id` = '{_id}'";
+            Mysql Connection = new Mysql();
+            CreateFromRow(Connection.RunQueryWithReturn(getQuery).RowData[0]);
+        }
+
+        public override void CreateFromRow(Row Table)
+        {
+            _id = Convert.ToInt32(Table.Values[0]);
+            Product = _getProduct(Convert.ToInt32(Table.Values[1]), Table.Values[2]);
+            Amount = Convert.ToInt32(Table.Values[3]);
+            Date = Convert.ToDateTime(Table.Values[4]);
+            ReceiptID = Convert.ToInt32(Table.Values[5]);
+            Price = Convert.ToDecimal(Table.Values[6]);
+            Discount = Convert.ToBoolean(Table.Values[8]);
+        }
+
         public override void UploadToDatabase()
         {
-            //TODO: Der skal laves datetime i den her query
-            string sql = "INSERT INTO `sale_transactions` (`id`, `product_id`, `product_type`,`amount`, `datetime`, `receipt_id`, `price`, `total_price`, `discount`)"+
-                $" VALUES (NULL, '{Product.ID}', '{_getProductType()}','{Amount}', '2017-10-25 00:00:00', '{ReceiptID}', '{GetProductPrice()}', '{TotalPrice}', '{Discount}');";
+            string sql = "INSERT INTO `sale_transactions` (`id`, `product_id`, `product_type`,`amount`, `datetime`, `receipt_id`, `price`, `total_price`, `discount`)" +
+                $" VALUES (NULL, '{Product.ID}', '{_getProductType()}','{Amount}', FROM_UNIXTIME('{Utils.GetUnixTime(Date)}'), '{ReceiptID}', '{GetProductPrice()}', '{TotalPrice}', '{Discount}');";
             Mysql Connection = new Mysql();
             Connection.RunQuery(sql);
         }
 
         public override void UpdateInDatabase()
-        {   
-            //TODO: Der skal laves Datatime her
+        {
             string sql = $"UPDATE `sale_transactions` SET" +
                 $"`product_id` = '{Product.ID}'," +
                 $"`product_type` = '{_getProductType()}'," +
                 $"`amount` = '{Amount}'," +
-                //$"`datetime` = '{DateTime??}'," +
+                $"`datetime` = FROM_UNIXTIME'{Utils.GetUnixTime(Date)}'," +
                 $"`receipt_id` = '{ReceiptID}'," +
                 $"`price` = '{GetProductPrice()}'," +
                 $"`total_price` = '{TotalPrice}'," +
