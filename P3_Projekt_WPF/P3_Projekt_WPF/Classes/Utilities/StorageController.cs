@@ -14,7 +14,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
         private int _idGroupCounter = 0;
 
         public Dictionary<int, Product> ProductDictionary = new Dictionary<int, Product>();
-        public Dictionary<int, Group> GroupDictionary = new Dictionary<int, Group>() { { 0, new Group("Diverse", "Produkter, som ikke tilhører en specifik gruppe") } };
+        public Dictionary<int, Group> GroupDictionary = new Dictionary<int, Group>() { { 0, new Group("Diverse", "Produkter, som ikke tilhører en specifik gruppe") }, { 1, new Group("Is", "Is af alle varianter") } };
         public Dictionary<int, StorageRoom> StorageRoomDictionary = new Dictionary<int, StorageRoom>();
         public List<TempProduct> TempProductList = new List<TempProduct>();
 
@@ -63,6 +63,17 @@ namespace P3_Projekt_WPF.Classes.Utilities
                 product.ProductGroup = GroupDictionary[0];
             }
             GroupDictionary.Remove(GroupID);
+        }
+
+        //Assign new group to products left with no group
+        //Removes group from dictionary
+        public void DeleteGroupAndMove(int removeID, int moveID)
+        {
+            foreach (Product product in ProductDictionary.Values.Where(x => x.ProductGroup == GroupDictionary[removeID]))
+            {
+                product.ProductGroup = GroupDictionary[moveID];
+            }
+            GroupDictionary.Remove(removeID);
         }
 
         /////////--------------------SEARCH---------------------------------
