@@ -17,12 +17,26 @@ namespace P3_Projekt_WPF.Classes.Utilities
 
         }
 
-        public void RequestStatistics(DateTime from, DateTime to)
+        public void RequestStatisticsDate(DateTime from, DateTime to)
         {
             int fromUnixTime = Utils.GetUnixTime(from);
             int toUnixTime = Utils.GetUnixTime(to);
 
             TransactionsForStatistics = DatabaseTransactions.Where(x => (Utils.GetUnixTime(x.Date) > fromUnixTime && Utils.GetUnixTime(x.Date) < toUnixTime)).ToList();
+        }
+
+        public void RequestStatisticsToday()
+        {
+            DateTime today = DateTime.Now;
+
+            TransactionsForStatistics = DatabaseTransactions.Where(x => x.Date.Day == today.Day).ToList();
+        }
+
+        public void RequestStatisticsYesterday()
+        {
+            DateTime yesterday = DateTime.Now.AddDays(-1);
+
+            TransactionsForStatistics = DatabaseTransactions.Where(x => x.Date.Day == yesterday.Day).ToList();
         }
     }
 }
