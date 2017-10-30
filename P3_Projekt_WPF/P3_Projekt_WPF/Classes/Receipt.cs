@@ -94,7 +94,7 @@ namespace P3_Projekt_WPF.Classes
             }
             else
             {
-                throw new WrongProductTypeException("Transaktionens produkt har ikke en valid type!");
+                throw new ProductAlreadyDeActivated("Transaktionens produkt har ikke en valid type!");
             }
 
             return priceTotal;
