@@ -18,7 +18,7 @@ namespace P3_Projekt_WPF.Classes
         public bool DiscountBool;
         public decimal DiscountPrice;
         private Image _image;
-        public bool _active = true;
+        private bool _active = true;
         public bool Active => _active;
         public Dictionary<StorageRoom, int> StorageWithAmount = new Dictionary<StorageRoom, int>();
 
