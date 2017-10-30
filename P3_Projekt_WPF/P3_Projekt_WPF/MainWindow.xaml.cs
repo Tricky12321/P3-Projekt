@@ -22,13 +22,46 @@ namespace P3_Projekt_WPF
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
+    /// 
+    public class ReceiptItem
+    {
+        Button btn_down = new Button();
+        public string string_Product { get; set; }
+
+    }
+
     public partial class MainWindow : Window
     {
         public MainWindow()
         {
             InitializeComponent();
-            
-            Start();
+            var gridView = new GridView();
+            listView_Receipt.View = gridView;
+
+            gridView.Columns.Add(new GridViewColumn
+            {
+                DisplayMemberBinding = new Binding("btn_down")
+            });
+            gridView.Columns.Add(new GridViewColumn
+            {
+                DisplayMemberBinding = new Binding("btn_up")
+            });
+            gridView.Columns.Add(new GridViewColumn
+            {
+                DisplayMemberBinding = new Binding("string_Product")
+            });
+            gridView.Columns.Add(new GridViewColumn
+            {
+                DisplayMemberBinding = new Binding("price")
+            });
+
+            listView_Receipt.Items.Add(new ReceiptItem { string_Product = "Dette er en test" });
+            listView_Receipt.Items.Add(new ReceiptItem { string_Product = "Dette er en test" });
+            listView_Receipt.Items.Add(new ReceiptItem { string_Product = "Dette er en test" });
+            listView_Receipt.Items.Add(new ReceiptItem { string_Product = "Dette er en test" });
+
+            listView_Receipt.Items.Add(new ReceiptItem { string_Product = "Dette er en test" });
+
         }
 
         private void tabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -45,6 +78,21 @@ namespace P3_Projekt_WPF
         {
             StorageController StorageControl = new StorageController();
             POSController POSControl = new POSController(StorageControl);
+        }
+
+        private void but_MobilePay_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void listView_Receipt_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            
+        }
+
+        private void TextBlock_TargetUpdated(object sender, DataTransferEventArgs e)
+        {
+
         }
     }
 }

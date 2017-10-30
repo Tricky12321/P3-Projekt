@@ -42,15 +42,16 @@ namespace P3_Projekt_WPF.Classes
         {
             ID = Convert.ToInt32(results.Values[0]);                         // id
             Name = results.Values[1];                                        // name
-            SalePrice = Convert.ToInt32(results.Values[2]);                  // price
-            GroupPrice = Convert.ToInt32(results.Values[3]);                 // price
-            GroupLimit = Convert.ToInt32(results.Values[4]);                 // price
+            ServiceProductGroup = new Group(Convert.ToInt32(results.Values[2]));
+            SalePrice = Convert.ToInt32(results.Values[3]);                  // price
+            GroupPrice = Convert.ToInt32(results.Values[4]);                 // price
+            GroupLimit = Convert.ToInt32(results.Values[5]);                 // price
         }
 
         public override void UploadToDatabase()
         {
-            string sql = $"INSERT INTO `service_products` (`id`, `name`, `price`, `group_price`, `group_limit`)" +
-            $"VALUES (NULL, '{Name}', '{SalePrice}','{GroupPrice}','{GroupLimit}');";
+            string sql = $"INSERT INTO `service_products` (`id`, `name`, `price`, `group_price`, `group_limit`, `groups`)" +
+            $"VALUES (NULL, '{Name}', '{SalePrice}','{GroupPrice}','{GroupLimit}','{ServiceProductGroup.ID}');";
             Mysql Connection = new Mysql();
             Connection.RunQuery(sql);
         }
@@ -61,7 +62,8 @@ namespace P3_Projekt_WPF.Classes
                 $"`name` = '{Name}'," +
                 $"`price` = '{SalePrice}'," +
                 $"`group_price` = '{GroupPrice}'," +
-                $"`group_limit` = '{GroupLimit}'" +
+                $"`group_limit` = '{GroupLimit}'," +
+                $"`groups` = '{ServiceProductGroup.ID}'"+
                 $"WHERE `id` = {ID};";
             Mysql Connection = new Mysql();
             Connection.RunQuery(sql);
