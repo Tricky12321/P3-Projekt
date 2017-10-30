@@ -59,6 +59,8 @@ namespace P3_Projekt_WPF.Classes.Utilities.Tests
             StorageController SC = new StorageController();
             POSController POSC = new POSController(SC);
 
+            POSC.StartPurchase();
+
             POSC.AddIcecreamTransaction(25);
 
             Assert.IsTrue((POSC.PlacerholderReceipt.Transactions.First().Product as ServiceProduct).ServiceProductGroup.Name == "Is");
@@ -80,6 +82,19 @@ namespace P3_Projekt_WPF.Classes.Utilities.Tests
         public void ExecuteReceiptTest()
         {
             Assert.Fail();
+        }
+
+        [Test()]
+        public void AddFreeSaleTransactionTest()
+        {
+            StorageController SC = new StorageController();
+            POSController POSC = new POSController(SC);
+
+            POSC.StartPurchase();
+
+            POSC.AddFreeSaleTransaction(new TempProduct("Hello", 3.6M),7);
+
+            Assert.IsTrue((POSC.PlacerholderReceipt.Transactions.First().TotalPrice == 0));
         }
     }
 }
