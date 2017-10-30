@@ -18,7 +18,9 @@ namespace P3_Projekt_WPF.Classes
         public bool DiscountBool;
         public decimal DiscountPrice;
         private Image _image;
-        public Dictionary<StorageRoom, int> StorageWithAmount = new Dictionary<StorageRoom, int>();
+        private bool _active = true;
+        public bool Active => _active;
+        public Dictionary<int, int> StorageWithAmount = new Dictionary<int, int>();
 
 
         public Product(string name, string brand, decimal purchasePrice, Group group, bool discount, decimal salePrice, decimal discountPrice, Image image) : base(salePrice)
@@ -122,7 +124,7 @@ namespace P3_Projekt_WPF.Classes
                 int StorageRoomID = Convert.ToInt32(row.Values[1]);
                 int Amount = Convert.ToInt32(row.Values[3]);
                 StorageRoom storgeRoom = new StorageRoom(StorageRoomID);
-                StorageWithAmount.Add(storgeRoom, Amount);
+                StorageWithAmount.Add(storgeRoom.ID, Amount);
             }
         }
         // Sletter lige alt storage information i datbasen inden der bliver uploadet noget nyt. 
@@ -140,7 +142,7 @@ namespace P3_Projekt_WPF.Classes
             foreach (var Storage_Room in StorageWithAmount)
             {
                 string sql = "INSERT INTO `storage_status` (`id`, `product_id`, `storageroom`, `amount`)" +
-                        $" VALUES (NULL, '{ID}', '{Storage_Room.Key.ID}', '{Storage_Room.Value}');";
+                        $" VALUES (NULL, '{ID}', '{Storage_Room.Key}', '{Storage_Room.Value}');";
                 Connection.RunQuery(sql);
             }
         }
@@ -167,8 +169,35 @@ namespace P3_Projekt_WPF.Classes
             Mysql Connection = new Mysql();
             Connection.RunQuery(sql);
             UpdateStorageStatus();
-
-
         }
+
+        public void DeactivateProduct()
+        {
+            if (_active)
+            {
+                string sql = $"UPDATE `products` SET `active` = '0' WHERE `id` = '{ID}'";
+                Mysql Connection = new Mysql();
+                Connection.RunQuery(sql);
+            }
+            else
+            {
+                throw new ProductAlreadyDeActivated("Dette produkt er allerede deaktiveret");
+            }
+        }
+
+        public void ActivateProduct()
+        {
+            if (!_active)
+            {
+                string sql = $"UPDATE `products` SET `active` = '1' WHERE `id` = '{ID}'";
+                Mysql Connection = new Mysql();
+                Connection.RunQuery(sql);
+            } else
+            {
+                throw new ProductAlreadyActivated("Dette produkt er allerede aktiveret");
+            }
+            
+        }
+
     }
 }

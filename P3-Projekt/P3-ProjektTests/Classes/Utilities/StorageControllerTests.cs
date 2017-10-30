@@ -9,7 +9,7 @@ using System.Drawing;
 
 namespace P3_Projekt_WPF.Classes.Utilities.Tests
 {
-    
+
     [TestFixture()]
     public class StorageControllerTests
     {
@@ -28,7 +28,7 @@ namespace P3_Projekt_WPF.Classes.Utilities.Tests
         {
             StorageController storageController = new StorageController();
             StorageRoom testStorage1 = new StorageRoom("3", "medium lager");
-            KeyValuePair<StorageRoom, int> testPair = new KeyValuePair<StorageRoom, int>(testStorage1, 10);
+            KeyValuePair<int, int> testPair = new KeyValuePair<int, int>(testStorage1.ID, 10);
             Group testGroup = new Group("drikkevarer", "wuhuu drikke");
 
             storageController.CreateProduct("mælk", "arla", Convert.ToDecimal(5), testGroup, false, Convert.ToDecimal(7), Convert.ToDecimal(10), null, testPair);
@@ -43,7 +43,7 @@ namespace P3_Projekt_WPF.Classes.Utilities.Tests
         {
             StorageController storageController = new StorageController();
             StorageRoom testStorage1 = new StorageRoom("3", "medium lager");
-            KeyValuePair<StorageRoom, int> testPair = new KeyValuePair<StorageRoom, int>(testStorage1, 10);
+            KeyValuePair<int, int> testPair = new KeyValuePair<int, int>(testStorage1.ID, 10);
             Group testGroup = new Group("drikkevarer", "wuhuu drikke");
 
             storageController.CreateProduct("mælk", "arla", Convert.ToDecimal(5), testGroup, false, Convert.ToDecimal(7), Convert.ToDecimal(10), null, testPair);
@@ -198,7 +198,7 @@ namespace P3_Projekt_WPF.Classes.Utilities.Tests
         {
             StorageController storageController = new StorageController();
             StorageRoom testStorage1 = new StorageRoom("3", "medium lager");
-            KeyValuePair<StorageRoom, int> testPair = new KeyValuePair<StorageRoom, int>(testStorage1, 10);
+            KeyValuePair<int, int> testPair = new KeyValuePair<int, int>(testStorage1.ID, 10);
             Group testGroup = new Group("drikkevarer", "wuhuu drikke");
 
             storageController.CreateProduct("mælk", "arla", Convert.ToDecimal(5), testGroup, false, Convert.ToDecimal(7), Convert.ToDecimal(10), null, testPair);
@@ -227,7 +227,7 @@ namespace P3_Projekt_WPF.Classes.Utilities.Tests
         {
             StorageController storageController = new StorageController();
             StorageRoom testStorage1 = new StorageRoom("3", "medium lager");
-            KeyValuePair<StorageRoom, int> testPair = new KeyValuePair<StorageRoom, int>(testStorage1, 10);
+            KeyValuePair<int, int> testPair = new KeyValuePair<int, int>(testStorage1.ID, 10);
 
             Group testGroup = new Group("drikkevarer", "wuhuu drikke");
 
@@ -247,13 +247,13 @@ namespace P3_Projekt_WPF.Classes.Utilities.Tests
 
             storageController.StorageRoomDictionary.Add(3, testStorage);
 
-            KeyValuePair<StorageRoom, int> testPair = new KeyValuePair<StorageRoom, int>(testStorage, testInput);
+            KeyValuePair<int, int> testPair = new KeyValuePair<int, int>(testStorage.ID, testInput);
 
             Group testGroup = new Group("drikkevarer", "wuhuu drikke");
 
             storageController.CreateProduct("mælk", "arla", Convert.ToDecimal(5), testGroup, false, Convert.ToDecimal(7), Convert.ToDecimal(10), null, testPair);
 
-            return test = storageController.ProductDictionary[0].StorageWithAmount[testStorage];
+            return test = storageController.ProductDictionary[0].StorageWithAmount[testStorage.ID];
         }
 
         [Test()]
@@ -265,7 +265,7 @@ namespace P3_Projekt_WPF.Classes.Utilities.Tests
 
             storageController.CreateStorageRoom("room1", "test room");
 
-            Assert.AreEqual("room1", storageController.ProductDictionary[0].StorageWithAmount.Keys.First().Name);
+            Assert.AreEqual("room1", storageController.StorageRoomDictionary.Values.First().Name);
         }
 
         [Test()]
@@ -280,10 +280,10 @@ namespace P3_Projekt_WPF.Classes.Utilities.Tests
             storageController.ProductDictionary.Add(testProduct3.ID, testProduct3);
 
             storageController.CreateStorageRoom("room1", "test room");
-
-            bool b1 = "room1" == storageController.ProductDictionary[0].StorageWithAmount.Keys.First().Name;
-            bool b2 = "room1" == storageController.ProductDictionary[1].StorageWithAmount.Keys.First().Name;
-            bool b3 = "room1" == storageController.ProductDictionary[2].StorageWithAmount.Keys.First().Name;
+            
+            bool b1 = "room1" == storageController.StorageRoomDictionary.First().Value.Name;
+            bool b2 = "room1" == storageController.StorageRoomDictionary.First().Value.Name;
+            bool b3 = "room1" == storageController.StorageRoomDictionary.First().Value.Name;
 
             Assert.IsTrue(b1 && b2 && b3);
         }
@@ -330,12 +330,12 @@ namespace P3_Projekt_WPF.Classes.Utilities.Tests
             var testProduct = new Product("test1", "blabla", 1.25m, new Group("group1", "good group"), false, 5.0m, 3.0m, null);
             storageController.ProductDictionary.Add(testProduct.ID, testProduct);
             var room = new StorageRoom("test", "test");
-            storageController.ProductDictionary[0].StorageWithAmount.Add(room, 0);
+            storageController.ProductDictionary[0].StorageWithAmount.Add(room.ID, 0);
             storageController.StorageRoomDictionary.Add(0, room);
 
             storageController.DeleteStorageRoom(0);
 
-            bool b1 = !storageController.ProductDictionary[0].StorageWithAmount.ContainsKey(room);
+            bool b1 = !storageController.ProductDictionary[0].StorageWithAmount.ContainsKey(room.ID);
             bool b2 = !storageController.StorageRoomDictionary.ContainsKey(0);
 
             Assert.IsTrue(b1 && b2);
@@ -352,16 +352,16 @@ namespace P3_Projekt_WPF.Classes.Utilities.Tests
             storageController.ProductDictionary.Add(testProduct2.ID, testProduct2);
             storageController.ProductDictionary.Add(testProduct3.ID, testProduct3);
             var room = new StorageRoom("test", "test");
-            storageController.ProductDictionary[0].StorageWithAmount.Add(room, 0);
-            storageController.ProductDictionary[1].StorageWithAmount.Add(room, 0);
-            storageController.ProductDictionary[2].StorageWithAmount.Add(room, 0);
+            storageController.ProductDictionary[0].StorageWithAmount.Add(room.ID, 0);
+            storageController.ProductDictionary[1].StorageWithAmount.Add(room.ID, 0);
+            storageController.ProductDictionary[2].StorageWithAmount.Add(room.ID, 0);
             storageController.StorageRoomDictionary.Add(0, room);
 
             storageController.DeleteStorageRoom(0);
 
-            bool b1 = !storageController.ProductDictionary[0].StorageWithAmount.ContainsKey(room);
-            bool b2 = !storageController.ProductDictionary[1].StorageWithAmount.ContainsKey(room);
-            bool b3 = !storageController.ProductDictionary[2].StorageWithAmount.ContainsKey(room);
+            bool b1 = !storageController.ProductDictionary[0].StorageWithAmount.ContainsKey(room.ID);
+            bool b2 = !storageController.ProductDictionary[1].StorageWithAmount.ContainsKey(room.ID);
+            bool b3 = !storageController.ProductDictionary[2].StorageWithAmount.ContainsKey(room.ID);
             bool b4 = !storageController.StorageRoomDictionary.ContainsKey(0);
 
             Assert.IsTrue(b1 && b2 && b3 && b4);
@@ -463,9 +463,8 @@ namespace P3_Projekt_WPF.Classes.Utilities.Tests
 
             Assert.IsTrue(productList.Contains(productToBeCompared));
         }
-        
+
         [Test()]
-        
         public void BrandSearchTest()
         {
             StorageController strContr = new StorageController();
@@ -478,6 +477,26 @@ namespace P3_Projekt_WPF.Classes.Utilities.Tests
             strContr.BrandSearch(searchedString, ref productList);
 
             Assert.IsTrue(productList.Contains(productToBeCompared));
+        }
+
+        [Test()]
+        public void CreateTempProductTest()
+        {
+            StorageController strContr = new StorageController();
+            string productDescription = "A blue shirt with yellow bananas";
+            decimal sellPrice = 100;
+            strContr.CreateTempProduct(productDescription, sellPrice);
+            Assert.IsTrue(strContr.TempProductList.Exists(x => x.Description == "A blue shirt with yellow bananas"));
+        }
+
+        [Test()]
+        public void EditTempProductTest()
+        {
+            StorageController strContr = new StorageController();
+            TempProduct tempProduct = new TempProduct("A shirt with bananas", 50);
+            strContr.EditTempProduct(tempProduct, "A green shirt with yellow bananas", 100);
+            Assert.IsTrue(tempProduct.Description != "A shirt with bananas" && tempProduct.Description == "A green shirt with yellow bananas" &&
+                          tempProduct.SalePrice != 50 && tempProduct.SalePrice == 100);
         }
     }
 }

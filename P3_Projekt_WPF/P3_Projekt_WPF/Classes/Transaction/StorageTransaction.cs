@@ -28,8 +28,8 @@ namespace P3_Projekt_WPF.Classes
 
         public override void Execute()
         {
-            (Product as Product).StorageWithAmount[_source] -= Amount;
-            (Product as Product).StorageWithAmount[_destination] += Amount;
+            (Product as Product).StorageWithAmount[_source.ID] -= Amount;
+            (Product as Product).StorageWithAmount[_destination.ID] += Amount;
         }
 
         public override void GetFromDatabase()
