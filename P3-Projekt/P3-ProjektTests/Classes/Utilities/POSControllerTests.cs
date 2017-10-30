@@ -14,41 +14,29 @@ namespace P3_Projekt_WPF.Classes.Utilities.Tests
         [Test()]
         public void AddSaleTransactionTest()
         {
-            Assert.Fail();
+            StorageController SC = new StorageController();
+            POSController POSC = new POSController(SC);
+
+            POSC.StartPurchase();
+
+            POSC.AddSaleTransaction(new TempProduct("Hello", 3.6M), 7);
+
+            Assert.IsTrue((POSC.PlacerholderReceipt.Transactions.First().TotalPrice == 3.6M*7));
         }
 
         [Test()]
         public void StartPurchaseTest()
         {
-            Assert.Fail();
-        }
+            StorageController SC = new StorageController();
+            POSController POSC = new POSController(SC);
 
-        [Test()]
-        public void RemoveProductTest()
-        {
-            Assert.Fail();
-        }
+            POSC.StartPurchase();
 
-        [Test()]
-        public void POSControllerTest()
-        {
-            Assert.Fail();
-        }
-
-        [Test()]
-        public void StartPurchaseTest1()
-        {
-            Assert.Fail();
+            Assert.IsTrue(POSC.PlacerholderReceipt != null);
         }
 
         [Test()]
         public void EditReceiptTest()
-        {
-            Assert.Fail();
-        }
-
-        [Test()]
-        public void AddSaleTransactionTest1()
         {
             Assert.Fail();
         }
