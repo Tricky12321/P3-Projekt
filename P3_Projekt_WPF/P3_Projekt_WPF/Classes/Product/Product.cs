@@ -20,7 +20,7 @@ namespace P3_Projekt_WPF.Classes
         private Image _image;
         private bool _active = true;
         public bool Active => _active;
-        public Dictionary<StorageRoom, int> StorageWithAmount = new Dictionary<StorageRoom, int>();
+        public Dictionary<int, int> StorageWithAmount = new Dictionary<int, int>();
 
 
         public Product(string name, string brand, decimal purchasePrice, Group group, bool discount, decimal salePrice, decimal discountPrice, Image image) : base(salePrice)
@@ -124,7 +124,7 @@ namespace P3_Projekt_WPF.Classes
                 int StorageRoomID = Convert.ToInt32(row.Values[1]);
                 int Amount = Convert.ToInt32(row.Values[3]);
                 StorageRoom storgeRoom = new StorageRoom(StorageRoomID);
-                StorageWithAmount.Add(storgeRoom, Amount);
+                StorageWithAmount.Add(storgeRoom.ID, Amount);
             }
         }
         // Sletter lige alt storage information i datbasen inden der bliver uploadet noget nyt. 
@@ -142,7 +142,7 @@ namespace P3_Projekt_WPF.Classes
             foreach (var Storage_Room in StorageWithAmount)
             {
                 string sql = "INSERT INTO `storage_status` (`id`, `product_id`, `storageroom`, `amount`)" +
-                        $" VALUES (NULL, '{ID}', '{Storage_Room.Key.ID}', '{Storage_Room.Value}');";
+                        $" VALUES (NULL, '{ID}', '{Storage_Room.Key}', '{Storage_Room.Value}');";
                 Connection.RunQuery(sql);
             }
         }
