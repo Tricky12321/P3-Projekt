@@ -18,6 +18,8 @@ namespace P3_Projekt_WPF.Classes
         public bool DiscountBool;
         public decimal DiscountPrice;
         private Image _image;
+        public bool _active = true;
+        public bool Active => _active;
         public Dictionary<StorageRoom, int> StorageWithAmount = new Dictionary<StorageRoom, int>();
 
 
@@ -167,8 +169,35 @@ namespace P3_Projekt_WPF.Classes
             Mysql Connection = new Mysql();
             Connection.RunQuery(sql);
             UpdateStorageStatus();
-
-
         }
+
+        public void DeactivateProduct()
+        {
+            if (_active)
+            {
+                string sql = $"UPDATE `products` SET `active` = '0' WHERE `id` = '{ID}'";
+                Mysql Connection = new Mysql();<
+                Connection.RunQuery(sql);
+            }
+            else
+            {
+                throw new ProductAlreadyDeActivated("Dette produkt er allerede deaktiveret");
+            }
+        }
+
+        public void ActivateProduct()
+        {
+            if (!_active)
+            {
+                string sql = $"UPDATE `products` SET `active` = '1' WHERE `id` = '{ID}'";
+                Mysql Connection = new Mysql();
+                Connection.RunQuery(sql);
+            } else
+            {
+                throw new ProductAlreadyActivated("Dette produkt er allerede aktiveret");
+            }
+            
+        }
+
     }
 }
