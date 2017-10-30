@@ -12,10 +12,17 @@ namespace P3_Projekt_WPF.Classes.Utilities
         List<SaleTransaction> TransactionsForStatistics = new List<SaleTransaction>();
         List<SaleTransaction> DatabaseTransactions = new List<SaleTransaction>();
 
+        private bool _sortByProductID;
+        private bool _sortByBrand;
+        private bool _sortByGroup;
+
         public StatisticsController()
         {
+            // TODO: Hent transactions fra DB til Databasetransactions
 
         }
+
+        public void RequestStatistics() { };
 
         public void RequestStatisticsDate(DateTime from, DateTime to)
         {
