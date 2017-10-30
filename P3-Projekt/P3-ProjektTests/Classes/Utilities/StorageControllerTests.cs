@@ -9,7 +9,7 @@ using System.Drawing;
 
 namespace P3_Projekt_WPF.Classes.Utilities.Tests
 {
-    
+
     [TestFixture()]
     public class StorageControllerTests
     {
@@ -463,9 +463,8 @@ namespace P3_Projekt_WPF.Classes.Utilities.Tests
 
             Assert.IsTrue(productList.Contains(productToBeCompared));
         }
-        
+
         [Test()]
-        
         public void BrandSearchTest()
         {
             StorageController strContr = new StorageController();
@@ -478,6 +477,26 @@ namespace P3_Projekt_WPF.Classes.Utilities.Tests
             strContr.BrandSearch(searchedString, ref productList);
 
             Assert.IsTrue(productList.Contains(productToBeCompared));
+        }
+
+        [Test()]
+        public void CreateTempProductTest()
+        {
+            StorageController strContr = new StorageController();
+            string productDescription = "A blue shirt with yellow bananas";
+            decimal sellPrice = 100;
+            strContr.CreateTempProduct(productDescription, sellPrice);
+            Assert.IsTrue(strContr.TempProductList.Exists(x => x.Description == "A blue shirt with yellow bananas"));
+        }
+
+        [Test()]
+        public void EditTempProductTest()
+        {
+            StorageController strContr = new StorageController();
+            TempProduct tempProduct = new TempProduct("A shirt with bananas", 50);
+            strContr.EditTempProduct(tempProduct, "A green shirt with yellow bananas", 100);
+            Assert.IsTrue(tempProduct.Description != "A shirt with bananas" && tempProduct.Description == "A green shirt with yellow bananas" &&
+                          tempProduct.SalePrice != 50 && tempProduct.SalePrice == 100);
         }
     }
 }

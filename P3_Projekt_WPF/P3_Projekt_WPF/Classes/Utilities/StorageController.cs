@@ -372,7 +372,9 @@ namespace P3_Projekt_WPF.Classes.Utilities
 
             ProductDictionary[matchedProductID].StorageWithAmount[StoreStorage.Key] -= tempProductsTransaction.Amount;
             tempProductsTransaction.EditSaleTransactionFromTempProduct(ProductDictionary[matchedProductID]);
-        }
+            tempProductToMerge.Resolve();
+            TempProductList.Remove(tempProductToMerge);
+        }   
 
         public void EditTempProduct(TempProduct tempProductToEdit, string description, decimal salePrice)
         {

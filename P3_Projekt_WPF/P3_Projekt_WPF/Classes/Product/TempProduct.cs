@@ -48,7 +48,6 @@ namespace P3_Projekt_WPF.Classes
             Mysql connection = new Mysql();
             TableDecode getTransaction = connection.RunQueryWithReturn(sql);
             SaleTransaction saleTrans = new SaleTransaction(getTransaction.RowData[0]);
-            Resolve();
             return saleTrans;
         }
 
