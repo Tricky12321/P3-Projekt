@@ -39,7 +39,7 @@ namespace P3_Projekt_WPF.Classes
                 /* Finder første storage room, som altid er butikken. Butikken har ID 0.
                  * Derefter bruger den StorageRoom delen som index,
                  * så man kan ændre Amount */
-                var StoreStorage = (Product as Product).StorageWithAmount.Where(x => x.Key.ID == 0).First();
+                var StoreStorage = (Product as Product).StorageWithAmount.Where(x => x.Key == 0).First();
 
                 (Product as Product).StorageWithAmount[StoreStorage.Key] -= Amount;
             }

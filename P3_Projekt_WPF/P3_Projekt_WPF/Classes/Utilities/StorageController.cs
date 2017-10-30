@@ -331,11 +331,11 @@ namespace P3_Projekt_WPF.Classes.Utilities
         //----SEARCH-END---------------------
 
         //Creates product with storage and stocka as keyvalue, then add the product to the list
-        public void CreateProduct(string name, string brand, decimal purchasePrice, Group group, bool discount, decimal discountPrice, decimal salePrice, Image image, params KeyValuePair<StorageRoom, int>[] storageRoomStockInput)
+        public void CreateProduct(string name, string brand, decimal purchasePrice, Group group, bool discount, decimal discountPrice, decimal salePrice, Image image, params KeyValuePair<int, int>[] storageRoomStockInput)
         {
             Product newProduct = new Product(name, brand, purchasePrice, group, discount, salePrice, discountPrice, image);
 
-            foreach (KeyValuePair<StorageRoom, int> roomInput in storageRoomStockInput)
+            foreach (KeyValuePair<int, int> roomInput in storageRoomStockInput)
             {
                 newProduct.StorageWithAmount[roomInput.Key] = roomInput.Value;
             }
@@ -368,7 +368,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
         public void MergeTempProduct(TempProduct tempProductToMerge, int matchedProductID)
         {
             SaleTransaction tempProductsTransaction = tempProductToMerge.GetTempProductsSaleTransaction();
-            var StoreStorage = ProductDictionary[matchedProductID].StorageWithAmount.Where(x => x.Key.ID == 0).First();
+            var StoreStorage = ProductDictionary[matchedProductID].StorageWithAmount.Where(x => x.Key == 0).First();
 
             ProductDictionary[matchedProductID].StorageWithAmount[StoreStorage.Key] -= tempProductsTransaction.Amount;
             tempProductsTransaction.EditSaleTransactionFromTempProduct(ProductDictionary[matchedProductID]);
@@ -387,7 +387,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
 
             foreach (Product product in ProductDictionary.Values)
             {
-                product.StorageWithAmount.Add(newRoom, 0);
+                product.StorageWithAmount.Add(newRoom.ID, 0);
             }
         }
 
@@ -402,7 +402,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
         {
             foreach (Product product in ProductDictionary.Values)
             {
-                product.StorageWithAmount.Remove(StorageRoomDictionary[id]);
+                product.StorageWithAmount.Remove(StorageRoomDictionary[id].ID);
             }
             StorageRoomDictionary.Remove(id);
 
