@@ -17,9 +17,82 @@
                     <Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="100" VerticalAlignment="Top" Width="1887" Grid.ColumnSpan="2"/>
                     <Button x:Name="but_Card"  Content="Dankort" Margin="0,0,10.334,65" Background="#FFC5C5C5" Style="{StaticResource Flat_Button}" Height="50" Width="260" VerticalAlignment="Bottom" HorizontalAlignment="Right" Grid.ColumnSpan="2"/>
                     <Button x:Name="but_MobilePay"  Content="MobilePay" Margin="0,0,10.334,10" Background="#FFC5C5C5" Style="{StaticResource Flat_Button}" Click="but_MobilePay_Click" Height="50" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="260" Grid.ColumnSpan="2"/>
-                    <ListView x:Name="listView_Receipt" Margin="1209,105,10,194" FontSize="23" SelectionChanged="listView_Receipt_SelectionChanged">
+                    <ListView x:Name="listView_Receipt" Margin="0,105,10,194" FontSize="23" SelectionChanged="listView_Receipt_SelectionChanged" HorizontalAlignment="Right" Width="900">
+                        <ListView.View>
+                            <GridView>
+                                <GridViewColumn>
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <Button Style="{StaticResource Flat_Button}"
+                                                Content = "+"
+
+                                                Width="30"
+                                                Height="30"
+                                                VerticalAlignment = "Center"
+                                                Click="but_Increment_Click"
+                                            />
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+
+                                <GridViewColumn>
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <Button Style="{StaticResource Flat_Button}"
+                                                Content = "-"
+                                                Width="30"
+                                                Height="30"
+                                                VerticalAlignment = "Center"
+                                                Click="but_Decrement_Click"
+                                            />
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+
+                                <GridViewColumn>
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding Amount}"/>
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+
+                                <GridViewColumn>
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding String_Product}"/>
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+
+                                <GridViewColumn>
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding Price}"/>
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+
+                                <GridViewColumn>
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <Button Style="{StaticResource Flat_Button}"
+                                                Content = "x"
+                                                Width="30"
+                                                Height="30"
+                                                VerticalAlignment = "Center"
+                                                Click="but_DeleteProduct_Click"
+                                            />
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+                            </GridView>
+                        </ListView.View>
                     </ListView>
                     <Button x:Name="But_EditReceipt"  Content="Rediger Kvittering" Margin="10,10,0,0" Background="#FFC5C5C5" Style="{StaticResource Flat_Button}" Height="80" VerticalAlignment="Top" HorizontalAlignment="Left" Width="299"/>
+                    <Grid x:Name="grid_QuickButton" Height="759" Margin="10,228,915,0" VerticalAlignment="Top"/>
+                    <Border BorderBrush="Black" BorderThickness="1" Margin="0,100,914,0" Background="Black" HorizontalAlignment="Right" Width="1"/>
+                    <Button x:Name="btn_addProduct"  Content="Tilføj Produkt" Margin="701,117,0,0" Background="#FFC5C5C5" Style="{StaticResource Flat_Button}" Height="50" VerticalAlignment="Top" HorizontalAlignment="Left" Width="260"/>
                 </Grid>
             </TabItem>
             <TabItem Header="Lager" Width="190">
@@ -43,7 +116,7 @@
             </TabItem>
         </TabControl>
 
-        <Button x:Name="but_search" Content="🔎" Background="#FF767676" Margin="0,5,10.333,0" VerticalAlignment="Top" Height="35" Grid.RowSpan="2" HorizontalAlignment="Right" Width="40" Style="{StaticResource Flat_Button}" FontSize="21"/>
+        <Button x:Name="but_search" Content="🔎" Background="#FF767676" Margin="0,7,10.333,0" VerticalAlignment="Top" Height="35" HorizontalAlignment="Right" Width="40" Style="{StaticResource Flat_Button}" FontSize="21"/>
 
         <TextBlock IsHitTestVisible="False" Text="SØG ERFTER ET PRODUKT" Margin="100,70,0,0" VerticalAlignment="Top" HorizontalAlignment="Right" Foreground="Red" Height="200" Grid.Row="1" Width="200">
             <TextBlock.Style>
@@ -73,6 +146,25 @@
                         <Setter Property="Visibility" Value="Collapsed"/>
                         <Style.Triggers>
                             <DataTrigger Binding="{Binding Text, ElementName=SearchTermTextBox}" Value="">
+                                <Setter Property="Visibility" Value="Visible"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </TextBlock.Style>
+            </TextBlock>
+            <TextBox Padding="10,0,0,0" x:Name="AddProductID" Margin="10,177,0,0" FontSize="23" HorizontalAlignment="Left" Width="350" Height="35" VerticalAlignment="Top">
+                <TextBox.Resources>
+                    <Style TargetType="{x:Type Border}">
+                        <Setter Property="CornerRadius" Value="10"/>
+                    </Style>
+                </TextBox.Resources>
+            </TextBox>
+            <TextBlock IsHitTestVisible="False" Text="Søg efter produkt" VerticalAlignment="Top" Margin="22,179,0,0" Foreground="DarkGray" Height="34" FontSize="23" HorizontalAlignment="Left" Width="245">
+                <TextBlock.Style>
+                    <Style TargetType="{x:Type TextBlock}">
+                        <Setter Property="Visibility" Value="Collapsed"/>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding Text, ElementName=AddProductID}" Value="">
                                 <Setter Property="Visibility" Value="Visible"/>
                             </DataTrigger>
                         </Style.Triggers>
