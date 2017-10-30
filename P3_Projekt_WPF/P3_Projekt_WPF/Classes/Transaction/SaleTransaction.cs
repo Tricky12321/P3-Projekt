@@ -14,10 +14,11 @@ namespace P3_Projekt_WPF.Classes
         public int ReceiptID;
         public decimal Price;
         public bool Discount;
-        public decimal TotalPrice => GetProductPrice() * Amount;
+        public decimal TotalPrice => Price * Amount;
         public SaleTransaction(BaseProduct product, int amount, int receiptID) : base(product, amount)
         {
             ReceiptID = receiptID;
+            Price = GetProductPrice();
         }
 
         public SaleTransaction(Row RowData) : base(new Product(Convert.ToInt32(RowData.Values[1])), Convert.ToInt32(RowData.Values[2]))
@@ -169,7 +170,7 @@ namespace P3_Projekt_WPF.Classes
         public override void UploadToDatabase()
         {
             string sql = "INSERT INTO `sale_transactions` (`id`, `product_id`, `product_type`,`amount`, `datetime`, `receipt_id`, `price`, `total_price`, `discount`)" +
-                $" VALUES (NULL, '{Product.ID}', '{_getProductType()}','{Amount}', FROM_UNIXTIME('{Utils.GetUnixTime(Date)}'), '{ReceiptID}', '{GetProductPrice()}', '{TotalPrice}', '{Discount}');";
+                $" VALUES (NULL, '{Product.ID}', '{_getProductType()}','{Amount}', FROM_UNIXTIME('{Utils.GetUnixTime(Date)}'), '{ReceiptID}', '{Price}', '{TotalPrice}', '{Discount}');";
             Mysql Connection = new Mysql();
             Connection.RunQuery(sql);
         }
@@ -182,7 +183,7 @@ namespace P3_Projekt_WPF.Classes
                 $"`amount` = '{Amount}'," +
                 $"`datetime` = FROM_UNIXTIME'{Utils.GetUnixTime(Date)}'," +
                 $"`receipt_id` = '{ReceiptID}'," +
-                $"`price` = '{GetProductPrice()}'," +
+                $"`price` = '{Price}'," +
                 $"`total_price` = '{TotalPrice}'," +
                 $"`discount` = '{Convert.ToInt32(Discount)}'" +
                 $"WHERE `id` = {_id};";
