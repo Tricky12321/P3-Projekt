@@ -176,7 +176,7 @@ namespace P3_Projekt_WPF.Classes
             if (_active)
             {
                 string sql = $"UPDATE `products` SET `active` = '0' WHERE `id` = '{ID}'";
-                Mysql Connection = new Mysql();<
+                Mysql Connection = new Mysql();
                 Connection.RunQuery(sql);
             }
             else
