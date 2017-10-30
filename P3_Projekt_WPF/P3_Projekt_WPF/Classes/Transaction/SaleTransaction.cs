@@ -82,7 +82,7 @@ namespace P3_Projekt_WPF.Classes
             }
             else
             {
-                throw new WrongProductTypeException();
+                throw new ProductAlreadyDeActivated();
             }
         }
 
