@@ -75,7 +75,7 @@ namespace P3_Projekt_WPF
 
         public void InitStorageGridProducts()
         {
-
+            productGrid.VerticalAlignment = VerticalAlignment.Top;
 
             productGrid.ColumnDefinitions.Add(new ColumnDefinition());
 
@@ -100,9 +100,9 @@ namespace P3_Projekt_WPF
             addProductButton.Width = 250;
             addProductButton.SetValue(Grid.RowProperty, 0);
             addProductButton.SetValue(Grid.ColumnProperty, 0);
-
+            addProductButton.Style = FindResource("Flat_Button") as Style;
+            // tilføj produkt addProductButton.Click
             productGrid.Children.Add(addProductButton);
-
         }
 
         public void AddTransactionToReceipt(SaleTransaction transaction)
