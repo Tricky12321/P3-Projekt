@@ -77,33 +77,19 @@ namespace P3_Projekt_WPF.Classes
             }
         }
 
-        public string GetTransactionString()
+        public string GetProductName()
         {
             if (Product is Product)
             {
-                if ((Product as Product).DiscountBool)
-                {
-                    return $"{(Product as Product).Name} {(Product as Product).DiscountPrice}";
-                }
-                else
-                {
-                    return $"{(Product as Product).Name} {(Product as Product).SalePrice}";
-                }
+                    return $"{(Product as Product).Name}";
             }
             else if (Product is ServiceProduct)
             {
-                if ((Product as ServiceProduct).GroupLimit <= Amount)
-                {
-                    return $"{(Product as ServiceProduct).Name} {(Product as ServiceProduct).GroupPrice}";
-                }
-                else
-                {
-                    return $"{(Product as ServiceProduct).Name} {(Product as ServiceProduct).SalePrice}";
-                }
+                    return $"{(Product as ServiceProduct).Name}";
             }
             else
             {
-                return $"{(Product as TempProduct).Description} {(Product as TempProduct).SalePrice}";
+                return $"{(Product as TempProduct).Description}";
             }
         }
 

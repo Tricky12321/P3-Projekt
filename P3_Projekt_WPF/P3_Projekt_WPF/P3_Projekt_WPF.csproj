@@ -95,6 +95,7 @@
     <Compile Include="Classes\Transaction\Transaction.cs" />
     <Compile Include="Classes\Utilities\Admin.cs" />
     <Compile Include="Classes\Utilities\ReceiptListItem.cs" />
+    <Compile Include="Classes\Utilities\SettingsController.cs" />
     <Compile Include="Classes\Utilities\Utils.cs" />
     <Compile Include="Classes\Utilities\POSController.cs" />
     <Compile Include="Classes\Utilities\StatisticsController.cs" />
