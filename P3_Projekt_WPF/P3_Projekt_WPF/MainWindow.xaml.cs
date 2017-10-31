@@ -26,7 +26,7 @@ namespace P3_Projekt_WPF
 
     public partial class MainWindow : Window
     {
-        List<Button> quickButtonList = new List<Button>();
+        SettingsController _settingsController = new SettingsController();
 
         Grid productGrid = new Grid();
 
@@ -34,16 +34,15 @@ namespace P3_Projekt_WPF
         public MainWindow()
         {
             InitializeComponent();
+
+            
             InitGridQuickButtons();
+            _settingsController.AddNewQuickButton("Hej med dig", 123, grid_QuickButton.Width, grid_QuickButton.Height);
+            UpdateGridQuickButtons();
             InitStorageGridProducts();
             AddProductButton();
 
-            for (int i = 0; i < 10; ++i)
-            {
-                AddNewQuickButton($"{i} test", 123);
-            }
-
-            AddTransactionToReceipt(default(SaleTransaction));
+            AddTransactionToReceipt(new SaleTransaction(new ServiceProduct(19m, 15m, 10, "kurt", default(Group)), 12, 102));
         }
 
         private void InitGridQuickButtons()
@@ -57,20 +56,13 @@ namespace P3_Projekt_WPF
             }
         }
 
-        public void AddNewQuickButton(string buttonText, int productID)
+        private void UpdateGridQuickButtons()
         {
-            Button button = new Button();
-            button.Content = buttonText;
-            button.Height = 50;
-            button.Width = 250;
-            button.SetValue(Grid.ColumnProperty, quickButtonList.Count % 2);
-            button.SetValue(Grid.RowProperty, quickButtonList.Count / 2);
-            button.Style = FindResource("Flat_Button") as Style;
-
-            grid_QuickButton.Children.Add(button);
-            
-            quickButtonList.Add(button);
-
+            foreach (Button button in _settingsController.quickButtonList)
+            {
+                button.Style = FindResource("Flat_Button") as Style;
+                grid_QuickButton.Children.Add(button);
+            }
         }
 
         public void InitStorageGridProducts()
@@ -89,7 +81,6 @@ namespace P3_Projekt_WPF
 
 
             scroll_StorageProduct.Content = productGrid;
-
         }
 
         public void AddProductButton()
@@ -107,8 +98,7 @@ namespace P3_Projekt_WPF
 
         public void AddTransactionToReceipt(SaleTransaction transaction)
         {
-            //TODO:
-            listView_Receipt.Items.Add(new ReceiptListItem { String_Product = "test", Amount = 12, Price = "123,-" });
+            listView_Receipt.Items.Add(new ReceiptListItem { String_Product = transaction.GetProductName(), Amount = transaction.Amount, Price = $"{transaction.GetProductPrice()},-" });
 
         }
 
@@ -164,6 +154,30 @@ namespace P3_Projekt_WPF
         private void btn_TempProduct_Click(object sender, RoutedEventArgs e)
         {
 
+        }
+
+        private void btn_AddProduct_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void btn_PlusToReciept_Click(object sender, RoutedEventArgs e)
+        {
+            int inputAmount = Int32.Parse(textBox.Text);
+            if (inputAmount < 99)
+            {
+                textBox.Text = (++inputAmount).ToString();
+            }
+        }
+
+        private void btn_MinusToReciept_Click(object sender, RoutedEventArgs e)
+        {
+            int inputAmount = Int32.Parse(textBox.Text);
+
+            if (inputAmount > 1)
+            {
+                textBox.Text = (--inputAmount).ToString();
+            }
         }
     }
 }
