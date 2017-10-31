@@ -11,6 +11,16 @@ namespace P3_Projekt_WPF.Classes.Utilities.Tests
     [TestFixture()]
     public class POSControllerTests
     {
+        [TearDown]
+        public void ResetStatic()
+        {
+            StorageRoom.IDCounter = 0;
+            BaseProduct.IDCounter = 0;
+            Group.IDCounter = 0;
+            Transaction.IDCounter = 0;
+            Receipt.IDCounter = 0;
+        }
+
         [Test()]
         public void AddSaleTransactionTest()
         {
@@ -55,21 +65,98 @@ namespace P3_Projekt_WPF.Classes.Utilities.Tests
         }
 
         [Test()]
-        public void RemoveTransactionFromReceiptTest()
+        public void RemoveTransactionFromReceiptTestOneTransaction()
         {
-            Assert.Fail();
+            StorageController SC = new StorageController();
+            POSController POSC = new POSController(SC);
+            POSC.StartPurchase();
+            SC.ProductDictionary.Add(0, new Product("test1", "blabla", 1.25m, SC.GroupDictionary[0], false, 5.0m, 3.0m, null));
+            SaleTransaction transaction = new SaleTransaction(SC.ProductDictionary[0], 5, 0);
+            POSC.PlacerholderReceipt.Transactions.Add(transaction);
+
+            bool b1 = POSC.PlacerholderReceipt.Transactions.Contains(transaction);
+
+            POSC.RemoveTransactionFromReceipt(0);
+
+            bool b2 = !POSC.PlacerholderReceipt.Transactions.Contains(transaction);
+
+            Assert.IsTrue(b1 && b2);
         }
 
+        [Test()]
+        public void RemoveTransactionFromReceiptTestSeveralTransactions()
+        {
+            StorageController SC = new StorageController();
+            POSController POSC = new POSController(SC);
+            POSC.StartPurchase();
+            SC.ProductDictionary.Add(0, new Product("test1", "blabla", 1.25m, SC.GroupDictionary[0], false, 5.0m, 3.0m, null));
+            SC.ProductDictionary.Add(1, new Product("test1", "blabla", 1.25m, SC.GroupDictionary[0], false, 5.0m, 3.0m, null));
+            SC.ProductDictionary.Add(2, new Product("test1", "blabla", 1.25m, SC.GroupDictionary[0], false, 5.0m, 3.0m, null));
+            SaleTransaction transaction1 = new SaleTransaction(SC.ProductDictionary[0], 5, 0);
+            SaleTransaction transaction2 = new SaleTransaction(SC.ProductDictionary[1], 1, 0);
+            SaleTransaction transaction3 = new SaleTransaction(SC.ProductDictionary[2], 1, 0);
+            POSC.PlacerholderReceipt.Transactions.Add(transaction1);
+            POSC.PlacerholderReceipt.Transactions.Add(transaction2);
+            POSC.PlacerholderReceipt.Transactions.Add(transaction3);
+
+            bool b1 = POSC.PlacerholderReceipt.Transactions.Contains(transaction1);
+            bool b2 = POSC.PlacerholderReceipt.Transactions.Contains(transaction2);
+            bool b3 = POSC.PlacerholderReceipt.Transactions.Contains(transaction3);
+
+            POSC.RemoveTransactionFromReceipt(1);
+
+            bool b4 = POSC.PlacerholderReceipt.Transactions.Contains(transaction1);
+            bool b5 = !POSC.PlacerholderReceipt.Transactions.Contains(transaction2);
+            bool b6 = POSC.PlacerholderReceipt.Transactions.Contains(transaction3);
+
+            Assert.IsTrue(b1 && b2 && b3 && b4 && b5 && b6);
+        }
+
+        /*Database method
         [Test()]
         public void DeleteTransactionTest()
         {
             Assert.Fail();
+        }*/
+
+        [Test()]
+        public void ExecuteReceiptTestOneTransaction()
+        {
+            StorageController SC = new StorageController();
+            POSController POSC = new POSController(SC);
+            POSC.StartPurchase();
+            SC.ProductDictionary.Add(0, new Product("test1", "blabla", 1.25m, SC.GroupDictionary[0], false, 5.0m, 3.0m, null));
+            SC.ProductDictionary[0].StorageWithAmount.Add(0, 9);
+            POSC.PlacerholderReceipt.Transactions.Add(new SaleTransaction(SC.ProductDictionary[0], 5, 0));
+
+            POSC.ExecuteReceipt();
+
+            Assert.IsTrue(SC.ProductDictionary[0].StorageWithAmount[0] == 4);
         }
 
         [Test()]
-        public void ExecuteReceiptTest()
+        public void ExecuteReceiptTestThreeTransactions()
         {
-            Assert.Fail();
+            StorageController SC = new StorageController();
+            POSController POSC = new POSController(SC);
+            POSC.StartPurchase();
+            SC.ProductDictionary.Add(0, new Product("test1", "blabla", 1.25m, SC.GroupDictionary[0], false, 5.0m, 3.0m, null));
+            SC.ProductDictionary.Add(1, new Product("test1", "blabla", 1.25m, SC.GroupDictionary[0], false, 5.0m, 3.0m, null));
+            SC.ProductDictionary.Add(2, new Product("test1", "blabla", 1.25m, SC.GroupDictionary[0], false, 5.0m, 3.0m, null));
+            SC.ProductDictionary[0].StorageWithAmount.Add(0, 9);
+            SC.ProductDictionary[1].StorageWithAmount.Add(0, 15);
+            SC.ProductDictionary[2].StorageWithAmount.Add(0, 2);
+            POSC.PlacerholderReceipt.Transactions.Add(new SaleTransaction(SC.ProductDictionary[0], 6, 0));
+            POSC.PlacerholderReceipt.Transactions.Add(new SaleTransaction(SC.ProductDictionary[1], 8, 0));
+            POSC.PlacerholderReceipt.Transactions.Add(new SaleTransaction(SC.ProductDictionary[2], 1, 0));
+
+            POSC.ExecuteReceipt();
+
+            bool b1 = SC.ProductDictionary[0].StorageWithAmount[0] == 3;
+            bool b2 = SC.ProductDictionary[1].StorageWithAmount[0] == 7;
+            bool b3 = SC.ProductDictionary[2].StorageWithAmount[0] == 1;
+
+            Assert.IsTrue(b1 && b2 && b3);
         }
 
         [Test()]
