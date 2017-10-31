@@ -33,23 +33,14 @@ namespace P3_Projekt_WPF.Classes
             GetFromDatabase();
         }
 
+        //If transaction contains Product, decrements the shop storage room(ID 0) by amount
+        //If transaction contains Temporary- or ServiceProduct, does nothing, since these do not have storage amounts
         public override void Execute()
         {
             if (Product is Product)
             {
-                /* Finder første storage room, som altid er butikken. Butikken har ID 0.
-                 * Derefter bruger den StorageRoom delen som index,
-                 * så man kan ændre Amount */
-                var StoreStorage = (Product as Product).StorageWithAmount.Where(x => x.Key == 0).First();
-
-                (Product as Product).StorageWithAmount[StoreStorage.Key] -= Amount;
+                (Product as Product).StorageWithAmount[0] -= Amount;
             }
-            else
-            {
-                /*Gør ingenting, fordi temp og service produkt ved ikke, hvilket lager de er på.
-                 * Derfor kan der ikke ændres lagerstatus */
-            }
-
         }
 
         public int GetID()
@@ -92,33 +83,19 @@ namespace P3_Projekt_WPF.Classes
             }
         }
 
-        public string GetTransactionString()
+        public string GetProductName()
         {
             if (Product is Product)
             {
-                if ((Product as Product).DiscountBool)
-                {
-                    return $"{(Product as Product).Name} {(Product as Product).DiscountPrice}";
-                }
-                else
-                {
-                    return $"{(Product as Product).Name} {(Product as Product).SalePrice}";
-                }
+                    return $"{(Product as Product).Name}";
             }
             else if (Product is ServiceProduct)
             {
-                if ((Product as ServiceProduct).GroupLimit <= Amount)
-                {
-                    return $"{(Product as ServiceProduct).Name} {(Product as ServiceProduct).GroupPrice}";
-                }
-                else
-                {
-                    return $"{(Product as ServiceProduct).Name} {(Product as ServiceProduct).SalePrice}";
-                }
+                    return $"{(Product as ServiceProduct).Name}";
             }
             else
             {
-                return $"{(Product as TempProduct).Description} {(Product as TempProduct).SalePrice}";
+                return $"{(Product as TempProduct).Description}";
             }
         }
 

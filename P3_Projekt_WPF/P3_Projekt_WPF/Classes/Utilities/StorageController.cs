@@ -390,9 +390,8 @@ namespace P3_Projekt_WPF.Classes.Utilities
         public void MergeTempProduct(TempProduct tempProductToMerge, int matchedProductID)
         {
             SaleTransaction tempProductsTransaction = tempProductToMerge.GetTempProductsSaleTransaction();
-            var StoreStorage = ProductDictionary[matchedProductID].StorageWithAmount.Where(x => x.Key == 0).First();
 
-            ProductDictionary[matchedProductID].StorageWithAmount[StoreStorage.Key] -= tempProductsTransaction.Amount;
+            ProductDictionary[matchedProductID].StorageWithAmount[0] -= tempProductsTransaction.Amount;
             tempProductsTransaction.EditSaleTransactionFromTempProduct(ProductDictionary[matchedProductID]);
             tempProductToMerge.Resolve();
             TempProductList.Remove(tempProductToMerge);
@@ -426,10 +425,13 @@ namespace P3_Projekt_WPF.Classes.Utilities
         {
             foreach (Product product in ProductDictionary.Values)
             {
-                product.StorageWithAmount.Remove(StorageRoomDictionary[id].ID);
+                product.StorageWithAmount.Remove(id);
+                product.UpdateInDatabase();
             }
             StorageRoomDictionary.Remove(id);
-
+            string deleteQuery = $"DELETE FROM `storagerooms` WHERE `id` = '{id}'";
+            Mysql Connection = new Mysql();
+            Connection.RunQuery(deleteQuery);
         }
     }
 }
