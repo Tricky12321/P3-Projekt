@@ -158,5 +158,24 @@ namespace P3_Projekt_WPF
         {
 
         }
+
+        private void btn_PlusToReciept_Click(object sender, RoutedEventArgs e)
+        {
+            int inputAmount = Int32.Parse(textBox.Text);
+            if (inputAmount < 99)
+            {
+                textBox.Text = (++inputAmount).ToString();
+            }
+        }
+
+        private void btn_MinusToReciept_Click(object sender, RoutedEventArgs e)
+        {
+            int inputAmount = Int32.Parse(textBox.Text);
+
+            if (inputAmount > 1)
+            {
+                textBox.Text = (--inputAmount).ToString();
+            }
+        }
     }
 }
