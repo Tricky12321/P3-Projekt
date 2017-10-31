@@ -121,5 +121,10 @@ namespace P3_Projekt_WPF
         {
 
         }
+
+        private void btn_TempProduct_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }
