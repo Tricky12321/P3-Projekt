@@ -11,13 +11,18 @@
         <TabControl x:Name="tabControl" FontSize="30" SelectionChanged="tabControl_SelectionChanged_1" Margin="0,0,0.333,-0.333" Grid.RowSpan="3">
             <TabItem Header="Salg" Width="190">
                 <Grid Background="#FFE5E5E5" Margin="0,1,0.333,-1.333">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="971*"/>
+                        <ColumnDefinition Width="450*"/>
+                        <ColumnDefinition Width="465*"/>
+                    </Grid.ColumnDefinitions>
 
 
-                    <Button x:Name="But_Cash"  Content="Kontant" Margin="0,0,10.334,120" Background="#FFC5C5C5" Style="{StaticResource Flat_Button}" Height="50" Width="260" VerticalAlignment="Bottom" HorizontalAlignment="Right" Grid.ColumnSpan="2"/>
-                    <Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="100" VerticalAlignment="Top" Width="1887" Grid.ColumnSpan="2"/>
-                    <Button x:Name="but_Card"  Content="Dankort" Margin="0,0,10.334,65" Background="#FFC5C5C5" Style="{StaticResource Flat_Button}" Height="50" Width="260" VerticalAlignment="Bottom" HorizontalAlignment="Right" Grid.ColumnSpan="2"/>
-                    <Button x:Name="but_MobilePay"  Content="MobilePay" Margin="0,0,10.334,10" Background="#FFC5C5C5" Style="{StaticResource Flat_Button}" Click="but_MobilePay_Click" Height="50" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="260" Grid.ColumnSpan="2"/>
-                    <ListView x:Name="listView_Receipt" Margin="0,105,10,194" FontSize="23" SelectionChanged="listView_Receipt_SelectionChanged" HorizontalAlignment="Right" Width="900">
+                    <Button x:Name="But_Cash"  Content="Kontant" Margin="0,0,10,120.333" Background="#FFC5C5C5" Style="{StaticResource Flat_Button}" Height="50" Width="260" VerticalAlignment="Bottom" HorizontalAlignment="Right" Grid.Column="2"/>
+                    <Border BorderBrush="Black" BorderThickness="1" Height="1" VerticalAlignment="Top" Margin="-34,71,-79,0" Grid.ColumnSpan="3"/>
+                    <Button x:Name="but_Card"  Content="Dankort" Margin="0,0,10,65.333" Background="#FFC5C5C5" Style="{StaticResource Flat_Button}" Height="50" Width="260" VerticalAlignment="Bottom" HorizontalAlignment="Right" Grid.Column="2"/>
+                    <Button x:Name="but_MobilePay"  Content="MobilePay" Margin="0,0,10,10.333" Background="#FFC5C5C5" Style="{StaticResource Flat_Button}" Click="but_MobilePay_Click" Height="50" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="260" Grid.Column="2"/>
+                    <ListView x:Name="listView_Receipt" Margin="6,106,0,175.333" FontSize="23" SelectionChanged="listView_Receipt_SelectionChanged" Grid.ColumnSpan="2" Grid.Column="1">
                         <ListView.View>
                             <GridView>
                                 <GridViewColumn>
@@ -89,15 +94,47 @@
                             </GridView>
                         </ListView.View>
                     </ListView>
-                    <Button x:Name="But_EditReceipt"  Content="Rediger Kvittering" Margin="10,10,0,0" Background="#FFC5C5C5" Style="{StaticResource Flat_Button}" Height="80" VerticalAlignment="Top" HorizontalAlignment="Left" Width="299"/>
-                    <Grid x:Name="grid_QuickButton" Height="759" Margin="10,228,915,0" VerticalAlignment="Top"/>
-                    <Border BorderBrush="Black" BorderThickness="1" Margin="0,100,914,0" Background="Black" HorizontalAlignment="Right" Width="1"/>
-                    <Button x:Name="btn_addProduct"  Content="Tilføj Produkt" Margin="701,117,0,0" Background="#FFC5C5C5" Style="{StaticResource Flat_Button}" Height="50" VerticalAlignment="Top" HorizontalAlignment="Left" Width="260"/>
+                    <Button x:Name="But_EditReceipt"  Content="Rediger Kvittering" Margin="10,10,0,0" Background="#FFC5C5C5" Style="{StaticResource Flat_Button}" Height="50" VerticalAlignment="Top" HorizontalAlignment="Left" Width="250"/>
+                    <Grid x:Name="grid_QuickButton" Height="759" Margin="10,228,0,0" VerticalAlignment="Top"/>
+                    <Border BorderBrush="Black" BorderThickness="1" Margin="0,100,0,0.333" Background="Black" HorizontalAlignment="Left" Width="1" Grid.Column="1"/>
+                    <Button x:Name="btn_AddProduct"  Content="Tilføj Produkt" Margin="0,117,10,0" Background="#FFC5C5C5" Style="{StaticResource Flat_Button}" Height="50" VerticalAlignment="Top" HorizontalAlignment="Right" Width="260"/>
+                    <Button x:Name="btn_TempProduct" Content="Midlertidigt Produkt" Margin="0,0,10,8.333" Style="{StaticResource Flat_Button}" HorizontalAlignment="Right" Width="350" Click="btn_TempProduct_Click" Height="50" VerticalAlignment="Bottom"/>
+                    <Button x:Name="btn_PlusToReciept" Content="+" HorizontalAlignment="Left" Margin="392,117,0,0" VerticalAlignment="Top" Width="35" Height="50" Style="{StaticResource Flat_Button}" RenderTransformOrigin="-0.486,0.333"/>
+                    <Button x:Name="btn_MinusToReciept" Content="-" HorizontalAlignment="Left" Margin="432,118,0,0" VerticalAlignment="Top" Width="35" Height="50" Style="{StaticResource Flat_Button}"/>
+                    <Button x:Name="btn_CancelReciept" Content="Afbryd" Margin="10,0,0,8.333" Style="{StaticResource Flat_Button}" Grid.Column="1" HorizontalAlignment="Left" Width="350" Height="50" VerticalAlignment="Bottom"/>
+                    <TextBox Padding="10,0,0,0" x:Name="AddProductID" Margin="10,115,0,0" FontSize="33" HorizontalAlignment="Left" Width="350" Height="52" VerticalAlignment="Top">
+                        <TextBox.Resources>
+                            <Style TargetType="{x:Type Border}">
+                                <Setter Property="CornerRadius" Value="10"/>
+                            </Style>
+                        </TextBox.Resources>
+                    </TextBox>
+                    <TextBlock IsHitTestVisible="False" Text="Tilføj Produkt med ID" VerticalAlignment="Top" Margin="22,118,0,0" Foreground="DarkGray" Height="50" FontSize="33" HorizontalAlignment="Left" Width="326">
+                        <TextBlock.Style>
+                            <Style TargetType="{x:Type TextBlock}">
+                                <Setter Property="Visibility" Value="Collapsed"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Text, ElementName=AddProductID}" Value="">
+                                        <Setter Property="Visibility" Value="Visible"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </TextBlock.Style>
+                    </TextBlock>
+                    <TextBox x:Name="textBox" HorizontalAlignment="Left" Height="50" Margin="472,118,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="60">
+                        <TextBox.Resources>
+                            <Style TargetType="{x:Type Border}">
+                                <Setter Property="CornerRadius" Value="10"/>
+                            </Style>
+                        </TextBox.Resources>
+                    </TextBox>
+                        
                 </Grid>
             </TabItem>
             <TabItem Header="Lager" Width="190">
                 <Grid Background="#FFE5E5E5" Margin="0">
-                    <Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="100" VerticalAlignment="Top" Width="1887"/>
+                    <Border BorderBrush="Black" BorderThickness="1" Height="1" VerticalAlignment="Top" Margin="-34,71,-79,0"/>
+                    <Button x:Name="btn_MoveProduct" Content="Flyt Produkt" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="250" Height="50" Style="{StaticResource Flat_Button}"/>
                 </Grid>
             </TabItem>
             <TabItem Header="Statistik" Width="190">
@@ -152,25 +189,7 @@
                     </Style>
                 </TextBlock.Style>
             </TextBlock>
-            <TextBox Padding="10,0,0,0" x:Name="AddProductID" Margin="10,177,0,0" FontSize="23" HorizontalAlignment="Left" Width="350" Height="35" VerticalAlignment="Top">
-                <TextBox.Resources>
-                    <Style TargetType="{x:Type Border}">
-                        <Setter Property="CornerRadius" Value="10"/>
-                    </Style>
-                </TextBox.Resources>
-            </TextBox>
-            <TextBlock IsHitTestVisible="False" Text="Søg efter produkt" VerticalAlignment="Top" Margin="22,179,0,0" Foreground="DarkGray" Height="34" FontSize="23" HorizontalAlignment="Left" Width="245">
-                <TextBlock.Style>
-                    <Style TargetType="{x:Type TextBlock}">
-                        <Setter Property="Visibility" Value="Collapsed"/>
-                        <Style.Triggers>
-                            <DataTrigger Binding="{Binding Text, ElementName=AddProductID}" Value="">
-                                <Setter Property="Visibility" Value="Visible"/>
-                            </DataTrigger>
-                        </Style.Triggers>
-                    </Style>
-                </TextBlock.Style>
-            </TextBlock>
+
         </Grid>
 
 
