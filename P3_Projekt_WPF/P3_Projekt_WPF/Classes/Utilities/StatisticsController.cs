@@ -33,7 +33,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
 
             Mysql Connection = new Mysql();
             TableDecode Return = Connection.RunQueryWithReturn(requestStatisticsQuery);
-
+            
             foreach(Row row in Return.RowData)
             {
                 TransactionsForStatistics.Add(new SaleTransaction(row));
