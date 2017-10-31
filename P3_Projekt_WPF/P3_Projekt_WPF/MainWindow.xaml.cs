@@ -28,6 +28,9 @@ namespace P3_Projekt_WPF
     {
         SettingsController _settingsController = new SettingsController();
 
+        Grid productGrid = new Grid();
+
+
         public MainWindow()
         {
             InitializeComponent();
@@ -36,6 +39,8 @@ namespace P3_Projekt_WPF
             InitGridQuickButtons();
             _settingsController.AddNewQuickButton("Hej med dig", 123, grid_QuickButton.Width, grid_QuickButton.Height);
             UpdateGridQuickButtons();
+            InitStorageGridProducts();
+            AddProductButton();
 
             AddTransactionToReceipt(new SaleTransaction(new ServiceProduct(19m, 15m, 10, "kurt", default(Group)), 12, 102));
         }
@@ -60,6 +65,40 @@ namespace P3_Projekt_WPF
             }
         }
 
+
+        }
+
+        public void InitStorageGridProducts()
+        {
+
+
+            productGrid.ColumnDefinitions.Add(new ColumnDefinition());
+
+            productGrid.ColumnDefinitions.Add(new ColumnDefinition());
+
+            productGrid.ColumnDefinitions.Add(new ColumnDefinition());
+
+            productGrid.ColumnDefinitions.Add(new ColumnDefinition());
+
+            productGrid.RowDefinitions.Add(new RowDefinition());
+
+
+            scroll_StorageProduct.Content = productGrid;
+
+        }
+
+        public void AddProductButton()
+        {
+            Button addProductButton = new Button();
+            addProductButton.Content = "+";
+            addProductButton.Height = 500;
+            addProductButton.Width = 250;
+            addProductButton.SetValue(Grid.RowProperty, 0);
+            addProductButton.SetValue(Grid.ColumnProperty, 0);
+
+            productGrid.Children.Add(addProductButton);
+
+        }
 
         public void AddTransactionToReceipt(SaleTransaction transaction)
         {
