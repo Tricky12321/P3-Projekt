@@ -17,7 +17,7 @@ namespace P3_Projekt_WPF.Classes
         public int NumberOfProducts;
         public decimal TotalPrice;
         public decimal PaidPrice;
-        public bool CashOrCard;
+        public int CashOrCard;
         public DateTime Date;
 
         
@@ -26,7 +26,17 @@ namespace P3_Projekt_WPF.Classes
             ID = _idCounter++;
             Date = DateTime.Now;
         }
+        
+        public Receipt(int ID)
+        {
+            this.ID = ID;
+            GetFromDatabase();
+        }
 
+        public Receipt(Row row)
+        {
+            CreateFromRow(row);
+        }
         public void AddTransaction(SaleTransaction transaction)
         {
             //Checks if product is already in reciept//
@@ -94,7 +104,7 @@ namespace P3_Projekt_WPF.Classes
             }
             else
             {
-                throw new ProductAlreadyDeActivated("Transaktionens produkt har ikke en valid type!");
+                throw new WrongProductTypeException("Transaktionens produkt har ikke en valid type!");
             }
 
             return priceTotal;
@@ -136,10 +146,8 @@ namespace P3_Projekt_WPF.Classes
 
         public void Delete()
         {
-            foreach (Transaction transaction in Transactions)
-            {
-                /**/
-            }
+            // TODO: Delete receipt skal laves? 
+            throw new NotImplementedException();
         }
 
         public void Execute()
@@ -153,48 +161,53 @@ namespace P3_Projekt_WPF.Classes
 
         public void GetFromDatabase()
         {
-            string sql = $"SELECT * FROM receipts WHERE id = {ID}";
-            Mysql Connection = new Mysql();
-            CreateFromRow(Connection.RunQueryWithReturn(sql).RowData[0]);
+            string sql = $"SELECT * FROM `receipt` WHERE `id` = '{ID}'";
+            CreateFromRow(Mysql.RunQueryWithReturn(sql).RowData[0]);
         }
 
         public void CreateFromRow(Row Table)
         {
             ID = Convert.ToInt32(Table.Values[0]);
             NumberOfProducts = Convert.ToInt32(Table.Values[1]);
-            TotalPrice = Convert.ToInt32(Table.Values[2]);
-            PaidPrice = Convert.ToInt32(Table.Values[3]);
-            CashOrCard = Convert.ToBoolean(Table.Values[4]);
-            string sql = $"SELECT * FROM `sale_transaction` WHERE `receipt_id` = '{ID}'";
-            Mysql Connection = new Mysql();
-            TableDecode Results = Connection.RunQueryWithReturn(sql);
-            Transactions = new List<SaleTransaction>();
-            foreach (var item in Results.RowData)
+            TotalPrice = Convert.ToDecimal(Table.Values[2]);
+            PaidPrice = Convert.ToDecimal(Table.Values[3]);
+            CashOrCard = Convert.ToInt32(Table.Values[4]);
+            string sql = $"SELECT * FROM `sale_transactions` WHERE `receipt_id` = '{ID}' AND `amount` != 0";
+            try
             {
-                SaleTransaction newSaleTransaction = new SaleTransaction(item);
-                Transactions.Add(newSaleTransaction);
+                TableDecode Results = Mysql.RunQueryWithReturn(sql);
+                Transactions = new List<SaleTransaction>();
+                foreach (var item in Results.RowData)
+                {
+                    SaleTransaction newSaleTransaction = new SaleTransaction(item);
+                    Transactions.Add(newSaleTransaction);
+                }
             }
+            catch (EmptyTableException)
+            {
+
+            }
+
             Date = Convert.ToDateTime(Table.Values[5]);
         }
 
         public void UploadToDatabase()
         {
-
             string sql = "INSERT INTO `receipt` (`id`, `number_of_products`, `total_price`, `paid_price`, `payment_method`, `datetime`)"+
-                $" VALUES (NULL, '{NumberOfProducts}', '{TotalPrice}', '{PaidPrice}', '{Convert.ToBoolean(CashOrCard)}', FROM_UNIXTIME('{Utils.GetUnixTime(Date)}'));";
+                $" VALUES (NULL, '{NumberOfProducts}', '{TotalPrice}', '{PaidPrice}', '{CashOrCard}', FROM_UNIXTIME('{Utils.GetUnixTime(Date)}'));";
         }
 
         public void UpdateInDatabase()
         {
-            string sql = $"UPDATE `receipt` SET" +
+            string sql = $"UPDATE `receipt` SET " +
                 $"`number_of_products` = '{NumberOfProducts}'," +
                 $"`total_price` = '{TotalPrice}'," +
                 $"`paid_price` = '{PaidPrice}'," +
-                $"`payment_method` = '{Convert.ToBoolean(CashOrCard)}'," +
-                $"`datetime` = FROM_UNIXTIME('{Utils.GetUnixTime(Date)}'"+
+                $"`payment_method` = '{CashOrCard}'," +
+                $"`datetime` = FROM_UNIXTIME('{Utils.GetUnixTime(Date)}') "+
                 $"WHERE `id` = {ID};";
-            Mysql Connection = new Mysql();
-            Connection.RunQuery(sql);
+            Mysql.RunQuery(sql);
         }
+        
     }
 }

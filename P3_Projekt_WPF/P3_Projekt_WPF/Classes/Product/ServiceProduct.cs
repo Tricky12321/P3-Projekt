@@ -34,8 +34,7 @@ namespace P3_Projekt_WPF.Classes
         public override void GetFromDatabase()
         {
             string sql = $"SELECT * FROM `service_products` WHERE `id` = {ID}";
-            Mysql Connection = new Mysql();
-            CreateFromRow(Connection.RunQueryWithReturn(sql).RowData[0]);
+            CreateFromRow(Mysql.RunQueryWithReturn(sql).RowData[0]);
         }
 
         public override void CreateFromRow(Row results)
@@ -52,21 +51,19 @@ namespace P3_Projekt_WPF.Classes
         {
             string sql = $"INSERT INTO `service_products` (`id`, `name`, `price`, `group_price`, `group_limit`, `groups`)" +
             $"VALUES (NULL, '{Name}', '{SalePrice}','{GroupPrice}','{GroupLimit}','{ServiceProductGroup.ID}');";
-            Mysql Connection = new Mysql();
-            Connection.RunQuery(sql);
+            Mysql.RunQuery(sql);
         }
 
         public override void UpdateInDatabase()
         {
-            string sql = $"UPDATE `service_products` SET" +
+            string sql = $"UPDATE `service_products` SET " +
                 $"`name` = '{Name}'," +
                 $"`price` = '{SalePrice}'," +
                 $"`group_price` = '{GroupPrice}'," +
                 $"`group_limit` = '{GroupLimit}'," +
-                $"`groups` = '{ServiceProductGroup.ID}'"+
+                $"`groups` = '{ServiceProductGroup.ID}' "+
                 $"WHERE `id` = {ID};";
-            Mysql Connection = new Mysql();
-            Connection.RunQuery(sql);
+            Mysql.RunQuery(sql);
         }
     }
 }

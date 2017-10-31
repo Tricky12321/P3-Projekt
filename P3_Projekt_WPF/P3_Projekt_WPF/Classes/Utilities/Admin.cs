@@ -13,9 +13,8 @@ namespace P3_Projekt_WPF.Classes.Utilities
         {
             string pwdSaltedAndHashed = SaltAndHashPassword(passwordInput);
 
-            string setQuery = $"UPDATE `admin_password` SET `admin_password` = '{pwdSaltedAndHashed}' WHERE ´id´ = '1'";
-            Mysql Connection = new Mysql();
-            Connection.RunQuery(setQuery);
+            string setQuery = $"UPDATE `admin_password` SET `admin_password` = '{pwdSaltedAndHashed}' WHERE `id` = '1'";
+            Mysql.RunQuery(setQuery);
         }
         
         // Generates a random salt
@@ -40,8 +39,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
         public static bool VerifyPassword (string passwordInput)
         {
             string getQuery = $"SELECT `admin_password` FROM `admin_password` WHERE `id` = '1'";
-            Mysql Connection = new Mysql();
-            string storedPassword = Connection.RunQueryWithReturn(getQuery).RowData[0].Values[0];
+            string storedPassword = Mysql.RunQueryWithReturn(getQuery).RowData[0].Values[0];
 
             string storedPasswordSaltedAndHashed = SaltAndHashPassword(passwordInput);
 

@@ -46,8 +46,7 @@ namespace P3_Projekt_WPF.Classes
         public override void GetFromDatabase()
         {
             string sql = $"SELECT * FROM `order_transactions` WHERE `id` = {_id}";
-            Mysql Connection = new Mysql();
-            CreateFromRow(Connection.RunQueryWithReturn(sql).RowData[0]);
+            CreateFromRow(Mysql.RunQueryWithReturn(sql).RowData[0]);
         }
 
         public override void CreateFromRow(Row Table)
@@ -70,16 +69,15 @@ namespace P3_Projekt_WPF.Classes
 
         public override void UpdateInDatabase()
         {
-            string sql = $"UPDATE `order_transaction` SET" +
+            string sql = $"UPDATE `order_transaction` SET " +
                $"`product_id` = '{Product.ID}'," +
                $"`amount` = '{Amount}'," +
                $"`datetime` = FROM_UNIXTIME('{Utils.GetUnixTime(Date)}')," +
                $"`purchase_price` = '{_purchasePrice}'," +
                $"`supplier` = '{_supplier}'," +
-               $"`storageroom_id` = '{_storageRoomID}'" +
+               $"`storageroom_id` = '{_storageRoomID}' " +
                $"WHERE `id` = {_id};";
-            Mysql Connection = new Mysql();
-            Connection.RunQuery(sql);
+            Mysql.RunQuery(sql);
         }
 
 
