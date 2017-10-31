@@ -31,9 +31,8 @@ namespace P3_Projekt_WPF.Classes.Utilities
             string requestStatisticsQuery = 
                 $"SELECT * FROM ´sale_transactions´ WHERE FROM_UNIXTIME(sale_transactions.`datetime`) >= '{fromUnixTime}' AND FROM_UNIXTIME(sale_transactions.`datetime`) <= '{toUnixTime}';";
 
-            Mysql Connection = new Mysql();
-            TableDecode Return = Connection.RunQueryWithReturn(requestStatisticsQuery);
-
+            TableDecode Return = Mysql.RunQueryWithReturn(requestStatisticsQuery);
+            
             foreach(Row row in Return.RowData)
             {
                 TransactionsForStatistics.Add(new SaleTransaction(row));
@@ -49,8 +48,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
             string requestStatisticsQuery =
                 $"SELECT * FROM ´sale_transactions´ WHERE FROM_UNIXTIME(sale_transactions.`datetime`) == '{today}';";
 
-            Mysql Connection = new Mysql();
-            TableDecode Return = Connection.RunQueryWithReturn(requestStatisticsQuery);
+            TableDecode Return = Mysql.RunQueryWithReturn(requestStatisticsQuery);
 
             foreach (Row row in Return.RowData)
             {
@@ -67,8 +65,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
             string requestStatisticsQuery =
                 $"SELECT * FROM ´sale_transactions´ WHERE FROM_UNIXTIME(sale_transactions.`datetime`) == '{yesterday}';";
 
-            Mysql Connection = new Mysql();
-            TableDecode Return = Connection.RunQueryWithReturn(requestStatisticsQuery);
+            TableDecode Return = Mysql.RunQueryWithReturn(requestStatisticsQuery);
 
             foreach (Row row in Return.RowData)
             {

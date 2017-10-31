@@ -15,7 +15,6 @@ namespace P3_Projekt_WPF.Classes.Utilities
     {
         /*
          * TODO: fiks metoden til at loade ID til transaction
-         * TODO: Fix constructoren så den ikke kræver BoerglumAbbeyStorageandSale
          */
         public Receipt PlacerholderReceipt;
         private StorageController _storageController;
@@ -75,13 +74,15 @@ namespace P3_Projekt_WPF.Classes.Utilities
             PlacerholderReceipt.RemoveTransaction(productID);
         }
 
+        /*
+         * TODO: Denne funktion skal føjst sansynligt ikke være her...
         public void DeleteTransaction(int transactionID)
         {
-            // TODO: Vær sikker på hvad transactions tabellen skal hedde!!
-            string deleteQuery = $"DELETE FROM transactions WHERE ID = {transactionID}";
+            string deleteQuery = $"DELETE FROM `transactions` WHERE ID = {transactionID}";
             Mysql Connection = new Mysql();
             Connection.RunQuery(deleteQuery);
         }
+        */
 
         public void ExecuteReceipt()
         {

@@ -39,6 +39,9 @@ namespace P3_Projekt_WPF
             POSController _POSController = new POSController(_storageController);
 
             InitializeComponent();
+            Mysql.Connect(); // Forbinder til databasen
+            var gridView = new GridView();
+            listView_Receipt.View = gridView;
 
             InitGridQuickButtons();
 
@@ -78,6 +81,8 @@ namespace P3_Projekt_WPF
 
         public void InitStorageGridProducts()
         {
+            productGrid.VerticalAlignment = VerticalAlignment.Top;
+
             productGrid.ColumnDefinitions.Add(new ColumnDefinition());
 
             productGrid.ColumnDefinitions.Add(new ColumnDefinition());
@@ -100,9 +105,9 @@ namespace P3_Projekt_WPF
             addProductButton.Width = 250;
             addProductButton.SetValue(Grid.RowProperty, 0);
             addProductButton.SetValue(Grid.ColumnProperty, 0);
-
+            addProductButton.Style = FindResource("Flat_Button") as Style;
+            // tilføj produkt addProductButton.Click
             productGrid.Children.Add(addProductButton);
-
         }
 
         public void AddTransactionToReceipt(SaleTransaction transaction)
@@ -177,6 +182,25 @@ namespace P3_Projekt_WPF
                 e.Handled = true;
         }
 
+        }
+
+        private void btn_PlusToReciept_Click(object sender, RoutedEventArgs e)
+        {
+            int inputAmount = Int32.Parse(textBox.Text);
+            if (inputAmount < 99)
+            {
+                textBox.Text = (++inputAmount).ToString();
+            }
+        }
+
+        private void btn_MinusToReciept_Click(object sender, RoutedEventArgs e)
+        {
+            int inputAmount = Int32.Parse(textBox.Text);
+
+            if (inputAmount > 1)
+            {
+                textBox.Text = (--inputAmount).ToString();
+            }
         private void TextInputNoNumberWithComma(object sender, TextCompositionEventArgs e)
         {
             // xaml.cs code

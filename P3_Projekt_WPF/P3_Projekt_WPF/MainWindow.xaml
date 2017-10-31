@@ -123,8 +123,8 @@
                     <Grid x:Name="grid_QuickButton" Margin="10,73,860,65.667" Grid.Row="1"/>
                     <Border BorderBrush="Black" BorderThickness="1" Margin="0,0,854,-0.333" Background="Black" Width="1" Grid.Row="1" HorizontalAlignment="Right"/>
                     <Button x:Name="btn_AddProduct"  Content="Tilføj Produkt" Margin="593,17,0,0" Background="#FFC5C5C5" Style="{StaticResource Flat_Button}" HorizontalAlignment="Left" Width="260" Grid.Row="1" Height="50" VerticalAlignment="Top" Click="btn_AddProduct_Click"/>
-                    <Button x:Name="btn_PlusToReciept" Content="+" HorizontalAlignment="Left" Margin="386,17,0,0" Width="35" Style="{StaticResource Flat_Button}" RenderTransformOrigin="-0.486,0.333" Grid.Row="1" Height="50" VerticalAlignment="Top"/>
-                    <Button x:Name="btn_MinusToReciept" Content="-" HorizontalAlignment="Left" Margin="426,17,0,0" Width="35" Style="{StaticResource Flat_Button}" FontSize="30" Grid.Row="1" Height="50" VerticalAlignment="Top"/>
+                    <Button x:Name="btn_PlusToReciept" Content="+" HorizontalAlignment="Left" Margin="386,17,0,0" Width="35" Style="{StaticResource Flat_Button}" RenderTransformOrigin="-0.486,0.333" Grid.Row="1" Height="50" VerticalAlignment="Top" Click="btn_PlusToReciept_Click"/>
+                    <Button x:Name="btn_MinusToReciept" Content="-" HorizontalAlignment="Left" Margin="426,17,0,0" Width="35" Style="{StaticResource Flat_Button}" FontSize="30" Grid.Row="1" Height="50" VerticalAlignment="Top" Click="btn_MinusToReciept_Click"/>
 
 
 
@@ -183,10 +183,7 @@
                 <Grid Background="#FFE5E5E5" Margin="0">
                     <Border BorderBrush="Black" BorderThickness="1" Height="1" VerticalAlignment="Top" Margin="-34,71,-79,0"/>
                     <Button x:Name="btn_MoveProduct" Content="Flyt Produkt" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="250" Height="50" Style="{StaticResource Flat_Button}"/>
-                        <ScrollViewer x:Name="scroll_StorageProduct" HorizontalAlignment="Left" Height="905" Margin="5,81,0,0" VerticalAlignment="Top" Width="1400"/>
-
-
-                    <Button x:Name="btn_EditProduct" Content="Rediger Produkt" Margin="1626,0,10,10" Style="{StaticResource Flat_Button}" Height="50" VerticalAlignment="Bottom"/>
+                    <ScrollViewer x:Name="scroll_StorageProduct" HorizontalAlignment="Left" Margin="5,81,0,9" Width="1400"/>
                 </Grid>
             </TabItem>
             <TabItem Header="Statistik" Width="190">

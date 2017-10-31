@@ -9,30 +9,52 @@ namespace P3_Projekt_WPF.Classes.Utilities
 {
     public class StorageController
     {
-        // TODO: SKal lige fixes
 
         private int _idGroupCounter = 0;
 
         public Dictionary<int, Product> ProductDictionary = new Dictionary<int, Product>();
         public Dictionary<int, Group> GroupDictionary = new Dictionary<int, Group>() { { 0, new Group("Diverse", "Produkter, som ikke tilhører en specifik gruppe") }, { 1, new Group("Is", "Is af alle varianter") } };
         public Dictionary<int, StorageRoom> StorageRoomDictionary = new Dictionary<int, StorageRoom>();
+        public Dictionary<int, SaleTransaction> SaleTransactionsDictionary = new Dictionary<int, SaleTransaction>();
+        public Dictionary<int, Receipt> ReceiptDictionary = new Dictionary<int, Receipt>();
         public List<TempProduct> TempProductList = new List<TempProduct>();
 
         public StorageController()
         {
             //GetAllProductsFromDatabase();
+            //GetAllReceiptsFromDatabase();
         }
         
 
         private void GetAllProductsFromDatabase()
         {
             string sql = "SELECT * FROM `products`";
-            Mysql Connection = new Mysql();
-            TableDecode Results = Connection.RunQueryWithReturn(sql);
+            TableDecode Results = Mysql.RunQueryWithReturn(sql);
             foreach (var row in Results.RowData)
             {
                 Product NewProduct = new Product(row);
                 ProductDictionary.Add(NewProduct.ID, NewProduct);
+            }
+        }
+
+        /// <summary>
+        /// Gets all receipts and saletransactions from the database.
+        /// </summary>
+        public void GetAllReceiptsFromDatabase()
+        {
+            string sql = "SELECT * FROM `receipt`";
+            TableDecode Results = Mysql.RunQueryWithReturn(sql);
+            foreach (var row in Results.RowData)
+            {
+                Receipt NewReceipt = new Receipt(row);
+                ReceiptDictionary.Add(NewReceipt.ID, NewReceipt);
+                foreach (var saleTransaction in NewReceipt.Transactions)
+                {
+                    if (saleTransaction is SaleTransaction)
+                    {
+                        SaleTransactionsDictionary.Add(saleTransaction.GetID(), saleTransaction);
+                    }
+                }
             }
         }
 
@@ -368,9 +390,8 @@ namespace P3_Projekt_WPF.Classes.Utilities
         public void MergeTempProduct(TempProduct tempProductToMerge, int matchedProductID)
         {
             SaleTransaction tempProductsTransaction = tempProductToMerge.GetTempProductsSaleTransaction();
-            var StoreStorage = ProductDictionary[matchedProductID].StorageWithAmount.Where(x => x.Key == 0).First();
 
-            ProductDictionary[matchedProductID].StorageWithAmount[StoreStorage.Key] -= tempProductsTransaction.Amount;
+            ProductDictionary[matchedProductID].StorageWithAmount[0] -= tempProductsTransaction.Amount;
             tempProductsTransaction.EditSaleTransactionFromTempProduct(ProductDictionary[matchedProductID]);
             tempProductToMerge.Resolve();
             TempProductList.Remove(tempProductToMerge);
@@ -404,10 +425,12 @@ namespace P3_Projekt_WPF.Classes.Utilities
         {
             foreach (Product product in ProductDictionary.Values)
             {
-                product.StorageWithAmount.Remove(StorageRoomDictionary[id].ID);
+                product.StorageWithAmount.Remove(id);
+                product.UpdateInDatabase();
             }
             StorageRoomDictionary.Remove(id);
-
+            string deleteQuery = $"DELETE FROM `storagerooms` WHERE `id` = '{id}'";
+            Mysql.RunQuery(deleteQuery);
         }
     }
 }
