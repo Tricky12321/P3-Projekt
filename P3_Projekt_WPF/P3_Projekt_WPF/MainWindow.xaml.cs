@@ -28,10 +28,15 @@ namespace P3_Projekt_WPF
     {
         List<Button> quickButtonList = new List<Button>();
 
+        Grid productGrid = new Grid();
+
+
         public MainWindow()
         {
             InitializeComponent();
             InitGridQuickButtons();
+            InitStorageGridProducts();
+            AddProductButton();
 
             for (int i = 0; i < 10; ++i)
             {
@@ -63,9 +68,43 @@ namespace P3_Projekt_WPF
             button.Style = FindResource("Flat_Button") as Style;
 
             grid_QuickButton.Children.Add(button);
+            
             quickButtonList.Add(button);
 
         }
+
+        public void InitStorageGridProducts()
+        {
+
+
+            productGrid.ColumnDefinitions.Add(new ColumnDefinition());
+
+            productGrid.ColumnDefinitions.Add(new ColumnDefinition());
+
+            productGrid.ColumnDefinitions.Add(new ColumnDefinition());
+
+            productGrid.ColumnDefinitions.Add(new ColumnDefinition());
+
+            productGrid.RowDefinitions.Add(new RowDefinition());
+
+
+            scroll_StorageProduct.Content = productGrid;
+
+        }
+
+        public void AddProductButton()
+        {
+            Button addProductButton = new Button();
+            addProductButton.Content = "+";
+            addProductButton.Height = 500;
+            addProductButton.Width = 250;
+            addProductButton.SetValue(Grid.RowProperty, 0);
+            addProductButton.SetValue(Grid.ColumnProperty, 0);
+
+            productGrid.Children.Add(addProductButton);
+
+        }
+
         public void AddTransactionToReceipt(SaleTransaction transaction)
         {
             //TODO:
