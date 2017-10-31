@@ -23,44 +23,53 @@ namespace P3_Projekt_WPF
     /// Interaction logic for MainWindow.xaml
     /// </summary>
     /// 
-    public class ReceiptItem
-    {
-        Button btn_down = new Button();
-        public string string_Product { get; set; }
-
-    }
 
     public partial class MainWindow : Window
     {
+        List<Button> quickButtonList = new List<Button>();
+
         public MainWindow()
         {
             InitializeComponent();
-            var gridView = new GridView();
-            listView_Receipt.View = gridView;
+            InitGridQuickButtons();
 
-            gridView.Columns.Add(new GridViewColumn
+            for (int i = 0; i < 10; ++i)
             {
-                DisplayMemberBinding = new Binding("btn_down")
-            });
-            gridView.Columns.Add(new GridViewColumn
-            {
-                DisplayMemberBinding = new Binding("btn_up")
-            });
-            gridView.Columns.Add(new GridViewColumn
-            {
-                DisplayMemberBinding = new Binding("string_Product")
-            });
-            gridView.Columns.Add(new GridViewColumn
-            {
-                DisplayMemberBinding = new Binding("price")
-            });
+                AddNewQuickButton($"{i} test", 123);
+            }
 
-            listView_Receipt.Items.Add(new ReceiptItem { string_Product = "Dette er en test" });
-            listView_Receipt.Items.Add(new ReceiptItem { string_Product = "Dette er en test" });
-            listView_Receipt.Items.Add(new ReceiptItem { string_Product = "Dette er en test" });
-            listView_Receipt.Items.Add(new ReceiptItem { string_Product = "Dette er en test" });
+            AddTransactionToReceipt(default(SaleTransaction));
+        }
 
-            listView_Receipt.Items.Add(new ReceiptItem { string_Product = "Dette er en test" });
+        private void InitGridQuickButtons()
+        {
+            grid_QuickButton.ColumnDefinitions.Add(new ColumnDefinition());
+            grid_QuickButton.ColumnDefinitions.Add(new ColumnDefinition());
+
+            for (int i = 0; i < 7; ++i)
+            {
+                grid_QuickButton.RowDefinitions.Add(new RowDefinition());
+            }
+        }
+
+        public void AddNewQuickButton(string buttonText, int productID)
+        {
+            Button button = new Button();
+            button.Content = buttonText;
+            button.Height = 50;
+            button.Width = 250;
+            button.SetValue(Grid.ColumnProperty, quickButtonList.Count % 2);
+            button.SetValue(Grid.RowProperty, quickButtonList.Count / 2);
+            button.Style = FindResource("Flat_Button") as Style;
+
+            grid_QuickButton.Children.Add(button);
+            quickButtonList.Add(button);
+
+        }
+        public void AddTransactionToReceipt(SaleTransaction transaction)
+        {
+            //TODO:
+            listView_Receipt.Items.Add(new ReceiptListItem { String_Product = "test", Amount = 12, Price = "123,-" });
 
         }
 
@@ -74,6 +83,8 @@ namespace P3_Projekt_WPF
 
         }
 
+
+
         public void Start()
         {
             StorageController StorageControl = new StorageController();
@@ -85,12 +96,33 @@ namespace P3_Projekt_WPF
 
         }
 
+        private void but_Increment_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void but_Decrement_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void but_DeleteProduct_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+
         private void listView_Receipt_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            
+
         }
 
         private void TextBlock_TargetUpdated(object sender, DataTransferEventArgs e)
+        {
+
+        }
+
+        private void btn_TempProduct_Click(object sender, RoutedEventArgs e)
         {
 
         }
