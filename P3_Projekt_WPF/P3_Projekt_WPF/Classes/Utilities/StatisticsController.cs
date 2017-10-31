@@ -22,8 +22,6 @@ namespace P3_Projekt_WPF.Classes.Utilities
 
         }
 
-        public void RequestStatistics() { };
-
         public void RequestStatisticsDate(DateTime from, DateTime to)
         {
             int fromUnixTime = Utils.GetUnixTime(from);
