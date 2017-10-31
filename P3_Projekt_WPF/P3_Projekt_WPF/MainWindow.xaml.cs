@@ -65,13 +65,8 @@ namespace P3_Projekt_WPF
             }
         }
 
-
-        }
-
         public void InitStorageGridProducts()
         {
-
-
             productGrid.ColumnDefinitions.Add(new ColumnDefinition());
 
             productGrid.ColumnDefinitions.Add(new ColumnDefinition());
@@ -84,7 +79,6 @@ namespace P3_Projekt_WPF
 
 
             scroll_StorageProduct.Content = productGrid;
-
         }
 
         public void AddProductButton()
@@ -102,7 +96,6 @@ namespace P3_Projekt_WPF
 
         public void AddTransactionToReceipt(SaleTransaction transaction)
         {
-            //TODO:
             listView_Receipt.Items.Add(new ReceiptListItem { String_Product = transaction.GetProductName(), Amount = transaction.Amount, Price = $"{transaction.GetProductPrice()},-" });
 
         }
@@ -157,6 +150,11 @@ namespace P3_Projekt_WPF
         }
 
         private void btn_TempProduct_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void btn_AddProduct_Click(object sender, RoutedEventArgs e)
         {
 
         }
