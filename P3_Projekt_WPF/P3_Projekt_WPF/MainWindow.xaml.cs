@@ -34,12 +34,13 @@ namespace P3_Projekt_WPF
 
         public MainWindow()
         {
-            SettingsController _settingsController = new SettingsController();
-            StorageController _storageController = new StorageController();
-            POSController _POSController = new POSController(_storageController);
+            _settingsController = new SettingsController();
+            _storageController = new StorageController();
+            _POSController = new POSController(_storageController);
 
             InitializeComponent();
             Mysql.Connect(); // Forbinder til databasen
+
             var gridView = new GridView();
             listView_Receipt.View = gridView;
 
@@ -49,13 +50,18 @@ namespace P3_Projekt_WPF
             InitStorageGridProducts();
             AddProductButton();
 
-            _storageController.
+
+
 
             // Kun til testing
+            //_storageController.GetAllProductsFromDatabase();
+
             _settingsController.AddNewQuickButton("Hej med dig", 123, grid_QuickButton.Width, grid_QuickButton.Height);
             _settingsController.AddNewQuickButton("Hej med dig2", 123, grid_QuickButton.Width, grid_QuickButton.Height);
 
             AddTransactionToReceipt(new SaleTransaction(new ServiceProduct(19m, 15m, 10, "kurt", default(Group)), 12, 102));
+            //UpdateGridQuickButtons();
+            //UpdateReceiptList();
             //
         }
 
@@ -76,6 +82,14 @@ namespace P3_Projekt_WPF
             {
                 button.Style = FindResource("Flat_Button") as Style;
                 grid_QuickButton.Children.Add(button);
+            }
+        }
+
+        private void UpdateReceiptList()
+        {
+            foreach(SaleTransaction transaction in _POSController.PlacerholderReceipt.Transactions)
+            {
+                AddTransactionToReceipt(transaction);
             }
         }
 
@@ -173,7 +187,32 @@ namespace P3_Projekt_WPF
         private void btn_AddProduct_Click(object sender, RoutedEventArgs e)
         {
             _POSController.AddSaleTransaction(_POSController.GetProductFromID(int.Parse(textBox_AddProductID.Text)), int.Parse(textBox_ProductAmount.Text));
+            UpdateReceiptList();
         }
+
+        private void btn_PlusToReciept_Click(object sender, RoutedEventArgs e)
+        {
+            int inputAmount = Int32.Parse(textBox_ProductAmount.Text);
+            if (inputAmount < 99)
+            {
+                textBox_ProductAmount.Text = (++inputAmount).ToString();
+            }
+        }
+
+        private void btn_MinusToReciept_Click(object sender, RoutedEventArgs e)
+        {
+            int inputAmount = Int32.Parse(textBox_ProductAmount.Text);
+
+            if (inputAmount > 1)
+            {
+                textBox_ProductAmount.Text = (--inputAmount).ToString();
+            }
+        }
+
+
+
+
+
 
         private void TextInputNoNumber(object sender, TextCompositionEventArgs e)
         {
@@ -182,25 +221,6 @@ namespace P3_Projekt_WPF
                 e.Handled = true;
         }
 
-        }
-
-        private void btn_PlusToReciept_Click(object sender, RoutedEventArgs e)
-        {
-            int inputAmount = Int32.Parse(textBox.Text);
-            if (inputAmount < 99)
-            {
-                textBox.Text = (++inputAmount).ToString();
-            }
-        }
-
-        private void btn_MinusToReciept_Click(object sender, RoutedEventArgs e)
-        {
-            int inputAmount = Int32.Parse(textBox.Text);
-
-            if (inputAmount > 1)
-            {
-                textBox.Text = (--inputAmount).ToString();
-            }
         private void TextInputNoNumberWithComma(object sender, TextCompositionEventArgs e)
         {
             // xaml.cs code

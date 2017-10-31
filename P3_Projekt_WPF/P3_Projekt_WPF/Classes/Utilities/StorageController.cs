@@ -26,7 +26,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
         }
         
 
-        private void GetAllProductsFromDatabase()
+        public void GetAllProductsFromDatabase()
         {
             string sql = "SELECT * FROM `products`";
             TableDecode Results = Mysql.RunQueryWithReturn(sql);
