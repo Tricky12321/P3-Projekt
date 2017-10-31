@@ -430,8 +430,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
             }
             StorageRoomDictionary.Remove(id);
             string deleteQuery = $"DELETE FROM `storagerooms` WHERE `id` = '{id}'";
-            Mysql Connection = new Mysql();
-            Connection.RunQuery(deleteQuery);
+            Mysql.RunQuery(deleteQuery);
         }
     }
 }
