@@ -12,12 +12,6 @@ namespace P3_Projekt_WPF.Classes.Tests
     public class TempProductTests
     {
         [Test()]
-        public void TempProductTest()
-        {
-            Assert.Fail();
-        }
-
-        [Test()]
         public void EditTest(string newDescription, decimal newSalePrice)
         {
             Assert.Fail();
