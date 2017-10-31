@@ -45,8 +45,7 @@ namespace P3_Projekt_WPF.Classes
         public SaleTransaction GetTempProductsSaleTransaction()
         {
             string sql = $"SELECT * FROM `sale_transactions` WHERE `product_type` = temp_products AND product_id = {this.ID}";
-            Mysql connection = new Mysql();
-            TableDecode getTransaction = connection.RunQueryWithReturn(sql);
+            TableDecode getTransaction = Mysql.RunQueryWithReturn(sql);
             SaleTransaction saleTrans = new SaleTransaction(getTransaction.RowData[0]);
             return saleTrans;
         }
@@ -54,8 +53,7 @@ namespace P3_Projekt_WPF.Classes
         public override void GetFromDatabase()
         {
             string sql = $"SELECT * FROM `temp_product` where `id` = '{ID}'";
-            Mysql Connection = new Mysql();
-            CreateFromRow(Connection.RunQueryWithReturn(sql).RowData[0]);
+            CreateFromRow(Mysql.RunQueryWithReturn(sql).RowData[0]);
         }
 
         public override void CreateFromRow(Row Table)
@@ -70,19 +68,17 @@ namespace P3_Projekt_WPF.Classes
         {
             string sql = "INSERT INTO `temp_products` (`id`, `sale_price`, `description`, `resolved`)"+
                 $"VALUES (NULL, '{SalePrice}', '{GetName()}', '{Convert.ToInt32(_resolved)}');";
-            Mysql Connection = new Mysql();
-            Connection.RunQuery(sql);
+            Mysql.RunQuery(sql);
         }
 
         public override void UpdateInDatabase()
         {
-            string sql = $"UPDATE `temp_products` SET" +
+            string sql = $"UPDATE `temp_products` SET " +
                 $"`sale_price` = '{SalePrice}'," +
                 $"`description` = '{GetName()}'," +
-                $"`resolved` = '{Convert.ToInt32(_resolved)}'" +
+                $"`resolved` = '{Convert.ToInt32(_resolved)}' " +
                 $"WHERE `id` = {ID};";
-            Mysql Connection = new Mysql();
-            Connection.RunQuery(sql);
+            Mysql.RunQuery(sql);
         }
 
     }

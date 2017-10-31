@@ -15,29 +15,10 @@ using System.Diagnostics;
 using System.Windows.Xps;
 namespace P3_Projekt_WPF.Classes
 {
-    //TODO: ReceiptPrinter virker slet ikke mere, alt er kommenteret ud.
-
-    public class ReceiptPrinter
+    public static class ReceiptPrinter
     {
-        //TODO: Skal laves om til WPF font
-        //private System.Drawing.FontStyle printFont;
-        //private string PrintThisText => .PrintTest;
-        Receipt ReceiptToPrint;
-
-
-        public ReceiptPrinter(Receipt receipt)
-        {
-            ReceiptToPrint = receipt;
-            //setup();
-
-        }
-
-        public ReceiptPrinter()
-        {
-
-        }
-
-        public void PrintText(string Text)
+        /// <param name="Text">The text to be printeted, new line using \n</param>
+        public static void PrintText(string Text)
         {
             Paragraph flowParagraph = new Paragraph();
             flowParagraph.Inlines.Add(Text); //courier new 
@@ -55,23 +36,34 @@ namespace P3_Projekt_WPF.Classes
             }
         }
 
-        public void GenerateTextToPrint()
+        /// <summary>
+        /// Prints the receipt given. 
+        /// </summary>
+        /// <param name="receipt">The receipt you would like to print</param>
+        public static void PrintReceipt(Receipt receipt)
         {
             StringBuilder textToPrint = new StringBuilder();
             textToPrint.Append($"|   {("#" + 10903).PadRight(5)}  { DateTime.Now.ToString().PadLeft(10)}  |\n");
             textToPrint.Append($"|   {("01" + "Børglum kloster").PadRight(5)} {000000.ToString().PadLeft(10)} |\n");
             textToPrint.Append($"|{" ".PadRight(35)}|\n");
 
-            /*List<SaleTransaction> transactionList = ReceiptToPrint.Transactions;
+            List<SaleTransaction> transactionList = receipt.Transactions;
 
             foreach (SaleTransaction t in transactionList)
             {
                 textToPrint.Append($"|   {t.Amount}x{t.Product.SalePrice.ToString().PadRight(10)} {("*" + (t.Amount * t.Product.SalePrice)).ToString().PadLeft(10)}\n");
                 textToPrint.Append($"|   {t.Product.GetName().PadRight(30)}   |\n");
             }
-            textToPrint.Append($"|    {"SUBTOTAL".PadRight(10)}{ReceiptToPrint.TotalPrice.ToString().PadLeft(10)}\n|");
-            */
+            textToPrint.Append($"|    {"SUBTOTAL".PadRight(10)}{receipt.TotalPrice.ToString().PadLeft(10)}\n|");
+            PrintText(textToPrint.ToString());
+        }
 
+        public static void GenerateTextToPrint()
+        {
+            StringBuilder textToPrint = new StringBuilder();
+            textToPrint.Append($"|   {("#" + 10903).PadRight(5)}  { DateTime.Now.ToString().PadLeft(10)}  |\n");
+            textToPrint.Append($"|   {("01" + "Børglum kloster").PadRight(5)} {000000.ToString().PadLeft(10)} |\n");
+            textToPrint.Append($"|{" ".PadRight(35)}|\n");
             PrintText(textToPrint.ToString());
         }
     }

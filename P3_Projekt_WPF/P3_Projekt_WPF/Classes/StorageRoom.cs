@@ -31,8 +31,7 @@ namespace P3_Projekt_WPF.Classes
         public void GetFromDatabase()
         {
             string sql = $"SELECT * FROM `storagerooms` WHERE `id` = '{ID}'";
-            Mysql Connection = new Mysql();
-            CreateFromRow(Connection.RunQueryWithReturn(sql).RowData[0]);
+            CreateFromRow(Mysql.RunQueryWithReturn(sql).RowData[0]);
         }
 
         public void CreateFromRow(Row Table)
@@ -46,8 +45,7 @@ namespace P3_Projekt_WPF.Classes
         {
             string sql = "INSERT INTO `storagerooms` (`id`, `name`, `description`)"+
                 $" VALUES (NULL, '{Name}', '{Description}');";
-            Mysql Connection = new Mysql();
-            Connection.RunQuery(sql);
+            Mysql.RunQuery(sql);
         }
 
         public void UpdateInDatabase()
@@ -56,8 +54,7 @@ namespace P3_Projekt_WPF.Classes
                $"`name` = '{Name}'," +
                $"`description` = '{Description}'," +
                $"WHERE `id` = {ID};";
-            Mysql Connection = new Mysql();
-            Connection.RunQuery(sql);
+            Mysql.RunQuery(sql);
         }
     }
 }

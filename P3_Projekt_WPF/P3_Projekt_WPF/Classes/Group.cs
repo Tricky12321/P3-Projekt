@@ -31,9 +31,8 @@ namespace P3_Projekt_WPF.Classes
 
         public void GetFromDatabase()
         {
-            string sql = $"SELECT * FROM groups WHERE id = {ID}";
-            Mysql Connection = new Mysql();
-            CreateFromRow(Connection.RunQueryWithReturn(sql).RowData[0]);
+            string sql = $"SELECT * FROM `groups` WHERE `id` = '{ID}'";
+            CreateFromRow(Mysql.RunQueryWithReturn(sql).RowData[0]);
         }
 
         public void CreateFromRow(Row Table)
@@ -46,8 +45,7 @@ namespace P3_Projekt_WPF.Classes
         public void UploadToDatabase()
         {
             string sql = $"INSERT INTO `groups` (`id`, `name`, `description`) VALUES (NULL, '{Name}', '{Description}');";
-            Mysql Connection = new Mysql();
-            Connection.RunQuery(sql);
+            Mysql.RunQuery(sql);
         }
 
         public void UpdateInDatabase()
@@ -56,8 +54,7 @@ namespace P3_Projekt_WPF.Classes
                 $"`name` = '{Name}'," +
                 $"`description` = '{Description}'," +
                 $"WHERE `id` = {ID};";
-            Mysql Connection = new Mysql();
-            Connection.RunQuery(sql);
+            Mysql.RunQuery(sql);
         }
     }
 }

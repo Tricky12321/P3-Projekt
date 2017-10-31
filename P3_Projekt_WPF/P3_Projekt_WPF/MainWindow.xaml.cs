@@ -34,7 +34,9 @@ namespace P3_Projekt_WPF
     {
         public MainWindow()
         {
+            
             InitializeComponent();
+            Mysql.Connect(); // Forbinder til databasen
             var gridView = new GridView();
             listView_Receipt.View = gridView;
 
@@ -94,5 +96,6 @@ namespace P3_Projekt_WPF
         {
 
         }
+
     }
 }
