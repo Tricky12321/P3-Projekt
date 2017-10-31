@@ -21,8 +21,9 @@ namespace P3_Projekt_WPF.Classes
             Price = GetProductPrice();
         }
 
-        public SaleTransaction(Row RowData) : base(new Product(Convert.ToInt32(RowData.Values[1])), Convert.ToInt32(RowData.Values[2]))
+        public SaleTransaction(Row RowData) : base(null, 0)
         {
+            _id = Convert.ToInt32(RowData.Values[0]);
             CreateFromRow(RowData);
         }
 
@@ -40,6 +41,11 @@ namespace P3_Projekt_WPF.Classes
             {
                 (Product as Product).StorageWithAmount[0] -= Amount;
             }
+        }
+
+        public int GetID()
+        {
+            return _id;
         }
 
         //Returns the correct price according to discount, groups etc.
@@ -73,7 +79,7 @@ namespace P3_Projekt_WPF.Classes
             }
             else
             {
-                throw new ProductAlreadyDeActivated();
+                throw new WrongProductTypeException("Dette er ikke en godkendt produkt type");
             }
         }
 
@@ -109,7 +115,7 @@ namespace P3_Projekt_WPF.Classes
             }
             else
             {
-                throw new UnknownProductTypeException("This product is not known by the program");
+                throw new UnknownProductTypeException("Dette produkt eksisetere ikke");
             }
         }
 
@@ -128,15 +134,14 @@ namespace P3_Projekt_WPF.Classes
 
         public void EditSaleTransactionFromTempProduct(Product productToResolve)
         {
-            this.Product = productToResolve;
+            Product = productToResolve;
             UpdateInDatabase();
         }
 
         public override void GetFromDatabase()
         {
             string getQuery = $"SELECT * FROM `sale_transactions` WHERE `id` = '{_id}'";
-            Mysql Connection = new Mysql();
-            CreateFromRow(Connection.RunQueryWithReturn(getQuery).RowData[0]);
+            CreateFromRow(Mysql.RunQueryWithReturn(getQuery).RowData[0]);
         }
 
         public override void CreateFromRow(Row Table)
@@ -154,24 +159,22 @@ namespace P3_Projekt_WPF.Classes
         {
             string sql = "INSERT INTO `sale_transactions` (`id`, `product_id`, `product_type`,`amount`, `datetime`, `receipt_id`, `price`, `total_price`, `discount`)" +
                 $" VALUES (NULL, '{Product.ID}', '{_getProductType()}','{Amount}', FROM_UNIXTIME('{Utils.GetUnixTime(Date)}'), '{ReceiptID}', '{Price}', '{TotalPrice}', '{Discount}');";
-            Mysql Connection = new Mysql();
-            Connection.RunQuery(sql);
+            Mysql.RunQuery(sql);
         }
 
         public override void UpdateInDatabase()
         {
-            string sql = $"UPDATE `sale_transactions` SET" +
+            string sql = $"UPDATE `sale_transactions` SET " +
                 $"`product_id` = '{Product.ID}'," +
                 $"`product_type` = '{_getProductType()}'," +
                 $"`amount` = '{Amount}'," +
-                $"`datetime` = FROM_UNIXTIME'{Utils.GetUnixTime(Date)}'," +
+                $"`datetime` = FROM_UNIXTIME('{Utils.GetUnixTime(Date)}')," +
                 $"`receipt_id` = '{ReceiptID}'," +
                 $"`price` = '{Price}'," +
                 $"`total_price` = '{TotalPrice}'," +
-                $"`discount` = '{Convert.ToInt32(Discount)}'" +
+                $"`discount` = '{Convert.ToInt32(Discount)}' " +
                 $"WHERE `id` = {_id};";
-            Mysql Connection = new Mysql();
-            Connection.RunQuery(sql);
+            Mysql.RunQuery(sql);
         }
     }
 }

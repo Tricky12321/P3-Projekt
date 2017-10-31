@@ -26,23 +26,43 @@ namespace P3_Projekt_WPF
 
     public partial class MainWindow : Window
     {
-        SettingsController _settingsController = new SettingsController();
+        SettingsController _settingsController;
+        StorageController _storageController;
+        POSController _POSController;
 
         Grid productGrid = new Grid();
 
-
         public MainWindow()
         {
-            InitializeComponent();
+            _settingsController = new SettingsController();
+            _storageController = new StorageController();
+            _POSController = new POSController(_storageController);
 
-            
+            InitializeComponent();
+            Mysql.Connect(); // Forbinder til databasen
+
+            var gridView = new GridView();
+            listView_Receipt.View = gridView;
+
             InitGridQuickButtons();
-            _settingsController.AddNewQuickButton("Hej med dig", 123, grid_QuickButton.Width, grid_QuickButton.Height);
-            UpdateGridQuickButtons();
+
+            //UpdateGridQuickButtons();
             InitStorageGridProducts();
             AddProductButton();
 
+
+
+
+            // Kun til testing
+            //_storageController.GetAllProductsFromDatabase();
+
+            _settingsController.AddNewQuickButton("Hej med dig", 123, grid_QuickButton.Width, grid_QuickButton.Height);
+            _settingsController.AddNewQuickButton("Hej med dig2", 123, grid_QuickButton.Width, grid_QuickButton.Height);
+
             AddTransactionToReceipt(new SaleTransaction(new ServiceProduct(19m, 15m, 10, "kurt", default(Group)), 12, 102));
+            //UpdateGridQuickButtons();
+            //UpdateReceiptList();
+            //
         }
 
         private void InitGridQuickButtons()
@@ -65,8 +85,20 @@ namespace P3_Projekt_WPF
             }
         }
 
+        private void UpdateReceiptList()
+        {
+            foreach(SaleTransaction transaction in _POSController.PlacerholderReceipt.Transactions)
+            {
+                AddTransactionToReceipt(transaction);
+            }
+        }
+
         public void InitStorageGridProducts()
         {
+            productGrid.VerticalAlignment = VerticalAlignment.Top;
+
+            productGrid.ColumnDefinitions.Add(new ColumnDefinition());
+
             productGrid.ColumnDefinitions.Add(new ColumnDefinition());
 
             productGrid.ColumnDefinitions.Add(new ColumnDefinition());
@@ -79,19 +111,21 @@ namespace P3_Projekt_WPF
 
 
             scroll_StorageProduct.Content = productGrid;
+
+            productGrid.Children.Add(new ProductControl());
         }
 
         public void AddProductButton()
         {
             Button addProductButton = new Button();
             addProductButton.Content = "+";
-            addProductButton.Height = 500;
+            addProductButton.Height = 350;
             addProductButton.Width = 250;
             addProductButton.SetValue(Grid.RowProperty, 0);
             addProductButton.SetValue(Grid.ColumnProperty, 0);
-
+            addProductButton.Style = FindResource("Flat_Button") as Style;
+            // tilføj produkt addProductButton.Click
             productGrid.Children.Add(addProductButton);
-
         }
 
         public void AddTransactionToReceipt(SaleTransaction transaction)
@@ -118,22 +152,22 @@ namespace P3_Projekt_WPF
             POSController POSControl = new POSController(StorageControl);
         }
 
-        private void but_MobilePay_Click(object sender, RoutedEventArgs e)
+        private void btn_MobilePay_Click(object sender, RoutedEventArgs e)
         {
 
         }
 
-        private void but_Increment_Click(object sender, RoutedEventArgs e)
+        private void btn_Increment_Click(object sender, RoutedEventArgs e)
         {
 
         }
 
-        private void but_Decrement_Click(object sender, RoutedEventArgs e)
+        private void btn_Decrement_Click(object sender, RoutedEventArgs e)
         {
 
         }
 
-        private void but_DeleteProduct_Click(object sender, RoutedEventArgs e)
+        private void btn_DeleteProduct_Click(object sender, RoutedEventArgs e)
         {
 
         }
@@ -156,7 +190,46 @@ namespace P3_Projekt_WPF
 
         private void btn_AddProduct_Click(object sender, RoutedEventArgs e)
         {
+            _POSController.AddSaleTransaction(_POSController.GetProductFromID(int.Parse(textBox_AddProductID.Text)), int.Parse(textBox_ProductAmount.Text));
+            UpdateReceiptList();
+        }
 
+        private void btn_PlusToReciept_Click(object sender, RoutedEventArgs e)
+        {
+            int inputAmount = Int32.Parse(textBox_ProductAmount.Text);
+            if (inputAmount < 99)
+            {
+                textBox_ProductAmount.Text = (++inputAmount).ToString();
+            }
+        }
+
+        private void btn_MinusToReciept_Click(object sender, RoutedEventArgs e)
+        {
+            int inputAmount = Int32.Parse(textBox_ProductAmount.Text);
+
+            if (inputAmount > 1)
+            {
+                textBox_ProductAmount.Text = (--inputAmount).ToString();
+            }
+        }
+
+
+
+
+
+
+        private void TextInputNoNumber(object sender, TextCompositionEventArgs e)
+        {
+            // xaml.cs code
+            if (!char.IsDigit(e.Text, e.Text.Length - 1))
+                e.Handled = true;
+        }
+
+        private void TextInputNoNumberWithComma(object sender, TextCompositionEventArgs e)
+        {
+            // xaml.cs code
+            if (!char.IsDigit(e.Text, e.Text.Length - 1) && !(e.Text[e.Text.Length - 1] == ','))
+                e.Handled = true;
         }
     }
 }

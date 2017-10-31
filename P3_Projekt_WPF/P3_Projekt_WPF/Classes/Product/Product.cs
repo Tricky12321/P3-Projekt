@@ -97,9 +97,8 @@ namespace P3_Projekt_WPF.Classes
         // Database stuff
         public override void GetFromDatabase()
         {
-            string sql = $"SELECT * FROM products WHERE id = {ID}";
-            Mysql Connection = new Mysql();
-            CreateFromRow(Connection.RunQueryWithReturn(sql).RowData[0]);
+            string sql = $"SELECT * FROM `products` WHERE `id` = '{ID}'";
+            CreateFromRow(Mysql.RunQueryWithReturn(sql).RowData[0]);
         }
 
         public override void CreateFromRow(Row results)
@@ -117,33 +116,38 @@ namespace P3_Projekt_WPF.Classes
         private void GetStorageStatus()
         {
             string sql = $"SELECT * FROM `storage_status` WHERE `product_id` = '{ID}'";
-            Mysql Connection = new Mysql();
-            TableDecode Results = Connection.RunQueryWithReturn(sql);
-            foreach (var row in Results.RowData)
+            try
             {
-                int StorageRoomID = Convert.ToInt32(row.Values[1]);
-                int Amount = Convert.ToInt32(row.Values[3]);
-                StorageRoom storgeRoom = new StorageRoom(StorageRoomID);
-                StorageWithAmount.Add(storgeRoom.ID, Amount);
+                TableDecode Results = Mysql.RunQueryWithReturn(sql);
+                foreach (var row in Results.RowData)
+                {
+                    int StorageRoomID = Convert.ToInt32(row.Values[2]);
+                    int Amount = Convert.ToInt32(row.Values[3]);
+                    StorageRoom storgeRoom = new StorageRoom(StorageRoomID);
+                    StorageWithAmount.Add(storgeRoom.ID, Amount);
+                }
             }
+            catch (EmptyTableException)
+            {
+
+            }
+            
         }
         // Sletter lige alt storage information i datbasen inden der bliver uploadet noget nyt. 
         private void DeleteAllStorageData()
         {
             string sql = $"DELETE FROM `storage_status` WHERE `product_id` = '{ID}'";
-            Mysql Connection = new Mysql();
-            Connection.RunQuery(sql);
+            Mysql.RunQuery(sql);
         }
         // Uploader alt information fra databasen om hvilke lagere der har hvilket antal af produkterne.
         private void UpdateStorageStatus()
         {
-            Mysql Connection = new Mysql();
             DeleteAllStorageData();
             foreach (var Storage_Room in StorageWithAmount)
             {
                 string sql = "INSERT INTO `storage_status` (`id`, `product_id`, `storageroom`, `amount`)" +
                         $" VALUES (NULL, '{ID}', '{Storage_Room.Key}', '{Storage_Room.Value}');";
-                Connection.RunQuery(sql);
+                Mysql.RunQuery(sql);
             }
         }
 
@@ -151,23 +155,21 @@ namespace P3_Projekt_WPF.Classes
         {
             string sql = $"INSERT INTO `products` (`id`, `name`, `brand`, `groups`, `price`, `discount`, `discount_price`)" +
             $"VALUES (NULL, '{Name}', '{Brand}', '{ProductGroup.ID}', '{SalePrice}', '{Convert.ToInt32(DiscountBool)}', '{DiscountPrice}');";
-            Mysql Connection = new Mysql();
-            Connection.RunQuery(sql);
+            Mysql.RunQuery(sql);
             UpdateStorageStatus();
         }
 
         public override void UpdateInDatabase()
         {
-            string sql = $"UPDATE `products` SET" +
+            string sql = $"UPDATE `products` SET " +
                 $"`name` = '{GetName()}'," +
                 $"`brand` = '{Brand}'," +
                 $"`groups` = '{ProductGroup.ID}'," +
                 $"`price` = '{SalePrice}'," +
                 $"`discount` = '{Convert.ToInt32(DiscountBool)}'," +
-                $"`discount_price` = '{DiscountPrice}'" +
+                $"`discount_price` = '{DiscountPrice}' " +
                 $"WHERE `id` = {ID};";
-            Mysql Connection = new Mysql();
-            Connection.RunQuery(sql);
+            Mysql.RunQuery(sql);
             UpdateStorageStatus();
         }
 
@@ -176,8 +178,7 @@ namespace P3_Projekt_WPF.Classes
             if (_active)
             {
                 string sql = $"UPDATE `products` SET `active` = '0' WHERE `id` = '{ID}'";
-                Mysql Connection = new Mysql();
-                Connection.RunQuery(sql);
+                Mysql.RunQuery(sql);
             }
             else
             {
@@ -190,8 +191,7 @@ namespace P3_Projekt_WPF.Classes
             if (!_active)
             {
                 string sql = $"UPDATE `products` SET `active` = '1' WHERE `id` = '{ID}'";
-                Mysql Connection = new Mysql();
-                Connection.RunQuery(sql);
+                Mysql.RunQuery(sql);
             } else
             {
                 throw new ProductAlreadyActivated("Dette produkt er allerede aktiveret");
