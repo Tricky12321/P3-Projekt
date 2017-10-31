@@ -13,7 +13,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
         {
             string pwdSaltedAndHashed = SaltAndHashPassword(passwordInput);
 
-            string setQuery = $"UPDATE `admin_password` SET `admin_password` = '{pwdSaltedAndHashed}' WHERE ´id´ = '1'";
+            string setQuery = $"UPDATE `admin_password` SET `admin_password` = '{pwdSaltedAndHashed}' WHERE `id` = '1'";
             Mysql.RunQuery(setQuery);
         }
         
