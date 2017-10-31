@@ -45,6 +45,11 @@ namespace P3_Projekt_WPF.Classes.Utilities
             PlacerholderReceipt.Delete();
         }
 
+        public Product GetProductFromID(int id)
+        {
+            return _storageController.ProductDictionary[id];
+        }
+
         public void AddSaleTransaction(BaseProduct product, int amount)
         {
             PlacerholderReceipt.AddTransaction(new SaleTransaction(product, amount, PlacerholderReceipt.ID));
