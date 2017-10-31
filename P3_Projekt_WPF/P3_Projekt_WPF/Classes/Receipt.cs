@@ -29,10 +29,10 @@ namespace P3_Projekt_WPF.Classes
 
         public void AddTransaction(SaleTransaction transaction)
         {
-            //Checks if product is already in reciept//
-            if (IsProductInReceipt(transaction.Product))
+            //Checks if product is already in receipt//
+            if (Transactions.Any(x => x.Product == transaction.Product))
             {
-                Transaction placeholderTransaction = GetTransactionWithProduct(transaction.Product);
+                Transaction placeholderTransaction = Transactions.First(x => x.Product == transaction.Product);
                 placeholderTransaction.Edit(placeholderTransaction.Amount += transaction.Amount);
             }
             else
@@ -50,16 +50,6 @@ namespace P3_Projekt_WPF.Classes
             {
                 TotalPrice += FindTransactionPrice(transaction);
             }
-        }
-
-        private bool IsProductInReceipt(BaseProduct product)
-        {
-            return Transactions.Any(x => x.Product == product);
-        }
-
-        private SaleTransaction GetTransactionWithProduct(BaseProduct product)
-        {
-            return Transactions.First(x => x.Product == product);
         }
 
         private decimal FindTransactionPrice(SaleTransaction transaction)
