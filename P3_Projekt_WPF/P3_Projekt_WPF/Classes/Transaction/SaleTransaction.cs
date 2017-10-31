@@ -128,7 +128,7 @@ namespace P3_Projekt_WPF.Classes
 
         public void EditSaleTransactionFromTempProduct(Product productToResolve)
         {
-            this.Product = productToResolve;
+            Product = productToResolve;
             UpdateInDatabase();
         }
 

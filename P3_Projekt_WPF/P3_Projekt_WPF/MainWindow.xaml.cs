@@ -26,23 +26,34 @@ namespace P3_Projekt_WPF
 
     public partial class MainWindow : Window
     {
-        SettingsController _settingsController = new SettingsController();
+        SettingsController _settingsController;
+        StorageController _storageController;
+        POSController _POSController;
 
         Grid productGrid = new Grid();
 
-
         public MainWindow()
         {
+            SettingsController _settingsController = new SettingsController();
+            StorageController _storageController = new StorageController();
+            POSController _POSController = new POSController(_storageController);
+
             InitializeComponent();
 
-            
             InitGridQuickButtons();
-            _settingsController.AddNewQuickButton("Hej med dig", 123, grid_QuickButton.Width, grid_QuickButton.Height);
-            UpdateGridQuickButtons();
+
+            //UpdateGridQuickButtons();
             InitStorageGridProducts();
             AddProductButton();
 
+            _storageController.
+
+            // Kun til testing
+            _settingsController.AddNewQuickButton("Hej med dig", 123, grid_QuickButton.Width, grid_QuickButton.Height);
+            _settingsController.AddNewQuickButton("Hej med dig2", 123, grid_QuickButton.Width, grid_QuickButton.Height);
+
             AddTransactionToReceipt(new SaleTransaction(new ServiceProduct(19m, 15m, 10, "kurt", default(Group)), 12, 102));
+            //
         }
 
         private void InitGridQuickButtons()
@@ -118,22 +129,22 @@ namespace P3_Projekt_WPF
             POSController POSControl = new POSController(StorageControl);
         }
 
-        private void but_MobilePay_Click(object sender, RoutedEventArgs e)
+        private void btn_MobilePay_Click(object sender, RoutedEventArgs e)
         {
 
         }
 
-        private void but_Increment_Click(object sender, RoutedEventArgs e)
+        private void btn_Increment_Click(object sender, RoutedEventArgs e)
         {
 
         }
 
-        private void but_Decrement_Click(object sender, RoutedEventArgs e)
+        private void btn_Decrement_Click(object sender, RoutedEventArgs e)
         {
 
         }
 
-        private void but_DeleteProduct_Click(object sender, RoutedEventArgs e)
+        private void btn_DeleteProduct_Click(object sender, RoutedEventArgs e)
         {
 
         }
@@ -156,7 +167,21 @@ namespace P3_Projekt_WPF
 
         private void btn_AddProduct_Click(object sender, RoutedEventArgs e)
         {
+            _POSController.AddSaleTransaction(_POSController.GetProductFromID(int.Parse(textBox_AddProductID.Text)), int.Parse(textBox_ProductAmount.Text));
+        }
 
+        private void TextInputNoNumber(object sender, TextCompositionEventArgs e)
+        {
+            // xaml.cs code
+            if (!char.IsDigit(e.Text, e.Text.Length - 1))
+                e.Handled = true;
+        }
+
+        private void TextInputNoNumberWithComma(object sender, TextCompositionEventArgs e)
+        {
+            // xaml.cs code
+            if (!char.IsDigit(e.Text, e.Text.Length - 1) && !(e.Text[e.Text.Length - 1] == ','))
+                e.Handled = true;
         }
     }
 }

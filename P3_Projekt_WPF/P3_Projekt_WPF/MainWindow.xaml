@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:P3_Projekt_WPF"
         xmlns:Classes="clr-namespace:P3_Projekt_WPF.Classes" x:Class="P3_Projekt_WPF.MainWindow"
         mc:Ignorable="d"
-        Title="Børglum Kloster Lager og Salg" Height="1080"  Width="1900" Background="#FF919191" WindowState="Maximized">
+        Title="Børglum Kloster Lager og Salg" Height="1080"  Width="1920" Background="#FF919191" WindowState="Maximized">
     <Grid>
         <TabControl x:Name="tabControl" FontSize="30" SelectionChanged="tabControl_SelectionChanged_1" Margin="0,0,0.333,-0.333" Grid.RowSpan="3">
             <TabItem Header="Salg" Width="190">
@@ -17,7 +17,7 @@
                     </Grid.RowDefinitions>
 
 
-                    <Button x:Name="but_search" Content="🔎" Background="#FF767676" Margin="0,10,10.333,0" VerticalAlignment="Top" Height="50" Style="{StaticResource Flat_Button}" FontSize="21" HorizontalAlignment="Right" Width="50" Grid.Column="1"/>
+                    <Button x:Name="btn_search" Content="🔎" Background="#FF767676" Margin="0,10,10.333,0" VerticalAlignment="Top" Height="50" Style="{StaticResource Flat_Button}" FontSize="21" HorizontalAlignment="Right" Width="50" Grid.Column="1"/>
 
                     <Grid Margin="0,0,0.333,0">
                         <TextBox Padding="10,0,0,0" x:Name="SearchTermTextBox" Margin="0,10,74,12" FontSize="33" HorizontalAlignment="Right" Width="503">
@@ -43,10 +43,10 @@
                     </Grid>
 
 
-                    <Button x:Name="But_Cash"  Content="Kontant" Margin="0,0,10.333,120.667" Background="#FFC5C5C5" Style="{StaticResource Flat_Button}" Height="50" Width="260" VerticalAlignment="Bottom" HorizontalAlignment="Right" Grid.Column="1" Grid.Row="1"/>
+                    <Button x:Name="btn_Cash"  Content="Kontant" Margin="0,0,10.333,120.667" Background="#FFC5C5C5" Style="{StaticResource Flat_Button}" Height="50" Width="260" VerticalAlignment="Bottom" HorizontalAlignment="Right" Grid.Column="1" Grid.Row="1"/>
                     <Border BorderBrush="Black" BorderThickness="1" Height="1" VerticalAlignment="Top" Margin="-34,71,-78.667,0" Grid.ColumnSpan="2"/>
-                    <Button x:Name="but_Card"  Content="Dankort" Margin="0,0,10.333,65.667" Background="#FFC5C5C5" Style="{StaticResource Flat_Button}" Height="50" Width="260" VerticalAlignment="Bottom" HorizontalAlignment="Right" Grid.Column="1" Grid.Row="1"/>
-                    <Button x:Name="but_MobilePay"  Content="MobilePay" Margin="0,0,10.333,10.667" Background="#FFC5C5C5" Style="{StaticResource Flat_Button}" Click="but_MobilePay_Click" Height="50" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="260" Grid.Column="1" Grid.Row="1"/>
+                    <Button x:Name="btn_Card"  Content="Dankort" Margin="0,0,10.333,65.667" Background="#FFC5C5C5" Style="{StaticResource Flat_Button}" Height="50" Width="260" VerticalAlignment="Bottom" HorizontalAlignment="Right" Grid.Column="1" Grid.Row="1"/>
+                    <Button x:Name="btn_MobilePay"  Content="MobilePay" Margin="0,0,10.333,10.667" Background="#FFC5C5C5" Style="{StaticResource Flat_Button}" Click="btn_MobilePay_Click" Height="50" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="260" Grid.Column="1" Grid.Row="1"/>
                     <ListView x:Name="listView_Receipt" Margin="0,10,1,184.667" FontSize="23" SelectionChanged="listView_Receipt_SelectionChanged" Grid.Row="1" HorizontalAlignment="Right" Width="848">
                         <ListView.View>
                             <GridView>
@@ -59,7 +59,7 @@
                                                 Width="30"
                                                 Height="30"
                                                 VerticalAlignment = "Center"
-                                                Click="but_Increment_Click"
+                                                Click="btn_Increment_Click"
                                             />
                                         </DataTemplate>
                                     </GridViewColumn.CellTemplate>
@@ -73,7 +73,7 @@
                                                 Width="30"
                                                 Height="30"
                                                 VerticalAlignment = "Center"
-                                                Click="but_Decrement_Click"
+                                                Click="btn_Decrement_Click"
                                             />
                                         </DataTemplate>
                                     </GridViewColumn.CellTemplate>
@@ -111,7 +111,7 @@
                                                 Width="30"
                                                 Height="30"
                                                 VerticalAlignment = "Center"
-                                                Click="but_DeleteProduct_Click"
+                                                Click="btn_DeleteProduct_Click"
                                             />
                                         </DataTemplate>
                                     </GridViewColumn.CellTemplate>
@@ -119,7 +119,7 @@
                             </GridView>
                         </ListView.View>
                     </ListView>
-                    <Button x:Name="But_EditReceipt"  Content="Rediger Kvittering" Margin="10,10,0,12" Background="#FFC5C5C5" Style="{StaticResource Flat_Button}" HorizontalAlignment="Left" Width="250"/>
+                    <Button x:Name="btn_EditReceipt"  Content="Rediger Kvittering" Margin="10,10,0,12" Background="#FFC5C5C5" Style="{StaticResource Flat_Button}" HorizontalAlignment="Left" Width="250"/>
                     <Grid x:Name="grid_QuickButton" Margin="10,73,860,65.667" Grid.Row="1"/>
                     <Border BorderBrush="Black" BorderThickness="1" Margin="0,0,854,-0.333" Background="Black" Width="1" Grid.Row="1" HorizontalAlignment="Right"/>
                     <Button x:Name="btn_AddProduct"  Content="Tilføj Produkt" Margin="593,17,0,0" Background="#FFC5C5C5" Style="{StaticResource Flat_Button}" HorizontalAlignment="Left" Width="260" Grid.Row="1" Height="50" VerticalAlignment="Top" Click="btn_AddProduct_Click"/>
@@ -128,7 +128,7 @@
 
 
 
-                    <TextBox Padding="10,0,0,0" x:Name="AddProductID" Margin="10,17,0,0" FontSize="33" HorizontalAlignment="Left" Width="350" Grid.Row="1" Height="50" VerticalAlignment="Top">
+                    <TextBox Padding="10,0,0,0"  TextCompositionManager.PreviewTextInput="TextInputNoNumber" x:Name="textBox_AddProductID" Margin="10,17,0,0" FontSize="33" HorizontalAlignment="Left" Width="350" Grid.Row="1" Height="50" VerticalAlignment="Top">
                         <TextBox.Resources>
                             <Style TargetType="{x:Type Border}">
                                 <Setter Property="CornerRadius" Value="10"/>
@@ -140,24 +140,24 @@
                             <Style TargetType="{x:Type TextBlock}">
                                 <Setter Property="Visibility" Value="Collapsed"/>
                                 <Style.Triggers>
-                                    <DataTrigger Binding="{Binding Text, ElementName=AddProductID}" Value="">
+                                    <DataTrigger Binding="{Binding Text, ElementName = textBox_AddProductID}" Value="">
                                         <Setter Property="Visibility" Value="Visible"/>
                                     </DataTrigger>
                                 </Style.Triggers>
                             </Style>
                         </TextBlock.Style>
                     </TextBlock>
-                    <TextBox x:Name="textBox" Padding="10,0,0,0" HorizontalAlignment="Left" Margin="466,17,0,0" TextWrapping="Wrap" Text="1" Width="84" MaxLines="1" MaxLength="3" FontSize="33" Grid.Row="1" Height="50" VerticalAlignment="Top">
+                    <TextBox x:Name="textBox_ProductAmount"  TextCompositionManager.PreviewTextInput="TextInputNoNumber" Padding="10,0,0,0" HorizontalAlignment="Left" Margin="466,17,0,0" TextWrapping="Wrap" Text="1" Width="84" MaxLines="1" MaxLength="3" FontSize="33" Grid.Row="1" Height="50" VerticalAlignment="Top">
                         <TextBox.Resources>
                             <Style TargetType="{x:Type Border}">
                                 <Setter Property="CornerRadius" Value="10"/>
                             </Style>
                         </TextBox.Resources>
                     </TextBox>
-                    <Button x:Name="but_Temporary"  Content="Midlertidigt Produkt" Margin="0,0,867,9.667" Background="#FFC5C5C5" Style="{StaticResource Flat_Button}" Height="50" Width="300" VerticalAlignment="Bottom" HorizontalAlignment="Right" Grid.Row="1"/>
-                    <Button x:Name="But_Cancel"  Content="Afbryd" Margin="0,0,582,9.667" Background="#FFC5C5C5" Style="{StaticResource Flat_Button}" Height="50" VerticalAlignment="Bottom" Grid.Row="1" HorizontalAlignment="Right" Width="260"/>
+                    <Button x:Name="btn_Temporary"  Content="Midlertidigt Produkt" Margin="0,0,867,9.667" Background="#FFC5C5C5" Style="{StaticResource Flat_Button}" Height="50" Width="300" VerticalAlignment="Bottom" HorizontalAlignment="Right" Grid.Row="1"/>
+                    <Button x:Name="btn_Cancel"  Content="Afbryd" Margin="0,0,582,9.667" Background="#FFC5C5C5" Style="{StaticResource Flat_Button}" Height="50" VerticalAlignment="Bottom" Grid.Row="1" HorizontalAlignment="Right" Width="260"/>
 
-                    <TextBox Padding="10,0,0,0" x:Name="PayWithAmount" Margin="0,0,281,120.667" FontSize="33" Grid.Row="1" Height="50" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="350">
+                    <TextBox TextCompositionManager.PreviewTextInput="TextInputNoNumberWithComma" Padding="10,0,0,0" x:Name="PayWithAmount" Margin="0,0,281,120.667" FontSize="33" Grid.Row="1" Height="50" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="350">
                         <TextBox.Resources>
                             <Style TargetType="{x:Type Border}">
                                 <Setter Property="CornerRadius" Value="10"/>
