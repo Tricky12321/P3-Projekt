@@ -12,7 +12,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using P3_Projekt.Classes;
+using P3_Projekt_WPF.Classes;
+
 namespace P3_Projekt_WPF
 {
     /// <summary>
@@ -35,10 +36,12 @@ namespace P3_Projekt_WPF
 
         public void ShowProductInfo()
         {
+
             txtbox_ID.Text = _displayProduct.ID.ToString();
             txtbox_Navn.Text = _displayProduct.Name;
+            txtbox_Gruppe.Text = _displayProduct.ProductGroup.ToString();
             txtbox_Price.Text = _displayProduct.SalePrice.ToString();
-            txtbox_Stock.Text = _displayProduct.StorageWithAmount.Values.ToString();
+            txtbox_Stock.Text = _displayProduct.StorageWithAmount[1].ToString();
         }
     }
 }

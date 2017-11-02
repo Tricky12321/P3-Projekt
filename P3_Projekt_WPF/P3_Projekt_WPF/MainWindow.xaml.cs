@@ -112,6 +112,16 @@ namespace P3_Projekt_WPF
 
             scroll_StorageProduct.Content = productGrid;
 
+            _storageController.GetAllProductsFromDatabase();
+
+            foreach(Product produkter in _storageController.ProductDictionary.Values)
+            {
+                int i = 0;
+                productGrid.Children.Add(new ProductControl(_storageController.ProductDictionary[13]));
+            }
+            
+
+
             //productGrid.Children.Add(new ProductControl());
         }
 

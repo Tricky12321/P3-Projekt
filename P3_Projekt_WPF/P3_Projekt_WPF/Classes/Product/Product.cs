@@ -17,7 +17,7 @@ namespace P3_Projekt_WPF.Classes
         public Group ProductGroup;
         public bool DiscountBool;
         public decimal DiscountPrice;
-        private Image _image;
+        public Image Image;
         private bool _active = true;
         public bool Active => _active;
         public Dictionary<int, int> StorageWithAmount = new Dictionary<int, int>();
@@ -31,7 +31,7 @@ namespace P3_Projekt_WPF.Classes
             ProductGroup = group;
             DiscountBool = discount;
             DiscountPrice = discountPrice;
-            _image = image;
+            Image = image;
         }
 
         public Product(int id) : base(0)
@@ -58,7 +58,7 @@ namespace P3_Projekt_WPF.Classes
             Name = name;
             Brand = brand;
             ProductGroup = group;
-            _image = image;
+            Image = image;
 
         }
 
@@ -71,7 +71,7 @@ namespace P3_Projekt_WPF.Classes
             ProductGroup = group;
             DiscountBool = discount;
             DiscountPrice = discountPrice;
-            _image = image;
+            Image = image;
             SalePrice = salePrice;
         }
 
