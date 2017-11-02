@@ -52,20 +52,26 @@ namespace P3_Projekt_WPF.Classes.Database
             }
         }
 
-        public static void RunQuery(string Query)
+        public static void RunQuery_thread(object Query)
         {
+            string sql = (Query as string);
             using (MySqlCommand cmd = Connection.CreateCommand())
             {
-                cmd.CommandText = Query;
+                cmd.CommandText = sql;
                 Debug.Print("Running: " + Query);
                 if (Connection == null)
                 {
                     throw new NotConnectedException("Der er ikke forbindelse til databasen");
                 }
 
-                cmd.ExecuteScalar();
+                cmd.ExecuteScalarAsync();
             }
+        }
 
+        public static void RunQuery(string Query)
+        {
+            Thread SqlThread = new Thread(new ParameterizedThreadStart(RunQuery_thread));
+            SqlThread.Start(Query);
         }
 
         public static TableDecode RunQueryWithReturn(string Query)
