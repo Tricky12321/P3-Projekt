@@ -13,7 +13,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
         private int _idGroupCounter = 0;
 
         public Dictionary<int, Product> ProductDictionary = new Dictionary<int, Product>();
-        public Dictionary<int, Group> GroupDictionary = new Dictionary<int, Group>() { { 0, new Group("Diverse", "Produkter, som ikke tilhører en specifik gruppe") }, { 1, new Group("Is", "Is af alle varianter") } };
+        public Dictionary<int, Group> GroupDictionary = new Dictionary<int, Group>();
         public Dictionary<int, StorageRoom> StorageRoomDictionary = new Dictionary<int, StorageRoom>();
         public Dictionary<int, SaleTransaction> SaleTransactionsDictionary = new Dictionary<int, SaleTransaction>();
         public Dictionary<int, Receipt> ReceiptDictionary = new Dictionary<int, Receipt>();
@@ -33,7 +33,11 @@ namespace P3_Projekt_WPF.Classes.Utilities
             foreach (var row in Results.RowData)
             {
                 Product NewProduct = new Product(row);
-                ProductDictionary.Add(NewProduct.ID, NewProduct);
+
+                if(ProductDictionary.ContainsKey(NewProduct.ID) == false)
+                {
+                    ProductDictionary.Add(NewProduct.ID, NewProduct);
+                }
             }
         }
 
@@ -61,7 +65,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
 
         public void GetAllTempProductsFromDatabase()
         {
-            string sql = "SELECT * FROM `temp_product`";
+            string sql = "SELECT * FROM `temp_products`";
             TableDecode Results = Mysql.RunQueryWithReturn(sql);
             foreach (var row in Results.RowData)
             {

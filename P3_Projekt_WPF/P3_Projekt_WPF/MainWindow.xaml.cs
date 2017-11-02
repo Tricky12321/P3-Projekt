@@ -37,10 +37,10 @@ namespace P3_Projekt_WPF
             _settingsController = new SettingsController();
             _storageController = new StorageController();
             _POSController = new POSController(_storageController);
-
+            
             InitializeComponent();
             Mysql.Connect(); // Forbinder til databasen
-
+            //_storageController.GetAll();
             var gridView = new GridView();
             listView_Receipt.View = gridView;
 
