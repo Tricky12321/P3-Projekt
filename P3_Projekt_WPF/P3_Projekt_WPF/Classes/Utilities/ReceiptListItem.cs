@@ -11,6 +11,5 @@ namespace P3_Projekt_WPF.Classes.Utilities
         public string String_Product { get; set; }
         public string Price { get; set; }
         public int Amount { get; set; }
-
     }
 }

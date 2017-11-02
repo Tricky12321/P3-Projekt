@@ -19,11 +19,12 @@ namespace P3_Projekt_WPF.Classes.Utilities
         public Receipt PlacerholderReceipt;
         private StorageController _storageController;
 
-        private List<Receipt> ReceiptList = new List<Receipt>();
+        public List<Receipt> ReceiptList = new List<Receipt>();
         
         public POSController(StorageController storageController)
         {
             _storageController = storageController;
+            StartPurchase();
         }
         
         // TODO: Denne funktion fylder ProductList med alle produkterne fra databasen. 
