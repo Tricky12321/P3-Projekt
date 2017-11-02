@@ -13,7 +13,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
         public static DateTime UnixTimeStampToDateTime(double unixTimeStamp)
         {
             // Unix timestamp is seconds past epoch
-            System.DateTime dtDateTime = new DateTime(1970, 1, 1, 0, 0, 0, 0, System.DateTimeKind.Utc);
+            DateTime dtDateTime = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
             dtDateTime = dtDateTime.AddSeconds(unixTimeStamp).ToLocalTime();
             return dtDateTime;
         }
@@ -50,13 +50,15 @@ namespace P3_Projekt_WPF.Classes.Utilities
             {
                 Receipt NewReceipt = new Receipt(receipt);
                 decimal price_of_all_transactions = 0;
+                int TotalProductCount = 0;
                 foreach (var transaction in NewReceipt.Transactions)
                 {
                     price_of_all_transactions += transaction.TotalPrice;
+                    TotalProductCount += transaction.Amount;
                 }
                 NewReceipt.TotalPrice = price_of_all_transactions;
                 NewReceipt.PaidPrice = price_of_all_transactions;
-                NewReceipt.NumberOfProducts = NewReceipt.Transactions.Count;
+                NewReceipt.NumberOfProducts = TotalProductCount;
                 NewReceipt.UpdateInDatabase();
             }
         }

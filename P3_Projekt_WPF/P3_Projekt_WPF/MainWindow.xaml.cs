@@ -106,14 +106,31 @@ namespace P3_Projekt_WPF
 
             scroll_StorageProduct.Content = productGrid;
 
-            productGrid.Children.Add(new ProductControl());
+            _storageController.GetAll();
+
+            productGrid.Children.Add(new ProductControl(_storageController.ProductDictionary[12]));
+
+
+            foreach (Product produkter in _storageController.ProductDictionary.Values)
+            {
+                int i = 1;
+                productGrid.Children.Add(new ProductControl(_storageController.ProductDictionary[i]));
+                if(i % 5 == 0)
+                {
+                    productGrid.RowDefinitions.Add(new RowDefinition());
+                }
+                ++i;
+            }
+            
+
+
         }
 
         public void AddProductButton()
         {
             Button addProductButton = new Button();
             addProductButton.Content = "+";
-            addProductButton.Height = 350;
+            addProductButton.Height = 360;
             addProductButton.Width = 250;
             addProductButton.SetValue(Grid.RowProperty, 0);
             addProductButton.SetValue(Grid.ColumnProperty, 0);

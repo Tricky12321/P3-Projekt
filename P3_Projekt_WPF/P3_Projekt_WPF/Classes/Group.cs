@@ -23,6 +23,11 @@ namespace P3_Projekt_WPF.Classes
             ID = _idCounter++;
         }
 
+        public Group(Row row)
+        {
+            CreateFromRow(row);
+        }
+
         public Group(int id)
         {
             ID = id;
