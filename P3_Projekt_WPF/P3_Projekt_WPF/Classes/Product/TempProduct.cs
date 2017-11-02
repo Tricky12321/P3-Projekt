@@ -24,7 +24,7 @@ namespace P3_Projekt_WPF.Classes
             GetFromDatabase();
         }
 
-        public TempProduct(Row row)
+        public TempProduct(Row row) : base(0)
         {
             CreateFromRow(row);
         }
