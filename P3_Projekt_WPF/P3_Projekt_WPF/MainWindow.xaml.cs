@@ -88,17 +88,17 @@ namespace P3_Projekt_WPF
 
             scroll_StorageProduct.Content = productGrid;
 
-            productGrid.Children.Add(new ProductControl());
+            //productGrid.Children.Add(new ProductControl());
         }
 
         public void AddProductButton()
         {
             Button addProductButton = new Button();
             addProductButton.Content = "+";
-            addProductButton.Height = 350;
+            addProductButton.Height = 360;
             addProductButton.Width = 250;
             addProductButton.SetValue(Grid.RowProperty, 0);
-            addProductButton.SetValue(Grid.ColumnProperty, 0);
+            addProductButton.SetValue(Grid.ColumnProperty, 1);
             addProductButton.Style = FindResource("Flat_Button") as Style;
             // tilføj produkt addProductButton.Click
             productGrid.Children.Add(addProductButton);
