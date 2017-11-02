@@ -112,17 +112,24 @@ namespace P3_Projekt_WPF
 
             scroll_StorageProduct.Content = productGrid;
 
-            _storageController.GetAllProductsFromDatabase();
+            _storageController.GetAll();
 
-            foreach(Product produkter in _storageController.ProductDictionary.Values)
+            productGrid.Children.Add(new ProductControl(_storageController.ProductDictionary[12]));
+
+
+            foreach (Product produkter in _storageController.ProductDictionary.Values)
             {
-                int i = 0;
-                productGrid.Children.Add(new ProductControl(_storageController.ProductDictionary[13]));
+                int i = 1;
+                productGrid.Children.Add(new ProductControl(_storageController.ProductDictionary[i]));
+                if(i % 5 == 0)
+                {
+                    productGrid.RowDefinitions.Add(new RowDefinition());
+                }
+                ++i;
             }
             
 
 
-            //productGrid.Children.Add(new ProductControl());
         }
 
         public void AddProductButton()
@@ -132,7 +139,7 @@ namespace P3_Projekt_WPF
             addProductButton.Height = 360;
             addProductButton.Width = 250;
             addProductButton.SetValue(Grid.RowProperty, 0);
-            addProductButton.SetValue(Grid.ColumnProperty, 1);
+            addProductButton.SetValue(Grid.ColumnProperty, 0);
             addProductButton.Style = FindResource("Flat_Button") as Style;
             // tilføj produkt addProductButton.Click
             productGrid.Children.Add(addProductButton);
