@@ -50,13 +50,15 @@ namespace P3_Projekt_WPF.Classes.Utilities
             {
                 Receipt NewReceipt = new Receipt(receipt);
                 decimal price_of_all_transactions = 0;
+                int TotalProductCount = 0;
                 foreach (var transaction in NewReceipt.Transactions)
                 {
                     price_of_all_transactions += transaction.TotalPrice;
+                    TotalProductCount += transaction.Amount;
                 }
                 NewReceipt.TotalPrice = price_of_all_transactions;
                 NewReceipt.PaidPrice = price_of_all_transactions;
-                NewReceipt.NumberOfProducts = NewReceipt.Transactions.Count;
+                NewReceipt.NumberOfProducts = TotalProductCount;
                 NewReceipt.UpdateInDatabase();
             }
         }
