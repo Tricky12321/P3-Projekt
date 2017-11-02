@@ -12,7 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-
+using P3_Projekt.Classes;
 namespace P3_Projekt_WPF
 {
     /// <summary>
@@ -20,9 +20,25 @@ namespace P3_Projekt_WPF
     /// </summary>
     public partial class ProductControl : UserControl
     {
-        public ProductControl()
+        private Product _displayProduct;
+        public ProductControl(Product productForDisplay)
         {
             InitializeComponent();
+            _displayProduct = productForDisplay;
+            ShowProductInfo();
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        public void ShowProductInfo()
+        {
+            txtbox_ID.Text = _displayProduct.ID.ToString();
+            txtbox_Navn.Text = _displayProduct.Name;
+            txtbox_Price.Text = _displayProduct.SalePrice.ToString();
+            txtbox_Stock.Text = _displayProduct.StorageWithAmount.Values.ToString();
         }
     }
 }
