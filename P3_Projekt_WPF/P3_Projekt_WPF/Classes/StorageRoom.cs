@@ -28,6 +28,11 @@ namespace P3_Projekt_WPF.Classes
             GetFromDatabase();
         }
 
+        public StorageRoom(Row row)
+        {
+            CreateFromRow(row);
+        }
+
         public void GetFromDatabase()
         {
             string sql = $"SELECT * FROM `storagerooms` WHERE `id` = '{ID}'";

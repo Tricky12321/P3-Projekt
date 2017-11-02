@@ -24,6 +24,11 @@ namespace P3_Projekt_WPF.Classes
             GetFromDatabase();
         }
 
+        public TempProduct(Row row)
+        {
+            CreateFromRow(row);
+        }
+
         public override string GetName()
         {
             return Description;

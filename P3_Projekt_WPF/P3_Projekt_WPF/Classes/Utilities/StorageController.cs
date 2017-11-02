@@ -37,6 +37,47 @@ namespace P3_Projekt_WPF.Classes.Utilities
             }
         }
 
+        public void GetAllGroupsFromDatabase()
+        {
+            string sql = "SELECT * FROM `groups`";
+            TableDecode Results = Mysql.RunQueryWithReturn(sql);
+            foreach (var row in Results.RowData)
+            {
+                Group NewGroup = new Group(row);
+                GroupDictionary.Add(NewGroup.ID, NewGroup);
+            }
+        }
+
+        public void GetAllStorageRooms()
+        {
+            string sql = "SELECT * FROM `storagerooms`";
+            TableDecode Results = Mysql.RunQueryWithReturn(sql);
+            foreach (var row in Results.RowData)
+            {
+                StorageRoom NewStorageRoom = new StorageRoom(row);
+                StorageRoomDictionary.Add(NewStorageRoom.ID, NewStorageRoom);
+            }
+        }
+
+        public void GetAllTempProductsFromDatabase()
+        {
+            string sql = "SELECT * FROM `temp_product`";
+            TableDecode Results = Mysql.RunQueryWithReturn(sql);
+            foreach (var row in Results.RowData)
+            {
+                TempProduct NewTempProduct = new TempProduct(row);
+                TempProductList.Add(NewTempProduct);
+            }
+        }
+
+        public void GetAll()
+        {
+            GetAllProductsFromDatabase();
+            GetAllGroupsFromDatabase();
+            GetAllReceiptsFromDatabase();
+            GetAllTempProductsFromDatabase();
+        }
+
         /// <summary>
         /// Gets all receipts and saletransactions from the database.
         /// </summary>
