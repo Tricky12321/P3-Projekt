@@ -107,10 +107,7 @@ namespace P3_Projekt_WPF
             {
                 Thread.Sleep(200);
             }
-
-            productGrid.Children.Add(new ProductControl(_storageController.ProductDictionary[12]));
-
-            LoadProductGrid();
+            
         }
 
         public void AddProductButton()
@@ -129,20 +126,24 @@ namespace P3_Projekt_WPF
 
         public void StorageTabClick(object sender, RoutedEventArgs e)
         {
-            LoadProductGrid();
+            //LoadProductGrid();
         }
 
         public void LoadProductGrid()
         {
+            //fproductGrid.Children.Clear();
             int i = 1;
+            
 
-            foreach (Product produkter in _storageController.ProductDictionary.Values)
+            foreach (KeyValuePair<int, Product> produkter in _storageController.ProductDictionary.OrderBy(x => x.Key))
             {
                 if (i % 5 == 0)
                 {
                     productGrid.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(380) });
+                    int hej = productGrid.RowDefinitions.Count;
                 }
-                ProductControl productControl = new ProductControl(produkter);
+
+                ProductControl productControl = new ProductControl(produkter.Value);
                 productControl.SetValue(Grid.ColumnProperty, i % 5);
                 productControl.SetValue(Grid.RowProperty, i / 5);
                 productGrid.Children.Add(productControl);
