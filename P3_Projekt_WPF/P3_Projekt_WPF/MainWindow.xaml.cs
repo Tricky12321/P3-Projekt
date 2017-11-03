@@ -44,11 +44,6 @@ namespace P3_Projekt_WPF
             _settingsController = new SettingsController();
             _storageController = new StorageController();
             _POSController = new POSController(_storageController);
-
-            Mysql.Connect(); // Forbinder til databasen
-
-            _storageController.GetAllProductsFromDatabase();
-
             InitGridQuickButtons();
             
             InitStorageGridProducts();

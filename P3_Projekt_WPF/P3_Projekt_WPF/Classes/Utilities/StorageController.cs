@@ -7,6 +7,7 @@ using System.Windows.Controls;
 using P3_Projekt_WPF.Classes.Database;
 using System.Threading;
 using System.Collections.Concurrent;
+using System.Diagnostics;
 namespace P3_Projekt_WPF.Classes.Utilities
 {
     public class StorageController
@@ -62,7 +63,14 @@ namespace P3_Projekt_WPF.Classes.Utilities
         {
             Row Data = (row_data as Row);
             Group NewGroup = new Group(Data);
-            GroupDictionary.Add(NewGroup.ID, NewGroup);
+            if (!GroupDictionary.ContainsKey(NewGroup.ID))
+            {
+                GroupDictionary.Add(NewGroup.ID, NewGroup);
+            }
+            else
+            {
+                Debug.WriteLine("Prøvede at tilføje en key der allerede er tilføjet!");
+            }
         }
 
         private void CreateStorageRoom_Thread(object row_data)
