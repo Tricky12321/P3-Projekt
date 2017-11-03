@@ -5,16 +5,23 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows.Media;
+using System.Windows;
 
 namespace P3_Projekt_WPF.Classes.Utilities
 {
+    class FastButton : Button
+    {
+        public int ProductID;
+    }
+
     class SettingsController
     {
-        public List<Button> quickButtonList = new List<Button>();
+        public List<FastButton> quickButtonList = new List<FastButton>();
 
         public void AddNewQuickButton(string buttonText, int productID, double gridWidth, double gridHeight)
         {
-            Button button = new Button();
+            FastButton button = new FastButton();
+            button.ProductID = productID;
             button.Content = buttonText;;
             button.Height = gridHeight / 7;
             button.Width = gridWidth / 2;

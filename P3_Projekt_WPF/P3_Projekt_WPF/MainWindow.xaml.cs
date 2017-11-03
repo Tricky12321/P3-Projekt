@@ -34,35 +34,25 @@ namespace P3_Projekt_WPF
 
         public MainWindow()
         {
+            InitializeComponent();
+
+            InitComponents();
+        }
+
+        private void InitComponents()
+        {
             _settingsController = new SettingsController();
             _storageController = new StorageController();
             _POSController = new POSController(_storageController);
-            
-            InitializeComponent();
+
             Mysql.Connect(); // Forbinder til databasen
-            //_storageController.GetAll();
-            var gridView = new GridView();
-            listView_Receipt.View = gridView;
+
+            _storageController.GetAllProductsFromDatabase();
 
             InitGridQuickButtons();
-
-            //UpdateGridQuickButtons();
+            
             InitStorageGridProducts();
             AddProductButton();
-
-
-
-
-            // Kun til testing
-            //_storageController.GetAllProductsFromDatabase();
-
-            _settingsController.AddNewQuickButton("Hej med dig", 123, grid_QuickButton.Width, grid_QuickButton.Height);
-            _settingsController.AddNewQuickButton("Hej med dig2", 123, grid_QuickButton.Width, grid_QuickButton.Height);
-
-            AddTransactionToReceipt(new SaleTransaction(new ServiceProduct(19m, 15m, 10, "kurt", default(Group)), 12, 102));
-            //UpdateGridQuickButtons();
-            //UpdateReceiptList();
-            //
         }
 
         private void InitGridQuickButtons()
@@ -78,16 +68,20 @@ namespace P3_Projekt_WPF
 
         private void UpdateGridQuickButtons()
         {
-            foreach (Button button in _settingsController.quickButtonList)
+            grid_QuickButton.Children.Clear();
+            foreach (FastButton button in _settingsController.quickButtonList)
             {
                 button.Style = FindResource("Flat_Button") as Style;
+
+                button.Click += btn_FastButton_click;
                 grid_QuickButton.Children.Add(button);
             }
         }
 
         private void UpdateReceiptList()
         {
-            foreach(SaleTransaction transaction in _POSController.PlacerholderReceipt.Transactions)
+            listView_Receipt.Items.Clear();
+            foreach (SaleTransaction transaction in _POSController.PlacerholderReceipt.Transactions)
             {
                 AddTransactionToReceipt(transaction);
             }
@@ -148,25 +142,6 @@ namespace P3_Projekt_WPF
         public void AddTransactionToReceipt(SaleTransaction transaction)
         {
             listView_Receipt.Items.Add(new ReceiptListItem { String_Product = transaction.GetProductName(), Amount = transaction.Amount, Price = $"{transaction.GetProductPrice()},-" });
-
-        }
-
-        private void tabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-
-        }
-
-        private void tabControl_SelectionChanged_1(object sender, SelectionChangedEventArgs e)
-        {
-
-        }
-
-
-
-        public void Start()
-        {
-            StorageController StorageControl = new StorageController();
-            POSController POSControl = new POSController(StorageControl);
         }
 
         private void btn_MobilePay_Click(object sender, RoutedEventArgs e)
@@ -230,21 +205,32 @@ namespace P3_Projekt_WPF
             }
         }
 
+        private void btn_SettingFastBtnAdd_Click(object sender, RoutedEventArgs e)
+        {
+            _settingsController.AddNewQuickButton(textBox_CreateQuickBtnName.Text, int.Parse(textBox_CreateQuickBtnID.Text), grid_QuickButton.Width, grid_QuickButton.Height);
+        }
 
+        private void btn_FastButton_click(object sender, RoutedEventArgs e)
+        {
+            _POSController.AddSaleTransaction(_POSController.GetProductFromID((sender as FastButton).ProductID), 1);
+            UpdateReceiptList();
+        }
 
-
-
+        private void updateGridQuickButtons(object sender, RoutedEventArgs e)
+        {
+            UpdateGridQuickButtons();
+        }
 
         private void TextInputNoNumber(object sender, TextCompositionEventArgs e)
         {
-            // xaml.cs code
+            // Only allows number in textfield
             if (!char.IsDigit(e.Text, e.Text.Length - 1))
                 e.Handled = true;
         }
 
         private void TextInputNoNumberWithComma(object sender, TextCompositionEventArgs e)
         {
-            // xaml.cs code
+            // Only allows number in textfield, also with comma
             if (!char.IsDigit(e.Text, e.Text.Length - 1) && !(e.Text[e.Text.Length - 1] == ','))
                 e.Handled = true;
         }
