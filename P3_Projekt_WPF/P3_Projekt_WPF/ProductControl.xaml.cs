@@ -23,16 +23,16 @@ namespace P3_Projekt_WPF
     {
         public Image txtboxImage
         {
-            get { return txtboxImage; }
+            get { return _displayProduct.Image; }
             set
             {
                 if(value != null)
                 {
-                    //txtboxImage = P3_Projekt_WPF.Properties.Resources.
+                    _displayProduct.Image = value;
                 }
                 else
                 {
-
+                     
                 }
 
             }

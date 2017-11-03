@@ -160,7 +160,19 @@
     <Resource Include="Resources\Red_Cross.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\questionmark.png" />
+    <None Include="Resources\QuestionMark.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Questiomark.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\questionmark.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\questionmark.png.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\questionmark.png.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
