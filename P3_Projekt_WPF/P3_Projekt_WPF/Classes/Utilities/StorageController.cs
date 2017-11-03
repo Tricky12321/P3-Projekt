@@ -5,6 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls;
 using P3_Projekt_WPF.Classes.Database;
+using System.Threading;
+using System.Collections.Concurrent;
 namespace P3_Projekt_WPF.Classes.Utilities
 {
     public class StorageController
@@ -18,13 +20,82 @@ namespace P3_Projekt_WPF.Classes.Utilities
         public Dictionary<int, SaleTransaction> SaleTransactionsDictionary = new Dictionary<int, SaleTransaction>();
         public Dictionary<int, Receipt> ReceiptDictionary = new Dictionary<int, Receipt>();
         public List<TempProduct> TempProductList = new List<TempProduct>();
+        public List<Thread> Threads = new List<Thread>();
+        public ConcurrentBag<Thread> ProductThreads = new ConcurrentBag<Thread>();
+        public const int ThreadCount = 20;
+        public object ThreadLock = new object();
+        public object ProductThreadLock = new object();
+        private List<Row> ProductThreadQue = new List<Row>();
+
+        public bool ThreadDone()
+        {
+            lock (ThreadLock)
+            {
+                foreach (var item in Threads)
+                {
+                    if (item.IsAlive)
+                    {
+                        return false;
+                    }
+                }
+            }
+            return true;
+        }
 
         public StorageController()
         {
             //GetAllProductsFromDatabase();
             //GetAllReceiptsFromDatabase();
         }
-        
+
+        private void CreateProduct_Thread(object rowData)
+        {
+            Row Data = (rowData as Row);
+            Product NewProduct = new Product(Data);
+            if (ProductDictionary.ContainsKey(NewProduct.ID) == false)
+            {
+                ProductDictionary.Add(NewProduct.ID, NewProduct);
+            }
+        }
+
+        private void CreateGroups_Thread(object row_data)
+        {
+            Row Data = (row_data as Row);
+            Group NewGroup = new Group(Data);
+            GroupDictionary.Add(NewGroup.ID, NewGroup);
+        }
+
+        private void CreateStorageRoom_Thread(object row_data)
+        {
+            Row Data = (row_data as Row);
+            StorageRoom NewStorageRoom = new StorageRoom(Data);
+            StorageRoomDictionary.Add(NewStorageRoom.ID, NewStorageRoom);
+        }
+
+        private void CreateTempProduct_Thread(object row_data)
+        {
+            Row Data = (row_data as Row);
+            TempProduct NewTempProduct = new TempProduct(Data);
+            lock (TempProductList)
+            {
+                TempProductList.Add(NewTempProduct);
+            }
+
+        }
+
+        private void CreateReceipt_Thread(object row_data)
+        {
+            Row Data = (row_data as Row);
+            Receipt NewReceipt = new Receipt(Data);
+            ReceiptDictionary.Add(NewReceipt.ID, NewReceipt);
+            foreach (var saleTransaction in NewReceipt.Transactions)
+            {
+                if (saleTransaction is SaleTransaction)
+                {
+                    SaleTransactionsDictionary.Add(saleTransaction.GetID(), saleTransaction);
+                }
+            }
+        }
 
         public void GetAllProductsFromDatabase()
         {
@@ -32,12 +103,12 @@ namespace P3_Projekt_WPF.Classes.Utilities
             TableDecode Results = Mysql.RunQueryWithReturn(sql);
             foreach (var row in Results.RowData)
             {
-                Product NewProduct = new Product(row);
-
-                if(ProductDictionary.ContainsKey(NewProduct.ID) == false)
+                Thread NewThread = new Thread(new ParameterizedThreadStart(CreateProduct_Thread));
+                lock (ThreadLock)
                 {
-                    ProductDictionary.Add(NewProduct.ID, NewProduct);
+                    Threads.Add(NewThread);
                 }
+                NewThread.Start(row);
             }
         }
 
@@ -47,8 +118,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
             TableDecode Results = Mysql.RunQueryWithReturn(sql);
             foreach (var row in Results.RowData)
             {
-                Group NewGroup = new Group(row);
-                GroupDictionary.Add(NewGroup.ID, NewGroup);
+                CreateGroups_Thread(row);
             }
         }
 
@@ -58,8 +128,15 @@ namespace P3_Projekt_WPF.Classes.Utilities
             TableDecode Results = Mysql.RunQueryWithReturn(sql);
             foreach (var row in Results.RowData)
             {
-                StorageRoom NewStorageRoom = new StorageRoom(row);
-                StorageRoomDictionary.Add(NewStorageRoom.ID, NewStorageRoom);
+                CreateStorageRoom_Thread(row);
+                /*
+                Thread NewThread = new Thread(new ParameterizedThreadStart(CreateStorageRoom_Thread));
+                lock (ThreadLock)
+                {
+                    Threads.Add(NewThread);
+                }
+                NewThread.Start(row);
+                */
             }
         }
 
@@ -69,39 +146,60 @@ namespace P3_Projekt_WPF.Classes.Utilities
             TableDecode Results = Mysql.RunQueryWithReturn(sql);
             foreach (var row in Results.RowData)
             {
-                TempProduct NewTempProduct = new TempProduct(row);
-                TempProductList.Add(NewTempProduct);
+                CreateTempProduct_Thread(row);
+                /*
+                Thread NewThread = new Thread(new ParameterizedThreadStart(CreateTempProduct_Thread));
+                lock (ThreadLock)
+                {
+                    Threads.Add(NewThread);
+                }
+                NewThread.Start(row);
+                */
             }
         }
 
-        public void GetAll()
-        {
-            GetAllProductsFromDatabase();
-            GetAllGroupsFromDatabase();
-            GetAllReceiptsFromDatabase();
-            GetAllTempProductsFromDatabase();
-        }
-
-        /// <summary>
-        /// Gets all receipts and saletransactions from the database.
-        /// </summary>
         public void GetAllReceiptsFromDatabase()
         {
             string sql = "SELECT * FROM `receipt`";
             TableDecode Results = Mysql.RunQueryWithReturn(sql);
             foreach (var row in Results.RowData)
             {
-                Receipt NewReceipt = new Receipt(row);
-                ReceiptDictionary.Add(NewReceipt.ID, NewReceipt);
-                foreach (var saleTransaction in NewReceipt.Transactions)
+                CreateReceipt_Thread(row);
+                /*
+                Thread NewThread = new Thread(new ParameterizedThreadStart(CreateReceipt_Thread));
+                lock (ThreadLock)
                 {
-                    if (saleTransaction is SaleTransaction)
-                    {
-                        SaleTransactionsDictionary.Add(saleTransaction.GetID(), saleTransaction);
-                    }
+                    Threads.Add(NewThread);
                 }
+                NewThread.Start(row);
+                */
             }
         }
+
+        public void GetAll()
+        {
+            // Multithreading the different mysql calls, so it goes much faster
+            Thread GetAllProductsThread = new Thread(new ThreadStart(GetAllProductsFromDatabase));
+            Thread GetAllGroupsThread = new Thread(new ThreadStart(GetAllGroupsFromDatabase));
+            //Thread GetAllReceiptsThread = new Thread(new ThreadStart(GetAllReceiptsFromDatabase));
+            Thread GetAllTempProductsThread = new Thread(new ThreadStart(GetAllProductsFromDatabase));
+            lock (ThreadLock)
+            {
+                Threads.Add(GetAllProductsThread);
+                Threads.Add(GetAllGroupsThread);
+                //Threads.Add(GetAllReceiptsThread);
+                Threads.Add(GetAllTempProductsThread);
+            }
+            GetAllProductsThread.Start();
+            GetAllGroupsThread.Start();
+            //GetAllReceiptsThread.Start();
+            GetAllTempProductsThread.Start();
+        }
+
+        /// <summary>
+        /// Gets all receipts and saletransactions from the database.
+        /// </summary>
+
 
         public void DeleteProduct(int ProductID)
         {
@@ -440,7 +538,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
             tempProductsTransaction.EditSaleTransactionFromTempProduct(ProductDictionary[matchedProductID]);
             tempProductToMerge.Resolve();
             TempProductList.Remove(tempProductToMerge);
-        }   
+        }
 
         public void EditTempProduct(TempProduct tempProductToEdit, string description, decimal salePrice)
         {

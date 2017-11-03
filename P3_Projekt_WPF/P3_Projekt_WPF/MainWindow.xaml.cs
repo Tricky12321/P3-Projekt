@@ -17,6 +17,7 @@ using P3_Projekt_WPF.Classes.Utilities;
 using P3_Projekt_WPF.Classes.Exceptions;
 using P3_Projekt_WPF.Classes;
 using System.Diagnostics;
+using System.Threading;
 namespace P3_Projekt_WPF
 {
     /// <summary>
@@ -105,8 +106,11 @@ namespace P3_Projekt_WPF
 
 
             scroll_StorageProduct.Content = productGrid;
-
             _storageController.GetAll();
+            while (!_storageController.ThreadDone())
+            {
+                Thread.Sleep(200);
+            }
 
             productGrid.Children.Add(new ProductControl(_storageController.ProductDictionary[12]));
 
