@@ -26,7 +26,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
 
         public static void CheckInternetConnection()
         {
-            try
+            /*try
             {
                 using (var client = new WebClient())
                 {
@@ -39,7 +39,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
             catch
             {
                 throw new NoInternetConnectionException("Der er ingen forbindelse til internettet!");
-            }
+            }*/
         }
 
         public static void FixReceiptInDatabase()
