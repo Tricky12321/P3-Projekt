@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:P3_Projekt_WPF"
         xmlns:Classes="clr-namespace:P3_Projekt_WPF.Classes" x:Class="P3_Projekt_WPF.MainWindow"
         mc:Ignorable="d"
-        Title="Børglum Kloster Lager og Salg" MinHeight="600" Height="600" MinWidth="1400" Width="1500" Background="#FF919191" WindowState="Maximized">
+        Title="Børglum Kloster Lager og Salg" MinHeight="600" Height="600" MinWidth="1366" Width="1366" Background="#FF919191" WindowState="Maximized">
     <Grid>
         <TabControl x:Name="tabControl" FontSize="30" Margin="0,0,0.333,-0.333" Grid.RowSpan="3">
             <TabItem x:Name="tab_Sale" GotFocus="updateGridQuickButtons" Header="Salg" Width="190">
@@ -15,6 +15,7 @@
                         <ColumnDefinition Width="1051*"/>
                         <ColumnDefinition Width="855*"/>
                     </Grid.ColumnDefinitions>
+                    
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition/>
