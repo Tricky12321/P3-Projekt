@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:P3_Projekt_WPF"
         xmlns:Classes="clr-namespace:P3_Projekt_WPF.Classes" x:Class="P3_Projekt_WPF.MainWindow"
         mc:Ignorable="d"
-        Title="Børglum Kloster Lager og Salg" MinHeight="600" Height="600" MinWidth="1366" Width="1366" Background="#FF919191" WindowState="Maximized">
+        Title="Børglum Kloster Lager og Salg" MinHeight="600" Height="1396" MinWidth="1366" Width="2068" Background="#FF919191" WindowState="Maximized">
     <Grid>
         <TabControl x:Name="tabControl" FontSize="30" Margin="0,0,0.333,-0.333" Grid.RowSpan="3">
             <TabItem x:Name="tab_Sale" GotFocus="updateGridQuickButtons" Header="Salg" Width="190">
@@ -15,7 +15,7 @@
                         <ColumnDefinition Width="1051*"/>
                         <ColumnDefinition Width="855*"/>
                     </Grid.ColumnDefinitions>
-                    
+
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition/>
@@ -92,14 +92,14 @@
                     <Button x:Name="btn_Temporary"  Content="Midlertidigt Produkt" Margin="0,0,12,10" Background="#FFC5C5C5" Style="{StaticResource Flat_Button}" Height="50" Width="300" VerticalAlignment="Bottom" HorizontalAlignment="Right" Grid.Row="1"/>
                     <Button x:Name="btn_Cancel"  Content="Afbryd" Margin="13,0,0,10" Background="#FFC5C5C5" Style="{StaticResource Flat_Button}" Height="50" VerticalAlignment="Bottom" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Left" Width="260"/>
 
-                    <TextBox TextCompositionManager.PreviewTextInput="TextInputNoNumberWithComma" Padding="10,0,0,0" x:Name="PayWithAmount" Margin="16,0,281,121" FontSize="33" Grid.Row="1" Height="50" VerticalAlignment="Bottom" Grid.Column="1">
+                    <TextBox TextCompositionManager.PreviewTextInput="TextInputNoNumberWithComma" Padding="10,0,0,0" x:Name="PayWithAmount" Margin="13,0,275,121" FontSize="33" Grid.Row="1" Height="50" VerticalAlignment="Bottom" Grid.Column="1">
                         <TextBox.Resources>
                             <Style TargetType="{x:Type Border}">
                                 <Setter Property="CornerRadius" Value="10"/>
                             </Style>
                         </TextBox.Resources>
                     </TextBox>
-                    <TextBlock IsHitTestVisible="False" Text="Betalt Beløb" Margin="35,0,300,120" Foreground="DarkGray" FontSize="33" Grid.Row="1" Height="50" VerticalAlignment="Bottom" Grid.Column="1">
+                    <TextBlock IsHitTestVisible="False" Text="Betalt Beløb" Margin="23,0,360,119" Foreground="DarkGray" FontSize="33" Grid.Row="1" Height="50" VerticalAlignment="Bottom" Grid.Column="1">
                         <TextBlock.Style>
                             <Style TargetType="{x:Type TextBlock}">
                                 <Setter Property="Visibility" Value="Collapsed"/>
@@ -193,7 +193,7 @@
                         </ListView.View>
                     </ListView>
                     <Label x:Name="label" Content="Kvittering" Margin="13,71,0,0" Height="68" VerticalAlignment="Top" FontSize="35" Grid.RowSpan="2" Grid.Column="1" HorizontalAlignment="Left" Width="312"/>
-                    <Label x:Name="label_TotalPrice" Content="Total" Margin="13,0,10,176" Grid.Row="1" VerticalAlignment="Bottom" Height="49" BorderThickness="1" Background="White" BorderBrush="Black" Grid.Column="1"/>
+                    <Label x:Name="label_TotalPrice" Content="Total" Margin="13,0,10,176" Grid.Row="1" VerticalAlignment="Bottom" Height="49" BorderThickness="1" Background="White" BorderBrush="#FF858585" Grid.Column="1"/>
                 </Grid>
             </TabItem>
 
@@ -256,6 +256,27 @@
                             </Style>
                         </TextBlock.Style>
                     </TextBlock>
+                    <ListView x:Name="listView_QuickBtn" HorizontalAlignment="Left" Height="572" Margin="10,169,0,0" VerticalAlignment="Top" Width="613">
+                        <ListView.View>
+                            <GridView>
+                                <GridViewColumn>
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding Button_Name}"/>
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+
+                                <GridViewColumn>
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding Button_Product_ID}"/>
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+                            </GridView>
+                        </ListView.View>
+                    </ListView>
                 </Grid>
             </TabItem>
         </TabControl>
