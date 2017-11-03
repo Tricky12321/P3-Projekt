@@ -154,7 +154,7 @@ namespace P3_Projekt_WPF.Classes.Database
                         // Sikre sig at der er noget at hente i databasen.
                         if (!Reader.HasRows)
                         {
-                            throw new EmptyTableException("Tabellen man forsøger at forbinde til í databasen er tom?");
+                            throw new EmptyTableException("Tabellen man forsøger at forbinde til i databasen er tom?");
                         }
                         TableContent = new TableDecode(Reader);
                     }
