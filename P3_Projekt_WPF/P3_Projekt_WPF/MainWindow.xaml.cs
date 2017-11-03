@@ -120,7 +120,7 @@ namespace P3_Projekt_WPF
             foreach (Product produkter in _storageController.ProductDictionary.Values)
             {
                 int i = 1;
-                productGrid.Children.Add(new ProductControl(_storageController.ProductDictionary[i]));
+                productGrid.Children.Add(new ProductControl(produkter));
                 if(i % 5 == 0)
                 {
                     productGrid.RowDefinitions.Add(new RowDefinition());

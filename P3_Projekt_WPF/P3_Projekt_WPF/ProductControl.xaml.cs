@@ -41,7 +41,6 @@ namespace P3_Projekt_WPF
             txtbox_Navn.Text = _displayProduct.Name;
             txtbox_Gruppe.Text = _displayProduct.ProductGroup.ToString();
             txtbox_Price.Text = _displayProduct.SalePrice.ToString();
-            txtbox_Stock.Text = _displayProduct.StorageWithAmount[1].ToString();
         }
     }
 }
