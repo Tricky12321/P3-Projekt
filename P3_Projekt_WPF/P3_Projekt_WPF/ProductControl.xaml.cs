@@ -44,6 +44,7 @@ namespace P3_Projekt_WPF
         {
             InitializeComponent();
             _displayProduct = productForDisplay;
+            ShowProductInfo();
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
