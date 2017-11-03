@@ -62,15 +62,21 @@ namespace P3_Projekt_WPF
             }
         }
 
+        private void updateGridQuickButtons(object sender, RoutedEventArgs e)
+        {
+            UpdateGridQuickButtons();
+        }
+
         private void UpdateGridQuickButtons()
         {
-            grid_QuickButton.Children.Clear();
             foreach (FastButton button in _settingsController.quickButtonList)
             {
-                button.Style = FindResource("Flat_Button") as Style;
+                if (!grid_QuickButton.Children.Contains(button)){
+                    button.Style = FindResource("Flat_Button") as Style;
 
-                button.Click += btn_FastButton_click;
-                grid_QuickButton.Children.Add(button);
+                    button.Click += btn_FastButton_click;
+                    grid_QuickButton.Children.Add(button);
+                }
             }
         }
 
@@ -234,10 +240,7 @@ namespace P3_Projekt_WPF
             UpdateReceiptList();
         }
 
-        private void updateGridQuickButtons(object sender, RoutedEventArgs e)
-        {
-            UpdateGridQuickButtons();
-        }
+
 
         private void TextInputNoNumber(object sender, TextCompositionEventArgs e)
         {
