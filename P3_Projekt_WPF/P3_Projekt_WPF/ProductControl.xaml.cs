@@ -49,6 +49,7 @@ namespace P3_Projekt_WPF
             _displayProduct = productForDisplay;
             txtboxImage = productForDisplay.Image;
             ShowProductInfo();
+
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
