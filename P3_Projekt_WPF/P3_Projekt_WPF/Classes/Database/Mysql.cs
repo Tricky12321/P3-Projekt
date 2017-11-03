@@ -74,7 +74,21 @@ namespace P3_Projekt_WPF.Classes.Database
         public static void RunQuery_thread(object Query)
         {
 
+            int fails = 0;
             MySqlConnection connection = Connect();
+            while (connection == null)
+            {
+                if (fails < 5)
+                {
+                    Thread.Sleep(250);
+                    fails++;
+                    connection = Connect();
+                }
+                else
+                {
+                    throw new NotConnectedException();
+                }
+            }
             try
             {
                 string sql = (Query as string);
@@ -110,7 +124,21 @@ namespace P3_Projekt_WPF.Classes.Database
 
         public static TableDecode RunQueryWithReturn(string Query)
         {
+            int fails = 0;
             MySqlConnection connection = Connect();
+            while (connection == null)
+            {
+                if (fails < 5)
+                {
+                    Thread.Sleep(250);
+                    fails++;
+                    connection = Connect();
+                }
+                else
+                {
+                    throw new NotConnectedException();
+                }
+            }
             TableDecode TableContent;
             try
             {

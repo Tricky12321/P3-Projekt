@@ -13,7 +13,7 @@ using System.Drawing;
 using System.Windows.Interop;
 using System.Windows;
 using System.Windows.Media.Imaging;
-
+using System.Threading;
 namespace P3_Projekt_WPF.Classes.Utilities
 {
     public static class Utils
@@ -46,7 +46,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
             }
         }
 
-        public static void FixReceiptInDatabase()
+        private static void _FixReceiptInDatabase()
         {
             string sql = "SELECT * FROM `receipt`";
             TableDecode receipts = Mysql.RunQueryWithReturn(sql);
@@ -65,6 +65,11 @@ namespace P3_Projekt_WPF.Classes.Utilities
                 NewReceipt.NumberOfProducts = TotalProductCount;
                 NewReceipt.UpdateInDatabase();
             }
+        }
+
+        public static void FixReceiptInDatabase()
+        {
+            Thread FixReceiptThread = new Thread(new ThreadStart(_FixReceiptInDatabase));
         }
 
         public static void GenerateSaleTransactions()
@@ -86,11 +91,11 @@ namespace P3_Projekt_WPF.Classes.Utilities
                     do
                     {
                         int random_num = rng.Next(range_min, range_max);
-
                         if (storageController.ProductDictionary.ContainsKey(random_num))
                         {
                             TestProduct = storageController.ProductDictionary[random_num];
-                        } else
+                        }
+                        else
                         {
                             TestProduct = null;
                         }
@@ -103,7 +108,6 @@ namespace P3_Projekt_WPF.Classes.Utilities
             }
             FixReceiptInDatabase();
         }
-
         [DllImport("gdi32.dll", EntryPoint = "DeleteObject")]
         [return: MarshalAs(UnmanagedType.Bool)]
         public static extern bool DeleteObject([In] IntPtr hObject);

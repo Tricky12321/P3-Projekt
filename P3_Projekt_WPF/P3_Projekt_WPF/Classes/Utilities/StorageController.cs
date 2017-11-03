@@ -23,10 +23,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
         public List<TempProduct> TempProductList = new List<TempProduct>();
         public List<Thread> Threads = new List<Thread>();
         public ConcurrentBag<Thread> ProductThreads = new ConcurrentBag<Thread>();
-        public const int ThreadCount = 20;
         public object ThreadLock = new object();
-        public object ProductThreadLock = new object();
-        private List<Row> ProductThreadQue = new List<Row>();
 
         public bool ThreadDone()
         {
