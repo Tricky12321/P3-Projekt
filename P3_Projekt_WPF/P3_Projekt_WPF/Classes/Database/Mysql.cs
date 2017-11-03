@@ -18,8 +18,9 @@ namespace P3_Projekt_WPF.Classes.Database
         private const int _port = 3306;
         private const string _database = "P3";
         public static List<MySqlConnection> Connection = new List<MySqlConnection>();
-        private static string _connectionString => $"Server={_ip};Port={_port};Database={_database};Uid={_username};Pwd={_password};";
-        private static bool InternetConnection = false;
+        private static string _connectionString = $"Server={_ip};Port={_port};Database={_database};Uid={_username};Pwd={_password};";
+        private static bool _internetConnection = false;
+        private static int _connectionCounter => Connection.Count;
         public static void Disconnect(MySqlConnection connection)
         {
             connection.Close();
@@ -31,10 +32,10 @@ namespace P3_Projekt_WPF.Classes.Database
 
         private static void CheckInternet()
         {
-            if (!InternetConnection)
+            if (!_internetConnection)
             {
-                InternetConnection = Utils.CheckInternetConnection();
-                if (InternetConnection == false)
+                _internetConnection = Utils.CheckInternetConnection();
+                if (_internetConnection == false)
                 {
                     throw new NoInternetConnectionException("Der er ingen forbindelse til serveren");
                 }
