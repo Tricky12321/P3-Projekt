@@ -146,7 +146,6 @@ namespace P3_Projekt_WPF
         public void LoadProductGrid()
         {
             int i = 1;
-            _storageController.GetAll();
 
             foreach (Product produkter in _storageController.ProductDictionary.Values)
             {

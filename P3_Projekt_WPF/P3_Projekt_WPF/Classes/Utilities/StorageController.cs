@@ -63,14 +63,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
         {
             Row Data = (row_data as Row);
             Group NewGroup = new Group(Data);
-            if (!GroupDictionary.ContainsKey(NewGroup.ID))
-            {
-                GroupDictionary.Add(NewGroup.ID, NewGroup);
-            }
-            else
-            {
-                Debug.WriteLine("Prøvede at tilføje en key der allerede er tilføjet!");
-            }
+            GroupDictionary.Add(NewGroup.ID, NewGroup);
         }
 
         private void CreateStorageRoom_Thread(object row_data)
