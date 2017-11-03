@@ -7,6 +7,13 @@ using System.Net;
 using P3_Projekt_WPF.Classes.Exceptions;
 using P3_Projekt_WPF.Classes.Database;
 using System.Net.NetworkInformation;
+using System.Runtime.InteropServices;
+using System.Windows.Media;
+using System.Drawing;
+using System.Windows.Interop;
+using System.Windows;
+using System.Windows.Media.Imaging;
+
 namespace P3_Projekt_WPF.Classes.Utilities
 {
     public static class Utils
@@ -95,6 +102,20 @@ namespace P3_Projekt_WPF.Classes.Utilities
                 TestReceipt.UpdateInDatabase();
             }
             FixReceiptInDatabase();
+        }
+
+        [DllImport("gdi32.dll", EntryPoint = "DeleteObject")]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        public static extern bool DeleteObject([In] IntPtr hObject);
+
+        public static ImageSource ImageSourceForBitmap(Bitmap bmp)
+        {
+            var handle = bmp.GetHbitmap();
+            try
+            {
+                return Imaging.CreateBitmapSourceFromHBitmap(handle, IntPtr.Zero, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
+            }
+            finally { DeleteObject(handle); }
         }
     }
 }
