@@ -108,20 +108,7 @@ namespace P3_Projekt_WPF
 
             productGrid.Children.Add(new ProductControl(_storageController.ProductDictionary[12]));
 
-
-            foreach (Product produkter in _storageController.ProductDictionary.Values)
-            {
-                int i = 1;
-                productGrid.Children.Add(new ProductControl(produkter));
-                if(i % 5 == 0)
-                {
-                    productGrid.RowDefinitions.Add(new RowDefinition());
-                }
-                ++i;
-            }
-            
-
-
+            LoadProductGrid();
         }
 
         public void AddProductButton()
