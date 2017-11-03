@@ -17,6 +17,7 @@ using P3_Projekt_WPF.Classes.Utilities;
 using P3_Projekt_WPF.Classes.Exceptions;
 using P3_Projekt_WPF.Classes;
 using System.Diagnostics;
+using System.Threading;
 namespace P3_Projekt_WPF
 {
     /// <summary>
@@ -29,7 +30,6 @@ namespace P3_Projekt_WPF
         SettingsController _settingsController;
         StorageController _storageController;
         POSController _POSController;
-
         Grid productGrid = new Grid();
 
         public MainWindow()
@@ -53,6 +53,7 @@ namespace P3_Projekt_WPF
             
             InitStorageGridProducts();
             AddProductButton();
+            LoadProductGrid();
         }
 
         private void InitGridQuickButtons()
@@ -95,36 +96,37 @@ namespace P3_Projekt_WPF
 
         public void InitStorageGridProducts()
         {
-            int i = 1;
-            _storageController.GetAll();
-
             productGrid.VerticalAlignment = VerticalAlignment.Top;
-
             productGrid.ColumnDefinitions.Add(new ColumnDefinition());
             productGrid.ColumnDefinitions.Add(new ColumnDefinition());
             productGrid.ColumnDefinitions.Add(new ColumnDefinition());
             productGrid.ColumnDefinitions.Add(new ColumnDefinition());
             productGrid.ColumnDefinitions.Add(new ColumnDefinition());
-            productGrid.RowDefinitions.Add(new RowDefinition());
-
+            productGrid.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(380) });
+            
             scroll_StorageProduct.Content = productGrid;
+            _storageController.GetAll();
+            while (!_storageController.ThreadDone())
+            {
+                Thread.Sleep(200);
+            }
+
+            productGrid.Children.Add(new ProductControl(_storageController.ProductDictionary[12]));
 
 
             foreach (Product produkter in _storageController.ProductDictionary.Values)
             {
-                if (i % 5 == 0)
+                int i = 1;
+                productGrid.Children.Add(new ProductControl(produkter));
+                if(i % 5 == 0)
                 {
                     productGrid.RowDefinitions.Add(new RowDefinition());
                 }
-
-                ProductControl productControl = new ProductControl(produkter);
-                productControl.SetValue(Grid.ColumnProperty, i % 5);
-                productControl.SetValue(Grid.RowProperty, i / 5);
-
-                productGrid.Children.Add(productControl);
-
-                i++;
+                ++i;
             }
+            
+
+
         }
 
         public void AddProductButton()
@@ -136,8 +138,34 @@ namespace P3_Projekt_WPF
             addProductButton.SetValue(Grid.RowProperty, 0);
             addProductButton.SetValue(Grid.ColumnProperty, 0);
             addProductButton.Style = FindResource("Flat_Button") as Style;
+            addProductButton.Background = Brushes.Transparent;
             // tilføj produkt addProductButton.Click
             productGrid.Children.Add(addProductButton);
+        }
+
+        public void StorageTabClick(object sender, RoutedEventArgs e)
+        {
+            LoadProductGrid();
+        }
+
+        public void LoadProductGrid()
+        {
+            int i = 1;
+            _storageController.GetAll();
+
+            foreach (Product produkter in _storageController.ProductDictionary.Values)
+            {
+                if (i % 5 == 0)
+                {
+                    productGrid.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(380) });
+                }
+                ProductControl productControl = new ProductControl(produkter);
+                productControl.SetValue(Grid.ColumnProperty, i % 5);
+                productControl.SetValue(Grid.RowProperty, i / 5);
+                productGrid.Children.Add(productControl);
+
+                i++;
+            }
         }
 
         public void AddTransactionToReceipt(SaleTransaction transaction)

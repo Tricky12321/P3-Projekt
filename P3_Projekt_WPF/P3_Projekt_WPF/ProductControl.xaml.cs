@@ -21,12 +21,29 @@ namespace P3_Projekt_WPF
     /// </summary>
     public partial class ProductControl : UserControl
     {
+        public Image txtboxImage
+        {
+            get { return txtboxImage; }
+            set
+            {
+                if(value != null)
+                {
+                    //txtboxImage = P3_Projekt_WPF.Properties.Resources.
+                }
+                else
+                {
+
+                }
+
+            }
+        }
+
+
         private Product _displayProduct;
         public ProductControl(Product productForDisplay)
         {
             InitializeComponent();
             _displayProduct = productForDisplay;
-            ShowProductInfo();
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
@@ -41,6 +58,7 @@ namespace P3_Projekt_WPF
             txtbox_Navn.Text = _displayProduct.Name;
             txtbox_Gruppe.Text = _displayProduct.ProductGroup.ToString();
             txtbox_Price.Text = _displayProduct.SalePrice.ToString();
+
         }
     }
 }

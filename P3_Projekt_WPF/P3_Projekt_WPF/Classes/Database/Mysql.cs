@@ -17,24 +17,43 @@ namespace P3_Projekt_WPF.Classes.Database
         private const string _ip = "v-world.dk";
         private const int _port = 3306;
         private const string _database = "P3";
-        public static MySqlConnection Connection = null;
+        public static List<MySqlConnection> Connection = new List<MySqlConnection>();
         private static string _connectionString => $"Server={_ip};Port={_port};Database={_database};Uid={_username};Pwd={_password};";
-
-        public static void Disconnect()
+        private static bool InternetConnection = false;
+        public static void Disconnect(MySqlConnection connection)
         {
-            Connection.Close();
-            Connection = null;
+            connection.Close();
+            lock (Connection)
+            {
+                Connection.Remove(connection);
+            }
         }
 
-        public static bool Connect()
+        private static void CheckInternet()
         {
-            Utils.CheckInternetConnection();
-            Connection = new MySqlConnection(_connectionString);
+            if (!InternetConnection)
+            {
+                InternetConnection = Utils.CheckInternetConnection();
+                if (InternetConnection == false)
+                {
+                    throw new NoInternetConnectionException("Der er ingen forbindelse til serveren");
+                }
+            }
+        }
+
+        public static MySqlConnection Connect()
+        {
+            CheckInternet();
+            MySqlConnection connection = new MySqlConnection(_connectionString);
             try
             {
-                Connection.Open();
+                connection.Open();
                 Debug.WriteLine("Database connection: OK!");
-                return true;
+                lock (Connection)
+                {
+                    Connection.Add(connection);
+                }
+                return connection;
             }
             catch (MySqlException ex)
             {
@@ -48,24 +67,39 @@ namespace P3_Projekt_WPF.Classes.Database
                         //MessageBox.Show("Invalid username/password, please try again");
                         break;
                 }
-                return false;
+                return null;
             }
         }
 
         public static void RunQuery_thread(object Query)
         {
-            string sql = (Query as string);
-            using (MySqlCommand cmd = Connection.CreateCommand())
-            {
-                cmd.CommandText = sql;
-                Debug.Print("Running: " + Query);
-                if (Connection == null)
-                {
-                    throw new NotConnectedException("Der er ikke forbindelse til databasen");
-                }
 
-                cmd.ExecuteScalarAsync();
+            MySqlConnection connection = Connect();
+            try
+            {
+                string sql = (Query as string);
+                using (MySqlCommand cmd = connection.CreateCommand())
+                {
+                    cmd.CommandText = sql;
+                    Debug.Print("Running: " + Query);
+                    if (Connection == null)
+                    {
+                        throw new NotConnectedException("Der er ikke forbindelse til databasen");
+                    }
+
+                    cmd.ExecuteScalarAsync();
+                }
             }
+            catch (Exception)
+            {
+
+                throw;
+            }
+            finally
+            {
+                Disconnect(connection);
+            }
+
         }
 
         public static void RunQuery(string Query)
@@ -76,11 +110,12 @@ namespace P3_Projekt_WPF.Classes.Database
 
         public static TableDecode RunQueryWithReturn(string Query)
         {
+            MySqlConnection connection = Connect();
             TableDecode TableContent;
             try
             {
                 // Hvilken commando skal der køres (Query)
-                using (MySqlCommand cmd = Connection.CreateCommand())
+                using (MySqlCommand cmd = connection.CreateCommand())
                 {
                     cmd.CommandText = Query;
                     // Åbner forbindelsen til databasen (OPEN)
@@ -99,6 +134,10 @@ namespace P3_Projekt_WPF.Classes.Database
             catch (Exception)
             {
                 throw;
+            }
+            finally
+            {
+                Disconnect(connection);
             }
             return TableContent;
         }

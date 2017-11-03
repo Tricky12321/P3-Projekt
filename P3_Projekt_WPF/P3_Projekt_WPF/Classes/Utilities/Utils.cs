@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Net;
 using P3_Projekt_WPF.Classes.Exceptions;
 using P3_Projekt_WPF.Classes.Database;
+using System.Net.NetworkInformation;
 namespace P3_Projekt_WPF.Classes.Utilities
 {
     public static class Utils
@@ -24,22 +25,18 @@ namespace P3_Projekt_WPF.Classes.Utilities
             return unixTimestamp;
         }
 
-        public static void CheckInternetConnection()
+        public static bool CheckInternetConnection()
         {
-            /*try
+            Ping ping = new Ping();
+            PingReply pingStatus = ping.Send(IPAddress.Parse("172.217.19.195"));
+            if (pingStatus.Status == IPStatus.Success)
             {
-                using (var client = new WebClient())
-                {
-                    using (client.OpenRead("https://google.dk/"))
-                    {
-
-                    }
-                }
+                return true;
             }
-            catch
+            else
             {
-                throw new NoInternetConnectionException("Der er ingen forbindelse til internettet!");
-            }*/
+                return false;
+            }
         }
 
         public static void FixReceiptInDatabase()
