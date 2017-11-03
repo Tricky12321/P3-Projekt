@@ -109,9 +109,15 @@
 
 
 
-                    <ListView x:Name="listView_Receipt" Margin="0,10,10,176" Grid.Row="1" HorizontalAlignment="Right" Width="832">
+                    <ListView x:Name="listView_Receipt" Margin="0,67,10,230" Grid.Row="1" HorizontalAlignment="Right" Width="832">
                         <ListView.View>
                             <GridView>
+                                <GridView.ColumnHeaderContainerStyle>
+                                    <Style>
+                                        <Setter Property="FrameworkElement.Visibility"  Value="Collapsed"/>
+                                    </Style>
+                                </GridView.ColumnHeaderContainerStyle>
+
                                 <GridViewColumn>
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate>
@@ -181,6 +187,8 @@
                             </GridView>
                         </ListView.View>
                     </ListView>
+                    <Label x:Name="label" Content="Kvittering" Margin="0,71,530,0" HorizontalAlignment="Right" Width="312" Height="68" VerticalAlignment="Top" FontSize="35" Grid.RowSpan="2"/>
+                    <TextBlock x:Name="textBlock" Margin="0,0,10,185" Grid.Row="1" TextWrapping="Wrap" Text="TextBlock" HorizontalAlignment="Right" Width="832" Height="40" VerticalAlignment="Bottom"/>
                 </Grid>
             </TabItem>
 

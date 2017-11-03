@@ -17,6 +17,7 @@ using P3_Projekt_WPF.Classes.Utilities;
 using P3_Projekt_WPF.Classes.Exceptions;
 using P3_Projekt_WPF.Classes;
 using System.Diagnostics;
+using System.Threading;
 namespace P3_Projekt_WPF
 {
     /// <summary>
@@ -43,11 +44,6 @@ namespace P3_Projekt_WPF
             _settingsController = new SettingsController();
             _storageController = new StorageController();
             _POSController = new POSController(_storageController);
-
-            Mysql.Connect(); // Forbinder til databasen
-
-            _storageController.GetAllProductsFromDatabase();
-
             InitGridQuickButtons();
             
             InitStorageGridProducts();
@@ -66,15 +62,21 @@ namespace P3_Projekt_WPF
             }
         }
 
+        private void updateGridQuickButtons(object sender, RoutedEventArgs e)
+        {
+            UpdateGridQuickButtons();
+        }
+
         private void UpdateGridQuickButtons()
         {
-            grid_QuickButton.Children.Clear();
             foreach (FastButton button in _settingsController.quickButtonList)
             {
-                button.Style = FindResource("Flat_Button") as Style;
+                if (!grid_QuickButton.Children.Contains(button)){
+                    button.Style = FindResource("Flat_Button") as Style;
 
-                button.Click += btn_FastButton_click;
-                grid_QuickButton.Children.Add(button);
+                    button.Click += btn_FastButton_click;
+                    grid_QuickButton.Children.Add(button);
+                }
             }
         }
 
@@ -98,6 +100,28 @@ namespace P3_Projekt_WPF
             productGrid.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(380) });
             
             scroll_StorageProduct.Content = productGrid;
+            _storageController.GetAll();
+            while (!_storageController.ThreadDone())
+            {
+                Thread.Sleep(200);
+            }
+
+            productGrid.Children.Add(new ProductControl(_storageController.ProductDictionary[12]));
+
+
+            foreach (Product produkter in _storageController.ProductDictionary.Values)
+            {
+                int i = 1;
+                productGrid.Children.Add(new ProductControl(produkter));
+                if(i % 5 == 0)
+                {
+                    productGrid.RowDefinitions.Add(new RowDefinition());
+                }
+                ++i;
+            }
+            
+
+
         }
 
         public void AddProductButton()
@@ -216,10 +240,7 @@ namespace P3_Projekt_WPF
             UpdateReceiptList();
         }
 
-        private void updateGridQuickButtons(object sender, RoutedEventArgs e)
-        {
-            UpdateGridQuickButtons();
-        }
+
 
         private void TextInputNoNumber(object sender, TextCompositionEventArgs e)
         {
