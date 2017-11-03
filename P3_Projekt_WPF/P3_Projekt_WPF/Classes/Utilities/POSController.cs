@@ -40,10 +40,14 @@ namespace P3_Projekt_WPF.Classes.Utilities
 
         public Product GetProductFromID(int id)
         {
-            return _storageController.ProductDictionary[id];
+            if (_storageController.ProductDictionary.Keys.Contains(id))
+            {
+                return _storageController.ProductDictionary[id];
+            }
+            return null;
         }
 
-        public void AddSaleTransaction(BaseProduct product, int amount)
+        public void AddSaleTransaction(BaseProduct product, int amount = 1)
         {
             PlacerholderReceipt.AddTransaction(new SaleTransaction(product, amount, PlacerholderReceipt.ID));
         }

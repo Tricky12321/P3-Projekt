@@ -20,6 +20,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
 
         public void AddNewQuickButton(string buttonText, int productID, double gridWidth, double gridHeight)
         {
+
             FastButton button = new FastButton();
             button.ProductID = productID;
             button.Content = buttonText;;
