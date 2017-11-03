@@ -89,41 +89,36 @@ namespace P3_Projekt_WPF
 
         public void InitStorageGridProducts()
         {
+            int i = 1;
+            _storageController.GetAll();
+
             productGrid.VerticalAlignment = VerticalAlignment.Top;
 
             productGrid.ColumnDefinitions.Add(new ColumnDefinition());
-
             productGrid.ColumnDefinitions.Add(new ColumnDefinition());
-
             productGrid.ColumnDefinitions.Add(new ColumnDefinition());
-
             productGrid.ColumnDefinitions.Add(new ColumnDefinition());
-
             productGrid.ColumnDefinitions.Add(new ColumnDefinition());
-
             productGrid.RowDefinitions.Add(new RowDefinition());
 
-
             scroll_StorageProduct.Content = productGrid;
-
-            _storageController.GetAll();
-
-            productGrid.Children.Add(new ProductControl(_storageController.ProductDictionary[12]));
 
 
             foreach (Product produkter in _storageController.ProductDictionary.Values)
             {
-                int i = 1;
-                productGrid.Children.Add(new ProductControl(_storageController.ProductDictionary[i]));
-                if(i % 5 == 0)
+                if (i % 5 == 0)
                 {
                     productGrid.RowDefinitions.Add(new RowDefinition());
                 }
-                ++i;
+
+                ProductControl productControl = new ProductControl(produkter);
+                productControl.SetValue(Grid.ColumnProperty, i % 5);
+                productControl.SetValue(Grid.RowProperty, i / 5);
+
+                productGrid.Children.Add(productControl);
+
+                i++;
             }
-            
-
-
         }
 
         public void AddProductButton()
