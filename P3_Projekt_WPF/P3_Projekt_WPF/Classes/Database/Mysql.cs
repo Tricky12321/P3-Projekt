@@ -18,8 +18,9 @@ namespace P3_Projekt_WPF.Classes.Database
         private const int _port = 3306;
         private const string _database = "P3";
         public static List<MySqlConnection> Connection = new List<MySqlConnection>();
-        private static string _connectionString => $"Server={_ip};Port={_port};Database={_database};Uid={_username};Pwd={_password};";
-        private static bool InternetConnection = false;
+        private static string _connectionString = $"Server={_ip};Port={_port};Database={_database};Uid={_username};Pwd={_password};";
+        private static bool _internetConnection = false;
+        private static int _connectionCounter => Connection.Count;
         public static void Disconnect(MySqlConnection connection)
         {
             connection.Close();
@@ -31,10 +32,10 @@ namespace P3_Projekt_WPF.Classes.Database
 
         private static void CheckInternet()
         {
-            if (!InternetConnection)
+            if (!_internetConnection)
             {
-                InternetConnection = Utils.CheckInternetConnection();
-                if (InternetConnection == false)
+                _internetConnection = Utils.CheckInternetConnection();
+                if (_internetConnection == false)
                 {
                     throw new NoInternetConnectionException("Der er ingen forbindelse til serveren");
                 }
@@ -74,7 +75,21 @@ namespace P3_Projekt_WPF.Classes.Database
         public static void RunQuery_thread(object Query)
         {
 
+            int fails = 0;
             MySqlConnection connection = Connect();
+            while (connection == null)
+            {
+                if (fails < 5)
+                {
+                    Thread.Sleep(250);
+                    fails++;
+                    connection = Connect();
+                }
+                else
+                {
+                    throw new NotConnectedException();
+                }
+            }
             try
             {
                 string sql = (Query as string);
@@ -110,7 +125,21 @@ namespace P3_Projekt_WPF.Classes.Database
 
         public static TableDecode RunQueryWithReturn(string Query)
         {
+            int fails = 0;
             MySqlConnection connection = Connect();
+            while (connection == null)
+            {
+                if (fails < 5)
+                {
+                    Thread.Sleep(250);
+                    fails++;
+                    connection = Connect();
+                }
+                else
+                {
+                    throw new NotConnectedException();
+                }
+            }
             TableDecode TableContent;
             try
             {
@@ -125,7 +154,7 @@ namespace P3_Projekt_WPF.Classes.Database
                         // Sikre sig at der er noget at hente i databasen.
                         if (!Reader.HasRows)
                         {
-                            throw new EmptyTableException("Tabellen man forsøger at forbinde til í databasen er tom?");
+                            throw new EmptyTableException("Tabellen man forsøger at forbinde til i databasen er tom?");
                         }
                         TableContent = new TableDecode(Reader);
                     }

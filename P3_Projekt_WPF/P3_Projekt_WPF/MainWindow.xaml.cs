@@ -87,6 +87,7 @@ namespace P3_Projekt_WPF
             {
                 AddTransactionToReceipt(transaction);
             }
+            label_TotalPrice.Content = _POSController.PlacerholderReceipt.TotalPrice;
         }
 
         public void InitStorageGridProducts()
@@ -162,7 +163,7 @@ namespace P3_Projekt_WPF
 
         private void btn_Increment_Click(object sender, RoutedEventArgs e)
         {
-
+            Debug.Print(e.RoutedEvent.ToString());
         }
 
         private void btn_Decrement_Click(object sender, RoutedEventArgs e)

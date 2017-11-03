@@ -10,7 +10,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
 {
     public delegate void LowStorageNotification(Product product);
 
-    
+
     public class POSController
     {
         /*
@@ -20,20 +20,13 @@ namespace P3_Projekt_WPF.Classes.Utilities
         private StorageController _storageController;
 
         public List<Receipt> ReceiptList = new List<Receipt>();
-        
+
         public POSController(StorageController storageController)
         {
             _storageController = storageController;
             StartPurchase();
         }
-        
-        // TODO: Denne funktion fylder ProductList med alle produkterne fra databasen. 
-        /*
-        public POSController(Dictionary<int, Product> ProductListe )
-        {
-            ProductList = ProductListe;
-        }
-        */
+
         public void StartPurchase()
         {
             PlacerholderReceipt = new Receipt();
@@ -59,7 +52,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
         {
             PlacerholderReceipt.AddTransaction(
                 new SaleTransaction(
-                new ServiceProduct(price,price,0,"Is", _storageController.GroupDictionary.Where(x => x.Key == 1).First().Value), 1, PlacerholderReceipt.ID));
+                new ServiceProduct(price, price, 0, "Is", _storageController.GroupDictionary.Where(x => x.Value.Name == "Is").First().Value), 1, PlacerholderReceipt.ID));
         }
 
         public void AddFreeSaleTransaction(BaseProduct product, int amount)
@@ -75,16 +68,6 @@ namespace P3_Projekt_WPF.Classes.Utilities
             PlacerholderReceipt.RemoveTransaction(productID);
         }
 
-        /*
-         * TODO: Denne funktion skal føjst sansynligt ikke være her...
-        public void DeleteTransaction(int transactionID)
-        {
-            string deleteQuery = $"DELETE FROM `transactions` WHERE ID = {transactionID}";
-            Mysql Connection = new Mysql();
-            Connection.RunQuery(deleteQuery);
-        }
-        */
-
         public void ExecuteReceipt()
         {
             try
@@ -92,7 +75,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
                 PlacerholderReceipt.Execute();
                 CheckStorageLevel();
             }
-            catch(NullReferenceException e)
+            catch (NullReferenceException e)
             {
                 Debug.Print(e.Message);
             }
