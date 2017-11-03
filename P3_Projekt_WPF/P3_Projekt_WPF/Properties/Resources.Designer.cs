@@ -100,6 +100,16 @@ namespace P3_Projekt_WPF.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        public static System.Drawing.Bitmap questionmark_png {
+            get {
+                object obj = ResourceManager.GetObject("questionmark_png", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         public static System.Drawing.Bitmap Red_Cross {
             get {
                 object obj = ResourceManager.GetObject("Red_Cross", resourceCulture);

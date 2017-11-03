@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using P3_Projekt_WPF.Classes;
+using P3_Projekt_WPF.Classes.Utilities;
 
 namespace P3_Projekt_WPF
 {
@@ -32,7 +33,9 @@ namespace P3_Projekt_WPF
                 }
                 else
                 {
-                     
+                    img_ProductImage.Source = Utils.ImageSourceForBitmap(Properties.Resources.questionmark_png);
+                    img_ProductImage.VerticalAlignment = VerticalAlignment.Center;
+                    img_ProductImage.HorizontalAlignment = HorizontalAlignment.Center;
                 }
 
             }
@@ -44,6 +47,7 @@ namespace P3_Projekt_WPF
         {
             InitializeComponent();
             _displayProduct = productForDisplay;
+            txtboxImage = productForDisplay.Image;
             ShowProductInfo();
         }
 
@@ -54,10 +58,10 @@ namespace P3_Projekt_WPF
 
         public void ShowProductInfo()
         {
-
+            img_ProductImage = _displayProduct.Image;
             txtbox_ID.Text = _displayProduct.ID.ToString();
             txtbox_Navn.Text = _displayProduct.Name;
-            txtbox_Gruppe.Text = _displayProduct.ProductGroup.ToString();
+            txtbox_Gruppe.Text = _displayProduct.ProductGroup.Name;
             txtbox_Price.Text = _displayProduct.SalePrice.ToString();
 
         }
