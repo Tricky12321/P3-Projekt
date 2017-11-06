@@ -14,25 +14,28 @@ namespace P3_Projekt_WPF.Classes.Utilities
     {
         public int ProductID { get; set; }
         public string Button_Name { get; set; }
-    }
 
-    class FastButtonListItem
-    {
-        public int ProductID { get; set; }
-        public string Button_Name { get; set; }
+        public FastButton()
+        {
+
+        }
+
+        public FastButton(int productID, string button_name)
+        {
+            ProductID = productID;
+            Button_Name = button_name;
+        }
     }
 
     class SettingsController
     {
         public List<FastButton> quickButtonList = new List<FastButton>();
-        public List<FastButtonListItem> quickButtonSettingsViewList = new List<FastButtonListItem>();
 
         public void AddNewQuickButton(string buttonText, int productID, double gridWidth, double gridHeight, RoutedEventHandler btn_FastButton_click)
         {
             FastButton button = new FastButton();
             button.ProductID = productID;
-            button.Button_Name = buttonText;
-            button.Content = buttonText;
+            button.Content = buttonText; ;
             button.Height = gridHeight / 7;
             button.Width = gridWidth / 2;
 
@@ -43,13 +46,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
             button.SetValue(Grid.ColumnProperty, quickButtonList.Count % 2);
             button.SetValue(Grid.RowProperty, quickButtonList.Count / 2);
 
-            FastButtonListItem buttonElement = new FastButtonListItem();
-            buttonElement.ProductID = productID;
-            buttonElement.Button_Name = buttonText;
-
-            quickButtonSettingsViewList.Add(buttonElement);
             quickButtonList.Add(button);
-
         }
     }
 }
