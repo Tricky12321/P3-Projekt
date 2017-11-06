@@ -81,6 +81,8 @@ namespace P3_Projekt_WPF
 
         private void InitGridQuickButtons()
         {
+            dataGrid_FastButtons.ItemsSource = _settingsController.quickButtonSettingsViewList;
+
             grid_QuickButton.ColumnDefinitions.Add(new ColumnDefinition());
             grid_QuickButton.ColumnDefinitions.Add(new ColumnDefinition());
 
@@ -95,20 +97,6 @@ namespace P3_Projekt_WPF
             UpdateGridQuickButtons();
         }
 
-        private void UpdateGridQuickButtons()
-        {
-            foreach (FastButton button in _settingsController.quickButtonList)
-            {
-                if (!grid_QuickButton.Children.Contains(button))
-                {
-                    button.Style = FindResource("Flat_Button") as Style;
-
-                    button.Click += btn_FastButton_click;
-                    grid_QuickButton.Children.Add(button);
-                }
-            }
-        }
-
         private void UpdateReceiptList()
         {
             listView_Receipt.Items.Clear();
@@ -121,13 +109,18 @@ namespace P3_Projekt_WPF
 
         public void InitStorageGridProducts()
         {
-            productGrid.VerticalAlignment = VerticalAlignment.Top;
-            productGrid.ColumnDefinitions.Add(new ColumnDefinition());
-            productGrid.ColumnDefinitions.Add(new ColumnDefinition());
-            productGrid.ColumnDefinitions.Add(new ColumnDefinition());
-            productGrid.ColumnDefinitions.Add(new ColumnDefinition());
-            productGrid.ColumnDefinitions.Add(new ColumnDefinition());
+            productGrid.VerticalAlignment = VerticalAlignment.Stretch;
+            productGrid.HorizontalAlignment = HorizontalAlignment.Stretch;
+
+            productGrid.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(1, GridUnitType.Star)});
+            productGrid.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(1, GridUnitType.Star)});
+            productGrid.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(1, GridUnitType.Star)});
+            productGrid.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(1, GridUnitType.Star)});
+            productGrid.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(1, GridUnitType.Star)});
+            
+
             productGrid.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(380) });
+
 
             scroll_StorageProduct.Content = productGrid;
             Stopwatch TimeTester = new Stopwatch();
@@ -147,6 +140,7 @@ namespace P3_Projekt_WPF
             addProductButton.Content = "+";
             addProductButton.Height = 360;
             addProductButton.Width = 250;
+
             addProductButton.SetValue(Grid.RowProperty, 0);
             addProductButton.SetValue(Grid.ColumnProperty, 0);
             addProductButton.Style = FindResource("Flat_Button") as Style;
@@ -165,6 +159,7 @@ namespace P3_Projekt_WPF
             //fproductGrid.Children.Clear();
             int i = 1;
             
+            
 
             foreach (KeyValuePair<int, Product> produkter in _storageController.ProductDictionary.OrderBy(x => x.Key))
             {
@@ -177,6 +172,9 @@ namespace P3_Projekt_WPF
                 ProductControl productControl = new ProductControl(produkter.Value);
                 productControl.SetValue(Grid.ColumnProperty, i % 5);
                 productControl.SetValue(Grid.RowProperty, i / 5);
+                
+                
+
                 productGrid.Children.Add(productControl);
 
                 i++;
@@ -265,20 +263,65 @@ namespace P3_Projekt_WPF
 
             if (_POSController.GetProductFromID(inputInt) != null )
             {
-                _settingsController.AddNewQuickButton(textBox_CreateQuickBtnName.Text, inputInt, grid_QuickButton.Width, grid_QuickButton.Height);
-                listView_QuickBtn.Items.Add(new { Button_Name = textBox_CreateQuickBtnName.Text, Button_Product_ID = inputInt });
+                _settingsController.AddNewQuickButton(textBox_CreateQuickBtnName.Text, inputInt, grid_QuickButton.Width, grid_QuickButton.Height, btn_FastButton_click);
+                listView_QuickBtn.Items.Add(new { Button_Name = textBox_CreateQuickBtnName.Text, ProductID = inputInt });
             }
             else
             {
                 MessageBox.Show($"Produkt med ID {inputInt} findes ikke på lageret");
             }
+            dataGrid_FastButtons.Items.Refresh();
         }
 
-        private void btn_FastButton_click(object sender, RoutedEventArgs e)
+        public void btn_FastButton_click(object sender, RoutedEventArgs e)
         {
             _POSController.AddSaleTransaction(_POSController.GetProductFromID((sender as FastButton).ProductID));
             UpdateReceiptList();
         }
+
+        private void UpdateGridQuickButtons()
+        {
+            //grid_QuickButton.Children.Clear();
+            foreach (FastButton button in _settingsController.quickButtonList)
+            {
+                if (!grid_QuickButton.Children.Contains(button))
+                {
+                    button.Style = FindResource("Flat_Button") as Style; 
+
+                    grid_QuickButton.Children.Add(button);
+                }
+            }
+        }
+
+        private void btn_Remove_Quick_Button(object sender, RoutedEventArgs e)
+        {
+            _settingsController.quickButtonList.RemoveAll(x => x.Tag == (sender as Button).Tag);
+            
+            //grid_QuickButton.Children.RemoveAt(1);
+
+            UpdateGridQuickButtons();
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
         private void TextInputNoNumber(object sender, TextCompositionEventArgs e)
         {

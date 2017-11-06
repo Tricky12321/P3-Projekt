@@ -8,7 +8,11 @@
         mc:Ignorable="d"
         Title="Børglum Kloster Lager og Salg" MinHeight="600" Height="1396" MinWidth="1366" Width="2068" Background="#FF919191" WindowState="Maximized">
     <Grid>
-        <TabControl x:Name="tabControl" FontSize="30" Margin="0,0,0.333,-0.333" Grid.RowSpan="3">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="283*"/>
+            <ColumnDefinition Width="129*"/>
+        </Grid.ColumnDefinitions>
+        <TabControl x:Name="tabControl" FontSize="30" Grid.ColumnSpan="2">
             <TabItem x:Name="tab_Sale" GotFocus="updateGridQuickButtons" Header="Salg" Width="190">
                 <Grid Background="#FFE5E5E5" Margin="0,1,0,-1">
                     <Grid.ColumnDefinitions>
@@ -199,9 +203,13 @@
 
             <TabItem x:Name="tab_Storage" Header="Lager" Width="190" >
                 <Grid Background="#FFE5E5E5" Margin="0">
-                    <Border BorderBrush="Black" BorderThickness="1" Height="1" VerticalAlignment="Top" Margin="-34,71,-79,0"/>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="1411*"/>
+                        <ColumnDefinition Width="643*"/>
+                    </Grid.ColumnDefinitions>
+                    <Border BorderBrush="Black" BorderThickness="1" Height="1" VerticalAlignment="Top" Margin="-34,71,-79,0" Grid.ColumnSpan="2"/>
                     <Button x:Name="btn_MoveProduct" Content="Flyt Produkt" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="250" Height="50" Style="{StaticResource Flat_Button}"/>
-                    <ScrollViewer x:Name="scroll_StorageProduct" HorizontalAlignment="Left" Margin="5,81,0,9" Width="1400"/>
+                    <ScrollViewer x:Name="scroll_StorageProduct" Margin="5,81,6,9" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled"  />
                 </Grid>
             </TabItem>
             <TabItem x:Name="tab_Statisticsc" Header="Statistik" Width="190">
@@ -270,19 +278,36 @@
                                 <GridViewColumn>
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate>
-                                            <TextBlock Text="{Binding Button_Product_ID}"/>
+                                            <TextBlock Text="{Binding ProductID}"/>
                                         </DataTemplate>
                                     </GridViewColumn.CellTemplate>
                                 </GridViewColumn>
+
+                                <GridViewColumn>
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <Button Style="{StaticResource Flat_Button}"
+                                                Content = "+"
+                                                Width="30"
+                                                Height="30"
+                                                VerticalAlignment = "Center"
+                                                Click="btn_Remove_Quick_Button"
+                                                Tag="{Binding ProductID}"
+                                            />
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+
                             </GridView>
                         </ListView.View>
                     </ListView>
+                    <DataGrid x:Name="dataGrid_FastButtons" HorizontalAlignment="Left" Margin="10,804,0,0" VerticalAlignment="Top" Height="239" Width="613"/>
                 </Grid>
             </TabItem>
         </TabControl>
 
 
-        <TextBlock IsHitTestVisible="False" Text="SØG ERFTER ET PRODUKT" Margin="100,70,0,0" VerticalAlignment="Top" HorizontalAlignment="Right" Foreground="Red" Height="200" Grid.Row="1" Width="200">
+        <TextBlock IsHitTestVisible="False" Text="SØG ERFTER ET PRODUKT" Margin="0,70,0,0" VerticalAlignment="Top" HorizontalAlignment="Right" Foreground="Red" Height="200" Width="200" Grid.Column="1">
             <TextBlock.Style>
                 <Style TargetType="{x:Type TextBlock}">
                     <Setter Property="Visibility" Value="Collapsed"/>
