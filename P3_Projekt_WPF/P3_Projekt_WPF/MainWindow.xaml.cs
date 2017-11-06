@@ -18,6 +18,7 @@ using P3_Projekt_WPF.Classes.Exceptions;
 using P3_Projekt_WPF.Classes;
 using System.Diagnostics;
 using System.Threading;
+
 namespace P3_Projekt_WPF
 {
     /// <summary>
@@ -31,12 +32,39 @@ namespace P3_Projekt_WPF
         StorageController _storageController;
         POSController _POSController;
         Grid productGrid = new Grid();
-
+        private Key _lastKey = Key.None;
+        private bool _ctrlDown = false;
         public MainWindow()
         {
             InitializeComponent();
-
             InitComponents();
+            this.KeyDown += new KeyEventHandler(KeyboardHook);
+            this.KeyDown += new KeyEventHandler(CtrlHookDown);
+            this.KeyUp += new KeyEventHandler(CtrlHookUp);
+        }
+
+        private void KeyboardHook(object sender, KeyEventArgs e)
+        {
+            if (_ctrlDown && (e.Key != Key.LeftCtrl && e.Key != Key.RightCtrl))
+            {
+                Debug.WriteLine("Ctrl+"+e.Key.ToString());
+            }
+        }
+
+        private void CtrlHookDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.LeftCtrl || e.Key == Key.RightCtrl)
+            {
+                _ctrlDown = true;
+            }
+        }
+
+        private void CtrlHookUp(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.LeftCtrl || e.Key == Key.RightCtrl)
+            {
+                _ctrlDown = false;
+            }
         }
 
         private void InitComponents()
@@ -189,7 +217,6 @@ namespace P3_Projekt_WPF
 
         }
 
-
         private void listView_Receipt_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
 
@@ -261,8 +288,6 @@ namespace P3_Projekt_WPF
             _POSController.AddSaleTransaction(_POSController.GetProductFromID((sender as FastButton).ProductID));
             UpdateReceiptList();
         }
-
-
 
         private void TextInputNoNumber(object sender, TextCompositionEventArgs e)
         {

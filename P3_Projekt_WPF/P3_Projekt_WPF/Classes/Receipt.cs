@@ -134,12 +134,6 @@ namespace P3_Projekt_WPF.Classes
             return Transactions.First(x => x.Product.ID == productID);
         }
 
-        public void Delete()
-        {
-            // TODO: Delete receipt skal laves? 
-            throw new NotImplementedException();
-        }
-
         public void Execute()
         {
             foreach (Transaction transaction in Transactions)
