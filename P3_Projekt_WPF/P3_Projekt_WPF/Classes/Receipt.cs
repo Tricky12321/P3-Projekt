@@ -167,7 +167,7 @@ namespace P3_Projekt_WPF.Classes
             }
             catch (EmptyTableException)
             {
-
+                // Ignorer EmptyTableException
             }
 
             Date = Convert.ToDateTime(Table.Values[5]);
@@ -177,6 +177,7 @@ namespace P3_Projekt_WPF.Classes
         {
             string sql = "INSERT INTO `receipt` (`id`, `number_of_products`, `total_price`, `payment_method`, `datetime`)"+
                 $" VALUES (NULL, '{NumberOfProducts}', '{TotalPrice}', '{CashOrCard}', FROM_UNIXTIME('{Utils.GetUnixTime(Date)}'));";
+            Mysql.RunQuery(sql);
         }
 
         public void UpdateInDatabase()

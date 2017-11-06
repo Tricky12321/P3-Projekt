@@ -8,10 +8,12 @@ using MySql.Data.MySqlClient;
 using System.Diagnostics;
 using P3_Projekt_WPF.Classes.Exceptions;
 using P3_Projekt_WPF.Classes.Utilities;
+using System.Collections.Concurrent;
 namespace P3_Projekt_WPF.Classes.Database
 {
     public static class Mysql
     {
+        private const bool _debug = false;
         private const string _username = "P3";
         private const string _password = "frankythefish";
         private const string _ip = "v-world.dk";
@@ -21,8 +23,24 @@ namespace P3_Projekt_WPF.Classes.Database
         private static string _connectionString = $"Server={_ip};Port={_port};Database={_database};Uid={_username};Pwd={_password};";
         private static bool _internetConnection = false;
         private static int _connectionCounter => Connection.Count;
+        private static int _threadCount = 10;
+        private static List<Thread> _queryThreads = new List<Thread>();
+        private static ConcurrentQueue<string> _queryTasks = new ConcurrentQueue<string>();
+   
+             
+        public static void StartThreads()
+        {
+            for (int i = 0; i < _threadCount; i++)
+            {
+                Thread NewThread = new Thread(new ThreadStart(RunQuery_thread));
+                NewThread.Start();
+                _queryThreads.Add(NewThread);
+            }
+        }
+
         public static void Disconnect(MySqlConnection connection)
         {
+
             connection.Close();
             lock (Connection)
             {
@@ -42,17 +60,25 @@ namespace P3_Projekt_WPF.Classes.Database
             }
         }
 
-        public static MySqlConnection Connect()
+        public static MySqlConnection Connect(int fails = 0)
         {
+
             CheckInternet();
             MySqlConnection connection = new MySqlConnection(_connectionString);
             try
             {
+
                 connection.Open();
-                Debug.WriteLine("Database connection: OK!");
-                lock (Connection)
+                if (connection == null)
                 {
-                    Connection.Add(connection);
+                    if (fails < 5)
+                    {
+                        return Connect();
+                    }
+                    else
+                    {
+                        throw new NotConnectedException("Der er ingen forbindelse til databasen");
+                    }
                 }
                 return connection;
             }
@@ -72,55 +98,57 @@ namespace P3_Projekt_WPF.Classes.Database
             }
         }
 
-        public static void RunQuery_thread(object Query)
+        public static void RunQuery_thread()
         {
-
-            int fails = 0;
-            MySqlConnection connection = Connect();
-            while (connection == null)
+            string Query = "";
+            if (_queryTasks.TryDequeue(out Query) == true)
             {
-                if (fails < 5)
+                using (MySqlConnection connection = Connect())
                 {
-                    Thread.Sleep(250);
-                    fails++;
-                    connection = Connect();
-                }
-                else
-                {
-                    throw new NotConnectedException();
-                }
-            }
-            try
-            {
-                string sql = (Query as string);
-                using (MySqlCommand cmd = connection.CreateCommand())
-                {
-                    cmd.CommandText = sql;
-                    Debug.Print("Running: " + Query);
-                    if (Connection == null)
+                    try
                     {
-                        throw new NotConnectedException("Der er ikke forbindelse til databasen");
-                    }
+                        string sql = (Query as string);
+                        using (MySqlCommand cmd = connection.CreateCommand())
+                        {
+                            cmd.CommandText = sql;
+                            if (_debug)
+                            {
+                                Debug.Print("Running: " + Query);
+                            }
+                            if (Connection == null)
+                            {
+                                throw new NotConnectedException("Der er ikke forbindelse til databasen");
+                            }
 
-                    cmd.ExecuteScalarAsync();
+                            cmd.ExecuteScalarAsync();
+                        }
+                    }
+                    catch (Exception)
+                    {
+
+                        throw;
+                    }
+                    finally
+                    {
+                        Disconnect(connection);
+                        RunQuery_thread();
+                    }
                 }
             }
-            catch (Exception)
+            else
             {
-
-                throw;
+                Thread.Sleep(10);
+                RunQuery_thread();
             }
-            finally
-            {
-                Disconnect(connection);
-            }
-
         }
 
         public static void RunQuery(string Query)
         {
+            _queryTasks.Enqueue(Query);
+            /*
             Thread SqlThread = new Thread(new ParameterizedThreadStart(RunQuery_thread));
             SqlThread.Start(Query);
+            */
         }
 
         public static TableDecode RunQueryWithReturn(string Query)
@@ -148,9 +176,13 @@ namespace P3_Projekt_WPF.Classes.Database
                 {
                     cmd.CommandText = Query;
                     // Åbner forbindelsen til databasen (OPEN)
+
                     using (MySqlDataReader Reader = cmd.ExecuteReader())
                     {
-                        Debug.Print("Running: " + Query);
+                        if (_debug)
+                        {
+                            Debug.Print("Running: " + Query);
+                        }
                         // Sikre sig at der er noget at hente i databasen.
                         if (!Reader.HasRows)
                         {

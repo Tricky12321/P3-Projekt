@@ -32,7 +32,6 @@ namespace P3_Projekt_WPF
         StorageController _storageController;
         POSController _POSController;
         Grid productGrid = new Grid();
-        private Key _lastKey = Key.None;
         private bool _ctrlDown = false;
         public MainWindow()
         {
@@ -41,6 +40,7 @@ namespace P3_Projekt_WPF
             this.KeyDown += new KeyEventHandler(KeyboardHook);
             this.KeyDown += new KeyEventHandler(CtrlHookDown);
             this.KeyUp += new KeyEventHandler(CtrlHookUp);
+            Mysql.StartThreads();
         }
 
         private void KeyboardHook(object sender, KeyEventArgs e)
@@ -130,12 +130,15 @@ namespace P3_Projekt_WPF
             productGrid.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(380) });
 
             scroll_StorageProduct.Content = productGrid;
+            Stopwatch TimeTester = new Stopwatch();
+            TimeTester.Start();
             _storageController.GetAll();
             while (!_storageController.ThreadDone())
             {
-                Thread.Sleep(200);
+                Thread.Sleep(100);
             }
-            
+            TimeTester.Stop();
+            Debug.WriteLine("[P3] Det tog "+TimeTester.ElapsedMilliseconds+"ms at hente alt fra databasen");
         }
 
         public void AddProductButton()

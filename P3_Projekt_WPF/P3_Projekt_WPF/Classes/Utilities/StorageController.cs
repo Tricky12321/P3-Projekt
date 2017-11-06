@@ -18,24 +18,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
         public Dictionary<int, SaleTransaction> SaleTransactionsDictionary = new Dictionary<int, SaleTransaction>();
         public Dictionary<int, Receipt> ReceiptDictionary = new Dictionary<int, Receipt>();
         public List<TempProduct> TempProductList = new List<TempProduct>();
-        public List<Thread> Threads = new List<Thread>();
-        public ConcurrentBag<Thread> ProductThreads = new ConcurrentBag<Thread>();
-        public object ThreadLock = new object();
-
-        public bool ThreadDone()
-        {
-            lock (ThreadLock)
-            {
-                foreach (var item in Threads)
-                {
-                    if (item.IsAlive)
-                    {
-                        return false;
-                    }
-                }
-            }
-            return true;
-        }
+        
 
         public StorageController()
         {
@@ -43,6 +26,69 @@ namespace P3_Projekt_WPF.Classes.Utilities
             //GetAllReceiptsFromDatabase();
         }
 
+
+        public List<Thread> Threads = new List<Thread>();
+        public object ThreadLock = new object();
+        #region Multithreading
+        private int _productThreadsCount = 20;
+        private ConcurrentQueue<Row> _productInformation = new ConcurrentQueue<Row>();
+        // For at holde garbage collector fra at dræbe tråde
+        private List<Thread> _productThreads = new List<Thread>();
+        // Til at tjekke om de forskellige tråde er færdige med at hente data.
+        private int _productsLoadedFromDatabase = 0;
+        private int _productsCreateByThreads = -1;
+        private bool _productQueDone = false;
+        private bool _tempProductQueDone = false;
+        private bool _groupQueDone = false;
+        private bool _storageRoomQueDone = false;
+        public bool ThreadDone()
+        {
+            Debug.WriteLine(_productsCreateByThreads + " = " + _productsLoadedFromDatabase);
+            if (!_productQueDone && (_productsCreateByThreads == _productsLoadedFromDatabase))
+            {
+                Debug.WriteLine("ProductQue: Done");
+                _productQueDone = true;
+
+            }
+            if (_groupQueDone && _productQueDone && _tempProductQueDone && _storageRoomQueDone)
+            {
+                return true;
+            }
+            return false;
+        }
+
+        // Opretter Product tråde
+        private void CreateProductThreads()
+        {
+            for (int i = 0; i < _productThreadsCount; i++)
+            {
+                Thread NewThread = new Thread(new ThreadStart(HandleCreateProductQue));
+                NewThread.Start();
+                _productThreads.Add(NewThread);
+            }
+            Debug.WriteLine("Created all product threads ["+_productThreads.Count+"]");
+        }
+        // Når trådene skal få opgaver
+        private void HandleCreateProductQue()
+        {
+            if (!_productQueDone)
+            {
+                Row Information = null;
+                if (_productInformation.TryDequeue(out Information) == true)
+                {
+                    CreateProduct_Thread(Information);
+                    _productsCreateByThreads++;
+                    HandleCreateProductQue();
+                }
+                else
+                {
+                    Thread.Sleep(2);
+                    HandleCreateProductQue();
+                }
+            }
+
+        }
+        // Når tråde skal oprette objecter
         private void CreateProduct_Thread(object rowData)
         {
             Row Data = (rowData as Row);
@@ -92,18 +138,34 @@ namespace P3_Projekt_WPF.Classes.Utilities
             }
         }
 
+        private void CalculateThreadCount(int ProductCount)
+        {
+            if (ProductCount > 100)
+            {
+                // Laver en tråd for hvert 5 produkter (100 produkter = 20 tråde)
+                _productThreadsCount = Convert.ToInt32(Math.Floor((decimal)_productsLoadedFromDatabase / 3));
+            } else if (ProductCount > 50)
+            {
+                // Laver en tråd for hvert 3 produkt (50 produkter = 16 tråde)
+                _productThreadsCount = Convert.ToInt32(Math.Floor((decimal)_productsLoadedFromDatabase / 2));
+            }
+            else
+            {
+                _productThreadsCount = 20;
+            }
+        }
+
         public void GetAllProductsFromDatabase()
         {
             string sql = "SELECT * FROM `products`";
             TableDecode Results = Mysql.RunQueryWithReturn(sql);
+            _productsLoadedFromDatabase = Results.RowData.Count;
+            _productsCreateByThreads = 0;
+            CalculateThreadCount(_productsLoadedFromDatabase);
+            CreateProductThreads(); // Opretter tråde til at behandle data
             foreach (var row in Results.RowData)
             {
-                Thread NewThread = new Thread(new ParameterizedThreadStart(CreateProduct_Thread));
-                lock (ThreadLock)
-                {
-                    Threads.Add(NewThread);
-                }
-                NewThread.Start(row);
+                _productInformation.Enqueue(row);
             }
         }
 
@@ -115,6 +177,8 @@ namespace P3_Projekt_WPF.Classes.Utilities
             {
                 CreateGroups_Thread(row);
             }
+            Debug.WriteLine("GroupQue: Done!");
+            _groupQueDone = true;
         }
 
         public void GetAllStorageRooms()
@@ -124,15 +188,9 @@ namespace P3_Projekt_WPF.Classes.Utilities
             foreach (var row in Results.RowData)
             {
                 CreateStorageRoom_Thread(row);
-                /*
-                Thread NewThread = new Thread(new ParameterizedThreadStart(CreateStorageRoom_Thread));
-                lock (ThreadLock)
-                {
-                    Threads.Add(NewThread);
-                }
-                NewThread.Start(row);
-                */
             }
+            Debug.WriteLine("StorageRoomQue: Done!");
+            _storageRoomQueDone = true;
         }
 
         public void GetAllTempProductsFromDatabase()
@@ -142,15 +200,10 @@ namespace P3_Projekt_WPF.Classes.Utilities
             foreach (var row in Results.RowData)
             {
                 CreateTempProduct_Thread(row);
-                /*
-                Thread NewThread = new Thread(new ParameterizedThreadStart(CreateTempProduct_Thread));
-                lock (ThreadLock)
-                {
-                    Threads.Add(NewThread);
-                }
-                NewThread.Start(row);
-                */
             }
+            Debug.WriteLine("TempProductQue: Done!");
+
+            _tempProductQueDone = true;
         }
 
         public void GetAllReceiptsFromDatabase()
@@ -176,21 +229,21 @@ namespace P3_Projekt_WPF.Classes.Utilities
             // Multithreading the different mysql calls, so it goes much faster
             Thread GetAllProductsThread = new Thread(new ThreadStart(GetAllProductsFromDatabase));
             Thread GetAllGroupsThread = new Thread(new ThreadStart(GetAllGroupsFromDatabase));
-            //Thread GetAllReceiptsThread = new Thread(new ThreadStart(GetAllReceiptsFromDatabase));
-            Thread GetAllTempProductsThread = new Thread(new ThreadStart(GetAllProductsFromDatabase));
+            Thread GetAllTempProductsThread = new Thread(new ThreadStart(GetAllTempProductsFromDatabase));
+            Thread GetAllStorageRoomsThread = new Thread(new ThreadStart(GetAllStorageRooms));
             lock (ThreadLock)
             {
                 Threads.Add(GetAllProductsThread);
                 Threads.Add(GetAllGroupsThread);
-                //Threads.Add(GetAllReceiptsThread);
                 Threads.Add(GetAllTempProductsThread);
             }
             GetAllProductsThread.Start();
             GetAllGroupsThread.Start();
-            //GetAllReceiptsThread.Start();
+            GetAllStorageRoomsThread.Start();
             GetAllTempProductsThread.Start();
         }
 
+        #endregion
         public void DeleteProduct(int ProductID)
         {
             ProductDictionary.Remove(ProductID);
