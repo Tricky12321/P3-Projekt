@@ -16,7 +16,6 @@ namespace P3_Projekt_WPF.Classes
         public List<SaleTransaction> Transactions = new List<SaleTransaction>();
         public int NumberOfProducts;
         public decimal TotalPrice;
-        public decimal PaidPrice;
         public int CashOrCard;
         public DateTime Date;
  
