@@ -12,9 +12,6 @@ namespace P3_Projekt_WPF.Classes.Utilities
 {
     public class StorageController
     {
-
-        private int _idGroupCounter = 0;
-
         public Dictionary<int, Product> ProductDictionary = new Dictionary<int, Product>();
         public Dictionary<int, Group> GroupDictionary = new Dictionary<int, Group>();
         public Dictionary<int, StorageRoom> StorageRoomDictionary = new Dictionary<int, StorageRoom>();
@@ -193,11 +190,6 @@ namespace P3_Projekt_WPF.Classes.Utilities
             //GetAllReceiptsThread.Start();
             GetAllTempProductsThread.Start();
         }
-
-        /// <summary>
-        /// Gets all receipts and saletransactions from the database.
-        /// </summary>
-
 
         public void DeleteProduct(int ProductID)
         {
