@@ -18,6 +18,7 @@ using P3_Projekt_WPF.Classes.Exceptions;
 using P3_Projekt_WPF.Classes;
 using System.Diagnostics;
 using System.Threading;
+
 namespace P3_Projekt_WPF
 {
     /// <summary>
@@ -31,12 +32,39 @@ namespace P3_Projekt_WPF
         StorageController _storageController;
         POSController _POSController;
         Grid productGrid = new Grid();
-
+        private Key _lastKey = Key.None;
+        private bool _ctrlDown = false;
         public MainWindow()
         {
             InitializeComponent();
-
             InitComponents();
+            this.KeyDown += new KeyEventHandler(KeyboardHook);
+            this.KeyDown += new KeyEventHandler(CtrlHookDown);
+            this.KeyUp += new KeyEventHandler(CtrlHookUp);
+        }
+
+        private void KeyboardHook(object sender, KeyEventArgs e)
+        {
+            if (_ctrlDown && (e.Key != Key.LeftCtrl && e.Key != Key.RightCtrl))
+            {
+                Debug.WriteLine("Ctrl+"+e.Key.ToString());
+            }
+        }
+
+        private void CtrlHookDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.LeftCtrl || e.Key == Key.RightCtrl)
+            {
+                _ctrlDown = true;
+            }
+        }
+
+        private void CtrlHookUp(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.LeftCtrl || e.Key == Key.RightCtrl)
+            {
+                _ctrlDown = false;
+            }
         }
 
         private void InitComponents()
@@ -79,13 +107,20 @@ namespace P3_Projekt_WPF
 
         public void InitStorageGridProducts()
         {
-            productGrid.VerticalAlignment = VerticalAlignment.Top;
-            productGrid.ColumnDefinitions.Add(new ColumnDefinition());
-            productGrid.ColumnDefinitions.Add(new ColumnDefinition());
-            productGrid.ColumnDefinitions.Add(new ColumnDefinition());
-            productGrid.ColumnDefinitions.Add(new ColumnDefinition());
-            productGrid.ColumnDefinitions.Add(new ColumnDefinition());
+            productGrid.VerticalAlignment = VerticalAlignment.Stretch;
+            productGrid.HorizontalAlignment = HorizontalAlignment.Stretch;
+
+            
+
+            productGrid.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(1, GridUnitType.Star)});
+            productGrid.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(1, GridUnitType.Star)});
+            productGrid.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(1, GridUnitType.Star)});
+            productGrid.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(1, GridUnitType.Star)});
+            productGrid.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(1, GridUnitType.Star)});
+            
+
             productGrid.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(380) });
+
 
             scroll_StorageProduct.Content = productGrid;
             _storageController.GetAll();
@@ -102,6 +137,7 @@ namespace P3_Projekt_WPF
             addProductButton.Content = "+";
             addProductButton.Height = 360;
             addProductButton.Width = 250;
+
             addProductButton.SetValue(Grid.RowProperty, 0);
             addProductButton.SetValue(Grid.ColumnProperty, 0);
             addProductButton.Style = FindResource("Flat_Button") as Style;
@@ -120,6 +156,7 @@ namespace P3_Projekt_WPF
             //fproductGrid.Children.Clear();
             int i = 1;
             
+            
 
             foreach (KeyValuePair<int, Product> produkter in _storageController.ProductDictionary.OrderBy(x => x.Key))
             {
@@ -132,6 +169,9 @@ namespace P3_Projekt_WPF
                 ProductControl productControl = new ProductControl(produkter.Value);
                 productControl.SetValue(Grid.ColumnProperty, i % 5);
                 productControl.SetValue(Grid.RowProperty, i / 5);
+                
+                
+
                 productGrid.Children.Add(productControl);
 
                 i++;
@@ -162,7 +202,6 @@ namespace P3_Projekt_WPF
         {
 
         }
-
 
         private void listView_Receipt_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {

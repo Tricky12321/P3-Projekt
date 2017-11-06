@@ -35,7 +35,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
         public void EditReceipt(int receiptID)
         {
             PlacerholderReceipt = ReceiptList.First(x => x.ID == receiptID);
-            PlacerholderReceipt.Delete();
+            //PlacerholderReceipt.Delete();
         }
 
         public Product GetProductFromID(int id)
