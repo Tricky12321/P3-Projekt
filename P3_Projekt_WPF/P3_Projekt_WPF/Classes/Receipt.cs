@@ -16,11 +16,9 @@ namespace P3_Projekt_WPF.Classes
         public List<SaleTransaction> Transactions = new List<SaleTransaction>();
         public int NumberOfProducts;
         public decimal TotalPrice;
-        public decimal PaidPrice;
         public int CashOrCard;
         public DateTime Date;
-
-        
+ 
         public Receipt()
         {
             ID = _idCounter++;
@@ -154,8 +152,8 @@ namespace P3_Projekt_WPF.Classes
             ID = Convert.ToInt32(Table.Values[0]);
             NumberOfProducts = Convert.ToInt32(Table.Values[1]);
             TotalPrice = Convert.ToDecimal(Table.Values[2]);
-            PaidPrice = Convert.ToDecimal(Table.Values[3]);
-            CashOrCard = Convert.ToInt32(Table.Values[4]);
+            //PaidPrice = Convert.ToDecimal(Table.Values[3]);
+            CashOrCard = Convert.ToInt32(Table.Values[3]);
             string sql = $"SELECT * FROM `sale_transactions` WHERE `receipt_id` = '{ID}' AND `amount` != 0";
             try
             {
@@ -169,7 +167,7 @@ namespace P3_Projekt_WPF.Classes
             }
             catch (EmptyTableException)
             {
-
+                // Ignorer EmptyTableException
             }
 
             Date = Convert.ToDateTime(Table.Values[5]);
@@ -177,8 +175,9 @@ namespace P3_Projekt_WPF.Classes
 
         public void UploadToDatabase()
         {
-            string sql = "INSERT INTO `receipt` (`id`, `number_of_products`, `total_price`, `paid_price`, `payment_method`, `datetime`)"+
-                $" VALUES (NULL, '{NumberOfProducts}', '{TotalPrice}', '{PaidPrice}', '{CashOrCard}', FROM_UNIXTIME('{Utils.GetUnixTime(Date)}'));";
+            string sql = "INSERT INTO `receipt` (`id`, `number_of_products`, `total_price`, `payment_method`, `datetime`)"+
+                $" VALUES (NULL, '{NumberOfProducts}', '{TotalPrice}', '{CashOrCard}', FROM_UNIXTIME('{Utils.GetUnixTime(Date)}'));";
+            Mysql.RunQuery(sql);
         }
 
         public void UpdateInDatabase()
@@ -186,7 +185,7 @@ namespace P3_Projekt_WPF.Classes
             string sql = $"UPDATE `receipt` SET " +
                 $"`number_of_products` = '{NumberOfProducts}'," +
                 $"`total_price` = '{TotalPrice}'," +
-                $"`paid_price` = '{PaidPrice}'," +
+                //$"`paid_price` = '{PaidPrice}'," +
                 $"`payment_method` = '{CashOrCard}'," +
                 $"`datetime` = FROM_UNIXTIME('{Utils.GetUnixTime(Date)}') "+
                 $"WHERE `id` = {ID};";

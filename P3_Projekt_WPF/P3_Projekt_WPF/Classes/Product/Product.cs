@@ -129,7 +129,7 @@ namespace P3_Projekt_WPF.Classes
             }
             catch (EmptyTableException)
             {
-
+                //Ignore EmptyTableException
             }
             
         }
