@@ -67,20 +67,6 @@ namespace P3_Projekt_WPF
             UpdateGridQuickButtons();
         }
 
-        private void UpdateGridQuickButtons()
-        {
-            foreach (FastButton button in _settingsController.quickButtonList)
-            {
-                if (!grid_QuickButton.Children.Contains(button))
-                {
-                    button.Style = FindResource("Flat_Button") as Style;
-
-                    button.Click += btn_FastButton_click;
-                    grid_QuickButton.Children.Add(button);
-                }
-            }
-        }
-
         private void UpdateReceiptList()
         {
             listView_Receipt.Items.Clear();
@@ -235,8 +221,8 @@ namespace P3_Projekt_WPF
 
             if (_POSController.GetProductFromID(inputInt) != null )
             {
-                _settingsController.AddNewQuickButton(textBox_CreateQuickBtnName.Text, inputInt, grid_QuickButton.Width, grid_QuickButton.Height);
-                listView_QuickBtn.Items.Add(new { Button_Name = textBox_CreateQuickBtnName.Text, Button_Product_ID = inputInt });
+                _settingsController.AddNewQuickButton(textBox_CreateQuickBtnName.Text, inputInt, grid_QuickButton.Width, grid_QuickButton.Height, btn_FastButton_click);
+                listView_QuickBtn.Items.Add(new { Button_Name = textBox_CreateQuickBtnName.Text, Button_Product_ID = inputInt});
             }
             else
             {
@@ -244,11 +230,52 @@ namespace P3_Projekt_WPF
             }
         }
 
-        private void btn_FastButton_click(object sender, RoutedEventArgs e)
+        public void btn_FastButton_click(object sender, RoutedEventArgs e)
         {
             _POSController.AddSaleTransaction(_POSController.GetProductFromID((sender as FastButton).ProductID));
             UpdateReceiptList();
         }
+
+        private void UpdateGridQuickButtons()
+        {
+            grid_QuickButton.Children.Clear();
+            foreach (FastButton button in _settingsController.quickButtonList)
+            {
+                if (!grid_QuickButton.Children.Contains(button))
+                {
+                    button.Style = FindResource("Flat_Button") as Style; 
+
+                    grid_QuickButton.Children.Add(button);
+                }
+            }
+        }
+
+        private void btn_Remove_Quick_Button(object sender, RoutedEventArgs e)
+        {
+            _settingsController.quickButtonList.RemoveAll(x => x.Tag == (sender as Button).Tag);
+            
+            //grid_QuickButton.Children.RemoveAt(1);
+            UpdateGridQuickButtons();
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

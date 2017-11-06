@@ -274,6 +274,23 @@
                                         </DataTemplate>
                                     </GridViewColumn.CellTemplate>
                                 </GridViewColumn>
+                                
+                                <GridViewColumn>
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <Button Style="{StaticResource Flat_Button}"
+                                                Content = "+"
+                                                    Tag="{Binding Button_ProductID}"
+                                                Width="30"
+                                                Height="30"
+                                                VerticalAlignment = "Center"
+                                                Click="btn_Remove_Quick_Button"
+                                                
+                                            />
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+                                
                             </GridView>
                         </ListView.View>
                     </ListView>
