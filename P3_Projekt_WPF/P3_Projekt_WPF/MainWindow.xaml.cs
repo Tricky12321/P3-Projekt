@@ -69,11 +69,11 @@ namespace P3_Projekt_WPF
 
         private void InitComponents()
         {
-            _settingsController = new SettingsController();
             _storageController = new StorageController();
             _POSController = new POSController(_storageController);
+            _settingsController = new SettingsController();
             InitGridQuickButtons();
-            
+
             InitStorageGridProducts();
             AddProductButton();
             LoadProductGrid();
@@ -99,7 +99,8 @@ namespace P3_Projekt_WPF
         {
             foreach (FastButton button in _settingsController.quickButtonList)
             {
-                if (!grid_QuickButton.Children.Contains(button)){
+                if (!grid_QuickButton.Children.Contains(button))
+                {
                     button.Style = FindResource("Flat_Button") as Style;
 
                     button.Click += btn_FastButton_click;
@@ -127,7 +128,7 @@ namespace P3_Projekt_WPF
             productGrid.ColumnDefinitions.Add(new ColumnDefinition());
             productGrid.ColumnDefinitions.Add(new ColumnDefinition());
             productGrid.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(380) });
-            
+
             scroll_StorageProduct.Content = productGrid;
             _storageController.GetAll();
             while (!_storageController.ThreadDone())
@@ -221,8 +222,18 @@ namespace P3_Projekt_WPF
 
         private void btn_AddProduct_Click(object sender, RoutedEventArgs e)
         {
-            _POSController.AddSaleTransaction(_POSController.GetProductFromID(int.Parse(textBox_AddProductID.Text)), int.Parse(textBox_ProductAmount.Text));
-            UpdateReceiptList();
+            int inputInt;
+            int.TryParse(textBox_AddProductID.Text, out inputInt);
+
+            if (_POSController.GetProductFromID(inputInt) != null)
+            {
+                _POSController.AddSaleTransaction(_POSController.GetProductFromID(int.Parse(textBox_AddProductID.Text)), int.Parse(textBox_ProductAmount.Text));
+                UpdateReceiptList();
+            }
+            else
+            {
+                MessageBox.Show($"Produkt med ID {inputInt} findes ikke på lageret");
+            }
         }
 
         private void btn_PlusToReciept_Click(object sender, RoutedEventArgs e)
@@ -246,12 +257,23 @@ namespace P3_Projekt_WPF
 
         private void btn_SettingFastBtnAdd_Click(object sender, RoutedEventArgs e)
         {
-            _settingsController.AddNewQuickButton(textBox_CreateQuickBtnName.Text, int.Parse(textBox_CreateQuickBtnID.Text), grid_QuickButton.Width, grid_QuickButton.Height);
+            int inputInt;
+            int.TryParse(textBox_CreateQuickBtnID.Text, out inputInt);
+
+            if (_POSController.GetProductFromID(inputInt) != null )
+            {
+                _settingsController.AddNewQuickButton(textBox_CreateQuickBtnName.Text, inputInt, grid_QuickButton.Width, grid_QuickButton.Height);
+                listView_QuickBtn.Items.Add(new { Button_Name = textBox_CreateQuickBtnName.Text, Button_Product_ID = inputInt });
+            }
+            else
+            {
+                MessageBox.Show($"Produkt med ID {inputInt} findes ikke på lageret");
+            }
         }
 
         private void btn_FastButton_click(object sender, RoutedEventArgs e)
         {
-            _POSController.AddSaleTransaction(_POSController.GetProductFromID((sender as FastButton).ProductID), 1);
+            _POSController.AddSaleTransaction(_POSController.GetProductFromID((sender as FastButton).ProductID));
             UpdateReceiptList();
         }
 

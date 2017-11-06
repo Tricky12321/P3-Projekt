@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:P3_Projekt_WPF"
              mc:Ignorable="d" Background="Transparent" Height="360" Width="250" >
     <Border Width="250" Background="Transparent" Margin="0,0,0,-20">
-        <Button Background="LightGray" Style="{StaticResource Flat_Button}" Height="360" Width="250" Margin="0" VerticalAlignment="Top" HorizontalAlignment="Left" Click="Button_Click">
+        <Button Background="LightGray" Style="{StaticResource Flat_Button}"  Margin="0" VerticalAlignment="Top" HorizontalAlignment="Left" Click="Button_Click">
 
             <Grid Margin="-2,0,-2,0" Height="350" Width="240" >
                 <Grid.RowDefinitions>
