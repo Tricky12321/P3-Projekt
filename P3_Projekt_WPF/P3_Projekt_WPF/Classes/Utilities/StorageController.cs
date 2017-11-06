@@ -400,44 +400,18 @@ namespace P3_Projekt_WPF.Classes.Utilities
         {
             int limitOfChanges;
             int searchedStringLength = searchedString.Length;
-            //if string Length is under 5 the max changes to the string is 1
+
+            // Determines how many changes is allowed, depending on how long the string is
             if (searchedStringLength < 5)
-            {
                 limitOfChanges = 1;
-                if (limitOfChanges >= charDiff)
-                {
-                    return true;
-                }
-            }
-            //string length is between 5 and 10 the max changes to the string is 3
             else if (searchedStringLength < 10 && searchedStringLength >= 5)
-            {
                 limitOfChanges = 3;
-                if (limitOfChanges >= charDiff)
-                {
-                    return true;
-                }
-            }
-            //string length is between 10 and 20 the max changes to the string is 6
             else if (searchedStringLength >= 10 && searchedStringLength < 20)
-            {
                 limitOfChanges = 6;
-                if (limitOfChanges >= charDiff)
-                {
-                    return true;
-                }
-            }
-            //string length is over 20 the max changes tot he string is 9
-            else if (searchedStringLength >= 20)
-            {
+            else
                 limitOfChanges = 9;
-                if (limitOfChanges >= charDiff)
-                {
-                    return true;
-                }
-            }
-            //if none of the criteria is true, there is no matches for the product.
-            return false;
+
+            return limitOfChanges >= charDiff;
         }
         //----LevenSthein-END-----------------------
 
