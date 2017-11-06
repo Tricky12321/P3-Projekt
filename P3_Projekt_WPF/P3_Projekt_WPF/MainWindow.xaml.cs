@@ -40,7 +40,6 @@ namespace P3_Projekt_WPF
             this.KeyDown += new KeyEventHandler(KeyboardHook);
             this.KeyDown += new KeyEventHandler(CtrlHookDown);
             this.KeyUp += new KeyEventHandler(CtrlHookUp);
-            Mysql.StartThreads();
         }
 
         private void KeyboardHook(object sender, KeyEventArgs e)

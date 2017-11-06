@@ -82,11 +82,11 @@ namespace P3_Projekt_WPF.Classes.Utilities
                 }
                 else
                 {
-                    Thread.Sleep(2);
+                    Thread.Sleep(5);
                     HandleCreateProductQue();
                 }
             }
-
+            //dør når der ikke er flere opgaver
         }
         // Når tråde skal oprette objecter
         private void CreateProduct_Thread(object rowData)

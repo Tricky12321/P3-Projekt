@@ -23,20 +23,8 @@ namespace P3_Projekt_WPF.Classes.Database
         private static string _connectionString = $"Server={_ip};Port={_port};Database={_database};Uid={_username};Pwd={_password};";
         private static bool _internetConnection = false;
         private static int _connectionCounter => Connection.Count;
-        private static int _threadCount = 10;
         private static List<Thread> _queryThreads = new List<Thread>();
         private static ConcurrentQueue<string> _queryTasks = new ConcurrentQueue<string>();
-   
-             
-        public static void StartThreads()
-        {
-            for (int i = 0; i < _threadCount; i++)
-            {
-                Thread NewThread = new Thread(new ThreadStart(RunQuery_thread));
-                NewThread.Start();
-                _queryThreads.Add(NewThread);
-            }
-        }
 
         public static void Disconnect(MySqlConnection connection)
         {
@@ -131,20 +119,16 @@ namespace P3_Projekt_WPF.Classes.Database
                     finally
                     {
                         Disconnect(connection);
-                        RunQuery_thread();
                     }
                 }
-            }
-            else
-            {
-                Thread.Sleep(10);
-                RunQuery_thread();
             }
         }
 
         public static void RunQuery(string Query)
         {
             _queryTasks.Enqueue(Query);
+            Thread NewThread = new Thread(new ThreadStart(RunQuery_thread));
+            NewThread.Start();
             /*
             Thread SqlThread = new Thread(new ParameterizedThreadStart(RunQuery_thread));
             SqlThread.Start(Query);
