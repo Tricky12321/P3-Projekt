@@ -4,9 +4,9 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:P3_Projekt_WPF"
-             mc:Ignorable="d" Background="Transparent" Height="360" Width="250" >
-    <Border Width="250" Background="Transparent" Margin="0,0,0,-20">
-        <Button Background="LightGray" Style="{StaticResource Flat_Button}"  Margin="0" VerticalAlignment="Top" HorizontalAlignment="Left" Click="Button_Click">
+             mc:Ignorable="d" Background="Transparent" Height="360" MinHeight="180" MinWidth="125" Width="250" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+    <Border Width="250" Background="Transparent" Margin="0,0,0,0">
+        <Button Background="LightGray" Style="{StaticResource Flat_Button}"  Margin="0" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Click="Button_Click">
 
             <Grid Margin="-2,0,-2,0" Height="350" Width="240" >
                 <Grid.RowDefinitions>
@@ -36,11 +36,11 @@
 
 
                 <TextBlock  x:Name="txt_Stock" HorizontalAlignment="Left" Margin="0,123,0,2" TextWrapping="Wrap" Text="På lager:" Width="161" FontSize="25" Grid.Row="1" />
-                <TextBlock x:Name="txtbox_Price" HorizontalAlignment="Left" Height="40" Margin="160,59,0,0" Grid.Row="1" TextWrapping="Wrap" Text="Test" VerticalAlignment="Top" Width="80" Background="Transparent" FontSize="25" />
-                <TextBlock x:Name="txtbox_Navn" HorizontalAlignment="Left" Height="40" Margin="160,29,0,0" Grid.Row="1" TextWrapping="Wrap" Text="Test" VerticalAlignment="Top" Width="80" Background="Transparent" FontSize="25" />
-                <TextBlock x:Name="txtbox_ID" HorizontalAlignment="Left" Height="40" Margin="160,0,0,0" Grid.Row="1" TextWrapping="Wrap" Text="Test" VerticalAlignment="Top" Width="80" Background="Transparent" FontSize="25" />
-                <TextBlock x:Name="txtbox_Gruppe" HorizontalAlignment="Left" Height="40" Margin="160,88,0,0" Grid.Row="1" TextWrapping="Wrap" Text="Test" VerticalAlignment="Top" Width="80" Background="Transparent" FontSize="25" />
-                <TextBlock x:Name="txtbox_Stock" HorizontalAlignment="Left" Height="40" Margin="160,119,0,0" Grid.Row="1" TextWrapping="Wrap" Text="Test" VerticalAlignment="Top" Width="80" Background="Transparent" FontSize="25" />
+                <TextBlock x:Name="txtbox_Price" Margin="160,59,0,62" Grid.Row="1" TextWrapping="Wrap" Text="Test" Background="Transparent" FontSize="25" />
+                <TextBlock x:Name="txtbox_Navn" Margin="160,29,0,92" Grid.Row="1" TextWrapping="Wrap" Text="Test" Background="Transparent" FontSize="25" />
+                <TextBlock x:Name="txtbox_ID" Margin="160,0,0,121" Grid.Row="1" TextWrapping="Wrap" Text="Test" Background="Transparent" FontSize="25" />
+                <TextBlock x:Name="txtbox_Gruppe" Margin="160,88,0,33" Grid.Row="1" TextWrapping="Wrap" Text="Test" Background="Transparent" FontSize="25" />
+                <TextBlock x:Name="txtbox_Stock" Margin="160,119,0,2" Grid.Row="1" TextWrapping="Wrap" Text="Test" Background="Transparent" FontSize="25" />
             </Grid>
         </Button>
     </Border>

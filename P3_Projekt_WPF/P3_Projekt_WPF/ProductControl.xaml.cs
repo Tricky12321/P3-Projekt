@@ -49,7 +49,10 @@ namespace P3_Projekt_WPF
             _displayProduct = productForDisplay;
             txtboxImage = productForDisplay.Image;
             ShowProductInfo();
-
+            this.VerticalAlignment = VerticalAlignment.Stretch;
+            this.HorizontalAlignment = HorizontalAlignment.Stretch;
+            
+            
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
