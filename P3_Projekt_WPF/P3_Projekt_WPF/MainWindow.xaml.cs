@@ -81,6 +81,8 @@ namespace P3_Projekt_WPF
 
         private void InitGridQuickButtons()
         {
+            dataGrid_FastButtons.ItemsSource = _settingsController.quickButtonSettingsViewList;
+
             grid_QuickButton.ColumnDefinitions.Add(new ColumnDefinition());
             grid_QuickButton.ColumnDefinitions.Add(new ColumnDefinition());
 
@@ -110,8 +112,6 @@ namespace P3_Projekt_WPF
             productGrid.VerticalAlignment = VerticalAlignment.Stretch;
             productGrid.HorizontalAlignment = HorizontalAlignment.Stretch;
 
-            
-
             productGrid.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(1, GridUnitType.Star)});
             productGrid.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(1, GridUnitType.Star)});
             productGrid.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(1, GridUnitType.Star)});
@@ -128,7 +128,7 @@ namespace P3_Projekt_WPF
             {
                 Thread.Sleep(200);
             }
-            
+
         }
 
         public void AddProductButton()
@@ -261,12 +261,13 @@ namespace P3_Projekt_WPF
             if (_POSController.GetProductFromID(inputInt) != null )
             {
                 _settingsController.AddNewQuickButton(textBox_CreateQuickBtnName.Text, inputInt, grid_QuickButton.Width, grid_QuickButton.Height, btn_FastButton_click);
-                listView_QuickBtn.Items.Add(new { Button_Name = textBox_CreateQuickBtnName.Text, Button_Product_ID = inputInt});
+                listView_QuickBtn.Items.Add(new { Button_Name = textBox_CreateQuickBtnName.Text, ProductID = inputInt });
             }
             else
             {
                 MessageBox.Show($"Produkt med ID {inputInt} findes ikke på lageret");
             }
+            dataGrid_FastButtons.Items.Refresh();
         }
 
         public void btn_FastButton_click(object sender, RoutedEventArgs e)
@@ -277,7 +278,7 @@ namespace P3_Projekt_WPF
 
         private void UpdateGridQuickButtons()
         {
-            grid_QuickButton.Children.Clear();
+            //grid_QuickButton.Children.Clear();
             foreach (FastButton button in _settingsController.quickButtonList)
             {
                 if (!grid_QuickButton.Children.Contains(button))
@@ -294,6 +295,7 @@ namespace P3_Projekt_WPF
             _settingsController.quickButtonList.RemoveAll(x => x.Tag == (sender as Button).Tag);
             
             //grid_QuickButton.Children.RemoveAt(1);
+
             UpdateGridQuickButtons();
         }
 
