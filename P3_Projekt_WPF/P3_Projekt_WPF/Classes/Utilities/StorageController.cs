@@ -26,10 +26,10 @@ namespace P3_Projekt_WPF.Classes.Utilities
             //GetAllReceiptsFromDatabase();
         }
 
+        #region Multithreading
 
         public List<Thread> Threads = new List<Thread>();
         public object ThreadLock = new object();
-        #region Multithreading
         private int _productThreadsCount = 20;
         private ConcurrentQueue<Row> _productInformation = new ConcurrentQueue<Row>();
         // For at holde garbage collector fra at dræbe tråde
@@ -76,19 +76,17 @@ namespace P3_Projekt_WPF.Classes.Utilities
         // Når trådene skal få opgaver
         private void HandleCreateProductQue()
         {
-            if (!_productQueDone)
+            while (!_productQueDone)
             {
                 Row Information = null;
                 if (_productInformation.TryDequeue(out Information) == true)
                 {
                     CreateProduct_Thread(Information);
                     Interlocked.Increment(ref _productsCreateByThreads);
-                    HandleCreateProductQue();
                 }
                 else
                 {
                     Thread.Sleep(1);
-                    HandleCreateProductQue();
                 }
             }
         }
@@ -232,6 +230,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
                 Threads.Add(GetAllProductsThread);
                 Threads.Add(GetAllGroupsThread);
                 Threads.Add(GetAllTempProductsThread);
+                Threads.Add(GetAllStorageRoomsThread);
             }
             GetAllProductsThread.Start();
             GetAllGroupsThread.Start();
@@ -240,6 +239,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
         }
 
         #endregion
+
         public void DeleteProduct(int ProductID)
         {
             ProductDictionary.Remove(ProductID);
@@ -262,9 +262,9 @@ namespace P3_Projekt_WPF.Classes.Utilities
         public void DeleteGroup(int GroupID)
         {
             //Mulighed for at flytte alle produkter til en bestem gruppe???
-            foreach (Product product in ProductDictionary.Values.Where(x => x.ProductGroup == GroupDictionary[GroupID]))
+            foreach (Product product in ProductDictionary.Values.Where(x => x.ProductGroupID == GroupID))
             {
-                product.ProductGroup = GroupDictionary[0];
+                product.ProductGroupID = GroupDictionary[0].ID;
             }
             GroupDictionary.Remove(GroupID);
         }
@@ -273,9 +273,9 @@ namespace P3_Projekt_WPF.Classes.Utilities
         //Removes group from dictionary
         public void DeleteGroupAndMove(int removeID, int moveID)
         {
-            foreach (Product product in ProductDictionary.Values.Where(x => x.ProductGroup == GroupDictionary[removeID]))
+            foreach (Product product in ProductDictionary.Values.Where(x => x.ProductGroupID == removeID))
             {
-                product.ProductGroup = GroupDictionary[moveID];
+                product.ProductGroupID = GroupDictionary[moveID].ID;
             }
             GroupDictionary.Remove(removeID);
         }
@@ -507,7 +507,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
                 //is added to the list of products to show.
                 if (dividedString.Contains(g.Name) || groupMatched)
                 {
-                    foreach (Product p in ProductDictionary.Values.Where(x => x.ProductGroup == g))
+                    foreach (Product p in ProductDictionary.Values.Where(x => x.ProductGroupID == g.ID))
                     {
                         if (!(productListToReturn.Contains(p)))
                         {
@@ -546,9 +546,9 @@ namespace P3_Projekt_WPF.Classes.Utilities
         //----SEARCH-END---------------------
 
         //Creates product with storage and stocka as keyvalue, then add the product to the list
-        public void CreateProduct(string name, string brand, decimal purchasePrice, Group group, bool discount, decimal discountPrice, decimal salePrice, Image image, params KeyValuePair<int, int>[] storageRoomStockInput)
+        public void CreateProduct(string name, string brand, decimal purchasePrice, int groupID, bool discount, decimal discountPrice, decimal salePrice, Image image, params KeyValuePair<int, int>[] storageRoomStockInput)
         {
-            Product newProduct = new Product(name, brand, purchasePrice, group, discount, salePrice, discountPrice, image);
+            Product newProduct = new Product(name, brand, purchasePrice, groupID, discount, salePrice, discountPrice, image);
 
             foreach (KeyValuePair<int, int> roomInput in storageRoomStockInput)
             {
@@ -559,15 +559,15 @@ namespace P3_Projekt_WPF.Classes.Utilities
         }
 
         //edit product, calles two different methods depending if its run by an admin
-        public void EditProduct(bool isAdmin, Product editProduct, string name, string brand, decimal purchasePrice, Group group, bool discount, decimal salePrice, decimal discountPrice, Image image)
+        public void EditProduct(bool isAdmin, Product editProduct, string name, string brand, decimal purchasePrice, int groupID, bool discount, decimal salePrice, decimal discountPrice, Image image)
         {
             if (isAdmin)
             {
-                editProduct.AdminEdit(name, brand, purchasePrice, salePrice, group, discount, discountPrice, image);
+                editProduct.AdminEdit(name, brand, purchasePrice, salePrice, groupID, discount, discountPrice, image);
             }
             else
             {
-                editProduct.Edit(name, brand, group, image);
+                editProduct.Edit(name, brand, groupID, image);
             }
         }
 

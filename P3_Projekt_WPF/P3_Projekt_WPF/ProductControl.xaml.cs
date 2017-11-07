@@ -37,32 +37,24 @@ namespace P3_Projekt_WPF
                     img_ProductImage.VerticalAlignment = VerticalAlignment.Center;
                     img_ProductImage.HorizontalAlignment = HorizontalAlignment.Center;
                 }
-
             }
         }
 
-
         private Product _displayProduct;
-        public ProductControl(Product productForDisplay)
+        public ProductControl(Product productForDisplay, Dictionary<int, Group> groupDict)
         {
             InitializeComponent();
             _displayProduct = productForDisplay;
             txtboxImage = productForDisplay.Image;
-            ShowProductInfo();
+            ShowProductInfo(groupDict);
             this.VerticalAlignment = VerticalAlignment.Stretch;
             this.HorizontalAlignment = HorizontalAlignment.Stretch;   
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        public void ShowProductInfo()
+        public void ShowProductInfo(Dictionary<int, Group> groupDict)
         {
             img_ProductImage = _displayProduct.Image;
-            txtbox_Product.Text = $"ID: {_displayProduct.ID.ToString()}\nNavn: { _displayProduct.Name}\nGruppe: { _displayProduct.ProductGroup.Name}\nPris { _displayProduct.SalePrice.ToString()},-";
-
+            txtbox_Product.Text = $"ID: {_displayProduct.ID.ToString()}\nNavn: { _displayProduct.Name}\nGruppe: {groupDict[_displayProduct.ProductGroupID].Name}\nPris { _displayProduct.SalePrice.ToString()}DKK";
         }
     }
 }
