@@ -42,13 +42,22 @@ namespace P3_Projekt_WPF.Classes.Utilities
         private bool _groupQueDone = false;
         private bool _storageRoomQueDone = false;
 
+        private object _productQueDoneLock = new object();
+        private object _productCounterLock = new object();
+
         public bool ThreadDone()
         {
             Debug.WriteLine(_productsCreateByThreads + " = " + _productsLoadedFromDatabase);
             if (!_productQueDone && (_productsCreateByThreads == _productsLoadedFromDatabase))
             {
-                Debug.WriteLine("ProductQue: Done");
-                _productQueDone = true;
+                lock(_productQueDoneLock)
+                {
+                    Debug.WriteLine("ProductQue: Done");
+                    _productQueDone = true;
+                }
+            } else
+            {
+                return false;
             }
             if (_groupQueDone && _productQueDone && _tempProductQueDone && _storageRoomQueDone)
             {
@@ -72,13 +81,18 @@ namespace P3_Projekt_WPF.Classes.Utilities
         // Når trådene skal få opgaver
         private void HandleCreateProductQue()
         {
-            if (!_productQueDone)
+            bool QueDone = false;
+            lock (_productQueDoneLock)
+            {
+                QueDone = _productQueDone;
+            }
+            if (!QueDone)
             {
                 Row Information = null;
                 if (_productInformation.TryDequeue(out Information) == true)
                 {
                     CreateProduct_Thread(Information);
-                    _productsCreateByThreads++;
+                    Interlocked.Increment(ref _productsCreateByThreads);
                     HandleCreateProductQue();
                 }
                 else
