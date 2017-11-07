@@ -210,6 +210,21 @@
                     <Border BorderBrush="Black" BorderThickness="1" Height="1" VerticalAlignment="Top" Margin="-34,71,-79,0" Grid.ColumnSpan="2"/>
                     <Button x:Name="btn_MoveProduct" Content="Flyt Produkt" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="250" Height="50" Style="{StaticResource Flat_Button}"/>
                     <ScrollViewer x:Name="scroll_StorageProduct" Margin="5,81,6,9" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled"  />
+
+
+                    <Border BorderBrush="Black" BorderThickness="0" Grid.Column="1" Margin="0,77,0,0">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="1*"/>
+                                <RowDefinition Height="2*"/>
+                            </Grid.RowDefinitions>
+                            <Image x:Name="image_ChosenProduct" Margin="0,0,0,0"/>
+                            <TextBlock x:Name="textBlock_ChosenProduct" TextWrapping="Wrap" Text="TextBlock" Grid.Row="1" Margin="0,0,0,0"/>
+
+                        </Grid>
+                    </Border>
+
+
                 </Grid>
             </TabItem>
             <TabItem x:Name="tab_Statisticsc" Header="Statistik" Width="190">

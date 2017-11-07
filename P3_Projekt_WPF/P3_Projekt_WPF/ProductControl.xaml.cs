@@ -37,10 +37,8 @@ namespace P3_Projekt_WPF
                     img_ProductImage.VerticalAlignment = VerticalAlignment.Center;
                     img_ProductImage.HorizontalAlignment = HorizontalAlignment.Center;
                 }
-
             }
         }
-
 
         private Product _displayProduct;
         public ProductControl(Product productForDisplay)
@@ -51,11 +49,6 @@ namespace P3_Projekt_WPF
             ShowProductInfo();
             this.VerticalAlignment = VerticalAlignment.Stretch;
             this.HorizontalAlignment = HorizontalAlignment.Stretch;   
-        }
-
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-
         }
 
         public void ShowProductInfo()

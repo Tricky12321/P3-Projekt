@@ -142,8 +142,23 @@ namespace P3_Projekt_WPF
             addProductButton.Style = FindResource("Flat_Button") as Style;
             addProductButton.Margin = new System.Windows.Thickness(2);
             addProductButton.Background = Brushes.Transparent;
-            // tilføj produkt addProductButton.Click
+
             productGrid.Children.Add(addProductButton);
+        }
+
+        private void ShowSpecificInfoProductStorage(object sender, RoutedEventArgs e)
+        {
+            Debug.Print((sender as Button).Tag.ToString());
+            Product placeholder = _storageController.ProductDictionary[Convert.ToInt32((sender as Button).Tag)];
+
+            image_ChosenProduct = placeholder.Image;
+            textBlock_ChosenProduct.Text = $"ID: {placeholder.ID}\nNavn: {placeholder.Name}\nGruppe: {placeholder.ProductGroup.Name}\nMærke: {placeholder.Brand}\nPris: {placeholder.SalePrice}\nTilbudspris: {placeholder.DiscountPrice}\nIndkøbspris: {placeholder.PurchasePrice}";
+            foreach(KeyValuePair<int,int> storageWithAmount in placeholder.StorageWithAmount)
+            {
+               // textBlock_ChosenProduct.Text += $"{}"
+            }
+
+
         }
 
         public void StorageTabClick(object sender, RoutedEventArgs e)
@@ -167,7 +182,8 @@ namespace P3_Projekt_WPF
                 ProductControl productControl = new ProductControl(produkter.Value);
                 productControl.SetValue(Grid.ColumnProperty, i % 5);
                 productControl.SetValue(Grid.RowProperty, i / 5);
-                
+                productControl.btn_ShowMoreInformation.Tag = produkter.Value.ID;
+                productControl.btn_ShowMoreInformation.Click += ShowSpecificInfoProductStorage;
                 productGrid.Children.Add(productControl);
 
                 i++;
