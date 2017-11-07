@@ -70,7 +70,7 @@ namespace P3_Projekt_WPF.Classes.Utilities.Tests
             StorageController SC = new StorageController();
             POSController POSC = new POSController(SC);
             POSC.StartPurchase();
-            SC.ProductDictionary.Add(0, new Product("test1", "blabla", 1.25m, SC.GroupDictionary[0], false, 5.0m, 3.0m, null));
+            SC.ProductDictionary.Add(0, new Product("test1", "blabla", 1.25m, 0, false, 5.0m, 3.0m, null));
             SaleTransaction transaction = new SaleTransaction(SC.ProductDictionary[0], 5, 0);
             POSC.PlacerholderReceipt.Transactions.Add(transaction);
 
@@ -89,9 +89,9 @@ namespace P3_Projekt_WPF.Classes.Utilities.Tests
             StorageController SC = new StorageController();
             POSController POSC = new POSController(SC);
             POSC.StartPurchase();
-            SC.ProductDictionary.Add(0, new Product("test1", "blabla", 1.25m, SC.GroupDictionary[0], false, 5.0m, 3.0m, null));
-            SC.ProductDictionary.Add(1, new Product("test1", "blabla", 1.25m, SC.GroupDictionary[0], false, 5.0m, 3.0m, null));
-            SC.ProductDictionary.Add(2, new Product("test1", "blabla", 1.25m, SC.GroupDictionary[0], false, 5.0m, 3.0m, null));
+            SC.ProductDictionary.Add(0, new Product("test1", "blabla", 1.25m, 0, false, 5.0m, 3.0m, null));
+            SC.ProductDictionary.Add(1, new Product("test1", "blabla", 1.25m, 0, false, 5.0m, 3.0m, null));
+            SC.ProductDictionary.Add(2, new Product("test1", "blabla", 1.25m, 0, false, 5.0m, 3.0m, null));
             SaleTransaction transaction1 = new SaleTransaction(SC.ProductDictionary[0], 5, 0);
             SaleTransaction transaction2 = new SaleTransaction(SC.ProductDictionary[1], 1, 0);
             SaleTransaction transaction3 = new SaleTransaction(SC.ProductDictionary[2], 1, 0);
@@ -125,7 +125,7 @@ namespace P3_Projekt_WPF.Classes.Utilities.Tests
             StorageController SC = new StorageController();
             POSController POSC = new POSController(SC);
             POSC.StartPurchase();
-            SC.ProductDictionary.Add(0, new Product("test1", "blabla", 1.25m, SC.GroupDictionary[0], false, 5.0m, 3.0m, null));
+            SC.ProductDictionary.Add(0, new Product("test1", "blabla", 1.25m, 0, false, 5.0m, 3.0m, null));
             SC.ProductDictionary[0].StorageWithAmount.Add(0, 9);
             POSC.PlacerholderReceipt.Transactions.Add(new SaleTransaction(SC.ProductDictionary[0], 5, 0));
 
@@ -140,9 +140,9 @@ namespace P3_Projekt_WPF.Classes.Utilities.Tests
             StorageController SC = new StorageController();
             POSController POSC = new POSController(SC);
             POSC.StartPurchase();
-            SC.ProductDictionary.Add(0, new Product("test1", "blabla", 1.25m, SC.GroupDictionary[0], false, 5.0m, 3.0m, null));
-            SC.ProductDictionary.Add(1, new Product("test1", "blabla", 1.25m, SC.GroupDictionary[0], false, 5.0m, 3.0m, null));
-            SC.ProductDictionary.Add(2, new Product("test1", "blabla", 1.25m, SC.GroupDictionary[0], false, 5.0m, 3.0m, null));
+            SC.ProductDictionary.Add(0, new Product("test1", "blabla", 1.25m, 0, false, 5.0m, 3.0m, null));
+            SC.ProductDictionary.Add(1, new Product("test1", "blabla", 1.25m, 0, false, 5.0m, 3.0m, null));
+            SC.ProductDictionary.Add(2, new Product("test1", "blabla", 1.25m, 0, false, 5.0m, 3.0m, null));
             SC.ProductDictionary[0].StorageWithAmount.Add(0, 9);
             SC.ProductDictionary[1].StorageWithAmount.Add(0, 15);
             SC.ProductDictionary[2].StorageWithAmount.Add(0, 2);

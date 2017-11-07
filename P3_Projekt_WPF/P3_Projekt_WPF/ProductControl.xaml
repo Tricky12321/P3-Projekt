@@ -13,8 +13,8 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <Button x:Name="button" Panel.ZIndex="-1" Width="auto" Background="Transparent" Style="{StaticResource Flat_Button}" Grid.RowSpan="2" Margin="0,0,0,0"/>
-        <Border BorderThickness="1" BorderBrush="Black" CornerRadius="8" Margin="2,2,2,2">
+        <Button x:Name="btn_ShowMoreInformation" Panel.ZIndex="-1" Width="auto" Background="Transparent" Style="{StaticResource Flat_Button}" Grid.RowSpan="2" Margin="0,0,0,0"/>
+        <Border BorderThickness="1" BorderBrush="DarkGray" CornerRadius="8" Margin="2,2,2,2" IsHitTestVisible="False">
             <Image x:Name="img_ProductImage" Height="auto" Margin="2,2,2,2" Width="auto" IsHitTestVisible="False"/>
         </Border>
 

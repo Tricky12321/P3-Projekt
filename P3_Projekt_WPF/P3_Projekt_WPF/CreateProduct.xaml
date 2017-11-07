@@ -1,0 +1,136 @@
+﻿<Window x:Class="P3_Projekt_WPF.CreateProduct"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:P3_Projekt_WPF"
+        mc:Ignorable="d"
+        Title="CreateProduct" Height="340" Width="550" Background="#FFE5E5E5" MinWidth="550" MinHeight="340">
+    <Grid x:Name="grid_input" Margin="0,40,0,0">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="298*"/>
+            <ColumnDefinition Width="194*"/>
+        </Grid.ColumnDefinitions>
+        <TextBlock x:Name="label_Navn" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Navn" FontSize="18" Margin="32,0,0,0" MinHeight="24" VerticalAlignment="Top"/>
+        <TextBox Padding="10,0,0,0" x:Name="textbox_Navn" FontSize="18" Grid.ColumnSpan="1" HorizontalAlignment="Left" Width="191" MinHeight="24" VerticalAlignment="Top" Margin="104,0,0,0">
+            <TextBox.Resources>
+                <Style TargetType="{x:Type Border}">
+                    <Setter Property="CornerRadius" Value="10"/>
+                </Style>
+            </TextBox.Resources>
+        </TextBox>
+        <TextBlock IsHitTestVisible="False" Text="Navn" Margin="114,0,0,0" Foreground="DarkGray" FontSize="18" HorizontalAlignment="Left" Width="148" Height="29" VerticalAlignment="Top">
+            <TextBlock.Style>
+                <Style TargetType="{x:Type TextBlock}">
+                    <Setter Property="Visibility" Value="Collapsed"/>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding Text, ElementName=textbox_Navn}" Value="">
+                            <Setter Property="Visibility" Value="Visible"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </TextBlock.Style>
+        </TextBlock>
+        <TextBlock x:Name="label_Mærke" HorizontalAlignment="Left" Margin="24,32,0,0" TextWrapping="Wrap" Text="Mærke" FontSize="18" MinHeight="24" VerticalAlignment="Top"/>
+        <ComboBox x:Name="comboBox_Mærke" HorizontalAlignment="Left" Margin="104,32,0,0" VerticalAlignment="Top" Width="191">
+            <ComboBoxItem>ComboBox Item #1</ComboBoxItem>
+            <ComboBoxItem>ComboBox Item #2</ComboBoxItem>
+            <ComboBoxItem>ComboBox Item #3</ComboBoxItem>
+        </ComboBox>
+        <TextBlock x:Name="label_Gruppe" HorizontalAlignment="Left" Margin="22,64,0,0" TextWrapping="Wrap" Text="Gruppe" FontSize="18" MinHeight="24" VerticalAlignment="Top"/>
+        <ComboBox x:Name="comboBox_Gruppe" HorizontalAlignment="Left" Margin="104,64,0,0" VerticalAlignment="Top" Width="191">
+            <ComboBoxItem>ComboBox Item #1</ComboBoxItem>
+            <ComboBoxItem>ComboBox Item #2</ComboBoxItem>
+            <ComboBoxItem>ComboBox Item #3</ComboBoxItem>
+        </ComboBox>
+
+        <TextBlock x:Name="label_Indkøbspris" HorizontalAlignment="Left" Margin="6,96,0,0" TextWrapping="Wrap" Text="Indkøbspris" FontSize="18" MinHeight="24" VerticalAlignment="Top"/>
+        <TextBox Padding="10,0,0,0" x:Name="textbox_Indkøbspris" Margin="104,96,0,0" FontSize="18" Grid.ColumnSpan="1" Height="27" VerticalAlignment="Top" HorizontalAlignment="Left" Width="192">
+            <TextBox.Resources>
+                <Style TargetType="{x:Type Border}">
+                    <Setter Property="CornerRadius" Value="10"/>
+                </Style>
+            </TextBox.Resources>
+        </TextBox>
+        <TextBlock IsHitTestVisible="False" Text="Indkøbspris" Margin="115,96,0,0" Foreground="DarkGray" FontSize="18" HorizontalAlignment="Left" Width="148" Height="27" VerticalAlignment="Top">
+            <TextBlock.Style>
+                <Style TargetType="{x:Type TextBlock}">
+                    <Setter Property="Visibility" Value="Collapsed"/>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding Text, ElementName=textbox_Indkøbspris}" Value="">
+                            <Setter Property="Visibility" Value="Visible"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </TextBlock.Style>
+        </TextBlock>
+        <TextBlock x:Name="label_Salgspris" HorizontalAlignment="Left" Margin="17,128,0,0" TextWrapping="Wrap" Text="Salgspris" FontSize="18" MinHeight="24" VerticalAlignment="Top"/>
+        <TextBox Padding="10,0,0,0" x:Name="textbox_Salgspris" Margin="104,128,0,0" FontSize="18" Grid.ColumnSpan="1" HorizontalAlignment="Left" Width="192" Height="27" VerticalAlignment="Top">
+            <TextBox.Resources>
+                <Style TargetType="{x:Type Border}">
+                    <Setter Property="CornerRadius" Value="10"/>
+                </Style>
+            </TextBox.Resources>
+        </TextBox>
+        <TextBlock IsHitTestVisible="False" Text="Salgspris" Margin="115,128,0,0" Foreground="DarkGray" FontSize="18" HorizontalAlignment="Left" Width="148" Height="27" VerticalAlignment="Top">
+            <TextBlock.Style>
+                <Style TargetType="{x:Type TextBlock}">
+                    <Setter Property="Visibility" Value="Collapsed"/>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding Text, ElementName=textbox_Salgspris}" Value="">
+                            <Setter Property="Visibility" Value="Visible"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </TextBlock.Style>
+        </TextBlock>
+        <TextBlock x:Name="label_Tilbudspris" HorizontalAlignment="Left" Margin="9,160,0,0" TextWrapping="Wrap" Text="Tilbudspris" FontSize="18" MinHeight="24" VerticalAlignment="Top"/>
+        <TextBox Padding="10,0,0,0" x:Name="textbox_Tilbudspris" Margin="104,160,0,0" FontSize="18" HorizontalAlignment="Left" Width="192" Height="27" VerticalAlignment="Top">
+            <TextBox.Resources>
+                <Style TargetType="{x:Type Border}">
+                    <Setter Property="CornerRadius" Value="10"/>
+                </Style>
+            </TextBox.Resources>
+        </TextBox>
+        <TextBlock IsHitTestVisible="False" Text="Tilbudspris" Margin="115,160,0,0" Foreground="DarkGray" FontSize="18" HorizontalAlignment="Left" Width="148" Height="27" VerticalAlignment="Top">
+            <TextBlock.Style>
+                <Style TargetType="{x:Type TextBlock}">
+                    <Setter Property="Visibility" Value="Collapsed"/>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding Text, ElementName=textbox_Tilbudspris}" Value="">
+                            <Setter Property="Visibility" Value="Visible"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </TextBlock.Style>
+        </TextBlock>
+        <TextBlock x:Name="label_Antal" HorizontalAlignment="Left" Margin="32,192,0,0" TextWrapping="Wrap" Text="Antal" FontSize="18" MinHeight="24" VerticalAlignment="Top"/>
+        <TextBox Padding="10,0,0,0" x:Name="textbox_Antal" Margin="104,192,0,0" FontSize="18" HorizontalAlignment="Left" Width="192" Grid.ColumnSpan="1" Height="27" VerticalAlignment="Top">
+            <TextBox.Resources>
+                <Style TargetType="{x:Type Border}">
+                    <Setter Property="CornerRadius" Value="10"/>
+                </Style>
+            </TextBox.Resources>
+        </TextBox>
+        <TextBlock IsHitTestVisible="False" Text="Antal" Margin="115,192,0,0" Foreground="DarkGray" FontSize="18" HorizontalAlignment="Left" Width="148" Height="27" VerticalAlignment="Top">
+            <TextBlock.Style>
+                <Style TargetType="{x:Type TextBlock}">
+                    <Setter Property="Visibility" Value="Collapsed"/>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding Text, ElementName=textbox_Antal}" Value="">
+                            <Setter Property="Visibility" Value="Visible"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </TextBlock.Style>
+        </TextBlock>
+        <TextBlock x:Name="label_ProduktID" Margin="7,233,0,0" TextWrapping="Wrap" Text="Produkt ID:" FontSize="18" Grid.ColumnSpan="2" MinHeight="24" VerticalAlignment="Top" HorizontalAlignment="Left" Width="291"/>
+
+        <Button Style="{StaticResource Flat_Button}" x:Name="btn_TilføjBillede" Content="Tilføj billede" FontSize="18" Grid.Column="2" Margin="0,29,0,0" Height="30" VerticalAlignment="Top" HorizontalAlignment="Center" Width="174" />
+        <Border BorderThickness="1" BorderBrush="Black"  Grid.Column="1" HorizontalAlignment="Center" Height="117" MinHeight="117" Margin="0,64,0,0" VerticalAlignment="Top" Width="208" MinWidth="208">
+            <Image x:Name="image" Grid.Column="1" HorizontalAlignment="Right" Height="117" MinHeight="117" Margin="0,0,0,0" VerticalAlignment="Top" Width="208" MinWidth="208" />
+        </Border>
+
+        <Button Style="{StaticResource Flat_Button}" x:Name="btn_GemOgAfslut" Content="Gem og Afslut"  FontSize="18" Grid.Column="2" Margin="0,0,0,10" Height="30" VerticalAlignment="Bottom" HorizontalAlignment="Center" Width="174"/>
+    </Grid>
+</Window>
