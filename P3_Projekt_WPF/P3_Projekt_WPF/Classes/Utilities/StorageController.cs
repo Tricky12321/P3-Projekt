@@ -76,19 +76,17 @@ namespace P3_Projekt_WPF.Classes.Utilities
         // Når trådene skal få opgaver
         private void HandleCreateProductQue()
         {
-            if (!_productQueDone)
+            while (!_productQueDone)
             {
                 Row Information = null;
                 if (_productInformation.TryDequeue(out Information) == true)
                 {
                     CreateProduct_Thread(Information);
                     Interlocked.Increment(ref _productsCreateByThreads);
-                    HandleCreateProductQue();
                 }
                 else
                 {
                     Thread.Sleep(1);
-                    HandleCreateProductQue();
                 }
             }
         }
@@ -232,6 +230,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
                 Threads.Add(GetAllProductsThread);
                 Threads.Add(GetAllGroupsThread);
                 Threads.Add(GetAllTempProductsThread);
+                Threads.Add(GetAllStorageRoomsThread);
             }
             GetAllProductsThread.Start();
             GetAllGroupsThread.Start();
@@ -262,9 +261,9 @@ namespace P3_Projekt_WPF.Classes.Utilities
         public void DeleteGroup(int GroupID)
         {
             //Mulighed for at flytte alle produkter til en bestem gruppe???
-            foreach (Product product in ProductDictionary.Values.Where(x => x.ProductGroup == GroupDictionary[GroupID]))
+            foreach (Product product in ProductDictionary.Values.Where(x => x.ProductGroupID == GroupID))
             {
-                product.ProductGroup = GroupDictionary[0];
+                product.ProductGroupID = GroupDictionary[0].ID;
             }
             GroupDictionary.Remove(GroupID);
         }
@@ -273,11 +272,40 @@ namespace P3_Projekt_WPF.Classes.Utilities
         //Removes group from dictionary
         public void DeleteGroupAndMove(int removeID, int moveID)
         {
-            foreach (Product product in ProductDictionary.Values.Where(x => x.ProductGroup == GroupDictionary[removeID]))
+            foreach (Product product in ProductDictionary.Values.Where(x => x.ProductGroupID == removeID))
             {
-                product.ProductGroup = GroupDictionary[moveID];
+                product.ProductGroupID = GroupDictionary[moveID].ID;
             }
             GroupDictionary.Remove(removeID);
+        }
+        // Levenstein multithreading
+        private bool _productSearchDone = false;
+        private bool _groupSearchDone = false;
+        private bool _brandSearchDone = false;
+        private int _productThreadCount = 4;
+        private ConcurrentQueue<Product> _productsToSearch = null;
+        private ConcurrentQueue<Product> _productsFound = null;
+        private List<Thread> _productSearchThreads = new List<Thread>();
+        private void LevensteinSearch_Thread(object searchedString)
+        {
+            while (!_productSearchDone)
+            {
+                Product p = null;
+                if (_productsToSearch.TryDequeue(out p) && p != null)
+                {
+                    LevenshteinsProductSearch((searchedString as string), p, ref _productsFound);
+                }
+            }
+        }
+
+        private void StartLevensteinSearchThreads()
+        {
+            for (int i = 0; i < _productThreadCount; i++)
+            {
+                Thread NewThread = new Thread(new ParameterizedThreadStart(LevensteinSearch_Thread));
+                _productSearchThreads.Add(NewThread);
+                NewThread.Start();
+            }
         }
 
         /////////--------------------SEARCH---------------------------------
@@ -286,7 +314,6 @@ namespace P3_Projekt_WPF.Classes.Utilities
             bool wordIsMatched = false;
             ConcurrentQueue<Product> productsToReturn = new ConcurrentQueue<Product>();
             IEnumerable<Product> returnableProducts;
-
             int isNumber;
             //returns 1 product if it is a matching ID number
             if (Int32.TryParse(searchedString, out isNumber))
@@ -298,23 +325,33 @@ namespace P3_Projekt_WPF.Classes.Utilities
             {
                 //checks if the searched string is
                 //matching with a product name.
-                foreach (Product p in ProductDictionary.Values)
+                
+                foreach (var p in ProductDictionary.Where(x => x.Value.Name == searchedString))
                 {
-                    if (p.Name == searchedString)
-                    {
-                        productsToReturn.Enqueue(p);
-                    }
+                    productsToReturn.Enqueue(p.Value);
                 }
-                //goes through all the products and suggest similiar products.
-                foreach (Product p in ProductDictionary.Values)
+                _productsToSearch = new ConcurrentQueue<Product>(ProductDictionary.Values);
+                _productsFound = productsToReturn;
+                // Starter multithreading 
+                StartLevensteinSearchThreads();
+                _productSearchDone = false;
+                while (_productsToSearch.IsEmpty == false)
                 {
-                    //levenshteins will try to autocorrect the string and suggest items with similar names to the string
-                    LevenshteinsProductSearch(searchedString, p, ref productsToReturn);
+                    Thread.Sleep(1);
                 }
+                _productSearchDone = true;
+
                 //will add all the matching brands to the productlist
-                BrandSearch(searchedString, ref productsToReturn);
-                //will add all th matching groups to the produclist
-                GroupSearch(searchedString, ref productsToReturn);
+                _brandSearchDone = false;
+                _groupSearchDone = false;
+                Thread BrandSearchThread = new Thread(new ParameterizedThreadStart(BrandSearch));
+                Thread GroupSearchThread = new Thread(new ParameterizedThreadStart(GroupSearch));
+                BrandSearchThread.Start(searchedString);
+                GroupSearchThread.Start(searchedString);
+                while (!_brandSearchDone && !_groupSearchDone)
+                {
+                    Thread.Sleep(1);
+                }
 
                 //removes duplicates from the list.
                 returnableProducts = productsToReturn.Distinct<Product>();
@@ -456,8 +493,10 @@ namespace P3_Projekt_WPF.Classes.Utilities
         }
         //----LevenSthein-END-----------------------
 
-        public void GroupSearch(string searchedString, ref ConcurrentQueue<Product> productListToReturn)//tested
+        public void GroupSearch(object searchString)//tested
         {
+            string searchedString = searchString as string;
+            ConcurrentQueue<Product> productListToReturn = _productsFound;
             //divides all the elements in the string, to evaluate each element
             string[] dividedString = searchedString.Split(' ');
             //checking all groups to to match with the searched string elements
@@ -469,16 +508,19 @@ namespace P3_Projekt_WPF.Classes.Utilities
                 //is added to the list of products to show.
                 if (dividedString.Contains(g.Name) || groupMatched)
                 {
-                    foreach (Product p in ProductDictionary.Values.Where(x => x.ProductGroup == g))
+                    foreach (Product p in ProductDictionary.Values.Where(x => x.ProductGroupID == g.ID))
                     {
                         productListToReturn.Enqueue(p);
                     }
                 }
             }
+            _groupSearchDone = true;
         }
 
-        public void BrandSearch(string searchedString, ref ConcurrentQueue<Product> productListToReturn)//tested
+        public void BrandSearch(object searchString)//tested
         {
+            string searchedString = searchString as string;
+            ConcurrentQueue<Product> productListToReturn = _productsFound;
             //divides all the elements in the string, to evaluate each element
             string[] dividedString = searchedString.Split(' ');
             //checking all products to to match the brands with the searched string elements
@@ -497,13 +539,14 @@ namespace P3_Projekt_WPF.Classes.Utilities
 
                 }
             }
+            _brandSearchDone = true;
         }
         //----SEARCH-END---------------------
 
         //Creates product with storage and stocka as keyvalue, then add the product to the list
-        public void CreateProduct(string name, string brand, decimal purchasePrice, Group group, bool discount, decimal discountPrice, decimal salePrice, Image image, params KeyValuePair<int, int>[] storageRoomStockInput)
+        public void CreateProduct(string name, string brand, decimal purchasePrice, int groupID, bool discount, decimal discountPrice, decimal salePrice, Image image, params KeyValuePair<int, int>[] storageRoomStockInput)
         {
-            Product newProduct = new Product(name, brand, purchasePrice, group, discount, salePrice, discountPrice, image);
+            Product newProduct = new Product(name, brand, purchasePrice, groupID, discount, salePrice, discountPrice, image);
 
             foreach (KeyValuePair<int, int> roomInput in storageRoomStockInput)
             {
@@ -514,15 +557,15 @@ namespace P3_Projekt_WPF.Classes.Utilities
         }
 
         //edit product, calles two different methods depending if its run by an admin
-        public void EditProduct(bool isAdmin, Product editProduct, string name, string brand, decimal purchasePrice, Group group, bool discount, decimal salePrice, decimal discountPrice, Image image)
+        public void EditProduct(bool isAdmin, Product editProduct, string name, string brand, decimal purchasePrice, int groupID, bool discount, decimal salePrice, decimal discountPrice, Image image)
         {
             if (isAdmin)
             {
-                editProduct.AdminEdit(name, brand, purchasePrice, salePrice, group, discount, discountPrice, image);
+                editProduct.AdminEdit(name, brand, purchasePrice, salePrice, groupID, discount, discountPrice, image);
             }
             else
             {
-                editProduct.Edit(name, brand, group, image);
+                editProduct.Edit(name, brand, groupID, image);
             }
         }
 
