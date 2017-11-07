@@ -164,7 +164,6 @@ namespace P3_Projekt_WPF
 
         public void LoadProductGrid()
         {
-            //fproductGrid.Children.Clear();
             int i = 1;
             
             foreach (KeyValuePair<int, Product> produkter in _storageController.ProductDictionary.OrderBy(x => x.Key))
@@ -217,11 +216,6 @@ namespace P3_Projekt_WPF
         }
 
         private void TextBlock_TargetUpdated(object sender, DataTransferEventArgs e)
-        {
-
-        }
-
-        private void btn_TempProduct_Click(object sender, RoutedEventArgs e)
         {
 
         }
@@ -302,7 +296,6 @@ namespace P3_Projekt_WPF
                     button.SetValue(Grid.RowProperty, i / 2);
                     ++i;
                 }
-                
             }
         }
 
@@ -310,17 +303,18 @@ namespace P3_Projekt_WPF
         {
             int removeThis = _settingsController.quickButtonList.FindIndex(x => x.ProductID == Convert.ToUInt32((sender as Button).Tag));
 
-
             _settingsController.quickButtonList.RemoveAll(x => x.ProductID == Convert.ToUInt32((sender as Button).Tag));
 
             listView_QuickBtn.Items.RemoveAt(removeThis);
-            
 
             listView_QuickBtn.Items.Refresh();
             UpdateGridQuickButtons();
         }
 
+        private void btn_Temporary_Click(object sender, RoutedEventArgs e)
+        {
 
+        }
 
 
 

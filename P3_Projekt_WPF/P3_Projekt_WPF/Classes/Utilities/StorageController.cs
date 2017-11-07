@@ -26,10 +26,10 @@ namespace P3_Projekt_WPF.Classes.Utilities
             //GetAllReceiptsFromDatabase();
         }
 
+        #region Multithreading
 
         public List<Thread> Threads = new List<Thread>();
         public object ThreadLock = new object();
-        #region Multithreading
         private int _productThreadsCount = 20;
         private ConcurrentQueue<Row> _productInformation = new ConcurrentQueue<Row>();
         // For at holde garbage collector fra at dræbe tråde
@@ -239,6 +239,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
         }
 
         #endregion
+
         public void DeleteProduct(int ProductID)
         {
             ProductDictionary.Remove(ProductID);
