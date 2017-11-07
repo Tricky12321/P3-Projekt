@@ -135,8 +135,6 @@ namespace P3_Projekt_WPF
         {
             Button addProductButton = new Button();
             addProductButton.Content = "+";
-            addProductButton.Height = 360;
-            addProductButton.Width = 250;
 
             addProductButton.SetValue(Grid.RowProperty, 0);
             addProductButton.SetValue(Grid.ColumnProperty, 0);
