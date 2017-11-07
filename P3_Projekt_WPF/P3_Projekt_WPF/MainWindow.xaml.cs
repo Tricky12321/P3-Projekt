@@ -354,5 +354,10 @@ namespace P3_Projekt_WPF
             if (!char.IsDigit(e.Text, e.Text.Length - 1) && !(e.Text[e.Text.Length - 1] == ','))
                 e.Handled = true;
         }
+
+        private void btn_PictureFilePath_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }

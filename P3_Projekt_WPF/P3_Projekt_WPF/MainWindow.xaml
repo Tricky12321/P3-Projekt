@@ -315,7 +315,7 @@
                                 </GridView>
                             </ListView.View>
                         </ListView>
-                        <Button x:Name="button" Content="mads lorteknap" HorizontalAlignment="Center" Margin="216,899,0,0" VerticalAlignment="Top" Width="466" Height="140" />
+                        <Button x:Name="btn_PictureFilePath" Content="mads lorteknap" HorizontalAlignment="Center" Margin="0,899,0,0" VerticalAlignment="Top" Width="466" Height="140" Click="btn_PictureFilePath_Click" />
                     </Grid>
                 </Grid>
             </TabItem>
