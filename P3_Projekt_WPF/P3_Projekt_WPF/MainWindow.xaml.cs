@@ -254,10 +254,14 @@ namespace P3_Projekt_WPF
             int inputInt;
             int.TryParse(textBox_CreateQuickBtnID.Text, out inputInt);
 
-            if (_POSController.GetProductFromID(inputInt) != null )
+            if (_POSController.GetProductFromID(inputInt) != null  && !_settingsController.quickButtonList.Any(x => x.ProductID == inputInt))
             {
                 _settingsController.AddNewQuickButton(textBox_CreateQuickBtnName.Text, inputInt, grid_QuickButton.Width, grid_QuickButton.Height, btn_FastButton_click);
                 listView_QuickBtn.Items.Add(new FastButton(){ Button_Name = textBox_CreateQuickBtnName.Text, ProductID = inputInt });
+            }
+            else if (!_settingsController.quickButtonList.Any(x => x.ProductID == inputInt))
+            {
+                MessageBox.Show($"Produkt med dette ID {inputInt} er allerede oprettet");
             }
             else
             {
@@ -273,6 +277,7 @@ namespace P3_Projekt_WPF
         
         private void UpdateGridQuickButtons()
         {
+            int i = 0;
             grid_QuickButton.Children.Clear();
             foreach (FastButton button in _settingsController.quickButtonList)
             {
@@ -281,14 +286,25 @@ namespace P3_Projekt_WPF
                     button.Style = FindResource("Flat_Button") as Style; 
 
                     grid_QuickButton.Children.Add(button);
+                    button.SetValue(Grid.ColumnProperty, i % 2);
+                    button.SetValue(Grid.RowProperty, i / 2);
+                    ++i;
                 }
+                
             }
         }
 
         private void btn_Remove_Quick_Button(object sender, RoutedEventArgs e)
         {
+            int removeThis = _settingsController.quickButtonList.FindIndex(x => x.ProductID == Convert.ToUInt32((sender as Button).Tag));
+
+
             _settingsController.quickButtonList.RemoveAll(x => x.ProductID == Convert.ToUInt32((sender as Button).Tag));
+
+            listView_QuickBtn.Items.RemoveAt(removeThis);
             
+
+            listView_QuickBtn.Items.Refresh();
             UpdateGridQuickButtons();
         }
 
