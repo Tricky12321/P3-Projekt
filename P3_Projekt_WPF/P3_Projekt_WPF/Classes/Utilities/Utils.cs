@@ -61,7 +61,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
                     TotalProductCount += transaction.Amount;
                 }
                 NewReceipt.TotalPrice = price_of_all_transactions;
-                NewReceipt.PaidPrice = price_of_all_transactions;
+                //NewReceipt.PaidPrice = price_of_all_transactions;
                 NewReceipt.NumberOfProducts = TotalProductCount;
                 NewReceipt.UpdateInDatabase();
             }

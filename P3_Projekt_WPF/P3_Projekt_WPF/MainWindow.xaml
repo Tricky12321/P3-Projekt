@@ -301,7 +301,6 @@
                             </GridView>
                         </ListView.View>
                     </ListView>
-                    <DataGrid x:Name="dataGrid_FastButtons" HorizontalAlignment="Left" Margin="10,804,0,0" VerticalAlignment="Top" Height="239" Width="613"/>
                 </Grid>
             </TabItem>
         </TabControl>
