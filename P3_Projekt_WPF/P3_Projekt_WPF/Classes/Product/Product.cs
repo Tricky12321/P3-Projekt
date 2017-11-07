@@ -13,7 +13,7 @@ namespace P3_Projekt_WPF.Classes
     {
         public string Name;
         public string Brand;
-        private decimal _purchasePrice;
+        public decimal PurchasePrice;
         public int ProductGroupID;
         public bool DiscountBool;
         public decimal DiscountPrice;
@@ -27,7 +27,7 @@ namespace P3_Projekt_WPF.Classes
         {
             Name = name;
             Brand = brand;
-            _purchasePrice = purchasePrice;
+            PurchasePrice = purchasePrice;
             ProductGroupID = groupID;
             DiscountBool = discount;
             DiscountPrice = discountPrice;
@@ -67,7 +67,7 @@ namespace P3_Projekt_WPF.Classes
         {
             Name = name;
             Brand = brand;
-            _purchasePrice = purchasePrice;
+            PurchasePrice = purchasePrice;
             ProductGroupID = groupID;
             DiscountBool = discount;
             DiscountPrice = discountPrice;

@@ -261,7 +261,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
         public void DeleteGroup(int GroupID)
         {
             //Mulighed for at flytte alle produkter til en bestem gruppe???
-            foreach (Product product in ProductDictionary.Values.Where(x => x.ProductGroupID == GroupDictionary[GroupID].ID))
+            foreach (Product product in ProductDictionary.Values.Where(x => x.ProductGroupID == GroupID))
             {
                 product.ProductGroupID = GroupDictionary[0].ID;
             }
@@ -272,7 +272,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
         //Removes group from dictionary
         public void DeleteGroupAndMove(int removeID, int moveID)
         {
-            foreach (Product product in ProductDictionary.Values.Where(x => x.ProductGroupID == GroupDictionary[removeID].ID))
+            foreach (Product product in ProductDictionary.Values.Where(x => x.ProductGroupID == removeID))
             {
                 product.ProductGroupID = GroupDictionary[moveID].ID;
             }
@@ -557,15 +557,15 @@ namespace P3_Projekt_WPF.Classes.Utilities
         }
 
         //edit product, calles two different methods depending if its run by an admin
-        public void EditProduct(bool isAdmin, Product editProduct, string name, string brand, decimal purchasePrice, Group group, bool discount, decimal salePrice, decimal discountPrice, Image image)
+        public void EditProduct(bool isAdmin, Product editProduct, string name, string brand, decimal purchasePrice, int groupID, bool discount, decimal salePrice, decimal discountPrice, Image image)
         {
             if (isAdmin)
             {
-                editProduct.AdminEdit(name, brand, purchasePrice, salePrice, group.ID, discount, discountPrice, image);
+                editProduct.AdminEdit(name, brand, purchasePrice, salePrice, groupID, discount, discountPrice, image);
             }
             else
             {
-                editProduct.Edit(name, brand, group.ID, image);
+                editProduct.Edit(name, brand, groupID, image);
             }
         }
 
