@@ -142,7 +142,16 @@ namespace P3_Projekt_WPF
             addProductButton.Margin = new System.Windows.Thickness(2);
             addProductButton.Background = System.Windows.Media.Brushes.Transparent;
 
+            addProductButton.Click += AddProductDialogOpener;
+
             productGrid.Children.Add(addProductButton);
+        }
+
+        public void AddProductDialogOpener(object sender, RoutedEventArgs e)
+        {
+            CreateProduct addProductWindow = new CreateProduct();
+            addProductWindow.btn_GemOgAfslut.Click += delegate{ addProductWindow.Close(); };
+            addProductWindow.Show();
         }
 
         private void ShowSpecificInfoProductStorage(object sender, RoutedEventArgs e)
