@@ -279,7 +279,7 @@
                             </Style>
                         </TextBlock.Style>
                     </TextBlock>
-                    <ListView x:Name="listView_QuickBtn" HorizontalAlignment="Left" Height="572" Margin="10,169,0,0" VerticalAlignment="Top" Width="613">
+                    <ListView x:Name="listView_QuickBtn" HorizontalAlignment="Left" Height="572" Margin="10,169,0,0" VerticalAlignment="Top" Width="613" >
                         <ListView.View>
                             <GridView>
                                 <GridViewColumn>
