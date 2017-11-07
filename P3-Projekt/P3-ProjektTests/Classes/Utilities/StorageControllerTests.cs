@@ -150,7 +150,9 @@ namespace P3_Projekt_WPF.Classes.Utilities.Tests
         {
             var storageController = new StorageController();
             Group newGroup1 = new Group("group", "test");
+            newGroup1.ID = 1;
             Group newGroup2 = new Group("group2", "test");
+            newGroup2.ID = 2;
             storageController.GroupDictionary.Add(newGroup1.ID, newGroup1);
             storageController.GroupDictionary.Add(newGroup2.ID, newGroup2);
             var testProduct1 = new Product("test1", "blabla", 1.25m, newGroup1.ID, false, 5.0m, 3.0m, null);
@@ -174,7 +176,9 @@ namespace P3_Projekt_WPF.Classes.Utilities.Tests
         {
             var storageController = new StorageController();
             Group newGroup1 = new Group("group", "test");
+            newGroup1.ID = 1;
             Group newGroup2 = new Group("group2", "test");
+            newGroup2.ID = 2;
             storageController.GroupDictionary.Add(newGroup1.ID, newGroup1);
             storageController.GroupDictionary.Add(newGroup2.ID, newGroup2);
             var testProduct1 = new Product("test1", "blabla", 1.25m, newGroup1.ID, false, 5.0m, 3.0m, null);

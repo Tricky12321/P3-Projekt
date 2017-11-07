@@ -37,24 +37,24 @@ namespace P3_Projekt_WPF.Classes.Utilities
         // Til at tjekke om de forskellige tråde er færdige med at hente data.
         private int _productsLoadedFromDatabase = 0;
         private int _productsCreateByThreads = -1;
-        private bool _productQueDone = false;
-        private bool _tempProductQueDone = false;
-        private bool _groupQueDone = false;
-        private bool _storageRoomQueDone = false;
+        private bool _productQueueDone = false;
+        private bool _tempProductQueueDone = false;
+        private bool _groupQueueDone = false;
+        private bool _storageRoomQueueDone = false;
 
         public bool ThreadDone()
         {
             //Debug.WriteLine(_productsCreateByThreads + " = " + _productsLoadedFromDatabase);
-            if (!_productQueDone && (_productsCreateByThreads == _productsLoadedFromDatabase))
+            if (!_productQueueDone && (_productsCreateByThreads == _productsLoadedFromDatabase))
             {
                 Debug.WriteLine("ProductQue: Done");
-                _productQueDone = true;
+                _productQueueDone = true;
             }
             else
             {
                 return false;
             }
-            if (_groupQueDone && _productQueDone && _tempProductQueDone && _storageRoomQueDone)
+            if (_groupQueueDone && _productQueueDone && _tempProductQueueDone && _storageRoomQueueDone)
             {
                 return true;
             }
@@ -76,7 +76,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
         // Når trådene skal få opgaver
         private void HandleCreateProductQue()
         {
-            while (!_productQueDone)
+            while (!_productQueueDone)
             {
                 Row Information = null;
                 if (_productInformation.TryDequeue(out Information) == true)
@@ -181,7 +181,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
                 CreateGroups_Thread(row);
             }
             Debug.WriteLine("GroupQue: Done!");
-            _groupQueDone = true;
+            _groupQueueDone = true;
         }
 
         public void GetAllStorageRooms()
@@ -193,7 +193,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
                 CreateStorageRoom_Thread(row);
             }
             Debug.WriteLine("StorageRoomQue: Done!");
-            _storageRoomQueDone = true;
+            _storageRoomQueueDone = true;
         }
 
         public void GetAllTempProductsFromDatabase()
@@ -205,7 +205,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
                 CreateTempProduct_Thread(row);
             }
             Debug.WriteLine("TempProductQue: Done!");
-            _tempProductQueDone = true;
+            _tempProductQueueDone = true;
         }
 
         public void GetAllReceiptsFromDatabase()
