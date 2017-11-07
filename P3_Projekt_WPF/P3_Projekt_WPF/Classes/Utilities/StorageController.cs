@@ -335,6 +335,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
                 _productsFound = productsToReturn;
                 // Starter multithreading 
                 StartLevensteinSearchThreads();
+                _productSearchDone = false;
                 while (_productsToSearch.IsEmpty == false)
                 {
                     Thread.Sleep(1);
