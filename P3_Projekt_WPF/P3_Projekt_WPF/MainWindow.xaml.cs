@@ -164,7 +164,6 @@ namespace P3_Projekt_WPF
 
         public void LoadProductGrid()
         {
-            //fproductGrid.Children.Clear();
             int i = 1;
             
             foreach (KeyValuePair<int, Product> produkter in _storageController.ProductDictionary.OrderBy(x => x.Key))
@@ -221,11 +220,6 @@ namespace P3_Projekt_WPF
 
         }
 
-        private void btn_TempProduct_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
         private void btn_AddProduct_Click(object sender, RoutedEventArgs e)
         {
             int inputInt;
@@ -271,7 +265,7 @@ namespace P3_Projekt_WPF
                 _settingsController.AddNewQuickButton(textBox_CreateQuickBtnName.Text, inputInt, grid_QuickButton.Width, grid_QuickButton.Height, btn_FastButton_click);
                 listView_QuickBtn.Items.Add(new FastButton(){ Button_Name = textBox_CreateQuickBtnName.Text, ProductID = inputInt });
             }
-            else if (!_settingsController.quickButtonList.Any(x => x.ProductID == inputInt))
+            else if (_settingsController.quickButtonList.Any(x => x.ProductID == inputInt))
             {
                 MessageBox.Show($"Produkt med dette ID {inputInt} er allerede oprettet");
             }
@@ -302,7 +296,6 @@ namespace P3_Projekt_WPF
                     button.SetValue(Grid.RowProperty, i / 2);
                     ++i;
                 }
-                
             }
         }
 
@@ -310,17 +303,18 @@ namespace P3_Projekt_WPF
         {
             int removeThis = _settingsController.quickButtonList.FindIndex(x => x.ProductID == Convert.ToUInt32((sender as Button).Tag));
 
-
             _settingsController.quickButtonList.RemoveAll(x => x.ProductID == Convert.ToUInt32((sender as Button).Tag));
 
             listView_QuickBtn.Items.RemoveAt(removeThis);
-            
 
             listView_QuickBtn.Items.Refresh();
             UpdateGridQuickButtons();
         }
 
+        private void btn_Temporary_Click(object sender, RoutedEventArgs e)
+        {
 
+        }
 
 
 
@@ -354,5 +348,7 @@ namespace P3_Projekt_WPF
             if (!char.IsDigit(e.Text, e.Text.Length - 1) && !(e.Text[e.Text.Length - 1] == ','))
                 e.Handled = true;
         }
+
+
     }
 }
