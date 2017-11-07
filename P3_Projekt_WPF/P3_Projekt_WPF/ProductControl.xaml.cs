@@ -54,7 +54,7 @@ namespace P3_Projekt_WPF
         public void ShowProductInfo()
         {
             img_ProductImage = _displayProduct.Image;
-            txtbox_Product.Text = $"ID: {_displayProduct.ID.ToString()}\nNavn: { _displayProduct.Name}\nGruppe: { _displayProduct.ProductGroup.Name}\nPris { _displayProduct.SalePrice.ToString()},-";
+            txtbox_Product.Text = $"ID: {_displayProduct.ID.ToString()}\nNavn: { _displayProduct.Name}\nGruppe: { _displayProduct. ProductGroup.Name}\nPris { _displayProduct.SalePrice.ToString()},-";
 
         }
     }

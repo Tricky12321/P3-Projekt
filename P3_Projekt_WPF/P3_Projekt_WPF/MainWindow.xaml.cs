@@ -152,10 +152,10 @@ namespace P3_Projekt_WPF
             Product placeholder = _storageController.ProductDictionary[Convert.ToInt32((sender as Button).Tag)];
 
             image_ChosenProduct = placeholder.Image;
-            textBlock_ChosenProduct.Text = $"ID: {placeholder.ID}\nNavn: {placeholder.Name}\nGruppe: {placeholder.ProductGroup.Name}\nMærke: {placeholder.Brand}\nPris: {placeholder.SalePrice}\nTilbudspris: {placeholder.DiscountPrice}\nIndkøbspris: {placeholder.PurchasePrice}";
+            textBlock_ChosenProduct.Text = $"ID: {placeholder.ID}\nNavn: {placeholder.Name}\nGruppe: {_storageController.GroupDictionary[placeholder.ProductGroupID].Name}\nMærke: {placeholder.Brand}\nPris: {placeholder.SalePrice}\nTilbudspris: {placeholder.DiscountPrice}\nIndkøbspris: {placeholder.PurchasePrice}";
             foreach(KeyValuePair<int,int> storageWithAmount in placeholder.StorageWithAmount)
             {
-               // textBlock_ChosenProduct.Text += $"{}"
+                textBlock_ChosenProduct.Text += $"{_storageController.StorageRoomDictionary[storageWithAmount.Key]} har {storageWithAmount.Value} stk.";
             }
 
 
