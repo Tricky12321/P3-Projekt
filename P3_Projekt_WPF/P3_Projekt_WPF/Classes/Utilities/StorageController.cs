@@ -76,19 +76,17 @@ namespace P3_Projekt_WPF.Classes.Utilities
         // Når trådene skal få opgaver
         private void HandleCreateProductQue()
         {
-            if (!_productQueDone)
+            while (!_productQueDone)
             {
                 Row Information = null;
                 if (_productInformation.TryDequeue(out Information) == true)
                 {
                     CreateProduct_Thread(Information);
                     Interlocked.Increment(ref _productsCreateByThreads);
-                    HandleCreateProductQue();
                 }
                 else
                 {
                     Thread.Sleep(1);
-                    HandleCreateProductQue();
                 }
             }
         }
@@ -263,9 +261,9 @@ namespace P3_Projekt_WPF.Classes.Utilities
         public void DeleteGroup(int GroupID)
         {
             //Mulighed for at flytte alle produkter til en bestem gruppe???
-            foreach (Product product in ProductDictionary.Values.Where(x => x.ProductGroup == GroupDictionary[GroupID]))
+            foreach (Product product in ProductDictionary.Values.Where(x => x.ProductGroupID == GroupDictionary[GroupID].ID))
             {
-                product.ProductGroup = GroupDictionary[0];
+                product.ProductGroupID = GroupDictionary[0].ID;
             }
             GroupDictionary.Remove(GroupID);
         }
@@ -274,9 +272,9 @@ namespace P3_Projekt_WPF.Classes.Utilities
         //Removes group from dictionary
         public void DeleteGroupAndMove(int removeID, int moveID)
         {
-            foreach (Product product in ProductDictionary.Values.Where(x => x.ProductGroup == GroupDictionary[removeID]))
+            foreach (Product product in ProductDictionary.Values.Where(x => x.ProductGroupID == GroupDictionary[removeID].ID))
             {
-                product.ProductGroup = GroupDictionary[moveID];
+                product.ProductGroupID = GroupDictionary[moveID].ID;
             }
             GroupDictionary.Remove(removeID);
         }
@@ -510,7 +508,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
                 //is added to the list of products to show.
                 if (dividedString.Contains(g.Name) || groupMatched)
                 {
-                    foreach (Product p in ProductDictionary.Values.Where(x => x.ProductGroup == g))
+                    foreach (Product p in ProductDictionary.Values.Where(x => x.ProductGroupID == g.ID))
                     {
                         productListToReturn.Enqueue(p);
                     }
@@ -546,9 +544,9 @@ namespace P3_Projekt_WPF.Classes.Utilities
         //----SEARCH-END---------------------
 
         //Creates product with storage and stocka as keyvalue, then add the product to the list
-        public void CreateProduct(string name, string brand, decimal purchasePrice, Group group, bool discount, decimal discountPrice, decimal salePrice, Image image, params KeyValuePair<int, int>[] storageRoomStockInput)
+        public void CreateProduct(string name, string brand, decimal purchasePrice, int groupID, bool discount, decimal discountPrice, decimal salePrice, Image image, params KeyValuePair<int, int>[] storageRoomStockInput)
         {
-            Product newProduct = new Product(name, brand, purchasePrice, group, discount, salePrice, discountPrice, image);
+            Product newProduct = new Product(name, brand, purchasePrice, groupID, discount, salePrice, discountPrice, image);
 
             foreach (KeyValuePair<int, int> roomInput in storageRoomStockInput)
             {
@@ -563,11 +561,11 @@ namespace P3_Projekt_WPF.Classes.Utilities
         {
             if (isAdmin)
             {
-                editProduct.AdminEdit(name, brand, purchasePrice, salePrice, group, discount, discountPrice, image);
+                editProduct.AdminEdit(name, brand, purchasePrice, salePrice, group.ID, discount, discountPrice, image);
             }
             else
             {
-                editProduct.Edit(name, brand, group, image);
+                editProduct.Edit(name, brand, group.ID, image);
             }
         }
 
