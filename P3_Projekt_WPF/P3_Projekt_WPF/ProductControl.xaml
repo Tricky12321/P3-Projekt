@@ -7,17 +7,20 @@
              mc:Ignorable="d" Background="Transparent" Height="auto" MinHeight="100" MinWidth="60" Width="auto" Margin="2,2,2,2">
 
     <Grid Height="auto" Margin="0,0,0,0" Width="Auto">
+        
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
+
+        <Button x:Name="button" Panel.ZIndex="-1" Width="auto" Background="Transparent" Style="{StaticResource Flat_Button}" Grid.RowSpan="2" Margin="0,0,0,0"/>
         <Border BorderThickness="1" BorderBrush="Black" CornerRadius="8" Margin="2,2,2,2">
-            <Image x:Name="img_ProductImage" Height="auto" Margin="2,2,2,2" Width="auto"/>
+            <Image x:Name="img_ProductImage" Height="auto" Margin="2,2,2,2" Width="auto" IsHitTestVisible="False"/>
         </Border>
 
-        <TextBlock x:Name="txtbox_Product" Margin="5,0,5,5" Grid.Row="1" FontStretch="SemiExpanded" FontSize="20" ><Run Text="ID: 12"></Run><LineBreak/><Run Text="Navn: Rød Fugl"/><LineBreak/><Run Text="Gruppe: Glas"/><LineBreak/><Run Text="Pris: 123,-"/><LineBreak/><Run Text="Lagerbeholdning:"/><LineBreak/><Run/></TextBlock>
+        <TextBlock x:Name="txtbox_Product" Margin="5,0,5,5" Grid.Row="1" FontStretch="SemiExpanded" FontSize="20" IsHitTestVisible="False" ><Run Text="ID: 12"></Run><LineBreak/><Run Text="Navn: Rød Fugl"/><LineBreak/><Run Text="Gruppe: Glas"/><LineBreak/><Run Text="Pris: 123,-"/><LineBreak/><Run Text="Lagerbeholdning:"/><LineBreak/><Run/></TextBlock>
 
-        <Button x:Name="button" Width="auto" Style="{StaticResource Flat_Button}" Background="Transparent" Grid.RowSpan="2" Margin="0,0,0,0"/>
+        
 
 
     </Grid>

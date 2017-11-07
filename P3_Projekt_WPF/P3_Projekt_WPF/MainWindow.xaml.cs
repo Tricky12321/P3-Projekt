@@ -134,11 +134,13 @@ namespace P3_Projekt_WPF
         public void AddProductButton()
         {
             Button addProductButton = new Button();
-            addProductButton.Content = "+";
+            addProductButton.Content = "Tilføj nyt produkt";
+            addProductButton.FontSize = 30;
 
             addProductButton.SetValue(Grid.RowProperty, 0);
             addProductButton.SetValue(Grid.ColumnProperty, 0);
             addProductButton.Style = FindResource("Flat_Button") as Style;
+            addProductButton.Margin = new System.Windows.Thickness(2);
             addProductButton.Background = Brushes.Transparent;
             // tilføj produkt addProductButton.Click
             productGrid.Children.Add(addProductButton);
