@@ -348,7 +348,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
                 Thread GroupSearchThread = new Thread(new ParameterizedThreadStart(GroupSearch));
                 BrandSearchThread.Start(searchedString);
                 GroupSearchThread.Start(searchedString);
-                while (!_brandSearchDone && _groupSearchDone)
+                while (!_brandSearchDone && !_groupSearchDone)
                 {
                     Thread.Sleep(1);
                 }
