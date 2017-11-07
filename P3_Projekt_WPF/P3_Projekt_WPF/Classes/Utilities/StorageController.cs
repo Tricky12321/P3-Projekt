@@ -310,9 +310,8 @@ namespace P3_Projekt_WPF.Classes.Utilities
         }
 
         /////////--------------------SEARCH---------------------------------
-        public IEnumerable<Product> SearchForProduct(string searchedString)
+        public ConcurrentQueue<Product> SearchForProduct(string searchedString)
         {
-            bool wordIsMatched = false;
             ConcurrentQueue<Product> productsToReturn = new ConcurrentQueue<Product>();
             IEnumerable<Product> returnableProducts;
             int isNumber;
@@ -353,11 +352,9 @@ namespace P3_Projekt_WPF.Classes.Utilities
                 {
                     Thread.Sleep(1);
                 }
-
-                //removes duplicates from the list.
-                returnableProducts = productsToReturn.Distinct<Product>();
+                
                 //productsToReturn = ok as ConcurrentQueue<Product>;
-                return returnableProducts;
+                return productsToReturn;
             }
         }
 
@@ -511,7 +508,10 @@ namespace P3_Projekt_WPF.Classes.Utilities
                 {
                     foreach (Product p in ProductDictionary.Values.Where(x => x.ProductGroupID == g.ID))
                     {
-                        productListToReturn.Enqueue(p);
+                        if (!(productListToReturn.Contains(p)))
+                        {
+                            productListToReturn.Enqueue(p);
+                        }
                     }
                 }
             }

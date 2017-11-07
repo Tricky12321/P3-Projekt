@@ -5,21 +5,21 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:P3_Projekt_WPF"
         mc:Ignorable="d"
-        Title="CreateProduct" Height="320" Width="500" Background="#FFE5E5E5">
+        Title="CreateProduct" Height="340" Width="550" Background="#FFE5E5E5" MinWidth="550" MinHeight="340">
     <Grid x:Name="grid_input" Margin="0,40,0,0">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="103*"/>
-            <ColumnDefinition Width="389*"/>
+            <ColumnDefinition Width="298*"/>
+            <ColumnDefinition Width="194*"/>
         </Grid.ColumnDefinitions>
-        <TextBlock x:Name="label_Navn" HorizontalAlignment="Center" TextWrapping="Wrap" Text="Navn" VerticalAlignment="Top" FontSize="18"/>
-        <TextBox Padding="10,0,0,0" x:Name="textbox_Navn" Margin="0,0,0,225" FontSize="18" Grid.ColumnSpan="1" Grid.Column="1" HorizontalAlignment="Left" Width="191">
+        <TextBlock x:Name="label_Navn" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Navn" FontSize="18" Margin="32,0,0,0" MinHeight="24" VerticalAlignment="Top"/>
+        <TextBox Padding="10,0,0,0" x:Name="textbox_Navn" FontSize="18" Grid.ColumnSpan="1" HorizontalAlignment="Left" Width="191" MinHeight="24" VerticalAlignment="Top" Margin="104,0,0,0">
             <TextBox.Resources>
                 <Style TargetType="{x:Type Border}">
                     <Setter Property="CornerRadius" Value="10"/>
                 </Style>
             </TextBox.Resources>
         </TextBox>
-        <TextBlock IsHitTestVisible="False" Text="Navn" Margin="11,0,0,225" Foreground="DarkGray" FontSize="18" HorizontalAlignment="Left" Width="148" Grid.Column="1">
+        <TextBlock IsHitTestVisible="False" Text="Navn" Margin="114,0,0,0" Foreground="DarkGray" FontSize="18" HorizontalAlignment="Left" Width="148" Height="29" VerticalAlignment="Top">
             <TextBlock.Style>
                 <Style TargetType="{x:Type TextBlock}">
                     <Setter Property="Visibility" Value="Collapsed"/>
@@ -31,22 +31,28 @@
                 </Style>
             </TextBlock.Style>
         </TextBlock>
-        <TextBlock x:Name="label_Mærke" HorizontalAlignment="Center" Margin="0,32,0,0" TextWrapping="Wrap" Text="Mærke" VerticalAlignment="Top" FontSize="18"/>
-        <ComboBox x:Name="comboBox_Mærke" Grid.Column="1" HorizontalAlignment="Left" Margin="1,34,0,0" VerticalAlignment="Top" Width="191">
+        <TextBlock x:Name="label_Mærke" HorizontalAlignment="Left" Margin="24,32,0,0" TextWrapping="Wrap" Text="Mærke" FontSize="18" MinHeight="24" VerticalAlignment="Top"/>
+        <ComboBox x:Name="comboBox_Mærke" HorizontalAlignment="Left" Margin="104,32,0,0" VerticalAlignment="Top" Width="191">
             <ComboBoxItem>ComboBox Item #1</ComboBoxItem>
             <ComboBoxItem>ComboBox Item #2</ComboBoxItem>
             <ComboBoxItem>ComboBox Item #3</ComboBoxItem>
         </ComboBox>
-        <TextBlock x:Name="label_Gruppe" HorizontalAlignment="Center" Margin="0,64,0,0" TextWrapping="Wrap" Text="Gruppe" VerticalAlignment="Top" FontSize="18"/>
-        <TextBlock x:Name="label_Indkøbspris" HorizontalAlignment="Center" Margin="0,96,0,0" TextWrapping="Wrap" Text="Indkøbspris" VerticalAlignment="Top" FontSize="18"/>
-        <TextBox Padding="10,0,0,0" x:Name="textbox_Indkøbspris" Margin="102,96,0,129" FontSize="18" Grid.ColumnSpan="2" HorizontalAlignment="Left" Width="192">
+        <TextBlock x:Name="label_Gruppe" HorizontalAlignment="Left" Margin="22,64,0,0" TextWrapping="Wrap" Text="Gruppe" FontSize="18" MinHeight="24" VerticalAlignment="Top"/>
+        <ComboBox x:Name="comboBox_Gruppe" HorizontalAlignment="Left" Margin="104,64,0,0" VerticalAlignment="Top" Width="191">
+            <ComboBoxItem>ComboBox Item #1</ComboBoxItem>
+            <ComboBoxItem>ComboBox Item #2</ComboBoxItem>
+            <ComboBoxItem>ComboBox Item #3</ComboBoxItem>
+        </ComboBox>
+
+        <TextBlock x:Name="label_Indkøbspris" HorizontalAlignment="Left" Margin="6,96,0,0" TextWrapping="Wrap" Text="Indkøbspris" FontSize="18" MinHeight="24" VerticalAlignment="Top"/>
+        <TextBox Padding="10,0,0,0" x:Name="textbox_Indkøbspris" Margin="104,96,0,0" FontSize="18" Grid.ColumnSpan="1" Height="27" VerticalAlignment="Top" HorizontalAlignment="Left" Width="192">
             <TextBox.Resources>
                 <Style TargetType="{x:Type Border}">
                     <Setter Property="CornerRadius" Value="10"/>
                 </Style>
             </TextBox.Resources>
         </TextBox>
-        <TextBlock IsHitTestVisible="False" Text="Indkøbspris" Margin="10,96,0,129" Foreground="DarkGray" FontSize="18" HorizontalAlignment="Left" Width="148" Grid.Column="1">
+        <TextBlock IsHitTestVisible="False" Text="Indkøbspris" Margin="115,96,0,0" Foreground="DarkGray" FontSize="18" HorizontalAlignment="Left" Width="148" Height="27" VerticalAlignment="Top">
             <TextBlock.Style>
                 <Style TargetType="{x:Type TextBlock}">
                     <Setter Property="Visibility" Value="Collapsed"/>
@@ -58,15 +64,15 @@
                 </Style>
             </TextBlock.Style>
         </TextBlock>
-        <TextBlock x:Name="label_Salgspris" HorizontalAlignment="Center" Margin="0,128,0,0" TextWrapping="Wrap" Text="Salgspris" VerticalAlignment="Top" FontSize="18"/>
-        <TextBox Padding="10,0,0,0" x:Name="textbox_Salgspris" Margin="102,128,0,97" FontSize="18" Grid.ColumnSpan="2" HorizontalAlignment="Left" Width="192">
+        <TextBlock x:Name="label_Salgspris" HorizontalAlignment="Left" Margin="17,128,0,0" TextWrapping="Wrap" Text="Salgspris" FontSize="18" MinHeight="24" VerticalAlignment="Top"/>
+        <TextBox Padding="10,0,0,0" x:Name="textbox_Salgspris" Margin="104,128,0,0" FontSize="18" Grid.ColumnSpan="1" HorizontalAlignment="Left" Width="192" Height="27" VerticalAlignment="Top">
             <TextBox.Resources>
                 <Style TargetType="{x:Type Border}">
                     <Setter Property="CornerRadius" Value="10"/>
                 </Style>
             </TextBox.Resources>
         </TextBox>
-        <TextBlock IsHitTestVisible="False" Text="Salgspris" Margin="10,128,0,97" Foreground="DarkGray" FontSize="18" HorizontalAlignment="Left" Width="148" Grid.Column="1">
+        <TextBlock IsHitTestVisible="False" Text="Salgspris" Margin="115,128,0,0" Foreground="DarkGray" FontSize="18" HorizontalAlignment="Left" Width="148" Height="27" VerticalAlignment="Top">
             <TextBlock.Style>
                 <Style TargetType="{x:Type TextBlock}">
                     <Setter Property="Visibility" Value="Collapsed"/>
@@ -78,15 +84,15 @@
                 </Style>
             </TextBlock.Style>
         </TextBlock>
-        <TextBlock x:Name="label_Tilbudspris" HorizontalAlignment="Center" Margin="0,160,0,0" TextWrapping="Wrap" Text="Tilbudspris" VerticalAlignment="Top" FontSize="18"/>
-        <TextBox Padding="10,0,0,0" x:Name="textbox_Tilbudspris" Margin="0,160,0,65" FontSize="18" HorizontalAlignment="Left" Width="192" Grid.Column="1">
+        <TextBlock x:Name="label_Tilbudspris" HorizontalAlignment="Left" Margin="9,160,0,0" TextWrapping="Wrap" Text="Tilbudspris" FontSize="18" MinHeight="24" VerticalAlignment="Top"/>
+        <TextBox Padding="10,0,0,0" x:Name="textbox_Tilbudspris" Margin="104,160,0,0" FontSize="18" HorizontalAlignment="Left" Width="192" Height="27" VerticalAlignment="Top">
             <TextBox.Resources>
                 <Style TargetType="{x:Type Border}">
                     <Setter Property="CornerRadius" Value="10"/>
                 </Style>
             </TextBox.Resources>
         </TextBox>
-        <TextBlock IsHitTestVisible="False" Text="Tilbudspris" Margin="11,160,0,65" Foreground="DarkGray" FontSize="18" HorizontalAlignment="Left" Width="148" Grid.Column="1">
+        <TextBlock IsHitTestVisible="False" Text="Tilbudspris" Margin="115,160,0,0" Foreground="DarkGray" FontSize="18" HorizontalAlignment="Left" Width="148" Height="27" VerticalAlignment="Top">
             <TextBlock.Style>
                 <Style TargetType="{x:Type TextBlock}">
                     <Setter Property="Visibility" Value="Collapsed"/>
@@ -98,15 +104,15 @@
                 </Style>
             </TextBlock.Style>
         </TextBlock>
-        <TextBlock x:Name="label_Antal" HorizontalAlignment="Center" Margin="0,192,0,0" TextWrapping="Wrap" Text="Antal" VerticalAlignment="Top" FontSize="18"/>
-        <TextBox Padding="10,0,0,0" x:Name="textbox_Antal" Margin="102,192,0,33" FontSize="18" HorizontalAlignment="Left" Width="192" Grid.ColumnSpan="2">
+        <TextBlock x:Name="label_Antal" HorizontalAlignment="Left" Margin="32,192,0,0" TextWrapping="Wrap" Text="Antal" FontSize="18" MinHeight="24" VerticalAlignment="Top"/>
+        <TextBox Padding="10,0,0,0" x:Name="textbox_Antal" Margin="104,192,0,0" FontSize="18" HorizontalAlignment="Left" Width="192" Grid.ColumnSpan="1" Height="27" VerticalAlignment="Top">
             <TextBox.Resources>
                 <Style TargetType="{x:Type Border}">
                     <Setter Property="CornerRadius" Value="10"/>
                 </Style>
             </TextBox.Resources>
         </TextBox>
-        <TextBlock IsHitTestVisible="False" Text="Antal" Margin="10,192,0,33" Foreground="DarkGray" FontSize="18" HorizontalAlignment="Left" Width="148" Grid.Column="1">
+        <TextBlock IsHitTestVisible="False" Text="Antal" Margin="115,192,0,0" Foreground="DarkGray" FontSize="18" HorizontalAlignment="Left" Width="148" Height="27" VerticalAlignment="Top">
             <TextBlock.Style>
                 <Style TargetType="{x:Type TextBlock}">
                     <Setter Property="Visibility" Value="Collapsed"/>
@@ -118,8 +124,13 @@
                 </Style>
             </TextBlock.Style>
         </TextBlock>
+        <TextBlock x:Name="label_ProduktID" Margin="7,233,0,0" TextWrapping="Wrap" Text="Produkt ID:" FontSize="18" Grid.ColumnSpan="2" MinHeight="24" VerticalAlignment="Top" HorizontalAlignment="Left" Width="291"/>
 
-        <TextBlock x:Name="label_ProduktID" Margin="7,224,0,0" TextWrapping="Wrap" Text="Produkt ID:" VerticalAlignment="Top" FontSize="18" Grid.ColumnSpan="2"/>
+        <Button Style="{StaticResource Flat_Button}" x:Name="btn_TilføjBillede" Content="Tilføj billede" FontSize="18" Grid.Column="2" Margin="0,29,0,0" Height="30" VerticalAlignment="Top" HorizontalAlignment="Center" Width="174" />
+        <Border BorderThickness="1" BorderBrush="Black"  Grid.Column="1" HorizontalAlignment="Center" Height="117" MinHeight="117" Margin="0,64,0,0" VerticalAlignment="Top" Width="208" MinWidth="208">
+            <Image x:Name="image" Grid.Column="1" HorizontalAlignment="Right" Height="117" MinHeight="117" Margin="0,0,0,0" VerticalAlignment="Top" Width="208" MinWidth="208" />
+        </Border>
 
+        <Button Style="{StaticResource Flat_Button}" x:Name="btn_GemOgAfslut" Content="Gem og Afslut"  FontSize="18" Grid.Column="2" Margin="0,0,0,10" Height="30" VerticalAlignment="Bottom" HorizontalAlignment="Center" Width="174"/>
     </Grid>
 </Window>
