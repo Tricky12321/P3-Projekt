@@ -26,10 +26,10 @@ namespace P3_Projekt_WPF.Classes.Utilities
             //GetAllReceiptsFromDatabase();
         }
 
+        #region Multithreading
 
         public List<Thread> Threads = new List<Thread>();
         public object ThreadLock = new object();
-        #region Multithreading
         private int _productThreadsCount = 20;
         private ConcurrentQueue<Row> _productInformation = new ConcurrentQueue<Row>();
         // For at holde garbage collector fra at dræbe tråde
@@ -239,6 +239,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
         }
 
         #endregion
+
         public void DeleteProduct(int ProductID)
         {
             ProductDictionary.Remove(ProductID);
@@ -309,9 +310,8 @@ namespace P3_Projekt_WPF.Classes.Utilities
         }
 
         /////////--------------------SEARCH---------------------------------
-        public IEnumerable<Product> SearchForProduct(string searchedString)
+        public ConcurrentQueue<Product> SearchForProduct(string searchedString)
         {
-            bool wordIsMatched = false;
             ConcurrentQueue<Product> productsToReturn = new ConcurrentQueue<Product>();
             IEnumerable<Product> returnableProducts;
             int isNumber;
@@ -352,11 +352,9 @@ namespace P3_Projekt_WPF.Classes.Utilities
                 {
                     Thread.Sleep(1);
                 }
-
-                //removes duplicates from the list.
-                returnableProducts = productsToReturn.Distinct<Product>();
+                
                 //productsToReturn = ok as ConcurrentQueue<Product>;
-                return returnableProducts;
+                return productsToReturn;
             }
         }
 
@@ -510,7 +508,10 @@ namespace P3_Projekt_WPF.Classes.Utilities
                 {
                     foreach (Product p in ProductDictionary.Values.Where(x => x.ProductGroupID == g.ID))
                     {
-                        productListToReturn.Enqueue(p);
+                        if (!(productListToReturn.Contains(p)))
+                        {
+                            productListToReturn.Enqueue(p);
+                        }
                     }
                 }
             }
