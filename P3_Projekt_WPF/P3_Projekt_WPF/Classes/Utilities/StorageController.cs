@@ -312,7 +312,6 @@ namespace P3_Projekt_WPF.Classes.Utilities
         /////////--------------------SEARCH---------------------------------
         public ConcurrentQueue<Product> SearchForProduct(string searchedString)
         {
-            bool wordIsMatched = false;
             ConcurrentQueue<Product> productsToReturn = new ConcurrentQueue<Product>();
             IEnumerable<Product> returnableProducts;
             int isNumber;
