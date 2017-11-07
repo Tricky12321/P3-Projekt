@@ -349,6 +349,9 @@ namespace P3_Projekt_WPF
                 e.Handled = true;
         }
 
+        private void btn_PictureFilePath_Click(object sender, RoutedEventArgs e)
+        {
 
+        }
     }
 }
