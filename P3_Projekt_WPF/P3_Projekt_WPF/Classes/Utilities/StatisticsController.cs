@@ -88,7 +88,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
             }
             if (group != null)
             {
-                TransactionsForStatistics = TransactionsForStatistics.Where(x => ((x.Product as Product).ProductGroup == group) || (x.Product as ServiceProduct).ServiceProductGroup == group).ToList();
+                TransactionsForStatistics = TransactionsForStatistics.Where(x => ((x.Product as Product).ProductGroupID == group.ID) || (x.Product as ServiceProduct).ServiceProductGroup == group).ToList();
             }
         }
     }

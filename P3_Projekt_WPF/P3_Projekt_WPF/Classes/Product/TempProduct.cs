@@ -11,6 +11,7 @@ namespace P3_Projekt_WPF.Classes
     {
         public string Description;
         private bool _resolved;
+        public int ResolvedProductID = 0;
 
         public TempProduct (string description, decimal salePrice) : base(salePrice)
         {
@@ -41,15 +42,16 @@ namespace P3_Projekt_WPF.Classes
             UpdateInDatabase();
         }
 
-        public void Resolve()
+        public void Resolve(Product MatchedProduct)
         {
             _resolved = true;
+            ResolvedProductID = MatchedProduct.ID;
             UpdateInDatabase();
         }
 
         public SaleTransaction GetTempProductsSaleTransaction()
         {
-            string sql = $"SELECT * FROM `sale_transactions` WHERE `product_type` = temp_products AND product_id = {this.ID}";
+            string sql = $"SELECT * FROM `sale_transactions` WHERE `product_type` = 'temp_products' AND `product_id` = '{this.ID}'";
             TableDecode getTransaction = Mysql.RunQueryWithReturn(sql);
             SaleTransaction saleTrans = new SaleTransaction(getTransaction.RowData[0]);
             return saleTrans;
@@ -67,12 +69,13 @@ namespace P3_Projekt_WPF.Classes
             SalePrice = Convert.ToDecimal(Table.Values[1]);
             Description = Table.Values[2];
             _resolved = Convert.ToBoolean(Table.Values[3]);
+            ResolvedProductID = Convert.ToInt32(Table.Values[4]);
         }
 
         public override void UploadToDatabase()
         {
-            string sql = "INSERT INTO `temp_products` (`id`, `sale_price`, `description`, `resolved`)"+
-                $"VALUES (NULL, '{SalePrice}', '{GetName()}', '{Convert.ToInt32(_resolved)}');";
+            string sql = "INSERT INTO `temp_products` (`id`, `sale_price`, `description`, `resolved`, `resolved_product_id`)"+
+                $"VALUES (NULL, '{SalePrice}', '{GetName()}', '{Convert.ToInt32(_resolved)}', '{ResolvedProductID}');";
             Mysql.RunQuery(sql);
         }
 
@@ -82,6 +85,7 @@ namespace P3_Projekt_WPF.Classes
                 $"`sale_price` = '{SalePrice}'," +
                 $"`description` = '{GetName()}'," +
                 $"`resolved` = '{Convert.ToInt32(_resolved)}' " +
+                $"`resolved_product_id` = '{ResolvedProductID}' " +
                 $"WHERE `id` = {ID};";
             Mysql.RunQuery(sql);
         }

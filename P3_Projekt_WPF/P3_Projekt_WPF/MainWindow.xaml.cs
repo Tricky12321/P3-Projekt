@@ -114,10 +114,8 @@ namespace P3_Projekt_WPF
             productGrid.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(1, GridUnitType.Star)});
             productGrid.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(1, GridUnitType.Star)});
             productGrid.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(1, GridUnitType.Star)});
-            
-
+           
             productGrid.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(380) });
-
 
             scroll_StorageProduct.Content = productGrid;
             Stopwatch TimeTester = new Stopwatch();
@@ -134,16 +132,29 @@ namespace P3_Projekt_WPF
         public void AddProductButton()
         {
             Button addProductButton = new Button();
-            addProductButton.Content = "+";
-            addProductButton.Height = 360;
-            addProductButton.Width = 250;
+            addProductButton.Content = "Tilføj nyt produkt";
+            addProductButton.FontSize = 30;
 
             addProductButton.SetValue(Grid.RowProperty, 0);
             addProductButton.SetValue(Grid.ColumnProperty, 0);
             addProductButton.Style = FindResource("Flat_Button") as Style;
+            addProductButton.Margin = new System.Windows.Thickness(2);
             addProductButton.Background = Brushes.Transparent;
-            // tilføj produkt addProductButton.Click
+
             productGrid.Children.Add(addProductButton);
+        }
+
+        private void ShowSpecificInfoProductStorage(object sender, RoutedEventArgs e)
+        {
+            Debug.Print((sender as Button).Tag.ToString());
+            Product placeholder = _storageController.ProductDictionary[Convert.ToInt32((sender as Button).Tag)];
+
+            image_ChosenProduct = placeholder.Image;
+            textBlock_ChosenProduct.Text = $"ID: {placeholder.ID}\nNavn: {placeholder.Name}\nGruppe: {_storageController.GroupDictionary[placeholder.ProductGroupID].Name}\nMærke: {placeholder.Brand}\nPris: {placeholder.SalePrice}\nTilbudspris: {placeholder.DiscountPrice}\nIndkøbspris: {placeholder.PurchasePrice}\nLagerstatus:";
+            foreach(KeyValuePair<int,int> storageWithAmount in placeholder.StorageWithAmount)
+            {
+                textBlock_ChosenProduct.Text += $"\n  - {_storageController.StorageRoomDictionary[storageWithAmount.Key].Name} har {storageWithAmount.Value} stk.";
+            }
         }
 
         public void StorageTabClick(object sender, RoutedEventArgs e)
@@ -164,10 +175,11 @@ namespace P3_Projekt_WPF
                     int hej = productGrid.RowDefinitions.Count;
                 }
 
-                ProductControl productControl = new ProductControl(produkter.Value);
+                ProductControl productControl = new ProductControl(produkter.Value, _storageController.GroupDictionary);
                 productControl.SetValue(Grid.ColumnProperty, i % 5);
                 productControl.SetValue(Grid.RowProperty, i / 5);
-                
+                productControl.btn_ShowMoreInformation.Tag = produkter.Value.ID;
+                productControl.btn_ShowMoreInformation.Click += ShowSpecificInfoProductStorage;
                 productGrid.Children.Add(productControl);
 
                 i++;
@@ -254,10 +266,14 @@ namespace P3_Projekt_WPF
             int inputInt;
             int.TryParse(textBox_CreateQuickBtnID.Text, out inputInt);
 
-            if (_POSController.GetProductFromID(inputInt) != null )
+            if (_POSController.GetProductFromID(inputInt) != null  && !_settingsController.quickButtonList.Any(x => x.ProductID == inputInt))
             {
                 _settingsController.AddNewQuickButton(textBox_CreateQuickBtnName.Text, inputInt, grid_QuickButton.Width, grid_QuickButton.Height, btn_FastButton_click);
                 listView_QuickBtn.Items.Add(new FastButton(){ Button_Name = textBox_CreateQuickBtnName.Text, ProductID = inputInt });
+            }
+            else if (!_settingsController.quickButtonList.Any(x => x.ProductID == inputInt))
+            {
+                MessageBox.Show($"Produkt med dette ID {inputInt} er allerede oprettet");
             }
             else
             {
@@ -273,6 +289,7 @@ namespace P3_Projekt_WPF
         
         private void UpdateGridQuickButtons()
         {
+            int i = 0;
             grid_QuickButton.Children.Clear();
             foreach (FastButton button in _settingsController.quickButtonList)
             {
@@ -281,14 +298,25 @@ namespace P3_Projekt_WPF
                     button.Style = FindResource("Flat_Button") as Style; 
 
                     grid_QuickButton.Children.Add(button);
+                    button.SetValue(Grid.ColumnProperty, i % 2);
+                    button.SetValue(Grid.RowProperty, i / 2);
+                    ++i;
                 }
+                
             }
         }
 
         private void btn_Remove_Quick_Button(object sender, RoutedEventArgs e)
         {
+            int removeThis = _settingsController.quickButtonList.FindIndex(x => x.ProductID == Convert.ToUInt32((sender as Button).Tag));
+
+
             _settingsController.quickButtonList.RemoveAll(x => x.ProductID == Convert.ToUInt32((sender as Button).Tag));
+
+            listView_QuickBtn.Items.RemoveAt(removeThis);
             
+
+            listView_QuickBtn.Items.Refresh();
             UpdateGridQuickButtons();
         }
 

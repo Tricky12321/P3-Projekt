@@ -107,7 +107,14 @@ namespace P3_Projekt_WPF.Classes
             }
             else if (Type == "temp_product")
             {
-                return new TempProduct(id);
+                TempProduct ResultsProduct = new TempProduct(id);
+                if (ResultsProduct.ResolvedProductID != 0)
+                {
+                    return new Product(ResultsProduct.ResolvedProductID);
+                } else
+                {
+                    return ResultsProduct;
+                }
             }
             else if (Type == "service_product")
             {

@@ -14,22 +14,23 @@ namespace P3_Projekt_WPF.Classes.Utilities
     {
         public int ProductID { get; set; }
         public string Button_Name { get; set; }
-
         public FastButton()
         {
-
+            
         }
 
         public FastButton(int productID, string button_name)
         {
             ProductID = productID;
             Button_Name = button_name;
+
         }
     }
 
     class SettingsController
     {
         public List<FastButton> quickButtonList = new List<FastButton>();
+
 
         public void AddNewQuickButton(string buttonText, int productID, double gridWidth, double gridHeight, RoutedEventHandler btn_FastButton_click)
         {
