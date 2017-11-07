@@ -50,9 +50,7 @@ namespace P3_Projekt_WPF
             txtboxImage = productForDisplay.Image;
             ShowProductInfo();
             this.VerticalAlignment = VerticalAlignment.Stretch;
-            this.HorizontalAlignment = HorizontalAlignment.Stretch;
-            
-            
+            this.HorizontalAlignment = HorizontalAlignment.Stretch;   
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
@@ -63,10 +61,7 @@ namespace P3_Projekt_WPF
         public void ShowProductInfo()
         {
             img_ProductImage = _displayProduct.Image;
-            txtbox_ID.Text = _displayProduct.ID.ToString();
-            txtbox_Navn.Text = _displayProduct.Name;
-            txtbox_Gruppe.Text = _displayProduct.ProductGroup.Name;
-            txtbox_Price.Text = _displayProduct.SalePrice.ToString();
+            txtbox_Product.Text = $"ID: {_displayProduct.ID.ToString()}\nNavn: { _displayProduct.Name}\nGruppe: { _displayProduct.ProductGroup.Name}\nPris { _displayProduct.SalePrice.ToString()},-";
 
         }
     }

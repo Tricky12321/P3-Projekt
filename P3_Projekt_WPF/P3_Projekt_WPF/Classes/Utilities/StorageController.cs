@@ -41,14 +41,23 @@ namespace P3_Projekt_WPF.Classes.Utilities
         private bool _tempProductQueDone = false;
         private bool _groupQueDone = false;
         private bool _storageRoomQueDone = false;
+
+        private object _productQueDoneLock = new object();
+        private object _productCounterLock = new object();
+
         public bool ThreadDone()
         {
             Debug.WriteLine(_productsCreateByThreads + " = " + _productsLoadedFromDatabase);
             if (!_productQueDone && (_productsCreateByThreads == _productsLoadedFromDatabase))
             {
-                Debug.WriteLine("ProductQue: Done");
-                _productQueDone = true;
-
+                lock(_productQueDoneLock)
+                {
+                    Debug.WriteLine("ProductQue: Done");
+                    _productQueDone = true;
+                }
+            } else
+            {
+                return false;
             }
             if (_groupQueDone && _productQueDone && _tempProductQueDone && _storageRoomQueDone)
             {
@@ -68,16 +77,22 @@ namespace P3_Projekt_WPF.Classes.Utilities
             }
             Debug.WriteLine("Created all product threads [" + _productThreads.Count + "]");
         }
+        
         // Når trådene skal få opgaver
         private void HandleCreateProductQue()
         {
-            if (!_productQueDone)
+            bool QueDone = false;
+            lock (_productQueDoneLock)
+            {
+                QueDone = _productQueDone;
+            }
+            if (!QueDone)
             {
                 Row Information = null;
                 if (_productInformation.TryDequeue(out Information) == true)
                 {
                     CreateProduct_Thread(Information);
-                    _productsCreateByThreads++;
+                    Interlocked.Increment(ref _productsCreateByThreads);
                     HandleCreateProductQue();
                 }
                 else
@@ -88,6 +103,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
             }
             //dør når der ikke er flere opgaver
         }
+        
         // Når tråde skal oprette objecter
         private void CreateProduct_Thread(object rowData)
         {
@@ -121,7 +137,6 @@ namespace P3_Projekt_WPF.Classes.Utilities
             {
                 TempProductList.Add(NewTempProduct);
             }
-
         }
 
         private void CreateReceipt_Thread(object row_data)
@@ -203,7 +218,6 @@ namespace P3_Projekt_WPF.Classes.Utilities
                 CreateTempProduct_Thread(row);
             }
             Debug.WriteLine("TempProductQue: Done!");
-
             _tempProductQueDone = true;
         }
 
@@ -214,14 +228,6 @@ namespace P3_Projekt_WPF.Classes.Utilities
             foreach (var row in Results.RowData)
             {
                 CreateReceipt_Thread(row);
-                /*
-                Thread NewThread = new Thread(new ParameterizedThreadStart(CreateReceipt_Thread));
-                lock (ThreadLock)
-                {
-                    Threads.Add(NewThread);
-                }
-                NewThread.Start(row);
-                */
             }
         }
 
@@ -543,10 +549,10 @@ namespace P3_Projekt_WPF.Classes.Utilities
         public void MergeTempProduct(TempProduct tempProductToMerge, int matchedProductID)
         {
             SaleTransaction tempProductsTransaction = tempProductToMerge.GetTempProductsSaleTransaction();
-
             ProductDictionary[matchedProductID].StorageWithAmount[0] -= tempProductsTransaction.Amount;
             tempProductsTransaction.EditSaleTransactionFromTempProduct(ProductDictionary[matchedProductID]);
-            tempProductToMerge.Resolve();
+            Product MergedProduct = ProductDictionary[matchedProductID];
+            tempProductToMerge.Resolve(MergedProduct);
             TempProductList.Remove(tempProductToMerge);
         }
 
