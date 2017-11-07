@@ -114,10 +114,8 @@ namespace P3_Projekt_WPF
             productGrid.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(1, GridUnitType.Star)});
             productGrid.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(1, GridUnitType.Star)});
             productGrid.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(1, GridUnitType.Star)});
-            
-
+           
             productGrid.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(380) });
-
 
             scroll_StorageProduct.Content = productGrid;
             Stopwatch TimeTester = new Stopwatch();
@@ -152,13 +150,11 @@ namespace P3_Projekt_WPF
             Product placeholder = _storageController.ProductDictionary[Convert.ToInt32((sender as Button).Tag)];
 
             image_ChosenProduct = placeholder.Image;
-            textBlock_ChosenProduct.Text = $"ID: {placeholder.ID}\nNavn: {placeholder.Name}\nGruppe: {_storageController.GroupDictionary[placeholder.ProductGroupID].Name}\nMærke: {placeholder.Brand}\nPris: {placeholder.SalePrice}\nTilbudspris: {placeholder.DiscountPrice}\nIndkøbspris: {placeholder.PurchasePrice}";
+            textBlock_ChosenProduct.Text = $"ID: {placeholder.ID}\nNavn: {placeholder.Name}\nGruppe: {_storageController.GroupDictionary[placeholder.ProductGroupID].Name}\nMærke: {placeholder.Brand}\nPris: {placeholder.SalePrice}\nTilbudspris: {placeholder.DiscountPrice}\nIndkøbspris: {placeholder.PurchasePrice}\nLagerstatus:";
             foreach(KeyValuePair<int,int> storageWithAmount in placeholder.StorageWithAmount)
             {
-                textBlock_ChosenProduct.Text += $"\n{_storageController.StorageRoomDictionary[storageWithAmount.Key].Name} har {storageWithAmount.Value} stk.";
+                textBlock_ChosenProduct.Text += $"\n  - {_storageController.StorageRoomDictionary[storageWithAmount.Key].Name} har {storageWithAmount.Value} stk.";
             }
-
-
         }
 
         public void StorageTabClick(object sender, RoutedEventArgs e)
