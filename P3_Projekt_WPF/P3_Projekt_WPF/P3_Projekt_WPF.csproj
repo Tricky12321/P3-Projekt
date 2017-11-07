@@ -114,6 +114,7 @@
     <Compile Include="Classes\Transaction\StorageTransaction.cs" />
     <Compile Include="Classes\Transaction\Transaction.cs" />
     <Compile Include="Classes\Utilities\Admin.cs" />
+    <Compile Include="Classes\Utilities\FastButton.cs" />
     <Compile Include="Classes\Utilities\ReceiptListItem.cs" />
     <Compile Include="Classes\Utilities\SettingsController.cs" />
     <Compile Include="Classes\Utilities\Utils.cs" />

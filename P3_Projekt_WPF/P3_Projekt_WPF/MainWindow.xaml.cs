@@ -18,6 +18,7 @@ using P3_Projekt_WPF.Classes.Exceptions;
 using P3_Projekt_WPF.Classes;
 using System.Diagnostics;
 using System.Threading;
+using System.Windows.Controls;
 
 namespace P3_Projekt_WPF
 {
@@ -46,7 +47,7 @@ namespace P3_Projekt_WPF
         {
             if (_ctrlDown && (e.Key != Key.LeftCtrl && e.Key != Key.RightCtrl))
             {
-                Debug.WriteLine("Ctrl+"+e.Key.ToString());
+                Debug.WriteLine("Ctrl+" + e.Key.ToString());
             }
         }
 
@@ -109,12 +110,12 @@ namespace P3_Projekt_WPF
             productGrid.VerticalAlignment = VerticalAlignment.Stretch;
             productGrid.HorizontalAlignment = HorizontalAlignment.Stretch;
 
-            productGrid.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(1, GridUnitType.Star)});
-            productGrid.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(1, GridUnitType.Star)});
-            productGrid.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(1, GridUnitType.Star)});
-            productGrid.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(1, GridUnitType.Star)});
-            productGrid.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(1, GridUnitType.Star)});
-           
+            productGrid.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(1, GridUnitType.Star) });
+            productGrid.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(1, GridUnitType.Star) });
+            productGrid.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(1, GridUnitType.Star) });
+            productGrid.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(1, GridUnitType.Star) });
+            productGrid.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(1, GridUnitType.Star) });
+
             productGrid.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(380) });
 
             scroll_StorageProduct.Content = productGrid;
@@ -126,7 +127,7 @@ namespace P3_Projekt_WPF
                 Thread.Sleep(100);
             }
             TimeTester.Stop();
-            Debug.WriteLine("[P3] Det tog "+TimeTester.ElapsedMilliseconds+"ms at hente alt fra databasen");
+            Debug.WriteLine("[P3] Det tog " + TimeTester.ElapsedMilliseconds + "ms at hente alt fra databasen");
         }
 
         public void AddProductButton()
@@ -139,7 +140,7 @@ namespace P3_Projekt_WPF
             addProductButton.SetValue(Grid.ColumnProperty, 0);
             addProductButton.Style = FindResource("Flat_Button") as Style;
             addProductButton.Margin = new System.Windows.Thickness(2);
-            addProductButton.Background = Brushes.Transparent;
+            addProductButton.Background = System.Windows.Media.Brushes.Transparent;
 
             productGrid.Children.Add(addProductButton);
         }
@@ -151,7 +152,7 @@ namespace P3_Projekt_WPF
 
             image_ChosenProduct = placeholder.Image;
             textBlock_ChosenProduct.Text = $"ID: {placeholder.ID}\nNavn: {placeholder.Name}\nGruppe: {_storageController.GroupDictionary[placeholder.ProductGroupID].Name}\nMærke: {placeholder.Brand}\nPris: {placeholder.SalePrice}\nTilbudspris: {placeholder.DiscountPrice}\nIndkøbspris: {placeholder.PurchasePrice}\nLagerstatus:";
-            foreach(KeyValuePair<int,int> storageWithAmount in placeholder.StorageWithAmount)
+            foreach (KeyValuePair<int, int> storageWithAmount in placeholder.StorageWithAmount)
             {
                 textBlock_ChosenProduct.Text += $"\n  - {_storageController.StorageRoomDictionary[storageWithAmount.Key].Name} har {storageWithAmount.Value} stk.";
             }
@@ -165,8 +166,8 @@ namespace P3_Projekt_WPF
         public void LoadProductGrid()
         {
             int i = 1;
-            
-            foreach (KeyValuePair<int, Product> produkter in _storageController.ProductDictionary.OrderBy(x => x.Key))
+
+            foreach (KeyValuePair<int, Product> product in _storageController.ProductDictionary.OrderBy(x => x.Key))
             {
                 if (i % 5 == 0)
                 {
@@ -174,10 +175,24 @@ namespace P3_Projekt_WPF
                     int hej = productGrid.RowDefinitions.Count;
                 }
 
-                ProductControl productControl = new ProductControl(produkter.Value, _storageController.GroupDictionary);
+                Product placeProduct = product.Value;
+
+                /* #LORT
+                Debug.Print($@"{_settingsController.PictureFilePath}/{product.Value.ID}");
+                try
+                {
+                    placeProduct.Image.Source = new BitmapImage(new Uri($@"{_settingsController.PictureFilePath}/{product.Value.ID}.png", UriKind.RelativeOrAbsolute));
+                }
+                catch
+                {
+                
+                }
+                */
+
+                ProductControl productControl = new ProductControl(placeProduct, _storageController.GroupDictionary);
                 productControl.SetValue(Grid.ColumnProperty, i % 5);
                 productControl.SetValue(Grid.RowProperty, i / 5);
-                productControl.btn_ShowMoreInformation.Tag = produkter.Value.ID;
+                productControl.btn_ShowMoreInformation.Tag = product.Value.ID;
                 productControl.btn_ShowMoreInformation.Click += ShowSpecificInfoProductStorage;
                 productGrid.Children.Add(productControl);
 
@@ -260,10 +275,10 @@ namespace P3_Projekt_WPF
             int inputInt;
             int.TryParse(textBox_CreateQuickBtnID.Text, out inputInt);
 
-            if (_POSController.GetProductFromID(inputInt) != null  && !_settingsController.quickButtonList.Any(x => x.ProductID == inputInt))
+            if (_POSController.GetProductFromID(inputInt) != null && !_settingsController.quickButtonList.Any(x => x.ProductID == inputInt))
             {
                 _settingsController.AddNewQuickButton(textBox_CreateQuickBtnName.Text, inputInt, grid_QuickButton.Width, grid_QuickButton.Height, btn_FastButton_click);
-                listView_QuickBtn.Items.Add(new FastButton(){ Button_Name = textBox_CreateQuickBtnName.Text, ProductID = inputInt });
+                listView_QuickBtn.Items.Add(new FastButton() { Button_Name = textBox_CreateQuickBtnName.Text, ProductID = inputInt });
             }
             else if (_settingsController.quickButtonList.Any(x => x.ProductID == inputInt))
             {
@@ -280,7 +295,7 @@ namespace P3_Projekt_WPF
             _POSController.AddSaleTransaction(_POSController.GetProductFromID((sender as FastButton).ProductID));
             UpdateReceiptList();
         }
-        
+
         private void UpdateGridQuickButtons()
         {
             int i = 0;
@@ -289,7 +304,7 @@ namespace P3_Projekt_WPF
             {
                 if (!grid_QuickButton.Children.Contains(button))
                 {
-                    button.Style = FindResource("Flat_Button") as Style; 
+                    button.Style = FindResource("Flat_Button") as Style;
 
                     grid_QuickButton.Children.Add(button);
                     button.SetValue(Grid.ColumnProperty, i % 2);
@@ -316,7 +331,10 @@ namespace P3_Projekt_WPF
 
         }
 
-
+        private void btn_PictureFilePath_Click(object sender, RoutedEventArgs e)
+        {
+            _settingsController.SpecifyPictureFilePath();
+        }
 
 
 
@@ -349,9 +367,6 @@ namespace P3_Projekt_WPF
                 e.Handled = true;
         }
 
-        private void btn_PictureFilePath_Click(object sender, RoutedEventArgs e)
-        {
 
-        }
     }
 }
