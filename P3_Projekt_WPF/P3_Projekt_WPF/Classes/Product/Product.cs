@@ -14,7 +14,7 @@ namespace P3_Projekt_WPF.Classes
         public string Name;
         public string Brand;
         private decimal _purchasePrice;
-        public Group ProductGroup;
+        public int ProductGroupID;
         public bool DiscountBool;
         public decimal DiscountPrice;
         public Image Image;
@@ -23,12 +23,12 @@ namespace P3_Projekt_WPF.Classes
         public Dictionary<int, int> StorageWithAmount = new Dictionary<int, int>();
 
 
-        public Product(string name, string brand, decimal purchasePrice, Group group, bool discount, decimal salePrice, decimal discountPrice, Image image) : base(salePrice)
+        public Product(string name, string brand, decimal purchasePrice, int groupID, bool discount, decimal salePrice, decimal discountPrice, Image image) : base(salePrice)
         {
             Name = name;
             Brand = brand;
             _purchasePrice = purchasePrice;
-            ProductGroup = group;
+            ProductGroupID = groupID;
             DiscountBool = discount;
             DiscountPrice = discountPrice;
             Image = image;
@@ -53,22 +53,22 @@ namespace P3_Projekt_WPF.Classes
         /* No delete method */
 
         //Regular edit without admin commands toggled
-        public void Edit(string name, string brand, Group group, Image image)
+        public void Edit(string name, string brand, int groupID, Image image)
         {
             Name = name;
             Brand = brand;
-            ProductGroup = group;
+            ProductGroupID = groupID;
             Image = image;
 
         }
 
         //Admin edit with admin command toggled
-        public void AdminEdit(string name, string brand, decimal purchasePrice, decimal salePrice, Group group, bool discount, decimal discountPrice, Image image)
+        public void AdminEdit(string name, string brand, decimal purchasePrice, decimal salePrice, int groupID, bool discount, decimal discountPrice, Image image)
         {
             Name = name;
             Brand = brand;
             _purchasePrice = purchasePrice;
-            ProductGroup = group;
+            ProductGroupID = groupID;
             DiscountBool = discount;
             DiscountPrice = discountPrice;
             Image = image;
@@ -106,7 +106,7 @@ namespace P3_Projekt_WPF.Classes
             ID = Convert.ToInt32(results.Values[0]);                        // id
             Name = results.Values[1];                                       // name
             Brand = results.Values[2];                                      // brand
-            ProductGroup = new Group(Convert.ToInt32(results.Values[3]));   // groups
+            ProductGroupID = Convert.ToInt32(results.Values[3]);            // groups
             SalePrice = Convert.ToDecimal(results.Values[4]);                 // price
             DiscountBool = Convert.ToBoolean(results.Values[5]);            // discount
             DiscountPrice = Convert.ToDecimal(results.Values[6]);             // discount_price
@@ -154,7 +154,7 @@ namespace P3_Projekt_WPF.Classes
         public override void UploadToDatabase()
         {
             string sql = $"INSERT INTO `products` (`id`, `name`, `brand`, `groups`, `price`, `discount`, `discount_price`)" +
-            $"VALUES (NULL, '{Name}', '{Brand}', '{ProductGroup.ID}', '{SalePrice}', '{Convert.ToInt32(DiscountBool)}', '{DiscountPrice}');";
+            $"VALUES (NULL, '{Name}', '{Brand}', '{ProductGroupID}', '{SalePrice}', '{Convert.ToInt32(DiscountBool)}', '{DiscountPrice}');";
             Mysql.RunQuery(sql);
             UpdateStorageStatus();
         }
@@ -164,7 +164,7 @@ namespace P3_Projekt_WPF.Classes
             string sql = $"UPDATE `products` SET " +
                 $"`name` = '{GetName()}'," +
                 $"`brand` = '{Brand}'," +
-                $"`groups` = '{ProductGroup.ID}'," +
+                $"`groups` = '{ProductGroupID}'," +
                 $"`price` = '{SalePrice}'," +
                 $"`discount` = '{Convert.ToInt32(DiscountBool)}'," +
                 $"`discount_price` = '{DiscountPrice}' " +

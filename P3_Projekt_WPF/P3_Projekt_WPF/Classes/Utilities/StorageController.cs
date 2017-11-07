@@ -232,6 +232,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
                 Threads.Add(GetAllProductsThread);
                 Threads.Add(GetAllGroupsThread);
                 Threads.Add(GetAllTempProductsThread);
+                Threads.Add(GetAllStorageRoomsThread);
             }
             GetAllProductsThread.Start();
             GetAllGroupsThread.Start();
