@@ -271,7 +271,7 @@ namespace P3_Projekt_WPF
                 _settingsController.AddNewQuickButton(textBox_CreateQuickBtnName.Text, inputInt, grid_QuickButton.Width, grid_QuickButton.Height, btn_FastButton_click);
                 listView_QuickBtn.Items.Add(new FastButton(){ Button_Name = textBox_CreateQuickBtnName.Text, ProductID = inputInt });
             }
-            else if (!_settingsController.quickButtonList.Any(x => x.ProductID == inputInt))
+            else if (_settingsController.quickButtonList.Any(x => x.ProductID == inputInt))
             {
                 MessageBox.Show($"Produkt med dette ID {inputInt} er allerede oprettet");
             }
