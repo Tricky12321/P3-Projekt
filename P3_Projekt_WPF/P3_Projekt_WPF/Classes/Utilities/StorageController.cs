@@ -18,7 +18,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
         public Dictionary<int, SaleTransaction> SaleTransactionsDictionary = new Dictionary<int, SaleTransaction>();
         public Dictionary<int, Receipt> ReceiptDictionary = new Dictionary<int, Receipt>();
         public List<TempProduct> TempProductList = new List<TempProduct>();
-        
+
 
         public StorageController()
         {
@@ -66,7 +66,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
                 NewThread.Start();
                 _productThreads.Add(NewThread);
             }
-            Debug.WriteLine("Created all product threads ["+_productThreads.Count+"]");
+            Debug.WriteLine("Created all product threads [" + _productThreads.Count + "]");
         }
         // Når trådene skal få opgaver
         private void HandleCreateProductQue()
@@ -144,7 +144,8 @@ namespace P3_Projekt_WPF.Classes.Utilities
             {
                 // Laver en tråd for hvert 5 produkter (100 produkter = 20 tråde)
                 _productThreadsCount = Convert.ToInt32(Math.Floor((decimal)_productsLoadedFromDatabase / 3));
-            } else if (ProductCount > 50)
+            }
+            else if (ProductCount > 50)
             {
                 // Laver en tråd for hvert 3 produkt (50 produkter = 16 tråde)
                 _productThreadsCount = Convert.ToInt32(Math.Floor((decimal)_productsLoadedFromDatabase / 2));
@@ -285,16 +286,17 @@ namespace P3_Projekt_WPF.Classes.Utilities
         }
 
         /////////--------------------SEARCH---------------------------------
-        public List<Product> SearchForProduct(string searchedString)
+        public IEnumerable<Product> SearchForProduct(string searchedString)
         {
             bool wordIsMatched = false;
-            List<string> produtNames = new List<string>();
-            List<Product> productsToReturn = new List<Product>();
+            ConcurrentQueue<Product> productsToReturn = new ConcurrentQueue<Product>();
+            IEnumerable<Product> returnableProducts;
 
             int isNumber;
+            //returns 1 product if it is a matching ID number
             if (Int32.TryParse(searchedString, out isNumber))
             {
-                productsToReturn.Add(ProductDictionary[isNumber]);
+                productsToReturn.Enqueue(ProductDictionary[isNumber]);
                 return productsToReturn;
             }
             else
@@ -305,38 +307,29 @@ namespace P3_Projekt_WPF.Classes.Utilities
                 {
                     if (p.Name == searchedString)
                     {
-                        productsToReturn.Add(p);
+                        productsToReturn.Enqueue(p);
                     }
-                    produtNames.Add(p.Name);
                 }
-
-                //if af matching name is not found the string will undergo different searching methods.
-                if (!wordIsMatched)
+                //goes through all the products and suggest similiar products.
+                foreach (Product p in ProductDictionary.Values)
                 {
-                    foreach (Product p in ProductDictionary.Values)
-                    {
-                        //levenshteins will try to autocorrect the string and suggest items with similar names to the string
-                        LevenshteinsProductSearch(searchedString, p, ref productsToReturn);
-                    }
-                    //will add all the matching brands to the productlist
-                    BrandSearch(searchedString, ref productsToReturn);
-                    //will add all th matching groups to the produclist
-                    GroupSearch(searchedString, ref productsToReturn);
+                    //levenshteins will try to autocorrect the string and suggest items with similar names to the string
+                    LevenshteinsProductSearch(searchedString, p, ref productsToReturn);
+                }
+                //will add all the matching brands to the productlist
+                BrandSearch(searchedString, ref productsToReturn);
+                //will add all th matching groups to the produclist
+                GroupSearch(searchedString, ref productsToReturn);
 
-                    //removes duplicates from the list. 
-                    productsToReturn = productsToReturn.Distinct().ToList();
-                    return productsToReturn;
-                }
-                else
-                {
-                    //will be called if a matching word is found
-                    return productsToReturn;
-                }
+                //removes duplicates from the list.
+                returnableProducts = productsToReturn.Distinct<Product>();
+                //productsToReturn = ok as ConcurrentQueue<Product>;
+                return returnableProducts;
             }
         }
 
         //----Levensthein---------------------
-        public void LevenshteinsProductSearch(string searchedString, Product productCheck, ref List<Product> productsToReturn)//tested
+        public void LevenshteinsProductSearch(string searchedString, Product productCheck, ref ConcurrentQueue<Product> productsToReturn)//tested
         {//setup for levenshteins
             //getting the chardifference between the searchedstring and the productname
             int charDifference = ComputeLevenshteinsDistance(searchedString, productCheck.Name);
@@ -345,7 +338,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
             {
                 if (!productsToReturn.Contains(productCheck))
                 {
-                    productsToReturn.Add(productCheck);
+                    productsToReturn.Enqueue(productCheck);
                 }
 
             }
@@ -468,7 +461,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
         }
         //----LevenSthein-END-----------------------
 
-        public void GroupSearch(string searchedString, ref List<Product> productListToReturn)//tested
+        public void GroupSearch(string searchedString, ref ConcurrentQueue<Product> productListToReturn)//tested
         {
             //divides all the elements in the string, to evaluate each element
             string[] dividedString = searchedString.Split(' ');
@@ -483,13 +476,13 @@ namespace P3_Projekt_WPF.Classes.Utilities
                 {
                     foreach (Product p in ProductDictionary.Values.Where(x => x.ProductGroup == g))
                     {
-                        productListToReturn.Add(p);
+                        productListToReturn.Enqueue(p);
                     }
                 }
             }
         }
 
-        public void BrandSearch(string searchedString, ref List<Product> productListToReturn)//tested
+        public void BrandSearch(string searchedString, ref ConcurrentQueue<Product> productListToReturn)//tested
         {
             //divides all the elements in the string, to evaluate each element
             string[] dividedString = searchedString.Split(' ');
@@ -504,7 +497,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
                 {
                     if (!productListToReturn.Contains(p))
                     {
-                        productListToReturn.Add(p);
+                        productListToReturn.Enqueue(p);
                     }
 
                 }
