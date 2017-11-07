@@ -41,21 +41,20 @@ namespace P3_Projekt_WPF
         }
 
         private Product _displayProduct;
-        public ProductControl(Product productForDisplay)
+        public ProductControl(Product productForDisplay, Dictionary<int, Group> groupDict)
         {
             InitializeComponent();
             _displayProduct = productForDisplay;
             txtboxImage = productForDisplay.Image;
-            ShowProductInfo();
+            ShowProductInfo(groupDict);
             this.VerticalAlignment = VerticalAlignment.Stretch;
             this.HorizontalAlignment = HorizontalAlignment.Stretch;   
         }
 
-        public void ShowProductInfo()
+        public void ShowProductInfo(Dictionary<int, Group> groupDict)
         {
             img_ProductImage = _displayProduct.Image;
-            txtbox_Product.Text = $"ID: {_displayProduct.ID.ToString()}\nNavn: { _displayProduct.Name}\nGruppe: \nPris { _displayProduct.SalePrice.ToString()},-";
-
+            txtbox_Product.Text = $"ID: {_displayProduct.ID.ToString()}\nNavn: { _displayProduct.Name}\nGruppe: {groupDict[_displayProduct.ProductGroupID].Name}\nPris { _displayProduct.SalePrice.ToString()}DKK";
         }
     }
 }

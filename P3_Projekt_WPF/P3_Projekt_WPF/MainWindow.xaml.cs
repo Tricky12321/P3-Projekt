@@ -155,7 +155,7 @@ namespace P3_Projekt_WPF
             textBlock_ChosenProduct.Text = $"ID: {placeholder.ID}\nNavn: {placeholder.Name}\nGruppe: {_storageController.GroupDictionary[placeholder.ProductGroupID].Name}\nMærke: {placeholder.Brand}\nPris: {placeholder.SalePrice}\nTilbudspris: {placeholder.DiscountPrice}\nIndkøbspris: {placeholder.PurchasePrice}";
             foreach(KeyValuePair<int,int> storageWithAmount in placeholder.StorageWithAmount)
             {
-                textBlock_ChosenProduct.Text += $"{_storageController.StorageRoomDictionary[storageWithAmount.Key]} har {storageWithAmount.Value} stk.";
+                textBlock_ChosenProduct.Text += $"\n{_storageController.StorageRoomDictionary[storageWithAmount.Key].Name} har {storageWithAmount.Value} stk.";
             }
 
 
@@ -179,7 +179,7 @@ namespace P3_Projekt_WPF
                     int hej = productGrid.RowDefinitions.Count;
                 }
 
-                ProductControl productControl = new ProductControl(produkter.Value);
+                ProductControl productControl = new ProductControl(produkter.Value, _storageController.GroupDictionary);
                 productControl.SetValue(Grid.ColumnProperty, i % 5);
                 productControl.SetValue(Grid.RowProperty, i / 5);
                 productControl.btn_ShowMoreInformation.Tag = produkter.Value.ID;
