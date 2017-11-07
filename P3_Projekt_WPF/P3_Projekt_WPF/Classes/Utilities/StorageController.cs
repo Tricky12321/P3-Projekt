@@ -18,7 +18,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
         public Dictionary<int, SaleTransaction> SaleTransactionsDictionary = new Dictionary<int, SaleTransaction>();
         public Dictionary<int, Receipt> ReceiptDictionary = new Dictionary<int, Receipt>();
         public List<TempProduct> TempProductList = new List<TempProduct>();
-        
+
 
         public StorageController()
         {
@@ -42,20 +42,15 @@ namespace P3_Projekt_WPF.Classes.Utilities
         private bool _groupQueDone = false;
         private bool _storageRoomQueDone = false;
 
-        private object _productQueDoneLock = new object();
-        private object _productCounterLock = new object();
-
         public bool ThreadDone()
         {
-            Debug.WriteLine(_productsCreateByThreads + " = " + _productsLoadedFromDatabase);
+            //Debug.WriteLine(_productsCreateByThreads + " = " + _productsLoadedFromDatabase);
             if (!_productQueDone && (_productsCreateByThreads == _productsLoadedFromDatabase))
             {
-                lock(_productQueDoneLock)
-                {
-                    Debug.WriteLine("ProductQue: Done");
-                    _productQueDone = true;
-                }
-            } else
+                Debug.WriteLine("ProductQue: Done");
+                _productQueDone = true;
+            }
+            else
             {
                 return false;
             }
@@ -75,18 +70,13 @@ namespace P3_Projekt_WPF.Classes.Utilities
                 NewThread.Start();
                 _productThreads.Add(NewThread);
             }
-            Debug.WriteLine("Created all product threads ["+_productThreads.Count+"]");
+            Debug.WriteLine("Created all product threads [" + _productThreads.Count + "]");
         }
-        
+
         // Når trådene skal få opgaver
         private void HandleCreateProductQue()
         {
-            bool QueDone = false;
-            lock (_productQueDoneLock)
-            {
-                QueDone = _productQueDone;
-            }
-            if (!QueDone)
+            if (!_productQueDone)
             {
                 Row Information = null;
                 if (_productInformation.TryDequeue(out Information) == true)
@@ -97,13 +87,12 @@ namespace P3_Projekt_WPF.Classes.Utilities
                 }
                 else
                 {
-                    Thread.Sleep(5);
+                    Thread.Sleep(1);
                     HandleCreateProductQue();
                 }
             }
-            //dør når der ikke er flere opgaver
         }
-        
+
         // Når tråde skal oprette objecter
         private void CreateProduct_Thread(object rowData)
         {
@@ -159,7 +148,8 @@ namespace P3_Projekt_WPF.Classes.Utilities
             {
                 // Laver en tråd for hvert 5 produkter (100 produkter = 20 tråde)
                 _productThreadsCount = Convert.ToInt32(Math.Floor((decimal)_productsLoadedFromDatabase / 3));
-            } else if (ProductCount > 50)
+            }
+            else if (ProductCount > 50)
             {
                 // Laver en tråd for hvert 3 produkt (50 produkter = 16 tråde)
                 _productThreadsCount = Convert.ToInt32(Math.Floor((decimal)_productsLoadedFromDatabase / 2));
