@@ -186,17 +186,23 @@ namespace P3_Projekt_WPF
 
                 Product placeProduct = product.Value;
 
-                /* #LORT
+
+
+
                 Debug.Print($@"{_settingsController.PictureFilePath}/{product.Value.ID}");
                 try
                 {
-                    placeProduct.Image.Source = new BitmapImage(new Uri($@"{_settingsController.PictureFilePath}/{product.Value.ID}.png", UriKind.RelativeOrAbsolute));
+                    var image = new Image();
+                    image.Source = new BitmapImage(new Uri($@"{_settingsController.PictureFilePath}/{product.Value.ID}.jpg", UriKind.RelativeOrAbsolute));
+                    image.Stretch = Stretch.Uniform;
+                    placeProduct.Image = image;
                 }
                 catch
                 {
                 
                 }
-                */
+
+
 
                 ProductControl productControl = new ProductControl(placeProduct, _storageController.GroupDictionary);
                 productControl.SetValue(Grid.ColumnProperty, i % 5);
@@ -344,24 +350,7 @@ namespace P3_Projekt_WPF
         {
             _settingsController.SpecifyPictureFilePath();
         }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+         
         private void TextInputNoNumber(object sender, TextCompositionEventArgs e)
         {
             // Only allows number in textfield
