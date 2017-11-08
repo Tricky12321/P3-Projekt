@@ -366,8 +366,8 @@
 
                             </Grid>
                         </TabItem>
-                        <TabItem Header="Lager Indtillinger">
-                            <Button x:Name="btn_PictureFilePath" Content="mads lorteknap" HorizontalAlignment="Center" Margin="0,899,0,0" VerticalAlignment="Top" Width="466" Height="140" Click="btn_PictureFilePath_Click" />
+                        <TabItem Header="Lager Indstillinger">
+                            <Button Style="{StaticResource Flat_Button}" x:Name="btn_PictureFilePath" Content="Vælg billedmappe til produkter" HorizontalAlignment="Left" Margin="50,50,0,0" VerticalAlignment="Top" Width="466" Height="100" Click="btn_PictureFilePath_Click" />
                         </TabItem>
 
                         <TabItem Header="Admin Indstilling">
