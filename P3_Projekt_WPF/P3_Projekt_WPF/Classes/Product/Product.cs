@@ -17,13 +17,13 @@ namespace P3_Projekt_WPF.Classes
         public int ProductGroupID;
         public bool DiscountBool;
         public decimal DiscountPrice;
-        public string ImagePath;
+        public Image Image;
         private bool _active = true;
         public bool Active => _active;
         public Dictionary<int, int> StorageWithAmount = new Dictionary<int, int>();
 
 
-        public Product(string name, string brand, decimal purchasePrice, int groupID, bool discount, decimal salePrice, decimal discountPrice, string imagePath) : base(salePrice)
+        public Product(string name, string brand, decimal purchasePrice, int groupID, bool discount, decimal salePrice, decimal discountPrice) : base(salePrice)
         {
             Name = name;
             Brand = brand;
@@ -31,7 +31,6 @@ namespace P3_Projekt_WPF.Classes
             ProductGroupID = groupID;
             DiscountBool = discount;
             DiscountPrice = discountPrice;
-            ImagePath = imagePath;
         }
 
         public Product(int id) : base(0)
@@ -53,16 +52,15 @@ namespace P3_Projekt_WPF.Classes
         /* No delete method */
 
         //Regular edit without admin commands toggled
-        public void Edit(string name, string brand, int groupID, string imagePath)
+        public void Edit(string name, string brand, int groupID)
         {
             Name = name;
             Brand = brand;
             ProductGroupID = groupID;
-            ImagePath = imagePath;
         }
 
         //Admin edit with admin command toggled
-        public void AdminEdit(string name, string brand, decimal purchasePrice, decimal salePrice, int groupID, bool discount, decimal discountPrice, string imagePath)
+        public void AdminEdit(string name, string brand, decimal purchasePrice, decimal salePrice, int groupID, bool discount, decimal discountPrice)
         {
             Name = name;
             Brand = brand;
@@ -70,7 +68,6 @@ namespace P3_Projekt_WPF.Classes
             ProductGroupID = groupID;
             DiscountBool = discount;
             DiscountPrice = discountPrice;
-            ImagePath = imagePath;
             SalePrice = salePrice;
         }
 
