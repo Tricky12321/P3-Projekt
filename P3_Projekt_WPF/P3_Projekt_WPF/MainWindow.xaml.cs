@@ -149,7 +149,7 @@ namespace P3_Projekt_WPF
         public void AddProductDialogOpener(object sender, RoutedEventArgs e)
         {
             CreateProduct addProductWindow = new CreateProduct();
-            addProductWindow.btn_GemOgAfslut.Click += delegate{ addProductWindow.Close(); };
+            addProductWindow.btn_SaveAndQuit.Click += delegate{ addProductWindow.Close(); };
             addProductWindow.Show();
         }
 
