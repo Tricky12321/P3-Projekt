@@ -159,7 +159,7 @@ namespace P3_Projekt_WPF
         public void AddProductDialogOpener(object sender, RoutedEventArgs e)
         {
             CreateProduct addProductWindow = new CreateProduct();
-            addProductWindow.btn_GemOgAfslut.Click += delegate{ addProductWindow.Close(); };
+            addProductWindow.btn_SaveAndQuit.Click += delegate{ addProductWindow.Close(); };
             addProductWindow.Show();
         }
 
@@ -220,7 +220,8 @@ namespace P3_Projekt_WPF
 
         public void AddTransactionToReceipt(SaleTransaction transaction)
         {
-            listView_Receipt.Items.Add(new ReceiptListItem { String_Product = transaction.GetProductName(), Amount = transaction.Amount, Price = $"{transaction.GetProductPrice()},-" });
+            listView_Receipt.Items.Add(new ReceiptListItem { String_Product = transaction.GetProductName(), Amount = transaction.Amount, Price = $"{transaction.GetProductPrice()},-", IDTag = transaction.Product.ID });
+
         }
 
         private void btn_MobilePay_Click(object sender, RoutedEventArgs e)
@@ -230,17 +231,24 @@ namespace P3_Projekt_WPF
 
         private void btn_Increment_Click(object sender, RoutedEventArgs e)
         {
-            Debug.Print(e.RoutedEvent.ToString());
+            int productID = Convert.ToInt32((sender as Button).Tag);
+            _POSController.PlacerholderReceipt.Transactions.Where(x => x.Product.ID == productID).First().Amount++;
+            UpdateReceiptList();
         }
 
         private void btn_Decrement_Click(object sender, RoutedEventArgs e)
         {
+            int productID = Convert.ToInt32((sender as Button).Tag);
+            _POSController.PlacerholderReceipt.Transactions.Where(x => x.Product.ID == productID).First().Amount--;
+            UpdateReceiptList();
 
         }
 
         private void btn_DeleteProduct_Click(object sender, RoutedEventArgs e)
         {
-
+            int productID = Convert.ToInt32((sender as Button).Tag);
+            _POSController.PlacerholderReceipt.RemoveTransaction(productID);
+            UpdateReceiptList();
         }
 
         private void listView_Receipt_SelectionChanged(object sender, SelectionChangedEventArgs e)

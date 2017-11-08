@@ -23,5 +23,10 @@ namespace P3_Projekt_WPF
         {
             InitializeComponent();
         }
+
+        public void PickImage()
+        {
+
+        }
     }
 }
