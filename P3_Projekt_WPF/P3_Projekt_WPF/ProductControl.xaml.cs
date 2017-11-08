@@ -14,7 +14,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using P3_Projekt_WPF.Classes;
 using P3_Projekt_WPF.Classes.Utilities;
-
+using System.Collections.Concurrent;
 namespace P3_Projekt_WPF
 {
     /// <summary>
@@ -41,7 +41,7 @@ namespace P3_Projekt_WPF
         }
 
         private Product _displayProduct;
-        public ProductControl(Product productForDisplay, Dictionary<int, Group> groupDict)
+        public ProductControl(Product productForDisplay, ConcurrentDictionary<int, Group> groupDict)
         {
             InitializeComponent();
             _displayProduct = productForDisplay;
@@ -51,7 +51,7 @@ namespace P3_Projekt_WPF
             this.HorizontalAlignment = HorizontalAlignment.Stretch;   
         }
 
-        public void ShowProductInfo(Dictionary<int, Group> groupDict)
+        public void ShowProductInfo(ConcurrentDictionary<int, Group> groupDict)
         {
             img_ProductImage = _displayProduct.Image;
             txtbox_Product.Text = $"ID: {_displayProduct.ID.ToString()}\nNavn: { _displayProduct.Name}\nGruppe: {groupDict[_displayProduct.ProductGroupID].Name}\nPris { _displayProduct.SalePrice.ToString()}DKK";

@@ -47,7 +47,16 @@ namespace P3_Projekt_WPF
         {
             if (_ctrlDown && (e.Key != Key.LeftCtrl && e.Key != Key.RightCtrl))
             {
-                Debug.WriteLine("Ctrl+" + e.Key.ToString());
+                ClickQuickButton(e.Key);
+            }
+        }
+
+        private void ClickQuickButton(Key btn)
+        {
+            Debug.Print("Pressed quickbutton combo:" + btn.ToString());
+            if (_settingsController.quickButtonKeyList.ContainsKey(btn))
+            {
+                _settingsController.quickButtonKeyList[btn].RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
             }
         }
 
@@ -200,17 +209,23 @@ namespace P3_Projekt_WPF
 
                 Product placeProduct = product.Value;
 
-                /* #LORT
+
+
+
                 Debug.Print($@"{_settingsController.PictureFilePath}/{product.Value.ID}");
                 try
                 {
-                    placeProduct.Image.Source = new BitmapImage(new Uri($@"{_settingsController.PictureFilePath}/{product.Value.ID}.png", UriKind.RelativeOrAbsolute));
+                    var image = new Image();
+                    image.Source = new BitmapImage(new Uri($@"{_settingsController.PictureFilePath}/{product.Value.ID}.jpg", UriKind.RelativeOrAbsolute));
+                    image.Stretch = Stretch.Uniform;
+                    placeProduct.Image = image;
                 }
                 catch
                 {
                 
                 }
-                */
+
+
 
                 ProductControl productControl = new ProductControl(placeProduct, _storageController.GroupDictionary);
                 productControl.SetValue(Grid.ColumnProperty, i % 5);
@@ -225,7 +240,8 @@ namespace P3_Projekt_WPF
 
         public void AddTransactionToReceipt(SaleTransaction transaction)
         {
-            listView_Receipt.Items.Add(new ReceiptListItem { String_Product = transaction.GetProductName(), Amount = transaction.Amount, Price = $"{transaction.GetProductPrice()},-" });
+            listView_Receipt.Items.Add(new ReceiptListItem { String_Product = transaction.GetProductName(), Amount = transaction.Amount, Price = $"{transaction.GetProductPrice()},-", IDTag = transaction.Product.ID });
+
         }
 
         private void btn_MobilePay_Click(object sender, RoutedEventArgs e)
@@ -235,17 +251,24 @@ namespace P3_Projekt_WPF
 
         private void btn_Increment_Click(object sender, RoutedEventArgs e)
         {
-            Debug.Print(e.RoutedEvent.ToString());
+            int productID = Convert.ToInt32((sender as Button).Tag);
+            _POSController.PlacerholderReceipt.Transactions.Where(x => x.Product.ID == productID).First().Amount++;
+            UpdateReceiptList();
         }
 
         private void btn_Decrement_Click(object sender, RoutedEventArgs e)
         {
+            int productID = Convert.ToInt32((sender as Button).Tag);
+            _POSController.PlacerholderReceipt.Transactions.Where(x => x.Product.ID == productID).First().Amount--;
+            UpdateReceiptList();
 
         }
 
         private void btn_DeleteProduct_Click(object sender, RoutedEventArgs e)
         {
-
+            int productID = Convert.ToInt32((sender as Button).Tag);
+            _POSController.PlacerholderReceipt.RemoveTransaction(productID);
+            UpdateReceiptList();
         }
 
         private void listView_Receipt_SelectionChanged(object sender, SelectionChangedEventArgs e)
