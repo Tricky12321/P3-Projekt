@@ -44,24 +44,26 @@ namespace P3_Projekt_WPF.Classes.Utilities
         private bool _groupQueueDone = false;
         private bool _storageRoomQueueDone = false;
         private bool _serviceProductQueueDone = false;
+        public bool ThreadsDone
+        {
+            get
+            {
+                CheckProductThreads();
+                return _productQueueDone && _groupQueueDone && _tempProductQueueDone && _storageRoomQueueDone && _serviceProductQueueDone;
+            }
+        }
 
-        private object _productDictionaryLock = new object();
-        public bool ThreadDone()
+        /// <summary>
+        /// Checks if the ProductQueue is done
+        /// </summary>
+        private void CheckProductThreads()
         {
             //Debug.WriteLine(_productsCreateByThreads + " = " + _productsLoadedFromDatabase);
             if (!_productQueueDone && (_productsCreateByThreads == _productsLoadedFromDatabase))
             {
                 Debug.WriteLine("ProductQue: Done");
                 _productQueueDone = true;
-            } else
-            {
-                return false;
             }
-            if (_groupQueueDone && _productQueueDone && _tempProductQueueDone && _storageRoomQueueDone && _serviceProductQueueDone)
-            {
-                return true;
-            }
-            return false;
         }
 
         // Opretter Product tråde
@@ -101,10 +103,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
             Product NewProduct = new Product(Data);
             if (ProductDictionary.ContainsKey(NewProduct.ID) == false)
             {
-                lock(_productDictionaryLock)
-                {
-                    ProductDictionary.TryAdd(NewProduct.ID, NewProduct);
-                }
+                ProductDictionary.TryAdd(NewProduct.ID, NewProduct);
             }
         }
 
@@ -158,12 +157,12 @@ namespace P3_Projekt_WPF.Classes.Utilities
             if (ProductCount > 100)
             {
                 // Laver en tråd for hvert 5 produkter (100 produkter = 20 tråde)
-                _productThreadsCount = Convert.ToInt32(Math.Floor((decimal)_productsLoadedFromDatabase / 3)+5);
+                _productThreadsCount = Convert.ToInt32(Math.Floor((decimal)_productsLoadedFromDatabase / 3) + 5);
             }
             else if (ProductCount > 33)
             {
                 // Laver en tråd for hvert 2 produkt (50 produkter = 25 tråde)
-                _productThreadsCount = Convert.ToInt32(Math.Floor((decimal)_productsLoadedFromDatabase / 2)+5);
+                _productThreadsCount = Convert.ToInt32(Math.Floor((decimal)_productsLoadedFromDatabase / 2) + 5);
             }
             else
             {
@@ -375,7 +374,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
             {
                 //checks if the searched string is
                 //matching with a product name.
-                
+
                 foreach (var p in ProductDictionary.Where(x => x.Value.Name == searchedString))
                 {
                     productsToReturn.Enqueue(p.Value);
@@ -403,7 +402,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
                 {
                     Thread.Sleep(1);
                 }
-                
+
                 //productsToReturn = ok as ConcurrentQueue<Product>;
                 return productsToReturn;
             }

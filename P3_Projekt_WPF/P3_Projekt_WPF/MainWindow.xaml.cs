@@ -131,7 +131,7 @@ namespace P3_Projekt_WPF
             Stopwatch TimeTester = new Stopwatch();
             TimeTester.Start();
             _storageController.GetAll();
-            while (!_storageController.ThreadDone())
+            while (!_storageController.ThreadsDone)
             {
                 Thread.Sleep(100);
             }
