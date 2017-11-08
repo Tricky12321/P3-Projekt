@@ -287,23 +287,24 @@ namespace P3_Projekt_WPF.Classes.Utilities
         private ConcurrentQueue<Product> _productsToSearch = null;
         private ConcurrentQueue<Product> _productsFound = null;
         private List<Thread> _productSearchThreads = new List<Thread>();
-        private void LevensteinSearch_Thread(object searchedString)
+        private string _searchedString = "";
+        private void LevenshteinSearch_Thread()
         {
             while (!_productSearchDone)
             {
                 Product p = null;
                 if (_productsToSearch.TryDequeue(out p) && p != null)
                 {
-                    LevenshteinsProductSearch((searchedString as string), p, ref _productsFound);
+                    LevenshteinsProductSearch(_searchedString, p, ref _productsFound);
                 }
             }
         }
 
-        private void StartLevensteinSearchThreads()
+        private void StartLevenshteinSearchThreads()
         {
             for (int i = 0; i < _productThreadCount; i++)
             {
-                Thread NewThread = new Thread(new ParameterizedThreadStart(LevensteinSearch_Thread));
+                Thread NewThread = new Thread(new ThreadStart(LevenshteinSearch_Thread));
                 _productSearchThreads.Add(NewThread);
                 NewThread.Start();
             }
@@ -333,7 +334,8 @@ namespace P3_Projekt_WPF.Classes.Utilities
                 _productsToSearch = new ConcurrentQueue<Product>(ProductDictionary.Values);
                 _productsFound = productsToReturn;
                 // Starter multithreading 
-                StartLevensteinSearchThreads();
+                _searchedString = searchedString;
+                StartLevenshteinSearchThreads();
                 _productSearchDone = false;
                 while (_productsToSearch.IsEmpty == false)
                 {
