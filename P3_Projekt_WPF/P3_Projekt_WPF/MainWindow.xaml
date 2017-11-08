@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:P3_Projekt_WPF"
-        xmlns:Classes="clr-namespace:P3_Projekt_WPF.Classes" x:Class="P3_Projekt_WPF.MainWindow"
+        xmlns:Classes="clr-namespace:P3_Projekt_WPF.Classes" xmlns:System="clr-namespace:System;assembly=mscorlib" x:Class="P3_Projekt_WPF.MainWindow"
         mc:Ignorable="d"
         Title="Børglum Kloster Lager og Salg" MinHeight="768" Height="1396" MinWidth="1366" Width="2068" Background="#FF919191" WindowState="Maximized">
     <Grid>
@@ -83,7 +83,7 @@
                             <Style TargetType="{x:Type TextBlock}">
                                 <Setter Property="Visibility" Value="Collapsed"/>
                                 <Style.Triggers>
-                                    <DataTrigger Binding="{Binding Text, ElementName = textBox_AddProductID}" Value="">
+                                    <DataTrigger Binding="{Binding Text, ElementName=textBox_AddProductID}" Value="">
                                         <Setter Property="Visibility" Value="Visible"/>
                                     </DataTrigger>
                                 </Style.Triggers>
@@ -124,10 +124,10 @@
 
                     <ListView x:Name="listView_Receipt" Margin="13,67,10,230" Grid.Row="1" Grid.Column="1">
                         <ListView.View>
-                            <GridView>
+                            <GridView x:Name="grid_Receipt">
                                 <GridView.ColumnHeaderContainerStyle>
                                     <Style>
-                                        <Setter Property="FrameworkElement.Visibility"  Value="Collapsed"/>
+                                        <Setter Property="UIElement.Visibility"  Value="Collapsed"/>
                                     </Style>
                                 </GridView.ColumnHeaderContainerStyle>
 
@@ -136,11 +136,12 @@
                                         <DataTemplate>
                                             <Button Style="{StaticResource Flat_Button}"
                                                 Content = "+"
- 
-                                                Width="30"
-                                                Height="30"
+                                                FontSize="30"
+                                                Width="40"
+                                                Height="50"
                                                 VerticalAlignment = "Center"
                                                 Click="btn_Increment_Click"
+                                                Tag="{Binding IDTag}"
                                             />
                                         </DataTemplate>
                                     </GridViewColumn.CellTemplate>
@@ -151,16 +152,18 @@
                                         <DataTemplate>
                                             <Button Style="{StaticResource Flat_Button}"
                                                 Content = "-"
-                                                Width="30"
-                                                Height="30"
+                                                Width="40"
+                                                Height="50"
+                                                FontSize="30"
                                                 VerticalAlignment = "Center"
                                                 Click="btn_Decrement_Click"
+                                                Tag="{Binding IDTag}"
                                             />
                                         </DataTemplate>
                                     </GridViewColumn.CellTemplate>
                                 </GridViewColumn>
 
-                                <GridViewColumn>
+                                <GridViewColumn Width="100">
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate>
                                             <TextBlock Text="{Binding Amount}"/>
@@ -168,7 +171,7 @@
                                     </GridViewColumn.CellTemplate>
                                 </GridViewColumn>
 
-                                <GridViewColumn>
+                                <GridViewColumn x:Name="column_Product">
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate>
                                             <TextBlock Text="{Binding String_Product}"/>
@@ -189,10 +192,12 @@
                                         <DataTemplate>
                                             <Button Style="{StaticResource Flat_Button}"
                                                 Content = "x"
-                                                Width="30"
-                                                Height="30"
+                                                Width="40"
+                                                Height="50"
+                                                FontSize="30"
                                                 VerticalAlignment = "Center"
                                                 Click="btn_DeleteProduct_Click"
+                                                Tag="{Binding IDTag}"
                                             />
                                         </DataTemplate>
                                     </GridViewColumn.CellTemplate>
@@ -222,11 +227,12 @@
                                 <RowDefinition Height="1*"/>
                                 <RowDefinition Height="2*"/>
                             </Grid.RowDefinitions>
-                            <Image x:Name="image_ChosenProduct" Margin="0,0,0,0"/>
+                            <Image x:Name="image_ChosenProduct" Margin="0,0,0,0" Stretch="Fill"/>
                             <TextBlock x:Name="textBlock_ChosenProduct" TextWrapping="Wrap" Text="TextBlock" Grid.Row="1" Margin="0,0,0,0"/>
 
                         </Grid>
                     </Border>
+                    <TextBlock x:Name="testtesttest" HorizontalAlignment="Left" Margin="283,15,0,0" TextWrapping="NoWrap"  Text="TextBlock" VerticalAlignment="Top" FontSize="12" Width="1251" Grid.ColumnSpan="2"/>
 
 
                 </Grid>
@@ -318,19 +324,18 @@
                     </ListView>
                 </Grid>
             </TabItem>
-            <TabItem x:Name="tab_Settings" Header="Indstillinger" Width="190" Height="46" Margin="0,-2,0,0" VerticalAlignment="Bottom">
+            <TabItem x:Name="tab_Settings" Header="Indstillinger" Width="190" Margin="0">
 
                 <Grid Background="#FFE5E5E5">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="71*"/>
-                        <RowDefinition Height="1240*"/>
-                    </Grid.RowDefinitions>
                     <Border BorderBrush="Black" BorderThickness="1" Height="1" VerticalAlignment="Top" Margin="-34,0,-79,0" Grid.Row="1"/>
 
 
                     <TabControl x:Name="tab_WithSettings" TabStripPlacement="Left" Background="Transparent" Margin="0,1,0,0" Grid.Row="1">
                         <TabItem Header="Salgs Indstillinger" >
                             <Grid x:Name="indstillinger_Grid" Margin="5,0">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="100"/>
+                                </Grid.RowDefinitions>
                                 <TextBox TextCompositionManager.PreviewTextInput="TextInputNoNumber" Padding="10,0,0,0" x:Name="textBox_CreateQuickBtnID" Margin="10,11,0,0" FontSize="33" Height="50" VerticalAlignment="Top" HorizontalAlignment="Left" Width="217" MaxLength="10">
                                     <TextBox.Resources>
                                         <Style TargetType="{x:Type Border}">
@@ -410,12 +415,19 @@
 
                             </Grid>
                         </TabItem>
-                        <TabItem Header="Lager Indtillinger">
-                            <Button x:Name="btn_PictureFilePath" Content="mads lorteknap" HorizontalAlignment="Center" Margin="0,899,0,0" VerticalAlignment="Top" Width="466" Height="140" Click="btn_PictureFilePath_Click" />
+                        <TabItem Header="Lager Indstillinger">
+                            <Button Style="{StaticResource Flat_Button}" x:Name="btn_PictureFilePath" Content="Vælg billedmappe til produkter" HorizontalAlignment="Left" Margin="50,50,0,0" VerticalAlignment="Top" Width="466" Height="100" Click="btn_PictureFilePath_Click" />
                         </TabItem>
 
-                        <TabItem Header="Admin Indstilling">
+                        <TabItem Header="Admin Indstilling"/>
+                        <TabItem Header="Information">
+                            <DataGrid x:Name="InformationGrid" Margin="2,0,-3,-7" IsReadOnly="True" EnableColumnVirtualization="True">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn x:Name="title" Binding="{x:Null}" ClipboardContentBinding="{x:Null}"/>
+                                    <DataGridTextColumn x:Name="value" Binding="{x:Null}" ClipboardContentBinding="{x:Null}"/>
+                                </DataGrid.Columns>
 
+                            </DataGrid>
 
                         </TabItem>
                     </TabControl>
