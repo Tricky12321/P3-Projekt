@@ -19,6 +19,8 @@ using P3_Projekt_WPF.Classes;
 using System.Diagnostics;
 using System.Threading;
 using System.Windows.Controls;
+using System.Collections;
+using System.IO;
 //using System.Drawing;
 
 namespace P3_Projekt_WPF
@@ -217,6 +219,8 @@ namespace P3_Projekt_WPF
             Debug.Print((sender as Button).Tag.ToString());
             Product placeholder = _storageController.ProductDictionary[Convert.ToInt32((sender as Button).Tag)];
 
+            image_ChosenProduct.Source = Utils.ImageSourceForBitmap(Properties.Resources.questionmark_png);
+
             if (placeholder.Image != null)
             {
                 image_ChosenProduct.Source = placeholder.Image.Source;
@@ -246,28 +250,21 @@ namespace P3_Projekt_WPF
                     int hej = productGrid.RowDefinitions.Count;
                 }
 
-
-
-
                 Debug.Print($@"{_settingsController.PictureFilePath}/{product.Value.ID}.png");
-                try
-                {
-                    //var test = new Bitmap(new Uri($@"{_settingsController.PictureFilePath}/{product.Value.ID}.png", UriKind.RelativeOrAbsolute)):
 
+                //BRug directory til at finde alle filtyper//
+
+                if(File.Exists($@"{_settingsController.PictureFilePath}/{product.Value.ID}.png"))
+                {
+                    BitmapImage bitMap = new BitmapImage(new Uri($@"{_settingsController.PictureFilePath}/{product.Value.ID}.png", UriKind.RelativeOrAbsolute));
                     var image = new Image();
 
-                    image.Source = new BitmapImage(new Uri($@"{_settingsController.PictureFilePath}/{product.Value.ID}.png", UriKind.RelativeOrAbsolute));
+                    image.Source = bitMap;
                     image.VerticalAlignment = VerticalAlignment.Center;
                     image.HorizontalAlignment = HorizontalAlignment.Center;
                     image.Stretch = Stretch.Uniform;
                     product.Value.Image = image;
                 }
-                catch
-                {
-
-                }
-
-
 
                 ProductControl productControl = new ProductControl(product.Value, _storageController.GroupDictionary);
                 productControl.SetValue(Grid.ColumnProperty, i % 5);
