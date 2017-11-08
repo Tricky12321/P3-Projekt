@@ -159,9 +159,23 @@ namespace P3_Projekt_WPF
         public void AddProductDialogOpener(object sender, RoutedEventArgs e)
         {
             CreateProduct addProductWindow = new CreateProduct();
+            foreach (Group group in _storageController.GroupDictionary.Values)
+            {
+                addProductWindow.comboBox_Group.Items.Add(group.Name);
+            }
+            foreach (string brand in _storageController.ProductDictionary.Values.Select(x => x.Brand).Distinct())
+            {
+                addProductWindow.comboBox_Brand.Items.Add(brand);
+            }
+            addProductWindow.output_ProductID.Text = Product.GetNextID().ToString();
             addProductWindow.btn_SaveAndQuit.Click += delegate{ addProductWindow.Close(); };
             addProductWindow.Show();
         }
+
+        /*
+        public void AddProduct(object sender, RoutedEventArgs e, 
+                               string name, string)
+        */
 
         private void ShowSpecificInfoProductStorage(object sender, RoutedEventArgs e)
         {
@@ -195,17 +209,22 @@ namespace P3_Projekt_WPF
 
                 Product placeProduct = product.Value;
 
-                /* #LORT
-                Debug.Print($@"{_settingsController.PictureFilePath}/{product.Value.ID}");
+
+
+                Debug.Print($@"{_settingsController.PictureFilePath}/{product.Value.ID}.png");
                 try
                 {
-                    placeProduct.Image.Source = new BitmapImage(new Uri($@"{_settingsController.PictureFilePath}/{product.Value.ID}.png", UriKind.RelativeOrAbsolute));
+                    var image = new Image();
+                    image.Source = new BitmapImage(new Uri($@"{_settingsController.PictureFilePath}/{product.Value.ID}.png", UriKind.RelativeOrAbsolute));
+                    image.Stretch = Stretch.Uniform;
+                    placeProduct.Image = image;
                 }
                 catch
                 {
                 
                 }
-                */
+
+
 
                 ProductControl productControl = new ProductControl(placeProduct, _storageController.GroupDictionary);
                 productControl.SetValue(Grid.ColumnProperty, i % 5);
