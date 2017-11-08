@@ -405,7 +405,13 @@ namespace P3_Projekt_WPF
             CreateTemporaryProduct createTemp = new CreateTemporaryProduct();
             createTemp.Show();
 
-            //createTemp.btn_AddTempProduct.cli
+            createTemp.btn_AddTempProduct.Click += delegate
+            {
+                string description = createTemp.textbox_Description.Text;
+                decimal price = decimal.Parse(createTemp.textbox_Price.Text);
+
+                _storageController.CreateTempProduct(description, price);
+            };
 
         }
 
