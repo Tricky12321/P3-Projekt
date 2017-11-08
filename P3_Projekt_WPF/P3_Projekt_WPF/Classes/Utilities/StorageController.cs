@@ -358,6 +358,16 @@ namespace P3_Projekt_WPF.Classes.Utilities
             }
         }
 
+        private void BrandGroupSearchThreaded()
+        {
+            _brandSearchDone = false;
+            _groupSearchDone = false;
+            Thread BrandSearchThread = new Thread(new ParameterizedThreadStart(BrandSearch));
+            Thread GroupSearchThread = new Thread(new ParameterizedThreadStart(GroupSearch));
+            BrandSearchThread.Start(_searchedString);
+            GroupSearchThread.Start(_searchedString);
+        }
+
         /////////--------------------SEARCH---------------------------------
         public ConcurrentQueue<Product> SearchForProduct(string searchedString)
         {
@@ -392,12 +402,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
                 _productSearchDone = true;
 
                 //will add all the matching brands to the productlist
-                _brandSearchDone = false;
-                _groupSearchDone = false;
-                Thread BrandSearchThread = new Thread(new ParameterizedThreadStart(BrandSearch));
-                Thread GroupSearchThread = new Thread(new ParameterizedThreadStart(GroupSearch));
-                BrandSearchThread.Start(searchedString);
-                GroupSearchThread.Start(searchedString);
+                BrandGroupSearchThreaded();
                 while (!_brandSearchDone && !_groupSearchDone)
                 {
                     Thread.Sleep(1);
