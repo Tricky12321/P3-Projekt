@@ -19,6 +19,7 @@ using P3_Projekt_WPF.Classes;
 using System.Diagnostics;
 using System.Threading;
 using System.Windows.Controls;
+//using System.Drawing;
 
 namespace P3_Projekt_WPF
 {
@@ -168,7 +169,7 @@ namespace P3_Projekt_WPF
                 addProductWindow.comboBox_Brand.Items.Add(brand);
             }
             addProductWindow.output_ProductID.Text = Product.GetNextID().ToString();
-            addProductWindow.btn_SaveAndQuit.Click += delegate{ addProductWindow.Close(); };
+            addProductWindow.btn_SaveAndQuit.Click += delegate { addProductWindow.Close(); };
             addProductWindow.Show();
         }
 
@@ -182,7 +183,11 @@ namespace P3_Projekt_WPF
             Debug.Print((sender as Button).Tag.ToString());
             Product placeholder = _storageController.ProductDictionary[Convert.ToInt32((sender as Button).Tag)];
 
-            image_ChosenProduct = placeholder.Image;
+            if (placeholder.Image != null)
+            {
+                image_ChosenProduct.Source = placeholder.Image.Source;
+            }
+
             textBlock_ChosenProduct.Text = $"ID: {placeholder.ID}\nNavn: {placeholder.Name}\nGruppe: {_storageController.GroupDictionary[placeholder.ProductGroupID].Name}\nMærke: {placeholder.Brand}\nPris: {placeholder.SalePrice}\nTilbudspris: {placeholder.DiscountPrice}\nIndkøbspris: {placeholder.PurchasePrice}\nLagerstatus:";
             foreach (KeyValuePair<int, int> storageWithAmount in placeholder.StorageWithAmount)
             {
@@ -207,26 +212,30 @@ namespace P3_Projekt_WPF
                     int hej = productGrid.RowDefinitions.Count;
                 }
 
-                Product placeProduct = product.Value;
 
 
 
                 Debug.Print($@"{_settingsController.PictureFilePath}/{product.Value.ID}.png");
                 try
                 {
+                    //var test = new Bitmap(new Uri($@"{_settingsController.PictureFilePath}/{product.Value.ID}.png", UriKind.RelativeOrAbsolute)):
+
                     var image = new Image();
+
                     image.Source = new BitmapImage(new Uri($@"{_settingsController.PictureFilePath}/{product.Value.ID}.png", UriKind.RelativeOrAbsolute));
+                    image.VerticalAlignment = VerticalAlignment.Center;
+                    image.HorizontalAlignment = HorizontalAlignment.Center;
                     image.Stretch = Stretch.Uniform;
-                    placeProduct.Image = image;
+                    product.Value.Image = image;
                 }
                 catch
                 {
-                
+
                 }
 
 
 
-                ProductControl productControl = new ProductControl(placeProduct, _storageController.GroupDictionary);
+                ProductControl productControl = new ProductControl(product.Value, _storageController.GroupDictionary);
                 productControl.SetValue(Grid.ColumnProperty, i % 5);
                 productControl.SetValue(Grid.RowProperty, i / 5);
                 productControl.btn_ShowMoreInformation.Tag = product.Value.ID;
