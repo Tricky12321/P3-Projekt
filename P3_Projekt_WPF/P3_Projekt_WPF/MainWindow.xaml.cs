@@ -132,7 +132,7 @@ namespace P3_Projekt_WPF
             Stopwatch TimeTester = new Stopwatch();
             TimeTester.Start();
             _storageController.GetAll();
-            while (!_storageController.ThreadDone())
+            while (!_storageController.ThreadsDone)
             {
                 Thread.Sleep(100);
             }
@@ -169,14 +169,31 @@ namespace P3_Projekt_WPF
                 addProductWindow.comboBox_Brand.Items.Add(brand);
             }
             addProductWindow.output_ProductID.Text = Product.GetNextID().ToString();
-            addProductWindow.btn_SaveAndQuit.Click += delegate { addProductWindow.Close(); };
+            addProductWindow.btn_SaveAndQuit.Click += delegate {
+                AddProduct(addProductWindow.textbox_Name.Text,
+                           addProductWindow.comboBox_Brand.Text,
+                           addProductWindow.comboBox_Group.Text,
+                           addProductWindow.textbox_PurchasePrice.Text,
+                           addProductWindow.textbox_SalePrice.Text,
+                           addProductWindow.textbox_DiscountPrice.Text,
+                           addProductWindow.textbox_Amount.Text,
+                           addProductWindow.ChosenFilePath);
+                addProductWindow.Close();
+            };
             addProductWindow.Show();
         }
 
-        /*
-        public void AddProduct(object sender, RoutedEventArgs e, 
-                               string name, string)
-        */
+        
+        public void AddProduct(string name, string brand, string group, string purchasePrice, string salePrice, string discountPrice, string amount, string filePath)
+        {
+            testtesttest.Text = $"Name: {name}, brand: {brand}, group: {group}, purchaseprice: {purchasePrice}, saleprice: {salePrice}, discountprice: {discountPrice}, amount: {amount}";
+
+            Product product = new Product(name, brand, Decimal.Parse(purchasePrice), _storageController.GroupDictionary.First(x => x.Value.Name.ToLower() == group).Key, (discountPrice != null) ? true : false, Decimal.Parse(salePrice), Decimal.Parse(discountPrice), filePath);
+
+            _storageController.ProductDictionary.TryAdd(product.ID, product);
+            product.UploadToDatabase();
+        }
+        
 
         private void ShowSpecificInfoProductStorage(object sender, RoutedEventArgs e)
         {

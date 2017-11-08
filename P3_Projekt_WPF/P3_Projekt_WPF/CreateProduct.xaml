@@ -32,7 +32,7 @@
             </TextBlock.Style>
         </TextBlock>
         <TextBlock x:Name="label_Brand" HorizontalAlignment="Left" Margin="10,55,0,0" TextWrapping="Wrap" Text="Mærke" FontSize="30" MinHeight="24" VerticalAlignment="Top"/>
-        <ComboBox x:Name="comboBox_Brand" HorizontalAlignment="Left" Margin="180,55,0,0" VerticalAlignment="Top" Width="280" Height="40" FontSize="30">
+        <ComboBox x:Name="comboBox_Brand" HorizontalAlignment="Left" Margin="180,55,0,0" VerticalAlignment="Top" Width="280" Height="40" FontSize="30" IsEditable="True">
             
         </ComboBox>
         <TextBlock x:Name="label_Group" HorizontalAlignment="Left" Margin="10,105,0,0" TextWrapping="Wrap" Text="Gruppe" FontSize="30" MinHeight="24" VerticalAlignment="Top"/>
