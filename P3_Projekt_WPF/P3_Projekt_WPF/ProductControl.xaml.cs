@@ -36,6 +36,7 @@ namespace P3_Projekt_WPF
                     img_ProductImage.Source = Utils.ImageSourceForBitmap(Properties.Resources.questionmark_png);
                     img_ProductImage.VerticalAlignment = VerticalAlignment.Center;
                     img_ProductImage.HorizontalAlignment = HorizontalAlignment.Center;
+                    img_ProductImage.Stretch = Stretch.Uniform;
                 }
             }
         }
@@ -46,6 +47,7 @@ namespace P3_Projekt_WPF
             InitializeComponent();
             _displayProduct = productForDisplay;
             txtboxImage = productForDisplay.Image;
+
             ShowProductInfo(groupDict);
             this.VerticalAlignment = VerticalAlignment.Stretch;
             this.HorizontalAlignment = HorizontalAlignment.Stretch;   

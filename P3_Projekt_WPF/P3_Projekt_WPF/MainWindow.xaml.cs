@@ -131,7 +131,7 @@ namespace P3_Projekt_WPF
             Stopwatch TimeTester = new Stopwatch();
             TimeTester.Start();
             _storageController.GetAll();
-            while (!_storageController.ThreadDone())
+            while (!_storageController.ThreadsDone)
             {
                 Thread.Sleep(100);
             }
@@ -228,12 +228,11 @@ namespace P3_Projekt_WPF
 
 
 
-
-                Debug.Print($@"{_settingsController.PictureFilePath}/{product.Value.ID}");
+                Debug.Print($@"{_settingsController.PictureFilePath}/{product.Value.ID}.png");
                 try
                 {
                     var image = new Image();
-                    image.Source = new BitmapImage(new Uri($@"{_settingsController.PictureFilePath}/{product.Value.ID}.jpg", UriKind.RelativeOrAbsolute));
+                    image.Source = new BitmapImage(new Uri($@"{_settingsController.PictureFilePath}/{product.Value.ID}.png", UriKind.RelativeOrAbsolute));
                     image.Stretch = Stretch.Uniform;
                     placeProduct.Image = image;
                 }
