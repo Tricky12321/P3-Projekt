@@ -610,6 +610,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
             }
 
             ProductDictionary.TryAdd(newProduct.ID, newProduct);
+            newProduct.UploadToDatabase();
         }
 
         //edit product, calles two different methods depending if its run by an admin
@@ -629,6 +630,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
         {
             TempProduct newTempProduct = new TempProduct(description, salePrice);
             TempProductList.Add(newTempProduct);
+            newTempProduct.UploadToDatabase();
         }
 
         /* User has already found the matching product ID.

@@ -400,7 +400,6 @@ namespace P3_Projekt_WPF
         private void btn_Temporary_Click(object sender, RoutedEventArgs e)
         {
             CreateTemporaryProduct createTemp = new CreateTemporaryProduct();
-            createTemp.Show();
 
             createTemp.btn_AddTempProduct.Click += delegate
             {
@@ -408,8 +407,9 @@ namespace P3_Projekt_WPF
                 decimal price = decimal.Parse(createTemp.textbox_Price.Text);
 
                 _storageController.CreateTempProduct(description, price);
+                createTemp.Close();
             };
-
+            createTemp.Show();
         }
 
         private void btn_PictureFilePath_Click(object sender, RoutedEventArgs e)
