@@ -621,9 +621,9 @@ namespace P3_Projekt_WPF.Classes.Utilities
         //----SEARCH-END---------------------
 
         //Creates product with storage and stocka as keyvalue, then add the product to the list
-        public void CreateProduct(string name, string brand, decimal purchasePrice, int groupID, bool discount, decimal discountPrice, decimal salePrice, Image image, params KeyValuePair<int, int>[] storageRoomStockInput)
+        public void CreateProduct(string name, string brand, decimal purchasePrice, int groupID, bool discount, decimal discountPrice, decimal salePrice, string imagePath, params KeyValuePair<int, int>[] storageRoomStockInput)
         {
-            Product newProduct = new Product(name, brand, purchasePrice, groupID, discount, salePrice, discountPrice, image);
+            Product newProduct = new Product(name, brand, purchasePrice, groupID, discount, salePrice, discountPrice);
 
             foreach (KeyValuePair<int, int> roomInput in storageRoomStockInput)
             {
@@ -634,15 +634,15 @@ namespace P3_Projekt_WPF.Classes.Utilities
         }
 
         //edit product, calles two different methods depending if its run by an admin
-        public void EditProduct(bool isAdmin, Product editProduct, string name, string brand, decimal purchasePrice, int groupID, bool discount, decimal salePrice, decimal discountPrice, Image image)
+        public void EditProduct(bool isAdmin, Product editProduct, string name, string brand, decimal purchasePrice, int groupID, bool discount, decimal salePrice, decimal discountPrice, string imagePath)
         {
             if (isAdmin)
             {
-                editProduct.AdminEdit(name, brand, purchasePrice, salePrice, groupID, discount, discountPrice, image);
+                editProduct.AdminEdit(name, brand, purchasePrice, salePrice, groupID, discount, discountPrice);
             }
             else
             {
-                editProduct.Edit(name, brand, groupID, image);
+                editProduct.Edit(name, brand, groupID);
             }
         }
 

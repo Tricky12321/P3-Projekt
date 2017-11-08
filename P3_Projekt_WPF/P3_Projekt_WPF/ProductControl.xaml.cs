@@ -29,7 +29,7 @@ namespace P3_Projekt_WPF
             {
                 if(value != null)
                 {
-                    _displayProduct.Image = value;
+                    _displayProduct.Image.Source = value.Source;
                 }
                 else
                 {
@@ -55,7 +55,6 @@ namespace P3_Projekt_WPF
 
         public void ShowProductInfo(ConcurrentDictionary<int, Group> groupDict)
         {
-            img_ProductImage = _displayProduct.Image;
             txtbox_Product.Text = $"ID: {_displayProduct.ID.ToString()}\nNavn: { _displayProduct.Name}\nGruppe: {groupDict[_displayProduct.ProductGroupID].Name}\nPris { _displayProduct.SalePrice.ToString()}DKK";
         }
     }
