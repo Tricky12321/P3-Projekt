@@ -13,15 +13,15 @@ namespace P3_Projekt_WPF.Classes.Utilities
 {
     public class StorageController
     {
-        public Dictionary<int, Product> ProductDictionary = new Dictionary<int, Product>();
-        public Dictionary<int, ServiceProduct> ServiceProductDictionary = new Dictionary<int, ServiceProduct>();
-        public Dictionary<int, Group> GroupDictionary = new Dictionary<int, Group>();
-        public Dictionary<int, StorageRoom> StorageRoomDictionary = new Dictionary<int, StorageRoom>();
-        public Dictionary<int, SaleTransaction> SaleTransactionsDictionary = new Dictionary<int, SaleTransaction>();
-        public Dictionary<int, Receipt> ReceiptDictionary = new Dictionary<int, Receipt>();
+        public ConcurrentDictionary<int, Product> ProductDictionary = new ConcurrentDictionary<int, Product>();
+        public ConcurrentDictionary<int, ServiceProduct> ServiceProductDictionary = new ConcurrentDictionary<int, ServiceProduct>();
+        public ConcurrentDictionary<int, Group> GroupDictionary = new ConcurrentDictionary<int, Group>();
+        public ConcurrentDictionary<int, StorageRoom> StorageRoomDictionary = new ConcurrentDictionary<int, StorageRoom>();
+        public ConcurrentDictionary<int, SaleTransaction> SaleTransactionsDictionary = new ConcurrentDictionary<int, SaleTransaction>();
+        public ConcurrentDictionary<int, Receipt> ReceiptDictionary = new ConcurrentDictionary<int, Receipt>();
         public List<TempProduct> TempProductList = new List<TempProduct>();
 
-
+        private ConcurrentQueue<Product> _productResults = new ConcurrentQueue<Product>();
         public StorageController()
         {
             //GetAllProductsFromDatabase();
@@ -44,6 +44,8 @@ namespace P3_Projekt_WPF.Classes.Utilities
         private bool _groupQueueDone = false;
         private bool _storageRoomQueueDone = false;
         private bool _serviceProductQueueDone = false;
+
+        private object _productDictionaryLock = new object();
         public bool ThreadDone()
         {
             //Debug.WriteLine(_productsCreateByThreads + " = " + _productsLoadedFromDatabase);
@@ -51,8 +53,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
             {
                 Debug.WriteLine("ProductQue: Done");
                 _productQueueDone = true;
-            }
-            else
+            } else
             {
                 return false;
             }
@@ -100,7 +101,10 @@ namespace P3_Projekt_WPF.Classes.Utilities
             Product NewProduct = new Product(Data);
             if (ProductDictionary.ContainsKey(NewProduct.ID) == false)
             {
-                ProductDictionary.Add(NewProduct.ID, NewProduct);
+                lock(_productDictionaryLock)
+                {
+                    ProductDictionary.TryAdd(NewProduct.ID, NewProduct);
+                }
             }
         }
 
@@ -108,14 +112,14 @@ namespace P3_Projekt_WPF.Classes.Utilities
         {
             Row Data = (row_data as Row);
             Group NewGroup = new Group(Data);
-            GroupDictionary.Add(NewGroup.ID, NewGroup);
+            GroupDictionary.TryAdd(NewGroup.ID, NewGroup);
         }
 
         private void CreateStorageRoom_Thread(object row_data)
         {
             Row Data = (row_data as Row);
             StorageRoom NewStorageRoom = new StorageRoom(Data);
-            StorageRoomDictionary.Add(NewStorageRoom.ID, NewStorageRoom);
+            StorageRoomDictionary.TryAdd(NewStorageRoom.ID, NewStorageRoom);
         }
 
         private void CreateTempProduct_Thread(object row_data)
@@ -132,12 +136,12 @@ namespace P3_Projekt_WPF.Classes.Utilities
         {
             Row Data = (row_data as Row);
             Receipt NewReceipt = new Receipt(Data);
-            ReceiptDictionary.Add(NewReceipt.ID, NewReceipt);
+            ReceiptDictionary.TryAdd(NewReceipt.ID, NewReceipt);
             foreach (var saleTransaction in NewReceipt.Transactions)
             {
                 if (saleTransaction is SaleTransaction)
                 {
-                    SaleTransactionsDictionary.Add(saleTransaction.GetID(), saleTransaction);
+                    SaleTransactionsDictionary.TryAdd(saleTransaction.GetID(), saleTransaction);
                 }
             }
         }
@@ -146,7 +150,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
         {
             Row Data = (row_data as Row);
             ServiceProduct NewServiceProduct = new ServiceProduct(Data);
-            ServiceProductDictionary.Add(NewServiceProduct.ID, NewServiceProduct);
+            ServiceProductDictionary.TryAdd(NewServiceProduct.ID, NewServiceProduct);
         }
 
         private void CalculateThreadCount(int ProductCount)
@@ -284,13 +288,14 @@ namespace P3_Projekt_WPF.Classes.Utilities
 
         public void DeleteProduct(int ProductID)
         {
-            ProductDictionary.Remove(ProductID);
+            Product outVal = null;
+            ProductDictionary.TryRemove(ProductID, out outVal);
         }
 
         public void CreateGroup(string name, string description)
         {
             Group newGroup = new Group(name, description);
-            GroupDictionary.Add(newGroup.ID, newGroup);
+            GroupDictionary.TryAdd(newGroup.ID, newGroup);
         }
 
         public void EditGroup(int id, string name, string description)
@@ -308,7 +313,8 @@ namespace P3_Projekt_WPF.Classes.Utilities
             {
                 product.ProductGroupID = GroupDictionary[0].ID;
             }
-            GroupDictionary.Remove(GroupID);
+            Group outVal = null;
+            GroupDictionary.TryRemove(GroupID, out outVal);
         }
 
         //Assign new group to products left with no group
@@ -319,7 +325,8 @@ namespace P3_Projekt_WPF.Classes.Utilities
             {
                 product.ProductGroupID = GroupDictionary[moveID].ID;
             }
-            GroupDictionary.Remove(removeID);
+            Group outVal = null;
+            GroupDictionary.TryRemove(removeID, out outVal);
         }
         // Levenstein multithreading
         private bool _productSearchDone = false;
@@ -598,7 +605,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
                 newProduct.StorageWithAmount[roomInput.Key] = roomInput.Value;
             }
 
-            ProductDictionary.Add(newProduct.ID, newProduct);
+            ProductDictionary.TryAdd(newProduct.ID, newProduct);
         }
 
         //edit product, calles two different methods depending if its run by an admin
@@ -642,7 +649,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
         public void CreateStorageRoom(string name, string description)
         {
             StorageRoom newRoom = new StorageRoom(name, description);
-            StorageRoomDictionary.Add(newRoom.ID, newRoom);
+            StorageRoomDictionary.TryAdd(newRoom.ID, newRoom);
 
             foreach (Product product in ProductDictionary.Values)
             {
@@ -664,7 +671,8 @@ namespace P3_Projekt_WPF.Classes.Utilities
                 product.StorageWithAmount.Remove(id);
                 product.UpdateInDatabase();
             }
-            StorageRoomDictionary.Remove(id);
+            StorageRoom outVal = null;
+            StorageRoomDictionary.TryRemove(id, out outVal);
             string deleteQuery = $"DELETE FROM `storagerooms` WHERE `id` = '{id}'";
             Mysql.RunQuery(deleteQuery);
         }
