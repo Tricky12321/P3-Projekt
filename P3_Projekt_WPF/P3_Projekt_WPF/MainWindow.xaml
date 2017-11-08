@@ -228,11 +228,10 @@
                                 <RowDefinition Height="2*"/>
                             </Grid.RowDefinitions>
                             <Image x:Name="image_ChosenProduct" Margin="0,0,0,0" Stretch="Fill"/>
-                            <TextBlock x:Name="textBlock_ChosenProduct" TextWrapping="Wrap" Text="TextBlock" Grid.Row="1" Margin="0,0,0,0"/>
+                            <TextBlock x:Name="textBlock_ChosenProduct" TextWrapping="Wrap" Grid.Row="1" Margin="0,0,0,0"/>
 
                         </Grid>
                     </Border>
-                    <TextBlock x:Name="testtesttest" HorizontalAlignment="Left" Margin="283,15,0,0" TextWrapping="NoWrap"  Text="TextBlock" VerticalAlignment="Top" FontSize="12" Width="1251" Grid.ColumnSpan="2"/>
 
 
                 </Grid>

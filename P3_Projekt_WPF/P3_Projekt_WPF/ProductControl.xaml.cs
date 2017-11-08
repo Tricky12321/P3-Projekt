@@ -27,9 +27,9 @@ namespace P3_Projekt_WPF
             get { return _displayProduct.Image; }
             set
             {
-                if(value != null)
+                if (value != null)
                 {
-                    _displayProduct.Image.Source = value.Source;
+                    img_ProductImage.Source = value.Source;
                 }
                 else
                 {
