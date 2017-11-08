@@ -345,23 +345,6 @@ namespace P3_Projekt_WPF
             _settingsController.SpecifyPictureFilePath();
         }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
         private void TextInputNoNumber(object sender, TextCompositionEventArgs e)
         {
             // Only allows number in textfield

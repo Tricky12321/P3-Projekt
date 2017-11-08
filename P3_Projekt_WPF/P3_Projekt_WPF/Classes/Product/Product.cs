@@ -75,6 +75,13 @@ namespace P3_Projekt_WPF.Classes
             SalePrice = salePrice;
         }
 
+        public int GetNextID()
+        {
+            string sql = "SHOW TABLE STATUS LIKE 'products'";
+            TableDecode Results = Mysql.RunQueryWithReturn(sql);
+            return Convert.ToInt32(Results.RowData[0].Values[10]);
+        }
+
         //modtage storage transaction?
         /*public void Deposit(StorageRoom depositRoom, int numberDeposited)
         {
