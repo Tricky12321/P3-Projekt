@@ -15,18 +15,20 @@ using System.Drawing;
 
 namespace P3_Projekt_WPF
 {
-    public delegate void ImageChosen(String ImageName);
+    public delegate void ImageChosen(string ImageName);
     /// <summary>
     /// Interaction logic for CreateProduct.xaml
     /// </summary>
     public partial class CreateProduct : Window
     {
+        public string ChosenFilePath;
+
         public CreateProduct()
         {
             InitializeComponent();
             btn_AddPicture.Click += PickImage;
-            ImageChosenEvent += ShowChosenImage;
-
+            ImageChosenEvent += (FilePath) => { image_Product.Source = new BitmapImage(new Uri(FilePath)); };
+            ImageChosenEvent += (FilePath) => { ChosenFilePath = FilePath; };
         }
 
         public event ImageChosen ImageChosenEvent;
@@ -38,11 +40,6 @@ namespace P3_Projekt_WPF
                 System.Windows.Forms.DialogResult result = dialog.ShowDialog();
                 ImageChosenEvent(dialog.FileName);
             }
-        }
-
-        public void ShowChosenImage(string ImageName)
-        {
-            image_Product.Source = new BitmapImage(new Uri(ImageName));
         }
     }
 }
