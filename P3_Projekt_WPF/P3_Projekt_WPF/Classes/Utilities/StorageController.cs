@@ -602,7 +602,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
         //Creates product with storage and stocka as keyvalue, then add the product to the list
         public void CreateProduct(string name, string brand, decimal purchasePrice, int groupID, bool discount, decimal discountPrice, decimal salePrice, string imagePath, params KeyValuePair<int, int>[] storageRoomStockInput)
         {
-            Product newProduct = new Product(name, brand, purchasePrice, groupID, discount, salePrice, discountPrice, imagePath);
+            Product newProduct = new Product(name, brand, purchasePrice, groupID, discount, salePrice, discountPrice);
 
             foreach (KeyValuePair<int, int> roomInput in storageRoomStockInput)
             {
@@ -617,11 +617,11 @@ namespace P3_Projekt_WPF.Classes.Utilities
         {
             if (isAdmin)
             {
-                editProduct.AdminEdit(name, brand, purchasePrice, salePrice, groupID, discount, discountPrice, imagePath);
+                editProduct.AdminEdit(name, brand, purchasePrice, salePrice, groupID, discount, discountPrice);
             }
             else
             {
-                editProduct.Edit(name, brand, groupID, imagePath);
+                editProduct.Edit(name, brand, groupID);
             }
         }
 

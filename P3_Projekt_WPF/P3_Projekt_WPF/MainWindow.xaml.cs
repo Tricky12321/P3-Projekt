@@ -176,19 +176,16 @@ namespace P3_Projekt_WPF
                            addProductWindow.textbox_PurchasePrice.Text,
                            addProductWindow.textbox_SalePrice.Text,
                            addProductWindow.textbox_DiscountPrice.Text,
-                           addProductWindow.textbox_Amount.Text,
-                           addProductWindow.ChosenFilePath);
+                           addProductWindow.textbox_Amount.Text);
                 addProductWindow.Close();
             };
             addProductWindow.Show();
         }
 
         
-        public void AddProduct(string name, string brand, string group, string purchasePrice, string salePrice, string discountPrice, string amount, string filePath)
+        public void AddProduct(string name, string brand, string group, string purchasePrice, string salePrice, string discountPrice, string amount)
         {
-            testtesttest.Text = $"Name: {name}, brand: {brand}, group: {group}, purchaseprice: {purchasePrice}, saleprice: {salePrice}, discountprice: {discountPrice}, amount: {amount}";
-
-            Product product = new Product(name, brand, Decimal.Parse(purchasePrice), _storageController.GroupDictionary.First(x => x.Value.Name.ToLower() == group).Key, (discountPrice != null) ? true : false, Decimal.Parse(salePrice), Decimal.Parse(discountPrice), filePath);
+            Product product = new Product(name, brand, Decimal.Parse(purchasePrice), _storageController.GroupDictionary.First(x => x.Value.Name.ToLower() == group).Key, (discountPrice != null) ? true : false, Decimal.Parse(salePrice), Decimal.Parse(discountPrice));
 
             _storageController.ProductDictionary.TryAdd(product.ID, product);
             product.UploadToDatabase();
