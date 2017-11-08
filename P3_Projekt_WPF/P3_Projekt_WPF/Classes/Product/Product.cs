@@ -115,7 +115,7 @@ namespace P3_Projekt_WPF.Classes
             DiscountBool = Convert.ToBoolean(results.Values[5]);            // discount
             DiscountPrice = Convert.ToDecimal(results.Values[6]);           // discount_price
             _active = Convert.ToBoolean(results.Values[7]);                 // active
-            CreatedTime = Utils.UnixTimeStampToDateTime(Convert.ToDouble(results.Values[8])); // CreatedTime
+            CreatedTime = Convert.ToDateTime(results.Values[8]); // CreatedTime
             GetStorageStatus();
         }
         // Henter storage status fra databasen om hvilke lagere der har hvilket antal af produkter
