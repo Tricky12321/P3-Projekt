@@ -159,9 +159,23 @@ namespace P3_Projekt_WPF
         public void AddProductDialogOpener(object sender, RoutedEventArgs e)
         {
             CreateProduct addProductWindow = new CreateProduct();
+            foreach (Group group in _storageController.GroupDictionary.Values)
+            {
+                addProductWindow.comboBox_Group.Items.Add(group.Name);
+            }
+            foreach (string brand in _storageController.ProductDictionary.Values.Select(x => x.Brand).Distinct())
+            {
+                addProductWindow.comboBox_Brand.Items.Add(brand);
+            }
+            addProductWindow.output_ProductID.Text = Product.GetNextID().ToString();
             addProductWindow.btn_SaveAndQuit.Click += delegate{ addProductWindow.Close(); };
             addProductWindow.Show();
         }
+
+        /*
+        public void AddProduct(object sender, RoutedEventArgs e, 
+                               string name, string)
+        */
 
         private void ShowSpecificInfoProductStorage(object sender, RoutedEventArgs e)
         {
