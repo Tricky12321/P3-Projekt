@@ -7,30 +7,14 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows;
 using P3_Projekt_WPF;
+using System.Diagnostics;
 
 namespace P3_Projekt_WPF.Classes.Utilities
 {
-    class FastButton : Button
-    {
-        public int ProductID { get; set; }
-        public string Button_Name { get; set; }
-        public FastButton()
-        {
-            
-        }
-
-        public FastButton(int productID, string button_name)
-        {
-            ProductID = productID;
-            Button_Name = button_name;
-
-        }
-    }
-
     class SettingsController
     {
         public List<FastButton> quickButtonList = new List<FastButton>();
-
+        public string PictureFilePath = @"C:/Users/Mads Stenkær/Desktop/test";
 
         public void AddNewQuickButton(string buttonText, int productID, double gridWidth, double gridHeight, RoutedEventHandler btn_FastButton_click)
         {
@@ -48,6 +32,15 @@ namespace P3_Projekt_WPF.Classes.Utilities
             button.SetValue(Grid.RowProperty, quickButtonList.Count / 2);
 
             quickButtonList.Add(button);
+        }
+
+        public void SpecifyPictureFilePath()
+        {
+            using (var dialog = new System.Windows.Forms.FolderBrowserDialog())
+            {
+                System.Windows.Forms.DialogResult result = dialog.ShowDialog();
+                PictureFilePath = dialog.SelectedPath;
+            }
         }
     }
 }

@@ -37,24 +37,24 @@ namespace P3_Projekt_WPF.Classes.Utilities
         // Til at tjekke om de forskellige tråde er færdige med at hente data.
         private int _productsLoadedFromDatabase = 0;
         private int _productsCreateByThreads = -1;
-        private bool _productQueDone = false;
-        private bool _tempProductQueDone = false;
-        private bool _groupQueDone = false;
-        private bool _storageRoomQueDone = false;
+        private bool _productQueueDone = false;
+        private bool _tempProductQueueDone = false;
+        private bool _groupQueueDone = false;
+        private bool _storageRoomQueueDone = false;
 
         public bool ThreadDone()
         {
             //Debug.WriteLine(_productsCreateByThreads + " = " + _productsLoadedFromDatabase);
-            if (!_productQueDone && (_productsCreateByThreads == _productsLoadedFromDatabase))
+            if (!_productQueueDone && (_productsCreateByThreads == _productsLoadedFromDatabase))
             {
                 Debug.WriteLine("ProductQue: Done");
-                _productQueDone = true;
+                _productQueueDone = true;
             }
             else
             {
                 return false;
             }
-            if (_groupQueDone && _productQueDone && _tempProductQueDone && _storageRoomQueDone)
+            if (_groupQueueDone && _productQueueDone && _tempProductQueueDone && _storageRoomQueueDone)
             {
                 return true;
             }
@@ -76,7 +76,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
         // Når trådene skal få opgaver
         private void HandleCreateProductQue()
         {
-            while (!_productQueDone)
+            while (!_productQueueDone)
             {
                 Row Information = null;
                 if (_productInformation.TryDequeue(out Information) == true)
@@ -181,7 +181,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
                 CreateGroups_Thread(row);
             }
             Debug.WriteLine("GroupQue: Done!");
-            _groupQueDone = true;
+            _groupQueueDone = true;
         }
 
         public void GetAllStorageRooms()
@@ -193,7 +193,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
                 CreateStorageRoom_Thread(row);
             }
             Debug.WriteLine("StorageRoomQue: Done!");
-            _storageRoomQueDone = true;
+            _storageRoomQueueDone = true;
         }
 
         public void GetAllTempProductsFromDatabase()
@@ -205,7 +205,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
                 CreateTempProduct_Thread(row);
             }
             Debug.WriteLine("TempProductQue: Done!");
-            _tempProductQueDone = true;
+            _tempProductQueueDone = true;
         }
 
         public void GetAllReceiptsFromDatabase()
@@ -287,23 +287,24 @@ namespace P3_Projekt_WPF.Classes.Utilities
         private ConcurrentQueue<Product> _productsToSearch = null;
         private ConcurrentQueue<Product> _productsFound = null;
         private List<Thread> _productSearchThreads = new List<Thread>();
-        private void LevensteinSearch_Thread(object searchedString)
+        private string _searchedString = "";
+        private void LevenshteinSearch_Thread()
         {
             while (!_productSearchDone)
             {
                 Product p = null;
                 if (_productsToSearch.TryDequeue(out p) && p != null)
                 {
-                    LevenshteinsProductSearch((searchedString as string), p, ref _productsFound);
+                    LevenshteinsProductSearch(_searchedString, p, ref _productsFound);
                 }
             }
         }
 
-        private void StartLevensteinSearchThreads()
+        private void StartLevenshteinSearchThreads()
         {
             for (int i = 0; i < _productThreadCount; i++)
             {
-                Thread NewThread = new Thread(new ParameterizedThreadStart(LevensteinSearch_Thread));
+                Thread NewThread = new Thread(new ThreadStart(LevenshteinSearch_Thread));
                 _productSearchThreads.Add(NewThread);
                 NewThread.Start();
             }
@@ -333,7 +334,8 @@ namespace P3_Projekt_WPF.Classes.Utilities
                 _productsToSearch = new ConcurrentQueue<Product>(ProductDictionary.Values);
                 _productsFound = productsToReturn;
                 // Starter multithreading 
-                StartLevensteinSearchThreads();
+                _searchedString = searchedString;
+                StartLevenshteinSearchThreads();
                 _productSearchDone = false;
                 while (_productsToSearch.IsEmpty == false)
                 {
