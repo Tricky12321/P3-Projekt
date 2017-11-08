@@ -8,13 +8,15 @@ using System.Windows.Media;
 using System.Windows;
 using P3_Projekt_WPF;
 using System.Diagnostics;
-
+using System.Windows.Controls;
+using System.Windows.Input;
 namespace P3_Projekt_WPF.Classes.Utilities
 {
     class SettingsController
     {
         public List<FastButton> quickButtonList = new List<FastButton>();
-        public string PictureFilePath = @"C:/Users/Mads Stenkær/Desktop/test";
+        public Dictionary<Key, FastButton> quickButtonKeyList = new Dictionary<Key, FastButton>();
+        public string PictureFilePath = @"C:";
 
         public void AddNewQuickButton(string buttonText, int productID, double gridWidth, double gridHeight, RoutedEventHandler btn_FastButton_click)
         {

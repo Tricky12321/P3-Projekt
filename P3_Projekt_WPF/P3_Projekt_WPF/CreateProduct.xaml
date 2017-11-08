@@ -12,7 +12,7 @@
             <ColumnDefinition Width="230*"/>
         </Grid.ColumnDefinitions>
         <TextBlock x:Name="label_Name" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Navn" FontSize="30" Margin="10,5,0,0" MinHeight="40" VerticalAlignment="Top"/>
-        <TextBox Padding="0,0,0,0" x:Name="textbox_Name" FontSize="18" Grid.ColumnSpan="1" HorizontalAlignment="Left" Width="280" MinHeight="40" VerticalAlignment="Top" Margin="180,5,0,0">
+        <TextBox Padding="0,0,0,0" x:Name="textbox_Name" FontSize="30" Grid.ColumnSpan="1" HorizontalAlignment="Left" Width="280" MinHeight="40" VerticalAlignment="Top" Margin="180,5,0,0">
             <TextBox.Resources>
                 <Style TargetType="{x:Type Border}">
                     <Setter Property="CornerRadius" Value="10"/>
@@ -32,16 +32,12 @@
             </TextBlock.Style>
         </TextBlock>
         <TextBlock x:Name="label_Brand" HorizontalAlignment="Left" Margin="10,55,0,0" TextWrapping="Wrap" Text="Mærke" FontSize="30" MinHeight="24" VerticalAlignment="Top"/>
-        <ComboBox x:Name="comboBox_Brand" HorizontalAlignment="Left" Margin="180,55,0,0" VerticalAlignment="Top" Width="280" Height="40" FontSize="30">
-            <ComboBoxItem>ComboBox Item #1</ComboBoxItem>
-            <ComboBoxItem>ComboBox Item #2</ComboBoxItem>
-            <ComboBoxItem>ComboBox Item #3</ComboBoxItem>
+        <ComboBox x:Name="comboBox_Brand" HorizontalAlignment="Left" Margin="180,55,0,0" VerticalAlignment="Top" Width="280" Height="40" FontSize="30" IsEditable="True">
+            
         </ComboBox>
         <TextBlock x:Name="label_Group" HorizontalAlignment="Left" Margin="10,105,0,0" TextWrapping="Wrap" Text="Gruppe" FontSize="30" MinHeight="24" VerticalAlignment="Top"/>
         <ComboBox x:Name="comboBox_Group" HorizontalAlignment="Left" Margin="180,105,0,0" VerticalAlignment="Top" Width="280" Height="40" FontSize="30">
-            <ComboBoxItem>ComboBox Item #1</ComboBoxItem>
-            <ComboBoxItem>ComboBox Item #2</ComboBoxItem>
-            <ComboBoxItem>ComboBox Item #3</ComboBoxItem>
+           
         </ComboBox>
         <TextBlock x:Name="label_PurchasePrice" HorizontalAlignment="Left" Margin="10,155,0,0" TextWrapping="Wrap" Text="Indkøbspris" FontSize="30" MinHeight="24" VerticalAlignment="Top"/>
         <TextBox Padding="10,0,0,0" x:Name="textbox_PurchasePrice" Margin="180,155,0,0" FontSize="30" Grid.ColumnSpan="1" Height="40" VerticalAlignment="Top" HorizontalAlignment="Left" Width="280">
@@ -128,7 +124,7 @@
 
         <Button Style="{StaticResource Flat_Button}" x:Name="btn_AddPicture" Content="Tilføj billede" FontSize="30" Grid.Column="1" Margin="75,260,74,0" Height="45" VerticalAlignment="Top" HorizontalAlignment="Center" Width="174" />
         <Border BorderThickness="1" BorderBrush="Black"  Grid.Column="1" HorizontalAlignment="Center" Height="207" Margin="0,40,0,0" VerticalAlignment="Top" Width="368">
-            <Image x:Name="image" Grid.Column="1" HorizontalAlignment="Right" Height="207" Margin="0,0,0,0" VerticalAlignment="Top" Width="368" />
+            <Image x:Name="image_Product" Grid.Column="1" HorizontalAlignment="Right" Height="207" Margin="0,0,0,0" VerticalAlignment="Top" Width="368" Stretch="Fill"/>
         </Border>
 
         <Button Style="{StaticResource Flat_Button}" x:Name="btn_SaveAndQuit" Content="Gem og Afslut"  FontSize="30" Grid.Column="2" Margin="0,0,10,10" Height="45" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="220"/>

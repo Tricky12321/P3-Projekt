@@ -14,7 +14,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using P3_Projekt_WPF.Classes;
 using P3_Projekt_WPF.Classes.Utilities;
-
+using System.Collections.Concurrent;
 namespace P3_Projekt_WPF
 {
     /// <summary>
@@ -29,31 +29,32 @@ namespace P3_Projekt_WPF
             {
                 if(value != null)
                 {
-                    _displayProduct.Image = value;
+                    _displayProduct.Image.Source = value.Source;
                 }
                 else
                 {
                     img_ProductImage.Source = Utils.ImageSourceForBitmap(Properties.Resources.questionmark_png);
                     img_ProductImage.VerticalAlignment = VerticalAlignment.Center;
                     img_ProductImage.HorizontalAlignment = HorizontalAlignment.Center;
+                    img_ProductImage.Stretch = Stretch.Uniform;
                 }
             }
         }
 
         private Product _displayProduct;
-        public ProductControl(Product productForDisplay, Dictionary<int, Group> groupDict)
+        public ProductControl(Product productForDisplay, ConcurrentDictionary<int, Group> groupDict)
         {
             InitializeComponent();
             _displayProduct = productForDisplay;
             txtboxImage = productForDisplay.Image;
+
             ShowProductInfo(groupDict);
             this.VerticalAlignment = VerticalAlignment.Stretch;
             this.HorizontalAlignment = HorizontalAlignment.Stretch;   
         }
 
-        public void ShowProductInfo(Dictionary<int, Group> groupDict)
+        public void ShowProductInfo(ConcurrentDictionary<int, Group> groupDict)
         {
-            img_ProductImage = _displayProduct.Image;
             txtbox_Product.Text = $"ID: {_displayProduct.ID.ToString()}\nNavn: { _displayProduct.Name}\nGruppe: {groupDict[_displayProduct.ProductGroupID].Name}\nPris { _displayProduct.SalePrice.ToString()}DKK";
         }
     }
