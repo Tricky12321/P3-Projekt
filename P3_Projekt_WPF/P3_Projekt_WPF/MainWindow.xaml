@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:P3_Projekt_WPF"
-        xmlns:Classes="clr-namespace:P3_Projekt_WPF.Classes" x:Class="P3_Projekt_WPF.MainWindow"
+        xmlns:Classes="clr-namespace:P3_Projekt_WPF.Classes" xmlns:System="clr-namespace:System;assembly=mscorlib" x:Class="P3_Projekt_WPF.MainWindow"
         mc:Ignorable="d"
         Title="Børglum Kloster Lager og Salg" MinHeight="768" Height="1396" MinWidth="1366" Width="2068" Background="#FF919191" WindowState="Maximized">
     <Grid>
@@ -83,7 +83,7 @@
                             <Style TargetType="{x:Type TextBlock}">
                                 <Setter Property="Visibility" Value="Collapsed"/>
                                 <Style.Triggers>
-                                    <DataTrigger Binding="{Binding Text, ElementName = textBox_AddProductID}" Value="">
+                                    <DataTrigger Binding="{Binding Text, ElementName=textBox_AddProductID}" Value="">
                                         <Setter Property="Visibility" Value="Visible"/>
                                     </DataTrigger>
                                 </Style.Triggers>
@@ -127,7 +127,7 @@
                             <GridView x:Name="grid_Receipt">
                                 <GridView.ColumnHeaderContainerStyle>
                                     <Style>
-                                        <Setter Property="FrameworkElement.Visibility"  Value="Collapsed"/>
+                                        <Setter Property="UIElement.Visibility"  Value="Collapsed"/>
                                     </Style>
                                 </GridView.ColumnHeaderContainerStyle>
 
@@ -280,7 +280,7 @@
                     <Button x:Name="Button_Statistik" Grid.ColumnSpan="2" Content="Opret Statistik" HorizontalAlignment="Left" Margin="20,0,0,22" Grid.Row="1" Width="489" Background="#FFC5C5C5" Style="{StaticResource Flat_Button}" Height="118" VerticalAlignment="Bottom"/>
                 </Grid>
             </TabItem>
-            <TabItem x:Name="tab_Settings" Header="Indstillinger" Width="190" Height="46" Margin="0,-2,0,0" VerticalAlignment="Bottom">
+            <TabItem x:Name="tab_Settings" Header="Indstillinger" Width="190" Margin="0">
 
                 <Grid Background="#FFE5E5E5">
                     <Border BorderBrush="Black" BorderThickness="1" Height="1" VerticalAlignment="Top" Margin="-34,0,-79,0" Grid.Row="1"/>
@@ -290,7 +290,7 @@
                         <TabItem Header="Salgs Indstillinger" >
                             <Grid x:Name="indstillinger_Grid" Margin="5,0">
                                 <Grid.RowDefinitions>
-                                    <RowDefinition Height="100"></RowDefinition>
+                                    <RowDefinition Height="100"/>
                                 </Grid.RowDefinitions>
                                 <TextBox TextCompositionManager.PreviewTextInput="TextInputNoNumber" Padding="10,0,0,0" x:Name="textBox_CreateQuickBtnID" Margin="10,11,0,0" FontSize="33" Height="50" VerticalAlignment="Top" HorizontalAlignment="Left" Width="217" MaxLength="10">
                                     <TextBox.Resources>
@@ -375,8 +375,15 @@
                             <Button Style="{StaticResource Flat_Button}" x:Name="btn_PictureFilePath" Content="Vælg billedmappe til produkter" HorizontalAlignment="Left" Margin="50,50,0,0" VerticalAlignment="Top" Width="466" Height="100" Click="btn_PictureFilePath_Click" />
                         </TabItem>
 
-                        <TabItem Header="Admin Indstilling">
+                        <TabItem Header="Admin Indstilling"/>
+                        <TabItem Header="Information">
+                            <DataGrid x:Name="InformationGrid" Margin="2,0,-3,-7" IsReadOnly="True" EnableColumnVirtualization="True">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn x:Name="title" Binding="{x:Null}" ClipboardContentBinding="{x:Null}"/>
+                                    <DataGridTextColumn x:Name="value" Binding="{x:Null}" ClipboardContentBinding="{x:Null}"/>
+                                </DataGrid.Columns>
 
+                            </DataGrid>
 
                         </TabItem>
                     </TabControl>
