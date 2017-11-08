@@ -8,11 +8,13 @@ using P3_Projekt_WPF.Classes.Database;
 using System.Threading;
 using System.Collections.Concurrent;
 using System.Diagnostics;
+using P3_Projekt_WPF.Classes.Exceptions;
 namespace P3_Projekt_WPF.Classes.Utilities
 {
     public class StorageController
     {
         public Dictionary<int, Product> ProductDictionary = new Dictionary<int, Product>();
+        public Dictionary<int, ServiceProduct> ServiceProductDictionary = new Dictionary<int, ServiceProduct>();
         public Dictionary<int, Group> GroupDictionary = new Dictionary<int, Group>();
         public Dictionary<int, StorageRoom> StorageRoomDictionary = new Dictionary<int, StorageRoom>();
         public Dictionary<int, SaleTransaction> SaleTransactionsDictionary = new Dictionary<int, SaleTransaction>();
@@ -41,7 +43,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
         private bool _tempProductQueueDone = false;
         private bool _groupQueueDone = false;
         private bool _storageRoomQueueDone = false;
-
+        private bool _serviceProductQueueDone = false;
         public bool ThreadDone()
         {
             //Debug.WriteLine(_productsCreateByThreads + " = " + _productsLoadedFromDatabase);
@@ -54,7 +56,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
             {
                 return false;
             }
-            if (_groupQueueDone && _productQueueDone && _tempProductQueueDone && _storageRoomQueueDone)
+            if (_groupQueueDone && _productQueueDone && _tempProductQueueDone && _storageRoomQueueDone && _serviceProductQueueDone)
             {
                 return true;
             }
@@ -140,21 +142,32 @@ namespace P3_Projekt_WPF.Classes.Utilities
             }
         }
 
+        private void CreateServiceProduct_Thread(object row_data)
+        {
+            Row Data = (row_data as Row);
+            ServiceProduct NewServiceProduct = new ServiceProduct(Data);
+            ServiceProductDictionary.Add(NewServiceProduct.ID, NewServiceProduct);
+        }
+
         private void CalculateThreadCount(int ProductCount)
         {
             if (ProductCount > 100)
             {
                 // Laver en tråd for hvert 5 produkter (100 produkter = 20 tråde)
-                _productThreadsCount = Convert.ToInt32(Math.Floor((decimal)_productsLoadedFromDatabase / 3));
+                _productThreadsCount = Convert.ToInt32(Math.Floor((decimal)_productsLoadedFromDatabase / 3)+5);
             }
-            else if (ProductCount > 50)
+            else if (ProductCount > 33)
             {
-                // Laver en tråd for hvert 3 produkt (50 produkter = 16 tråde)
-                _productThreadsCount = Convert.ToInt32(Math.Floor((decimal)_productsLoadedFromDatabase / 2));
+                // Laver en tråd for hvert 2 produkt (50 produkter = 25 tråde)
+                _productThreadsCount = Convert.ToInt32(Math.Floor((decimal)_productsLoadedFromDatabase / 2)+5);
             }
             else
             {
                 _productThreadsCount = 20;
+            }
+            if (_productThreadCount > 50)
+            {
+                _productThreadCount = 50;
             }
         }
 
@@ -184,7 +197,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
             _groupQueueDone = true;
         }
 
-        public void GetAllStorageRooms()
+        public void GetAllStorageRoomsFromDatabase()
         {
             string sql = "SELECT * FROM `storagerooms`";
             TableDecode Results = Mysql.RunQueryWithReturn(sql);
@@ -208,6 +221,25 @@ namespace P3_Projekt_WPF.Classes.Utilities
             _tempProductQueueDone = true;
         }
 
+        public void GetAllServiceProductsFromDatabase()
+        {
+            string sql = "SELECT * FROM `service_products`";
+            try
+            {
+                TableDecode Results = Mysql.RunQueryWithReturn(sql);
+                foreach (var row in Results.RowData)
+                {
+                    CreateServiceProduct_Thread(row);
+                }
+            }
+            catch (EmptyTableException)
+            {
+
+            }
+            Debug.WriteLine("ServiceProductQueue: Done!");
+            _serviceProductQueueDone = true;
+        }
+
         public void GetAllReceiptsFromDatabase()
         {
             string sql = "SELECT * FROM `receipt`";
@@ -220,22 +252,32 @@ namespace P3_Projekt_WPF.Classes.Utilities
 
         public void GetAll()
         {
+            _productsLoadedFromDatabase = 0;
+            _productsCreateByThreads = -1;
+            _productQueueDone = false;
+            _tempProductQueueDone = false;
+            _groupQueueDone = false;
+            _storageRoomQueueDone = false;
+            _serviceProductQueueDone = false;
             // Multithreading the different mysql calls, so it goes much faster
             Thread GetAllProductsThread = new Thread(new ThreadStart(GetAllProductsFromDatabase));
             Thread GetAllGroupsThread = new Thread(new ThreadStart(GetAllGroupsFromDatabase));
             Thread GetAllTempProductsThread = new Thread(new ThreadStart(GetAllTempProductsFromDatabase));
-            Thread GetAllStorageRoomsThread = new Thread(new ThreadStart(GetAllStorageRooms));
+            Thread GetAllStorageRoomsThread = new Thread(new ThreadStart(GetAllStorageRoomsFromDatabase));
+            Thread GetAllServiceProductsThread = new Thread(new ThreadStart(GetAllServiceProductsFromDatabase));
             lock (ThreadLock)
             {
                 Threads.Add(GetAllProductsThread);
                 Threads.Add(GetAllGroupsThread);
                 Threads.Add(GetAllTempProductsThread);
                 Threads.Add(GetAllStorageRoomsThread);
+                Threads.Add(GetAllServiceProductsThread);
             }
             GetAllProductsThread.Start();
             GetAllGroupsThread.Start();
             GetAllStorageRoomsThread.Start();
             GetAllTempProductsThread.Start();
+            GetAllServiceProductsThread.Start();
         }
 
         #endregion

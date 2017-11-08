@@ -47,7 +47,16 @@ namespace P3_Projekt_WPF
         {
             if (_ctrlDown && (e.Key != Key.LeftCtrl && e.Key != Key.RightCtrl))
             {
-                Debug.WriteLine("Ctrl+" + e.Key.ToString());
+                ClickQuickButton(e.Key);
+            }
+        }
+
+        private void ClickQuickButton(Key btn)
+        {
+            Debug.Print("Pressed quickbutton combo:" + btn.ToString());
+            if (_settingsController.quickButtonKeyList.ContainsKey(btn))
+            {
+                _settingsController.quickButtonKeyList[btn].RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
             }
         }
 
