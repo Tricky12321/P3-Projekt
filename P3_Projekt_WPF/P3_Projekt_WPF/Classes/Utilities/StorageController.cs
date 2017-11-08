@@ -20,7 +20,8 @@ namespace P3_Projekt_WPF.Classes.Utilities
         public ConcurrentDictionary<int, SaleTransaction> SaleTransactionsDictionary = new ConcurrentDictionary<int, SaleTransaction>();
         public ConcurrentDictionary<int, Receipt> ReceiptDictionary = new ConcurrentDictionary<int, Receipt>();
         public List<TempProduct> TempProductList = new List<TempProduct>();
-
+        public List<string[]> InformationGridData = new List<string[]>();
+        private object InformationGridLock = new object();
         private ConcurrentQueue<Product> _productResults = new ConcurrentQueue<Product>();
         public StorageController()
         {
@@ -53,6 +54,15 @@ namespace P3_Projekt_WPF.Classes.Utilities
             }
         }
 
+        public void AddInformation(string name, object value)
+        {
+            lock (InformationGridLock)
+            {
+                string[] result = { name, value.ToString() };
+                InformationGridData.Add(result);
+            }
+        }
+
         /// <summary>
         /// Checks if the ProductQueue is done
         /// </summary>
@@ -63,6 +73,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
             {
                 Debug.WriteLine("ProductQue: Done");
                 _productQueueDone = true;
+                AddInformation("Product count", _productsCreateByThreads);
             }
         }
 
@@ -172,6 +183,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
             {
                 _productThreadCount = 50;
             }
+            AddInformation("Product Threads created", _productThreadCount);
         }
 
         public void GetAllProductsFromDatabase()
@@ -198,6 +210,8 @@ namespace P3_Projekt_WPF.Classes.Utilities
             }
             Debug.WriteLine("GroupQue: Done!");
             _groupQueueDone = true;
+            AddInformation("Groups count", GroupDictionary.Count);
+
         }
 
         public void GetAllStorageRoomsFromDatabase()
@@ -210,6 +224,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
             }
             Debug.WriteLine("StorageRoomQue: Done!");
             _storageRoomQueueDone = true;
+            AddInformation("Storageroom count", StorageRoomDictionary.Count);
         }
 
         public void GetAllTempProductsFromDatabase()
@@ -222,6 +237,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
             }
             Debug.WriteLine("TempProductQue: Done!");
             _tempProductQueueDone = true;
+            AddInformation("TempProduct count", TempProductList.Count);
         }
 
         public void GetAllServiceProductsFromDatabase()
@@ -241,6 +257,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
             }
             Debug.WriteLine("ServiceProductQueue: Done!");
             _serviceProductQueueDone = true;
+            AddInformation("ServiceProduct count", ServiceProductDictionary.Count);
         }
 
         public void GetAllReceiptsFromDatabase()
@@ -366,6 +383,27 @@ namespace P3_Projekt_WPF.Classes.Utilities
             Thread GroupSearchThread = new Thread(new ParameterizedThreadStart(GroupSearch));
             BrandSearchThread.Start(_searchedString);
             GroupSearchThread.Start(_searchedString);
+            while (!_brandSearchDone && !_groupSearchDone)
+            {
+                Thread.Sleep(1);
+            }
+        }
+
+        private void ProductSearchThreaded()
+        {
+            StartLevenshteinSearchThreads();
+            _productSearchDone = false;
+            while (_productsToSearch.IsEmpty == false)
+            {
+                Thread.Sleep(1);
+            }
+            _productSearchDone = true;
+        }
+
+        private void SearchProductsBrandsAndGroups()
+        {
+            ProductSearchThreaded();
+            BrandGroupSearchThreaded();
         }
 
         /////////--------------------SEARCH---------------------------------
@@ -382,9 +420,6 @@ namespace P3_Projekt_WPF.Classes.Utilities
             }
             else
             {
-                //checks if the searched string is
-                //matching with a product name.
-
                 foreach (var p in ProductDictionary.Where(x => x.Value.Name == searchedString))
                 {
                     productsToReturn.Enqueue(p.Value);
@@ -393,21 +428,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
                 _productsFound = productsToReturn;
                 // Starter multithreading 
                 _searchedString = searchedString;
-                StartLevenshteinSearchThreads();
-                _productSearchDone = false;
-                while (_productsToSearch.IsEmpty == false)
-                {
-                    Thread.Sleep(1);
-                }
-                _productSearchDone = true;
-
-                //will add all the matching brands to the productlist
-                BrandGroupSearchThreaded();
-                while (!_brandSearchDone && !_groupSearchDone)
-                {
-                    Thread.Sleep(1);
-                }
-
+                SearchProductsBrandsAndGroups();
                 //productsToReturn = ok as ConcurrentQueue<Product>;
                 return productsToReturn;
             }
@@ -610,6 +631,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
             }
 
             ProductDictionary.TryAdd(newProduct.ID, newProduct);
+            newProduct.UploadToDatabase();
         }
 
         //edit product, calles two different methods depending if its run by an admin
@@ -629,6 +651,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
         {
             TempProduct newTempProduct = new TempProduct(description, salePrice);
             TempProductList.Add(newTempProduct);
+            newTempProduct.UploadToDatabase();
         }
 
         /* User has already found the matching product ID.

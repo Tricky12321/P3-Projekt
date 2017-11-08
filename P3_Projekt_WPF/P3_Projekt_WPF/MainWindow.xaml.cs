@@ -44,6 +44,7 @@ namespace P3_Projekt_WPF
             this.KeyDown += new KeyEventHandler(KeyboardHook);
             this.KeyDown += new KeyEventHandler(CtrlHookDown);
             this.KeyUp += new KeyEventHandler(CtrlHookUp);
+
         }
 
         private void KeyboardHook(object sender, KeyEventArgs e)
@@ -85,10 +86,10 @@ namespace P3_Projekt_WPF
             _POSController = new POSController(_storageController);
             _settingsController = new SettingsController();
             InitGridQuickButtons();
-
             InitStorageGridProducts();
             AddProductButton();
             LoadProductGrid();
+            BuildInformationTable();
         }
 
         private void InitGridQuickButtons()
@@ -397,10 +398,16 @@ namespace P3_Projekt_WPF
         private void btn_Temporary_Click(object sender, RoutedEventArgs e)
         {
             CreateTemporaryProduct createTemp = new CreateTemporaryProduct();
+
+            createTemp.btn_AddTempProduct.Click += delegate
+            {
+                string description = createTemp.textbox_Description.Text;
+                decimal price = decimal.Parse(createTemp.textbox_Price.Text);
+
+                _storageController.CreateTempProduct(description, price);
+                createTemp.Close();
+            };
             createTemp.Show();
-
-            //createTemp.btn_AddTempProduct.cli
-
         }
 
         private void btn_PictureFilePath_Click(object sender, RoutedEventArgs e)
@@ -422,6 +429,15 @@ namespace P3_Projekt_WPF
                 e.Handled = true;
         }
 
-
+        private void BuildInformationTable()
+        {
+            InformationGrid.CanUserAddRows = false;
+            foreach (var item in _storageController.InformationGridData)
+            {
+                InformationGrid.Items.Add(new { title = item[0], value = item[1] });
+            }
+            InformationGrid.UpdateLayout();
+            InformationGrid.UpdateDefaultStyle();
+        }
     }
 }

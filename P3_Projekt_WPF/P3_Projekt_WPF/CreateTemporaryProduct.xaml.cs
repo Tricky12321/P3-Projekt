@@ -23,20 +23,9 @@ namespace P3_Projekt_WPF
     /// </summary>
     public partial class CreateTemporaryProduct : Window
     {
-
-        string description;
-        decimal price;
-
         public CreateTemporaryProduct()
         {
             InitializeComponent();
-        }
-
-        private void btn_AddTempProduct_Click(object sender, RoutedEventArgs e)
-        {
-            price = decimal.Parse(textbox_Price.Text);
-            description = textbox_Description.Text;
-
         }
     }
 }
