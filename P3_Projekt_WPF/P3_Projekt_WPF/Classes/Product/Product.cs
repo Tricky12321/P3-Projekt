@@ -75,7 +75,7 @@ namespace P3_Projekt_WPF.Classes
             SalePrice = salePrice;
         }
 
-        public int GetNextID()
+        public static int GetNextID()
         {
             string sql = "SHOW TABLE STATUS LIKE 'products'";
             TableDecode Results = Mysql.RunQueryWithReturn(sql);
