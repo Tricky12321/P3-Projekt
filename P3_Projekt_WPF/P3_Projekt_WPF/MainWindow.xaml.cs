@@ -32,6 +32,7 @@ namespace P3_Projekt_WPF
         SettingsController _settingsController;
         StorageController _storageController;
         POSController _POSController;
+        StatisticsController _statisticsController;
         Grid productGrid = new Grid();
         private bool _ctrlDown = false;
         public MainWindow()
@@ -72,11 +73,13 @@ namespace P3_Projekt_WPF
             _storageController = new StorageController();
             _POSController = new POSController(_storageController);
             _settingsController = new SettingsController();
+            _statisticsController = new StatisticsController();
             InitGridQuickButtons();
 
             InitStorageGridProducts();
             AddProductButton();
             LoadProductGrid();
+            InitStatisticsTab();
         }
 
         private void InitGridQuickButtons()
@@ -94,6 +97,22 @@ namespace P3_Projekt_WPF
         {
             UpdateGridQuickButtons();
         }
+
+        private void InitStatisticsTab()
+        {
+            datePicker_StartDate.SelectedDate = DateTime.Now;
+            datePicker_EndDate.SelectedDate = DateTime.Now;
+            foreach(string brand in _storageController.ProductDictionary.Values.Select(x => x.Brand).Distinct())
+            {
+                comboBox_Brand.Items.Add(brand);
+            }
+            foreach(Group group in _storageController.GroupDictionary.Values)
+            {
+                comboBox_Group.Items.Add(group.Name);
+            }
+
+        }
+
 
         private void UpdateReceiptList()
         {
@@ -345,8 +364,54 @@ namespace P3_Projekt_WPF
             _settingsController.SpecifyPictureFilePath();
         }
 
+        private void OnSelectedStartDateChanged(object sender, SelectionChangedEventArgs  e)
+        {
+            string[] dateTime = datePicker_StartDate.ToString().Split(' ');
+            label_CurrentStartDate.Text = $"{ dateTime[0]}";
+        }
+
+        private void OnSelectedEndDateChanged(object sender, SelectionChangedEventArgs e)
+        {
+            string[] dateTime = datePicker_EndDate.ToString().Split(' ');
+            label_CurrentEndDate.Text = $"{ dateTime[0]}";
+        }
+
+        private void Button_CreateStatistics_Click(object sender, RoutedEventArgs e)
+        {
+            DateTime startDate = (DateTime)datePicker_StartDate.SelectedDate;
+            DateTime endDate = (DateTime)datePicker_EndDate.SelectedDate;
 
 
+            string id = textBox_StatisticsProductID.Text;
+            string brand = (string)comboBox_Brand.SelectedItem;
+            string groupString = (string)comboBox_Group.SelectedItem;
+            Group group;
+            if((string)comboBox_Group.SelectedItem != null)
+            {
+                group = _storageController.GroupDictionary.Values.First(x => x.Name == groupString);
+            }
+
+            //Today?? Yesterday??
+
+            if (!(bool)checkBox_Product.IsChecked)
+            {
+                id = null;
+            }
+            if (!(bool)checkBox_Brand.IsChecked)
+            {
+                brand = null;
+            }
+            if (!(bool)checkBox_Group.IsChecked)
+            {
+                group = null;
+            }
+
+            //_statisticsController.RequestStatisticsDate(startDate, endDate);
+            //_statisticsController.RequestStatisticsWithParameters(id, brand, GROUP?);
+            
+            listView_Statistics.Items.Add("TEest som er LAaaAAAAaaaAAaAAAaAaAaaaAaaaaAAAaaaAaaaaaANg");
+
+        }
 
 
 
@@ -365,8 +430,12 @@ namespace P3_Projekt_WPF
         private void TextInputNoNumber(object sender, TextCompositionEventArgs e)
         {
             // Only allows number in textfield
-            if (!char.IsDigit(e.Text, e.Text.Length - 1))
-                e.Handled = true;
+            if(e.Text.Length > 0)
+            {
+                if (!char.IsDigit(e.Text, e.Text.Length - 1))
+                    e.Handled = true;
+            }
+
         }
 
         private void TextInputNoNumberWithComma(object sender, TextCompositionEventArgs e)
@@ -375,7 +444,5 @@ namespace P3_Projekt_WPF
             if (!char.IsDigit(e.Text, e.Text.Length - 1) && !(e.Text[e.Text.Length - 1] == ','))
                 e.Handled = true;
         }
-
-
     }
 }
