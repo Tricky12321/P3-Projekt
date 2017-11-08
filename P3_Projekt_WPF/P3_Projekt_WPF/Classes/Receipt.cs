@@ -51,7 +51,7 @@ namespace P3_Projekt_WPF.Classes
             UpdateNumberOfProducts();
         }
 
-        private void UpdateTotalPrice()
+        public void UpdateTotalPrice()
         {
             TotalPrice = 0;
             foreach (SaleTransaction transaction in Transactions)

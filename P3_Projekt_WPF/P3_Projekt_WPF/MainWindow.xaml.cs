@@ -275,6 +275,7 @@ namespace P3_Projekt_WPF
         {
             int productID = Convert.ToInt32((sender as Button).Tag);
             _POSController.PlacerholderReceipt.Transactions.Where(x => x.Product.ID == productID).First().Amount++;
+            _POSController.PlacerholderReceipt.UpdateTotalPrice();
             UpdateReceiptList();
         }
 
@@ -282,6 +283,7 @@ namespace P3_Projekt_WPF
         {
             int productID = Convert.ToInt32((sender as Button).Tag);
             _POSController.PlacerholderReceipt.Transactions.Where(x => x.Product.ID == productID).First().Amount--;
+            _POSController.PlacerholderReceipt.UpdateTotalPrice();
             UpdateReceiptList();
 
         }
@@ -290,12 +292,13 @@ namespace P3_Projekt_WPF
         {
             int productID = Convert.ToInt32((sender as Button).Tag);
             _POSController.PlacerholderReceipt.RemoveTransaction(productID);
+            _POSController.PlacerholderReceipt.UpdateTotalPrice();
             UpdateReceiptList();
         }
 
         private void listView_Receipt_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-
+            
         }
 
         private void TextBlock_TargetUpdated(object sender, DataTransferEventArgs e)
@@ -396,6 +399,10 @@ namespace P3_Projekt_WPF
 
         private void btn_Temporary_Click(object sender, RoutedEventArgs e)
         {
+            CreateTemporaryProduct createTemp = new CreateTemporaryProduct();
+            createTemp.Show();
+
+            //createTemp.btn_AddTempProduct.cli
 
         }
 
