@@ -103,6 +103,7 @@
     <Compile Include="Classes\Group.cs" />
     <Compile Include="Classes\Product\BaseProduct.cs" />
     <Compile Include="Classes\Product\Product.cs" />
+    <Compile Include="Classes\Product\SearchedProduct.cs" />
     <Compile Include="Classes\Product\ServiceProduct.cs" />
     <Compile Include="Classes\Product\TempProduct.cs" />
     <Compile Include="Classes\Receipt.cs" />

@@ -286,8 +286,10 @@ namespace P3_Projekt_WPF.Classes.Utilities
         private int _productThreadCount = 4;
         private ConcurrentQueue<Product> _productsToSearch = null;
         private ConcurrentQueue<Product> _productsFound = null;
+        private ConcurrentQueue<SearchedProduct> _productsToSort = null;
         private List<Thread> _productSearchThreads = new List<Thread>();
         private string _searchedString = "";
+
         private void LevenshteinSearch_Thread()
         {
             while (!_productSearchDone)
@@ -295,7 +297,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
                 Product p = null;
                 if (_productsToSearch.TryDequeue(out p) && p != null)
                 {
-                    LevenshteinsProductSearch(_searchedString, p, ref _productsFound);
+                    LevenshteinsProductSearch(_searchedString, p);
                 }
             }
         }
@@ -333,6 +335,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
                 }
                 _productsToSearch = new ConcurrentQueue<Product>(ProductDictionary.Values);
                 _productsFound = productsToReturn;
+                _productsToSort = null;
                 // Starter multithreading 
                 _searchedString = searchedString;
                 StartLevenshteinSearchThreads();
@@ -342,6 +345,9 @@ namespace P3_Projekt_WPF.Classes.Utilities
                     Thread.Sleep(1);
                 }
                 _productSearchDone = true;
+                
+
+               
 
                 //will add all the matching brands to the productlist
                 _brandSearchDone = false;
@@ -361,7 +367,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
         }
 
         //----Levensthein---------------------
-        public void LevenshteinsProductSearch(string searchedString, Product productCheck, ref ConcurrentQueue<Product> productsToReturn)//tested
+        /*public void LevenshteinsProductSearch(string searchedString, Product productCheck, ref ConcurrentQueue<Product> productsToReturn)//tested
         {//setup for levenshteins
             //getting the chardifference between the searchedstring and the productname
             int charDifference = ComputeLevenshteinsDistance(searchedString, productCheck.Name);
@@ -373,6 +379,94 @@ namespace P3_Projekt_WPF.Classes.Utilities
                     productsToReturn.Enqueue(productCheck);
                 }
 
+            }
+        }*/
+
+        public void LevenshteinsProductSearch(string searchStringElement, Product productToConvert)
+        {
+            ConcurrentQueue<SearchedProduct> sortQueue = _productsToSort;
+            SearchedProduct productToAdd = new SearchedProduct(productToConvert);
+            string[] searchSplit = searchStringElement.Split(' ');
+            string[] productSplit = productToConvert.Name.Split(' ');
+
+            foreach(string s in searchSplit)
+            {
+                foreach(string t in productSplit)
+                {
+                    if(LevenstheinProductSearch(s, t))
+                    {
+                        productToAdd.WordMatches += 1;
+                    }
+                }
+            }
+            sortQueue.Enqueue(productToAdd);
+
+        }
+
+
+        public void GroupSearch(object searchString)//tested
+        {
+            string searchedString = searchString as string;
+            ConcurrentQueue<Product> productListToReturn = _productsFound;
+            //divides all the elements in the string, to evaluate each element
+            string[] dividedString = searchedString.Split(' ');
+            //checking all groups to to match with the searched string elements
+            foreach (Group g in GroupDictionary.Values)
+            {
+                //matching on each element in the string
+                bool groupMatched = LevenshteinsGroupSearch(dividedString, g);
+                //if the string contains a name of a group, or the string is matched, each product with the same group 
+                //is added to the list of products to show.
+                if (dividedString.Contains(g.Name) || groupMatched)
+                {
+                    foreach (Product p in ProductDictionary.Values.Where(x => x.ProductGroupID == g.ID))
+                    {
+                        if (!(productListToReturn.Contains(p)))
+                        {
+                            productListToReturn.Enqueue(p);
+                        }
+                    }
+                }
+            }
+            _groupSearchDone = true;
+        }
+
+        public void BrandSearch(object searchString)//tested
+        {
+            string searchedString = searchString as string;
+            ConcurrentQueue<Product> productListToReturn = _productsFound;
+            //divides all the elements in the string, to evaluate each element
+            string[] dividedString = searchedString.Split(' ');
+            //checking all products to to match the brands with the searched string elements
+            foreach (Product p in ProductDictionary.Values)
+            {
+                //matching on each element in the string
+                bool brandMatched = LevenshteinsBrandSearch(dividedString, p.Brand);
+                //if the string contains a product brand, or the string is matched, each product with the same brand
+                //is added to the list of products to show.
+                if (dividedString.Contains(p.Brand) || brandMatched)
+                {
+                    if (!productListToReturn.Contains(p))
+                    {
+                        productListToReturn.Enqueue(p);
+                    }
+
+                }
+            }
+            _brandSearchDone = true;
+        }
+
+        public bool LevenstheinProductSearch(string searchEle, string ProductEle)
+        {
+            int charDifference = ComputeLevenshteinsDistance(searchEle, ProductEle);
+
+            if(EvaluateStringLimit(searchEle, charDifference))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
             }
         }
 
@@ -493,57 +587,6 @@ namespace P3_Projekt_WPF.Classes.Utilities
         }
         //----LevenSthein-END-----------------------
 
-        public void GroupSearch(object searchString)//tested
-        {
-            string searchedString = searchString as string;
-            ConcurrentQueue<Product> productListToReturn = _productsFound;
-            //divides all the elements in the string, to evaluate each element
-            string[] dividedString = searchedString.Split(' ');
-            //checking all groups to to match with the searched string elements
-            foreach (Group g in GroupDictionary.Values)
-            {
-                //matching on each element in the string
-                bool groupMatched = LevenshteinsGroupSearch(dividedString, g);
-                //if the string contains a name of a group, or the string is matched, each product with the same group 
-                //is added to the list of products to show.
-                if (dividedString.Contains(g.Name) || groupMatched)
-                {
-                    foreach (Product p in ProductDictionary.Values.Where(x => x.ProductGroupID == g.ID))
-                    {
-                        if (!(productListToReturn.Contains(p)))
-                        {
-                            productListToReturn.Enqueue(p);
-                        }
-                    }
-                }
-            }
-            _groupSearchDone = true;
-        }
-
-        public void BrandSearch(object searchString)//tested
-        {
-            string searchedString = searchString as string;
-            ConcurrentQueue<Product> productListToReturn = _productsFound;
-            //divides all the elements in the string, to evaluate each element
-            string[] dividedString = searchedString.Split(' ');
-            //checking all products to to match the brands with the searched string elements
-            foreach (Product p in ProductDictionary.Values)
-            {
-                //matching on each element in the string
-                bool brandMatched = LevenshteinsBrandSearch(dividedString, p.Brand);
-                //if the string contains a product brand, or the string is matched, each product with the same brand
-                //is added to the list of products to show.
-                if (dividedString.Contains(p.Brand) || brandMatched)
-                {
-                    if (!productListToReturn.Contains(p))
-                    {
-                        productListToReturn.Enqueue(p);
-                    }
-
-                }
-            }
-            _brandSearchDone = true;
-        }
         //----SEARCH-END---------------------
 
         //Creates product with storage and stocka as keyvalue, then add the product to the list
