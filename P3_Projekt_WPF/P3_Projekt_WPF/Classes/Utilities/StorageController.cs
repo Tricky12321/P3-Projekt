@@ -647,11 +647,12 @@ namespace P3_Projekt_WPF.Classes.Utilities
             }
         }
 
-        public void CreateTempProduct(string description, decimal salePrice)
+        public TempProduct CreateTempProduct(string description, decimal salePrice)
         {
             TempProduct newTempProduct = new TempProduct(description, salePrice);
             TempProductList.Add(newTempProduct);
             newTempProduct.UploadToDatabase();
+            return newTempProduct;
         }
 
         /* User has already found the matching product ID.

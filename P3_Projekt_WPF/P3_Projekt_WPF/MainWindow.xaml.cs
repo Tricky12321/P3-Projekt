@@ -279,8 +279,14 @@ namespace P3_Projekt_WPF
 
         public void AddTransactionToReceipt(SaleTransaction transaction)
         {
-            listView_Receipt.Items.Add(new ReceiptListItem { String_Product = transaction.GetProductName(), Amount = transaction.Amount, Price = $"{transaction.GetProductPrice()},-", IDTag = transaction.Product.ID });
-
+            if(transaction.Product is TempProduct)
+            {
+                listView_Receipt.Items.Add(new ReceiptListItem { String_Product = (transaction.Product as TempProduct).Description, Amount = transaction.Amount, Price = $"{transaction.GetProductPrice()}", IDTag = transaction.Product.ID });
+            }
+            else
+            {
+                listView_Receipt.Items.Add(new ReceiptListItem { String_Product = transaction.GetProductName(), Amount = transaction.Amount, Price = $"{transaction.GetProductPrice()},-", IDTag = transaction.Product.ID });
+            }
         }
 
         private void btn_MobilePay_Click(object sender, RoutedEventArgs e)
@@ -422,8 +428,10 @@ namespace P3_Projekt_WPF
             {
                 string description = createTemp.textbox_Description.Text;
                 decimal price = decimal.Parse(createTemp.textbox_Price.Text);
-
-                _storageController.CreateTempProduct(description, price);
+                int amount = int.Parse(createTemp.textBox_ProductAmount.Text);
+                TempProduct NewTemp = _storageController.CreateTempProduct(description, price);
+                _POSController.AddSaleTransaction(NewTemp, amount);
+                UpdateReceiptList();
                 createTemp.Close();
             };
             createTemp.Show();
@@ -479,7 +487,7 @@ namespace P3_Projekt_WPF
             //_statisticsController.RequestStatisticsDate(startDate, endDate);
             //_statisticsController.RequestStatisticsWithParameters(id, brand, GROUP?);
             
-            listView_Statistics.Items.Add("TEest som er LAaaAAAAaaaAAaAAAaAaAaaaAaaaaAAAaaaAaaaaaANg");
+            listView_Statistics.Items.Add("TEest som er KYS :D LAaaAAAAaaaAAaAAAaAaAaaaAaaaaAAAaaaAaaaaaANg");
 
         }
 
@@ -524,6 +532,16 @@ namespace P3_Projekt_WPF
             }
             InformationGrid.UpdateLayout();
             InformationGrid.UpdateDefaultStyle();
+        }
+
+        private void button_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void btn_MergerTempProduct_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }
