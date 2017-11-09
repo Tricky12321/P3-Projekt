@@ -209,7 +209,7 @@ namespace P3_Projekt_WPF
         {
             Product product = new Product(name, brand, Decimal.Parse(purchasePrice), _storageController.GroupDictionary.First(x => x.Value.Name.ToLower() == group).Key, (discountPrice != null) ? true : false, Decimal.Parse(salePrice), Decimal.Parse(discountPrice));
 
-            _storageController.ProductDictionary.TryAdd(product.ID, product);
+            //_storageController.CreateProduct(name, brand, Decimal.Parse(purchasePrice), _storageController.GroupDictionary.First(x => x.Value.Name.ToLower() == group).Key)
             product.UploadToDatabase();
         }
         
