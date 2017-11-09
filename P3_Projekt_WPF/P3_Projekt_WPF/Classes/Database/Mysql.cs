@@ -13,7 +13,7 @@ namespace P3_Projekt_WPF.Classes.Database
 {
     public static class Mysql
     {
-        private const bool _debug = false;
+        private const bool _debug = true;
         private const string _username = "P3";
         private const string _password = "frankythefish";
         private const string _ip = "v-world.dk";
@@ -124,10 +124,6 @@ namespace P3_Projekt_WPF.Classes.Database
         {
             Thread NewThread = new Thread(new ParameterizedThreadStart(RunQuery_thread));
             NewThread.Start(Query);
-            /*
-            Thread SqlThread = new Thread(new ParameterizedThreadStart(RunQuery_thread));
-            SqlThread.Start(Query);
-            */
         }
 
         public static TableDecode RunQueryWithReturn(string Query)
