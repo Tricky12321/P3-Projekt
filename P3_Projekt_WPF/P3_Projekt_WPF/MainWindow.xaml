@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:P3_Projekt_WPF"
-        xmlns:Classes="clr-namespace:P3_Projekt_WPF.Classes" x:Class="P3_Projekt_WPF.MainWindow"
+        xmlns:Classes="clr-namespace:P3_Projekt_WPF.Classes" xmlns:System="clr-namespace:System;assembly=mscorlib" x:Class="P3_Projekt_WPF.MainWindow"
         mc:Ignorable="d"
         Title="Børglum Kloster Lager og Salg" MinHeight="768" Height="1396" MinWidth="1366" Width="2068" Background="#FF919191" WindowState="Maximized">
     <Grid>
@@ -17,7 +17,7 @@
             <ColumnDefinition Width="129*"/>
         </Grid.ColumnDefinitions>
         <TabControl x:Name="tabControl" FontSize="30" Grid.ColumnSpan="2" Grid.RowSpan="2">
-            <TabItem x:Name="tab_Sale" GotFocus="updateGridQuickButtons" Header="Salg" Width="190">
+            <TabItem x:Name="tab_Sale" GotFocus="updateGridQuickButtons" Header="Salg" Width="190" Height="46" Margin="0,-2,0,0" VerticalAlignment="Top">
                 <Grid Background="#FFE5E5E5" Margin="0,1,0,-1">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="1051*"/>
@@ -83,7 +83,7 @@
                             <Style TargetType="{x:Type TextBlock}">
                                 <Setter Property="Visibility" Value="Collapsed"/>
                                 <Style.Triggers>
-                                    <DataTrigger Binding="{Binding Text, ElementName = textBox_AddProductID}" Value="">
+                                    <DataTrigger Binding="{Binding Text, ElementName=textBox_AddProductID}" Value="">
                                         <Setter Property="Visibility" Value="Visible"/>
                                     </DataTrigger>
                                 </Style.Triggers>
@@ -124,10 +124,10 @@
 
                     <ListView x:Name="listView_Receipt" Margin="13,67,10,230" Grid.Row="1" Grid.Column="1">
                         <ListView.View>
-                            <GridView>
+                            <GridView x:Name="grid_Receipt">
                                 <GridView.ColumnHeaderContainerStyle>
                                     <Style>
-                                        <Setter Property="FrameworkElement.Visibility"  Value="Collapsed"/>
+                                        <Setter Property="UIElement.Visibility"  Value="Collapsed"/>
                                     </Style>
                                 </GridView.ColumnHeaderContainerStyle>
 
@@ -136,11 +136,12 @@
                                         <DataTemplate>
                                             <Button Style="{StaticResource Flat_Button}"
                                                 Content = "+"
- 
-                                                Width="30"
-                                                Height="30"
+                                                FontSize="30"
+                                                Width="40"
+                                                Height="50"
                                                 VerticalAlignment = "Center"
                                                 Click="btn_Increment_Click"
+                                                Tag="{Binding IDTag}"
                                             />
                                         </DataTemplate>
                                     </GridViewColumn.CellTemplate>
@@ -151,16 +152,18 @@
                                         <DataTemplate>
                                             <Button Style="{StaticResource Flat_Button}"
                                                 Content = "-"
-                                                Width="30"
-                                                Height="30"
+                                                Width="40"
+                                                Height="50"
+                                                FontSize="30"
                                                 VerticalAlignment = "Center"
                                                 Click="btn_Decrement_Click"
+                                                Tag="{Binding IDTag}"
                                             />
                                         </DataTemplate>
                                     </GridViewColumn.CellTemplate>
                                 </GridViewColumn>
 
-                                <GridViewColumn>
+                                <GridViewColumn Width="100">
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate>
                                             <TextBlock Text="{Binding Amount}"/>
@@ -168,7 +171,7 @@
                                     </GridViewColumn.CellTemplate>
                                 </GridViewColumn>
 
-                                <GridViewColumn>
+                                <GridViewColumn x:Name="column_Product">
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate>
                                             <TextBlock Text="{Binding String_Product}"/>
@@ -189,10 +192,12 @@
                                         <DataTemplate>
                                             <Button Style="{StaticResource Flat_Button}"
                                                 Content = "x"
-                                                Width="30"
-                                                Height="30"
+                                                Width="40"
+                                                Height="50"
+                                                FontSize="30"
                                                 VerticalAlignment = "Center"
                                                 Click="btn_DeleteProduct_Click"
+                                                Tag="{Binding IDTag}"
                                             />
                                         </DataTemplate>
                                     </GridViewColumn.CellTemplate>
@@ -202,6 +207,7 @@
                     </ListView>
                     <Label x:Name="label" Content="Kvittering" Margin="13,71,0,0" Height="68" VerticalAlignment="Top" FontSize="35" Grid.RowSpan="2" Grid.Column="1" HorizontalAlignment="Left" Width="312"/>
                     <Label x:Name="label_TotalPrice" Content="Total" Margin="13,0,10,176" Grid.Row="1" VerticalAlignment="Bottom" Height="49" BorderThickness="1" Background="White" BorderBrush="#FF858585" Grid.Column="1"/>
+                    <Button x:Name="btn_MergerTempProduct" Content="Ret et Midlertidigt Produkt" Background="#FFC5C5C5" HorizontalAlignment="Left" Margin="10,1187,0,0" Grid.Row="1" VerticalAlignment="Top" Width="430" Style="{StaticResource Flat_Button}" Click="btn_MergerTempProduct_Click"/>
                 </Grid>
             </TabItem>
 
@@ -222,8 +228,8 @@
                                 <RowDefinition Height="1*"/>
                                 <RowDefinition Height="2*"/>
                             </Grid.RowDefinitions>
-                            <Image x:Name="image_ChosenProduct" Margin="0,0,0,0"/>
-                            <TextBlock x:Name="textBlock_ChosenProduct" TextWrapping="Wrap" Text="TextBlock" Grid.Row="1" Margin="0,0,0,0"/>
+                            <Image x:Name="image_ChosenProduct" Margin="0,0,0,0" Stretch="Fill"/>
+                            <TextBlock x:Name="textBlock_ChosenProduct" TextWrapping="Wrap" Grid.Row="1" Margin="0,0,0,0"/>
 
                         </Grid>
                     </Border>
@@ -242,51 +248,94 @@
                         <ColumnDefinition Width="23*"/>
                     </Grid.ColumnDefinitions>
                     <Border BorderBrush="Black" BorderThickness="1" Height="1" VerticalAlignment="Top" Margin="-34,1,-79,0" Grid.ColumnSpan="2" Grid.Row="1"/>
-                    <TextBlock x:Name="label_StartDato" Margin="50,48,9,0" Grid.Row="1" TextWrapping="Wrap" Text="Start Dato" VerticalAlignment="Top" FontSize="40"/>
-                    <TextBlock x:Name="label_SlutDato" Margin="50,100,10,0" Grid.Row="1" TextWrapping="Wrap" Text="Slut Dato" VerticalAlignment="Top" FontSize="40"/>
-                    <DatePicker Margin="26,48,0,0" Grid.Row="1" VerticalAlignment="Top" Grid.Column="1" HorizontalAlignment="Left" Width="240"/>
-                    <DatePicker Margin="26,108,0,0" Grid.Row="1" VerticalAlignment="Top" Grid.Column="1" HorizontalAlignment="Left" Width="240"/>
-                    <TextBox x:Name="textBox" Grid.ColumnSpan="2" HorizontalAlignment="Left" Height="43" Margin="113,304,0,0" Grid.Row="1" TextWrapping="Wrap" VerticalAlignment="Top" Width="350"/>
-                    <TextBlock x:Name="textBlock" HorizontalAlignment="Left" Margin="118,304,0,0" Grid.Row="1" TextWrapping="Wrap" Text="Produkt ID" VerticalAlignment="Top" Grid.ColumnSpan="2" Height="43" Width="350" Foreground="DarkGray" IsHitTestVisible="False"/>
-                    <CheckBox x:Name="checkBox_Produkt" HorizontalAlignment="Left" Margin="74,318,0,0" Grid.Row="1" VerticalAlignment="Top" RenderTransformOrigin="0.5,0.5">
+                    <TextBlock x:Name="label_StartDate" Margin="50,48,9,0" Grid.Row="1" TextWrapping="Wrap" Text="Start Dato" VerticalAlignment="Top" FontSize="40"/>
+                    <TextBlock x:Name="label_EndDate" Margin="50,100,10,0" Grid.Row="1" TextWrapping="Wrap" Text="Slut Dato" VerticalAlignment="Top" FontSize="40"/>
+                    <DatePicker Margin="231,72,0,0" Grid.Row="1" VerticalAlignment="Top" Grid.Column="1" HorizontalAlignment="Left" Width="28" FirstDayOfWeek="Monday" Name="datePicker_StartDate" Height="24" RenderTransformOrigin="0.5,0.5" SelectedDateChanged="OnSelectedStartDateChanged">
+                        <DatePicker.RenderTransform>
+                            <TransformGroup>
+                                <ScaleTransform ScaleX="2" ScaleY="2"/>
+                                <SkewTransform/>
+                                <RotateTransform/>
+                                <TranslateTransform/>
+                            </TransformGroup>
+                        </DatePicker.RenderTransform>
+                    </DatePicker>
+                    <DatePicker Margin="231,126,0,0" Grid.Row="1" VerticalAlignment="Top" Grid.Column="1" HorizontalAlignment="Left" Width="28" FirstDayOfWeek="Monday" Name="datePicker_EndDate" Height="24" RenderTransformOrigin="0.5,0.5" SelectedDateChanged="OnSelectedEndDateChanged">
+                        <DatePicker.RenderTransform>
+                            <TransformGroup>
+                                <ScaleTransform ScaleX="2" ScaleY="2"/>
+                                <SkewTransform/>
+                                <RotateTransform/>
+                                <TranslateTransform/>
+                            </TransformGroup>
+                        </DatePicker.RenderTransform>
+                    </DatePicker>
+                    <CheckBox x:Name="checkBox_Product" HorizontalAlignment="Left" Margin="74,318,0,0" Grid.Row="1" VerticalAlignment="Top" RenderTransformOrigin="0.5,0.5">
                         <CheckBox.RenderTransform>
                             <TransformGroup>
                                 <ScaleTransform ScaleX="3" ScaleY="3"/>
                             </TransformGroup>
                         </CheckBox.RenderTransform>
                     </CheckBox>
-                    <CheckBox x:Name="checkBox_Mærke" HorizontalAlignment="Left" Margin="74,378,0,0" Grid.Row="1" VerticalAlignment="Top" RenderTransformOrigin="0.5,0.5">
+                    <CheckBox x:Name="checkBox_Brand" HorizontalAlignment="Left" Margin="74,378,0,0" Grid.Row="1" VerticalAlignment="Top" RenderTransformOrigin="0.5,0.5">
                         <CheckBox.RenderTransform>
                             <TransformGroup>
                                 <ScaleTransform ScaleX="3" ScaleY="3"/>
                             </TransformGroup>
                         </CheckBox.RenderTransform>
                     </CheckBox>
-                    <CheckBox x:Name="checkBox_Gruppe" HorizontalAlignment="Left" Margin="74,438,0,0" Grid.Row="1" VerticalAlignment="Top" RenderTransformOrigin="0.5,0.5">
+                    <CheckBox x:Name="checkBox_Group" HorizontalAlignment="Left" Margin="74,438,0,0" Grid.Row="1" VerticalAlignment="Top" RenderTransformOrigin="0.5,0.5">
                         <CheckBox.RenderTransform>
                             <TransformGroup>
                                 <ScaleTransform ScaleX="3" ScaleY="3"/>
                             </TransformGroup>
                         </CheckBox.RenderTransform>
                     </CheckBox>
-                    <ComboBox x:Name="comboBox_Mærke" Grid.ColumnSpan="2" HorizontalAlignment="Left" Height="40" Margin="113,366,0,0" Grid.Row="1" VerticalAlignment="Top" Width="350"/>
-                    <ComboBox x:Name="comboBox_Gruppe" Grid.ColumnSpan="2" HorizontalAlignment="Left" Height="40" Margin="113,426,0,0" Grid.Row="1" VerticalAlignment="Top" Width="350"/>
-                    <Button x:Name="Button_Statistik" Grid.ColumnSpan="2" Content="Opret Statistik" HorizontalAlignment="Left" Margin="20,0,0,22" Grid.Row="1" Width="489" Background="#FFC5C5C5" Style="{StaticResource Flat_Button}" Height="118" VerticalAlignment="Bottom"/>
+                    <ComboBox x:Name="comboBox_Brand" Grid.ColumnSpan="2" HorizontalAlignment="Left" Height="40" Margin="113,366,0,0" Grid.Row="1" VerticalAlignment="Top" Width="350"/>
+                    <ComboBox x:Name="comboBox_Group" Grid.ColumnSpan="2" HorizontalAlignment="Left" Height="40" Margin="113,426,0,0" Grid.Row="1" VerticalAlignment="Top" Width="350"/>
+                    <Button x:Name="Button_CreateStatistics" Grid.ColumnSpan="2" Content="Opret Statistik" HorizontalAlignment="Left" Margin="20,0,0,22" Grid.Row="1" Width="489" Background="#FFC5C5C5" Style="{StaticResource Flat_Button}" Height="118" VerticalAlignment="Bottom" Click="Button_CreateStatistics_Click"/>
+                    <TextBox Padding="10,0,0,0"  TextCompositionManager.PreviewTextInput="TextInputNoNumber" x:Name="textBox_StatisticsProductID" Margin="114,301,0,0" FontSize="33" HorizontalAlignment="Left" Width="350" Grid.Row="1" Height="50" VerticalAlignment="Top" Grid.ColumnSpan="2">
+                        <TextBox.Resources>
+                            <Style TargetType="{x:Type Border}">
+                                <Setter Property="CornerRadius" Value="10"/>
+                            </Style>
+                        </TextBox.Resources>
+                    </TextBox>
+                    <TextBlock IsHitTestVisible="False" Text="Indtast Produkt ID" Margin="128,302,0,0" Foreground="DarkGray" FontSize="33" HorizontalAlignment="Left" Width="326" Grid.Row="1" Height="50" VerticalAlignment="Top" Grid.ColumnSpan="2">
+                        <TextBlock.Style>
+                            <Style TargetType="{x:Type TextBlock}">
+                                <Setter Property="Visibility" Value="Collapsed"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Text, ElementName=textBox_StatisticsProductID}" Value="">
+                                        <Setter Property="Visibility" Value="Visible"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </TextBlock.Style>
+                    </TextBlock>
+                    <TextBlock x:Name="label_CurrentStartDate" Grid.Column="1" HorizontalAlignment="Left" Margin="22,50,0,0" Grid.Row="1" TextWrapping="Wrap" Text="dd/mm/åå" VerticalAlignment="Top" FontSize="40"/>
+                    <TextBlock x:Name="label_CurrentEndDate" Grid.Column="1" HorizontalAlignment="Left" Margin="22,104,0,0" Grid.Row="1" TextWrapping="Wrap" Text="dd/mm/åå" VerticalAlignment="Top" FontSize="40"/>
+                    <ListView x:Name="listView_Statistics" Grid.Column="1" Margin="436,52,25,21" Grid.Row="1">
+                        <ListView.View>
+                            <GridView>
+                                <GridViewColumn/>
+                            </GridView>
+                        </ListView.View>
+                    </ListView>
                 </Grid>
             </TabItem>
-            <TabItem x:Name="tab_Settings" Header="Indstillinger" Width="190" Height="46" Margin="0,-2,0,0" VerticalAlignment="Bottom">
+            <TabItem x:Name="tab_Settings" Header="Indstillinger" Width="190" Margin="0">
 
                 <Grid Background="#FFE5E5E5">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="71*"/>
-                        <RowDefinition Height="1240*"/>
-                    </Grid.RowDefinitions>
                     <Border BorderBrush="Black" BorderThickness="1" Height="1" VerticalAlignment="Top" Margin="-34,0,-79,0" Grid.Row="1"/>
 
 
                     <TabControl x:Name="tab_WithSettings" TabStripPlacement="Left" Background="Transparent" Margin="0,1,0,0" Grid.Row="1">
                         <TabItem Header="Salgs Indstillinger" >
                             <Grid x:Name="indstillinger_Grid" Margin="5,0">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="100"/>
+                                </Grid.RowDefinitions>
                                 <TextBox TextCompositionManager.PreviewTextInput="TextInputNoNumber" Padding="10,0,0,0" x:Name="textBox_CreateQuickBtnID" Margin="10,11,0,0" FontSize="33" Height="50" VerticalAlignment="Top" HorizontalAlignment="Left" Width="217" MaxLength="10">
                                     <TextBox.Resources>
                                         <Style TargetType="{x:Type Border}">
@@ -366,12 +415,19 @@
 
                             </Grid>
                         </TabItem>
-                        <TabItem Header="Lager Indtillinger">
-                            <Button x:Name="btn_PictureFilePath" Content="mads lorteknap" HorizontalAlignment="Center" Margin="0,899,0,0" VerticalAlignment="Top" Width="466" Height="140" Click="btn_PictureFilePath_Click" />
+                        <TabItem Header="Lager Indstillinger">
+                            <Button Style="{StaticResource Flat_Button}" x:Name="btn_PictureFilePath" Content="Vælg billedmappe til produkter" HorizontalAlignment="Left" Margin="50,50,0,0" VerticalAlignment="Top" Width="466" Height="100" Click="btn_PictureFilePath_Click" />
                         </TabItem>
 
-                        <TabItem Header="Admin Indstilling">
+                        <TabItem Header="Admin Indstilling"/>
+                        <TabItem Header="Information">
+                            <DataGrid x:Name="InformationGrid" Margin="2,0,-3,-7" IsReadOnly="True" EnableColumnVirtualization="True">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="Title" x:Name="title" Binding="{Binding title}" ClipboardContentBinding="{x:Null}"/>
+                                    <DataGridTextColumn Header="Værdi" x:Name="value" Binding="{Binding value}" ClipboardContentBinding="{x:Null}"/>
+                                </DataGrid.Columns>
 
+                            </DataGrid>
 
                         </TabItem>
                     </TabControl>

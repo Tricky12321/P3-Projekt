@@ -21,6 +21,11 @@ namespace P3_Projekt_WPF.Classes
             ServiceProductGroup = serviceProductGroup;
         }
 
+        public ServiceProduct(Row Data) : base(0)
+        {
+            CreateFromRow(Data);
+        }
+
         public ServiceProduct(int id) : base(0)
         {
             ID = id;

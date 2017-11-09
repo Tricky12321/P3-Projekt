@@ -13,7 +13,7 @@ namespace P3_Projekt_WPF.Classes.Database
 {
     public static class Mysql
     {
-        private const bool _debug = false;
+        private const bool _debug = true;
         private const string _username = "P3";
         private const string _password = "frankythefish";
         private const string _ip = "v-world.dk";
@@ -86,53 +86,44 @@ namespace P3_Projekt_WPF.Classes.Database
             }
         }
 
-        public static void RunQuery_thread()
+        public static void RunQuery_thread(object Query)
         {
-            string Query = "";
-            if (_queryTasks.TryDequeue(out Query) == true)
+            using (MySqlConnection connection = Connect())
             {
-                using (MySqlConnection connection = Connect())
+                try
                 {
-                    try
+                    string sql = (Query as string);
+                    using (MySqlCommand cmd = connection.CreateCommand())
                     {
-                        string sql = (Query as string);
-                        using (MySqlCommand cmd = connection.CreateCommand())
+                        cmd.CommandText = sql;
+                        if (_debug)
                         {
-                            cmd.CommandText = sql;
-                            if (_debug)
-                            {
-                                Debug.Print("Running: " + Query);
-                            }
-                            if (Connection == null)
-                            {
-                                throw new NotConnectedException("Der er ikke forbindelse til databasen");
-                            }
-
-                            cmd.ExecuteScalarAsync();
+                            Debug.Print("Running: " + Query);
                         }
-                    }
-                    catch (Exception)
-                    {
+                        if (Connection == null)
+                        {
+                            throw new NotConnectedException("Der er ikke forbindelse til databasen");
+                        }
 
-                        throw;
+                        cmd.ExecuteScalarAsync();
                     }
-                    finally
-                    {
-                        Disconnect(connection);
-                    }
+                }
+                catch (Exception)
+                {
+
+                    throw;
+                }
+                finally
+                {
+                    Disconnect(connection);
                 }
             }
         }
 
         public static void RunQuery(string Query)
         {
-            _queryTasks.Enqueue(Query);
-            Thread NewThread = new Thread(new ThreadStart(RunQuery_thread));
-            NewThread.Start();
-            /*
-            Thread SqlThread = new Thread(new ParameterizedThreadStart(RunQuery_thread));
-            SqlThread.Start(Query);
-            */
+            Thread NewThread = new Thread(new ParameterizedThreadStart(RunQuery_thread));
+            NewThread.Start(Query);
         }
 
         public static TableDecode RunQueryWithReturn(string Query)

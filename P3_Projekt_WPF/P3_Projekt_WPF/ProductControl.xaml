@@ -14,8 +14,8 @@
         </Grid.RowDefinitions>
 
         <Button x:Name="btn_ShowMoreInformation" Panel.ZIndex="-1" Width="auto" Background="Transparent" Style="{StaticResource Flat_Button}" Grid.RowSpan="2" Margin="0,0,0,0"/>
-        <Border BorderThickness="1" BorderBrush="DarkGray" CornerRadius="8" Margin="2,2,2,2" IsHitTestVisible="False">
-            <Image x:Name="img_ProductImage" Height="auto" Margin="2,2,2,2" Width="auto" IsHitTestVisible="False"/>
+        <Border BorderThickness="1" Panel.ZIndex="2" BorderBrush="DarkGray" CornerRadius="8" Margin="2,2,2,2" IsHitTestVisible="False">
+            <Image x:Name="img_ProductImage" Height="auto" Margin="2,2,2,2" Width="auto" IsHitTestVisible="false"/>
         </Border>
 
         <TextBlock x:Name="txtbox_Product" Margin="5,0,5,5" Grid.Row="1" FontStretch="SemiExpanded" FontSize="20" IsHitTestVisible="False" ><Run Text="ID: 12"></Run><LineBreak/><Run Text="Navn: Rød Fugl"/><LineBreak/><Run Text="Gruppe: Glas"/><LineBreak/><Run Text="Pris: 123,-"/><LineBreak/><Run Text="Lagerbeholdning:"/><LineBreak/><Run/></TextBlock>
