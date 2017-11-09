@@ -228,11 +228,10 @@
                                 <RowDefinition Height="2*"/>
                             </Grid.RowDefinitions>
                             <Image x:Name="image_ChosenProduct" Margin="0,0,0,0" Stretch="Fill"/>
-                            <TextBlock x:Name="textBlock_ChosenProduct" TextWrapping="Wrap" Text="TextBlock" Grid.Row="1" Margin="0,0,0,0"/>
+                            <TextBlock x:Name="textBlock_ChosenProduct" TextWrapping="Wrap" Grid.Row="1" Margin="0,0,0,0"/>
 
                         </Grid>
                     </Border>
-                    <TextBlock x:Name="testtesttest" HorizontalAlignment="Left" Margin="283,15,0,0" TextWrapping="NoWrap"  Text="TextBlock" VerticalAlignment="Top" FontSize="12" Width="1251" Grid.ColumnSpan="2"/>
 
 
                 </Grid>
@@ -248,36 +247,80 @@
                         <ColumnDefinition Width="23*"/>
                     </Grid.ColumnDefinitions>
                     <Border BorderBrush="Black" BorderThickness="1" Height="1" VerticalAlignment="Top" Margin="-34,1,-79,0" Grid.ColumnSpan="2" Grid.Row="1"/>
-                    <TextBlock x:Name="label_StartDato" Margin="50,48,9,0" Grid.Row="1" TextWrapping="Wrap" Text="Start Dato" VerticalAlignment="Top" FontSize="40"/>
-                    <TextBlock x:Name="label_SlutDato" Margin="50,100,10,0" Grid.Row="1" TextWrapping="Wrap" Text="Slut Dato" VerticalAlignment="Top" FontSize="40"/>
-                    <DatePicker Margin="26,48,0,0" Grid.Row="1" VerticalAlignment="Top" Grid.Column="1" HorizontalAlignment="Left" Width="240"/>
-                    <DatePicker Margin="26,108,0,0" Grid.Row="1" VerticalAlignment="Top" Grid.Column="1" HorizontalAlignment="Left" Width="240"/>
-                    <TextBox x:Name="textBox" Grid.ColumnSpan="2" HorizontalAlignment="Left" Height="43" Margin="113,304,0,0" Grid.Row="1" TextWrapping="Wrap" VerticalAlignment="Top" Width="350"/>
-                    <TextBlock x:Name="textBlock" HorizontalAlignment="Left" Margin="118,304,0,0" Grid.Row="1" TextWrapping="Wrap" Text="Produkt ID" VerticalAlignment="Top" Grid.ColumnSpan="2" Height="43" Width="350" Foreground="DarkGray" IsHitTestVisible="False"/>
-                    <CheckBox x:Name="checkBox_Produkt" HorizontalAlignment="Left" Margin="74,318,0,0" Grid.Row="1" VerticalAlignment="Top" RenderTransformOrigin="0.5,0.5">
+                    <TextBlock x:Name="label_StartDate" Margin="50,48,9,0" Grid.Row="1" TextWrapping="Wrap" Text="Start Dato" VerticalAlignment="Top" FontSize="40"/>
+                    <TextBlock x:Name="label_EndDate" Margin="50,100,10,0" Grid.Row="1" TextWrapping="Wrap" Text="Slut Dato" VerticalAlignment="Top" FontSize="40"/>
+                    <DatePicker Margin="231,72,0,0" Grid.Row="1" VerticalAlignment="Top" Grid.Column="1" HorizontalAlignment="Left" Width="28" FirstDayOfWeek="Monday" Name="datePicker_StartDate" Height="24" RenderTransformOrigin="0.5,0.5" SelectedDateChanged="OnSelectedStartDateChanged">
+                        <DatePicker.RenderTransform>
+                            <TransformGroup>
+                                <ScaleTransform ScaleX="2" ScaleY="2"/>
+                                <SkewTransform/>
+                                <RotateTransform/>
+                                <TranslateTransform/>
+                            </TransformGroup>
+                        </DatePicker.RenderTransform>
+                    </DatePicker>
+                    <DatePicker Margin="231,126,0,0" Grid.Row="1" VerticalAlignment="Top" Grid.Column="1" HorizontalAlignment="Left" Width="28" FirstDayOfWeek="Monday" Name="datePicker_EndDate" Height="24" RenderTransformOrigin="0.5,0.5" SelectedDateChanged="OnSelectedEndDateChanged">
+                        <DatePicker.RenderTransform>
+                            <TransformGroup>
+                                <ScaleTransform ScaleX="2" ScaleY="2"/>
+                                <SkewTransform/>
+                                <RotateTransform/>
+                                <TranslateTransform/>
+                            </TransformGroup>
+                        </DatePicker.RenderTransform>
+                    </DatePicker>
+                    <CheckBox x:Name="checkBox_Product" HorizontalAlignment="Left" Margin="74,318,0,0" Grid.Row="1" VerticalAlignment="Top" RenderTransformOrigin="0.5,0.5">
                         <CheckBox.RenderTransform>
                             <TransformGroup>
                                 <ScaleTransform ScaleX="3" ScaleY="3"/>
                             </TransformGroup>
                         </CheckBox.RenderTransform>
                     </CheckBox>
-                    <CheckBox x:Name="checkBox_Mærke" HorizontalAlignment="Left" Margin="74,378,0,0" Grid.Row="1" VerticalAlignment="Top" RenderTransformOrigin="0.5,0.5">
+                    <CheckBox x:Name="checkBox_Brand" HorizontalAlignment="Left" Margin="74,378,0,0" Grid.Row="1" VerticalAlignment="Top" RenderTransformOrigin="0.5,0.5">
                         <CheckBox.RenderTransform>
                             <TransformGroup>
                                 <ScaleTransform ScaleX="3" ScaleY="3"/>
                             </TransformGroup>
                         </CheckBox.RenderTransform>
                     </CheckBox>
-                    <CheckBox x:Name="checkBox_Gruppe" HorizontalAlignment="Left" Margin="74,438,0,0" Grid.Row="1" VerticalAlignment="Top" RenderTransformOrigin="0.5,0.5">
+                    <CheckBox x:Name="checkBox_Group" HorizontalAlignment="Left" Margin="74,438,0,0" Grid.Row="1" VerticalAlignment="Top" RenderTransformOrigin="0.5,0.5">
                         <CheckBox.RenderTransform>
                             <TransformGroup>
                                 <ScaleTransform ScaleX="3" ScaleY="3"/>
                             </TransformGroup>
                         </CheckBox.RenderTransform>
                     </CheckBox>
-                    <ComboBox x:Name="comboBox_Mærke" Grid.ColumnSpan="2" HorizontalAlignment="Left" Height="40" Margin="113,366,0,0" Grid.Row="1" VerticalAlignment="Top" Width="350"/>
-                    <ComboBox x:Name="comboBox_Gruppe" Grid.ColumnSpan="2" HorizontalAlignment="Left" Height="40" Margin="113,426,0,0" Grid.Row="1" VerticalAlignment="Top" Width="350"/>
-                    <Button x:Name="Button_Statistik" Grid.ColumnSpan="2" Content="Opret Statistik" HorizontalAlignment="Left" Margin="20,0,0,22" Grid.Row="1" Width="489" Background="#FFC5C5C5" Style="{StaticResource Flat_Button}" Height="118" VerticalAlignment="Bottom"/>
+                    <ComboBox x:Name="comboBox_Brand" Grid.ColumnSpan="2" HorizontalAlignment="Left" Height="40" Margin="113,366,0,0" Grid.Row="1" VerticalAlignment="Top" Width="350"/>
+                    <ComboBox x:Name="comboBox_Group" Grid.ColumnSpan="2" HorizontalAlignment="Left" Height="40" Margin="113,426,0,0" Grid.Row="1" VerticalAlignment="Top" Width="350"/>
+                    <Button x:Name="Button_CreateStatistics" Grid.ColumnSpan="2" Content="Opret Statistik" HorizontalAlignment="Left" Margin="20,0,0,22" Grid.Row="1" Width="489" Background="#FFC5C5C5" Style="{StaticResource Flat_Button}" Height="118" VerticalAlignment="Bottom" Click="Button_CreateStatistics_Click"/>
+                    <TextBox Padding="10,0,0,0"  TextCompositionManager.PreviewTextInput="TextInputNoNumber" x:Name="textBox_StatisticsProductID" Margin="114,301,0,0" FontSize="33" HorizontalAlignment="Left" Width="350" Grid.Row="1" Height="50" VerticalAlignment="Top" Grid.ColumnSpan="2">
+                        <TextBox.Resources>
+                            <Style TargetType="{x:Type Border}">
+                                <Setter Property="CornerRadius" Value="10"/>
+                            </Style>
+                        </TextBox.Resources>
+                    </TextBox>
+                    <TextBlock IsHitTestVisible="False" Text="Indtast Produkt ID" Margin="128,302,0,0" Foreground="DarkGray" FontSize="33" HorizontalAlignment="Left" Width="326" Grid.Row="1" Height="50" VerticalAlignment="Top" Grid.ColumnSpan="2">
+                        <TextBlock.Style>
+                            <Style TargetType="{x:Type TextBlock}">
+                                <Setter Property="Visibility" Value="Collapsed"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Text, ElementName=textBox_StatisticsProductID}" Value="">
+                                        <Setter Property="Visibility" Value="Visible"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </TextBlock.Style>
+                    </TextBlock>
+                    <TextBlock x:Name="label_CurrentStartDate" Grid.Column="1" HorizontalAlignment="Left" Margin="22,50,0,0" Grid.Row="1" TextWrapping="Wrap" Text="dd/mm/åå" VerticalAlignment="Top" FontSize="40"/>
+                    <TextBlock x:Name="label_CurrentEndDate" Grid.Column="1" HorizontalAlignment="Left" Margin="22,104,0,0" Grid.Row="1" TextWrapping="Wrap" Text="dd/mm/åå" VerticalAlignment="Top" FontSize="40"/>
+                    <ListView x:Name="listView_Statistics" Grid.Column="1" Margin="436,52,25,21" Grid.Row="1">
+                        <ListView.View>
+                            <GridView>
+                                <GridViewColumn/>
+                            </GridView>
+                        </ListView.View>
+                    </ListView>
                 </Grid>
             </TabItem>
             <TabItem x:Name="tab_Settings" Header="Indstillinger" Width="190" Margin="0">

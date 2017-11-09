@@ -19,6 +19,8 @@ using P3_Projekt_WPF.Classes;
 using System.Diagnostics;
 using System.Threading;
 using System.Windows.Controls;
+using System.Collections;
+using System.IO;
 //using System.Drawing;
 
 namespace P3_Projekt_WPF
@@ -33,6 +35,7 @@ namespace P3_Projekt_WPF
         SettingsController _settingsController;
         StorageController _storageController;
         POSController _POSController;
+        StatisticsController _statisticsController;
         Grid productGrid = new Grid();
         private bool _ctrlDown = false;
         public MainWindow()
@@ -82,11 +85,13 @@ namespace P3_Projekt_WPF
             _storageController = new StorageController();
             _POSController = new POSController(_storageController);
             _settingsController = new SettingsController();
+            _statisticsController = new StatisticsController();
             InitGridQuickButtons();
             InitStorageGridProducts();
             AddProductButton();
             LoadProductGrid();
             BuildInformationTable();
+            InitStatisticsTab();
         }
 
         private void InitGridQuickButtons()
@@ -104,6 +109,22 @@ namespace P3_Projekt_WPF
         {
             UpdateGridQuickButtons();
         }
+
+        private void InitStatisticsTab()
+        {
+            datePicker_StartDate.SelectedDate = DateTime.Now;
+            datePicker_EndDate.SelectedDate = DateTime.Now;
+            foreach(string brand in _storageController.ProductDictionary.Values.Select(x => x.Brand).Distinct())
+            {
+                comboBox_Brand.Items.Add(brand);
+            }
+            foreach(Group group in _storageController.GroupDictionary.Values)
+            {
+                comboBox_Group.Items.Add(group.Name);
+            }
+
+        }
+
 
         private void UpdateReceiptList()
         {
@@ -197,6 +218,8 @@ namespace P3_Projekt_WPF
             Debug.Print((sender as Button).Tag.ToString());
             Product placeholder = _storageController.ProductDictionary[Convert.ToInt32((sender as Button).Tag)];
 
+            image_ChosenProduct.Source = Utils.ImageSourceForBitmap(Properties.Resources.questionmark_png);
+
             if (placeholder.Image != null)
             {
                 image_ChosenProduct.Source = placeholder.Image.Source;
@@ -226,28 +249,21 @@ namespace P3_Projekt_WPF
                     int hej = productGrid.RowDefinitions.Count;
                 }
 
-
-
-
                 Debug.Print($@"{_settingsController.PictureFilePath}/{product.Value.ID}.png");
-                try
-                {
-                    //var test = new Bitmap(new Uri($@"{_settingsController.PictureFilePath}/{product.Value.ID}.png", UriKind.RelativeOrAbsolute)):
 
+                //BRug directory til at finde alle filtyper//
+
+                if(File.Exists($@"{_settingsController.PictureFilePath}/{product.Value.ID}.png"))
+                {
+                    BitmapImage bitMap = new BitmapImage(new Uri($@"{_settingsController.PictureFilePath}/{product.Value.ID}.png", UriKind.RelativeOrAbsolute));
                     var image = new Image();
 
-                    image.Source = new BitmapImage(new Uri($@"{_settingsController.PictureFilePath}/{product.Value.ID}.png", UriKind.RelativeOrAbsolute));
+                    image.Source = bitMap;
                     image.VerticalAlignment = VerticalAlignment.Center;
                     image.HorizontalAlignment = HorizontalAlignment.Center;
                     image.Stretch = Stretch.Uniform;
                     product.Value.Image = image;
                 }
-                catch
-                {
-
-                }
-
-
 
                 ProductControl productControl = new ProductControl(product.Value, _storageController.GroupDictionary);
                 productControl.SetValue(Grid.ColumnProperty, i % 5);
@@ -417,11 +433,78 @@ namespace P3_Projekt_WPF
             _settingsController.SpecifyPictureFilePath();
         }
 
+        private void OnSelectedStartDateChanged(object sender, SelectionChangedEventArgs  e)
+        {
+            string[] dateTime = datePicker_StartDate.ToString().Split(' ');
+            label_CurrentStartDate.Text = $"{ dateTime[0]}";
+        }
+
+        private void OnSelectedEndDateChanged(object sender, SelectionChangedEventArgs e)
+        {
+            string[] dateTime = datePicker_EndDate.ToString().Split(' ');
+            label_CurrentEndDate.Text = $"{ dateTime[0]}";
+        }
+
+        private void Button_CreateStatistics_Click(object sender, RoutedEventArgs e)
+        {
+            DateTime startDate = (DateTime)datePicker_StartDate.SelectedDate;
+            DateTime endDate = (DateTime)datePicker_EndDate.SelectedDate;
+
+
+            string id = textBox_StatisticsProductID.Text;
+            string brand = (string)comboBox_Brand.SelectedItem;
+            string groupString = (string)comboBox_Group.SelectedItem;
+            Group group;
+            if((string)comboBox_Group.SelectedItem != null)
+            {
+                group = _storageController.GroupDictionary.Values.First(x => x.Name == groupString);
+            }
+
+            //Today?? Yesterday??
+
+            if (!(bool)checkBox_Product.IsChecked)
+            {
+                id = null;
+            }
+            if (!(bool)checkBox_Brand.IsChecked)
+            {
+                brand = null;
+            }
+            if (!(bool)checkBox_Group.IsChecked)
+            {
+                group = null;
+            }
+
+            //_statisticsController.RequestStatisticsDate(startDate, endDate);
+            //_statisticsController.RequestStatisticsWithParameters(id, brand, GROUP?);
+            
+            listView_Statistics.Items.Add("TEest som er LAaaAAAAaaaAAaAAAaAaAaaaAaaaaAAAaaaAaaaaaANg");
+
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         private void TextInputNoNumber(object sender, TextCompositionEventArgs e)
         {
             // Only allows number in textfield
-            if (!char.IsDigit(e.Text, e.Text.Length - 1))
-                e.Handled = true;
+            if(e.Text.Length > 0)
+            {
+                if (!char.IsDigit(e.Text, e.Text.Length - 1))
+                    e.Handled = true;
+            }
+
         }
 
         private void TextInputNoNumberWithComma(object sender, TextCompositionEventArgs e)
