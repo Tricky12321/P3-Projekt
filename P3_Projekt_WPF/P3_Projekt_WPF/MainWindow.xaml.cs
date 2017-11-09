@@ -42,7 +42,6 @@ namespace P3_Projekt_WPF
             this.KeyDown += new KeyEventHandler(KeyboardHook);
             this.KeyDown += new KeyEventHandler(CtrlHookDown);
             this.KeyUp += new KeyEventHandler(CtrlHookUp);
-
         }
 
         private void KeyboardHook(object sender, KeyEventArgs e)
@@ -440,7 +439,6 @@ namespace P3_Projekt_WPF
                 InformationGrid.Items.Add(new { title = item[0], value = item[1] });
             }
             InformationGrid.UpdateLayout();
-            InformationGrid.UpdateDefaultStyle();
         }
     }
 }
