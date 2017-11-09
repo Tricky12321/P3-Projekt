@@ -25,6 +25,22 @@ namespace P3_Projekt_WPF.Classes.Database
         private static int _connectionCounter => Connection.Count;
         private static List<Thread> _queryThreads = new List<Thread>();
         private static ConcurrentQueue<string> _queryTasks = new ConcurrentQueue<string>();
+        private static bool _queryThreadsStarted = false;
+        private const int _queryThreadCount = 5;
+
+        private static void StartQueryThreads()
+        {
+            if (!_queryThreadsStarted)
+            {
+                for (int i = 0; i < _queryThreadCount; i++)
+                {
+                    Thread NewThread = new Thread(new ThreadStart(RunQuery_thread));
+                    _queryThreads.Add(NewThread);
+                    NewThread.Start();
+                }
+                _queryThreadsStarted = true;
+            }
+        }
 
         public static void Disconnect(MySqlConnection connection)
         {
@@ -55,7 +71,6 @@ namespace P3_Projekt_WPF.Classes.Database
             MySqlConnection connection = new MySqlConnection(_connectionString);
             try
             {
-
                 connection.Open();
                 if (connection == null)
                 {
@@ -86,44 +101,56 @@ namespace P3_Projekt_WPF.Classes.Database
             }
         }
 
-        public static void RunQuery_thread(object Query)
+        public static void RunQuery_thread()
         {
-            using (MySqlConnection connection = Connect())
+            while (true)
             {
-                try
+                string Query = "";
+                if (_queryTasks.TryDequeue(out Query))
                 {
-                    string sql = (Query as string);
-                    using (MySqlCommand cmd = connection.CreateCommand())
-                    {
-                        cmd.CommandText = sql;
-                        if (_debug)
-                        {
-                            Debug.Print("Running: " + Query);
-                        }
-                        if (Connection == null)
-                        {
-                            throw new NotConnectedException("Der er ikke forbindelse til databasen");
-                        }
 
-                        cmd.ExecuteScalarAsync();
+                    using (MySqlConnection connection = Connect())
+                    {
+                        try
+                        {
+                            string sql = (Query as string);
+                            using (MySqlCommand cmd = connection.CreateCommand())
+                            {
+                                cmd.CommandText = sql;
+                                if (_debug)
+                                {
+                                    Debug.Print("Running: " + Query);
+                                }
+                                if (Connection == null)
+                                {
+                                    throw new NotConnectedException("Der er ikke forbindelse til databasen");
+                                }
+
+                                cmd.ExecuteScalarAsync();
+                            }
+                        }
+                        catch (Exception)
+                        {
+
+                            throw;
+                        }
+                        finally
+                        {
+                            Disconnect(connection);
+                        }
                     }
                 }
-                catch (Exception)
-                {
-
-                    throw;
-                }
-                finally
-                {
-                    Disconnect(connection);
-                }
+                Thread.Sleep(5);
             }
         }
 
         public static void RunQuery(string Query)
         {
-            Thread NewThread = new Thread(new ParameterizedThreadStart(RunQuery_thread));
-            NewThread.Start(Query);
+            if (!_queryThreadsStarted)
+            {
+                StartQueryThreads();
+            }
+            _queryTasks.Enqueue(Query);
         }
 
         public static TableDecode RunQueryWithReturn(string Query)

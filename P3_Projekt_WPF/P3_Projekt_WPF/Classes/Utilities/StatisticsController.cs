@@ -54,7 +54,6 @@ namespace P3_Projekt_WPF.Classes.Utilities
             {
                 TransactionsForStatistics.Add(new SaleTransaction(row));
             }
-
             //TransactionsForStatistics = TransactionsForStatistics.Where(x => x.Date.Day == today.Day).ToList();
         }
 
