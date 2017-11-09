@@ -23,9 +23,27 @@ namespace P3_Projekt_WPF
     /// </summary>
     public partial class CreateTemporaryProduct : Window
     {
+        int amount = 1;
         public CreateTemporaryProduct()
         {
             InitializeComponent();
+        }
+
+        private void btn_PlusToReciept_Click(object sender, RoutedEventArgs e)
+        {
+            ++amount;
+            UpdateBox();
+        }
+
+        private void btn_MinusToReciept_Click(object sender, RoutedEventArgs e)
+        {
+            --amount;
+            UpdateBox();
+        }
+
+        private void UpdateBox()
+        {
+            textBox_ProductAmount.Text = amount.ToString();
         }
     }
 }
