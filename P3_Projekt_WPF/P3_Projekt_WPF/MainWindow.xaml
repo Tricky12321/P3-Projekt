@@ -17,7 +17,7 @@
             <ColumnDefinition Width="129*"/>
         </Grid.ColumnDefinitions>
         <TabControl x:Name="tabControl" FontSize="30" Grid.ColumnSpan="2" Grid.RowSpan="2">
-            <TabItem x:Name="tab_Sale" GotFocus="updateGridQuickButtons" Header="Salg" Width="190">
+            <TabItem x:Name="tab_Sale" GotFocus="updateGridQuickButtons" Header="Salg" Width="190" Height="46" Margin="0,-2,0,0" VerticalAlignment="Top">
                 <Grid Background="#FFE5E5E5" Margin="0,1,0,-1">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="1051*"/>
@@ -207,6 +207,7 @@
                     </ListView>
                     <Label x:Name="label" Content="Kvittering" Margin="13,71,0,0" Height="68" VerticalAlignment="Top" FontSize="35" Grid.RowSpan="2" Grid.Column="1" HorizontalAlignment="Left" Width="312"/>
                     <Label x:Name="label_TotalPrice" Content="Total" Margin="13,0,10,176" Grid.Row="1" VerticalAlignment="Bottom" Height="49" BorderThickness="1" Background="White" BorderBrush="#FF858585" Grid.Column="1"/>
+                    <Button x:Name="btn_MergeTempProduct" Content="Ret et Midlertidigt Produkt" Background="#FFC5C5C5" HorizontalAlignment="Left" Margin="10,0,0,6" Grid.Row="1" Width="430" Style="{StaticResource Flat_Button}" Height="46" VerticalAlignment="Bottom" Click="btn_MergeTempProduct_Click"/>
                 </Grid>
             </TabItem>
 
@@ -422,8 +423,8 @@
                         <TabItem Header="Information">
                             <DataGrid x:Name="InformationGrid" Margin="2,0,-3,-7" IsReadOnly="True" EnableColumnVirtualization="True">
                                 <DataGrid.Columns>
-                                    <DataGridTextColumn x:Name="title" Binding="{x:Null}" ClipboardContentBinding="{x:Null}"/>
-                                    <DataGridTextColumn x:Name="value" Binding="{x:Null}" ClipboardContentBinding="{x:Null}"/>
+                                    <DataGridTextColumn Header="Title" x:Name="title" Binding="{Binding title}" ClipboardContentBinding="{x:Null}"/>
+                                    <DataGridTextColumn Header="Værdi" x:Name="value" Binding="{Binding value}" ClipboardContentBinding="{x:Null}"/>
                                 </DataGrid.Columns>
 
                             </DataGrid>

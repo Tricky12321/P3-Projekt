@@ -45,6 +45,17 @@
                 </Style>
             </TextBlock.Style>
         </TextBlock>
-        <Button x:Name="btn_AddTempProduct" Content="Tilføj til kvittering" Margin="10,0,10,10" FontSize="30" Height="58" VerticalAlignment="Bottom" Style="{StaticResource Flat_Button}" />
+        <Button x:Name="btn_AddTempProduct" Content="Tilføj til kvittering" Background="Transparent" Margin="10,0,10,10" FontSize="30" Height="58" VerticalAlignment="Bottom" Style="{StaticResource Flat_Button}" />
+        <Button x:Name="btn_PlusToReciept" Content="+" Background="Transparent" HorizontalAlignment="Left" Margin="186,314,0,0" Width="35" Style="{StaticResource Flat_Button}" RenderTransformOrigin="-0.486,0.333" Height="50" VerticalAlignment="Top" Click="btn_PlusToReciept_Click"/>
+        <Button x:Name="btn_MinusToReciept" Content="-" Background="Transparent" HorizontalAlignment="Left" Margin="226,314,0,0" Width="35" Style="{StaticResource Flat_Button}" FontSize="30" Height="50" VerticalAlignment="Top" Click="btn_MinusToReciept_Click"/>
+        <TextBox x:Name="textBox_ProductAmount"   Padding="10,0,0,0" HorizontalAlignment="Left" Margin="113,314,0,0" TextWrapping="Wrap" Text="1" Width="68" MaxLines="1" MaxLength="2" FontSize="33" Height="50" VerticalAlignment="Top">
+            <TextBox.Resources>
+                <Style TargetType="{x:Type Border}">
+                    <Setter Property="CornerRadius" Value="10"/>
+                </Style>
+            </TextBox.Resources>
+        </TextBox>
+        <Label x:Name="label" HorizontalAlignment="Left" Margin="29,336,0,0" VerticalAlignment="Top"/>
+        <Label x:Name="label1" Content="Antal:" FontSize="30" Margin="16,313,484,106"/>
     </Grid>
 </Window>
