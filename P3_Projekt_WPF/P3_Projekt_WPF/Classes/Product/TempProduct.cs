@@ -10,13 +10,13 @@ namespace P3_Projekt_WPF.Classes
     public class TempProduct : BaseProduct
     {
         public string Description;
-        private bool _resolved;
+        public bool Resolved;
         public int ResolvedProductID = 0;
 
         public TempProduct (string description, decimal salePrice) : base(salePrice)
         {
             Description = description;
-            _resolved = false;
+            Resolved = false;
         }
 
         public TempProduct(int id) : base(0)
@@ -44,7 +44,7 @@ namespace P3_Projekt_WPF.Classes
 
         public void Resolve(Product MatchedProduct)
         {
-            _resolved = true;
+            Resolved = true;
             ResolvedProductID = MatchedProduct.ID;
             UpdateInDatabase();
         }
@@ -68,14 +68,14 @@ namespace P3_Projekt_WPF.Classes
             ID = Convert.ToInt32(Table.Values[0]);
             SalePrice = Convert.ToDecimal(Table.Values[1]);
             Description = Table.Values[2];
-            _resolved = Convert.ToBoolean(Table.Values[3]);
+            Resolved = Convert.ToBoolean(Table.Values[3]);
             ResolvedProductID = Convert.ToInt32(Table.Values[4]);
         }
 
         public override void UploadToDatabase()
         {
             string sql = "INSERT INTO `temp_products` (`id`, `sale_price`, `description`, `resolved`, `resolved_product_id`)"+
-                $"VALUES (NULL, '{SalePrice}', '{GetName()}', '{Convert.ToInt32(_resolved)}', '{ResolvedProductID}');";
+                $"VALUES (NULL, '{SalePrice}', '{GetName()}', '{Convert.ToInt32(Resolved)}', '{ResolvedProductID}');";
             Mysql.RunQuery(sql);
         }
 
@@ -84,7 +84,7 @@ namespace P3_Projekt_WPF.Classes
             string sql = $"UPDATE `temp_products` SET " +
                 $"`sale_price` = '{SalePrice}'," +
                 $"`description` = '{GetName()}'," +
-                $"`resolved` = '{Convert.ToInt32(_resolved)}' " +
+                $"`resolved` = '{Convert.ToInt32(Resolved)}' " +
                 $"`resolved_product_id` = '{ResolvedProductID}' " +
                 $"WHERE `id` = {ID};";
             Mysql.RunQuery(sql);

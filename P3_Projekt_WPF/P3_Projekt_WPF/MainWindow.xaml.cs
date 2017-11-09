@@ -452,10 +452,10 @@ namespace P3_Projekt_WPF
             DateTime endDate = (DateTime)datePicker_EndDate.SelectedDate;
 
 
-            string id = textBox_StatisticsProductID.Text;
+            string id = (textBox_StatisticsProductID.Text.Length == 0 ? null : textBox_StatisticsProductID.Text);
             string brand = (string)comboBox_Brand.SelectedItem;
             string groupString = (string)comboBox_Group.SelectedItem;
-            Group group;
+            Group group = null;
             if((string)comboBox_Group.SelectedItem != null)
             {
                 group = _storageController.GroupDictionary.Values.First(x => x.Name == groupString);
@@ -476,8 +476,8 @@ namespace P3_Projekt_WPF
                 group = null;
             }
 
-            //_statisticsController.RequestStatisticsDate(startDate, endDate);
-            //_statisticsController.RequestStatisticsWithParameters(id, brand, GROUP?);
+            _statisticsController.RequestStatisticsDate(startDate, endDate);
+            _statisticsController.RequestStatisticsWithParameters(id, brand, group);
             
             listView_Statistics.Items.Add("TEest som er LAaaAAAAaaaAAaAAAaAaAaaaAaaaaAAAaaaAaaaaaANg");
 
