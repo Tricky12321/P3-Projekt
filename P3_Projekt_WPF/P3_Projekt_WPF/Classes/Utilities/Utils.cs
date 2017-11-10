@@ -70,6 +70,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
         public static void FixReceiptInDatabase()
         {
             Thread FixReceiptThread = new Thread(new ThreadStart(_FixReceiptInDatabase));
+            FixReceiptThread.Name = "FixReceiptThread";
         }
 
         public static void GenerateSaleTransactions()

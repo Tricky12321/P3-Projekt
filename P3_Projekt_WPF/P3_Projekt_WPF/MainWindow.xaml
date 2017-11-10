@@ -17,7 +17,7 @@
             <ColumnDefinition Width="129*"/>
         </Grid.ColumnDefinitions>
         <TabControl x:Name="tabControl" FontSize="30" Grid.ColumnSpan="2" Grid.RowSpan="2">
-            <TabItem x:Name="tab_Sale" GotFocus="updateGridQuickButtons" Header="Salg" Width="190" Height="46" Margin="0,-2,0,0" VerticalAlignment="Top">
+            <TabItem x:Name="tab_Sale" GotFocus="updateGridQuickButtons" Header="Salg" Width="190" Height="46" Margin="0" VerticalAlignment="Top">
                 <Grid Background="#FFE5E5E5" Margin="0,1,0,-1">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="1051*"/>
@@ -228,7 +228,7 @@
                                 <RowDefinition Height="1*"/>
                                 <RowDefinition Height="2*"/>
                             </Grid.RowDefinitions>
-                            <Image x:Name="image_ChosenProduct" Margin="0,0,0,0" Stretch="Fill"/>
+                            <Image x:Name="image_ChosenProduct" Margin="0,0,0,0"/>
                             <TextBlock x:Name="textBlock_ChosenProduct" TextWrapping="Wrap" Grid.Row="1" Margin="0,0,0,0"/>
 
                         </Grid>

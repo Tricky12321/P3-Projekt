@@ -83,6 +83,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
             for (int i = 0; i < _productThreadsCount; i++)
             {
                 Thread NewThread = new Thread(new ThreadStart(HandleCreateProductQue));
+                NewThread.Name = "Create Product Thread";
                 NewThread.Start();
                 _productThreads.Add(NewThread);
             }
@@ -285,6 +286,11 @@ namespace P3_Projekt_WPF.Classes.Utilities
             Thread GetAllTempProductsThread = new Thread(new ThreadStart(GetAllTempProductsFromDatabase));
             Thread GetAllStorageRoomsThread = new Thread(new ThreadStart(GetAllStorageRoomsFromDatabase));
             Thread GetAllServiceProductsThread = new Thread(new ThreadStart(GetAllServiceProductsFromDatabase));
+            GetAllProductsThread.Name = "GetAllProductsThread";
+            GetAllGroupsThread.Name = "GetAllGroupsThread";
+            GetAllTempProductsThread.Name = "GetAllTempProductsThread";
+            GetAllStorageRoomsThread.Name = "GetAllStorageRoomsThread";
+            GetAllServiceProductsThread.Name = "GetAllServiceProductsThread";
             lock (ThreadLock)
             {
                 Threads.Add(GetAllProductsThread);
@@ -344,13 +350,19 @@ namespace P3_Projekt_WPF.Classes.Utilities
             Group outVal = null;
             GroupDictionary.TryRemove(removeID, out outVal);
         }
+
+        public IEnumerable<string> GetProductBrands()
+        {
+            return ProductDictionary.Values.Select(x => x.Brand).Distinct();
+        }
+
         // Levenstein multithreading
         private bool _productSearchDone = false;
         private bool _groupSearchDone = false;
         private bool _brandSearchDone = false;
         private int _productThreadCount = 4;
         private ConcurrentQueue<Product> _productsToSearch = null;
-        private ConcurrentQueue<Product> _productsFound = null;
+        private ConcurrentQueue<SearchedProduct> _productsFound = null;
         private ConcurrentQueue<SearchedProduct> _productsToSort = null;
         private List<Thread> _productSearchThreads = new List<Thread>();
         private string _searchedString = "";
@@ -372,6 +384,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
             for (int i = 0; i < _productThreadCount; i++)
             {
                 Thread NewThread = new Thread(new ThreadStart(LevenshteinSearch_Thread));
+                NewThread.Name = "LevenshteinSearchThread";
                 _productSearchThreads.Add(NewThread);
                 NewThread.Start();
             }
@@ -382,7 +395,10 @@ namespace P3_Projekt_WPF.Classes.Utilities
             _brandSearchDone = false;
             _groupSearchDone = false;
             Thread BrandSearchThread = new Thread(new ParameterizedThreadStart(BrandSearch));
+            BrandSearchThread.Name = "BrandSearchThread";
             Thread GroupSearchThread = new Thread(new ParameterizedThreadStart(GroupSearch));
+            GroupSearchThread.Name = "GroupSearchThread";
+
             BrandSearchThread.Start(_searchedString);
             GroupSearchThread.Start(_searchedString);
             while (!_brandSearchDone && !_groupSearchDone)
@@ -409,22 +425,23 @@ namespace P3_Projekt_WPF.Classes.Utilities
         }
 
         /////////--------------------SEARCH---------------------------------
-        public ConcurrentQueue<Product> SearchForProduct(string searchedString)
+        public ConcurrentQueue<SearchedProduct> SearchForProduct(string searchedString)
         {
-            ConcurrentQueue<Product> productsToReturn = new ConcurrentQueue<Product>();
-            IEnumerable<Product> returnableProducts;
+            ConcurrentQueue<SearchedProduct> productsToReturn = new ConcurrentQueue<SearchedProduct>();
+            IEnumerable<SearchedProduct> returnableProducts;
             int isNumber;
             //returns 1 product if it is a matching ID number
             if (Int32.TryParse(searchedString, out isNumber))
             {
-                productsToReturn.Enqueue(ProductDictionary[isNumber]);
+                SearchedProduct NewSearch = new SearchedProduct(ProductDictionary[isNumber]);
+                productsToReturn.Enqueue(NewSearch);
                 return productsToReturn;
             }
             else
             {
                 foreach (var p in ProductDictionary.Where(x => x.Value.Name == searchedString))
                 {
-                    productsToReturn.Enqueue(p.Value);
+                    productsToReturn.Enqueue(new SearchedProduct(p.Value));
                 }
                 _productsToSearch = new ConcurrentQueue<Product>(ProductDictionary.Values);
                 _productsFound = productsToReturn;
@@ -446,7 +463,9 @@ namespace P3_Projekt_WPF.Classes.Utilities
                 _brandSearchDone = false;
                 _groupSearchDone = false;
                 Thread BrandSearchThread = new Thread(new ParameterizedThreadStart(BrandSearch));
+                BrandSearchThread.Name = "BrandSearchThread";
                 Thread GroupSearchThread = new Thread(new ParameterizedThreadStart(GroupSearch));
+                GroupSearchThread.Name = "GroupSearchThread";
                 BrandSearchThread.Start(searchedString);
                 GroupSearchThread.Start(searchedString);
                 while (!_brandSearchDone && !_groupSearchDone)
@@ -489,7 +508,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
                 {
                     if(LevenstheinProductSearch(s, t))
                     {
-                        productToAdd.WordMatches += 1;
+                        productToAdd.NameMatch += 1;
                     }
                 }
             }
@@ -501,23 +520,26 @@ namespace P3_Projekt_WPF.Classes.Utilities
         public void GroupSearch(object searchString)//tested
         {
             string searchedString = searchString as string;
-            ConcurrentQueue<Product> productListToReturn = _productsFound;
+            ConcurrentQueue<SearchedProduct> productListToReturn = _productsFound;
             //divides all the elements in the string, to evaluate each element
             string[] dividedString = searchedString.Split(' ');
             //checking all groups to to match with the searched string elements
             foreach (Group g in GroupDictionary.Values)
             {
                 //matching on each element in the string
-                bool groupMatched = LevenshteinsGroupSearch(dividedString, g);
+                int MatchedValue;
+                bool groupMatched = LevenshteinsGroupSearch(dividedString, g, out MatchedValue);
                 //if the string contains a name of a group, or the string is matched, each product with the same group 
                 //is added to the list of products to show.
                 if (dividedString.Contains(g.Name) || groupMatched)
                 {
                     foreach (Product p in ProductDictionary.Values.Where(x => x.ProductGroupID == g.ID))
                     {
-                        if (!(productListToReturn.Contains(p)))
+                        if (productListToReturn.Where(x => x.CurrentProduct.ID == p.ID).First() != null)
                         {
-                            productListToReturn.Enqueue(p);
+                            SearchedProduct NewProduct = new SearchedProduct(p);
+                            NewProduct.SetGroupMatch(MatchedValue);
+                            productListToReturn.Enqueue(NewProduct);
                         }
                     }
                 }
@@ -528,21 +550,24 @@ namespace P3_Projekt_WPF.Classes.Utilities
         public void BrandSearch(object searchString)//tested
         {
             string searchedString = searchString as string;
-            ConcurrentQueue<Product> productListToReturn = _productsFound;
+            ConcurrentQueue<SearchedProduct> productListToReturn = _productsFound;
             //divides all the elements in the string, to evaluate each element
             string[] dividedString = searchedString.Split(' ');
             //checking all products to to match the brands with the searched string elements
             foreach (Product p in ProductDictionary.Values)
             {
+                int MatchedValues;
                 //matching on each element in the string
-                bool brandMatched = LevenshteinsBrandSearch(dividedString, p.Brand);
+                bool brandMatched = LevenshteinsBrandSearch(dividedString, p.Brand, out MatchedValues);
                 //if the string contains a product brand, or the string is matched, each product with the same brand
                 //is added to the list of products to show.
                 if (dividedString.Contains(p.Brand) || brandMatched)
                 {
-                    if (!productListToReturn.Contains(p))
+                    if (productListToReturn.Where(x => x.CurrentProduct.ID == p.ID).First() == null) ;
                     {
-                        productListToReturn.Enqueue(p);
+                        SearchedProduct NewProduct = new SearchedProduct(p);
+                        NewProduct.SetBrandMatch(MatchedValues);
+                        productListToReturn.Enqueue(NewProduct);
                     }
 
                 }
@@ -564,12 +589,12 @@ namespace P3_Projekt_WPF.Classes.Utilities
             }
         }
 
-        public bool LevenshteinsGroupSearch(string[] searchedString, Group groupCheck)//tested
+        public bool LevenshteinsGroupSearch(string[] searchedString, Group groupCheck, out int charDifference)//tested
         {//setup for levenshteins
             foreach (string s in searchedString)
             {
                 //getting the chardifference between the searchedstring and the productname
-                int charDifference = ComputeLevenshteinsDistance(s, groupCheck.Name);
+                charDifference = ComputeLevenshteinsDistance(s, groupCheck.Name);
                 //Evaluate if the chardifference is in between the changelimit of the string
                 if (EvaluateStringLimit(s, charDifference))
                 {
@@ -577,17 +602,17 @@ namespace P3_Projekt_WPF.Classes.Utilities
                     return true;
                 }
             }
-
+            charDifference = -1;
             return false;
 
         }
 
-        public bool LevenshteinsBrandSearch(string[] searchedString, string productBrandName)//tested
+        public bool LevenshteinsBrandSearch(string[] searchedString, string productBrandName, out int charDifference)//tested
         {//setup for levenshteins
             foreach (string s in searchedString)
             {
                 //getting the chardifference between the searchedstring and the productname
-                int charDifference = ComputeLevenshteinsDistance(s, productBrandName);
+                charDifference = ComputeLevenshteinsDistance(s, productBrandName);
                 //Evaluate if the chardifference is in between the changelimit of the string
                 if (EvaluateStringLimit(s, charDifference))
                 {
@@ -595,6 +620,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
                     return true;
                 }
             }
+            charDifference = -1;
             return false;
         }
 
@@ -684,14 +710,16 @@ namespace P3_Projekt_WPF.Classes.Utilities
         //----SEARCH-END---------------------
 
         //Creates product with storage and stocka as keyvalue, then add the product to the list
-        public void CreateProduct(string name, string brand, decimal purchasePrice, int groupID, bool discount, decimal discountPrice, decimal salePrice, string imagePath, params KeyValuePair<int, int>[] storageRoomStockInput)
+        public void CreateProduct(int id, string name, string brand, decimal purchasePrice, int groupID, bool discount, decimal discountPrice, decimal salePrice, /*params KeyValuePair<int, int>[] storageRoomStockInput*/ Dictionary<int,int> storageWithAmount)
         {
-            Product newProduct = new Product(name, brand, purchasePrice, groupID, discount, salePrice, discountPrice);
-
+            Product newProduct = new Product(id, name, brand, purchasePrice, groupID, discount, salePrice, discountPrice);
+            newProduct.StorageWithAmount = storageWithAmount;
+            /*
             foreach (KeyValuePair<int, int> roomInput in storageRoomStockInput)
             {
                 newProduct.StorageWithAmount[roomInput.Key] = roomInput.Value;
             }
+            */
 
             ProductDictionary.TryAdd(newProduct.ID, newProduct);
             newProduct.UploadToDatabase();

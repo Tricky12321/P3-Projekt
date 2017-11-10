@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using System.Drawing;
+using System.Collections.Concurrent;
 
 namespace P3_Projekt_WPF
 {
@@ -21,7 +22,10 @@ namespace P3_Projekt_WPF
     /// </summary>
     public partial class CreateProduct : Window
     {
+        public event ImageChosen ImageChosenEvent;
         public string ChosenFilePath;
+        public string FileName;
+        public Dictionary<int, int> StorageWithAmount = new Dictionary<int, int>();
 
         public CreateProduct()
         {
@@ -29,9 +33,9 @@ namespace P3_Projekt_WPF
             btn_AddPicture.Click += PickImage;
             ImageChosenEvent += (FilePath) => { image_Product.Source = new BitmapImage(new Uri(FilePath)); };
             ImageChosenEvent += (FilePath) => { ChosenFilePath = FilePath; };
-        }
 
-        public event ImageChosen ImageChosenEvent;
+            btn_AddStorageRoomWithAmount.Click += AddStorageWithAmount;
+        }
 
         public void PickImage(object sender, RoutedEventArgs e)
         {
@@ -39,7 +43,18 @@ namespace P3_Projekt_WPF
             {
                 System.Windows.Forms.DialogResult result = dialog.ShowDialog();
                 ImageChosenEvent(dialog.FileName);
+                FileName = dialog.SafeFileName;
             }
+        }
+
+        public void AddStorageWithAmount(object sender, RoutedEventArgs e)
+        {
+            int addedStorageRoomID = Int32.Parse(comboBox_StorageRoom.Text.Substring(0, comboBox_StorageRoom.Text.IndexOf(' ')));
+            // TODO: Validation of input to disallow non-numbers
+            StorageWithAmount[addedStorageRoomID] = Int32.Parse(textbox_Amount.Text);
+            listview_AddedStorageRooms.Items.Add($"{comboBox_StorageRoom.Text}: {textbox_Amount.Text}");
+
+            textbox_Amount.Text = "";
         }
     }
 }
