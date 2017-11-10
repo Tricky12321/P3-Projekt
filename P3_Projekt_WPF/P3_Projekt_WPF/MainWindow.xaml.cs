@@ -209,6 +209,10 @@ namespace P3_Projekt_WPF
             addProductWindow.output_ProductID.Text = Product.GetNextID().ToString();
             addProductWindow.btn_SaveAndQuit.Click += delegate
             {
+                if (addProductWindow.ChosenFilePath != null)
+                {
+                    System.IO.File.Copy(addProductWindow.ChosenFilePath, _settingsController.PictureFilePath + "\\" + Product.GetNextID() + ".jpg", true);
+                }
                 AddProduct(addProductWindow.textbox_Name.Text,
                            addProductWindow.comboBox_Brand.Text,
                            addProductWindow.comboBox_Group.Text,
@@ -216,6 +220,8 @@ namespace P3_Projekt_WPF
                            addProductWindow.textbox_SalePrice.Text,
                            addProductWindow.textbox_DiscountPrice.Text,
                            addProductWindow.StorageWithAmount);
+               
+
                 addProductWindow.Close();
             };
             addProductWindow.Show();
@@ -487,12 +493,24 @@ namespace P3_Projekt_WPF
             UpdateGridQuickButtons();
         }
 
-        CreateTemporaryProduct createTemp = new CreateTemporaryProduct();
+
+
+
+        CreateTemporaryProduct createTemp;
+        bool isWindowOpen = false;
 
         private void btn_Temporary_Click(object sender, RoutedEventArgs e)
         {
-            createTemp.Show();
-            createTemp.Activate();
+            if (isWindowOpen == false)
+            {
+                createTemp = new CreateTemporaryProduct();
+                createTemp.Show();
+                isWindowOpen = true;
+            }
+            else
+            {
+                createTemp.Show();
+            }
 
             createTemp.btn_AddTempProduct.Click += delegate
             {
@@ -503,8 +521,11 @@ namespace P3_Projekt_WPF
                 _POSController.AddSaleTransaction(NewTemp, amount);
                 UpdateReceiptList();
                 createTemp.Close();
+
             };
         }
+
+        
 
         private void btn_PictureFilePath_Click(object sender, RoutedEventArgs e)
         {   
@@ -528,8 +549,10 @@ namespace P3_Projekt_WPF
         {
             DateTime startDate = (DateTime)datePicker_StartDate.SelectedDate;
             DateTime endDate = (DateTime)datePicker_EndDate.SelectedDate;
+            listView_Statistics.Items.Clear();
 
-
+            int totalAmount;
+            decimal totalPrice;
             string id = (textBox_StatisticsProductID.Text.Length == 0 ? null : textBox_StatisticsProductID.Text);
             string brand = (string)comboBox_Brand.SelectedItem;
             string groupString = (string)comboBox_Group.SelectedItem;
@@ -557,8 +580,34 @@ namespace P3_Projekt_WPF
             _statisticsController.RequestStatisticsDate(startDate, endDate);
             _statisticsController.RequestStatisticsWithParameters(id, brand, group);
 
-            listView_Statistics.Items.Add("TEest som er KYS :D LAaaAAAAaaaAAaAAAaAaAaaaAaaaaAAAaaaAaaaaaANg");
+            totalAmount = TotalAmount();
+            totalPrice = TotalPrice();
 
+            listView_Statistics.Items.Add(new StatisticsListItem("", "Total", $"{TotalAmount()}", $"{TotalPrice()}"));
+            foreach (SaleTransaction transaction in _statisticsController.TransactionsForStatistics)
+            {
+                listView_Statistics.Items.Add(transaction.StatisticsStrings());
+            }
+        }
+
+        private int TotalAmount()
+        {
+            int amount = 0;
+            foreach(SaleTransaction transaction in _statisticsController.TransactionsForStatistics)
+            {
+                amount += transaction.Amount;
+            }
+            return amount;
+        }
+
+        private decimal TotalPrice()
+        {
+            decimal price = 0;
+            foreach (SaleTransaction transaction in _statisticsController.TransactionsForStatistics)
+            {
+                price += transaction.TotalPrice;
+            }
+            return price;
         }
 
 
@@ -602,7 +651,7 @@ namespace P3_Projekt_WPF
             }
             InformationGrid.UpdateLayout();
         }
-
+        
         private void button_Click(object sender, RoutedEventArgs e)
         {
 
@@ -611,7 +660,7 @@ namespace P3_Projekt_WPF
         ResovleTempProduct resolveTempProduct = new ResovleTempProduct();
 
         private void btn_MergeTempProduct_Click(object sender, RoutedEventArgs e)
-        {/*
+        {
             resolveTempProduct.Show();
             resolveTempProduct.Activate();
 
@@ -633,5 +682,10 @@ namespace P3_Projekt_WPF
                 Debug.Print(s.CurrentProduct.ID.ToString());
             }
         }
+    }
+            var tempProducts = _storageController.TempProductList.Where(x => x.Resolved == false);
+        }
+
+        
     }
 }

@@ -24,6 +24,7 @@ namespace P3_Projekt_WPF
     {
         public event ImageChosen ImageChosenEvent;
         public string ChosenFilePath;
+        public string FileName;
         public Dictionary<int, int> StorageWithAmount = new Dictionary<int, int>();
 
         public CreateProduct()
@@ -42,6 +43,7 @@ namespace P3_Projekt_WPF
             {
                 System.Windows.Forms.DialogResult result = dialog.ShowDialog();
                 ImageChosenEvent(dialog.FileName);
+                FileName = dialog.SafeFileName;
             }
         }
 
