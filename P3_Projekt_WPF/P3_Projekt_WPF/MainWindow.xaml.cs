@@ -114,11 +114,11 @@ namespace P3_Projekt_WPF
         {
             datePicker_StartDate.SelectedDate = DateTime.Now;
             datePicker_EndDate.SelectedDate = DateTime.Now;
-            foreach(string brand in _storageController.ProductDictionary.Values.Select(x => x.Brand).Distinct())
+            foreach (string brand in _storageController.ProductDictionary.Values.Select(x => x.Brand).Distinct())
             {
                 comboBox_Brand.Items.Add(brand);
             }
-            foreach(Group group in _storageController.GroupDictionary.Values)
+            foreach (Group group in _storageController.GroupDictionary.Values)
             {
                 comboBox_Group.Items.Add(group.Name);
             }
@@ -181,11 +181,18 @@ namespace P3_Projekt_WPF
         public void AddProductDialogOpener(object sender, RoutedEventArgs e)
         {
             CreateProduct addProductWindow = new CreateProduct();
+
+            // Adds ID to the combox text, to allow for comparing the name of the storageroom in combox with the ID in the storagewithamount, without adding reference to storageroomcontroller 
+            foreach(StorageRoom storageRoom in _storageController.StorageRoomDictionary.Values)
+            {
+                addProductWindow.comboBox_StorageRoom.Items.Add($"{storageRoom.ID.ToString()} {storageRoom.Name}");
+                addProductWindow.StorageWithAmount.Add(storageRoom.ID, 0);
+            }
             foreach (Group group in _storageController.GroupDictionary.Values)
             {
                 addProductWindow.comboBox_Group.Items.Add(group.Name);
             }
-            foreach (string brand in _storageController.ProductDictionary.Values.Select(x => x.Brand).Distinct())
+            foreach (string brand in _storageController.GetProductBrands())
             {
                 addProductWindow.comboBox_Brand.Items.Add(brand);
             }
@@ -198,21 +205,24 @@ namespace P3_Projekt_WPF
                            addProductWindow.textbox_PurchasePrice.Text,
                            addProductWindow.textbox_SalePrice.Text,
                            addProductWindow.textbox_DiscountPrice.Text,
-                           addProductWindow.textbox_Amount.Text);
+                           addProductWindow.StorageWithAmount);
                 addProductWindow.Close();
             };
             addProductWindow.Show();
         }
 
-
-        public void AddProduct(string name, string brand, string group, string purchasePrice, string salePrice, string discountPrice, string amount)
+        public void AddProduct(string name, string brand, string group, string purchasePrice, string salePrice, string discountPrice, Dictionary<int,int> storageWithAmount)
         {
-            Product product = new Product(name, brand, Decimal.Parse(purchasePrice), _storageController.GroupDictionary.First(x => x.Value.Name.ToLower() == group).Key, (discountPrice != null) ? true : false, Decimal.Parse(salePrice), Decimal.Parse(discountPrice));
-
-            //_storageController.CreateProduct(name, brand, Decimal.Parse(purchasePrice), _storageController.GroupDictionary.First(x => x.Value.Name.ToLower() == group).Key)
-            product.UploadToDatabase();
+            _storageController.CreateProduct(Product.GetNextID(),
+                                             name,
+                                             brand,
+                                             Decimal.Parse(purchasePrice),
+                                             _storageController.GroupDictionary.First(x => x.Value.Name == group).Key,
+                                             (discountPrice != null) ? true : false,
+                                             Decimal.Parse(discountPrice),
+                                             Decimal.Parse(salePrice),
+                                             storageWithAmount);
         }
-
 
         private void ShowSpecificInfoProductStorage(object sender, RoutedEventArgs e)
         {
@@ -240,7 +250,7 @@ namespace P3_Projekt_WPF
 
         public void LoadProductGrid()
         {
-
+            LoadProductImages();
             int i = 1;
 
             foreach (KeyValuePair<int, Product> product in _storageController.ProductDictionary.OrderBy(x => x.Key))
@@ -249,45 +259,6 @@ namespace P3_Projekt_WPF
                 {
                     productGrid.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(380) });
                     int hej = productGrid.RowDefinitions.Count;
-                }
-                /*
-                var directory = new DirectoryInfo($@"{ _settingsController.PictureFilePath }/{ product.Value.ID}");
-                var allowedExtensions = new string[] { ".jpg", ".bmp", ".png", "jpeg" };
-
-                var imageFiles = from file in directory.EnumerateFiles("*", SearchOption.AllDirectories)
-                                 where allowedExtensions.Contains(file.Extension.ToLower())
-                                 select file;
-
-                foreach (var file in imageFiles)
-                    Console.WriteLine(file.FullName);
-
-                /*
-                Image image = new Image();
-
-                
-                if (Directory.Exists(directory.ToString()))
-                { 
-                    var imageFiles = from file in directory.EnumerateFiles("*", SearchOption.AllDirectories)
-                                     where allowedExtensions.Contains(file.Extension.ToLower())
-                                     select file;
-
-                    if (imageFiles.Count<FileInfo>() >= 1)
-                    {
-                        BitmapImage bitMap = new BitmapImage(new Uri(imageFiles.First().ToString()));
-                        image.Source = bitMap;
-                    }
-                }
-                
-
-
-
-
-                if (image != null)
-                {
-                    image.VerticalAlignment = VerticalAlignment.Center;
-                    image.HorizontalAlignment = HorizontalAlignment.Center;
-                    image.Stretch = Stretch.Uniform;
-                    product.Value.Image = image;
                 }
 
                 ProductControl productControl = new ProductControl(product.Value, _storageController.GroupDictionary);
@@ -298,13 +269,38 @@ namespace P3_Projekt_WPF
                 productGrid.Children.Add(productControl);
 
                 i++;
-                */
+            }
+        }
+
+        private void LoadProductImages()
+        {
+            if (Directory.Exists(_settingsController.PictureFilePath))
+            {
+                DirectoryInfo directory = new DirectoryInfo($@"{ _settingsController.PictureFilePath }");
+                string[] allowedExtensions = new string[] { ".jpg", ".bmp", ".png", ".jpeg" };
+
+                IEnumerable<FileInfo> imageFiles = from file in directory.EnumerateFiles("*", SearchOption.AllDirectories)
+                                                   where allowedExtensions.Contains(file.Extension.ToLower())
+                                                   select file;
+
+                foreach (FileInfo productImage in imageFiles)
+                {
+                    int productID;
+                    int.TryParse((productImage.Name.Replace(productImage.Extension, "")), out productID);
+
+                    BitmapImage bitMap = new BitmapImage(new Uri($"{productImage.DirectoryName}/{productImage}"));
+
+                    Image image = new Image();
+                    image.Source = bitMap;
+
+                    _storageController.ProductDictionary[productID].Image = image;
+                }
             }
         }
 
         public void AddTransactionToReceipt(SaleTransaction transaction)
         {
-            if(transaction.Product is TempProduct)
+            if (transaction.Product is TempProduct)
             {
                 listView_Receipt.Items.Add(new ReceiptListItem { String_Product = (transaction.Product as TempProduct).Description, Amount = transaction.Amount, Price = $"{transaction.GetProductPrice()}", IDTag = transaction.Product.ID });
             }
@@ -471,7 +467,7 @@ namespace P3_Projekt_WPF
             _settingsController.SpecifyPictureFilePath();
         }
 
-        private void OnSelectedStartDateChanged(object sender, SelectionChangedEventArgs  e)
+        private void OnSelectedStartDateChanged(object sender, SelectionChangedEventArgs e)
         {
             string[] dateTime = datePicker_StartDate.ToString().Split(' ');
             label_CurrentStartDate.Text = $"{ dateTime[0]}";
@@ -493,7 +489,7 @@ namespace P3_Projekt_WPF
             string brand = (string)comboBox_Brand.SelectedItem;
             string groupString = (string)comboBox_Group.SelectedItem;
             Group group = null;
-            if((string)comboBox_Group.SelectedItem != null)
+            if ((string)comboBox_Group.SelectedItem != null)
             {
                 group = _storageController.GroupDictionary.Values.First(x => x.Name == groupString);
             }
@@ -515,7 +511,7 @@ namespace P3_Projekt_WPF
 
             _statisticsController.RequestStatisticsDate(startDate, endDate);
             _statisticsController.RequestStatisticsWithParameters(id, brand, group);
-            
+
             listView_Statistics.Items.Add("TEest som er KYS :D LAaaAAAAaaaAAaAAAaAaAaaaAaaaaAAAaaaAaaaaaANg");
 
         }
@@ -537,7 +533,7 @@ namespace P3_Projekt_WPF
         private void TextInputNoNumber(object sender, TextCompositionEventArgs e)
         {
             // Only allows number in textfield
-            if(e.Text.Length > 0)
+            if (e.Text.Length > 0)
             {
                 if (!char.IsDigit(e.Text, e.Text.Length - 1))
                     e.Handled = true;

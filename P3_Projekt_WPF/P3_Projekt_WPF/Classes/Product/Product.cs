@@ -24,8 +24,9 @@ namespace P3_Projekt_WPF.Classes
         public Dictionary<int, int> StorageWithAmount = new Dictionary<int, int>();
 
 
-        public Product(string name, string brand, decimal purchasePrice, int groupID, bool discount, decimal salePrice, decimal discountPrice) : base(salePrice)
+        public Product(int id, string name, string brand, decimal purchasePrice, int groupID, bool discount, decimal salePrice, decimal discountPrice) : base(salePrice)
         {
+            ID = id;
             Name = name;
             Brand = brand;
             PurchasePrice = purchasePrice;
@@ -36,7 +37,7 @@ namespace P3_Projekt_WPF.Classes
 
         public Product(int id) : base(0)
         {
-            this.ID = id;
+            ID = id;
             GetFromDatabase();
         }
 
