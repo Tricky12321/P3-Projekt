@@ -162,9 +162,9 @@ namespace P3_Projekt_WPF.Classes
             UpdateInDatabase();
         }
 
-        public string ToStatisticsString()
+        public StatisticsListItem StatisticsStrings()
         {
-            return $"{Date.ToString("dd/mm/yy")} | {Product.GetName()} | {Amount} | {TotalPrice}";
+            return new StatisticsListItem(Date.ToString("dd/mm/yy"), Product.GetName(), Amount.ToString(), TotalPrice.ToString());
         }
 
         public override void GetFromDatabase()

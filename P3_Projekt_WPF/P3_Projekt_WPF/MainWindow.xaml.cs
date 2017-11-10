@@ -501,7 +501,10 @@ namespace P3_Projekt_WPF
         {
             DateTime startDate = (DateTime)datePicker_StartDate.SelectedDate;
             DateTime endDate = (DateTime)datePicker_EndDate.SelectedDate;
+            listView_Statistics.Items.Clear();
 
+            int totalAmount;
+            decimal totalPrice;
             string id = (textBox_StatisticsProductID.Text.Length == 0 ? null : textBox_StatisticsProductID.Text);
             string brand = (string)comboBox_Brand.SelectedItem;
             string groupString = (string)comboBox_Group.SelectedItem;
@@ -529,12 +532,34 @@ namespace P3_Projekt_WPF
             _statisticsController.RequestStatisticsDate(startDate, endDate);
             _statisticsController.RequestStatisticsWithParameters(id, brand, group);
 
+            totalAmount = TotalAmount();
+            totalPrice = TotalPrice();
+
+            listView_Statistics.Items.Add(new StatisticsListItem("", "Total", $"{TotalAmount()}", $"{TotalPrice()}"));
+            foreach (SaleTransaction transaction in _statisticsController.TransactionsForStatistics)
+            {
+                listView_Statistics.Items.Add(transaction.StatisticsStrings());
+            }
+        }
+
+        private int TotalAmount()
+        {
+            int amount = 0;
             foreach(SaleTransaction transaction in _statisticsController.TransactionsForStatistics)
             {
-                listView_Statistics.Items.Add(transaction.ToStatisticsString());
-
+                amount += transaction.Amount;
             }
+            return amount;
+        }
 
+        private decimal TotalPrice()
+        {
+            decimal price = 0;
+            foreach (SaleTransaction transaction in _statisticsController.TransactionsForStatistics)
+            {
+                price += transaction.TotalPrice;
+            }
+            return price;
         }
 
 

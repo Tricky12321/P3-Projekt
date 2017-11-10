@@ -28,7 +28,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
         private ConcurrentQueue<SaleTransaction> _saleTransactions;
         private List<Thread> _saleTransactionThreads = new List<Thread>();
         private object _tableDecodeLock = new object();
-        private int _threadCount = 4;
+        private int _threadCount = 10;
         private TableDecode _saleTransactionsRawData;
         private int _saleTransactionsCreated = 0;
         private ConcurrentQueue<Row> _dataQueue;
@@ -48,7 +48,6 @@ namespace P3_Projekt_WPF.Classes.Utilities
             Row data;
             while (_dataQueue.TryDequeue(out data))
             {
-                data = _saleTransactionsRawData.RowData.Take(1).First();
                 SaleTransaction NewTransaction = new SaleTransaction(data);
                 _saleTransactions.Enqueue(NewTransaction);
                 Interlocked.Increment(ref _saleTransactionsCreated);
@@ -73,8 +72,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
             {
                 Thread.Sleep(5);
             }
-            List<SaleTransaction> SaleTransactions = new List<SaleTransaction>(_saleTransactions);
-            //TransactionsForStatistics = TransactionsForStatistics.Where(x => (Utils.GetUnixTime(x.Date) > fromUnixTime && Utils.GetUnixTime(x.Date) < toUnixTime)).ToList();
+            TransactionsForStatistics = new List<SaleTransaction>(_saleTransactions);
         }
 
         public void RequestStatisticsToday()
@@ -94,8 +92,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
             {
                 Thread.Sleep(5);
             }
-            List<SaleTransaction> SaleTransactions = new List<SaleTransaction>(_saleTransactions);
-            //TransactionsForStatistics = TransactionsForStatistics.Where(x => x.Date.Day == today.Day).ToList();
+            TransactionsForStatistics = new List<SaleTransaction>(_saleTransactions);
         }
 
         public void RequestStatisticsYesterday()
@@ -115,8 +112,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
             {
                 Thread.Sleep(5);
             }
-            List<SaleTransaction> SaleTransactions = new List<SaleTransaction>(_saleTransactions);
-            // TransactionsForStatistics = TransactionsForStatistics.Where(x => x.Date.Day == yesterday.Day).ToList();
+            TransactionsForStatistics = new List<SaleTransaction>(_saleTransactions);
         }
 
         public void RequestStatisticsWithParameters(string productID, string brand, Group group)
