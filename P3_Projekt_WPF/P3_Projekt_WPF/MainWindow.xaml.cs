@@ -274,24 +274,27 @@ namespace P3_Projekt_WPF
 
         private void LoadProductImages()
         {
-            DirectoryInfo directory = new DirectoryInfo($@"{ _settingsController.PictureFilePath }");
-            string[] allowedExtensions = new string[] { ".jpg", ".bmp", ".png", ".jpeg" };
-
-            IEnumerable<FileInfo> imageFiles = from file in directory.EnumerateFiles("*", SearchOption.AllDirectories)
-                                               where allowedExtensions.Contains(file.Extension.ToLower())
-                                               select file;
-
-            foreach (FileInfo productImage in imageFiles)
+            if (Directory.Exists(_settingsController.PictureFilePath))
             {
-                int productID;
-                int.TryParse((productImage.Name.Replace(productImage.Extension, "")), out productID);
+                DirectoryInfo directory = new DirectoryInfo($@"{ _settingsController.PictureFilePath }");
+                string[] allowedExtensions = new string[] { ".jpg", ".bmp", ".png", ".jpeg" };
 
-                BitmapImage bitMap = new BitmapImage(new Uri($"{productImage.DirectoryName}/{productImage}"));
+                IEnumerable<FileInfo> imageFiles = from file in directory.EnumerateFiles("*", SearchOption.AllDirectories)
+                                                   where allowedExtensions.Contains(file.Extension.ToLower())
+                                                   select file;
 
-                Image image = new Image();
-                image.Source = bitMap;
+                foreach (FileInfo productImage in imageFiles)
+                {
+                    int productID;
+                    int.TryParse((productImage.Name.Replace(productImage.Extension, "")), out productID);
 
-                _storageController.ProductDictionary[productID].Image = image;
+                    BitmapImage bitMap = new BitmapImage(new Uri($"{productImage.DirectoryName}/{productImage}"));
+
+                    Image image = new Image();
+                    image.Source = bitMap;
+
+                    _storageController.ProductDictionary[productID].Image = image;
+                }
             }
         }
 

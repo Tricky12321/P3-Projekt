@@ -16,7 +16,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
     {
         public List<FastButton> quickButtonList = new List<FastButton>();
         public Dictionary<Key, FastButton> quickButtonKeyList = new Dictionary<Key, FastButton>();
-        public string PictureFilePath = @"C:/Users/Mads Stenkær/Desktop/test";
+        public string PictureFilePath = Properties.Settings.Default.PictureFilePath;
 
         public void AddNewQuickButton(string buttonText, int productID, double gridWidth, double gridHeight, RoutedEventHandler btn_FastButton_click)
         {
@@ -41,7 +41,9 @@ namespace P3_Projekt_WPF.Classes.Utilities
             using (var dialog = new System.Windows.Forms.FolderBrowserDialog())
             {
                 System.Windows.Forms.DialogResult result = dialog.ShowDialog();
-                PictureFilePath = dialog.SelectedPath;
+                Properties.Settings.Default.PictureFilePath = dialog.SelectedPath;
+                Properties.Settings.Default.Save();
+                PictureFilePath = Properties.Settings.Default.PictureFilePath;
             }
         }
     }
