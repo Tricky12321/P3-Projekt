@@ -183,7 +183,7 @@ namespace P3_Projekt_WPF
             CreateProduct addProductWindow = new CreateProduct();
 
             // Adds ID to the combox text, to allow for comparing the name of the storageroom in combox with the ID in the storagewithamount, without adding reference to storageroomcontroller 
-            foreach(StorageRoom storageRoom in _storageController.StorageRoomDictionary.Values)
+            foreach (StorageRoom storageRoom in _storageController.StorageRoomDictionary.Values)
             {
                 addProductWindow.comboBox_StorageRoom.Items.Add($"{storageRoom.ID.ToString()} {storageRoom.Name}");
                 addProductWindow.StorageWithAmount.Add(storageRoom.ID, 0);
@@ -211,7 +211,7 @@ namespace P3_Projekt_WPF
             addProductWindow.Show();
         }
 
-        public void AddProduct(string name, string brand, string group, string purchasePrice, string salePrice, string discountPrice, Dictionary<int,int> storageWithAmount)
+        public void AddProduct(string name, string brand, string group, string purchasePrice, string salePrice, string discountPrice, Dictionary<int, int> storageWithAmount)
         {
             _storageController.CreateProduct(Product.GetNextID(),
                                              name,
@@ -283,17 +283,24 @@ namespace P3_Projekt_WPF
                                                    where allowedExtensions.Contains(file.Extension.ToLower())
                                                    select file;
 
-                foreach (FileInfo productImage in imageFiles)
+                try
                 {
-                    int productID;
-                    int.TryParse((productImage.Name.Replace(productImage.Extension, "")), out productID);
+                    foreach (FileInfo productImage in imageFiles)
+                    {
+                        int productID;
+                        int.TryParse((productImage.Name.Replace(productImage.Extension, "")), out productID);
 
-                    BitmapImage bitMap = new BitmapImage(new Uri($"{productImage.DirectoryName}/{productImage}"));
+                        BitmapImage bitMap = new BitmapImage(new Uri($"{productImage.DirectoryName}/{productImage}"));
 
-                    Image image = new Image();
-                    image.Source = bitMap;
+                        Image image = new Image();
+                        image.Source = bitMap;
 
-                    _storageController.ProductDictionary[productID].Image = image;
+                        _storageController.ProductDictionary[productID].Image = image;
+                    }
+                }
+                catch (UnauthorizedAccessException e)
+                {
+
                 }
             }
         }
@@ -357,12 +364,12 @@ namespace P3_Projekt_WPF
 
             if (_POSController.GetProductFromID(inputInt) != null)
             {
-                _POSController.AddSaleTransaction(_POSController.GetProductFromID(int.Parse(textBox_AddProductID.Text)), int.Parse(textBox_ProductAmount.Text));
+                _POSController.AddSaleTransaction(_POSController.GetProductFromID(inputInt), int.Parse(textBox_ProductAmount.Text));
                 UpdateReceiptList();
             }
             else
             {
-                MessageBox.Show($"Produkt med ID {inputInt} findes ikke på lageret");
+                Utils.ShowErrorWarning($"Produkt med ID {inputInt} findes ikke på lageret");
             }
         }
 
@@ -397,11 +404,11 @@ namespace P3_Projekt_WPF
             }
             else if (_settingsController.quickButtonList.Any(x => x.ProductID == inputInt))
             {
-                MessageBox.Show($"Produkt med dette ID {inputInt} er allerede oprettet");
+                Utils.ShowErrorWarning($"Produkt med dette ID {inputInt} er allerede oprettet");
             }
             else
             {
-                MessageBox.Show($"Produkt med ID {inputInt} findes ikke på lageret");
+                Utils.ShowErrorWarning($"Produkt med ID {inputInt} findes ikke på lageret");
             }
         }
 
