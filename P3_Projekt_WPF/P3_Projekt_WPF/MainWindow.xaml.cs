@@ -442,12 +442,24 @@ namespace P3_Projekt_WPF
         }
 
 
-        
+
+
+        CreateTemporaryProduct createTemp;
+        bool isWindowOpen = false;
 
         private void btn_Temporary_Click(object sender, RoutedEventArgs e)
         {
-            CreateTemporaryProduct createTemp = new CreateTemporaryProduct();
-            
+            if (isWindowOpen == false)
+            {
+                createTemp = new CreateTemporaryProduct();
+                createTemp.Show();
+                isWindowOpen = true;
+            }
+            else
+            {
+                createTemp.Show();
+            }
+
             createTemp.btn_AddTempProduct.Click += delegate
             {
                 string description = createTemp.textbox_Description.Text;
@@ -457,6 +469,7 @@ namespace P3_Projekt_WPF
                 _POSController.AddSaleTransaction(NewTemp, amount);
                 UpdateReceiptList();
                 createTemp.Close();
+
             };
         }
 

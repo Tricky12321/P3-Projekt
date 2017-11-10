@@ -45,5 +45,6 @@ namespace P3_Projekt_WPF
         {
             textBox_ProductAmount.Text = amount.ToString();
         }
+
     }
 }
