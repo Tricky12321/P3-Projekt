@@ -43,7 +43,10 @@ namespace P3_Projekt_WPF.Classes.Utilities
                 System.Windows.Forms.DialogResult result = dialog.ShowDialog();
                 Properties.Settings.Default.PictureFilePath = dialog.SelectedPath;
                 Properties.Settings.Default.Save();
+
                 PictureFilePath = Properties.Settings.Default.PictureFilePath;
+
+                
             }
         }
     }
