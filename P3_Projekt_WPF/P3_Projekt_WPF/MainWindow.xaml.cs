@@ -596,6 +596,9 @@ namespace P3_Projekt_WPF
             var tempProducts = _storageController.TempProductList.Where(x => x.Resolved == false);
         }
 
-        
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            Environment.Exit(0);
+        }
     }
 }
