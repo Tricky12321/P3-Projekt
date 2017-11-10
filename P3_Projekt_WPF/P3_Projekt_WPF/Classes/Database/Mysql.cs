@@ -31,9 +31,8 @@ namespace P3_Projekt_WPF.Classes.Database
         {
             Thread NewThread = new Thread(new ThreadStart(RunQuery_thread));
             NewThread.Name = "Mysql Thread";
-            _queryThreads.RemoveAll(x => x.ThreadState != System.Threading.ThreadState.Running);
-            _queryThreads.Add(NewThread);
             NewThread.Start();
+            _queryThreads.Add(NewThread);
         }
 
         public static void Disconnect(MySqlConnection connection)
