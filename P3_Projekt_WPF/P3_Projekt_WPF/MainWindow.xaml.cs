@@ -486,7 +486,6 @@ namespace P3_Projekt_WPF
             DateTime startDate = (DateTime)datePicker_StartDate.SelectedDate;
             DateTime endDate = (DateTime)datePicker_EndDate.SelectedDate;
 
-
             string id = (textBox_StatisticsProductID.Text.Length == 0 ? null : textBox_StatisticsProductID.Text);
             string brand = (string)comboBox_Brand.SelectedItem;
             string groupString = (string)comboBox_Group.SelectedItem;
@@ -513,8 +512,12 @@ namespace P3_Projekt_WPF
 
             _statisticsController.RequestStatisticsDate(startDate, endDate);
             _statisticsController.RequestStatisticsWithParameters(id, brand, group);
-            
-            listView_Statistics.Items.Add("TEest som er KYS :D LAaaAAAAaaaAAaAAAaAaAaaaAaaaaAAAaaaAaaaaaANg");
+
+            foreach(SaleTransaction transaction in _statisticsController.TransactionsForStatistics)
+            {
+                listView_Statistics.Items.Add(transaction.ToStatisticsString());
+
+            }
 
         }
 

@@ -27,7 +27,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
         {
             TransactionsForStatistics.RemoveAll(x => true);
             int fromUnixTime = Utils.GetUnixTime(from);
-            int toUnixTime = Utils.GetUnixTime(ToDate(to));
+            int toUnixTime = Utils.GetUnixTime(EndDate(to));
 
             string requestStatisticsQuery =
             $"SELECT * FROM `sale_transactions` WHERE UNIX_TIMESTAMP(`datetime`) >= '{fromUnixTime}' AND UNIX_TIMESTAMP(`datetime`) <= '{toUnixTime}';";
@@ -94,7 +94,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
             }  
         }
 
-        public DateTime ToDate(DateTime date)
+        public DateTime EndDate(DateTime date)
         {
             TimeSpan dayEnd = new TimeSpan(23, 59, 59);
             return date + dayEnd;

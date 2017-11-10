@@ -162,6 +162,11 @@ namespace P3_Projekt_WPF.Classes
             UpdateInDatabase();
         }
 
+        public string ToStatisticsString()
+        {
+            return $"{Date.ToString("dd/mm/yy")} | {Product.GetName()} | {Amount} | {TotalPrice}";
+        }
+
         public override void GetFromDatabase()
         {
             string getQuery = $"SELECT * FROM `sale_transactions` WHERE `id` = '{_id}'";
