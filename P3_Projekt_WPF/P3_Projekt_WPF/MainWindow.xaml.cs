@@ -181,11 +181,18 @@ namespace P3_Projekt_WPF
         public void AddProductDialogOpener(object sender, RoutedEventArgs e)
         {
             CreateProduct addProductWindow = new CreateProduct();
+
+            // Adds ID to the combox text, to allow for comparing the name of the storageroom in combox with the ID in the storagewithamount, without adding reference to storageroomcontroller 
+            foreach(StorageRoom storageRoom in _storageController.StorageRoomDictionary.Values)
+            {
+                addProductWindow.comboBox_StorageRoom.Items.Add($"{storageRoom.ID.ToString()} {storageRoom.Name}");
+                addProductWindow.StorageWithAmount.Add(storageRoom.ID, 0);
+            }
             foreach (Group group in _storageController.GroupDictionary.Values)
             {
                 addProductWindow.comboBox_Group.Items.Add(group.Name);
             }
-            foreach (string brand in _storageController.ProductDictionary.Values.Select(x => x.Brand).Distinct())
+            foreach (string brand in _storageController.GetProductBrands())
             {
                 addProductWindow.comboBox_Brand.Items.Add(brand);
             }
@@ -198,21 +205,24 @@ namespace P3_Projekt_WPF
                            addProductWindow.textbox_PurchasePrice.Text,
                            addProductWindow.textbox_SalePrice.Text,
                            addProductWindow.textbox_DiscountPrice.Text,
-                           addProductWindow.textbox_Amount.Text);
+                           addProductWindow.StorageWithAmount);
                 addProductWindow.Close();
             };
             addProductWindow.Show();
         }
 
-
-        public void AddProduct(string name, string brand, string group, string purchasePrice, string salePrice, string discountPrice, string amount)
+        public void AddProduct(string name, string brand, string group, string purchasePrice, string salePrice, string discountPrice, Dictionary<int,int> storageWithAmount)
         {
-            Product product = new Product(name, brand, Decimal.Parse(purchasePrice), _storageController.GroupDictionary.First(x => x.Value.Name.ToLower() == group).Key, (discountPrice != null) ? true : false, Decimal.Parse(salePrice), Decimal.Parse(discountPrice));
-
-            //_storageController.CreateProduct(name, brand, Decimal.Parse(purchasePrice), _storageController.GroupDictionary.First(x => x.Value.Name.ToLower() == group).Key)
-            product.UploadToDatabase();
+            _storageController.CreateProduct(Product.GetNextID(),
+                                             name,
+                                             brand,
+                                             Decimal.Parse(purchasePrice),
+                                             _storageController.GroupDictionary.First(x => x.Value.Name == group).Key,
+                                             (discountPrice != null) ? true : false,
+                                             Decimal.Parse(discountPrice),
+                                             Decimal.Parse(salePrice),
+                                             storageWithAmount);
         }
-
 
         private void ShowSpecificInfoProductStorage(object sender, RoutedEventArgs e)
         {

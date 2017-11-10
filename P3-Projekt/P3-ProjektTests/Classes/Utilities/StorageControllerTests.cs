@@ -129,9 +129,9 @@ namespace P3_Projekt_WPF.Classes.Utilities.Tests
             var storageController = new StorageController();
             Group newGroup = new Group("group", "test");
             storageController.GroupDictionary.TryAdd(newGroup.ID, newGroup);
-            var testProduct1 = new Product("test1", "blabla", 1.25m, newGroup.ID, false, 5.0m, 3.0m, null);
-            var testProduct2 = new Product("test2", "blabla", 1.25m, newGroup.ID, false, 5.0m, 3.0m, null);
-            var testProduct3 = new Product("test3", "blabla", 1.25m, newGroup.ID, false, 5.0m, 3.0m, null);
+            var testProduct1 = new Product("test1", "blabla", 1.25m, newGroup.ID, false, 5.0m, 3.0m);
+            var testProduct2 = new Product("test2", "blabla", 1.25m, newGroup.ID, false, 5.0m, 3.0m);
+            var testProduct3 = new Product("test3", "blabla", 1.25m, newGroup.ID, false, 5.0m, 3.0m);
             storageController.ProductDictionary.TryAdd(testProduct1.ID, testProduct1);
             storageController.ProductDictionary.TryAdd(testProduct2.ID, testProduct2);
             storageController.ProductDictionary.TryAdd(testProduct3.ID, testProduct3);
@@ -155,9 +155,9 @@ namespace P3_Projekt_WPF.Classes.Utilities.Tests
             newGroup2.ID = 2;
             storageController.GroupDictionary.TryAdd(newGroup1.ID, newGroup1);
             storageController.GroupDictionary.TryAdd(newGroup2.ID, newGroup2);
-            var testProduct1 = new Product("test1", "blabla", 1.25m, newGroup1.ID, false, 5.0m, 3.0m, null);
-            var testProduct2 = new Product("test2", "blabla", 1.25m, newGroup2.ID, false, 5.0m, 3.0m, null);
-            var testProduct3 = new Product("test3", "blabla", 1.25m, newGroup2.ID, false, 5.0m, 3.0m, null);
+            var testProduct1 = new Product("test1", "blabla", 1.25m, newGroup1.ID, false, 5.0m, 3.0m);
+            var testProduct2 = new Product("test2", "blabla", 1.25m, newGroup2.ID, false, 5.0m, 3.0m);
+            var testProduct3 = new Product("test3", "blabla", 1.25m, newGroup2.ID, false, 5.0m, 3.0m);
             storageController.ProductDictionary.TryAdd(testProduct1.ID, testProduct1);
             storageController.ProductDictionary.TryAdd(testProduct2.ID, testProduct2);
             storageController.ProductDictionary.TryAdd(testProduct3.ID, testProduct3);
@@ -181,9 +181,9 @@ namespace P3_Projekt_WPF.Classes.Utilities.Tests
             newGroup2.ID = 2;
             storageController.GroupDictionary.TryAdd(newGroup1.ID, newGroup1);
             storageController.GroupDictionary.TryAdd(newGroup2.ID, newGroup2);
-            var testProduct1 = new Product("test1", "blabla", 1.25m, newGroup1.ID, false, 5.0m, 3.0m, null);
-            var testProduct2 = new Product("test2", "blabla", 1.25m, newGroup1.ID, false, 5.0m, 3.0m, null);
-            var testProduct3 = new Product("test3", "blabla", 1.25m, newGroup1.ID, false, 5.0m, 3.0m, null);
+            var testProduct1 = new Product("test1", "blabla", 1.25m, newGroup1.ID, false, 5.0m, 3.0m);
+            var testProduct2 = new Product("test2", "blabla", 1.25m, newGroup1.ID, false, 5.0m, 3.0m);
+            var testProduct3 = new Product("test3", "blabla", 1.25m, newGroup1.ID, false, 5.0m, 3.0m);
             storageController.ProductDictionary.TryAdd(testProduct1.ID, testProduct1);
             storageController.ProductDictionary.TryAdd(testProduct2.ID, testProduct2);
             storageController.ProductDictionary.TryAdd(testProduct3.ID, testProduct3);
@@ -267,7 +267,7 @@ namespace P3_Projekt_WPF.Classes.Utilities.Tests
             var storageController = new StorageController();
             Group ProdGroup = new Group("group1", "good group");
             ProdGroup.ID = 9999;
-            var testProduct = new Product("test1", "blabla", 1.25m, ProdGroup.ID, false, 5.0m, 3.0m, null);
+            var testProduct = new Product("test1", "blabla", 1.25m, ProdGroup.ID, false, 5.0m, 3.0m);
             storageController.ProductDictionary.TryAdd(testProduct.ID, testProduct);
 
             storageController.CreateStorageRoom("room1", "test room");
@@ -282,9 +282,9 @@ namespace P3_Projekt_WPF.Classes.Utilities.Tests
             var group1 = new Group("group1", "good group");
             var group2 = new Group("group2", "good group");
             var group3 = new Group("group3", "good group");
-            var testProduct1 = new Product("test1", "blabla", 1.25m, group1.ID, false, 5.0m, 3.0m, null);
-            var testProduct2 = new Product("test2", "blabla", 1.25m, group2.ID, false, 5.0m, 3.0m, null);
-            var testProduct3 = new Product("test3", "blabla", 1.25m, group3.ID, false, 5.0m, 3.0m, null);
+            var testProduct1 = new Product("test1", "blabla", 1.25m, group1.ID, false, 5.0m, 3.0m);
+            var testProduct2 = new Product("test2", "blabla", 1.25m, group2.ID, false, 5.0m, 3.0m);
+            var testProduct3 = new Product("test3", "blabla", 1.25m, group3.ID, false, 5.0m, 3.0m);
             storageController.ProductDictionary.TryAdd(testProduct1.ID, testProduct1);
             storageController.ProductDictionary.TryAdd(testProduct2.ID, testProduct2);
             storageController.ProductDictionary.TryAdd(testProduct3.ID, testProduct3);
@@ -337,7 +337,7 @@ namespace P3_Projekt_WPF.Classes.Utilities.Tests
         public void DeleteStorageRoomTestOneProduct()
         {
             var storageController = new StorageController();
-            var testProduct = new Product("test1", "blabla", 1.25m, 0, false, 5.0m, 3.0m, null);
+            var testProduct = new Product("test1", "blabla", 1.25m, 0, false, 5.0m, 3.0m);
             storageController.ProductDictionary.TryAdd(testProduct.ID, testProduct);
             var room = new StorageRoom("test", "test");
             storageController.ProductDictionary[0].StorageWithAmount.Add(room.ID, 0);
@@ -355,9 +355,9 @@ namespace P3_Projekt_WPF.Classes.Utilities.Tests
         public void DeleteStorageRoomTestThreeProducts()
         {
             var storageController = new StorageController();
-            var testProduct1 = new Product("test1", "blabla", 1.25m, 0, false, 5.0m, 3.0m, null);
-            var testProduct2 = new Product("test2", "blabla", 1.25m, 0, false, 5.0m, 3.0m, null);
-            var testProduct3 = new Product("test3", "blabla", 1.25m, 0, false, 5.0m, 3.0m, null);
+            var testProduct1 = new Product("test1", "blabla", 1.25m, 0, false, 5.0m, 3.0m);
+            var testProduct2 = new Product("test2", "blabla", 1.25m, 0, false, 5.0m, 3.0m);
+            var testProduct3 = new Product("test3", "blabla", 1.25m, 0, false, 5.0m, 3.0m);
             storageController.ProductDictionary.TryAdd(testProduct1.ID, testProduct1);
             storageController.ProductDictionary.TryAdd(testProduct2.ID, testProduct2);
             storageController.ProductDictionary.TryAdd(testProduct3.ID, testProduct3);
@@ -392,18 +392,18 @@ namespace P3_Projekt_WPF.Classes.Utilities.Tests
         {
             StorageController strContr = new StorageController();
             Group testGroup = new Group("shirts", "shirts and dresses");
-            Product productToBeCompared = new Product("Running shoes", "Adidas", 100, testGroup.ID, false, 20, 50, null);
+            Product productToBeCompared = new Product("Running shoes", "Adidas", 100, testGroup.ID, false, 20, 50);
             string searchedString = "Runin shos";
             int charDifference = strContr.ComputeLevenshteinsDistance(searchedString, productToBeCompared.Name);
             Assert.IsTrue(charDifference == 3);
         }
-
+        /*
         [Test()]
         public void LevenshteinsProductSearchTest()
         {
             StorageController strContr = new StorageController();
             Group testGroup = new Group("shirts", "shirts and dresses");
-            Product productToBeCompared = new Product("Running shoes", "Adidas", 100, testGroup.ID, false, 20, 50, null);
+            Product productToBeCompared = new Product("Running shoes", "Adidas", 100, testGroup.ID, false, 20, 50);
             string searchedString = "runin shos";
             ConcurrentQueue<Product> productList = new ConcurrentQueue<Product>();
 
@@ -422,7 +422,6 @@ namespace P3_Projekt_WPF.Classes.Utilities.Tests
 
             Assert.IsTrue(groupWasMatched == true);
         }
-
         [Test()]
         public void LevenshteinsGroupSearchFalseTest()
         {
@@ -457,6 +456,8 @@ namespace P3_Projekt_WPF.Classes.Utilities.Tests
 
             Assert.IsTrue(brandWasMatched == false);
         }
+        */
+
         /*
         [Test()]
         public void GroupSearchTest()
