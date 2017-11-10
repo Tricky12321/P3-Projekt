@@ -199,6 +199,10 @@ namespace P3_Projekt_WPF
             addProductWindow.output_ProductID.Text = Product.GetNextID().ToString();
             addProductWindow.btn_SaveAndQuit.Click += delegate
             {
+                if (addProductWindow.ChosenFilePath != null)
+                {
+                    System.IO.File.Copy(addProductWindow.ChosenFilePath, _settingsController.PictureFilePath + "\\" + Product.GetNextID() + ".jpg", true);
+                }
                 AddProduct(addProductWindow.textbox_Name.Text,
                            addProductWindow.comboBox_Brand.Text,
                            addProductWindow.comboBox_Group.Text,
@@ -206,10 +210,7 @@ namespace P3_Projekt_WPF
                            addProductWindow.textbox_SalePrice.Text,
                            addProductWindow.textbox_DiscountPrice.Text,
                            addProductWindow.StorageWithAmount);
-                if (addProductWindow.ChosenFilePath != null)
-                {
-                    System.IO.File.Copy(addProductWindow.ChosenFilePath, _settingsController.PictureFilePath + addProductWindow.FileName,true);
-                }
+               
 
                 addProductWindow.Close();
             };
