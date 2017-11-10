@@ -206,6 +206,11 @@ namespace P3_Projekt_WPF
                            addProductWindow.textbox_SalePrice.Text,
                            addProductWindow.textbox_DiscountPrice.Text,
                            addProductWindow.StorageWithAmount);
+                if (addProductWindow.ChosenFilePath != null)
+                {
+                    System.IO.File.Copy(addProductWindow.ChosenFilePath, _settingsController.PictureFilePath + addProductWindow.FileName,true);
+                }
+
                 addProductWindow.Close();
             };
             addProductWindow.Show();
