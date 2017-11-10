@@ -11,12 +11,12 @@ namespace P3_Projekt_WPF.Classes
     {
         public int ID;
         public decimal SalePrice;
-        protected static int _idCounter = 0;
-        public static int IDCounter { get { return _idCounter; } set { _idCounter = value; } }
+        //protected static int _idCounter = 0;
+        //public static int IDCounter { get { return _idCounter; } set { _idCounter = value; } }
 
         public BaseProduct(decimal salePrice)
         {
-            ID = _idCounter++;
+            //ID = id;
             SalePrice = salePrice;
         }
 

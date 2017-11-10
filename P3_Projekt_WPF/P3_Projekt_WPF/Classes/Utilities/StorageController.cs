@@ -344,6 +344,12 @@ namespace P3_Projekt_WPF.Classes.Utilities
             Group outVal = null;
             GroupDictionary.TryRemove(removeID, out outVal);
         }
+
+        public IEnumerable<string> GetProductBrands()
+        {
+            return ProductDictionary.Values.Select(x => x.Brand).Distinct();
+        }
+
         // Levenstein multithreading
         private bool _productSearchDone = false;
         private bool _groupSearchDone = false;
@@ -621,14 +627,16 @@ namespace P3_Projekt_WPF.Classes.Utilities
         //----SEARCH-END---------------------
 
         //Creates product with storage and stocka as keyvalue, then add the product to the list
-        public void CreateProduct(string name, string brand, decimal purchasePrice, int groupID, bool discount, decimal discountPrice, decimal salePrice, string imagePath, params KeyValuePair<int, int>[] storageRoomStockInput)
+        public void CreateProduct(int id, string name, string brand, decimal purchasePrice, int groupID, bool discount, decimal discountPrice, decimal salePrice, /*params KeyValuePair<int, int>[] storageRoomStockInput*/ Dictionary<int,int> storageWithAmount)
         {
-            Product newProduct = new Product(name, brand, purchasePrice, groupID, discount, salePrice, discountPrice);
-
+            Product newProduct = new Product(id, name, brand, purchasePrice, groupID, discount, salePrice, discountPrice);
+            newProduct.StorageWithAmount = storageWithAmount;
+            /*
             foreach (KeyValuePair<int, int> roomInput in storageRoomStockInput)
             {
                 newProduct.StorageWithAmount[roomInput.Key] = roomInput.Value;
             }
+            */
 
             ProductDictionary.TryAdd(newProduct.ID, newProduct);
             newProduct.UploadToDatabase();

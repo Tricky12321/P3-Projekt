@@ -99,15 +99,16 @@
                 </Style>
             </TextBlock.Style>
         </TextBlock>
-        <TextBlock x:Name="label_Amount" HorizontalAlignment="Left" Margin="10,305,0,0" TextWrapping="Wrap" Text="Angiv " FontSize="30" MinHeight="24" VerticalAlignment="Top"/>
-        <TextBox Padding="10,0,0,0" x:Name="textbox_Amount" Margin="180,305,0,0" FontSize="30" HorizontalAlignment="Left" Width="280" Grid.ColumnSpan="1" Height="40" VerticalAlignment="Top">
+
+        <TextBlock x:Name="label_Amount" HorizontalAlignment="Left" Margin="10,305,0,0" TextWrapping="Wrap" Text="Angiv lagerrum og antal af produkter:" FontSize="24" MinHeight="24" VerticalAlignment="Top"/>
+        <TextBox Padding="10,0,0,0" x:Name="textbox_Amount" Margin="264,0,0,25" FontSize="30" HorizontalAlignment="Left" Width="90" Grid.ColumnSpan="1" Height="40" VerticalAlignment="Bottom">
             <TextBox.Resources>
                 <Style TargetType="{x:Type Border}">
                     <Setter Property="CornerRadius" Value="10"/>
                 </Style>
             </TextBox.Resources>
         </TextBox>
-        <TextBlock IsHitTestVisible="False" Text="Antal" Margin="195,305,0,0" Foreground="DarkGray" FontSize="30" HorizontalAlignment="Left" Width="255" Height="40" VerticalAlignment="Top">
+        <TextBlock IsHitTestVisible="False" Text="Antal" Margin="274,0,0,25" Foreground="DarkGray" FontSize="30" HorizontalAlignment="Left" Width="70" VerticalAlignment="Bottom" Height="40">
             <TextBlock.Style>
                 <Style TargetType="{x:Type TextBlock}">
                     <Setter Property="Visibility" Value="Collapsed"/>
@@ -119,6 +120,9 @@
                 </Style>
             </TextBlock.Style>
         </TextBlock>
+        <Button Style="{StaticResource Flat_Button}"  x:Name="btn_AddStorageRoomWithAmount" Content="Tilføj" FontSize="30" HorizontalAlignment="Left" Margin="360,0,0,23" Height="45" VerticalAlignment="Bottom" Width="100"/>
+        <ComboBox x:Name="comboBox_StorageRoom" HorizontalAlignment="Left" Margin="10,0,0,25" VerticalAlignment="Bottom" Width="245" Height="40" FontSize="30"/>
+
         <TextBlock x:Name="label_ProductID" Margin="23,23,0,78" Text="Produkt ID:" FontSize="24" MinHeight="24" VerticalAlignment="Top" Grid.Column="1" HorizontalAlignment="Left" Width="118"/>
         <TextBlock x:Name="output_ProductID" HorizontalAlignment="Left" Margin="160,23,0,78" TextWrapping="Wrap" Text=""  FontSize="24" VerticalAlignment="Top" Grid.Column="1"/>
 
@@ -128,5 +132,17 @@
         </Border>
 
         <Button Style="{StaticResource Flat_Button}" x:Name="btn_SaveAndQuit" Content="Gem og Afslut"  FontSize="30" Grid.Column="2" Margin="0,0,10,10" Height="45" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="220"/>
+        <ListView x:Name="listview_AddedStorageRooms" Grid.Column="1" HorizontalAlignment="Left" Height="55" Margin="23,356,0,0" VerticalAlignment="Top" Width="137">
+            <ListView.View>
+                <GridView>
+                    <GridView.ColumnHeaderContainerStyle>
+                        <Style>
+                            <Setter Property="UIElement.Visibility"  Value="Collapsed"/>
+                        </Style>
+                    </GridView.ColumnHeaderContainerStyle>
+                    <GridViewColumn/>
+                </GridView>
+            </ListView.View>
+        </ListView>
     </Grid>
 </Window>
