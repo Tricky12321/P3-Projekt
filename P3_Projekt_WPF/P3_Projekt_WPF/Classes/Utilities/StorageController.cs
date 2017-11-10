@@ -189,7 +189,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
 
         public void GetAllProductsFromDatabase()
         {
-            string sql = "SELECT * FROM `products`";
+            string sql = "SELECT * FROM `products` WHERE `id` > '0'";
             TableDecode Results = Mysql.RunQueryWithReturn(sql);
             _productsLoadedFromDatabase = Results.RowData.Count;
             _productsCreateByThreads = 0;
@@ -363,7 +363,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
         private int _productThreadCount = 4;
         private ConcurrentQueue<Product> _productsToSearch = null;
         private ConcurrentQueue<SearchedProduct> _productsFound = null;
-        private ConcurrentQueue<SearchedProduct> _productsToSort = null;
+        private ConcurrentQueue<SearchedProduct> _productsToSort = new ConcurrentQueue<SearchedProduct>();
         private List<Thread> _productSearchThreads = new List<Thread>();
         private string _searchedString = "";
 
@@ -445,7 +445,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
                 }
                 _productsToSearch = new ConcurrentQueue<Product>(ProductDictionary.Values);
                 _productsFound = productsToReturn;
-                _productsToSort = null;
+                _productsToSort = new ConcurrentQueue<SearchedProduct>();
                 // Starter multithreading 
                 _searchedString = searchedString;
                 StartLevenshteinSearchThreads();
@@ -535,11 +535,14 @@ namespace P3_Projekt_WPF.Classes.Utilities
                 {
                     foreach (Product p in ProductDictionary.Values.Where(x => x.ProductGroupID == g.ID))
                     {
-                        if (productListToReturn.Where(x => x.CurrentProduct.ID == p.ID).First() != null)
+                        if (productListToReturn.Where(x => x.CurrentProduct.ID == p.ID).Count() > 0)
                         {
-                            SearchedProduct NewProduct = new SearchedProduct(p);
-                            NewProduct.SetGroupMatch(MatchedValue);
-                            productListToReturn.Enqueue(NewProduct);
+                            if (productListToReturn.Where(x => x.CurrentProduct.ID == p.ID).First() != null)
+                            {
+                                SearchedProduct NewProduct = new SearchedProduct(p);
+                                NewProduct.SetGroupMatch(MatchedValue);
+                                productListToReturn.Enqueue(NewProduct);
+                            }
                         }
                     }
                 }

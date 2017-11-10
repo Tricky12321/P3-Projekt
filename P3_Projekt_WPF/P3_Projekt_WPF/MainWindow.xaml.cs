@@ -220,7 +220,7 @@ namespace P3_Projekt_WPF
                            addProductWindow.textbox_SalePrice.Text,
                            addProductWindow.textbox_DiscountPrice.Text,
                            addProductWindow.StorageWithAmount);
-               
+
 
                 addProductWindow.Close();
             };
@@ -268,7 +268,7 @@ namespace P3_Projekt_WPF
         {
             LoadProductGrid(_storageController.ProductDictionary);
         }
-         
+
 
         private void LoadProductControlDictionary()
         {
@@ -290,7 +290,7 @@ namespace P3_Projekt_WPF
             productGrid.RowDefinitions.Clear();
             productGrid.Children.Clear();
             AddProductButton();
-            
+
             productGrid.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(380) });
             int i = 1;
 
@@ -525,10 +525,10 @@ namespace P3_Projekt_WPF
             };
         }
 
-        
+
 
         private void btn_PictureFilePath_Click(object sender, RoutedEventArgs e)
-        {   
+        {
             _settingsController.SpecifyPictureFilePath();
             LoadProductImages();
         }
@@ -593,7 +593,7 @@ namespace P3_Projekt_WPF
         private int TotalAmount()
         {
             int amount = 0;
-            foreach(SaleTransaction transaction in _statisticsController.TransactionsForStatistics)
+            foreach (SaleTransaction transaction in _statisticsController.TransactionsForStatistics)
             {
                 amount += transaction.Amount;
             }
@@ -651,7 +651,7 @@ namespace P3_Projekt_WPF
             }
             InformationGrid.UpdateLayout();
         }
-        
+
         private void button_Click(object sender, RoutedEventArgs e)
         {
 
@@ -659,33 +659,34 @@ namespace P3_Projekt_WPF
 
         ResovleTempProduct resolveTempProduct = new ResovleTempProduct();
 
-        private void btn_MergeTempProduct_Click(object sender, RoutedEventArgs e)
-        {
-            resolveTempProduct.Show();
-            resolveTempProduct.Activate();
+        /* private void btn_MergeTempProduct_Click(object sender, RoutedEventArgs e)
+         {
+             resolveTempProduct.Show();
+             resolveTempProduct.Activate();
 
-            //(SaleTransaction transaction in _POSController.PlacerholderReceipt.Transactions
-            foreach (SaleTransaction tempProduct in _POSController.PlacerholderReceipt.Transactions.)
-            {
-                resolveTempProduct.listview_ProductsToMerge.Items.Add(new { Amount = 10 });
+             //(SaleTransaction transaction in _POSController.PlacerholderReceipt.Transactions
+             foreach (SaleTransaction tempProduct in _POSController.PlacerholderReceipt.Transactions.)
+             {
+                 resolveTempProduct.listview_ProductsToMerge.Items.Add(new { Amount = 10 });
+                 var tempProducts = _storageController.TempProductList.Where(x => x.Resolved == false);
+             }
+         }
 
-            }
-            */
-        }
+         }
+
+
+
+             }*/
+
 
         private void btn_search_Click(object sender, RoutedEventArgs e)
         {
-            ConcurrentQueue<SearchedProduct> productsFoundList =  _storageController.SearchForProduct(txtBox_SearchField.Text);
+            ConcurrentQueue<SearchedProduct> productsFoundList = _storageController.SearchForProduct(txtBox_SearchField.Text);
 
-            foreach(SearchedProduct s in productsFoundList)
+            foreach (SearchedProduct s in productsFoundList)
             {
-                Debug.Print(s.CurrentProduct.ID.ToString());
+                Debug.Print("testetetstt" + s.CurrentProduct.ID.ToString());
             }
         }
-    }
-            var tempProducts = _storageController.TempProductList.Where(x => x.Resolved == false);
-        }
-
-        
     }
 }
