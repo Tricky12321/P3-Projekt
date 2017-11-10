@@ -554,6 +554,7 @@ namespace P3_Projekt_WPF
             DateTime startDate = (DateTime)datePicker_StartDate.SelectedDate;
             DateTime endDate = (DateTime)datePicker_EndDate.SelectedDate;
             listView_Statistics.Items.Clear();
+            label_NoTransactions.Visibility = Visibility.Hidden;
 
             int totalAmount;
             decimal totalPrice;
@@ -580,18 +581,25 @@ namespace P3_Projekt_WPF
             {
                 group = null;
             }
-
-            _statisticsController.RequestStatisticsDate(startDate, endDate);
-            _statisticsController.RequestStatisticsWithParameters(id, brand, group);
-
-            totalAmount = TotalAmount();
-            totalPrice = TotalPrice();
-
-            listView_Statistics.Items.Add(new StatisticsListItem("", "Total", $"{TotalAmount()}", $"{TotalPrice()}"));
-            foreach (SaleTransaction transaction in _statisticsController.TransactionsForStatistics)
+            try
             {
-                listView_Statistics.Items.Add(transaction.StatisticsStrings());
+                _statisticsController.RequestStatisticsDate(startDate, endDate);
+                _statisticsController.RequestStatisticsWithParameters(id, brand, group);
+
+                totalAmount = TotalAmount();
+                totalPrice = TotalPrice();
+
+                listView_Statistics.Items.Add(new StatisticsListItem("", "Total", $"{TotalAmount()}", $"{TotalPrice()}"));
+                foreach (SaleTransaction transaction in _statisticsController.TransactionsForStatistics)
+                {
+                    listView_Statistics.Items.Add(transaction.StatisticsStrings());
+                }
             }
+            catch (EmptyTableException exception)
+            {
+                label_NoTransactions.Visibility = Visibility.Visible;
+            }
+
         }
 
         private int TotalAmount()

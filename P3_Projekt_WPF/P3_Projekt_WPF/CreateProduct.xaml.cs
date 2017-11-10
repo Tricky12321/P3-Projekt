@@ -55,7 +55,7 @@ namespace P3_Projekt_WPF
             listview_AddedStorageRooms.Items.Clear();
             int addedStorageRoomID = Int32.Parse(comboBox_StorageRoom.Text.Substring(0, comboBox_StorageRoom.Text.IndexOf(' ')));
             // TODO: Validation of input to disallow non-numbers
-            StorageWithAmount[addedStorageRoomID] += Int32.Parse(textbox_Amount.Text);
+            StorageWithAmount[addedStorageRoomID] += textbox_Amount.Text != "" ? Int32.Parse(textbox_Amount.Text) : 0;
             foreach(KeyValuePair<int, string> storageRoom in StorageRooms)
             {
                 if (StorageWithAmount[storageRoom.Key] > 0)
