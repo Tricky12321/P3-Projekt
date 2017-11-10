@@ -95,6 +95,7 @@ namespace P3_Projekt_WPF
             InitStorageGridProducts();
             AddProductButton();
 
+
             LoadProductImages();
             LoadProductGrid(_storageController.ProductDictionary);
 
@@ -171,9 +172,10 @@ namespace P3_Projekt_WPF
             Debug.WriteLine("[P3] Det tog " + TimeTester.ElapsedMilliseconds + "ms at hente alt fra databasen");
         }
 
+        Button addProductButton = new Button();
         public void AddProductButton()
         {
-            Button addProductButton = new Button();
+            
             addProductButton.Content = "Tilføj nyt produkt";
             addProductButton.FontSize = 30;
 
@@ -185,7 +187,7 @@ namespace P3_Projekt_WPF
 
             addProductButton.Click += AddProductDialogOpener;
 
-            productGrid.Children.Add(addProductButton);
+            
         }
 
         public void AddProductDialogOpener(object sender, RoutedEventArgs e)
@@ -289,7 +291,8 @@ namespace P3_Projekt_WPF
         {
             productGrid.RowDefinitions.Clear();
             productGrid.Children.Clear();
-            AddProductButton();
+            productGrid.Children.Add(addProductButton);
+            
             
             productGrid.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(380) });
             int i = 1;
@@ -308,6 +311,7 @@ namespace P3_Projekt_WPF
                 productGrid.Children.Add(productControl);
                 i++;
             }
+
         }
 
         public void LoadProductImages()
