@@ -665,12 +665,11 @@ namespace P3_Projekt_WPF
             resolveTempProduct.Activate();
 
             //(SaleTransaction transaction in _POSController.PlacerholderReceipt.Transactions
-            foreach (SaleTransaction tempProduct in _POSController.PlacerholderReceipt.Transactions.)
+            foreach (SaleTransaction tempProduct in _POSController.PlacerholderReceipt.Transactions)
             {
                 resolveTempProduct.listview_ProductsToMerge.Items.Add(new { Amount = 10 });
 
             }
-            */
         }
 
         private void btn_search_Click(object sender, RoutedEventArgs e)
@@ -681,8 +680,6 @@ namespace P3_Projekt_WPF
             {
                 Debug.Print(s.CurrentProduct.ID.ToString());
             }
-        }
-    }
             var tempProducts = _storageController.TempProductList.Where(x => x.Resolved == false);
         }
 
