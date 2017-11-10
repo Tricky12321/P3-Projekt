@@ -37,6 +37,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
             for (int i = 0; i < _threadCount; i++)
             {
                 Thread NewThread = new Thread(new ThreadStart(ThreadWork));
+                NewThread.Name = "Statistics Controller Thread";
                 NewThread.Start();
                 _saleTransactionThreads.Add(NewThread);
             }
