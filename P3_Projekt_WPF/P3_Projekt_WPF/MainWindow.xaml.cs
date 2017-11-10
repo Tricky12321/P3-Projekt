@@ -95,6 +95,7 @@ namespace P3_Projekt_WPF
             InitStorageGridProducts();
             AddProductButton();
 
+
             LoadProductImages();
             LoadProductGrid(_storageController.ProductDictionary);
 
@@ -171,9 +172,10 @@ namespace P3_Projekt_WPF
             Debug.WriteLine("[P3] Det tog " + TimeTester.ElapsedMilliseconds + "ms at hente alt fra databasen");
         }
 
+        Button addProductButton = new Button();
         public void AddProductButton()
         {
-            Button addProductButton = new Button();
+            
             addProductButton.Content = "Tilføj nyt produkt";
             addProductButton.FontSize = 30;
 
@@ -185,7 +187,7 @@ namespace P3_Projekt_WPF
 
             addProductButton.Click += AddProductDialogOpener;
 
-            productGrid.Children.Add(addProductButton);
+            
         }
 
         public void AddProductDialogOpener(object sender, RoutedEventArgs e)
@@ -193,10 +195,11 @@ namespace P3_Projekt_WPF
             CreateProduct addProductWindow = new CreateProduct();
 
             // Adds ID to the combox text, to allow for comparing the name of the storageroom in combox with the ID in the storagewithamount, without adding reference to storageroomcontroller 
-            foreach (StorageRoom storageRoom in _storageController.StorageRoomDictionary.Values)
+            foreach(KeyValuePair<int,StorageRoom> storageRoom in _storageController.StorageRoomDictionary)
             {
-                addProductWindow.comboBox_StorageRoom.Items.Add($"{storageRoom.ID.ToString()} {storageRoom.Name}");
-                addProductWindow.StorageWithAmount.Add(storageRoom.ID, 0);
+                addProductWindow.StorageRooms.Add(storageRoom.Key, storageRoom.Value.Name);
+                addProductWindow.comboBox_StorageRoom.Items.Add($"{storageRoom.Key.ToString()} {storageRoom.Value.Name}");
+                addProductWindow.StorageWithAmount.Add(storageRoom.Key, 0);
             }
             foreach (Group group in _storageController.GroupDictionary.Values)
             {
@@ -220,9 +223,13 @@ namespace P3_Projekt_WPF
                            addProductWindow.textbox_SalePrice.Text,
                            addProductWindow.textbox_DiscountPrice.Text,
                            addProductWindow.StorageWithAmount);
-
+                if (addProductWindow.ChosenFilePath != null)
+                {
+                    System.IO.File.Copy(addProductWindow.ChosenFilePath, _settingsController.PictureFilePath + addProductWindow.FileName, true);
+                }
 
                 addProductWindow.Close();
+                LoadProductImages();
             };
             addProductWindow.Show();
         }
@@ -289,8 +296,9 @@ namespace P3_Projekt_WPF
         {
             productGrid.RowDefinitions.Clear();
             productGrid.Children.Clear();
-            AddProductButton();
-
+            productGrid.Children.Add(addProductButton);
+            
+            
             productGrid.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(380) });
             int i = 1;
 
@@ -308,6 +316,7 @@ namespace P3_Projekt_WPF
                 productGrid.Children.Add(productControl);
                 i++;
             }
+
         }
 
         public void LoadProductImages()
@@ -494,35 +503,27 @@ namespace P3_Projekt_WPF
         }
 
 
-
-
-        CreateTemporaryProduct createTemp;
-        bool isWindowOpen = false;
-
+        CreateTemporaryProduct _createTempProduct;
+        
         private void btn_Temporary_Click(object sender, RoutedEventArgs e)
         {
-            if (isWindowOpen == false)
+            if(_createTempProduct == null)
             {
-                createTemp = new CreateTemporaryProduct();
-                createTemp.Show();
-                isWindowOpen = true;
+                _createTempProduct = new CreateTemporaryProduct();
+                _createTempProduct.Closed += delegate { _createTempProduct = null; };
+                _createTempProduct.btn_AddTempProduct.Click += delegate
+                {
+                    string description = _createTempProduct.textbox_Description.Text;
+                    decimal price = decimal.Parse(_createTempProduct.textbox_Price.Text);
+                    int amount = int.Parse(_createTempProduct.textBox_ProductAmount.Text);
+                    TempProduct NewTemp = _storageController.CreateTempProduct(description, price);
+                    _POSController.AddSaleTransaction(NewTemp, amount);
+                    UpdateReceiptList();
+                    _createTempProduct.Close();
+                };
             }
-            else
-            {
-                createTemp.Show();
-            }
-
-            createTemp.btn_AddTempProduct.Click += delegate
-            {
-                string description = createTemp.textbox_Description.Text;
-                decimal price = decimal.Parse(createTemp.textbox_Price.Text);
-                int amount = int.Parse(createTemp.textBox_ProductAmount.Text);
-                TempProduct NewTemp = _storageController.CreateTempProduct(description, price);
-                _POSController.AddSaleTransaction(NewTemp, amount);
-                UpdateReceiptList();
-                createTemp.Close();
-
-            };
+            _createTempProduct.Activate();
+            _createTempProduct.Show();
         }
 
 
@@ -550,6 +551,7 @@ namespace P3_Projekt_WPF
             DateTime startDate = (DateTime)datePicker_StartDate.SelectedDate;
             DateTime endDate = (DateTime)datePicker_EndDate.SelectedDate;
             listView_Statistics.Items.Clear();
+            label_NoTransactions.Visibility = Visibility.Hidden;
 
             int totalAmount;
             decimal totalPrice;
@@ -576,18 +578,25 @@ namespace P3_Projekt_WPF
             {
                 group = null;
             }
-
-            _statisticsController.RequestStatisticsDate(startDate, endDate);
-            _statisticsController.RequestStatisticsWithParameters(id, brand, group);
-
-            totalAmount = TotalAmount();
-            totalPrice = TotalPrice();
-
-            listView_Statistics.Items.Add(new StatisticsListItem("", "Total", $"{TotalAmount()}", $"{TotalPrice()}"));
-            foreach (SaleTransaction transaction in _statisticsController.TransactionsForStatistics)
+            try
             {
-                listView_Statistics.Items.Add(transaction.StatisticsStrings());
+                _statisticsController.RequestStatisticsDate(startDate, endDate);
+                _statisticsController.RequestStatisticsWithParameters(id, brand, group);
+
+                totalAmount = TotalAmount();
+                totalPrice = TotalPrice();
+
+                listView_Statistics.Items.Add(new StatisticsListItem("", "Total", $"{TotalAmount()}", $"{TotalPrice()}"));
+                foreach (SaleTransaction transaction in _statisticsController.TransactionsForStatistics)
+                {
+                    listView_Statistics.Items.Add(transaction.StatisticsStrings());
+                }
             }
+            catch (EmptyTableException exception)
+            {
+                label_NoTransactions.Visibility = Visibility.Visible;
+            }
+
         }
 
         private int TotalAmount()
@@ -635,6 +644,8 @@ namespace P3_Projekt_WPF
 
         }
 
+
+
         private void TextInputNoNumberWithComma(object sender, TextCompositionEventArgs e)
         {
             // Only allows number in textfield, also with comma
@@ -656,22 +667,27 @@ namespace P3_Projekt_WPF
         {
 
         }
+        
+        ResovleTempProduct _resolveTempProduct;
 
-        ResovleTempProduct resolveTempProduct = new ResovleTempProduct();
+        private void btn_MergeTempProduct_Click(object sender, RoutedEventArgs e)
+        {
+            if (_resolveTempProduct == null)
+            {
+                _resolveTempProduct = new ResovleTempProduct();
 
-        /* private void btn_MergeTempProduct_Click(object sender, RoutedEventArgs e)
-         {
-             resolveTempProduct.Show();
-             resolveTempProduct.Activate();
+                _resolveTempProduct.Closed += delegate { _resolveTempProduct = null; };
 
-             //(SaleTransaction transaction in _POSController.PlacerholderReceipt.Transactions
-             foreach (SaleTransaction tempProduct in _POSController.PlacerholderReceipt.Transactions.)
-             {
-                 resolveTempProduct.listview_ProductsToMerge.Items.Add(new { Amount = 10 });
-                 var tempProducts = _storageController.TempProductList.Where(x => x.Resolved == false);
-             }
-         }
+            }
+            _resolveTempProduct.Show();
+            _resolveTempProduct.Activate();
+            //(SaleTransaction transaction in _POSController.PlacerholderReceipt.Transactions
+            foreach (SaleTransaction tempProduct in _POSController.PlacerholderReceipt.Transactions)
+            {
+                resolveTempProduct.listview_ProductsToMerge.Items.Add(new { Amount = 10 });
 
+            }
+        }
          }
 
 
@@ -681,12 +697,23 @@ namespace P3_Projekt_WPF
 
         private void btn_search_Click(object sender, RoutedEventArgs e)
         {
-            ConcurrentQueue<SearchedProduct> productsFoundList = _storageController.SearchForProduct(txtBox_SearchField.Text);
+            ConcurrentQueue<SearchedProduct> productsFoundList =  _storageController.SearchForProduct(txtBox_SearchField.Text);
 
-            foreach (SearchedProduct s in productsFoundList)
+            foreach(SearchedProduct s in productsFoundList)
             {
-                Debug.Print("testetetstt" + s.CurrentProduct.ID.ToString());
+                Debug.Print(s.CurrentProduct.ID.ToString());
             }
+            var tempProducts = _storageController.TempProductList.Where(x => x.Resolved == false);
+            
+            foreach(TempProduct tempProductsToListView in tempProducts)
+            {
+                _resolveTempProduct.listview_ProductsToMerge.Items.Add(new { Amount = tempProductsToListView.SalePrice, Description = tempProductsToListView.Description, Price = tempProductsToListView.SalePrice });
+            }
+        }
+
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            Environment.Exit(0);
         }
     }
 }

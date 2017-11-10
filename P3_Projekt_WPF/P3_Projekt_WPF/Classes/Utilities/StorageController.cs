@@ -713,19 +713,18 @@ namespace P3_Projekt_WPF.Classes.Utilities
         //----SEARCH-END---------------------
 
         //Creates product with storage and stocka as keyvalue, then add the product to the list
-        public void CreateProduct(int id, string name, string brand, decimal purchasePrice, int groupID, bool discount, decimal discountPrice, decimal salePrice, /*params KeyValuePair<int, int>[] storageRoomStockInput*/ Dictionary<int,int> storageWithAmount)
+        public void CreateProduct(int id, string name, string brand, decimal purchasePrice, int groupID, bool discount, decimal discountPrice, decimal salePrice, Dictionary<int,int> storageWithAmount, bool UploadToDatabase = true)
         {
             Product newProduct = new Product(id, name, brand, purchasePrice, groupID, discount, salePrice, discountPrice);
             newProduct.StorageWithAmount = storageWithAmount;
-            /*
-            foreach (KeyValuePair<int, int> roomInput in storageRoomStockInput)
+            if (!ProductDictionary.TryAdd(newProduct.ID, newProduct))
             {
-                newProduct.StorageWithAmount[roomInput.Key] = roomInput.Value;
+                throw new Exception("This key already exists");
             }
-            */
-
-            ProductDictionary.TryAdd(newProduct.ID, newProduct);
-            newProduct.UploadToDatabase();
+            if (UploadToDatabase)
+            {
+                newProduct.UploadToDatabase();
+            }
         }
 
         //edit product, calles two different methods depending if its run by an admin

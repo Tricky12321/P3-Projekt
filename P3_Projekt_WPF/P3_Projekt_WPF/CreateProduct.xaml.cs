@@ -26,6 +26,7 @@ namespace P3_Projekt_WPF
         public string ChosenFilePath;
         public string FileName;
         public Dictionary<int, int> StorageWithAmount = new Dictionary<int, int>();
+        public Dictionary<int, string> StorageRooms = new Dictionary<int, string>();
 
         public CreateProduct()
         {
@@ -33,7 +34,6 @@ namespace P3_Projekt_WPF
             btn_AddPicture.Click += PickImage;
             ImageChosenEvent += (FilePath) => { image_Product.Source = new BitmapImage(new Uri(FilePath)); };
             ImageChosenEvent += (FilePath) => { ChosenFilePath = FilePath; };
-
             btn_AddStorageRoomWithAmount.Click += AddStorageWithAmount;
         }
 
@@ -42,19 +42,39 @@ namespace P3_Projekt_WPF
             using (var dialog = new System.Windows.Forms.OpenFileDialog())
             {
                 System.Windows.Forms.DialogResult result = dialog.ShowDialog();
-                ImageChosenEvent(dialog.FileName);
-                FileName = dialog.SafeFileName;
+                if (dialog.FileName != null && dialog.FileName != "")
+                {
+                    ImageChosenEvent(dialog.FileName);
+                    FileName = dialog.SafeFileName;
+                }
             }
         }
 
         public void AddStorageWithAmount(object sender, RoutedEventArgs e)
         {
+            listview_AddedStorageRooms.Items.Clear();
             int addedStorageRoomID = Int32.Parse(comboBox_StorageRoom.Text.Substring(0, comboBox_StorageRoom.Text.IndexOf(' ')));
             // TODO: Validation of input to disallow non-numbers
-            StorageWithAmount[addedStorageRoomID] = Int32.Parse(textbox_Amount.Text);
-            listview_AddedStorageRooms.Items.Add($"{comboBox_StorageRoom.Text}: {textbox_Amount.Text}");
+            StorageWithAmount[addedStorageRoomID] += textbox_Amount.Text != "" ? Int32.Parse(textbox_Amount.Text) : 0;
+            foreach(KeyValuePair<int, string> storageRoom in StorageRooms)
+            {
+                if (StorageWithAmount[storageRoom.Key] > 0)
+                {
+                    listview_AddedStorageRooms.Items.Add($"{storageRoom.Value}: {StorageWithAmount[storageRoom.Key]}");
+                }
+            }
 
             textbox_Amount.Text = "";
+        }
+
+        private void AmountInputOnlyNumbers(object sender, TextCompositionEventArgs e)
+        {
+            // Only allows number in textfield
+            if (e.Text.Length > 0)
+            {
+                if (!char.IsDigit(e.Text, e.Text.Length - 1))
+                    e.Handled = true;
+            }
         }
     }
 }

@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         Title="CreateTemporaryProduct" Height="500" Width="600" Background="White">
     <Grid Background="#FFE5E5E5">
-        <TextBox Padding="4,0,0,0" x:Name="textbox_Description" FontSize="30" Grid.ColumnSpan="1" MinHeight="40" VerticalAlignment="Top" Margin="10,10,10,0" Height="225">
+        <TextBox Padding="4,0,0,0" x:Name="textbox_Description" FontSize="30" Grid.ColumnSpan="1" MinHeight="40" VerticalAlignment="Top" Margin="10,10,10,0" Height="225" TextWrapping="Wrap">
             <TextBox.Resources>
                 <Style TargetType="{x:Type Border}">
                     <Setter Property="CornerRadius" Value="10"/>
