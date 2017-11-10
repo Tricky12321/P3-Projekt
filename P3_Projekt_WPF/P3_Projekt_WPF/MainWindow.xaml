@@ -318,6 +318,11 @@
                     <ListView x:Name="listView_Statistics" Grid.Column="1" Margin="436,52,25,21" Grid.Row="1">
                         <ListView.View>
                             <GridView>
+                                <GridView.ColumnHeaderContainerStyle>
+                                    <Style>
+                                        <Setter Property="UIElement.Visibility"  Value="Collapsed"/>
+                                    </Style>
+                                </GridView.ColumnHeaderContainerStyle>
                                 <GridViewColumn/>
                             </GridView>
                         </ListView.View>

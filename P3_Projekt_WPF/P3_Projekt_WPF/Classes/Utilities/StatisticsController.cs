@@ -37,6 +37,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
             for (int i = 0; i < _threadCount; i++)
             {
                 Thread NewThread = new Thread(new ThreadStart(ThreadWork));
+                NewThread.Name = "Statistics Controller Thread";
                 NewThread.Start();
                 _saleTransactionThreads.Add(NewThread);
             }
@@ -60,7 +61,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
             _saleTransactions = new ConcurrentQueue<SaleTransaction>();
             TransactionsForStatistics = new List<SaleTransaction>();
             int fromUnixTime = Utils.GetUnixTime(from);
-            int toUnixTime = Utils.GetUnixTime(ToDate(to));
+            int toUnixTime = Utils.GetUnixTime(EndDate(to));
 
             string requestStatisticsQuery =
             $"SELECT * FROM `sale_transactions` WHERE UNIX_TIMESTAMP(`datetime`) >= '{fromUnixTime}' AND UNIX_TIMESTAMP(`datetime`) <= '{toUnixTime}';";
@@ -135,7 +136,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
             }  
         }
 
-        public DateTime ToDate(DateTime date)
+        public DateTime EndDate(DateTime date)
         {
             TimeSpan dayEnd = new TimeSpan(23, 59, 59);
             return date + dayEnd;

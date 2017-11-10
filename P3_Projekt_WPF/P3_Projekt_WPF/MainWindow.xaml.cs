@@ -448,12 +448,24 @@ namespace P3_Projekt_WPF
         }
 
 
-        
+
+
+        CreateTemporaryProduct createTemp;
+        bool isWindowOpen = false;
 
         private void btn_Temporary_Click(object sender, RoutedEventArgs e)
         {
-            CreateTemporaryProduct createTemp = new CreateTemporaryProduct();
-            
+            if (isWindowOpen == false)
+            {
+                createTemp = new CreateTemporaryProduct();
+                createTemp.Show();
+                isWindowOpen = true;
+            }
+            else
+            {
+                createTemp.Show();
+            }
+
             createTemp.btn_AddTempProduct.Click += delegate
             {
                 string description = createTemp.textbox_Description.Text;
@@ -463,6 +475,7 @@ namespace P3_Projekt_WPF
                 _POSController.AddSaleTransaction(NewTemp, amount);
                 UpdateReceiptList();
                 createTemp.Close();
+
             };
         }
 
@@ -489,7 +502,6 @@ namespace P3_Projekt_WPF
         {
             DateTime startDate = (DateTime)datePicker_StartDate.SelectedDate;
             DateTime endDate = (DateTime)datePicker_EndDate.SelectedDate;
-
 
             string id = (textBox_StatisticsProductID.Text.Length == 0 ? null : textBox_StatisticsProductID.Text);
             string brand = (string)comboBox_Brand.SelectedItem;
@@ -518,7 +530,11 @@ namespace P3_Projekt_WPF
             _statisticsController.RequestStatisticsDate(startDate, endDate);
             _statisticsController.RequestStatisticsWithParameters(id, brand, group);
 
-            listView_Statistics.Items.Add("TEest som er KYS :D LAaaAAAAaaaAAaAAAaAaAaaaAaaaaAAAaaaAaaaaaANg");
+            foreach(SaleTransaction transaction in _statisticsController.TransactionsForStatistics)
+            {
+                listView_Statistics.Items.Add(transaction.ToStatisticsString());
+
+            }
 
         }
 
