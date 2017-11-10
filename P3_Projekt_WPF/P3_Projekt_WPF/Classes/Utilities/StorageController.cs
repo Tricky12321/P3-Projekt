@@ -83,6 +83,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
             for (int i = 0; i < _productThreadsCount; i++)
             {
                 Thread NewThread = new Thread(new ThreadStart(HandleCreateProductQue));
+                NewThread.Name = "Create Product Thread";
                 NewThread.Start();
                 _productThreads.Add(NewThread);
             }
@@ -285,6 +286,11 @@ namespace P3_Projekt_WPF.Classes.Utilities
             Thread GetAllTempProductsThread = new Thread(new ThreadStart(GetAllTempProductsFromDatabase));
             Thread GetAllStorageRoomsThread = new Thread(new ThreadStart(GetAllStorageRoomsFromDatabase));
             Thread GetAllServiceProductsThread = new Thread(new ThreadStart(GetAllServiceProductsFromDatabase));
+            GetAllProductsThread.Name = "GetAllProductsThread";
+            GetAllGroupsThread.Name = "GetAllGroupsThread";
+            GetAllTempProductsThread.Name = "GetAllTempProductsThread";
+            GetAllStorageRoomsThread.Name = "GetAllStorageRoomsThread";
+            GetAllServiceProductsThread.Name = "GetAllServiceProductsThread";
             lock (ThreadLock)
             {
                 Threads.Add(GetAllProductsThread);
@@ -378,6 +384,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
             for (int i = 0; i < _productThreadCount; i++)
             {
                 Thread NewThread = new Thread(new ThreadStart(LevenshteinSearch_Thread));
+                NewThread.Name = "LevenshteinSearchThread";
                 _productSearchThreads.Add(NewThread);
                 NewThread.Start();
             }
@@ -388,7 +395,10 @@ namespace P3_Projekt_WPF.Classes.Utilities
             _brandSearchDone = false;
             _groupSearchDone = false;
             Thread BrandSearchThread = new Thread(new ParameterizedThreadStart(BrandSearch));
+            BrandSearchThread.Name = "BrandSearchThread";
             Thread GroupSearchThread = new Thread(new ParameterizedThreadStart(GroupSearch));
+            GroupSearchThread.Name = "GroupSearchThread";
+
             BrandSearchThread.Start(_searchedString);
             GroupSearchThread.Start(_searchedString);
             while (!_brandSearchDone && !_groupSearchDone)
@@ -453,7 +463,9 @@ namespace P3_Projekt_WPF.Classes.Utilities
                 _brandSearchDone = false;
                 _groupSearchDone = false;
                 Thread BrandSearchThread = new Thread(new ParameterizedThreadStart(BrandSearch));
+                BrandSearchThread.Name = "BrandSearchThread";
                 Thread GroupSearchThread = new Thread(new ParameterizedThreadStart(GroupSearch));
+                GroupSearchThread.Name = "GroupSearchThread";
                 BrandSearchThread.Start(searchedString);
                 GroupSearchThread.Start(searchedString);
                 while (!_brandSearchDone && !_groupSearchDone)
@@ -698,19 +710,18 @@ namespace P3_Projekt_WPF.Classes.Utilities
         //----SEARCH-END---------------------
 
         //Creates product with storage and stocka as keyvalue, then add the product to the list
-        public void CreateProduct(int id, string name, string brand, decimal purchasePrice, int groupID, bool discount, decimal discountPrice, decimal salePrice, /*params KeyValuePair<int, int>[] storageRoomStockInput*/ Dictionary<int,int> storageWithAmount)
+        public void CreateProduct(int id, string name, string brand, decimal purchasePrice, int groupID, bool discount, decimal discountPrice, decimal salePrice, Dictionary<int,int> storageWithAmount, bool UploadToDatabase = true)
         {
             Product newProduct = new Product(id, name, brand, purchasePrice, groupID, discount, salePrice, discountPrice);
             newProduct.StorageWithAmount = storageWithAmount;
-            /*
-            foreach (KeyValuePair<int, int> roomInput in storageRoomStockInput)
+            if (!ProductDictionary.TryAdd(newProduct.ID, newProduct))
             {
-                newProduct.StorageWithAmount[roomInput.Key] = roomInput.Value;
+                throw new Exception("This key already exists");
             }
-            */
-
-            ProductDictionary.TryAdd(newProduct.ID, newProduct);
-            newProduct.UploadToDatabase();
+            if (UploadToDatabase)
+            {
+                newProduct.UploadToDatabase();
+            }
         }
 
         //edit product, calles two different methods depending if its run by an admin

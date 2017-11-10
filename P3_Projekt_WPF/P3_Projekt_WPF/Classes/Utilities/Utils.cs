@@ -18,6 +18,12 @@ namespace P3_Projekt_WPF.Classes.Utilities
 {
     public static class Utils
     {
+        public static void ShowErrorWarning(string text)
+        {
+            MessageBox.Show(text);
+        }
+
+
         public static DateTime UnixTimeStampToDateTime(double unixTimeStamp)
         {
             // Unix timestamp is seconds past epoch
@@ -70,6 +76,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
         public static void FixReceiptInDatabase()
         {
             Thread FixReceiptThread = new Thread(new ThreadStart(_FixReceiptInDatabase));
+            FixReceiptThread.Name = "FixReceiptThread";
         }
 
         public static void GenerateSaleTransactions()

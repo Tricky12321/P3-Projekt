@@ -15,7 +15,6 @@ namespace P3_Projekt_WPF.Classes.Utilities.Tests
         public void ResetStatic()
         {
             StorageRoom.IDCounter = 0;
-            BaseProduct.IDCounter = 0;
             Group.IDCounter = 0;
             Transaction.IDCounter = 0;
             Receipt.IDCounter = 0;
@@ -59,7 +58,7 @@ namespace P3_Projekt_WPF.Classes.Utilities.Tests
 
             POSC.StartPurchase();
 
-            POSC.AddIcecreamTransaction(25);
+            POSC.AddIcecreamTransaction(25m);
 
             Assert.IsTrue((POSC.PlacerholderReceipt.Transactions.First().Product as ServiceProduct).ServiceProductGroup.Name == "Is");
         }
@@ -70,7 +69,7 @@ namespace P3_Projekt_WPF.Classes.Utilities.Tests
             StorageController SC = new StorageController();
             POSController POSC = new POSController(SC);
             POSC.StartPurchase();
-            SC.ProductDictionary.TryAdd(0, new Product("test1", "blabla", 1.25m, 0, false, 5.0m, 3.0m));
+            SC.ProductDictionary.TryAdd(0, new Product(1,"test1", "blabla", 1.25m, 0, false, 5.0m, 3.0m));
             SaleTransaction transaction = new SaleTransaction(SC.ProductDictionary[0], 5, 0);
             POSC.PlacerholderReceipt.Transactions.Add(transaction);
 
@@ -89,9 +88,9 @@ namespace P3_Projekt_WPF.Classes.Utilities.Tests
             StorageController SC = new StorageController();
             POSController POSC = new POSController(SC);
             POSC.StartPurchase();
-            SC.ProductDictionary.TryAdd(0, new Product("test1", "blabla", 1.25m, 0, false, 5.0m, 3.0m));
-            SC.ProductDictionary.TryAdd(1, new Product("test1", "blabla", 1.25m, 0, false, 5.0m, 3.0m));
-            SC.ProductDictionary.TryAdd(2, new Product("test1", "blabla", 1.25m, 0, false, 5.0m, 3.0m));
+            SC.ProductDictionary.TryAdd(0, new Product(1,"test1", "blabla", 1.25m, 0, false, 5.0m, 3.0m));
+            SC.ProductDictionary.TryAdd(1, new Product(2,"test1", "blabla", 1.25m, 0, false, 5.0m, 3.0m));
+            SC.ProductDictionary.TryAdd(2, new Product(3,"test1", "blabla", 1.25m, 0, false, 5.0m, 3.0m));
             SaleTransaction transaction1 = new SaleTransaction(SC.ProductDictionary[0], 5, 0);
             SaleTransaction transaction2 = new SaleTransaction(SC.ProductDictionary[1], 1, 0);
             SaleTransaction transaction3 = new SaleTransaction(SC.ProductDictionary[2], 1, 0);
@@ -118,7 +117,7 @@ namespace P3_Projekt_WPF.Classes.Utilities.Tests
             StorageController SC = new StorageController();
             POSController POSC = new POSController(SC);
             POSC.StartPurchase();
-            SC.ProductDictionary.TryAdd(0, new Product("test1", "blabla", 1.25m, 0, false, 5.0m, 3.0m));
+            SC.ProductDictionary.TryAdd(0, new Product(1,"test1", "blabla", 1.25m, 0, false, 5.0m, 3.0m));
             SC.ProductDictionary[0].StorageWithAmount.Add(0, 9);
             POSC.PlacerholderReceipt.Transactions.Add(new SaleTransaction(SC.ProductDictionary[0], 5, 0));
 
@@ -133,9 +132,9 @@ namespace P3_Projekt_WPF.Classes.Utilities.Tests
             StorageController SC = new StorageController();
             POSController POSC = new POSController(SC);
             POSC.StartPurchase();
-            SC.ProductDictionary.TryAdd(0, new Product("test1", "blabla", 1.25m, 0, false, 5.0m, 3.0m));
-            SC.ProductDictionary.TryAdd(1, new Product("test1", "blabla", 1.25m, 0, false, 5.0m, 3.0m));
-            SC.ProductDictionary.TryAdd(2, new Product("test1", "blabla", 1.25m, 0, false, 5.0m, 3.0m));
+            SC.ProductDictionary.TryAdd(0, new Product(1,"test1", "blabla", 1.25m, 0, false, 5.0m, 3.0m));
+            SC.ProductDictionary.TryAdd(1, new Product(2,"test1", "blabla", 1.25m, 0, false, 5.0m, 3.0m));
+            SC.ProductDictionary.TryAdd(2, new Product(3,"test1", "blabla", 1.25m, 0, false, 5.0m, 3.0m));
             SC.ProductDictionary[0].StorageWithAmount.Add(0, 9);
             SC.ProductDictionary[1].StorageWithAmount.Add(0, 15);
             SC.ProductDictionary[2].StorageWithAmount.Add(0, 2);

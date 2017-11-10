@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using P3_Projekt_WPF.Classes.Database;
 using System.Collections.Concurrent;
 using System.Threading;
+using System.Diagnostics;
 namespace P3_Projekt_WPF.Classes.Utilities
 {
     public class StatisticsController
@@ -27,9 +28,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
         private bool _allStatisticsDone = false;
         private ConcurrentQueue<SaleTransaction> _saleTransactions;
         private List<Thread> _saleTransactionThreads = new List<Thread>();
-        private object _tableDecodeLock = new object();
-        private int _threadCount = 4;
-        private TableDecode _saleTransactionsRawData;
+        private int _threadCount = 30;
         private int _saleTransactionsCreated = 0;
         private ConcurrentQueue<Row> _dataQueue;
         private void CreateThreads()
@@ -37,6 +36,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
             for (int i = 0; i < _threadCount; i++)
             {
                 Thread NewThread = new Thread(new ThreadStart(ThreadWork));
+                NewThread.Name = "Statistics Controller Thread";
                 NewThread.Start();
                 _saleTransactionThreads.Add(NewThread);
             }
@@ -47,11 +47,11 @@ namespace P3_Projekt_WPF.Classes.Utilities
             Row data;
             while (_dataQueue.TryDequeue(out data))
             {
-                data = _saleTransactionsRawData.RowData.Take(1).First();
                 SaleTransaction NewTransaction = new SaleTransaction(data);
                 _saleTransactions.Enqueue(NewTransaction);
                 Interlocked.Increment(ref _saleTransactionsCreated);
             }
+
         }
 
         public void RequestStatisticsDate(DateTime from, DateTime to)
@@ -60,18 +60,19 @@ namespace P3_Projekt_WPF.Classes.Utilities
             _saleTransactions = new ConcurrentQueue<SaleTransaction>();
             TransactionsForStatistics = new List<SaleTransaction>();
             int fromUnixTime = Utils.GetUnixTime(from);
-            int toUnixTime = Utils.GetUnixTime(ToDate(to));
-
+            int toUnixTime = Utils.GetUnixTime(EndDate(to));
             string requestStatisticsQuery =
             $"SELECT * FROM `sale_transactions` WHERE UNIX_TIMESTAMP(`datetime`) >= '{fromUnixTime}' AND UNIX_TIMESTAMP(`datetime`) <= '{toUnixTime}';";
 
             _dataQueue = new ConcurrentQueue<Row>(Mysql.RunQueryWithReturn(requestStatisticsQuery).RowData);
             int TransCount = _dataQueue.Count;
+            Stopwatch Timer1 = new Stopwatch();
             CreateThreads();
             while (_saleTransactionsCreated != TransCount)
             {
                 Thread.Sleep(5);
             }
+            _allStatisticsDone = true;
             List<SaleTransaction> SaleTransactions = new List<SaleTransaction>(_saleTransactions);
             //TransactionsForStatistics = TransactionsForStatistics.Where(x => (Utils.GetUnixTime(x.Date) > fromUnixTime && Utils.GetUnixTime(x.Date) < toUnixTime)).ToList();
         }
@@ -93,8 +94,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
             {
                 Thread.Sleep(5);
             }
-            List<SaleTransaction> SaleTransactions = new List<SaleTransaction>(_saleTransactions);
-            //TransactionsForStatistics = TransactionsForStatistics.Where(x => x.Date.Day == today.Day).ToList();
+            TransactionsForStatistics = new List<SaleTransaction>(_saleTransactions);
         }
 
         public void RequestStatisticsYesterday()
@@ -114,8 +114,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
             {
                 Thread.Sleep(5);
             }
-            List<SaleTransaction> SaleTransactions = new List<SaleTransaction>(_saleTransactions);
-            // TransactionsForStatistics = TransactionsForStatistics.Where(x => x.Date.Day == yesterday.Day).ToList();
+            TransactionsForStatistics = new List<SaleTransaction>(_saleTransactions);
         }
 
         public void RequestStatisticsWithParameters(string productID, string brand, Group group)
@@ -132,10 +131,10 @@ namespace P3_Projekt_WPF.Classes.Utilities
             if (group != null)
             {
                 TransactionsForStatistics = TransactionsForStatistics.Where(x => x.GetGroupID() == group.ID).ToList();
-            }  
+            }
         }
 
-        public DateTime ToDate(DateTime date)
+        public DateTime EndDate(DateTime date)
         {
             TimeSpan dayEnd = new TimeSpan(23, 59, 59);
             return date + dayEnd;
