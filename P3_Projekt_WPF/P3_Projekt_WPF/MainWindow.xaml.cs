@@ -684,7 +684,7 @@ namespace P3_Projekt_WPF
             //(SaleTransaction transaction in _POSController.PlacerholderReceipt.Transactions
             foreach (SaleTransaction tempProduct in _POSController.PlacerholderReceipt.Transactions)
             {
-                resolveTempProduct.listview_ProductsToMerge.Items.Add(new { Amount = 10 });
+                _resolveTempProduct.listview_ProductsToMerge.Items.Add(new { Amount = 10 });
 
             }
         }
