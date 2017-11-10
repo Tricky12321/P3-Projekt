@@ -21,6 +21,7 @@ using System.Threading;
 using System.Windows.Controls;
 using System.Collections;
 using System.IO;
+using System.Collections.Concurrent;
 //using System.Drawing;
 
 namespace P3_Projekt_WPF
@@ -37,7 +38,11 @@ namespace P3_Projekt_WPF
         POSController _POSController;
         StatisticsController _statisticsController;
         Grid productGrid = new Grid();
-        private bool _ctrlDown = false;
+        bool _ctrlDown = false;
+
+        Dictionary<int, ProductControl> _productControlDictionary = new Dictionary<int, ProductControl>();
+
+
         public MainWindow()
         {
             InitializeComponent();
@@ -89,7 +94,12 @@ namespace P3_Projekt_WPF
             InitGridQuickButtons();
             InitStorageGridProducts();
             AddProductButton();
-            LoadProductGrid();
+
+            LoadProductImages();
+            LoadProductGrid(_storageController.ProductDictionary);
+
+
+
             BuildInformationTable();
             InitStatisticsTab();
         }
@@ -248,36 +258,58 @@ namespace P3_Projekt_WPF
             //LoadProductGrid();
         }
 
-        public void LoadProductGrid()
+        public void UpdateStorageTab(object sender, RoutedEventArgs e)
         {
-            LoadProductImages();
+            LoadProductGrid(_storageController.ProductDictionary);
+        }
+         
+
+        private void LoadProductControlDictionary()
+        {
+            _productControlDictionary.Clear();
+            foreach (KeyValuePair<int, Product> product in _storageController.ProductDictionary.OrderBy(x => x.Key))
+            {
+                ProductControl productControl = new ProductControl(product.Value, _storageController.GroupDictionary);
+                productControl.btn_ShowMoreInformation.Tag = product.Value.ID;
+                productControl.btn_ShowMoreInformation.Click += ShowSpecificInfoProductStorage;
+
+                _productControlDictionary.Add(product.Value.ID, productControl);
+            }
+            Debug.Print("LOLOLOLOLOLOLOLO");
+        }
+
+
+        public void LoadProductGrid(ConcurrentDictionary<int, Product> productDictionary)
+        {
+            productGrid.RowDefinitions.Clear();
+            productGrid.Children.Clear();
+            AddProductButton();
+            
+            productGrid.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(380) });
             int i = 1;
 
-            foreach (KeyValuePair<int, Product> product in _storageController.ProductDictionary.OrderBy(x => x.Key))
+            foreach (KeyValuePair<int, Product> product in productDictionary.OrderBy(x => x.Key))
             {
                 if (i % 5 == 0)
                 {
                     productGrid.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(380) });
-                    int hej = productGrid.RowDefinitions.Count;
                 }
 
-                ProductControl productControl = new ProductControl(product.Value, _storageController.GroupDictionary);
+                ProductControl productControl = _productControlDictionary[product.Value.ID];
                 productControl.SetValue(Grid.ColumnProperty, i % 5);
                 productControl.SetValue(Grid.RowProperty, i / 5);
-                productControl.btn_ShowMoreInformation.Tag = product.Value.ID;
-                productControl.btn_ShowMoreInformation.Click += ShowSpecificInfoProductStorage;
-                productGrid.Children.Add(productControl);
 
+                productGrid.Children.Add(productControl);
                 i++;
             }
         }
 
-        private void LoadProductImages()
+        public void LoadProductImages()
         {
             if (Directory.Exists(_settingsController.PictureFilePath))
             {
                 DirectoryInfo directory = new DirectoryInfo($@"{ _settingsController.PictureFilePath }");
-                string[] allowedExtensions = new string[] { ".jpg", ".bmp", ".png", ".jpeg" };
+                string[] allowedExtensions = new string[] { ".jpg", ".bmp", ".png", ".jpeg", ".tiff", ".gif" };
 
                 IEnumerable<FileInfo> imageFiles = from file in directory.EnumerateFiles("*", SearchOption.AllDirectories)
                                                    where allowedExtensions.Contains(file.Extension.ToLower())
@@ -303,6 +335,13 @@ namespace P3_Projekt_WPF
 
                 }
             }
+            /*
+            Thread productControlThread = new Thread(LoadProductControlDictionary);
+            productControlThread.Name = "Product Control Load Thread";
+            productControlThread.SetApartmentState(ApartmentState.STA);
+            productControlThread.Start();
+            */
+            LoadProductControlDictionary();
         }
 
         public void AddTransactionToReceipt(SaleTransaction transaction)
@@ -468,8 +507,9 @@ namespace P3_Projekt_WPF
         }
 
         private void btn_PictureFilePath_Click(object sender, RoutedEventArgs e)
-        {
+        {   
             _settingsController.SpecifyPictureFilePath();
+            LoadProductImages();
         }
 
         private void OnSelectedStartDateChanged(object sender, SelectionChangedEventArgs e)
@@ -582,6 +622,16 @@ namespace P3_Projekt_WPF
 
             }
             */
+        }
+
+        private void btn_search_Click(object sender, RoutedEventArgs e)
+        {
+            ConcurrentQueue<SearchedProduct> productsFoundList =  _storageController.SearchForProduct(txtBox_SearchField.Text);
+
+            foreach(SearchedProduct s in productsFoundList)
+            {
+                Debug.Print(s.CurrentProduct.ID.ToString());
+            }
         }
     }
 }

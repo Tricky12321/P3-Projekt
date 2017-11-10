@@ -45,6 +45,8 @@ namespace P3_Projekt_WPF.Classes.Utilities
                 Properties.Settings.Default.Save();
 
                 PictureFilePath = Properties.Settings.Default.PictureFilePath;
+
+                
             }
         }
     }
