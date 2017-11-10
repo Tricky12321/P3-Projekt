@@ -183,7 +183,7 @@ namespace P3_Projekt_WPF
             CreateProduct addProductWindow = new CreateProduct();
 
             // Adds ID to the combox text, to allow for comparing the name of the storageroom in combox with the ID in the storagewithamount, without adding reference to storageroomcontroller 
-            foreach(StorageRoom storageRoom in _storageController.StorageRoomDictionary.Values)
+            foreach (StorageRoom storageRoom in _storageController.StorageRoomDictionary.Values)
             {
                 addProductWindow.comboBox_StorageRoom.Items.Add($"{storageRoom.ID.ToString()} {storageRoom.Name}");
                 addProductWindow.StorageWithAmount.Add(storageRoom.ID, 0);
@@ -208,7 +208,7 @@ namespace P3_Projekt_WPF
                            addProductWindow.StorageWithAmount);
                 if (addProductWindow.ChosenFilePath != null)
                 {
-                    System.IO.File.Copy(addProductWindow.ChosenFilePath, _settingsController.PictureFilePath + addProductWindow.FileName,true);
+                    System.IO.File.Copy(addProductWindow.ChosenFilePath, _settingsController.PictureFilePath + addProductWindow.FileName, true);
                 }
 
                 addProductWindow.Close();
@@ -216,7 +216,7 @@ namespace P3_Projekt_WPF
             addProductWindow.Show();
         }
 
-        public void AddProduct(string name, string brand, string group, string purchasePrice, string salePrice, string discountPrice, Dictionary<int,int> storageWithAmount)
+        public void AddProduct(string name, string brand, string group, string purchasePrice, string salePrice, string discountPrice, Dictionary<int, int> storageWithAmount)
         {
             _storageController.CreateProduct(Product.GetNextID(),
                                              name,
@@ -447,38 +447,33 @@ namespace P3_Projekt_WPF
         }
 
 
-
-
-        CreateTemporaryProduct createTemp;
-        bool isWindowOpen = false;
-
+        CreateTemporaryProduct _createTempProduct;
+        
         private void btn_Temporary_Click(object sender, RoutedEventArgs e)
         {
-            if (isWindowOpen == false)
+            if(_createTempProduct == null)
             {
-                createTemp = new CreateTemporaryProduct();
-                createTemp.Show();
-                isWindowOpen = true;
+                _createTempProduct = new CreateTemporaryProduct();
+                _createTempProduct.Closed += delegate { _createTempProduct = null; };
+                _createTempProduct.btn_AddTempProduct.Click += delegate
+                {
+                    string description = _createTempProduct.textbox_Description.Text;
+                    decimal price = decimal.Parse(_createTempProduct.textbox_Price.Text);
+                    int amount = int.Parse(_createTempProduct.textBox_ProductAmount.Text);
+                    TempProduct NewTemp = _storageController.CreateTempProduct(description, price);
+                    _POSController.AddSaleTransaction(NewTemp, amount);
+                    UpdateReceiptList();
+                    _createTempProduct.Close();
+                };
             }
-            else
-            {
-                createTemp.Show();
-            }
-
-            createTemp.btn_AddTempProduct.Click += delegate
-            {
-                string description = createTemp.textbox_Description.Text;
-                decimal price = decimal.Parse(createTemp.textbox_Price.Text);
-                int amount = int.Parse(createTemp.textBox_ProductAmount.Text);
-                TempProduct NewTemp = _storageController.CreateTempProduct(description, price);
-                _POSController.AddSaleTransaction(NewTemp, amount);
-                UpdateReceiptList();
-                createTemp.Close();
-
-            };
+            _createTempProduct.Activate();
+            _createTempProduct.Show();
         }
 
-        
+        public void TempProductAdd(object sender, EventArgs e)
+        {
+
+        }
 
         private void btn_PictureFilePath_Click(object sender, RoutedEventArgs e)
         {
@@ -559,6 +554,8 @@ namespace P3_Projekt_WPF
 
         }
 
+
+
         private void TextInputNoNumberWithComma(object sender, TextCompositionEventArgs e)
         {
             // Only allows number in textfield, also with comma
@@ -575,23 +572,33 @@ namespace P3_Projekt_WPF
             }
             InformationGrid.UpdateLayout();
         }
-        
+
         private void button_Click(object sender, RoutedEventArgs e)
         {
 
         }
-
-        ResovleTempProduct resolveTempProduct = new ResovleTempProduct();
+        
+        ResovleTempProduct _resolveTempProduct;
 
         private void btn_MergeTempProduct_Click(object sender, RoutedEventArgs e)
         {
-            resolveTempProduct.Show();
-            resolveTempProduct.Activate();
+            if (_resolveTempProduct == null)
+            {
+                _resolveTempProduct = new ResovleTempProduct();
 
-            //(SaleTransaction transaction in _POSController.PlacerholderReceipt.Transactions
+                _resolveTempProduct.Closed += delegate { _resolveTempProduct = null; };
+
+            }
+            _resolveTempProduct.Show();
+            _resolveTempProduct.Activate();
             var tempProducts = _storageController.TempProductList.Where(x => x.Resolved == false);
+            
+            foreach(TempProduct tempProductsToListView in tempProducts)
+            {
+                _resolveTempProduct.listview_ProductsToMerge.Items.Add(new { Amount = tempProductsToListView.SalePrice, Description = tempProductsToListView.Description, Price = tempProductsToListView.SalePrice });
+            }
         }
 
-        
+
     }
 }

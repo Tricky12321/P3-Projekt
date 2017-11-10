@@ -171,10 +171,10 @@
                                     </GridViewColumn.CellTemplate>
                                 </GridViewColumn>
 
-                                <GridViewColumn x:Name="column_Product">
+                                <GridViewColumn x:Name="column_Product" Width="auto" >
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate>
-                                            <TextBlock Text="{Binding String_Product}"/>
+                                            <TextBlock Text="{Binding String_Product}" TextWrapping="Wrap" MaxWidth="400"/>
                                         </DataTemplate>
                                     </GridViewColumn.CellTemplate>
                                 </GridViewColumn>
