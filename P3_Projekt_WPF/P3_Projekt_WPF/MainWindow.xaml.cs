@@ -193,10 +193,11 @@ namespace P3_Projekt_WPF
             CreateProduct addProductWindow = new CreateProduct();
 
             // Adds ID to the combox text, to allow for comparing the name of the storageroom in combox with the ID in the storagewithamount, without adding reference to storageroomcontroller 
-            foreach (StorageRoom storageRoom in _storageController.StorageRoomDictionary.Values)
+            foreach(KeyValuePair<int,StorageRoom> storageRoom in _storageController.StorageRoomDictionary)
             {
-                addProductWindow.comboBox_StorageRoom.Items.Add($"{storageRoom.ID.ToString()} {storageRoom.Name}");
-                addProductWindow.StorageWithAmount.Add(storageRoom.ID, 0);
+                addProductWindow.StorageRooms.Add(storageRoom.Key, storageRoom.Value.Name);
+                addProductWindow.comboBox_StorageRoom.Items.Add($"{storageRoom.Key.ToString()} {storageRoom.Value.Name}");
+                addProductWindow.StorageWithAmount.Add(storageRoom.Key, 0);
             }
             foreach (Group group in _storageController.GroupDictionary.Values)
             {
@@ -220,9 +221,8 @@ namespace P3_Projekt_WPF
                            addProductWindow.textbox_SalePrice.Text,
                            addProductWindow.textbox_DiscountPrice.Text,
                            addProductWindow.StorageWithAmount);
-               
-
                 addProductWindow.Close();
+                LoadProductImages();
             };
             addProductWindow.Show();
         }
