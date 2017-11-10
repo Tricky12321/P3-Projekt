@@ -94,8 +94,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
             {
                 Thread.Sleep(5);
             }
-            List<SaleTransaction> SaleTransactions = new List<SaleTransaction>(_saleTransactions);
-            //TransactionsForStatistics = TransactionsForStatistics.Where(x => x.Date.Day == today.Day).ToList();
+            TransactionsForStatistics = new List<SaleTransaction>(_saleTransactions);
         }
 
         public void RequestStatisticsYesterday()
@@ -115,8 +114,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
             {
                 Thread.Sleep(5);
             }
-            List<SaleTransaction> SaleTransactions = new List<SaleTransaction>(_saleTransactions);
-            // TransactionsForStatistics = TransactionsForStatistics.Where(x => x.Date.Day == yesterday.Day).ToList();
+            TransactionsForStatistics = new List<SaleTransaction>(_saleTransactions);
         }
 
         public void RequestStatisticsWithParameters(string productID, string brand, Group group)
