@@ -7,8 +7,8 @@
         mc:Ignorable="d"
         Title="Ret Midlertidigt Produkt" Height="700" Width="600">
     <Grid>
-        <ScrollViewer Height="auto" Margin="10,10,10,0" VerticalAlignment="Top">
-            <ListView x:Name="listview_ProductsToMerge" Height="100" Width="551">
+        <ScrollViewer  Margin="10,10,10,0" VerticalAlignment="Top" Height="450">
+            <ListView x:Name="listview_ProductsToMerge" Height="auto" Width="auto" VerticalAlignment="Top">
                 <ListView.View>
                     <GridView>
                         <GridViewColumn>

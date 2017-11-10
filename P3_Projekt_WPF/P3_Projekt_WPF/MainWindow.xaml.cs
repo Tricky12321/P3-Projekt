@@ -445,13 +445,13 @@ namespace P3_Projekt_WPF
             UpdateGridQuickButtons();
         }
 
-        CreateTemporaryProduct createTemp = new CreateTemporaryProduct();
+
+        
 
         private void btn_Temporary_Click(object sender, RoutedEventArgs e)
         {
-            createTemp.Show();
-            createTemp.Activate();
-
+            CreateTemporaryProduct createTemp = new CreateTemporaryProduct();
+            
             createTemp.btn_AddTempProduct.Click += delegate
             {
                 string description = createTemp.textbox_Description.Text;
@@ -463,6 +463,8 @@ namespace P3_Projekt_WPF
                 createTemp.Close();
             };
         }
+
+        
 
         private void btn_PictureFilePath_Click(object sender, RoutedEventArgs e)
         {
@@ -559,7 +561,7 @@ namespace P3_Projekt_WPF
             }
             InformationGrid.UpdateLayout();
         }
-
+        
         private void button_Click(object sender, RoutedEventArgs e)
         {
 
@@ -568,17 +570,14 @@ namespace P3_Projekt_WPF
         ResovleTempProduct resolveTempProduct = new ResovleTempProduct();
 
         private void btn_MergeTempProduct_Click(object sender, RoutedEventArgs e)
-        {/*
+        {
             resolveTempProduct.Show();
             resolveTempProduct.Activate();
 
             //(SaleTransaction transaction in _POSController.PlacerholderReceipt.Transactions
-            foreach (SaleTransaction tempProduct in _POSController.PlacerholderReceipt.Transactions.)
-            {
-                resolveTempProduct.listview_ProductsToMerge.Items.Add(new { Amount = 10 });
-
-            }
-            */
+            var tempProducts = _storageController.TempProductList.Where(x => x.Resolved == false);
         }
+
+        
     }
 }
