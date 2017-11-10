@@ -137,6 +137,9 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="Resources\Class1.cs" />
+    <Compile Include="ResovleTempProduct.xaml.cs">
+      <DependentUpon>ResovleTempProduct.xaml</DependentUpon>
+    </Compile>
     <Page Include="ButtonStyle.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -162,6 +165,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="ProductControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ResovleTempProduct.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

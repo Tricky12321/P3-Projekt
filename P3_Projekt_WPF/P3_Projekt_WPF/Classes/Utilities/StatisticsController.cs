@@ -15,23 +15,24 @@ namespace P3_Projekt_WPF.Classes.Utilities
         {
 
         }
-   
-         /* Man anmoder altid om dato først, men kun én af dato-metoderne af gangen.
-          * Hver dato-metode nulstiller TransactionsForStatistics ved at hente transaktioner ned fra databasen alt efter datoen
-          * Derefter skal formen kalde RequestStatisticsWithParameters */
+
+        /* Man anmoder altid om dato først, men kun én af dato-metoderne af gangen.
+         * Hver dato-metode nulstiller TransactionsForStatistics ved at hente transaktioner ned fra databasen alt efter datoen
+         * Derefter skal formen kalde RequestStatisticsWithParameters */
 
 
         // TODO: Tjek om det virker
 
         public void RequestStatisticsDate(DateTime from, DateTime to)
         {
+            TransactionsForStatistics.RemoveAll(x => true);
             int fromUnixTime = Utils.GetUnixTime(from);
-            int toUnixTime = Utils.GetUnixTime(to);
+            int toUnixTime = Utils.GetUnixTime(ToDate(to));
 
-            string requestStatisticsQuery = 
-                $"SELECT * FROM `sale_transactions` WHERE FROM_UNIXTIME(`datetime`) >= '{fromUnixTime}' AND FROM_UNIXTIME(`datetime`) <= '{toUnixTime}';";
+            string requestStatisticsQuery =
+            $"SELECT * FROM `sale_transactions` WHERE UNIX_TIMESTAMP(`datetime`) >= '{fromUnixTime}' AND UNIX_TIMESTAMP(`datetime`) <= '{toUnixTime}';";
 
-            TableDecode Return = Mysql.RunQueryWithReturn(requestStatisticsQuery);
+           TableDecode Return = Mysql.RunQueryWithReturn(requestStatisticsQuery);
             
             foreach(Row row in Return.RowData)
             {
@@ -43,6 +44,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
 
         public void RequestStatisticsToday()
         {
+            TransactionsForStatistics.RemoveAll(x => true);
             DateTime today = DateTime.Now;
 
             string requestStatisticsQuery =
@@ -59,6 +61,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
 
         public void RequestStatisticsYesterday()
         {
+            TransactionsForStatistics.RemoveAll(x => true);
             DateTime yesterday = DateTime.Now.AddDays(-1);
 
             string requestStatisticsQuery =
@@ -87,8 +90,14 @@ namespace P3_Projekt_WPF.Classes.Utilities
             }
             if (group != null)
             {
-                TransactionsForStatistics = TransactionsForStatistics.Where(x => ((x.Product as Product).ProductGroupID == group.ID) || (x.Product as ServiceProduct).ServiceProductGroup == group).ToList();
-            }
+                TransactionsForStatistics = TransactionsForStatistics.Where(x => x.GetGroupID() == group.ID).ToList();
+            }  
+        }
+
+        public DateTime ToDate(DateTime date)
+        {
+            TimeSpan dayEnd = new TimeSpan(23, 59, 59);
+            return date + dayEnd;
         }
     }
 }

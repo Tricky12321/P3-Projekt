@@ -240,6 +240,7 @@ namespace P3_Projekt_WPF
 
         public void LoadProductGrid()
         {
+
             int i = 1;
 
             foreach (KeyValuePair<int, Product> product in _storageController.ProductDictionary.OrderBy(x => x.Key))
@@ -260,7 +261,7 @@ namespace P3_Projekt_WPF
                 foreach (var file in imageFiles)
                     Console.WriteLine(file.FullName);
 
-
+                /*
                 Image image = new Image();
 
                 
@@ -444,9 +445,12 @@ namespace P3_Projekt_WPF
             UpdateGridQuickButtons();
         }
 
+        CreateTemporaryProduct createTemp = new CreateTemporaryProduct();
+
         private void btn_Temporary_Click(object sender, RoutedEventArgs e)
         {
-            CreateTemporaryProduct createTemp = new CreateTemporaryProduct();
+            createTemp.Show();
+            createTemp.Activate();
 
             createTemp.btn_AddTempProduct.Click += delegate
             {
@@ -458,7 +462,6 @@ namespace P3_Projekt_WPF
                 UpdateReceiptList();
                 createTemp.Close();
             };
-            createTemp.Show();
         }
 
         private void btn_PictureFilePath_Click(object sender, RoutedEventArgs e)
@@ -484,10 +487,10 @@ namespace P3_Projekt_WPF
             DateTime endDate = (DateTime)datePicker_EndDate.SelectedDate;
 
 
-            string id = textBox_StatisticsProductID.Text;
+            string id = (textBox_StatisticsProductID.Text.Length == 0 ? null : textBox_StatisticsProductID.Text);
             string brand = (string)comboBox_Brand.SelectedItem;
             string groupString = (string)comboBox_Group.SelectedItem;
-            Group group;
+            Group group = null;
             if((string)comboBox_Group.SelectedItem != null)
             {
                 group = _storageController.GroupDictionary.Values.First(x => x.Name == groupString);
@@ -508,8 +511,8 @@ namespace P3_Projekt_WPF
                 group = null;
             }
 
-            //_statisticsController.RequestStatisticsDate(startDate, endDate);
-            //_statisticsController.RequestStatisticsWithParameters(id, brand, GROUP?);
+            _statisticsController.RequestStatisticsDate(startDate, endDate);
+            _statisticsController.RequestStatisticsWithParameters(id, brand, group);
             
             listView_Statistics.Items.Add("TEest som er KYS :D LAaaAAAAaaaAAaAAAaAaAaaaAaaaaAAAaaaAaaaaaANg");
 
@@ -562,9 +565,20 @@ namespace P3_Projekt_WPF
 
         }
 
-        private void btn_MergerTempProduct_Click(object sender, RoutedEventArgs e)
-        {
+        ResovleTempProduct resolveTempProduct = new ResovleTempProduct();
 
+        private void btn_MergeTempProduct_Click(object sender, RoutedEventArgs e)
+        {/*
+            resolveTempProduct.Show();
+            resolveTempProduct.Activate();
+
+            //(SaleTransaction transaction in _POSController.PlacerholderReceipt.Transactions
+            foreach (SaleTransaction tempProduct in _POSController.PlacerholderReceipt.Transactions.)
+            {
+                resolveTempProduct.listview_ProductsToMerge.Items.Add(new { Amount = 10 });
+
+            }
+            */
         }
     }
 }
