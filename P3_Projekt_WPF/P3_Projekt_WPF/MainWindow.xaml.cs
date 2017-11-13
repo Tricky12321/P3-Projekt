@@ -549,6 +549,7 @@ namespace P3_Projekt_WPF
             label_CurrentEndDate.Text = $"{ dateTime[0]}";
         }
 
+        //Today?? Yesterday??
         private void Button_CreateStatistics_Click(object sender, RoutedEventArgs e)
         {
             DateTime startDate = (DateTime)datePicker_StartDate.SelectedDate;
@@ -556,8 +557,6 @@ namespace P3_Projekt_WPF
             listView_Statistics.Items.Clear();
             label_NoTransactions.Visibility = Visibility.Hidden;
 
-            int totalAmount = 0;
-            decimal totalPrice = 0;
             string id = (textBox_StatisticsProductID.Text.Length == 0 ? null : textBox_StatisticsProductID.Text);
             string brand = (string)comboBox_Brand.SelectedItem;
             string groupString = (string)comboBox_Group.SelectedItem;
@@ -566,8 +565,6 @@ namespace P3_Projekt_WPF
             {
                 group = _storageController.GroupDictionary.Values.First(x => x.Name == groupString);
             }
-
-            //Today?? Yesterday??
 
             if (!(bool)checkBox_Product.IsChecked)
             {
@@ -586,13 +583,7 @@ namespace P3_Projekt_WPF
                 _statisticsController.RequestStatisticsDate(startDate, endDate);
                 _statisticsController.RequestStatisticsWithParameters(id, brand, group);
 
-                foreach (SaleTransaction transaction in _statisticsController.TransactionsForStatistics)
-                {
-                    listView_Statistics.Items.Add(transaction.StatisticsStrings());
-                    totalAmount += transaction.Amount;
-                    totalPrice += transaction.TotalPrice;
-                }
-                listView_Statistics.Items.Insert(0, new StatisticsListItem("", "Total", $"{totalAmount}", $"{totalPrice}"));
+                DisplayStatistics();
             }
             catch (EmptyTableException exception)
             {
@@ -600,6 +591,19 @@ namespace P3_Projekt_WPF
             }
         }
 
+        private void DisplayStatistics()
+        {
+            int totalAmount = 0;
+            decimal totalPrice = 0;
+
+            foreach (SaleTransaction transaction in _statisticsController.TransactionsForStatistics)
+            {
+                listView_Statistics.Items.Add(transaction.StatisticsStrings());
+                totalAmount += transaction.Amount;
+                totalPrice += transaction.TotalPrice;
+            }
+            listView_Statistics.Items.Insert(0, new StatisticsListItem("", "Total", $"{totalAmount}", $"{totalPrice}"));
+        }
 
 
 
