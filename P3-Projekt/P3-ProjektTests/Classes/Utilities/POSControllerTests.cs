@@ -45,12 +45,6 @@ namespace P3_Projekt_WPF.Classes.Utilities.Tests
         }
 
         [Test()]
-        public void EditReceiptTest()
-        {
-            Assert.Fail();
-        }
-
-        [Test()]
         public void AddIcecreamTransactionTest()
         {
             StorageController SC = new StorageController();
@@ -75,7 +69,7 @@ namespace P3_Projekt_WPF.Classes.Utilities.Tests
 
             bool b1 = POSC.PlacerholderReceipt.Transactions.Contains(transaction);
 
-            POSC.RemoveTransactionFromReceipt(0);
+            POSC.RemoveTransactionFromReceipt(1);
 
             bool b2 = !POSC.PlacerholderReceipt.Transactions.Contains(transaction);
 
@@ -102,7 +96,7 @@ namespace P3_Projekt_WPF.Classes.Utilities.Tests
             bool b2 = POSC.PlacerholderReceipt.Transactions.Contains(transaction2);
             bool b3 = POSC.PlacerholderReceipt.Transactions.Contains(transaction3);
 
-            POSC.RemoveTransactionFromReceipt(1);
+            POSC.RemoveTransactionFromReceipt(2);
 
             bool b4 = POSC.PlacerholderReceipt.Transactions.Contains(transaction1);
             bool b5 = !POSC.PlacerholderReceipt.Transactions.Contains(transaction2);

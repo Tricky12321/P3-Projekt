@@ -16,7 +16,8 @@ namespace P3_Projekt_WPF.Classes.Database
         private const bool _debug = true;
         private const string _username = "P3";
         private const string _password = "frankythefish";
-        private const string _ip = "v-world.dk";
+        private const bool _remoteDB = true;
+        private const string _ip = _remoteDB ? "v-world.dk" : "192.168.2.1";
         private const int _port = 3306;
         private const string _database = "P3";
         public static List<MySqlConnection> Connection = new List<MySqlConnection>();
@@ -58,7 +59,7 @@ namespace P3_Projekt_WPF.Classes.Database
 
         public static MySqlConnection Connect(int fails = 0)
         {
-            CheckInternet();
+            //CheckInternet();
             MySqlConnection connection = new MySqlConnection(_connectionString);
             try
             {

@@ -33,7 +33,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
 
         public List<Thread> Threads = new List<Thread>();
         public object ThreadLock = new object();
-        private int _productThreadsCount = 20;
+        private int _productThreadsCount = 4;
         private ConcurrentQueue<Row> _productInformation = new ConcurrentQueue<Row>();
         // For at holde garbage collector fra at dræbe tråde
         private List<Thread> _productThreads = new List<Thread>();
@@ -45,12 +45,16 @@ namespace P3_Projekt_WPF.Classes.Utilities
         private bool _groupQueueDone = false;
         private bool _storageRoomQueueDone = false;
         private bool _serviceProductQueueDone = false;
+        private bool _stoargeStatusQueueDone = false;
+        private int _storageStatusThreadCount = 4;
+        private List<Thread> _storageStatusThreads = new List<Thread>();
+        private ConcurrentQueue<Row> _storageStatusInformation = new ConcurrentQueue<Row>();
         public bool ThreadsDone
         {
             get
             {
-                CheckProductThreads();
-                return _productQueueDone && _groupQueueDone && _tempProductQueueDone && _storageRoomQueueDone && _serviceProductQueueDone;
+                CheckThreads();
+                return _productQueueDone && _groupQueueDone && _tempProductQueueDone && _storageRoomQueueDone && _serviceProductQueueDone && _stoargeStatusQueueDone;
             }
         }
 
@@ -66,14 +70,20 @@ namespace P3_Projekt_WPF.Classes.Utilities
         /// <summary>
         /// Checks if the ProductQueue is done
         /// </summary>
-        private void CheckProductThreads()
+        private void CheckThreads()
         {
-            //Debug.WriteLine(_productsCreateByThreads + " = " + _productsLoadedFromDatabase);
             if (!_productQueueDone && (_productsCreateByThreads == _productsLoadedFromDatabase))
             {
                 Debug.WriteLine("ProductQue: Done");
                 _productQueueDone = true;
+                UpdateStorageStatus();
                 AddInformation("Product count", _productsCreateByThreads);
+            } else
+            {
+                if (_storageStatusInformation.IsEmpty)
+                {
+                    _stoargeStatusQueueDone = true;
+                }
             }
         }
 
@@ -105,6 +115,38 @@ namespace P3_Projekt_WPF.Classes.Utilities
                 {
                     Thread.Sleep(1);
                 }
+            }
+        }
+
+        private void UpdateStorageStatus_Thread()
+        {
+            Row Data = null;
+            while (_storageStatusInformation.TryDequeue(out Data))
+            {
+                int productID = Convert.ToInt32(Data.Values[1]);
+                int storageRoom = Convert.ToInt32(Data.Values[2]);
+                int amount = Convert.ToInt32(Data.Values[3]);
+                ProductDictionary[productID].StorageWithAmount[storageRoom] = amount;
+
+            }
+        }
+
+
+        private void UpdateStorageStatus()
+        {
+            string sql = "SELECT * FROM `storage_status`";
+            TableDecode Results = Mysql.RunQueryWithReturn(sql);
+            _storageStatusInformation = new ConcurrentQueue<Row>(Results.RowData);
+            CreateStorageStatusThreads();
+        }
+
+        private void CreateStorageStatusThreads()
+        {
+            for (int i = 0; i < _storageStatusThreadCount; i++)
+            {
+                Thread NewThread = new Thread(new ThreadStart(UpdateStorageStatus_Thread));
+                NewThread.Start();
+                _storageStatusThreads.Add(NewThread);
             }
         }
 
@@ -164,36 +206,12 @@ namespace P3_Projekt_WPF.Classes.Utilities
             ServiceProductDictionary.TryAdd(NewServiceProduct.ID, NewServiceProduct);
         }
 
-        private void CalculateThreadCount(int ProductCount)
-        {
-            if (ProductCount > 100)
-            {
-                // Laver en tråd for hvert 5 produkter (100 produkter = 20 tråde)
-                _productThreadsCount = Convert.ToInt32(Math.Floor((decimal)_productsLoadedFromDatabase / 3) + 5);
-            }
-            else if (ProductCount > 33)
-            {
-                // Laver en tråd for hvert 2 produkt (50 produkter = 25 tråde)
-                _productThreadsCount = Convert.ToInt32(Math.Floor((decimal)_productsLoadedFromDatabase / 2) + 5);
-            }
-            else
-            {
-                _productThreadsCount = 20;
-            }
-            if (_productThreadCount > 50)
-            {
-                _productThreadCount = 50;
-            }
-            AddInformation("Product Threads created", _productThreadCount);
-        }
-
         public void GetAllProductsFromDatabase()
         {
             string sql = "SELECT * FROM `products` WHERE `id` > '0'";
             TableDecode Results = Mysql.RunQueryWithReturn(sql);
             _productsLoadedFromDatabase = Results.RowData.Count;
             _productsCreateByThreads = 0;
-            CalculateThreadCount(_productsLoadedFromDatabase);
             CreateProductThreads(); // Opretter tråde til at behandle data
             foreach (var row in Results.RowData)
             {
@@ -314,9 +332,10 @@ namespace P3_Projekt_WPF.Classes.Utilities
             ProductDictionary.TryRemove(ProductID, out outVal);
         }
 
-        public void CreateGroup(string name, string description)
+        public void CreateGroup(int id, string name, string description)
         {
             Group newGroup = new Group(name, description);
+            newGroup.ID = id;
             GroupDictionary.TryAdd(newGroup.ID, newGroup);
         }
 
