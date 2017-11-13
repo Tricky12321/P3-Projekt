@@ -553,8 +553,8 @@ namespace P3_Projekt_WPF
             listView_Statistics.Items.Clear();
             label_NoTransactions.Visibility = Visibility.Hidden;
 
-            int totalAmount;
-            decimal totalPrice;
+            int totalAmount = 0;
+            decimal totalPrice = 0;
             string id = (textBox_StatisticsProductID.Text.Length == 0 ? null : textBox_StatisticsProductID.Text);
             string brand = (string)comboBox_Brand.SelectedItem;
             string groupString = (string)comboBox_Group.SelectedItem;
@@ -583,40 +583,18 @@ namespace P3_Projekt_WPF
                 _statisticsController.RequestStatisticsDate(startDate, endDate);
                 _statisticsController.RequestStatisticsWithParameters(id, brand, group);
 
-                totalAmount = TotalAmount();
-                totalPrice = TotalPrice();
-
-                listView_Statistics.Items.Add(new StatisticsListItem("", "Total", $"{TotalAmount()}", $"{TotalPrice()}"));
                 foreach (SaleTransaction transaction in _statisticsController.TransactionsForStatistics)
                 {
                     listView_Statistics.Items.Add(transaction.StatisticsStrings());
+                    totalAmount += transaction.Amount;
+                    totalPrice += transaction.TotalPrice;
                 }
+                listView_Statistics.Items.Insert(0, new StatisticsListItem("", "Total", $"{totalAmount}", $"{totalPrice}"));
             }
             catch (EmptyTableException exception)
             {
                 label_NoTransactions.Visibility = Visibility.Visible;
             }
-
-        }
-
-        private int TotalAmount()
-        {
-            int amount = 0;
-            foreach (SaleTransaction transaction in _statisticsController.TransactionsForStatistics)
-            {
-                amount += transaction.Amount;
-            }
-            return amount;
-        }
-
-        private decimal TotalPrice()
-        {
-            decimal price = 0;
-            foreach (SaleTransaction transaction in _statisticsController.TransactionsForStatistics)
-            {
-                price += transaction.TotalPrice;
-            }
-            return price;
         }
 
 
