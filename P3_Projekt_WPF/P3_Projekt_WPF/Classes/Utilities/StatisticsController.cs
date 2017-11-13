@@ -73,8 +73,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
                 Thread.Sleep(5);
             }
             _allStatisticsDone = true;
-            List<SaleTransaction> SaleTransactions = new List<SaleTransaction>(_saleTransactions);
-            //TransactionsForStatistics = TransactionsForStatistics.Where(x => (Utils.GetUnixTime(x.Date) > fromUnixTime && Utils.GetUnixTime(x.Date) < toUnixTime)).ToList();
+            TransactionsForStatistics = new List<SaleTransaction>(_saleTransactions);
         }
 
         public void RequestStatisticsToday()
