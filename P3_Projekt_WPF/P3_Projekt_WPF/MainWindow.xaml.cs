@@ -175,7 +175,7 @@ namespace P3_Projekt_WPF
         Button addProductButton = new Button();
         public void AddProductButton()
         {
-            
+
             addProductButton.Content = "Tilføj nyt produkt";
             addProductButton.FontSize = 30;
 
@@ -187,7 +187,7 @@ namespace P3_Projekt_WPF
 
             addProductButton.Click += AddProductDialogOpener;
 
-            
+
         }
 
         public void AddProductDialogOpener(object sender, RoutedEventArgs e)
@@ -195,7 +195,7 @@ namespace P3_Projekt_WPF
             CreateProduct addProductWindow = new CreateProduct();
 
             // Adds ID to the combox text, to allow for comparing the name of the storageroom in combox with the ID in the storagewithamount, without adding reference to storageroomcontroller 
-            foreach(KeyValuePair<int,StorageRoom> storageRoom in _storageController.StorageRoomDictionary)
+            foreach (KeyValuePair<int, StorageRoom> storageRoom in _storageController.StorageRoomDictionary)
             {
                 addProductWindow.StorageRooms.Add(storageRoom.Key, storageRoom.Value.Name);
                 addProductWindow.comboBox_StorageRoom.Items.Add($"{storageRoom.Key.ToString()} {storageRoom.Value.Name}");
@@ -297,8 +297,8 @@ namespace P3_Projekt_WPF
             productGrid.RowDefinitions.Clear();
             productGrid.Children.Clear();
             productGrid.Children.Add(addProductButton);
-            
-            
+
+
             productGrid.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(380) });
             int i = 1;
 
@@ -504,10 +504,10 @@ namespace P3_Projekt_WPF
 
 
         CreateTemporaryProduct _createTempProduct;
-        
+
         private void btn_Temporary_Click(object sender, RoutedEventArgs e)
         {
-            if(_createTempProduct == null)
+            if (_createTempProduct == null)
             {
                 _createTempProduct = new CreateTemporaryProduct();
                 _createTempProduct.Closed += delegate { _createTempProduct = null; };
@@ -667,7 +667,7 @@ namespace P3_Projekt_WPF
         {
 
         }
-        
+
         ResovleTempProduct _resolveTempProduct;
 
         private void btn_MergeTempProduct_Click(object sender, RoutedEventArgs e)
@@ -687,25 +687,11 @@ namespace P3_Projekt_WPF
                 _resolveTempProduct.listview_ProductsToMerge.Items.Add(new { Amount = 10 });
 
             }
-        }
-         }
 
 
-
-             }*/
-
-
-        private void btn_search_Click(object sender, RoutedEventArgs e)
-        {
-            ConcurrentQueue<SearchedProduct> productsFoundList =  _storageController.SearchForProduct(txtBox_SearchField.Text);
-
-            foreach(SearchedProduct s in productsFoundList)
-            {
-                Debug.Print(s.CurrentProduct.ID.ToString());
-            }
             var tempProducts = _storageController.TempProductList.Where(x => x.Resolved == false);
-            
-            foreach(TempProduct tempProductsToListView in tempProducts)
+
+            foreach (TempProduct tempProductsToListView in tempProducts)
             {
                 _resolveTempProduct.listview_ProductsToMerge.Items.Add(new { Amount = tempProductsToListView.SalePrice, Description = tempProductsToListView.Description, Price = tempProductsToListView.SalePrice });
             }
@@ -714,6 +700,16 @@ namespace P3_Projekt_WPF
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             Environment.Exit(0);
+        }
+
+        private void btn_search_Click(object sender, RoutedEventArgs e)
+        {
+            ConcurrentQueue<SearchedProduct> productsFoundList = _storageController.SearchForProduct(txtBox_SearchField.Text);
+
+            foreach (SearchedProduct s in productsFoundList)
+            {
+                Debug.Print(s.CurrentProduct.ID.ToString());
+            }
         }
     }
 }
