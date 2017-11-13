@@ -529,32 +529,24 @@ namespace P3_Projekt_WPF
         //Today?? Yesterday??
         private void Button_CreateStatistics_Click(object sender, RoutedEventArgs e)
         {
-            DateTime startDate = (DateTime)datePicker_StartDate.SelectedDate;
-            DateTime endDate = (DateTime)datePicker_EndDate.SelectedDate;
-            listView_Statistics.Items.Clear();
-            label_NoTransactions.Visibility = Visibility.Hidden;
+            DateTime startDate = datePicker_StartDate.SelectedDate.Value;
+            DateTime endDate = datePicker_EndDate.SelectedDate.Value;
+            ResetStatisticsView();
 
-            string id = (textBox_StatisticsProductID.Text.Length == 0 ? null : textBox_StatisticsProductID.Text);
-            string brand = (string)comboBox_Brand.SelectedItem;
-            string groupString = (string)comboBox_Group.SelectedItem;
+            string id = null;
+            if(textBox_StatisticsProductID.Text.Length > 0)
+            {
+                id = textBox_StatisticsProductID.Text;
+            }
+            string brand = comboBox_Brand.Text;
+            string groupString = comboBox_Group.Text;
             Group group = null;
-            if ((string)comboBox_Group.SelectedItem != null)
+            if (comboBox_Group.Text != "")
             {
                 group = _storageController.GroupDictionary.Values.First(x => x.Name == groupString);
             }
 
-            if (!(bool)checkBox_Product.IsChecked)
-            {
-                id = null;
-            }
-            if (!(bool)checkBox_Brand.IsChecked)
-            {
-                brand = null;
-            }
-            if (!(bool)checkBox_Group.IsChecked)
-            {
-                group = null;
-            }
+            CheckboxChecker(ref id, ref brand, ref group);
             try
             {
                 _statisticsController.RequestStatisticsDate(startDate, endDate);
@@ -565,6 +557,28 @@ namespace P3_Projekt_WPF
             catch (EmptyTableException exception)
             {
                 label_NoTransactions.Visibility = Visibility.Visible;
+            }
+        }
+
+        private void ResetStatisticsView()
+        {
+            listView_Statistics.Items.Clear();
+            label_NoTransactions.Visibility = Visibility.Hidden;
+        }
+
+        private void CheckboxChecker(ref string id, ref string brand, ref Group group)
+        {
+            if (!checkBox_Product.IsChecked.Value)
+            {
+                id = null;
+            }
+            if (!checkBox_Brand.IsChecked.Value)
+            {
+                brand = null;
+            }
+            if (!checkBox_Group.IsChecked.Value)
+            {
+                group = null;
             }
         }
 
