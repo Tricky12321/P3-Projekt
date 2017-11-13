@@ -7,7 +7,7 @@
         xmlns:Classes="clr-namespace:P3_Projekt_WPF.Classes" xmlns:System="clr-namespace:System;assembly=mscorlib" x:Class="P3_Projekt_WPF.MainWindow"
         mc:Ignorable="d"
         Closing="Window_Closing"
-        Title="Børglum Kloster Lager og Salg" MinHeight="768" Height="1080" MinWidth="1366" Width="1920" Background="#FF919191" WindowState="Maximized">
+        Title="Børglum Kloster Lager og Salg" MinHeight="700" Height="1080" MinWidth="1366" Width="1920" Background="#FF919191" WindowState="Maximized">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="122*"/>
