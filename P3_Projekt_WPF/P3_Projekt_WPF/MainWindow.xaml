@@ -326,8 +326,8 @@
                             </TransformGroup>
                         </CheckBox.RenderTransform>
                     </CheckBox>
-                    <ComboBox x:Name="comboBox_Brand" Grid.ColumnSpan="2" HorizontalAlignment="Left" Height="40" Margin="119,0,0,225" Grid.Row="1" VerticalAlignment="Bottom" Width="350"/>
-                    <ComboBox x:Name="comboBox_Group" Grid.ColumnSpan="2" HorizontalAlignment="Left" Height="40" Margin="119,0,0,165" Grid.Row="1" VerticalAlignment="Bottom" Width="350"/>
+                    <ComboBox x:Name="comboBox_Brand" Grid.ColumnSpan="2" HorizontalAlignment="Left" Height="40" Margin="119,0,0,225" Grid.Row="1" VerticalAlignment="Bottom" Width="350" SelectedValuePath="Content"/>
+                    <ComboBox x:Name="comboBox_Group" Grid.ColumnSpan="2" HorizontalAlignment="Left" Height="40" Margin="119,0,0,165" Grid.Row="1" VerticalAlignment="Bottom" Width="350" SelectedValuePath="Content"/>
                     <Button x:Name="Button_CreateStatistics" Grid.ColumnSpan="2" Content="Opret Statistik" HorizontalAlignment="Left" Margin="11,0,0,13" Grid.Row="1" Width="489" Background="#FFC5C5C5" Style="{StaticResource Flat_Button}" Height="118" VerticalAlignment="Bottom" Click="Button_CreateStatistics_Click"/>
                     <TextBox Padding="10,0,0,0"  TextCompositionManager.PreviewTextInput="TextInputNoNumber" x:Name="textBox_StatisticsProductID" Margin="118,0,0,285" FontSize="33" HorizontalAlignment="Left" Width="350" Grid.Row="1" Height="50" VerticalAlignment="Bottom" Grid.ColumnSpan="2">
                         <TextBox.Resources>
