@@ -194,14 +194,8 @@ namespace P3_Projekt_WPF
         {
             CreateProduct addProductWindow = new CreateProduct(new Dictionary<int, StorageRoom>(_storageController.StorageRoomDictionary));
 
-            foreach (Group group in _storageController.GroupDictionary.Values)
-            {
-                addProductWindow.comboBox_Group.Items.Add(group.Name);
-            }
-            foreach (string brand in _storageController.GetProductBrands())
-            {
-                addProductWindow.comboBox_Brand.Items.Add(brand);
-            }
+            addProductWindow.comboBox_Group.Items.Add(_storageController.GroupDictionary.Values);
+            addProductWindow.comboBox_Brand.Items.Add(_storageController.GetProductBrands());
 
             addProductWindow.btn_SaveAndQuit.Click += delegate
             {
