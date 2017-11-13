@@ -205,7 +205,7 @@ namespace P3_Projekt_WPF
                     {
                         System.IO.File.Copy(addProductWindow.ChosenFilePath, _settingsController.PictureFilePath + "\\" + Product.GetNextID() + ".jpg", true);
                     }
-
+                    // TODO: Give ability to make a service product
                     AddProduct(addProductWindow);
                     addProductWindow.Close();
                     LoadProductImages();
