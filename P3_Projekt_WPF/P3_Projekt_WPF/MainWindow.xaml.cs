@@ -672,29 +672,22 @@ namespace P3_Projekt_WPF
 
         private void btn_MergeTempProduct_Click(object sender, RoutedEventArgs e)
         {
+            List<TempListItem> ItemList = new List<TempListItem>();   
             if (_resolveTempProduct == null)
             {
                 _resolveTempProduct = new ResovleTempProduct();
-
                 _resolveTempProduct.Closed += delegate { _resolveTempProduct = null; };
-
             }
-            _resolveTempProduct.Show();
-            _resolveTempProduct.Activate();
-            //(SaleTransaction transaction in _POSController.PlacerholderReceipt.Transactions
-            foreach (SaleTransaction tempProduct in _POSController.PlacerholderReceipt.Transactions)
-            {
-                _resolveTempProduct.listview_ProductsToMerge.Items.Add(new { Amount = 10 });
-
-            }
-
-
             var tempProducts = _storageController.TempProductList.Where(x => x.Resolved == false);
 
+            //_resolveTempProduct.listview_ProductsToMerge.Items.Add(new { Amount = "Antal", Description = "Beskrivelse", Price = "Pris" });
             foreach (TempProduct tempProductsToListView in tempProducts)
             {
-                _resolveTempProduct.listview_ProductsToMerge.Items.Add(new { Amount = tempProductsToListView.SalePrice, Description = tempProductsToListView.Description, Price = tempProductsToListView.SalePrice });
+                ItemList.Add(new TempListItem { Description = tempProductsToListView.Description, Price = tempProductsToListView.SalePrice }); 
             }
+            _resolveTempProduct.listview_ProductsToMerge.ItemsSource = ItemList;
+            _resolveTempProduct.Show();
+            _resolveTempProduct.Activate();
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
@@ -710,6 +703,11 @@ namespace P3_Projekt_WPF
             {
                 Debug.Print(s.CurrentProduct.ID.ToString());
             }
+        }
+
+        private void btn_MergeTempProduct_Click_1(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }

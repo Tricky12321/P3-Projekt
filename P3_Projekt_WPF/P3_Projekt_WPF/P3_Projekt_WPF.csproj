@@ -119,6 +119,7 @@
     <Compile Include="Classes\Utilities\ReceiptListItem.cs" />
     <Compile Include="Classes\Utilities\SettingsController.cs" />
     <Compile Include="Classes\Utilities\StatisticsListItem.cs" />
+    <Compile Include="Classes\Utilities\TempListItem.cs" />
     <Compile Include="Classes\Utilities\Utils.cs" />
     <Compile Include="Classes\Utilities\POSController.cs" />
     <Compile Include="Classes\Utilities\StatisticsController.cs" />
