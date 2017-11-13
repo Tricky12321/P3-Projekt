@@ -8,10 +8,8 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
-using System.Drawing;
 using System.Collections.Concurrent;
 using P3_Projekt_WPF.Classes;
 
@@ -25,9 +23,7 @@ namespace P3_Projekt_WPF
     {
         public event ImageChosen ImageChosenEvent;
         public string ChosenFilePath;
-        public string FileName;
         public Dictionary<int, int> StorageWithAmount = new Dictionary<int, int>();
-        //public Dictionary<int, string> StorageRooms = new Dictionary<int, string>();
         public Dictionary<int, StorageRoom> StorageRooms;
 
         public CreateProduct(Dictionary<int, StorageRoom> storageRooms)
@@ -57,7 +53,6 @@ namespace P3_Projekt_WPF
                 if (dialog.FileName != null && dialog.FileName != "")
                 {
                     ImageChosenEvent(dialog.FileName);
-                    FileName = dialog.SafeFileName;
                 }
             }
         }
