@@ -23,5 +23,12 @@ namespace P3_Projekt_WPF
         {
             InitializeComponent();
         }
+
+        private void listview_ProductsToMerge_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            var ok = this.listview_ProductsToMerge.SelectedValue;
+            
+
+        }
     }
 }

@@ -116,8 +116,7 @@ namespace P3_Projekt_WPF.Classes
             DiscountBool = Convert.ToBoolean(results.Values[5]);            // discount
             DiscountPrice = Convert.ToDecimal(results.Values[6]);           // discount_price
             _active = Convert.ToBoolean(results.Values[7]);                 // active
-            CreatedTime = Convert.ToDateTime(results.Values[8]); // CreatedTime
-            GetStorageStatus();
+            CreatedTime = Convert.ToDateTime(results.Values[8]);            // CreatedTime
         }
         // Henter storage status fra databasen om hvilke lagere der har hvilket antal af produkter
         private void GetStorageStatus()
@@ -138,7 +137,6 @@ namespace P3_Projekt_WPF.Classes
             {
                 //Ignore EmptyTableException
             }
-            
         }
         // Sletter lige alt storage information i datbasen inden der bliver uploadet noget nyt. 
         private void DeleteAllStorageData()

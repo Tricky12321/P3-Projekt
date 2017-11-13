@@ -192,59 +192,39 @@ namespace P3_Projekt_WPF
 
         public void AddProductDialogOpener(object sender, RoutedEventArgs e)
         {
-            CreateProduct addProductWindow = new CreateProduct();
+            CreateProduct addProductWindow = new CreateProduct(new Dictionary<int, StorageRoom>(_storageController.StorageRoomDictionary));
 
-            // Adds ID to the combox text, to allow for comparing the name of the storageroom in combox with the ID in the storagewithamount, without adding reference to storageroomcontroller 
-            foreach (KeyValuePair<int, StorageRoom> storageRoom in _storageController.StorageRoomDictionary)
-            {
-                addProductWindow.StorageRooms.Add(storageRoom.Key, storageRoom.Value.Name);
-                addProductWindow.comboBox_StorageRoom.Items.Add($"{storageRoom.Key.ToString()} {storageRoom.Value.Name}");
-                addProductWindow.StorageWithAmount.Add(storageRoom.Key, 0);
-            }
-            foreach (Group group in _storageController.GroupDictionary.Values)
-            {
-                addProductWindow.comboBox_Group.Items.Add(group.Name);
-            }
-            foreach (string brand in _storageController.GetProductBrands())
-            {
-                addProductWindow.comboBox_Brand.Items.Add(brand);
-            }
-            addProductWindow.output_ProductID.Text = Product.GetNextID().ToString();
+            addProductWindow.comboBox_Group.ItemsSource = (_storageController.GroupDictionary.Values.Select(x => x.Name));
+            addProductWindow.comboBox_Brand.ItemsSource = (_storageController.GetProductBrands());
+
             addProductWindow.btn_SaveAndQuit.Click += delegate
             {
-                if (addProductWindow.ChosenFilePath != null)
+                if (addProductWindow.IsInputValid())
                 {
-                    System.IO.File.Copy(addProductWindow.ChosenFilePath, _settingsController.PictureFilePath + "\\" + Product.GetNextID() + ".jpg", true);
+                    if (addProductWindow.ChosenFilePath != null)
+                    {
+                        System.IO.File.Copy(addProductWindow.ChosenFilePath, _settingsController.PictureFilePath + "\\" + Product.GetNextID() + ".jpg", true);
+                    }
+                    // TODO: Give ability to make a service product
+                    AddProduct(addProductWindow);
+                    addProductWindow.Close();
+                    LoadProductImages();
                 }
-                AddProduct(addProductWindow.textbox_Name.Text,
-                           addProductWindow.comboBox_Brand.Text,
-                           addProductWindow.comboBox_Group.Text,
-                           addProductWindow.textbox_PurchasePrice.Text,
-                           addProductWindow.textbox_SalePrice.Text,
-                           addProductWindow.textbox_DiscountPrice.Text,
-                           addProductWindow.StorageWithAmount);
-                if (addProductWindow.ChosenFilePath != null)
-                {
-                    System.IO.File.Copy(addProductWindow.ChosenFilePath, _settingsController.PictureFilePath + addProductWindow.FileName, true);
-                }
-
-                addProductWindow.Close();
-                LoadProductImages();
             };
             addProductWindow.Show();
         }
 
-        public void AddProduct(string name, string brand, string group, string purchasePrice, string salePrice, string discountPrice, Dictionary<int, int> storageWithAmount)
+        public void AddProduct(CreateProduct addProductWindow)
         {
             _storageController.CreateProduct(Product.GetNextID(),
-                                             name,
-                                             brand,
-                                             Decimal.Parse(purchasePrice),
-                                             _storageController.GroupDictionary.First(x => x.Value.Name == group).Key,
-                                             (discountPrice != null) ? true : false,
-                                             Decimal.Parse(discountPrice),
-                                             Decimal.Parse(salePrice),
-                                             storageWithAmount);
+                                             addProductWindow.textbox_Name.Text,
+                                             addProductWindow.comboBox_Brand.Text,
+                                             Decimal.Parse(addProductWindow.textbox_PurchasePrice.Text),
+                                             _storageController.GroupDictionary.First(x => x.Value.Name == addProductWindow.comboBox_Group.Text).Key,
+                                             (addProductWindow.textbox_DiscountPrice.Text != "0") ? true : false,
+                                             Decimal.Parse(addProductWindow.textbox_DiscountPrice.Text),
+                                             Decimal.Parse(addProductWindow.textbox_SalePrice.Text),
+                                             addProductWindow.StorageWithAmount);
         }
 
         private void ShowSpecificInfoProductStorage(object sender, RoutedEventArgs e)
@@ -546,79 +526,75 @@ namespace P3_Projekt_WPF
             label_CurrentEndDate.Text = $"{ dateTime[0]}";
         }
 
+        //Today?? Yesterday??
         private void Button_CreateStatistics_Click(object sender, RoutedEventArgs e)
         {
-            DateTime startDate = (DateTime)datePicker_StartDate.SelectedDate;
-            DateTime endDate = (DateTime)datePicker_EndDate.SelectedDate;
-            listView_Statistics.Items.Clear();
-            label_NoTransactions.Visibility = Visibility.Hidden;
+            DateTime startDate = datePicker_StartDate.SelectedDate.Value;
+            DateTime endDate = datePicker_EndDate.SelectedDate.Value;
+            ResetStatisticsView();
 
-            int totalAmount;
-            decimal totalPrice;
-            string id = (textBox_StatisticsProductID.Text.Length == 0 ? null : textBox_StatisticsProductID.Text);
-            string brand = (string)comboBox_Brand.SelectedItem;
-            string groupString = (string)comboBox_Group.SelectedItem;
+            string id = null;
+            if(textBox_StatisticsProductID.Text.Length > 0)
+            {
+                id = textBox_StatisticsProductID.Text;
+            }
+            string brand = comboBox_Brand.Text;
+            string groupString = comboBox_Group.Text;
             Group group = null;
-            if ((string)comboBox_Group.SelectedItem != null)
+            if (comboBox_Group.Text != "")
             {
                 group = _storageController.GroupDictionary.Values.First(x => x.Name == groupString);
             }
 
-            //Today?? Yesterday??
-
-            if (!(bool)checkBox_Product.IsChecked)
-            {
-                id = null;
-            }
-            if (!(bool)checkBox_Brand.IsChecked)
-            {
-                brand = null;
-            }
-            if (!(bool)checkBox_Group.IsChecked)
-            {
-                group = null;
-            }
+            CheckboxChecker(ref id, ref brand, ref group);
             try
             {
                 _statisticsController.RequestStatisticsDate(startDate, endDate);
                 _statisticsController.RequestStatisticsWithParameters(id, brand, group);
 
-                totalAmount = TotalAmount();
-                totalPrice = TotalPrice();
-
-                listView_Statistics.Items.Add(new StatisticsListItem("", "Total", $"{TotalAmount()}", $"{TotalPrice()}"));
-                foreach (SaleTransaction transaction in _statisticsController.TransactionsForStatistics)
-                {
-                    listView_Statistics.Items.Add(transaction.StatisticsStrings());
-                }
+                DisplayStatistics();
             }
             catch (EmptyTableException exception)
             {
                 label_NoTransactions.Visibility = Visibility.Visible;
             }
-
         }
 
-        private int TotalAmount()
+        private void ResetStatisticsView()
         {
-            int amount = 0;
+            listView_Statistics.Items.Clear();
+            label_NoTransactions.Visibility = Visibility.Hidden;
+        }
+
+        private void CheckboxChecker(ref string id, ref string brand, ref Group group)
+        {
+            if (!checkBox_Product.IsChecked.Value)
+            {
+                id = null;
+            }
+            if (!checkBox_Brand.IsChecked.Value)
+            {
+                brand = null;
+            }
+            if (!checkBox_Group.IsChecked.Value)
+            {
+                group = null;
+            }
+        }
+
+        private void DisplayStatistics()
+        {
+            int totalAmount = 0;
+            decimal totalPrice = 0;
+
             foreach (SaleTransaction transaction in _statisticsController.TransactionsForStatistics)
             {
-                amount += transaction.Amount;
+                listView_Statistics.Items.Add(transaction.StatisticsStrings());
+                totalAmount += transaction.Amount;
+                totalPrice += transaction.TotalPrice;
             }
-            return amount;
+            listView_Statistics.Items.Insert(0, new StatisticsListItem("", "Total", $"{totalAmount}", $"{totalPrice}"));
         }
-
-        private decimal TotalPrice()
-        {
-            decimal price = 0;
-            foreach (SaleTransaction transaction in _statisticsController.TransactionsForStatistics)
-            {
-                price += transaction.TotalPrice;
-            }
-            return price;
-        }
-
 
 
 
@@ -672,29 +648,22 @@ namespace P3_Projekt_WPF
 
         private void btn_MergeTempProduct_Click(object sender, RoutedEventArgs e)
         {
+            List<TempListItem> ItemList = new List<TempListItem>();   
             if (_resolveTempProduct == null)
             {
                 _resolveTempProduct = new ResovleTempProduct();
-
                 _resolveTempProduct.Closed += delegate { _resolveTempProduct = null; };
-
             }
-            _resolveTempProduct.Show();
-            _resolveTempProduct.Activate();
-            //(SaleTransaction transaction in _POSController.PlacerholderReceipt.Transactions
-            foreach (SaleTransaction tempProduct in _POSController.PlacerholderReceipt.Transactions)
-            {
-                _resolveTempProduct.listview_ProductsToMerge.Items.Add(new { Amount = 10 });
-
-            }
-
-
             var tempProducts = _storageController.TempProductList.Where(x => x.Resolved == false);
 
+            //_resolveTempProduct.listview_ProductsToMerge.Items.Add(new { Amount = "Antal", Description = "Beskrivelse", Price = "Pris" });
             foreach (TempProduct tempProductsToListView in tempProducts)
             {
-                _resolveTempProduct.listview_ProductsToMerge.Items.Add(new { Amount = tempProductsToListView.SalePrice, Description = tempProductsToListView.Description, Price = tempProductsToListView.SalePrice });
+                ItemList.Add(new TempListItem { Description = tempProductsToListView.Description, Price = tempProductsToListView.SalePrice }); 
             }
+            _resolveTempProduct.listview_ProductsToMerge.ItemsSource = ItemList;
+            _resolveTempProduct.Show();
+            _resolveTempProduct.Activate();
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
@@ -704,12 +673,12 @@ namespace P3_Projekt_WPF
 
         private void btn_search_Click(object sender, RoutedEventArgs e)
         {
-            ConcurrentQueue<SearchedProduct> productsFoundList = _storageController.SearchForProduct(txtBox_SearchField.Text);
+            Utils.SearchForProduct(txtBox_SearchField.Text, _storageController.ProductDictionary, _storageController.GroupDictionary);
+        }
 
-            foreach (SearchedProduct s in productsFoundList)
-            {
-                Debug.Print(s.CurrentProduct.ID.ToString());
-            }
+        private void btn_MergeTempProduct_Click_1(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }

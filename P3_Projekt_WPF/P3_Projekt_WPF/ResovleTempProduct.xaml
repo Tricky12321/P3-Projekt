@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         Title="Ret Midlertidigt Produkt" Height="700" Width="600">
     <Grid>
-        <ListView x:Name="listview_ProductsToMerge" Height="auto" Width="auto" VerticalAlignment="Top">
+        <ListView x:Name="listview_ProductsToMerge"  MaxHeight="500" Width="auto" VerticalAlignment="Top" MouseLeftButtonUp="listview_ProductsToMerge_MouseLeftButtonUp">
             <ListView.View>
                 <GridView>
                     <GridView.ColumnHeaderContainerStyle>
@@ -41,5 +41,8 @@
                 </GridView>
             </ListView.View>
         </ListView>
+        <Button x:Name="button" Content="Button" HorizontalAlignment="Left" Margin="459,602,0,0" VerticalAlignment="Top" Width="120" Style="{StaticResource Flat_Button}" Height="60"/>
+        <TextBlock x:Name="txt_blockTempProduct" HorizontalAlignment="Left" Margin="146,631,0,0" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top" Height="28" Width="108"/>
+        <TextBlock x:Name="txt_blockMergeProduct" HorizontalAlignment="Left" Margin="47,631,0,10" TextWrapping="Wrap" Text="TextBlock" Width="78" RenderTransformOrigin="1.269,0.536"/>
     </Grid>
 </Window>
