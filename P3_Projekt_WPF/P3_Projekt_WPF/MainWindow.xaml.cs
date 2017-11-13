@@ -192,15 +192,8 @@ namespace P3_Projekt_WPF
 
         public void AddProductDialogOpener(object sender, RoutedEventArgs e)
         {
-            CreateProduct addProductWindow = new CreateProduct();
+            CreateProduct addProductWindow = new CreateProduct(new Dictionary<int, StorageRoom>(_storageController.StorageRoomDictionary));
 
-            // Adds ID to the combox text, to allow for comparing the name of the storageroom in combox with the ID in the storagewithamount, without adding reference to storageroomcontroller 
-            foreach (KeyValuePair<int, StorageRoom> storageRoom in _storageController.StorageRoomDictionary)
-            {
-                addProductWindow.StorageRooms.Add(storageRoom.Key, storageRoom.Value.Name);
-                addProductWindow.comboBox_StorageRoom.Items.Add($"{storageRoom.Key.ToString()} {storageRoom.Value.Name}");
-                addProductWindow.StorageWithAmount.Add(storageRoom.Key, 0);
-            }
             foreach (Group group in _storageController.GroupDictionary.Values)
             {
                 addProductWindow.comboBox_Group.Items.Add(group.Name);
@@ -209,8 +202,7 @@ namespace P3_Projekt_WPF
             {
                 addProductWindow.comboBox_Brand.Items.Add(brand);
             }
-            addProductWindow.output_ProductID.Text = Product.GetNextID().ToString();
-            Debug.WriteLine(Product.GetNextID().ToString());
+
             addProductWindow.btn_SaveAndQuit.Click += delegate
             {
                 if (addProductWindow.IsInputValid())
