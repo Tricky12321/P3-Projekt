@@ -35,6 +35,7 @@ namespace P3_Projekt_WPF
             ImageChosenEvent += (FilePath) => { image_Product.Source = new BitmapImage(new Uri(FilePath)); };
             ImageChosenEvent += (FilePath) => { ChosenFilePath = FilePath; };
             btn_AddStorageRoomWithAmount.Click += AddStorageWithAmount;
+            btn_JustQuit.Click += delegate { this.Close(); };
         }
 
         public void PickImage(object sender, RoutedEventArgs e)
@@ -53,17 +54,19 @@ namespace P3_Projekt_WPF
         public void AddStorageWithAmount(object sender, RoutedEventArgs e)
         {
             listview_AddedStorageRooms.Items.Clear();
-            int addedStorageRoomID = Int32.Parse(comboBox_StorageRoom.Text.Substring(0, comboBox_StorageRoom.Text.IndexOf(' ')));
+            if (comboBox_StorageRoom.Text != "")
+            {
+                int addedStorageRoomID = Int32.Parse(comboBox_StorageRoom.Text.Substring(0, comboBox_StorageRoom.Text.IndexOf(' ')));
+                StorageWithAmount[addedStorageRoomID] += textbox_Amount.Text != "" ? Int32.Parse(textbox_Amount.Text) : 0;
+            }
             // TODO: Validation of input to disallow non-numbers
-            StorageWithAmount[addedStorageRoomID] += textbox_Amount.Text != "" ? Int32.Parse(textbox_Amount.Text) : 0;
-            foreach(KeyValuePair<int, string> storageRoom in StorageRooms)
+            foreach (KeyValuePair<int, string> storageRoom in StorageRooms)
             {
                 if (StorageWithAmount[storageRoom.Key] > 0)
                 {
                     listview_AddedStorageRooms.Items.Add($"{storageRoom.Value}: {StorageWithAmount[storageRoom.Key]}");
                 }
             }
-
             textbox_Amount.Text = "";
         }
 
@@ -75,6 +78,73 @@ namespace P3_Projekt_WPF
                 if (!char.IsDigit(e.Text, e.Text.Length - 1))
                     e.Handled = true;
             }
+        }
+
+        public bool IsInputValid()
+        {
+            if (textbox_DiscountPrice.Text == "")
+            {
+                textbox_DiscountPrice.Text = "0";
+            }
+
+            if (textbox_Name.Text == "" || comboBox_Brand.Text == "" || comboBox_Group.Text == "" || textbox_SalePrice.Text == "" || textbox_PurchasePrice.Text == "")
+            {
+                if (textbox_Name.Text == "")
+                {
+                    textbox_Name.BorderBrush = System.Windows.Media.Brushes.Red;
+                    textbox_Name.BorderThickness = new Thickness(2, 2, 2, 2);
+                }
+                else
+                {
+                    textbox_Name.BorderBrush = System.Windows.Media.Brushes.DarkGray;
+                    textbox_Name.BorderThickness = new Thickness(1, 1, 1, 1);
+                }
+                if (comboBox_Brand.Text == "")
+                {
+                    comboBox_Brand.BorderBrush = System.Windows.Media.Brushes.Red;
+                    comboBox_Brand.BorderThickness = new Thickness(2, 2, 2, 2);
+                }
+                else
+                {
+                    comboBox_Brand.BorderBrush = System.Windows.Media.Brushes.DarkGray;
+                    comboBox_Brand.BorderThickness = new Thickness(1, 1, 1, 1);
+                }
+                if (comboBox_Group.Text == "")
+                {
+                    comboBox_Group.BorderBrush = System.Windows.Media.Brushes.Red;
+                    comboBox_Group.BorderThickness = new Thickness(2, 2, 2, 2);
+                }
+                else
+                {
+                    comboBox_Group.BorderBrush = System.Windows.Media.Brushes.DarkGray;
+                    comboBox_Group.BorderThickness = new Thickness(1, 1, 1, 1);
+                }
+                if (textbox_SalePrice.Text == "")
+                {
+                    textbox_SalePrice.BorderBrush = System.Windows.Media.Brushes.Red;
+                    textbox_SalePrice.BorderThickness = new Thickness(2, 2, 2, 2);
+                }
+                else
+                {
+                    textbox_SalePrice.BorderBrush = System.Windows.Media.Brushes.DarkGray;
+                    textbox_SalePrice.BorderThickness = new Thickness(1, 1, 1, 1);
+                }
+                if (textbox_PurchasePrice.Text == "")
+                {
+                    textbox_PurchasePrice.BorderBrush = System.Windows.Media.Brushes.Red;
+                    textbox_PurchasePrice.BorderThickness = new Thickness(2, 2, 2, 2);
+                }
+                else
+                {
+                    textbox_PurchasePrice.BorderBrush = System.Windows.Media.Brushes.DarkGray;
+                    textbox_PurchasePrice.BorderThickness = new Thickness(1, 1, 1, 1);
+                }
+                label_InputNotValid.Visibility = Visibility.Visible;
+                return false;
+            }
+            else
+                return true;
+            
         }
     }
 }

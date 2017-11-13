@@ -210,26 +210,29 @@ namespace P3_Projekt_WPF
                 addProductWindow.comboBox_Brand.Items.Add(brand);
             }
             addProductWindow.output_ProductID.Text = Product.GetNextID().ToString();
+            Debug.WriteLine(Product.GetNextID().ToString());
             addProductWindow.btn_SaveAndQuit.Click += delegate
             {
-                if (addProductWindow.ChosenFilePath != null)
+                if (addProductWindow.IsInputValid())
                 {
-                    System.IO.File.Copy(addProductWindow.ChosenFilePath, _settingsController.PictureFilePath + "\\" + Product.GetNextID() + ".jpg", true);
+                    if (addProductWindow.ChosenFilePath != null)
+                    {
+                        System.IO.File.Copy(addProductWindow.ChosenFilePath, _settingsController.PictureFilePath + "\\" + Product.GetNextID() + ".jpg", true);
+                    }
+                    AddProduct(addProductWindow.textbox_Name.Text,
+                               addProductWindow.comboBox_Brand.Text,
+                               addProductWindow.comboBox_Group.Text,
+                               addProductWindow.textbox_PurchasePrice.Text,
+                               addProductWindow.textbox_SalePrice.Text,
+                               addProductWindow.textbox_DiscountPrice.Text,
+                               addProductWindow.StorageWithAmount);
+                    if (addProductWindow.ChosenFilePath != null)
+                    {
+                        System.IO.File.Copy(addProductWindow.ChosenFilePath, _settingsController.PictureFilePath + addProductWindow.FileName, true);
+                    }
+                    addProductWindow.Close();
+                    LoadProductImages();
                 }
-                AddProduct(addProductWindow.textbox_Name.Text,
-                           addProductWindow.comboBox_Brand.Text,
-                           addProductWindow.comboBox_Group.Text,
-                           addProductWindow.textbox_PurchasePrice.Text,
-                           addProductWindow.textbox_SalePrice.Text,
-                           addProductWindow.textbox_DiscountPrice.Text,
-                           addProductWindow.StorageWithAmount);
-                if (addProductWindow.ChosenFilePath != null)
-                {
-                    System.IO.File.Copy(addProductWindow.ChosenFilePath, _settingsController.PictureFilePath + addProductWindow.FileName, true);
-                }
-
-                addProductWindow.Close();
-                LoadProductImages();
             };
             addProductWindow.Show();
         }
