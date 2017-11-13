@@ -59,7 +59,7 @@ namespace P3_Projekt_WPF.Classes.Database
 
         public static MySqlConnection Connect(int fails = 0)
         {
-            //CheckInternet();
+            CheckInternet();
             MySqlConnection connection = new MySqlConnection(_connectionString);
             try
             {
@@ -96,33 +96,17 @@ namespace P3_Projekt_WPF.Classes.Database
         public static void RunQuery_thread()
         {
             string Query = "";
-
             while (_queryTasks.TryDequeue(out Query))
             {
                 using (MySqlConnection connection = Connect())
                 {
                     try
                     {
-                        string sql = (Query as string);
                         using (MySqlCommand cmd = connection.CreateCommand())
                         {
-                            cmd.CommandText = sql;
-                            if (_debug)
-                            {
-                                Debug.Print("Running: " + Query);
-                            }
-                            if (Connection == null)
-                            {
-                                throw new NotConnectedException("Der er ikke forbindelse til databasen");
-                            }
-
+                            cmd.CommandText = Query;
                             cmd.ExecuteScalarAsync();
                         }
-                    }
-                    catch (Exception)
-                    {
-
-                        throw;
                     }
                     finally
                     {
@@ -138,50 +122,21 @@ namespace P3_Projekt_WPF.Classes.Database
             _queryTasks.Enqueue(Query);
         }
 
+
         public static TableDecode RunQueryWithReturn(string Query)
         {
-            int fails = 0;
             MySqlConnection connection = Connect();
-            while (connection == null)
-            {
-                if (fails < 5)
-                {
-                    Thread.Sleep(250);
-                    fails++;
-                    connection = Connect();
-                }
-                else
-                {
-                    throw new NotConnectedException();
-                }
-            }
             TableDecode TableContent;
             try
             {
-                // Hvilken commando skal der køres (Query)
                 using (MySqlCommand cmd = connection.CreateCommand())
                 {
                     cmd.CommandText = Query;
-                    // Åbner forbindelsen til databasen (OPEN)
-
                     using (MySqlDataReader Reader = cmd.ExecuteReader())
                     {
-                        if (_debug)
-                        {
-                            Debug.Print("Running: " + Query);
-                        }
-                        // Sikre sig at der er noget at hente i databasen.
-                        if (!Reader.HasRows)
-                        {
-                            throw new EmptyTableException("Tabellen man forsøger at forbinde til i databasen er tom?");
-                        }
                         TableContent = new TableDecode(Reader);
                     }
                 }
-            }
-            catch (Exception)
-            {
-                throw;
             }
             finally
             {

@@ -192,15 +192,8 @@ namespace P3_Projekt_WPF
 
         public void AddProductDialogOpener(object sender, RoutedEventArgs e)
         {
-            CreateProduct addProductWindow = new CreateProduct();
+            CreateProduct addProductWindow = new CreateProduct(new Dictionary<int, StorageRoom>(_storageController.StorageRoomDictionary));
 
-            // Adds ID to the combox text, to allow for comparing the name of the storageroom in combox with the ID in the storagewithamount, without adding reference to storageroomcontroller 
-            foreach (KeyValuePair<int, StorageRoom> storageRoom in _storageController.StorageRoomDictionary)
-            {
-                addProductWindow.StorageRooms.Add(storageRoom.Key, storageRoom.Value.Name);
-                addProductWindow.comboBox_StorageRoom.Items.Add($"{storageRoom.Key.ToString()} {storageRoom.Value.Name}");
-                addProductWindow.StorageWithAmount.Add(storageRoom.Key, 0);
-            }
             foreach (Group group in _storageController.GroupDictionary.Values)
             {
                 addProductWindow.comboBox_Group.Items.Add(group.Name);
@@ -209,8 +202,7 @@ namespace P3_Projekt_WPF
             {
                 addProductWindow.comboBox_Brand.Items.Add(brand);
             }
-            addProductWindow.output_ProductID.Text = Product.GetNextID().ToString();
-            Debug.WriteLine(Product.GetNextID().ToString());
+
             addProductWindow.btn_SaveAndQuit.Click += delegate
             {
                 if (addProductWindow.IsInputValid())
@@ -219,17 +211,8 @@ namespace P3_Projekt_WPF
                     {
                         System.IO.File.Copy(addProductWindow.ChosenFilePath, _settingsController.PictureFilePath + "\\" + Product.GetNextID() + ".jpg", true);
                     }
-                    AddProduct(addProductWindow.textbox_Name.Text,
-                               addProductWindow.comboBox_Brand.Text,
-                               addProductWindow.comboBox_Group.Text,
-                               addProductWindow.textbox_PurchasePrice.Text,
-                               addProductWindow.textbox_SalePrice.Text,
-                               addProductWindow.textbox_DiscountPrice.Text,
-                               addProductWindow.StorageWithAmount);
-                    if (addProductWindow.ChosenFilePath != null)
-                    {
-                        System.IO.File.Copy(addProductWindow.ChosenFilePath, _settingsController.PictureFilePath + addProductWindow.FileName, true);
-                    }
+
+                    AddProduct(addProductWindow);
                     addProductWindow.Close();
                     LoadProductImages();
                 }
@@ -237,17 +220,17 @@ namespace P3_Projekt_WPF
             addProductWindow.Show();
         }
 
-        public void AddProduct(string name, string brand, string group, string purchasePrice, string salePrice, string discountPrice, Dictionary<int, int> storageWithAmount)
+        public void AddProduct(CreateProduct addProductWindow)
         {
             _storageController.CreateProduct(Product.GetNextID(),
-                                             name,
-                                             brand,
-                                             Decimal.Parse(purchasePrice),
-                                             _storageController.GroupDictionary.First(x => x.Value.Name == group).Key,
-                                             (discountPrice != null) ? true : false,
-                                             Decimal.Parse(discountPrice),
-                                             Decimal.Parse(salePrice),
-                                             storageWithAmount);
+                                             addProductWindow.textbox_Name.Text,
+                                             addProductWindow.comboBox_Brand.Text,
+                                             Decimal.Parse(addProductWindow.textbox_PurchasePrice.Text),
+                                             _storageController.GroupDictionary.First(x => x.Value.Name == addProductWindow.comboBox_Group.Text).Key,
+                                             (addProductWindow.textbox_DiscountPrice.Text != "0") ? true : false,
+                                             Decimal.Parse(addProductWindow.textbox_DiscountPrice.Text),
+                                             Decimal.Parse(addProductWindow.textbox_SalePrice.Text),
+                                             addProductWindow.StorageWithAmount);
         }
 
         private void ShowSpecificInfoProductStorage(object sender, RoutedEventArgs e)

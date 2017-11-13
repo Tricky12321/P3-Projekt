@@ -8,11 +8,10 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
-using System.Drawing;
 using System.Collections.Concurrent;
+using P3_Projekt_WPF.Classes;
 
 namespace P3_Projekt_WPF
 {
@@ -24,13 +23,21 @@ namespace P3_Projekt_WPF
     {
         public event ImageChosen ImageChosenEvent;
         public string ChosenFilePath;
-        public string FileName;
         public Dictionary<int, int> StorageWithAmount = new Dictionary<int, int>();
-        public Dictionary<int, string> StorageRooms = new Dictionary<int, string>();
+        public Dictionary<int, StorageRoom> StorageRooms;
 
-        public CreateProduct()
+        public CreateProduct(Dictionary<int, StorageRoom> storageRooms)
         {
             InitializeComponent();
+
+            StorageRooms = storageRooms;
+            foreach(KeyValuePair<int, StorageRoom> storageRoom in StorageRooms)
+            {
+                comboBox_StorageRoom.Items.Add($"{storageRoom.Key.ToString()} {storageRoom.Value.Name}");
+                StorageWithAmount.Add(storageRoom.Key, 0);
+            }
+            output_ProductID.Text = Product.GetNextID().ToString();
+
             btn_AddPicture.Click += PickImage;
             ImageChosenEvent += (FilePath) => { image_Product.Source = new BitmapImage(new Uri(FilePath)); };
             ImageChosenEvent += (FilePath) => { ChosenFilePath = FilePath; };
@@ -46,28 +53,33 @@ namespace P3_Projekt_WPF
                 if (dialog.FileName != null && dialog.FileName != "")
                 {
                     ImageChosenEvent(dialog.FileName);
-                    FileName = dialog.SafeFileName;
                 }
             }
         }
 
         public void AddStorageWithAmount(object sender, RoutedEventArgs e)
         {
-            listview_AddedStorageRooms.Items.Clear();
             if (comboBox_StorageRoom.Text != "")
             {
                 int addedStorageRoomID = Int32.Parse(comboBox_StorageRoom.Text.Substring(0, comboBox_StorageRoom.Text.IndexOf(' ')));
                 StorageWithAmount[addedStorageRoomID] += textbox_Amount.Text != "" ? Int32.Parse(textbox_Amount.Text) : 0;
             }
-            // TODO: Validation of input to disallow non-numbers
-            foreach (KeyValuePair<int, string> storageRoom in StorageRooms)
+            ReloadAddedStorageRooms();
+            
+            textbox_Amount.Text = "";
+        }
+
+        private void ReloadAddedStorageRooms()
+        {
+            listview_AddedStorageRooms.Items.Clear();
+
+            foreach (KeyValuePair<int, StorageRoom> storageRoom in StorageRooms)
             {
                 if (StorageWithAmount[storageRoom.Key] > 0)
                 {
-                    listview_AddedStorageRooms.Items.Add($"{storageRoom.Value}: {StorageWithAmount[storageRoom.Key]}");
+                    listview_AddedStorageRooms.Items.Add(new Classes.Utilities.StorageListItem(storageRoom.Value.Name, StorageWithAmount[storageRoom.Key], storageRoom.Key));
                 }
             }
-            textbox_Amount.Text = "";
         }
 
         private void AmountInputOnlyNumbers(object sender, TextCompositionEventArgs e)
@@ -145,6 +157,13 @@ namespace P3_Projekt_WPF
             else
                 return true;
             
+        }
+
+        private void btn_DeleteStorage_Click(object sender, RoutedEventArgs e)
+        {
+            int IDToRemove = Convert.ToInt32((sender as Button).Tag);
+            StorageWithAmount[IDToRemove] = 0;
+            ReloadAddedStorageRooms();
         }
     }
 }
