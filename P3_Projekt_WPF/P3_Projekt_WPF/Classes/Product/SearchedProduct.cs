@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace P3_Projekt_WPF.Classes
 {
-    public class SearchedProduct
+    public class SearchProduct
     {
         public Product CurrentProduct;
         public int NameMatch = 0;
@@ -14,25 +14,11 @@ namespace P3_Projekt_WPF.Classes
         public int BrandMatch = 0;
 
 
-        public SearchedProduct(Product product)
+        public SearchProduct(Product product)
         {
             CurrentProduct = product;
         }
 
-        public void SetNameMatch(int matchValue)
-        {
-            NameMatch = matchValue;
-        }
-
-        public void SetBrandMatch(int matchValue)
-        {
-            BrandMatch = matchValue;
-        }
-
-        public void SetGroupMatch(int matchValue)
-        {
-            GroupMatch = matchValue;
-        }
 
 
     }

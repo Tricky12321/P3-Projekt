@@ -374,15 +374,15 @@ namespace P3_Projekt_WPF.Classes.Utilities
         {
             return ProductDictionary.Values.Select(x => x.Brand).Distinct();
         }
-
+        /*
         // Levenstein multithreading
         private bool _productSearchDone = false;
         private bool _groupSearchDone = false;
         private bool _brandSearchDone = false;
         private int _productThreadCount = 4;
         private ConcurrentQueue<Product> _productsToSearch = null;
-        private ConcurrentQueue<SearchedProduct> _productsFound = null;
-        private ConcurrentQueue<SearchedProduct> _productsToSort = new ConcurrentQueue<SearchedProduct>();
+        //private ConcurrentQueue<SearchedProduct> _productsFound = null;
+        //private ConcurrentQueue<SearchedProduct> _productsToSort = new ConcurrentQueue<SearchedProduct>();
         private List<Thread> _productSearchThreads = new List<Thread>();
         private string _searchedString = "";
 
@@ -512,7 +512,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
                 }
 
             }
-        }*/
+        }
 
         public void LevenshteinsProductSearch(string searchStringElement, Product productToConvert)
         {
@@ -730,6 +730,8 @@ namespace P3_Projekt_WPF.Classes.Utilities
         //----LevenSthein-END-----------------------
 
         //----SEARCH-END---------------------
+
+            */
 
         //Creates product with storage and stocka as keyvalue, then add the product to the list
         public void CreateProduct(int id, string name, string brand, decimal purchasePrice, int groupID, bool discount, decimal discountPrice, decimal salePrice, Dictionary<int,int> storageWithAmount, bool UploadToDatabase = true)

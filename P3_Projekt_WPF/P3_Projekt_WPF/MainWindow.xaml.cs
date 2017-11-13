@@ -697,12 +697,7 @@ namespace P3_Projekt_WPF
 
         private void btn_search_Click(object sender, RoutedEventArgs e)
         {
-            ConcurrentQueue<SearchedProduct> productsFoundList = _storageController.SearchForProduct(txtBox_SearchField.Text);
-
-            foreach (SearchedProduct s in productsFoundList)
-            {
-                Debug.Print(s.CurrentProduct.ID.ToString());
-            }
+            Utils.SearchForProduct(txtBox_SearchField.Text, _storageController.ProductDictionary, _storageController.GroupDictionary);
         }
 
         private void btn_MergeTempProduct_Click_1(object sender, RoutedEventArgs e)
