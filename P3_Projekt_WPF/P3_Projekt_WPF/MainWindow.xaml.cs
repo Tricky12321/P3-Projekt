@@ -210,26 +210,29 @@ namespace P3_Projekt_WPF
                 addProductWindow.comboBox_Brand.Items.Add(brand);
             }
             addProductWindow.output_ProductID.Text = Product.GetNextID().ToString();
+            Debug.WriteLine(Product.GetNextID().ToString());
             addProductWindow.btn_SaveAndQuit.Click += delegate
             {
-                if (addProductWindow.ChosenFilePath != null)
+                if (addProductWindow.IsInputValid())
                 {
-                    System.IO.File.Copy(addProductWindow.ChosenFilePath, _settingsController.PictureFilePath + "\\" + Product.GetNextID() + ".jpg", true);
+                    if (addProductWindow.ChosenFilePath != null)
+                    {
+                        System.IO.File.Copy(addProductWindow.ChosenFilePath, _settingsController.PictureFilePath + "\\" + Product.GetNextID() + ".jpg", true);
+                    }
+                    AddProduct(addProductWindow.textbox_Name.Text,
+                               addProductWindow.comboBox_Brand.Text,
+                               addProductWindow.comboBox_Group.Text,
+                               addProductWindow.textbox_PurchasePrice.Text,
+                               addProductWindow.textbox_SalePrice.Text,
+                               addProductWindow.textbox_DiscountPrice.Text,
+                               addProductWindow.StorageWithAmount);
+                    if (addProductWindow.ChosenFilePath != null)
+                    {
+                        System.IO.File.Copy(addProductWindow.ChosenFilePath, _settingsController.PictureFilePath + addProductWindow.FileName, true);
+                    }
+                    addProductWindow.Close();
+                    LoadProductImages();
                 }
-                AddProduct(addProductWindow.textbox_Name.Text,
-                           addProductWindow.comboBox_Brand.Text,
-                           addProductWindow.comboBox_Group.Text,
-                           addProductWindow.textbox_PurchasePrice.Text,
-                           addProductWindow.textbox_SalePrice.Text,
-                           addProductWindow.textbox_DiscountPrice.Text,
-                           addProductWindow.StorageWithAmount);
-                if (addProductWindow.ChosenFilePath != null)
-                {
-                    System.IO.File.Copy(addProductWindow.ChosenFilePath, _settingsController.PictureFilePath + addProductWindow.FileName, true);
-                }
-
-                addProductWindow.Close();
-                LoadProductImages();
             };
             addProductWindow.Show();
         }
@@ -650,29 +653,22 @@ namespace P3_Projekt_WPF
 
         private void btn_MergeTempProduct_Click(object sender, RoutedEventArgs e)
         {
+            List<TempListItem> ItemList = new List<TempListItem>();   
             if (_resolveTempProduct == null)
             {
                 _resolveTempProduct = new ResovleTempProduct();
-
                 _resolveTempProduct.Closed += delegate { _resolveTempProduct = null; };
-
             }
-            _resolveTempProduct.Show();
-            _resolveTempProduct.Activate();
-            //(SaleTransaction transaction in _POSController.PlacerholderReceipt.Transactions
-            foreach (SaleTransaction tempProduct in _POSController.PlacerholderReceipt.Transactions)
-            {
-                _resolveTempProduct.listview_ProductsToMerge.Items.Add(new { Amount = 10 });
-
-            }
-
-
             var tempProducts = _storageController.TempProductList.Where(x => x.Resolved == false);
 
+            //_resolveTempProduct.listview_ProductsToMerge.Items.Add(new { Amount = "Antal", Description = "Beskrivelse", Price = "Pris" });
             foreach (TempProduct tempProductsToListView in tempProducts)
             {
-                _resolveTempProduct.listview_ProductsToMerge.Items.Add(new { Amount = tempProductsToListView.SalePrice, Description = tempProductsToListView.Description, Price = tempProductsToListView.SalePrice });
+                ItemList.Add(new TempListItem { Description = tempProductsToListView.Description, Price = tempProductsToListView.SalePrice }); 
             }
+            _resolveTempProduct.listview_ProductsToMerge.ItemsSource = ItemList;
+            _resolveTempProduct.Show();
+            _resolveTempProduct.Activate();
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
@@ -688,6 +684,11 @@ namespace P3_Projekt_WPF
             {
                 Debug.Print(s.CurrentProduct.ID.ToString());
             }
+        }
+
+        private void btn_MergeTempProduct_Click_1(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }
