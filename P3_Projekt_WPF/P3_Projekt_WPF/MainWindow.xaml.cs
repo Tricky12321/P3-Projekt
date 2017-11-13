@@ -288,13 +288,16 @@ namespace P3_Projekt_WPF
 
                 _productControlDictionary.Add(product.Value.ID, productControl);
             }
+            Debug.Print("LOLOLOLOLOLOLOLO");
         }
+
 
         public void LoadProductGrid(ConcurrentDictionary<int, Product> productDictionary)
         {
             productGrid.RowDefinitions.Clear();
             productGrid.Children.Clear();
             productGrid.Children.Add(addProductButton);
+
 
             productGrid.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(380) });
             int i = 1;
@@ -311,10 +314,6 @@ namespace P3_Projekt_WPF
                 productControl.SetValue(Grid.RowProperty, i / 5);
 
                 productGrid.Children.Add(productControl);
-                if (i == 1)
-                {
-
-                }
                 i++;
             }
 
@@ -489,7 +488,6 @@ namespace P3_Projekt_WPF
                     ++i;
                 }
             }
-            
         }
 
         private void btn_Remove_Quick_Button(object sender, RoutedEventArgs e)
@@ -503,6 +501,7 @@ namespace P3_Projekt_WPF
             listView_QuickBtn.Items.Refresh();
             UpdateGridQuickButtons();
         }
+
 
         CreateTemporaryProduct _createTempProduct;
 

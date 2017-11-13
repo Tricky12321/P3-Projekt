@@ -140,7 +140,6 @@
                                                 FontSize="30"
                                                 Width="40"
                                                 Height="50"
-                                                Background="Transparent"
                                                 VerticalAlignment = "Center"
                                                 Click="btn_Increment_Click"
                                                 Tag="{Binding IDTag}"
@@ -156,7 +155,6 @@
                                                 Content = "-"
                                                 Width="40"
                                                 Height="50"
-                                                Background="Transparent"
                                                 FontSize="30"
                                                 VerticalAlignment = "Center"
                                                 Click="btn_Decrement_Click"
@@ -174,10 +172,10 @@
                                     </GridViewColumn.CellTemplate>
                                 </GridViewColumn>
 
-                                <GridViewColumn x:Name="column_Product" Width="auto">
+                                <GridViewColumn x:Name="column_Product" Width="auto" >
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate>
-                                            <TextBlock HorizontalAlignment="Stretch" Text="{Binding String_Product}" TextWrapping="Wrap" MaxWidth="400"/>
+                                            <TextBlock Text="{Binding String_Product}" TextWrapping="Wrap" MaxWidth="400"/>
                                         </DataTemplate>
                                     </GridViewColumn.CellTemplate>
                                 </GridViewColumn>
@@ -190,14 +188,13 @@
                                     </GridViewColumn.CellTemplate>
                                 </GridViewColumn>
 
-                                <GridViewColumn Width="auto">
+                                <GridViewColumn>
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate>
                                             <Button Style="{StaticResource Flat_Button}"
                                                 Content = "x"
                                                 Width="40"
                                                 Height="50"
-                                                    Background="Transparent"
                                                 FontSize="30"
                                                 VerticalAlignment = "Center"
                                                 Click="btn_DeleteProduct_Click"
@@ -211,7 +208,7 @@
                     </ListView>
                     <Label x:Name="label" Content="Kvittering" Margin="13,71,0,0" Height="68" VerticalAlignment="Top" FontSize="35" Grid.RowSpan="2" Grid.Column="1" HorizontalAlignment="Left" Width="312"/>
                     <Label x:Name="label_TotalPrice" Content="Total" Margin="13,0,10,176" Grid.Row="1" VerticalAlignment="Bottom" Height="49" BorderThickness="1" Background="White" BorderBrush="#FF858585" Grid.Column="1"/>
-                    <Button x:Name="btn_MergeTempProduct" Content="Ret et Midlertidigt Produkt" Background="#FFC5C5C5" HorizontalAlignment="Left" Margin="10,0,0,12" Grid.Row="1" Width="430" Style="{StaticResource Flat_Button}" Height="46" VerticalAlignment="Bottom" />
+                    <Button x:Name="btn_MergeTempProduct" Content="Ret et Midlertidigt Produkt" Background="#FFC5C5C5" HorizontalAlignment="Left" Margin="10,0,0,6" Grid.Row="1" Width="430" Style="{StaticResource Flat_Button}" Height="46" VerticalAlignment="Bottom" />
                 </Grid>
             </TabItem>
 
@@ -480,6 +477,10 @@
                 </Style>
             </TextBlock.Style>
         </TextBlock>
+
+
+
+
 
 
     </Grid>
