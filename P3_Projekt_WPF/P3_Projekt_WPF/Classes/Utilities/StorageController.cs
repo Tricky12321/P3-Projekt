@@ -68,7 +68,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
         }
 
         /// <summary>
-        /// Checks if the ProductQueue is done
+        /// Checks if the ProductQueue and StorageStatus is done
         /// </summary>
         private void CheckThreads()
         {
