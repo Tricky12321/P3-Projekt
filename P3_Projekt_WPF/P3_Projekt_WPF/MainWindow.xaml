@@ -470,7 +470,10 @@
                             </Grid>
                         </TabItem>
                         <TabItem Header="Lager Indstillinger">
-                            <Button Style="{StaticResource Flat_Button}" x:Name="btn_PictureFilePath" Content="Vælg billedmappe til produkter" HorizontalAlignment="Left" Margin="50,50,0,0" VerticalAlignment="Top" Width="466" Height="100" Click="btn_PictureFilePath_Click" />
+                            <Grid>
+                                <Button Style="{StaticResource Flat_Button}" x:Name="btn_PictureFilePath" Content="Vælg billedmappe til produkter" HorizontalAlignment="Left" Margin="50,50,0,0" VerticalAlignment="Top" Width="466" Height="100" Click="btn_PictureFilePath_Click" />
+                                <Button Style="{StaticResource Flat_Button}" x:Name="btn_IcecreamID" Content="Vælg ID til is" HorizontalAlignment="Left" Margin="550,50,0,0" VerticalAlignment="Top" Width="466" Height="100" Click="btn_PictureFilePath_Click" />
+                            </Grid>
                         </TabItem>
 
                         <TabItem Header="Admin Indstilling"/>
