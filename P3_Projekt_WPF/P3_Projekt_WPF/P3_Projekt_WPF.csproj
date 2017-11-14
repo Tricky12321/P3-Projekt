@@ -34,7 +34,7 @@
     <PlatformTarget>x64</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
+    <Optimize>true</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
@@ -122,6 +122,9 @@
     <Compile Include="Classes\Utilities\FastButton.cs" />
     <Compile Include="Classes\Utilities\ReceiptListItem.cs" />
     <Compile Include="Classes\Utilities\SettingsController.cs" />
+    <Compile Include="Classes\Utilities\StatisticsListItem.cs" />
+    <Compile Include="Classes\Utilities\StorageListItem.cs" />
+    <Compile Include="Classes\Utilities\TempListItem.cs" />
     <Compile Include="Classes\Utilities\Utils.cs" />
     <Compile Include="Classes\Utilities\POSController.cs" />
     <Compile Include="Classes\Utilities\StatisticsController.cs" />

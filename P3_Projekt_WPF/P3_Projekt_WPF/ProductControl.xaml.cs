@@ -40,7 +40,7 @@ namespace P3_Projekt_WPF
                 }
             }
         }
-
+        
         private Product _displayProduct;
         public ProductControl(Product productForDisplay, ConcurrentDictionary<int, Group> groupDict)
         {
@@ -55,7 +55,7 @@ namespace P3_Projekt_WPF
 
         public void ShowProductInfo(ConcurrentDictionary<int, Group> groupDict)
         {
-            txtbox_Product.Text = $"ID: {_displayProduct.ID.ToString()}\nNavn: { _displayProduct.Name}\nGruppe: {groupDict[_displayProduct.ProductGroupID].Name}\nPris { _displayProduct.SalePrice.ToString()}DKK";
+           txtbox_Product.Text = $"ID: {_displayProduct.ID.ToString()}\nNavn: { _displayProduct.Name}\nGruppe: {groupDict[_displayProduct.ProductGroupID].Name}\nPris { _displayProduct.SalePrice.ToString()}DKK";
         }
     }
 }

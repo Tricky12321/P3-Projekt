@@ -11,10 +11,6 @@ namespace P3_Projekt_WPF.Classes.Tests
     [TestFixture()]
     public class TempProductTests
     {
-        [Test()]
-        public void EditTest(string newDescription, decimal newSalePrice)
-        {
-            Assert.Fail();
-        }
+
     }
 }

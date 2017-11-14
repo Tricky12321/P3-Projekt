@@ -18,7 +18,8 @@ namespace P3_Projekt_WPF.Classes.Database
                 while (Reader.Read())
                 {
                     RowData.Add(new Row());
-                    for (int i = 0; i < Reader.FieldCount; i++)
+                    int fieldCount = Reader.FieldCount;
+                    for (int i = 0; i < fieldCount; i++)
                     {
                         RowData[row].Colums.Add(Reader[i].Equals(DBNull.Value) ? String.Empty : Reader.GetName(i));     // Navnet på den kolonne man henter
                         RowData[row].Values.Add(Reader[i].Equals(DBNull.Value) ? String.Empty : Reader.GetString(i));   // Værdien på den kolonne man henter

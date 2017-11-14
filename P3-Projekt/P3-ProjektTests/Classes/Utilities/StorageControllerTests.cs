@@ -7,6 +7,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Drawing;
 using System.Collections.Concurrent;
+using System.Diagnostics;
+using System.Threading;
 namespace P3_Projekt_WPF.Classes.Utilities.Tests
 {
 
@@ -17,7 +19,6 @@ namespace P3_Projekt_WPF.Classes.Utilities.Tests
         public void ResetStatic()
         {
             StorageRoom.IDCounter = 0;
-            BaseProduct.IDCounter = 0;
             Group.IDCounter = 0;
             Transaction.IDCounter = 0;
             Receipt.IDCounter = 0;
@@ -28,10 +29,11 @@ namespace P3_Projekt_WPF.Classes.Utilities.Tests
         {
             StorageController storageController = new StorageController();
             StorageRoom testStorage1 = new StorageRoom("3", "medium lager");
-            KeyValuePair<int, int> testPair = new KeyValuePair<int, int>(testStorage1.ID, 10);
+            Dictionary<int, int> testPair = new Dictionary<int, int>();
+            testPair.Add(testStorage1.ID, 10);
             Group testGroup = new Group("drikkevarer", "wuhuu drikke");
 
-            storageController.CreateProduct("mælk", "arla", Convert.ToDecimal(5), testGroup.ID, false, Convert.ToDecimal(7), Convert.ToDecimal(10), null, testPair);
+            storageController.CreateProduct(9999,"mælk", "arla", 5m, testGroup.ID, false, 7m, 10m, testPair, false);
 
             storageController.DeleteProduct(0);
 
@@ -43,12 +45,12 @@ namespace P3_Projekt_WPF.Classes.Utilities.Tests
         {
             StorageController storageController = new StorageController();
             StorageRoom testStorage1 = new StorageRoom("3", "medium lager");
-            KeyValuePair<int, int> testPair = new KeyValuePair<int, int>(testStorage1.ID, 10);
+            Dictionary<int, int> testPair = new Dictionary<int, int>();
             Group testGroup = new Group("drikkevarer", "wuhuu drikke");
 
-            storageController.CreateProduct("mælk", "arla", Convert.ToDecimal(5), testGroup.ID, false, Convert.ToDecimal(7), Convert.ToDecimal(10), null, testPair);
+            storageController.CreateProduct(0, "mælk", "arla", 5m, testGroup.ID, false, 7m, 10m, testPair, false);
 
-            storageController.EditProduct(true, storageController.ProductDictionary[0], "test", "test", Convert.ToDecimal(5), testGroup.ID, false, Convert.ToDecimal(7), Convert.ToDecimal(10), null);
+            storageController.EditProduct(true, storageController.ProductDictionary[0], "test", "test", 5m, testGroup.ID, false, 7m, 10m, null);
 
             Assert.IsTrue(storageController.ProductDictionary[0].Name == "test");
         }
@@ -57,10 +59,10 @@ namespace P3_Projekt_WPF.Classes.Utilities.Tests
         public void CreateGroupTestOneGroup()
         {
             var storageController = new StorageController();
-            storageController.CreateGroup("group", "test");
+            storageController.CreateGroup(1,"group", "test");
 
-            bool b1 = "group" == storageController.GroupDictionary[2].Name;
-            bool b2 = "test" == storageController.GroupDictionary[2].Description;
+            bool b1 = "group" == storageController.GroupDictionary[1].Name;
+            bool b2 = "test" == storageController.GroupDictionary[1].Description;
 
             Assert.IsTrue(b1 && b2);
         }
@@ -69,16 +71,16 @@ namespace P3_Projekt_WPF.Classes.Utilities.Tests
         public void CreateGroupTestThreeGroups()
         {
             var storageController = new StorageController();
-            storageController.CreateGroup("group1", "test1");
-            storageController.CreateGroup("group2", "test2");
-            storageController.CreateGroup("group3", "test3");
+            storageController.CreateGroup(1,"group1", "test1");
+            storageController.CreateGroup(2,"group2", "test2");
+            storageController.CreateGroup(3,"group3", "test3");
 
-            bool b1 = "group1" == storageController.GroupDictionary[2].Name;
-            bool b2 = "test1" == storageController.GroupDictionary[2].Description;
-            bool b3 = "group2" == storageController.GroupDictionary[3].Name;
-            bool b4 = "test2" == storageController.GroupDictionary[3].Description;
-            bool b5 = "group3" == storageController.GroupDictionary[4].Name;
-            bool b6 = "test3" == storageController.GroupDictionary[4].Description;
+            bool b1 = "group1" == storageController.GroupDictionary[1].Name;
+            bool b2 = "test1" == storageController.GroupDictionary[1].Description;
+            bool b3 = "group2" == storageController.GroupDictionary[2].Name;
+            bool b4 = "test2" == storageController.GroupDictionary[2].Description;
+            bool b5 = "group3" == storageController.GroupDictionary[3].Name;
+            bool b6 = "test3" == storageController.GroupDictionary[3].Description;
 
             Assert.IsTrue(b1 && b2 && b3 && b4 && b5 && b6);
         }
@@ -88,6 +90,7 @@ namespace P3_Projekt_WPF.Classes.Utilities.Tests
         {
             var storageController = new StorageController();
             Group newGroup = new Group("group", "test");
+            newGroup.ID = 1;
             storageController.GroupDictionary.TryAdd(newGroup.ID, newGroup);
 
             storageController.EditGroup(1, "newgroup", "newtest");
@@ -105,6 +108,9 @@ namespace P3_Projekt_WPF.Classes.Utilities.Tests
             Group newGroup1 = new Group("group1", "test1");
             Group newGroup2 = new Group("group2", "test2");
             Group newGroup3 = new Group("group3", "test3");
+            newGroup1.ID = 1;
+            newGroup2.ID = 2;
+            newGroup3.ID = 3;
             storageController.GroupDictionary.TryAdd(newGroup1.ID, newGroup1);
             storageController.GroupDictionary.TryAdd(newGroup2.ID, newGroup2);
             storageController.GroupDictionary.TryAdd(newGroup3.ID, newGroup3);
@@ -127,22 +133,20 @@ namespace P3_Projekt_WPF.Classes.Utilities.Tests
         public void DeleteGroupTestOneGroup()
         {
             var storageController = new StorageController();
-            Group newGroup = new Group("group", "test");
-            storageController.GroupDictionary.TryAdd(newGroup.ID, newGroup);
-            var testProduct1 = new Product("test1", "blabla", 1.25m, newGroup.ID, false, 5.0m, 3.0m);
-            var testProduct2 = new Product("test2", "blabla", 1.25m, newGroup.ID, false, 5.0m, 3.0m);
-            var testProduct3 = new Product("test3", "blabla", 1.25m, newGroup.ID, false, 5.0m, 3.0m);
+            storageController.CreateGroup(1, "group", "test");
+            storageController.CreateGroup(0, "Diverse", "test");
+            var testProduct1 = new Product(1,"test1", "blabla", 1.25m, 1, false, 5.0m, 3.0m);
+            var testProduct2 = new Product(2,"test2", "blabla", 1.25m, 1, false, 5.0m, 3.0m);
+            var testProduct3 = new Product(3,"test3", "blabla", 1.25m, 1, false, 5.0m, 3.0m);
             storageController.ProductDictionary.TryAdd(testProduct1.ID, testProduct1);
             storageController.ProductDictionary.TryAdd(testProduct2.ID, testProduct2);
             storageController.ProductDictionary.TryAdd(testProduct3.ID, testProduct3);
 
-            storageController.DeleteGroup(2);
+            storageController.DeleteGroup(1);
 
-            bool b1 = storageController.ProductDictionary[0].ProductGroupID == storageController.GroupDictionary[0].ID;
-            bool b2 = storageController.ProductDictionary[1].ProductGroupID == storageController.GroupDictionary[0].ID;
-            bool b3 = storageController.ProductDictionary[2].ProductGroupID == storageController.GroupDictionary[0].ID;
+            bool b1 = storageController.GroupDictionary.ContainsKey(1);
 
-            Assert.IsTrue(b1 && b2 && b3);
+            Assert.IsTrue(!b1);
         }
 
         [Test()]
@@ -155,18 +159,18 @@ namespace P3_Projekt_WPF.Classes.Utilities.Tests
             newGroup2.ID = 2;
             storageController.GroupDictionary.TryAdd(newGroup1.ID, newGroup1);
             storageController.GroupDictionary.TryAdd(newGroup2.ID, newGroup2);
-            var testProduct1 = new Product("test1", "blabla", 1.25m, newGroup1.ID, false, 5.0m, 3.0m);
-            var testProduct2 = new Product("test2", "blabla", 1.25m, newGroup2.ID, false, 5.0m, 3.0m);
-            var testProduct3 = new Product("test3", "blabla", 1.25m, newGroup2.ID, false, 5.0m, 3.0m);
+            var testProduct1 = new Product(1,"test1", "blabla", 1.25m, newGroup1.ID, false, 5.0m, 3.0m);
+            var testProduct2 = new Product(2,"test2", "blabla", 1.25m, newGroup2.ID, false, 5.0m, 3.0m);
+            var testProduct3 = new Product(3,"test3", "blabla", 1.25m, newGroup2.ID, false, 5.0m, 3.0m);
             storageController.ProductDictionary.TryAdd(testProduct1.ID, testProduct1);
             storageController.ProductDictionary.TryAdd(testProduct2.ID, testProduct2);
             storageController.ProductDictionary.TryAdd(testProduct3.ID, testProduct3);
 
             storageController.DeleteGroup(3);
 
-            bool b1 = storageController.ProductDictionary[0].ProductGroupID == storageController.GroupDictionary[2].ID;
-            bool b2 = storageController.ProductDictionary[1].ProductGroupID == storageController.GroupDictionary[0].ID;
-            bool b3 = storageController.ProductDictionary[2].ProductGroupID == storageController.GroupDictionary[0].ID;
+            bool b1 = storageController.ProductDictionary[1].ProductGroupID == storageController.GroupDictionary[1].ID;
+            bool b2 = storageController.ProductDictionary[2].ProductGroupID == storageController.GroupDictionary[2].ID;
+            bool b3 = storageController.ProductDictionary[3].ProductGroupID == storageController.GroupDictionary[2].ID;
 
             Assert.IsTrue(b1 && b2 && b3);
         }
@@ -181,18 +185,18 @@ namespace P3_Projekt_WPF.Classes.Utilities.Tests
             newGroup2.ID = 2;
             storageController.GroupDictionary.TryAdd(newGroup1.ID, newGroup1);
             storageController.GroupDictionary.TryAdd(newGroup2.ID, newGroup2);
-            var testProduct1 = new Product("test1", "blabla", 1.25m, newGroup1.ID, false, 5.0m, 3.0m);
-            var testProduct2 = new Product("test2", "blabla", 1.25m, newGroup1.ID, false, 5.0m, 3.0m);
-            var testProduct3 = new Product("test3", "blabla", 1.25m, newGroup1.ID, false, 5.0m, 3.0m);
+            var testProduct1 = new Product(1,"test1", "blabla", 1.25m, newGroup1.ID, false, 5.0m, 3.0m);
+            var testProduct2 = new Product(2,"test2", "blabla", 1.25m, newGroup1.ID, false, 5.0m, 3.0m);
+            var testProduct3 = new Product(3,"test3", "blabla", 1.25m, newGroup1.ID, false, 5.0m, 3.0m);
             storageController.ProductDictionary.TryAdd(testProduct1.ID, testProduct1);
             storageController.ProductDictionary.TryAdd(testProduct2.ID, testProduct2);
             storageController.ProductDictionary.TryAdd(testProduct3.ID, testProduct3);
 
             storageController.DeleteGroupAndMove(1, 2);
 
-            bool b1 = storageController.ProductDictionary[0].ProductGroupID == storageController.GroupDictionary[2].ID;
-            bool b2 = storageController.ProductDictionary[1].ProductGroupID == storageController.GroupDictionary[2].ID;
-            bool b3 = storageController.ProductDictionary[2].ProductGroupID == storageController.GroupDictionary[2].ID;
+            bool b1 = storageController.ProductDictionary[1].ProductGroupID == storageController.GroupDictionary[2].ID;
+            bool b2 = storageController.ProductDictionary[2].ProductGroupID == storageController.GroupDictionary[2].ID;
+            bool b3 = storageController.ProductDictionary[3].ProductGroupID == storageController.GroupDictionary[2].ID;
 
             Assert.IsTrue(b1 && b2 && b3);
         }
@@ -202,14 +206,15 @@ namespace P3_Projekt_WPF.Classes.Utilities.Tests
         {
             StorageController storageController = new StorageController();
             StorageRoom testStorage1 = new StorageRoom("3", "medium lager");
-            KeyValuePair<int, int> testPair = new KeyValuePair<int, int>(testStorage1.ID, 10);
+            Dictionary<int, int> testPair = new Dictionary<int, int>();
+            testPair.Add(testStorage1.ID, 10);
             Group testGroup = new Group("drikkevarer", "wuhuu drikke");
 
-            storageController.CreateProduct("mælk", "arla", Convert.ToDecimal(5), testGroup.ID, false, Convert.ToDecimal(7), Convert.ToDecimal(10), null, testPair);
+            storageController.CreateProduct(1,"mælk", "arla", 5m, testGroup.ID, false, 7m, 10m, testPair, false);
 
-            storageController.EditProduct(true, storageController.ProductDictionary[0], "test", "test", Convert.ToDecimal(5), testGroup.ID, true, Convert.ToDecimal(2), Convert.ToDecimal(14), null);
+            storageController.EditProduct(true, storageController.ProductDictionary[1], "test", "test", 5m, testGroup.ID, true, 2m, 14m, null);
 
-            Assert.IsTrue(storageController.ProductDictionary[0].DiscountBool && storageController.ProductDictionary[0].SalePrice == 2 && storageController.ProductDictionary[0].DiscountPrice == 14);
+            Assert.IsTrue(storageController.ProductDictionary[1].DiscountBool && storageController.ProductDictionary[1].SalePrice == 2 && storageController.ProductDictionary[1].DiscountPrice == 14);
         }
 
         /*[Test()]
@@ -231,13 +236,13 @@ namespace P3_Projekt_WPF.Classes.Utilities.Tests
         {
             StorageController storageController = new StorageController();
             StorageRoom testStorage1 = new StorageRoom("3", "medium lager");
-            KeyValuePair<int, int> testPair = new KeyValuePair<int, int>(testStorage1.ID, 10);
-
+            Dictionary<int, int> testPair = new Dictionary<int, int>();
+            testPair.Add(testStorage1.ID, 10);
             Group testGroup = new Group("drikkevarer", "wuhuu drikke");
 
-            storageController.CreateProduct("mælk", "arla", Convert.ToDecimal(5), testGroup.ID, false, Convert.ToDecimal(7), Convert.ToDecimal(10), null, testPair);
+            storageController.CreateProduct(1,"mælk", "arla", 5m, testGroup.ID, false, 7m, 10m, testPair, false);
 
-            Assert.IsTrue(storageController.ProductDictionary.ContainsKey(0));
+            Assert.IsTrue(storageController.ProductDictionary.ContainsKey(1));
         }
 
         [TestCase(10, ExpectedResult = 10)]
@@ -245,20 +250,17 @@ namespace P3_Projekt_WPF.Classes.Utilities.Tests
         [TestCase(356, ExpectedResult = 356)]
         public int CreateProductTest2(int testInput)
         {
-            int test = 0;
             StorageController storageController = new StorageController();
             StorageRoom testStorage = new StorageRoom("medium lager", "medium lager");
+            testStorage.ID = 3;
+            storageController.StorageRoomDictionary.TryAdd(testStorage.ID, testStorage);
 
-            storageController.StorageRoomDictionary.TryAdd(3, testStorage);
-
-            KeyValuePair<int, int> testPair = new KeyValuePair<int, int>(testStorage.ID, testInput);
-
+            Dictionary<int, int> testPair = new Dictionary<int, int>();
+            testPair.Add(testStorage.ID, testInput);
             Group testGroup = new Group("drikkevarer", "wuhuu drikke");
-            testGroup.ID = 9999;
-
-            storageController.CreateProduct("mælk", "arla", Convert.ToDecimal(5), testGroup.ID, false, Convert.ToDecimal(7), Convert.ToDecimal(10), null, testPair);
-
-            return test = storageController.ProductDictionary[0].StorageWithAmount[testStorage.ID];
+            int ProductID = 1;
+            storageController.CreateProduct(ProductID, "mælk", "arla", 5m, testGroup.ID, false, 7m, 10m, testPair, false);
+            return storageController.ProductDictionary[ProductID].StorageWithAmount[testStorage.ID];
         }
 
         [Test()]
@@ -267,7 +269,7 @@ namespace P3_Projekt_WPF.Classes.Utilities.Tests
             var storageController = new StorageController();
             Group ProdGroup = new Group("group1", "good group");
             ProdGroup.ID = 9999;
-            var testProduct = new Product("test1", "blabla", 1.25m, ProdGroup.ID, false, 5.0m, 3.0m);
+            var testProduct = new Product(1, "test1", "blabla", 1.25m, ProdGroup.ID, false, 5.0m, 3.0m);
             storageController.ProductDictionary.TryAdd(testProduct.ID, testProduct);
 
             storageController.CreateStorageRoom("room1", "test room");
@@ -282,9 +284,9 @@ namespace P3_Projekt_WPF.Classes.Utilities.Tests
             var group1 = new Group("group1", "good group");
             var group2 = new Group("group2", "good group");
             var group3 = new Group("group3", "good group");
-            var testProduct1 = new Product("test1", "blabla", 1.25m, group1.ID, false, 5.0m, 3.0m);
-            var testProduct2 = new Product("test2", "blabla", 1.25m, group2.ID, false, 5.0m, 3.0m);
-            var testProduct3 = new Product("test3", "blabla", 1.25m, group3.ID, false, 5.0m, 3.0m);
+            var testProduct1 = new Product(1,"test1", "blabla", 1.25m, group1.ID, false, 5.0m, 3.0m);
+            var testProduct2 = new Product(2,"test2", "blabla", 1.25m, group2.ID, false, 5.0m, 3.0m);
+            var testProduct3 = new Product(3,"test3", "blabla", 1.25m, group3.ID, false, 5.0m, 3.0m);
             storageController.ProductDictionary.TryAdd(testProduct1.ID, testProduct1);
             storageController.ProductDictionary.TryAdd(testProduct2.ID, testProduct2);
             storageController.ProductDictionary.TryAdd(testProduct3.ID, testProduct3);
@@ -337,16 +339,17 @@ namespace P3_Projekt_WPF.Classes.Utilities.Tests
         public void DeleteStorageRoomTestOneProduct()
         {
             var storageController = new StorageController();
-            var testProduct = new Product("test1", "blabla", 1.25m, 0, false, 5.0m, 3.0m);
+            var testProduct = new Product(1,"test1", "blabla", 1.25m, 0, false, 5.0m, 3.0m);
             storageController.ProductDictionary.TryAdd(testProduct.ID, testProduct);
             var room = new StorageRoom("test", "test");
-            storageController.ProductDictionary[0].StorageWithAmount.Add(room.ID, 0);
-            storageController.StorageRoomDictionary.TryAdd(0, room);
+            room.ID = 1;
+            storageController.ProductDictionary[1].StorageWithAmount.Add(room.ID, 0);
+            storageController.StorageRoomDictionary.TryAdd(room.ID, room);
 
-            storageController.DeleteStorageRoom(0);
+            storageController.DeleteStorageRoom(room.ID);
 
-            bool b1 = !storageController.ProductDictionary[0].StorageWithAmount.ContainsKey(room.ID);
-            bool b2 = !storageController.StorageRoomDictionary.ContainsKey(0);
+            bool b1 = !storageController.ProductDictionary[1].StorageWithAmount.ContainsKey(room.ID);
+            bool b2 = !storageController.StorageRoomDictionary.ContainsKey(1);
 
             Assert.IsTrue(b1 && b2);
         }
@@ -355,24 +358,25 @@ namespace P3_Projekt_WPF.Classes.Utilities.Tests
         public void DeleteStorageRoomTestThreeProducts()
         {
             var storageController = new StorageController();
-            var testProduct1 = new Product("test1", "blabla", 1.25m, 0, false, 5.0m, 3.0m);
-            var testProduct2 = new Product("test2", "blabla", 1.25m, 0, false, 5.0m, 3.0m);
-            var testProduct3 = new Product("test3", "blabla", 1.25m, 0, false, 5.0m, 3.0m);
+            var testProduct1 = new Product(1,"test1", "blabla", 1.25m, 0, false, 5.0m, 3.0m);
+            var testProduct2 = new Product(2,"test2", "blabla", 1.25m, 0, false, 5.0m, 3.0m);
+            var testProduct3 = new Product(3,"test3", "blabla", 1.25m, 0, false, 5.0m, 3.0m);
             storageController.ProductDictionary.TryAdd(testProduct1.ID, testProduct1);
             storageController.ProductDictionary.TryAdd(testProduct2.ID, testProduct2);
             storageController.ProductDictionary.TryAdd(testProduct3.ID, testProduct3);
             var room = new StorageRoom("test", "test");
-            storageController.ProductDictionary[0].StorageWithAmount.Add(room.ID, 0);
+            room.ID = 1;
             storageController.ProductDictionary[1].StorageWithAmount.Add(room.ID, 0);
             storageController.ProductDictionary[2].StorageWithAmount.Add(room.ID, 0);
-            storageController.StorageRoomDictionary.TryAdd(0, room);
+            storageController.ProductDictionary[3].StorageWithAmount.Add(room.ID, 0);
+            storageController.StorageRoomDictionary.TryAdd(room.ID, room);
 
-            storageController.DeleteStorageRoom(0);
+            storageController.DeleteStorageRoom(room.ID);
 
-            bool b1 = !storageController.ProductDictionary[0].StorageWithAmount.ContainsKey(room.ID);
-            bool b2 = !storageController.ProductDictionary[1].StorageWithAmount.ContainsKey(room.ID);
-            bool b3 = !storageController.ProductDictionary[2].StorageWithAmount.ContainsKey(room.ID);
-            bool b4 = !storageController.StorageRoomDictionary.ContainsKey(0);
+            bool b1 = !storageController.ProductDictionary[1].StorageWithAmount.ContainsKey(room.ID);
+            bool b2 = !storageController.ProductDictionary[2].StorageWithAmount.ContainsKey(room.ID);
+            bool b3 = !storageController.ProductDictionary[3].StorageWithAmount.ContainsKey(room.ID);
+            bool b4 = !storageController.StorageRoomDictionary.ContainsKey(room.ID);
 
             Assert.IsTrue(b1 && b2 && b3 && b4);
         }
@@ -392,7 +396,7 @@ namespace P3_Projekt_WPF.Classes.Utilities.Tests
         {
             StorageController strContr = new StorageController();
             Group testGroup = new Group("shirts", "shirts and dresses");
-            Product productToBeCompared = new Product("Running shoes", "Adidas", 100, testGroup.ID, false, 20, 50);
+            Product productToBeCompared = new Product(1, "Running shoes", "Adidas", 100, testGroup.ID, false, 20, 50);
             string searchedString = "Runin shos";
             int charDifference = strContr.ComputeLevenshteinsDistance(searchedString, productToBeCompared.Name);
             Assert.IsTrue(charDifference == 3);

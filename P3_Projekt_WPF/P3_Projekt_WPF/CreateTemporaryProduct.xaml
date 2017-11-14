@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         Title="CreateTemporaryProduct" Height="500" Width="600" Background="White">
     <Grid Background="#FFE5E5E5">
-        <TextBox Padding="4,0,0,0" x:Name="textbox_Description" FontSize="30" Grid.ColumnSpan="1" MinHeight="40" VerticalAlignment="Top" Margin="10,10,10,0" Height="225">
+        <TextBox Padding="4,0,0,0" x:Name="textbox_Description" FontSize="30" Grid.ColumnSpan="1" MinHeight="40" VerticalAlignment="Top" Margin="10,10,10,0" Height="225" TextWrapping="Wrap">
             <TextBox.Resources>
                 <Style TargetType="{x:Type Border}">
                     <Setter Property="CornerRadius" Value="10"/>
@@ -56,6 +56,6 @@
             </TextBox.Resources>
         </TextBox>
         <Label x:Name="label" HorizontalAlignment="Left" Margin="29,336,0,0" VerticalAlignment="Top"/>
-        <Label x:Name="label1" Content="Antal:" FontSize="30" Margin="16,313,484,106"/>
+        <Label x:Name="label1" Content="Antal:" FontSize="30" Margin="16,313,0,0" HorizontalAlignment="Left" Width="92" Height="50" VerticalAlignment="Top"/>
     </Grid>
 </Window>
