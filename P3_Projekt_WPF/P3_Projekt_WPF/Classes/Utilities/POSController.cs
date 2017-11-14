@@ -54,9 +54,9 @@ namespace P3_Projekt_WPF.Classes.Utilities
 
         public void AddIcecreamTransaction(decimal price)
         {
-            PlacerholderReceipt.AddTransaction(
-                new SaleTransaction(
-                new ServiceProduct(price, price, 0, "Is", _storageController.GroupDictionary.Where(x => x.Value.Name == "Is").First().Value), 1, PlacerholderReceipt.ID));
+            //PlacerholderReceipt.AddTransaction(
+                //new SaleTransaction(
+                //new ServiceProduct(price, price, 0, "Is", _storageController.GroupDictionary.Where(x => x.Value.Name == "Is").First().Value), 1, PlacerholderReceipt.ID));
         }
 
         public void AddFreeSaleTransaction(BaseProduct product, int amount)
