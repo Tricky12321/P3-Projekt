@@ -43,13 +43,38 @@ namespace P3_Projekt_WPF
         Dictionary<int, ProductControl> _productControlDictionary = new Dictionary<int, ProductControl>();
 
 
+        private bool _ctrlDown = false;
+        public static bool runLoading = true;
         public MainWindow()
         {
             InitializeComponent();
             InitComponents();
+
             this.KeyDown += new KeyEventHandler(KeyboardHook);
             this.KeyDown += new KeyEventHandler(CtrlHookDown);
             this.KeyUp += new KeyEventHandler(CtrlHookUp);
+
+            int j = ServiceProduct.GetNextID();
+            Debug.WriteLine("Hello World");
+            LoadDatabase();
+
+        }
+
+        public void showloadform()
+        {
+            //load.Close();
+
+            /*
+            if (g)
+            {
+                load.ShowDialog();
+            }
+            else if(g == false)
+            {
+                load.Close();
+            }*/
+
+
         }
 
         private void KeyboardHook(object sender, KeyEventArgs e)
@@ -94,13 +119,8 @@ namespace P3_Projekt_WPF
             InitGridQuickButtons();
             InitStorageGridProducts();
             AddProductButton();
-
-
             LoadProductImages();
             LoadProductGrid(_storageController.ProductDictionary);
-
-
-
             BuildInformationTable();
             InitStatisticsTab();
         }
@@ -161,6 +181,11 @@ namespace P3_Projekt_WPF
             productGrid.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(380) });
 
             scroll_StorageProduct.Content = productGrid;
+
+        }
+
+        public void LoadDatabase()
+        {
             Stopwatch TimeTester = new Stopwatch();
             TimeTester.Start();
             _storageController.GetAll();
@@ -168,6 +193,7 @@ namespace P3_Projekt_WPF
             {
                 Thread.Sleep(100);
             }
+            runLoading = false;
             TimeTester.Stop();
             Debug.WriteLine("[P3] Det tog " + TimeTester.ElapsedMilliseconds + "ms at hente alt fra databasen");
         }
@@ -212,6 +238,8 @@ namespace P3_Projekt_WPF
                 }
             };
             addProductWindow.Show();
+            LoadingScreen load = new LoadingScreen();
+            load.Show();
         }
 
         public void AddProduct(CreateProduct addProductWindow)
