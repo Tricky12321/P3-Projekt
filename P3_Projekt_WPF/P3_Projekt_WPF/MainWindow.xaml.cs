@@ -547,14 +547,12 @@ namespace P3_Projekt_WPF
             }
 
             CheckboxChecker(ref id, ref brand, ref group);
-            try
-            {
-                _statisticsController.RequestStatisticsDate(startDate, endDate);
-                _statisticsController.RequestStatisticsWithParameters(id, brand, group);
 
-                DisplayStatistics();
-            }
-            catch (EmptyTableException exception)
+            _statisticsController.RequestStatisticsDate(startDate, endDate);
+            _statisticsController.RequestStatisticsWithParameters(id, brand, group);
+
+            DisplayStatistics();
+            if(_statisticsController.TransactionsForStatistics.Count == 0)
             {
                 label_NoTransactions.Visibility = Visibility.Visible;
             }
@@ -594,6 +592,18 @@ namespace P3_Projekt_WPF
                 totalPrice += transaction.TotalPrice;
             }
             listView_Statistics.Items.Insert(0, new StatisticsListItem("", "Total", $"{totalAmount}", $"{totalPrice}"));
+        }
+
+        private void Button_DateToday_Click(object sender, RoutedEventArgs e)
+        {
+            datePicker_StartDate.SelectedDate = DateTime.Today;
+            datePicker_EndDate.SelectedDate = DateTime.Today;
+        }
+
+        private void Button_DateYesterday_Click(object sender, RoutedEventArgs e)
+        {
+            datePicker_StartDate.SelectedDate = DateTime.Today.AddDays(-1);
+            datePicker_EndDate.SelectedDate = DateTime.Today.AddDays(-1);
         }
 
 
@@ -680,5 +690,7 @@ namespace P3_Projekt_WPF
         {
 
         }
+
+
     }
 }
