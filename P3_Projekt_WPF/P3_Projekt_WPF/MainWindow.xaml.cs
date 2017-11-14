@@ -38,13 +38,32 @@ namespace P3_Projekt_WPF
         StatisticsController _statisticsController;
         Grid productGrid = new Grid();
         private bool _ctrlDown = false;
+        public static bool runLoading = true;
         public MainWindow()
         {
             InitializeComponent();
             InitComponents();
+
             this.KeyDown += new KeyEventHandler(KeyboardHook);
             this.KeyDown += new KeyEventHandler(CtrlHookDown);
             this.KeyUp += new KeyEventHandler(CtrlHookUp);
+        }
+
+        public void showloadform()
+        {
+            //load.Close();
+
+            /*
+            if (g)
+            {
+                load.ShowDialog();
+            }
+            else if(g == false)
+            {
+                load.Close();
+            }*/
+
+
         }
 
         private void KeyboardHook(object sender, KeyEventArgs e)
@@ -114,11 +133,11 @@ namespace P3_Projekt_WPF
         {
             datePicker_StartDate.SelectedDate = DateTime.Now;
             datePicker_EndDate.SelectedDate = DateTime.Now;
-            foreach(string brand in _storageController.ProductDictionary.Values.Select(x => x.Brand).Distinct())
+            foreach (string brand in _storageController.ProductDictionary.Values.Select(x => x.Brand).Distinct())
             {
                 comboBox_Brand.Items.Add(brand);
             }
-            foreach(Group group in _storageController.GroupDictionary.Values)
+            foreach (Group group in _storageController.GroupDictionary.Values)
             {
                 comboBox_Group.Items.Add(group.Name);
             }
@@ -157,6 +176,7 @@ namespace P3_Projekt_WPF
             {
                 Thread.Sleep(100);
             }
+            runLoading = false;
             TimeTester.Stop();
             Debug.WriteLine("[P3] Det tog " + TimeTester.ElapsedMilliseconds + "ms at hente alt fra databasen");
         }
@@ -202,6 +222,8 @@ namespace P3_Projekt_WPF
                 addProductWindow.Close();
             };
             addProductWindow.Show();
+            LoadingScreen load = new LoadingScreen();
+            load.Show();
         }
 
 
@@ -304,7 +326,7 @@ namespace P3_Projekt_WPF
 
         public void AddTransactionToReceipt(SaleTransaction transaction)
         {
-            if(transaction.Product is TempProduct)
+            if (transaction.Product is TempProduct)
             {
                 listView_Receipt.Items.Add(new ReceiptListItem { String_Product = (transaction.Product as TempProduct).Description, Amount = transaction.Amount, Price = $"{transaction.GetProductPrice()}", IDTag = transaction.Product.ID });
             }
@@ -469,7 +491,7 @@ namespace P3_Projekt_WPF
             _settingsController.SpecifyPictureFilePath();
         }
 
-        private void OnSelectedStartDateChanged(object sender, SelectionChangedEventArgs  e)
+        private void OnSelectedStartDateChanged(object sender, SelectionChangedEventArgs e)
         {
             string[] dateTime = datePicker_StartDate.ToString().Split(' ');
             label_CurrentStartDate.Text = $"{ dateTime[0]}";
@@ -491,7 +513,7 @@ namespace P3_Projekt_WPF
             string brand = (string)comboBox_Brand.SelectedItem;
             string groupString = (string)comboBox_Group.SelectedItem;
             Group group = null;
-            if((string)comboBox_Group.SelectedItem != null)
+            if ((string)comboBox_Group.SelectedItem != null)
             {
                 group = _storageController.GroupDictionary.Values.First(x => x.Name == groupString);
             }
@@ -513,7 +535,7 @@ namespace P3_Projekt_WPF
 
             _statisticsController.RequestStatisticsDate(startDate, endDate);
             _statisticsController.RequestStatisticsWithParameters(id, brand, group);
-            
+
             listView_Statistics.Items.Add("TEest som er KYS :D LAaaAAAAaaaAAaAAAaAaAaaaAaaaaAAAaaaAaaaaaANg");
 
         }
@@ -535,7 +557,7 @@ namespace P3_Projekt_WPF
         private void TextInputNoNumber(object sender, TextCompositionEventArgs e)
         {
             // Only allows number in textfield
-            if(e.Text.Length > 0)
+            if (e.Text.Length > 0)
             {
                 if (!char.IsDigit(e.Text, e.Text.Length - 1))
                     e.Handled = true;
