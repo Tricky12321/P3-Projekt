@@ -274,7 +274,7 @@ namespace P3_Projekt_WPF
 
         private void AddServiceProduct(CreateProduct addProductWindow)
         {
-            _storageController.CreateServiceProduct(123456789,
+            _storageController.CreateServiceProduct(ServiceProduct.GetNextID(),
                                                     Decimal.Parse(addProductWindow.textbox_ServiceSalePrice.Text),
                                                     Decimal.Parse(addProductWindow.textbox_ServiceGroupPrice.Text),
                                                     Int32.Parse(addProductWindow.textbox_ServiceGroupLimit.Text),
