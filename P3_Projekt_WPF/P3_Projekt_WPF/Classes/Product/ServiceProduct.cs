@@ -27,6 +27,13 @@ namespace P3_Projekt_WPF.Classes
             CreateFromRow(Data);
         }
 
+        public static int GetNextID()
+        {
+            string sql = "SHOW TABLE STATUS LIKE 'service_products'";
+            TableDecode Results = Mysql.RunQueryWithReturn(sql);
+            return Convert.ToInt32(Results.RowData[0].Values[10]);
+        }
+
         public ServiceProduct(int id) : base(0)
         {
             ID = id;
