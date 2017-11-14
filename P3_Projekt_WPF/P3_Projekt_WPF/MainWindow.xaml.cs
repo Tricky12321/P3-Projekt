@@ -38,7 +38,6 @@ namespace P3_Projekt_WPF
         POSController _POSController;
         StatisticsController _statisticsController;
         Grid productGrid = new Grid();
-        bool _ctrlDown = false;
 
         Dictionary<int, ProductControl> _productControlDictionary = new Dictionary<int, ProductControl>();
 
@@ -48,33 +47,27 @@ namespace P3_Projekt_WPF
         public MainWindow()
         {
             InitializeComponent();
-            InitComponents();
-
             this.KeyDown += new KeyEventHandler(KeyboardHook);
             this.KeyDown += new KeyEventHandler(CtrlHookDown);
             this.KeyUp += new KeyEventHandler(CtrlHookUp);
-
-            int j = ServiceProduct.GetNextID();
-            Debug.WriteLine("Hello World");
-            LoadDatabase();
+            Loaded += Windows_Loaded;
 
         }
 
-        public void showloadform()
+        private void Windows_Loaded(object sender, RoutedEventArgs e)
         {
-            //load.Close();
+            InitComponents();
+            Debug.WriteLine("Hello World");
+            Thread NewThread2 = new Thread(new ThreadStart(showloadform));
+            NewThread2.SetApartmentState(ApartmentState.STA);
+            NewThread2.Start();
+            LoadDatabase();
+        }
 
-            /*
-            if (g)
-            {
-                load.ShowDialog();
-            }
-            else if(g == false)
-            {
-                load.Close();
-            }*/
-
-
+        private void showloadform()
+        {
+            LoadingScreen load = new LoadingScreen();
+            load.ShowDialog();
         }
 
         private void KeyboardHook(object sender, KeyEventArgs e)
@@ -191,7 +184,7 @@ namespace P3_Projekt_WPF
             _storageController.GetAll();
             while (!_storageController.ThreadsDone)
             {
-                Thread.Sleep(100);
+                Thread.Sleep(5000);
             }
             runLoading = false;
             TimeTester.Stop();
@@ -238,8 +231,6 @@ namespace P3_Projekt_WPF
                 }
             };
             addProductWindow.Show();
-            LoadingScreen load = new LoadingScreen();
-            load.Show();
         }
 
         public void AddProduct(CreateProduct addProductWindow)

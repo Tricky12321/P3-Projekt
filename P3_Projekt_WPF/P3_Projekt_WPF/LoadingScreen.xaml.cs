@@ -11,7 +11,9 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
-
+using System.Threading;
+using System.Diagnostics;
+using System.Windows.Threading;
 namespace P3_Projekt_WPF
 {
     /// <summary>
@@ -19,9 +21,33 @@ namespace P3_Projekt_WPF
     /// </summary>
     public partial class LoadingScreen : Window
     {
+        private static event Action CloseRegionWindows = delegate { }; // won't have to check for null
+        private Thread _startThread;
         public LoadingScreen()
         {
             InitializeComponent();
+            Loaded += MyWindow_Loaded;
+        }
+
+        private void CloseWindow()
+        {
+            if (!MainWindow.runLoading)
+            {
+                this.Close();
+            }
+        }
+
+        private void dispatcherTimer_Tick(object sender, EventArgs e)
+        {
+             CloseWindow();
+        }
+
+        private void MyWindow_Loaded(object sender, RoutedEventArgs e)
+        {
+            DispatcherTimer dispatcherTimer = new System.Windows.Threading.DispatcherTimer();
+            dispatcherTimer.Tick += dispatcherTimer_Tick;
+            dispatcherTimer.Interval = new TimeSpan(0, 0, 0, 0, 100);
+            dispatcherTimer.Start();
         }
     }
 }
