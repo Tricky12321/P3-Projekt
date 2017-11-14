@@ -11,14 +11,15 @@ namespace P3_Projekt_WPF.Classes
         public string Name;
         public decimal GroupPrice;
         public int GroupLimit;
-        public Group ServiceProductGroup;
+        public int ServiceProductGroupID;
 
-        public ServiceProduct(decimal salePrice, decimal groupPrice, int groupLimit, string name, Group serviceProductGroup) : base(salePrice)
+        public ServiceProduct(int id, decimal salePrice, decimal groupPrice, int groupLimit, string name, int serviceProductGroupID) : base(salePrice)
         {
+            ID = id;
             GroupPrice = groupPrice;
             GroupLimit = groupLimit;
             Name = name;
-            ServiceProductGroup = serviceProductGroup;
+            ServiceProductGroupID = serviceProductGroupID;
         }
 
         public ServiceProduct(Row Data) : base(0)
@@ -53,7 +54,7 @@ namespace P3_Projekt_WPF.Classes
         {
             ID = Convert.ToInt32(results.Values[0]);                         // id
             Name = results.Values[1];                                        // name
-            ServiceProductGroup = new Group(Convert.ToInt32(results.Values[2]));
+            ServiceProductGroupID = Convert.ToInt32(results.Values[2]);
             SalePrice = Convert.ToInt32(results.Values[3]);                  // price
             GroupPrice = Convert.ToInt32(results.Values[4]);                 // price
             GroupLimit = Convert.ToInt32(results.Values[5]);                 // price
@@ -62,7 +63,7 @@ namespace P3_Projekt_WPF.Classes
         public override void UploadToDatabase()
         {
             string sql = $"INSERT INTO `service_products` (`id`, `name`, `price`, `group_price`, `group_limit`, `groups`)" +
-            $"VALUES (NULL, '{Name}', '{SalePrice}','{GroupPrice}','{GroupLimit}','{ServiceProductGroup.ID}');";
+            $"VALUES (NULL, '{Name}', '{SalePrice}','{GroupPrice}','{GroupLimit}','{ServiceProductGroupID}');";
             Mysql.RunQuery(sql);
         }
 
@@ -73,7 +74,7 @@ namespace P3_Projekt_WPF.Classes
                 $"`price` = '{SalePrice}'," +
                 $"`group_price` = '{GroupPrice}'," +
                 $"`group_limit` = '{GroupLimit}'," +
-                $"`groups` = '{ServiceProductGroup.ID}' "+
+                $"`groups` = '{ServiceProductGroupID}' "+
                 $"WHERE `id` = {ID};";
             Mysql.RunQuery(sql);
         }

@@ -390,6 +390,19 @@ namespace P3_Projekt_WPF.Classes.Utilities
             }
         }
 
+        public void CreateServiceProduct(int id, decimal salePrice, decimal groupPrice, int groupLimit, string name, int serviceProductGroupID, bool UploadToDatabase = true)
+        {
+            ServiceProduct newServiceProduct = new ServiceProduct(id, salePrice, groupPrice, groupLimit, name, serviceProductGroupID);
+            if (!ServiceProductDictionary.TryAdd(newServiceProduct.ID, newServiceProduct))
+            {
+                throw new Exception("This key already exists");
+            }
+            if (UploadToDatabase)
+            {
+                newServiceProduct.UploadToDatabase();
+            }
+        }
+
         //edit product, calles two different methods depending if its run by an admin
         public void EditProduct(bool isAdmin, Product editProduct, string name, string brand, decimal purchasePrice, int groupID, bool discount, decimal salePrice, decimal discountPrice, string imagePath)
         {
