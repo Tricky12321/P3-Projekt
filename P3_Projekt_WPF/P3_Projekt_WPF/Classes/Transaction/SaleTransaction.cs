@@ -91,7 +91,7 @@ namespace P3_Projekt_WPF.Classes
             }
             else if (Product is ServiceProduct)
             {
-                return (Product as ServiceProduct).ServiceProductGroup.ID;
+                return (Product as ServiceProduct).ServiceProductGroupID;
             }
             else if (Product is TempProduct && (Product as TempProduct).Resolved)
             {

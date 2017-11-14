@@ -39,10 +39,13 @@ namespace P3_Projekt_WPF
             output_ProductID.Text = Product.GetNextID().ToString();
 
             btn_AddPicture.Click += PickImage;
+            btn_ServiceAddPicture.Click += PickImage;
             ImageChosenEvent += (FilePath) => { image_Product.Source = new BitmapImage(new Uri(FilePath));
+                                                image_ServiceProduct.Source = new BitmapImage(new Uri(FilePath));
                                                 ChosenFilePath = FilePath; };
             btn_AddStorageRoomWithAmount.Click += AddStorageWithAmount;
             btn_JustQuit.Click += delegate { this.Close(); };
+            btn_ServiceJustQuit.Click += delegate { this.Close(); };
         }
 
         public void PickImage(object sender, RoutedEventArgs e)
@@ -92,7 +95,7 @@ namespace P3_Projekt_WPF
             }
         }
 
-        public bool IsInputValid()
+        public bool IsProductInputValid()
         {
             if (textbox_DiscountPrice.Text == "")
                 textbox_DiscountPrice.Text = "0";
@@ -134,6 +137,41 @@ namespace P3_Projekt_WPF
             else
                 return true;
             
+        }
+
+        public bool IsServiceProductInputValid()
+        {
+            TextBox[] textboxes = new TextBox[] { textbox_ServiceName, textbox_ServiceSalePrice, textbox_ServiceGroupLimit, textbox_ServiceGroupPrice };
+
+            if (textbox_ServiceName.Text == "" || comboBox_ServiceGroup.Text == "" || textbox_ServiceSalePrice.Text == "" || textbox_ServiceGroupLimit.Text == "" || textbox_ServiceGroupPrice.Text == "")
+            {
+                foreach (TextBox textbox in textboxes)
+                {
+                    if (textbox.Text == "")
+                    {
+                        textbox.BorderBrush = System.Windows.Media.Brushes.Red;
+                        textbox.BorderThickness = new Thickness(2, 2, 2, 2);
+                    }
+                    else
+                    {
+                        textbox.BorderBrush = System.Windows.Media.Brushes.DarkGray;
+                        textbox.BorderThickness = new Thickness(1, 1, 1, 1);
+                    }
+                }
+                if (comboBox_ServiceGroup.Text == "")
+                {
+                    comboBox_ServiceGroup.BorderBrush = System.Windows.Media.Brushes.Red;
+                    comboBox_ServiceGroup.BorderThickness = new Thickness(2, 2, 2, 2);
+                }
+                else
+                {
+                    comboBox_ServiceGroup.BorderBrush = System.Windows.Media.Brushes.DarkGray;
+                    comboBox_ServiceGroup.BorderThickness = new Thickness(1, 1, 1, 1);
+                }
+                return false;
+            }
+            else
+                return true;
         }
 
         private void btn_DeleteStorage_Click(object sender, RoutedEventArgs e)
