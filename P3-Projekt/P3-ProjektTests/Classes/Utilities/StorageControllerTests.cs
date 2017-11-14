@@ -380,7 +380,7 @@ namespace P3_Projekt_WPF.Classes.Utilities.Tests
 
             Assert.IsTrue(b1 && b2 && b3 && b4);
         }
-
+        /*
         [TestCase("shir with banas", 3, ExpectedResult = true)]
         [TestCase("bok", 1, ExpectedResult = true)]
         [TestCase("smal blu bid with gren head", 4, ExpectedResult = true)]
@@ -401,6 +401,7 @@ namespace P3_Projekt_WPF.Classes.Utilities.Tests
             int charDifference = strContr.ComputeLevenshteinsDistance(searchedString, productToBeCompared.Name);
             Assert.IsTrue(charDifference == 3);
         }
+        */
         /*
         [Test()]
         public void LevenshteinsProductSearchTest()
