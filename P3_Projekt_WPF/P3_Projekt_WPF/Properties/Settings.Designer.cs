@@ -34,5 +34,9 @@ namespace P3_Projekt_WPF.Properties {
                 this["PictureFilePath"] = value;
             }
         }
+        public int IcecreamID
+        {
+            get; set;
+        }
     }
 }

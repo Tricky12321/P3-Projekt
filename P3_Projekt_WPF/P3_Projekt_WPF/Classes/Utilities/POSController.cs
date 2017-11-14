@@ -54,9 +54,12 @@ namespace P3_Projekt_WPF.Classes.Utilities
 
         public void AddIcecreamTransaction(decimal price)
         {
+            // TODO: Den giver ikke rigtige argumenter til constructoren
+            // Der mangler at få rigtig ID til is
+            // Der er et felt i settings og en knap i settings tab til at angive is ID, men intet er hooket up
             PlacerholderReceipt.AddTransaction(
                 new SaleTransaction(
-                new ServiceProduct(price, price, 0, "Is", _storageController.GroupDictionary.Where(x => x.Value.Name == "Is").First().Value), 1, PlacerholderReceipt.ID));
+                new ServiceProduct(123456789, 1m,2m,3,"4",5), 6, 7));
         }
 
         public void AddFreeSaleTransaction(BaseProduct product, int amount)
