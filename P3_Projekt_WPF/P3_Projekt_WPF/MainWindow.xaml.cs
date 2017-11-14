@@ -42,14 +42,42 @@ namespace P3_Projekt_WPF
 
         Dictionary<int, ProductControl> _productControlDictionary = new Dictionary<int, ProductControl>();
 
-
+        public static bool runLoading = true;
         public MainWindow()
         {
+            _storageController = new StorageController();
+            _POSController = new POSController(_storageController);
+            _settingsController = new SettingsController();
+            _statisticsController = new StatisticsController();
             InitializeComponent();
+            LoadDatabase();
             InitComponents();
+
             this.KeyDown += new KeyEventHandler(KeyboardHook);
             this.KeyDown += new KeyEventHandler(CtrlHookDown);
             this.KeyUp += new KeyEventHandler(CtrlHookUp);
+
+            int j = ServiceProduct.GetNextID();
+            Debug.WriteLine("Hello World");
+            
+
+        }
+
+        public void showloadform()
+        {
+            //load.Close();
+
+            /*
+            if (g)
+            {
+                load.ShowDialog();
+            }
+            else if(g == false)
+            {
+                load.Close();
+            }*/
+
+
         }
 
         private void KeyboardHook(object sender, KeyEventArgs e)
@@ -87,20 +115,11 @@ namespace P3_Projekt_WPF
 
         private void InitComponents()
         {
-            _storageController = new StorageController();
-            _POSController = new POSController(_storageController);
-            _settingsController = new SettingsController();
-            _statisticsController = new StatisticsController();
             InitGridQuickButtons();
             InitStorageGridProducts();
             AddProductButton();
-
-
             LoadProductImages();
             LoadProductGrid(_storageController.ProductDictionary);
-
-
-
             BuildInformationTable();
             InitStatisticsTab();
         }
@@ -161,6 +180,11 @@ namespace P3_Projekt_WPF
             productGrid.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(380) });
 
             scroll_StorageProduct.Content = productGrid;
+
+        }
+
+        public void LoadDatabase()
+        {
             Stopwatch TimeTester = new Stopwatch();
             TimeTester.Start();
             _storageController.GetAll();
@@ -168,6 +192,7 @@ namespace P3_Projekt_WPF
             {
                 Thread.Sleep(100);
             }
+            runLoading = false;
             TimeTester.Stop();
             Debug.WriteLine("[P3] Det tog " + TimeTester.ElapsedMilliseconds + "ms at hente alt fra databasen");
         }
@@ -195,26 +220,45 @@ namespace P3_Projekt_WPF
             CreateProduct addProductWindow = new CreateProduct(new Dictionary<int, StorageRoom>(_storageController.StorageRoomDictionary));
 
             addProductWindow.comboBox_Group.ItemsSource = (_storageController.GroupDictionary.Values.Select(x => x.Name));
+            addProductWindow.comboBox_ServiceGroup.ItemsSource = (_storageController.GroupDictionary.Values.Select(x => x.Name));
             addProductWindow.comboBox_Brand.ItemsSource = (_storageController.GetProductBrands());
 
             addProductWindow.btn_SaveAndQuit.Click += delegate
             {
-                if (addProductWindow.IsInputValid())
+                if (addProductWindow.IsProductInputValid())
                 {
-                    if (addProductWindow.ChosenFilePath != null)
-                    {
-                        System.IO.File.Copy(addProductWindow.ChosenFilePath, _settingsController.PictureFilePath + "\\" + Product.GetNextID() + ".jpg", true);
-                    }
+                    AddProductImage(addProductWindow);
                     // TODO: Give ability to make a service product
                     AddProduct(addProductWindow);
                     addProductWindow.Close();
                     LoadProductImages();
                 }
             };
+            addProductWindow.btn_ServiceSaveAndQuit.Click += delegate
+            {
+                if (addProductWindow.IsServiceProductInputValid())
+                {
+                    AddProductImage(addProductWindow);
+                    AddServiceProduct(addProductWindow);
+                    addProductWindow.Close();
+                    LoadProductImages();
+                }
+            };
+
             addProductWindow.Show();
+            LoadingScreen load = new LoadingScreen();
+            load.Show();
         }
 
-        public void AddProduct(CreateProduct addProductWindow)
+        private void AddProductImage (CreateProduct addProductWindow)
+        {
+            if (addProductWindow.ChosenFilePath != null)
+            {
+                System.IO.File.Copy(addProductWindow.ChosenFilePath, _settingsController.PictureFilePath + "\\" + Product.GetNextID() + ".jpg", true);
+            }
+        }
+
+        private void AddProduct(CreateProduct addProductWindow)
         {
             _storageController.CreateProduct(Product.GetNextID(),
                                              addProductWindow.textbox_Name.Text,
@@ -225,6 +269,16 @@ namespace P3_Projekt_WPF
                                              Decimal.Parse(addProductWindow.textbox_DiscountPrice.Text),
                                              Decimal.Parse(addProductWindow.textbox_SalePrice.Text),
                                              addProductWindow.StorageWithAmount);
+        }
+
+        private void AddServiceProduct(CreateProduct addProductWindow)
+        {
+            _storageController.CreateServiceProduct(ServiceProduct.GetNextID(),
+                                                    Decimal.Parse(addProductWindow.textbox_ServiceSalePrice.Text),
+                                                    Decimal.Parse(addProductWindow.textbox_ServiceGroupPrice.Text),
+                                                    Int32.Parse(addProductWindow.textbox_ServiceGroupLimit.Text),
+                                                    addProductWindow.textbox_ServiceName.Text,
+                                                    _storageController.GroupDictionary.First(X => X.Value.Name == addProductWindow.comboBox_ServiceGroup.Text).Key);
         }
 
         private void ShowSpecificInfoProductStorage(object sender, RoutedEventArgs e)
@@ -691,6 +745,11 @@ namespace P3_Projekt_WPF
 
         }
 
-
+        private void btn_search_Storage_Click(object sender, RoutedEventArgs e)
+        {
+            ConcurrentDictionary<int, Product> productSearch = Utils.SearchForProduct(txtBox_SearchField_Storage.Text, _storageController.ProductDictionary, _storageController.GroupDictionary);
+            LoadProductGrid(productSearch);
+            
+        }
     }
 }

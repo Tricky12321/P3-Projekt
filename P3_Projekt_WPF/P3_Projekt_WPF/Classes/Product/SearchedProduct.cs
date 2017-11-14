@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace P3_Projekt_WPF.Classes
 {
-    public class SearchProduct
+    public class SearchProduct : IComparable
     {
         public Product CurrentProduct;
         public int NameMatch = 0;
@@ -19,7 +19,15 @@ namespace P3_Projekt_WPF.Classes
             CurrentProduct = product;
         }
 
+        public int CompareTo(object obj)
+        {
+            int compare = 0;
 
+            compare += (obj as SearchProduct).NameMatch - this.NameMatch;
+            compare += (obj as SearchProduct).GroupMatch - this.GroupMatch;
+            compare += (obj as SearchProduct).BrandMatch - this.BrandMatch;
 
+            return compare;
+        }
     }
 }

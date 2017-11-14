@@ -47,7 +47,7 @@
                                 <Style TargetType="{x:Type TextBlock}">
                                     <Setter Property="Visibility" Value="Collapsed"/>
                                     <Style.Triggers>
-                                        <DataTrigger Binding="{Binding Text, ElementName=SearchTermTextBox}" Value="">
+                                        <DataTrigger Binding="{Binding Text, ElementName=txtBox_SearchField}" Value="">
                                             <Setter Property="Visibility" Value="Visible"/>
                                         </DataTrigger>
                                     </Style.Triggers>
@@ -213,7 +213,7 @@
                 </Grid>
             </TabItem>
 
-            <TabItem x:Name="tab_Storage" GotFocus="UpdateStorageTab" Header="Lager" Width="190" >
+            <TabItem x:Name="tab_Storage"  Header="Lager" Width="190" >
                 <Grid Background="#FFE5E5E5" Margin="0">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="1411*"/>
@@ -234,10 +234,32 @@
                             <TextBlock x:Name="textBlock_ChosenProduct" TextWrapping="Wrap" Grid.Row="1" Margin="0,0,0,0"/>
                         </Grid>
                     </Border>
+                    <TextBox Padding="10,0,0,0" x:Name="txtBox_SearchField_Storage" Margin="0,10,74,0" FontSize="33" HorizontalAlignment="Right" Width="503" Grid.Column="1" Height="50" VerticalAlignment="Top">
+                        <TextBox.Resources>
+                            <Style TargetType="{x:Type Border}">
+                                <Setter Property="CornerRadius" Value="10"/>
+                            </Style>
+                        </TextBox.Resources>
+                    </TextBox>
+                    <TextBlock IsHitTestVisible="False" Text="Søg efter produkt" Margin="0,11,294,0" Foreground="DarkGray" FontSize="33" HorizontalAlignment="Right" Width="271" Grid.Column="1" Height="47" VerticalAlignment="Top">
+                        <TextBlock.Style>
+                            <Style TargetType="{x:Type TextBlock}">
+                                <Setter Property="Visibility" Value="Collapsed"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Text, ElementName=txtBox_SearchField_Storage}" Value="">
+                                        <Setter Property="Visibility" Value="Visible"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </TextBlock.Style>
+                    </TextBlock>
+                    <Button x:Name="btn_search_Storage" Content="🔎" Background="#FF767676" Margin="0,10,10,0" VerticalAlignment="Top" Height="50" Style="{StaticResource Flat_Button}" FontSize="21" HorizontalAlignment="Right" Width="50" Grid.Column="1" Click="btn_search_Storage_Click"/>
+
+
                 </Grid>
             </TabItem>
             <TabItem x:Name="tab_Statisticsc" Header="Statistik" Width="190">
-                <Grid Background="#FFE5E5E5" Margin="4,0,-4,0">
+                <Grid Background="#FFE5E5E5" Margin="0">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="70*"/>
                         <RowDefinition Height="1241*"/>
@@ -468,7 +490,7 @@
         </TabControl>
 
 
-        <TextBlock IsHitTestVisible="False" Text="SØG ERFTER ET PRODUKT" Margin="0,70,0,0" VerticalAlignment="Top" HorizontalAlignment="Right" Foreground="Red" Height="200" Width="200" Grid.Column="2" Grid.RowSpan="2">
+        <TextBlock IsHitTestVisible="False" Text="SØG ERFTER ET PRODUKT" Margin="0,70,0,0" VerticalAlignment="Top" HorizontalAlignment="Right" Foreground="Red" Height="200" Width="200" Grid.Column="1" Grid.RowSpan="2">
             <TextBlock.Style>
                 <Style TargetType="{x:Type TextBlock}">
                     <Setter Property="Visibility" Value="Collapsed"/>
