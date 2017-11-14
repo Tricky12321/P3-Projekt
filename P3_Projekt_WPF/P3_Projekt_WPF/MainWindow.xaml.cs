@@ -680,5 +680,12 @@ namespace P3_Projekt_WPF
         {
 
         }
+
+        private void btn_search_Storage_Click(object sender, RoutedEventArgs e)
+        {
+            ConcurrentDictionary<int, Product> productSearch = Utils.SearchForProduct(txtBox_SearchField_Storage.Text, _storageController.ProductDictionary, _storageController.GroupDictionary);
+            LoadProductGrid(productSearch);
+            
+        }
     }
 }
