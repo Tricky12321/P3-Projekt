@@ -109,7 +109,7 @@ namespace P3_Projekt_WPF
         {
             if (e.Key == Key.LeftCtrl || e.Key == Key.RightCtrl)
             {
-                _ctrldown = false;
+                _ctrlDown = false;
             }
         }
 
