@@ -42,12 +42,15 @@ namespace P3_Projekt_WPF
 
         Dictionary<int, ProductControl> _productControlDictionary = new Dictionary<int, ProductControl>();
 
-
-        private bool _ctrlDown = false;
         public static bool runLoading = true;
         public MainWindow()
         {
+            _storageController = new StorageController();
+            _POSController = new POSController(_storageController);
+            _settingsController = new SettingsController();
+            _statisticsController = new StatisticsController();
             InitializeComponent();
+            LoadDatabase();
             InitComponents();
 
             this.KeyDown += new KeyEventHandler(KeyboardHook);
@@ -56,7 +59,7 @@ namespace P3_Projekt_WPF
 
             int j = ServiceProduct.GetNextID();
             Debug.WriteLine("Hello World");
-            LoadDatabase();
+            
 
         }
 
@@ -106,16 +109,12 @@ namespace P3_Projekt_WPF
         {
             if (e.Key == Key.LeftCtrl || e.Key == Key.RightCtrl)
             {
-                _ctrlDown = false;
+                _ctrldown = false;
             }
         }
 
         private void InitComponents()
         {
-            _storageController = new StorageController();
-            _POSController = new POSController(_storageController);
-            _settingsController = new SettingsController();
-            _statisticsController = new StatisticsController();
             InitGridQuickButtons();
             InitStorageGridProducts();
             AddProductButton();
