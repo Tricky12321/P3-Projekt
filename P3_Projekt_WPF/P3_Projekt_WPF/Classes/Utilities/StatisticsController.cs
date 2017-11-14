@@ -31,6 +31,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
         private int _threadCount = 30;
         private int _saleTransactionsCreated = 0;
         private ConcurrentQueue<Row> _dataQueue;
+
         private void CreateThreads()
         {
             for (int i = 0; i < _threadCount; i++)
@@ -76,7 +77,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
             TransactionsForStatistics = new List<SaleTransaction>(_saleTransactions);
         }
 
-        public void RequestStatisticsToday()
+        /*public void RequestStatisticsToday()
         {
             _saleTransactionsCreated = 0;
             _saleTransactions = new ConcurrentQueue<SaleTransaction>();
@@ -114,7 +115,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
                 Thread.Sleep(5);
             }
             TransactionsForStatistics = new List<SaleTransaction>(_saleTransactions);
-        }
+        }*/
 
         public void RequestStatisticsWithParameters(string productID, string brand, Group group)
         {

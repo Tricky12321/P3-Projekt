@@ -134,16 +134,19 @@ namespace P3_Projekt_WPF.Classes.Utilities
         #region SearchAlgorithm
 
         static List<SearchProduct> weigthedSearchList;
-        public static ConcurrentDictionary<int,Product> SearchForProduct(string searchString, ConcurrentDictionary<int, Product> productDictionary, ConcurrentDictionary<int, Group> groupDictionary)
+        public static ConcurrentDictionary<int, Product> SearchForProduct(string searchString, ConcurrentDictionary<int, Product> productDictionary, ConcurrentDictionary<int, Group> groupDictionary)
         {
             weigthedSearchList = new List<SearchProduct>();
             searchString.ToLower();
-            ConcurrentDictionary<int,Product> productsToReturn = new ConcurrentDictionary<int, Product>();
+            ConcurrentDictionary<int, Product> productsToReturn = new ConcurrentDictionary<int, Product>();
             int isNumber;
 
             if (int.TryParse(searchString, out isNumber))
             {
-                productsToReturn.TryAdd(isNumber,productDictionary[isNumber]);
+                if (productDictionary.Keys.Contains(isNumber))
+                {
+                    productsToReturn.TryAdd(isNumber, productDictionary[isNumber]);
+                }
             }
 
             foreach (Product product in productDictionary.Values)
@@ -157,10 +160,10 @@ namespace P3_Projekt_WPF.Classes.Utilities
             return productsToReturn;
         }
 
-        private static void SortWeightedSearchList(ref ConcurrentDictionary<int,Product> productsToReturn)
+        private static void SortWeightedSearchList(ref ConcurrentDictionary<int, Product> productsToReturn)
         {
             weigthedSearchList.Sort();
-            foreach(SearchProduct searchproduct in weigthedSearchList.TakeWhile(x => (x.BrandMatch + x.GroupMatch + x.NameMatch) > 0))
+            foreach (SearchProduct searchproduct in weigthedSearchList.TakeWhile(x => (x.BrandMatch + x.GroupMatch + x.NameMatch) > 0))
             {
                 productsToReturn.TryAdd(searchproduct.CurrentProduct.ID, searchproduct.CurrentProduct);
             }
