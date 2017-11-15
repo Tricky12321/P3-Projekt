@@ -126,7 +126,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
                 int productID = Convert.ToInt32(Data.Values[1]);
                 int storageRoom = Convert.ToInt32(Data.Values[2]);
                 int amount = Convert.ToInt32(Data.Values[3]);
-                ProductDictionary[productID].StorageWithAmount[storageRoom] = amount;
+                ProductDictionary[productID].StorageWithAmount.TryAdd(storageRoom, amount);
 
             }
         }
@@ -376,7 +376,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
         }
 
         //Creates product with storage and stocka as keyvalue, then add the product to the list
-        public void CreateProduct(int id, string name, string brand, decimal purchasePrice, int groupID, bool discount, decimal discountPrice, decimal salePrice, Dictionary<int,int> storageWithAmount, bool UploadToDatabase = true)
+        public void CreateProduct(int id, string name, string brand, decimal purchasePrice, int groupID, bool discount, decimal discountPrice, decimal salePrice, ConcurrentDictionary<int,int> storageWithAmount, bool UploadToDatabase = true)
         {
             Product newProduct = new Product(id, name, brand, purchasePrice, groupID, discount, salePrice, discountPrice);
             newProduct.StorageWithAmount = storageWithAmount;
@@ -389,6 +389,15 @@ namespace P3_Projekt_WPF.Classes.Utilities
                 newProduct.UploadToDatabase();
             }
         }
+
+        public void UpdateProduct(int id, string name, string brand, decimal purchasePrice, int groupID, bool discount, decimal discountPrice, decimal salePrice, ConcurrentDictionary<int, int> storageWithAmount, bool UploadToDatabase = true)
+        {
+            Product newProduct = new Product(id, name, brand, purchasePrice, groupID, discount, salePrice, discountPrice);
+            newProduct.StorageWithAmount = storageWithAmount;
+            ProductDictionary[newProduct.ID] = newProduct;
+            newProduct.UpdateInDatabase();
+        }
+
 
         public void CreateServiceProduct(int id, decimal salePrice, decimal groupPrice, int groupLimit, string name, int serviceProductGroupID, bool UploadToDatabase = true)
         {
@@ -450,7 +459,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
 
             foreach (Product product in ProductDictionary.Values)
             {
-                product.StorageWithAmount.Add(newRoom.ID, 0);
+                product.StorageWithAmount.TryAdd(newRoom.ID, 0);
             }
         }
 
@@ -465,7 +474,8 @@ namespace P3_Projekt_WPF.Classes.Utilities
         {
             foreach (Product product in ProductDictionary.Values)
             {
-                product.StorageWithAmount.Remove(id);
+                int h = 0;
+                product.StorageWithAmount.TryRemove(id, out h);
                 product.UpdateInDatabase();
             }
             StorageRoom outVal = null;

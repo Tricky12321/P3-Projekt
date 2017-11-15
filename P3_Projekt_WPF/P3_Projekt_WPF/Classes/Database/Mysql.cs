@@ -98,28 +98,31 @@ namespace P3_Projekt_WPF.Classes.Database
             string Query = "";
             while (_queryTasks.TryDequeue(out Query))
             {
-                using (MySqlConnection connection = Connect())
-                {
-                    try
-                    {
-                        using (MySqlCommand cmd = connection.CreateCommand())
-                        {
-                            cmd.CommandText = Query;
-                            cmd.ExecuteScalarAsync();
-                        }
-                    }
-                    finally
-                    {
-                        Disconnect(connection);
-                    }
-                }
+                
             }
         }
 
         public static void RunQuery(string Query)
         {
-            StartQueryThreads();
-            _queryTasks.Enqueue(Query);
+            using (MySqlConnection connection = Connect())
+            {
+                try
+                {
+                    using (MySqlCommand cmd = connection.CreateCommand())
+                    {
+                        if (_debug)
+                        {
+                            Debug.WriteLine("SQL: "+Query);
+                        }
+                        cmd.CommandText = Query;
+                        cmd.ExecuteScalarAsync();
+                    }
+                }
+                finally
+                {
+                    Disconnect(connection);
+                }
+            }
         }
 
 
@@ -131,6 +134,10 @@ namespace P3_Projekt_WPF.Classes.Database
             {
                 using (MySqlCommand cmd = connection.CreateCommand())
                 {
+                    if (_debug)
+                    {
+                        Debug.WriteLine("SQL: " + Query);
+                    }
                     cmd.CommandText = Query;
                     using (MySqlDataReader Reader = cmd.ExecuteReader())
                     {

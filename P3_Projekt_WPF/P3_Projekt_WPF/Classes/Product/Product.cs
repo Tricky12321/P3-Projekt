@@ -7,6 +7,7 @@ using System.Windows.Controls;
 using P3_Projekt_WPF.Classes.Utilities;
 using P3_Projekt_WPF.Classes.Database;
 using P3_Projekt_WPF.Classes.Exceptions;
+using System.Collections.Concurrent;
 namespace P3_Projekt_WPF.Classes
 {
     public class Product : BaseProduct
@@ -21,7 +22,7 @@ namespace P3_Projekt_WPF.Classes
         private bool _active = true;
         public bool Active => _active;
         public DateTime CreatedTime;
-        public Dictionary<int, int> StorageWithAmount = new Dictionary<int, int>();
+        public ConcurrentDictionary<int, int> StorageWithAmount = new ConcurrentDictionary<int, int>();
 
 
         public Product(int id, string name, string brand, decimal purchasePrice, int groupID, bool discount, decimal salePrice, decimal discountPrice) : base(salePrice)
@@ -113,10 +114,11 @@ namespace P3_Projekt_WPF.Classes
             Brand = results.Values[2];                                      // brand
             ProductGroupID = Convert.ToInt32(results.Values[3]);            // groups
             SalePrice = Convert.ToDecimal(results.Values[4]);               // price
-            DiscountBool = Convert.ToBoolean(results.Values[5]);            // discount
-            DiscountPrice = Convert.ToDecimal(results.Values[6]);           // discount_price
-            _active = Convert.ToBoolean(results.Values[7]);                 // active
-            CreatedTime = Convert.ToDateTime(results.Values[8]);            // CreatedTime
+            PurchasePrice = Convert.ToDecimal(results.Values[5]);
+            DiscountBool = Convert.ToBoolean(results.Values[6]);            // discount
+            DiscountPrice = Convert.ToDecimal(results.Values[7]);           // discount_price
+            _active = Convert.ToBoolean(results.Values[8]);                 // active
+            CreatedTime = Convert.ToDateTime(results.Values[9]);            // CreatedTime
         }
         // Henter storage status fra databasen om hvilke lagere der har hvilket antal af produkter
         private void GetStorageStatus()
@@ -130,7 +132,7 @@ namespace P3_Projekt_WPF.Classes
                     int StorageRoomID = Convert.ToInt32(row.Values[2]);
                     int Amount = Convert.ToInt32(row.Values[3]);
                     StorageRoom storgeRoom = new StorageRoom(StorageRoomID);
-                    StorageWithAmount.Add(storgeRoom.ID, Amount);
+                    StorageWithAmount.TryAdd(storgeRoom.ID, Amount);
                 }
             }
             catch (EmptyTableException)
@@ -158,8 +160,8 @@ namespace P3_Projekt_WPF.Classes
 
         public override void UploadToDatabase()
         {
-            string sql = $"INSERT INTO `products` (`id`, `name`, `brand`, `groups`, `price`, `discount`, `discount_price`)" +
-            $"VALUES (NULL, '{Name}', '{Brand}', '{ProductGroupID}', '{SalePrice}', '{Convert.ToInt32(DiscountBool)}', '{DiscountPrice}');";
+            string sql = $"INSERT INTO `products` (`id`, `name`, `brand`, `groups`, `price`, `purchase_price` ,`discount`, `discount_price`)" +
+            $"VALUES (NULL, '{Name}', '{Brand}', '{ProductGroupID}', '{SalePrice}','{PurchasePrice}' '{Convert.ToInt32(DiscountBool)}', '{DiscountPrice}');";
             Mysql.RunQuery(sql);
             UpdateStorageStatus();
             CreatedTime = DateTime.Now;
@@ -173,7 +175,8 @@ namespace P3_Projekt_WPF.Classes
                 $"`groups` = '{ProductGroupID}'," +
                 $"`price` = '{SalePrice}'," +
                 $"`discount` = '{Convert.ToInt32(DiscountBool)}'," +
-                $"`discount_price` = '{DiscountPrice}' " +
+                $"`discount_price` = '{DiscountPrice}'," +
+                $"`purchase_price` = '{PurchasePrice}' " +
                 $"WHERE `id` = {ID};";
             Mysql.RunQuery(sql);
             UpdateStorageStatus();
