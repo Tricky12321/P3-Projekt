@@ -10,8 +10,7 @@
         Title="Børglum Kloster Lager og Salg" MinHeight="700" Height="1080" MinWidth="1366" Width="1920" Background="#FF919191" WindowState="Maximized">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="122*"/>
-            <RowDefinition Height="1243*"/>
+
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
 
@@ -219,7 +218,7 @@
                     </Grid.ColumnDefinitions>
                     <Border BorderBrush="Black" BorderThickness="1" Height="1" VerticalAlignment="Top" Margin="-34,71,-79,0" Grid.ColumnSpan="2"/>
                     <Button x:Name="btn_MoveProduct" Content="Flyt Produkt" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="250" Height="50" Style="{StaticResource Flat_Button}"/>
-                    <ScrollViewer x:Name="scroll_StorageProduct" Margin="5,81,5,5" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" Grid.Column="0"/>
+                    <ScrollViewer x:Name="scroll_StorageProduct" Margin="5,151,5,5" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" Grid.Column="0"/>
 
 
                     <Border BorderBrush="Black" BorderThickness="0" Grid.Column="1" Margin="0,77,0,0">
@@ -380,7 +379,7 @@
                     <Border BorderBrush="Black" BorderThickness="1" Height="1" VerticalAlignment="Top" Margin="-34,0,-79,0" Grid.Row="1"/>
 
 
-                    <TabControl x:Name="tab_WithSettings" TabStripPlacement="Left" Background="Transparent" Margin="0,1,0,0" Grid.Row="1">
+                    <TabControl x:Name="tab_WithSettings" TabStripPlacement="Left" Background="Transparent" Margin="0,81,0,0">
                         <TabItem Header="Salgs Indstillinger" >
                             <Grid x:Name="indstillinger_Grid" Margin="5,0">
                                 <Grid.RowDefinitions>
@@ -484,6 +483,7 @@
 
                         </TabItem>
                     </TabControl>
+                    <Border BorderBrush="Black" BorderThickness="1" Height="1" VerticalAlignment="Top" Margin="-34,71,-79,0"/>
                 </Grid>
             </TabItem>
         </TabControl>
