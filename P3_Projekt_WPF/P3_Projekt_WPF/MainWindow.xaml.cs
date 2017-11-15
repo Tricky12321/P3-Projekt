@@ -41,6 +41,7 @@ namespace P3_Projekt_WPF
 
         Dictionary<int, ProductControl> _productControlDictionary = new Dictionary<int, ProductControl>();
 
+        private bool _ctrlDown = false;
         public static bool runLoading = true;
         public MainWindow()
         {
@@ -705,11 +706,17 @@ namespace P3_Projekt_WPF
 
         private void btn_MergeTempProduct_Click(object sender, RoutedEventArgs e)
         {
+            int index = 0;
             List<TempListItem> ItemList = new List<TempListItem>();   
             if (_resolveTempProduct == null)
             {
                 _resolveTempProduct = new ResovleTempProduct();
                 _resolveTempProduct.Closed += delegate { _resolveTempProduct = null; };
+                _resolveTempProduct.MouseLeftButtonUp += delegate 
+                {
+                    index = _resolveTempProduct.listview_ProductsToMerge.SelectedIndex;
+                    _resolveTempProduct.label_TempProductInfo.Content = _storageController.TempProductList[index].Description;
+                };
             }
             var tempProducts = _storageController.TempProductList.Where(x => x.Resolved == false);
 

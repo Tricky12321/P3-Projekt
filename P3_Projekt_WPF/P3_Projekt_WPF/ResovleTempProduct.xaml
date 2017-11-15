@@ -7,42 +7,57 @@
         mc:Ignorable="d"
         Title="Ret Midlertidigt Produkt" Height="700" Width="600">
     <Grid>
-        <ListView x:Name="listview_ProductsToMerge"  MaxHeight="500" Width="auto" VerticalAlignment="Top" MouseLeftButtonUp="listview_ProductsToMerge_MouseLeftButtonUp">
+        <Button x:Name="button" Content="Button" HorizontalAlignment="Left" Margin="462,621,0,0" VerticalAlignment="Top" Width="120" Style="{StaticResource Flat_Button}" Height="38"/>
+        <TextBlock x:Name="txt_blockTempProduct" HorizontalAlignment="Left" Margin="10,359,0,0" TextWrapping="Wrap" Text="Midlertidigt Produkt:" Width="auto" FontSize="30" Height="41" VerticalAlignment="Top" />
+        <TextBlock x:Name="txt_blockMergeProduct" HorizontalAlignment="Left" Margin="10,553,0,71" TextWrapping="Wrap" Text="Sammensæt med Produkt:" Width="auto" RenderTransformOrigin="1.269,0.536" FontSize="30"/>
+        <ListView x:Name="listview_ProductsToMerge" Height="350" Margin="0,4,0,0" VerticalAlignment="Top" Grid.RowSpan="2" >
             <ListView.View>
                 <GridView>
-                    <GridView.ColumnHeaderContainerStyle>
-                        <Style>
-                            <Setter Property="UIElement.Visibility"  Value="Collapsed"/>
-                        </Style>
-                    </GridView.ColumnHeaderContainerStyle>
-                    <GridViewColumn Width="auto">
+
+                    <GridViewColumn Width="auto" Header="Description">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBlock Text="{Binding Amount}" FontSize="30"/>
+                                <TextBlock Text="{Binding Description}" FontSize="30" MaxWidth="400" TextWrapping="Wrap"/>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
 
-                    <GridViewColumn Width="auto" >
+                    <GridViewColumn Width="auto" Header="Price">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBlock Text="{Binding Description}" FontSize="30" MaxWidth="300" TextWrapping="Wrap"/>
-                            </DataTemplate>
-                        </GridViewColumn.CellTemplate>
-                    </GridViewColumn>
-
-                    <GridViewColumn Width="auto">
-                        <GridViewColumn.CellTemplate>
-                            <DataTemplate>
-                                <TextBlock Text="{Binding Price}" FontSize="30" />
+                                <TextBlock Text="{Binding Price}" FontSize="30" Width="auto" TextWrapping="Wrap"/>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
                 </GridView>
             </ListView.View>
         </ListView>
-        <Button x:Name="button" Content="Button" HorizontalAlignment="Left" Margin="459,602,0,0" VerticalAlignment="Top" Width="120" Style="{StaticResource Flat_Button}" Height="60"/>
-        <TextBlock x:Name="txt_blockTempProduct" HorizontalAlignment="Left" Margin="146,631,0,0" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top" Height="28" Width="108"/>
-        <TextBlock x:Name="txt_blockMergeProduct" HorizontalAlignment="Left" Margin="47,631,0,10" TextWrapping="Wrap" Text="TextBlock" Width="78" RenderTransformOrigin="1.269,0.536"/>
+        <Label x:Name="label_TempProductInfo" Content="Produkt Beksrivelse" Margin="10,400,10,0" VerticalAlignment="Top" Height="145" Background="White" BorderBrush="Black" BorderThickness="1" FontSize="20" Foreground="Gray" >
+            <Label.Resources>
+                <Style TargetType="Border">
+                    <Setter Property="CornerRadius" Value="8"></Setter>
+                </Style>
+            </Label.Resources>
+        </Label>
+        <TextBox Padding="10,0,0,0"  TextCompositionManager.PreviewTextInput="TextInputNoNumber" x:Name="textBox_IDToMerge" Margin="370,553,0,0" FontSize="33" HorizontalAlignment="Left" Width="50" Height="45" VerticalAlignment="Top">
+            <TextBox.Resources>
+                <Style TargetType="{x:Type Border}">
+                    <Setter Property="CornerRadius" Value="10"/>
+                </Style>
+            </TextBox.Resources>
+        </TextBox>
+        <TextBlock IsHitTestVisible="False" Text="ID" Margin="381,554,0,0" Foreground="DarkGray" FontSize="33" HorizontalAlignment="Left" Width="32" Height="45" VerticalAlignment="Top">
+            <TextBlock.Style>
+                <Style TargetType="{x:Type TextBlock}">
+                    <Setter Property="Visibility" Value="Collapsed"/>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding Text, ElementName=textBox_IDToMerge}" Value="">
+                            <Setter Property="Visibility" Value="Visible"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </TextBlock.Style>
+        </TextBlock>
+
     </Grid>
 </Window>

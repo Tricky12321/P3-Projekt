@@ -221,7 +221,7 @@
                     </Grid.ColumnDefinitions>
                     <Border BorderBrush="Black" BorderThickness="1" Height="1" VerticalAlignment="Top" Margin="-34,71,-79,0" Grid.ColumnSpan="2"/>
                     <Button x:Name="btn_MoveProduct" Content="Flyt Produkt" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="250" Height="50" Style="{StaticResource Flat_Button}"/>
-                    <ScrollViewer x:Name="scroll_StorageProduct" Margin="5,81,6,9" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled"  />
+                    <ScrollViewer x:Name="scroll_StorageProduct" Margin="0,81,10,10" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled"  />
 
 
                     <Border BorderBrush="Black" BorderThickness="0" Grid.Column="1" Margin="0,77,0,0">

@@ -24,10 +24,14 @@ namespace P3_Projekt_WPF
             InitializeComponent();
         }
 
-        private void listview_ProductsToMerge_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        private void TextInputNoNumber(object sender, TextCompositionEventArgs e)
         {
-            var ok = this.listview_ProductsToMerge.SelectedValue;
-            
+            // Only allows number in textfield
+            if (e.Text.Length > 0)
+            {
+                if (!char.IsDigit(e.Text, e.Text.Length - 1))
+                    e.Handled = true;
+            }
 
         }
     }
