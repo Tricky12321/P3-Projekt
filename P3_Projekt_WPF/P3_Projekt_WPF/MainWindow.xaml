@@ -473,6 +473,14 @@
                             <Grid>
                                 <Button Style="{StaticResource Flat_Button}" x:Name="btn_PictureFilePath" Content="Vælg billedmappe til produkter" HorizontalAlignment="Left" Margin="50,50,0,0" VerticalAlignment="Top" Width="466" Height="100" Click="btn_PictureFilePath_Click" />
                                 <Button Style="{StaticResource Flat_Button}" x:Name="btn_IcecreamID" Content="Vælg ID til is" HorizontalAlignment="Left" Margin="550,50,0,0" VerticalAlignment="Top" Width="466" Height="100" Click="btn_PictureFilePath_Click" />
+                                <Button Style="{StaticResource Flat_Button}" x:Name="btn_newStorageRoom" Content="Tilføj nyt Lagerrum" HorizontalAlignment="Left" Margin="50,0,0,310" VerticalAlignment="Bottom" Width="466" Height="100" Click="btn_PictureFilePath_Click" />
+                                <Button Style="{StaticResource Flat_Button}" x:Name="btn_editStorageRoom" Content="Rediger Lagerrum" HorizontalAlignment="Left" Margin="50,0,0,30" VerticalAlignment="Bottom" Width="466" Height="100" Click="btn_PictureFilePath_Click" />
+                                <ComboBox x:Name="comboBox_storageRoomSelect" Height="100" Margin="50,716,1133,170"/>
+                                <Border BorderBrush="Black" BorderThickness="2" HorizontalAlignment="Left" Height="380" Margin="619,578,0,0" VerticalAlignment="Top" Width="999" >
+                                    <TextBlock x:Name="textBlock_StorageDescr" TextWrapping="Wrap" Text="STORAGE ROOM BESKRIVELSE HER KOMMER SNART, I GRUPPERUMMET DEN 16 NOVEMBER 2017!" Margin="10,0,0,0" HorizontalAlignment="Left"/>
+                                </Border>
+
+
                             </Grid>
                         </TabItem>
 
