@@ -47,5 +47,10 @@ namespace P3_Projekt_WPF.Classes.Utilities
                 
             }
         }
+
+        public void SpecifyIcecreamID(int ID)
+        {
+            Properties.Settings.Default.IcecreamID = ID;
+        }
     }
 }
