@@ -344,6 +344,32 @@ namespace P3_Projekt_WPF
 
         }
 
+        public void LoadProductGrid(ConcurrentDictionary<int, SearchProduct> productDictionary)
+        {
+            productGrid.RowDefinitions.Clear();
+            productGrid.Children.Clear();
+            productGrid.Children.Add(addProductButton);
+
+            productGrid.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(380) });
+            int i = 1;
+
+            foreach (KeyValuePair<int, SearchProduct> product in productDictionary.OrderByDescending(x => x.Value.BrandMatch + x.Value.GroupMatch + x.Value.NameMatch))
+            {
+                if (i % 5 == 0)
+                {
+                    productGrid.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(380) });
+                }
+
+                ProductControl productControl = _productControlDictionary[product.Value.CurrentProduct.ID];
+                productControl.SetValue(Grid.ColumnProperty, i % 5);
+                productControl.SetValue(Grid.RowProperty, i / 5);
+
+                productGrid.Children.Add(productControl);
+                i++;
+            }
+
+        }
+
         public void LoadProductImages()
         {
             if (Directory.Exists(_settingsController.PictureFilePath))
@@ -551,8 +577,6 @@ namespace P3_Projekt_WPF
             _createTempProduct.Show();
         }
 
-
-
         private void btn_PictureFilePath_Click(object sender, RoutedEventArgs e)
         {
             _settingsController.SpecifyPictureFilePath();
@@ -652,18 +676,6 @@ namespace P3_Projekt_WPF
         }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
         private void TextInputNoNumber(object sender, TextCompositionEventArgs e)
         {
             // Only allows number in textfield
@@ -738,9 +750,8 @@ namespace P3_Projekt_WPF
 
         private void btn_search_Storage_Click(object sender, RoutedEventArgs e)
         {
-            ConcurrentDictionary<int, Product> productSearch = Utils.SearchForProduct(txtBox_SearchField_Storage.Text, _storageController.ProductDictionary, _storageController.GroupDictionary);
+            ConcurrentDictionary<int, SearchProduct> productSearch = Utils.SearchForProduct(txtBox_SearchField_Storage.Text, _storageController.ProductDictionary, _storageController.GroupDictionary);
             LoadProductGrid(productSearch);
-            
         }
 
         private void btn_IcecreamID_Click(object sender, RoutedEventArgs e)
