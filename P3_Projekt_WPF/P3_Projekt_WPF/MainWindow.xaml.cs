@@ -61,8 +61,6 @@ namespace P3_Projekt_WPF
 
         private void Windows_Loaded(object sender, RoutedEventArgs e)
         {
-            InitComponents();
-            Debug.WriteLine("Hello World");
             Thread NewThread2 = new Thread(new ThreadStart(showloadform));
             NewThread2.SetApartmentState(ApartmentState.STA);
             NewThread2.Start();
