@@ -40,7 +40,7 @@ namespace P3_Projekt_WPF
         Grid productGrid = new Grid();
 
         Dictionary<int, ProductControl> _productControlDictionary = new Dictionary<int, ProductControl>();
-
+        private bool _ctrlDown = false;
         public static bool runLoading = true;
         public MainWindow()
         {
