@@ -467,7 +467,26 @@
                         <TabItem Header="Lager Indstillinger">
                             <Grid>
                                 <Button Style="{StaticResource Flat_Button}" x:Name="btn_PictureFilePath" Content="Vælg billedmappe til produkter" HorizontalAlignment="Left" Margin="50,50,0,0" VerticalAlignment="Top" Width="466" Height="100" Click="btn_PictureFilePath_Click" />
-                                <Button Style="{StaticResource Flat_Button}" x:Name="btn_IcecreamID" Content="Vælg ID til is" HorizontalAlignment="Left" Margin="550,50,0,0" VerticalAlignment="Top" Width="466" Height="100" Click="btn_PictureFilePath_Click" />
+                                <Button Style="{StaticResource Flat_Button}" x:Name="btn_IcecreamID" Content="Gem nyt ID til is" HorizontalAlignment="Left" Margin="650,50,0,0" VerticalAlignment="Top" Width="242" Height="100" Click="btn_IcecreamID_Click" />
+                                <TextBox x:Name="textBox_IceID" TextWrapping="Wrap" Text="" TextCompositionManager.PreviewTextInput="TextInputNoNumber" FontSize="30" Width="84" Margin="561,79,0,0" HorizontalAlignment="Left" Height="50" VerticalAlignment="Top">
+                                    <TextBox.Resources>
+                                        <Style TargetType="{x:Type Border}">
+                                            <Setter Property="CornerRadius" Value="10"/>
+                                        </Style>
+                                    </TextBox.Resources>
+                                </TextBox>
+                                <TextBlock IsHitTestVisible="False" Text="ID" Margin="570,85,0,0" Foreground="DarkGray" FontSize="30" HorizontalAlignment="Left" Width="64" Height="50" VerticalAlignment="Top">
+                                    <TextBlock.Style>
+                                        <Style TargetType="{x:Type TextBlock}">
+                                            <Setter Property="Visibility" Value="Collapsed"/>
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding Text, ElementName=textBox_IceID}" Value="">
+                                                    <Setter Property="Visibility" Value="Visible"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </TextBlock.Style>
+                                </TextBlock>
                             </Grid>
                         </TabItem>
 

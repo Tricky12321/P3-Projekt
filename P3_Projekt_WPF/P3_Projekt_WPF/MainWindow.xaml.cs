@@ -759,5 +759,10 @@ namespace P3_Projekt_WPF
             ConcurrentDictionary<int, SearchProduct> productSearch = Utils.SearchForProduct(txtBox_SearchField_Storage.Text, _storageController.ProductDictionary, _storageController.GroupDictionary);
             LoadProductGrid(productSearch);
         }
+
+        private void btn_IcecreamID_Click(object sender, RoutedEventArgs e)
+        {
+            _settingsController.SpecifyIcecreamID(Int32.Parse(textBox_IceID.Text));
+        }
     }
 }
