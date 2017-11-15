@@ -10,7 +10,6 @@ namespace P3_Projekt_WPF.Classes.Utilities
 {
     public delegate void LowStorageNotification(Product product);
 
-
     public class POSController
     {
         /*
@@ -59,7 +58,9 @@ namespace P3_Projekt_WPF.Classes.Utilities
             // Der er et felt i settings og en knap i settings tab til at angive is ID, men intet er hooket up
             PlacerholderReceipt.AddTransaction(
                 new SaleTransaction(
-                new ServiceProduct(123456789, 1m,2m,3,"4",5), 6, 7));
+                    new ServiceProduct (Properties.Settings.Default.IcecreamID, price,price,0,"Is",_storageController.GroupDictionary.Values.First(x => x.Name == "Is").ID), 
+                    1, 
+                    PlacerholderReceipt.ID));
         }
 
         public void AddFreeSaleTransaction(BaseProduct product, int amount)

@@ -33,13 +33,13 @@ namespace P3_Projekt_WPF
 
     public partial class MainWindow : Window
     {
-        SettingsController _settingsController;
-        StorageController _storageController;
-        POSController _POSController;
-        StatisticsController _statisticsController;
-        Grid productGrid = new Grid();
+        private SettingsController _settingsController;
+        private StorageController _storageController;
+        private POSController _POSController;
+        private StatisticsController _statisticsController;
+        private Grid productGrid = new Grid();
 
-        Dictionary<int, ProductControl> _productControlDictionary = new Dictionary<int, ProductControl>();
+        private Dictionary<int, ProductControl> _productControlDictionary = new Dictionary<int, ProductControl>();
         private bool _ctrlDown = false;
         public static bool runLoading = true;
         public MainWindow()
@@ -61,8 +61,6 @@ namespace P3_Projekt_WPF
 
         private void Windows_Loaded(object sender, RoutedEventArgs e)
         {
-            InitComponents();
-            Debug.WriteLine("Hello World");
             Thread NewThread2 = new Thread(new ThreadStart(showloadform));
             NewThread2.SetApartmentState(ApartmentState.STA);
             NewThread2.Start();
@@ -346,6 +344,32 @@ namespace P3_Projekt_WPF
 
         }
 
+        public void LoadProductGrid(ConcurrentDictionary<int, SearchProduct> productDictionary)
+        {
+            productGrid.RowDefinitions.Clear();
+            productGrid.Children.Clear();
+            productGrid.Children.Add(addProductButton);
+
+            productGrid.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(380) });
+            int i = 1;
+
+            foreach (KeyValuePair<int, SearchProduct> product in productDictionary.OrderByDescending(x => x.Value.BrandMatch + x.Value.GroupMatch + x.Value.NameMatch))
+            {
+                if (i % 5 == 0)
+                {
+                    productGrid.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(380) });
+                }
+
+                ProductControl productControl = _productControlDictionary[product.Value.CurrentProduct.ID];
+                productControl.SetValue(Grid.ColumnProperty, i % 5);
+                productControl.SetValue(Grid.RowProperty, i / 5);
+
+                productGrid.Children.Add(productControl);
+                i++;
+            }
+
+        }
+
         public void LoadProductImages()
         {
             if (Directory.Exists(_settingsController.PictureFilePath))
@@ -553,8 +577,6 @@ namespace P3_Projekt_WPF
             _createTempProduct.Show();
         }
 
-
-
         private void btn_PictureFilePath_Click(object sender, RoutedEventArgs e)
         {
             _settingsController.SpecifyPictureFilePath();
@@ -654,18 +676,6 @@ namespace P3_Projekt_WPF
         }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
         private void TextInputNoNumber(object sender, TextCompositionEventArgs e)
         {
             // Only allows number in textfield
@@ -705,11 +715,17 @@ namespace P3_Projekt_WPF
 
         private void btn_MergeTempProduct_Click(object sender, RoutedEventArgs e)
         {
+            int index = 0;
             List<TempListItem> ItemList = new List<TempListItem>();   
             if (_resolveTempProduct == null)
             {
                 _resolveTempProduct = new ResovleTempProduct();
                 _resolveTempProduct.Closed += delegate { _resolveTempProduct = null; };
+                _resolveTempProduct.MouseLeftButtonUp += delegate 
+                {
+                    index = _resolveTempProduct.listview_ProductsToMerge.SelectedIndex;
+                    _resolveTempProduct.label_TempProductInfo.Content = _storageController.TempProductList[index].Description;
+                };
             }
             var tempProducts = _storageController.TempProductList.Where(x => x.Resolved == false);
 
@@ -740,9 +756,13 @@ namespace P3_Projekt_WPF
 
         private void btn_search_Storage_Click(object sender, RoutedEventArgs e)
         {
-            ConcurrentDictionary<int, Product> productSearch = Utils.SearchForProduct(txtBox_SearchField_Storage.Text, _storageController.ProductDictionary, _storageController.GroupDictionary);
+            ConcurrentDictionary<int, SearchProduct> productSearch = Utils.SearchForProduct(txtBox_SearchField_Storage.Text, _storageController.ProductDictionary, _storageController.GroupDictionary);
             LoadProductGrid(productSearch);
-            
+        }
+
+        private void btn_IcecreamID_Click(object sender, RoutedEventArgs e)
+        {
+            _settingsController.SpecifyIcecreamID(Int32.Parse(textBox_IceID.Text));
         }
     }
 }

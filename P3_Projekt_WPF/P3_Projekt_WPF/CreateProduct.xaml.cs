@@ -40,9 +40,12 @@ namespace P3_Projekt_WPF
 
             btn_AddPicture.Click += PickImage;
             btn_ServiceAddPicture.Click += PickImage;
-            ImageChosenEvent += (FilePath) => { image_Product.Source = new BitmapImage(new Uri(FilePath));
-                                                image_ServiceProduct.Source = new BitmapImage(new Uri(FilePath));
-                                                ChosenFilePath = FilePath; };
+            ImageChosenEvent += (FilePath) => 
+            {
+                image_Product.Source = new BitmapImage(new Uri(FilePath));
+                image_ServiceProduct.Source = new BitmapImage(new Uri(FilePath));
+                ChosenFilePath = FilePath;
+            };
             btn_AddStorageRoomWithAmount.Click += AddStorageWithAmount;
             btn_JustQuit.Click += delegate { this.Close(); };
             btn_ServiceJustQuit.Click += delegate { this.Close(); };
