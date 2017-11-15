@@ -180,7 +180,7 @@
 
                 <TextBlock x:Name="label_InputNotValid" Visibility="Hidden" Margin="97,295,97,0" FontSize="26" Height="45" Foreground="Red" Text="Ikke alle felter er udfyldt" HorizontalAlignment="Center" VerticalAlignment="Top"/>
 
-                <Button Style="{StaticResource Flat_Button}" x:Name="btn_SaveAndQuit" Content="Gem og Afslut"  FontSize="30" Grid.Column="1" Margin="0,0,10,10" Height="45" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="220"/>
+                <Button Style="{StaticResource Flat_Button}" x:Name="btn_SaveAndQuit" Content="Gem og Afslut"  FontSize="30" Grid.Column="1" Margin="0,0,10,10" Height="45" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="220" Click="btn_SaveAndQuit_Click"/>
                 <Button Style="{StaticResource Flat_Button}" x:Name="btn_JustQuit" Content="Afbryd"  FontSize="30" Grid.Column="1" Margin="10,0,0,10" Height="45" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="220"/>
             </Grid>
         </TabItem>
@@ -290,7 +290,7 @@
 
                 <TextBlock x:Name="label_ServiceInputNotValid" Visibility="Hidden" Margin="97,295,97,0" FontSize="26" Height="45" Foreground="Red" Text="Ikke alle felter er udfyldt" HorizontalAlignment="Center" VerticalAlignment="Top"/>
 
-                <Button Style="{StaticResource Flat_Button}" x:Name="btn_ServiceSaveAndQuit" Content="Gem og Afslut"  FontSize="30" Grid.Column="1" Margin="0,0,10,10" Height="45" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="220"/>
+                <Button Style="{StaticResource Flat_Button}" x:Name="btn_ServiceSaveAndQuit" Content="Gem og Afslut"  FontSize="30" Grid.Column="1" Margin="0,0,10,10" Height="45" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="220" Click="btn_ServiceSaveAndQuit_Click"/>
                 <Button Style="{StaticResource Flat_Button}" x:Name="btn_ServiceJustQuit" Content="Afbryd"  FontSize="30" Grid.Column="1" Margin="10,0,0,10" Height="45" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="220"/>
             </Grid>
         </TabItem>

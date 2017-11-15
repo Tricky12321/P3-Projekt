@@ -29,8 +29,8 @@ namespace P3_Projekt_WPF.Classes.Utilities.Tests
         {
             StorageController storageController = new StorageController();
             StorageRoom testStorage1 = new StorageRoom("3", "medium lager");
-            Dictionary<int, int> testPair = new Dictionary<int, int>();
-            testPair.Add(testStorage1.ID, 10);
+            ConcurrentDictionary<int, int> testPair = new ConcurrentDictionary<int, int>();
+            testPair.TryAdd(testStorage1.ID, 10);
             Group testGroup = new Group("drikkevarer", "wuhuu drikke");
 
             storageController.CreateProduct(9999,"mælk", "arla", 5m, testGroup.ID, false, 7m, 10m, testPair, false);
@@ -45,7 +45,7 @@ namespace P3_Projekt_WPF.Classes.Utilities.Tests
         {
             StorageController storageController = new StorageController();
             StorageRoom testStorage1 = new StorageRoom("3", "medium lager");
-            Dictionary<int, int> testPair = new Dictionary<int, int>();
+            ConcurrentDictionary<int, int> testPair = new ConcurrentDictionary<int, int>();
             Group testGroup = new Group("drikkevarer", "wuhuu drikke");
 
             storageController.CreateProduct(0, "mælk", "arla", 5m, testGroup.ID, false, 7m, 10m, testPair, false);
@@ -206,8 +206,8 @@ namespace P3_Projekt_WPF.Classes.Utilities.Tests
         {
             StorageController storageController = new StorageController();
             StorageRoom testStorage1 = new StorageRoom("3", "medium lager");
-            Dictionary<int, int> testPair = new Dictionary<int, int>();
-            testPair.Add(testStorage1.ID, 10);
+            ConcurrentDictionary<int, int> testPair = new ConcurrentDictionary<int, int>();
+            testPair.TryAdd(testStorage1.ID, 10);
             Group testGroup = new Group("drikkevarer", "wuhuu drikke");
 
             storageController.CreateProduct(1,"mælk", "arla", 5m, testGroup.ID, false, 7m, 10m, testPair, false);
@@ -236,8 +236,8 @@ namespace P3_Projekt_WPF.Classes.Utilities.Tests
         {
             StorageController storageController = new StorageController();
             StorageRoom testStorage1 = new StorageRoom("3", "medium lager");
-            Dictionary<int, int> testPair = new Dictionary<int, int>();
-            testPair.Add(testStorage1.ID, 10);
+            ConcurrentDictionary<int, int> testPair = new ConcurrentDictionary<int, int>();
+            testPair.TryAdd(testStorage1.ID, 10);
             Group testGroup = new Group("drikkevarer", "wuhuu drikke");
 
             storageController.CreateProduct(1,"mælk", "arla", 5m, testGroup.ID, false, 7m, 10m, testPair, false);
@@ -255,8 +255,8 @@ namespace P3_Projekt_WPF.Classes.Utilities.Tests
             testStorage.ID = 3;
             storageController.StorageRoomDictionary.TryAdd(testStorage.ID, testStorage);
 
-            Dictionary<int, int> testPair = new Dictionary<int, int>();
-            testPair.Add(testStorage.ID, testInput);
+            ConcurrentDictionary<int, int> testPair = new ConcurrentDictionary<int, int>();
+            testPair.TryAdd(testStorage.ID, testInput);
             Group testGroup = new Group("drikkevarer", "wuhuu drikke");
             int ProductID = 1;
             storageController.CreateProduct(ProductID, "mælk", "arla", 5m, testGroup.ID, false, 7m, 10m, testPair, false);
@@ -343,7 +343,7 @@ namespace P3_Projekt_WPF.Classes.Utilities.Tests
             storageController.ProductDictionary.TryAdd(testProduct.ID, testProduct);
             var room = new StorageRoom("test", "test");
             room.ID = 1;
-            storageController.ProductDictionary[1].StorageWithAmount.Add(room.ID, 0);
+            storageController.ProductDictionary[1].StorageWithAmount.TryAdd(room.ID, 0);
             storageController.StorageRoomDictionary.TryAdd(room.ID, room);
 
             storageController.DeleteStorageRoom(room.ID);
@@ -366,9 +366,9 @@ namespace P3_Projekt_WPF.Classes.Utilities.Tests
             storageController.ProductDictionary.TryAdd(testProduct3.ID, testProduct3);
             var room = new StorageRoom("test", "test");
             room.ID = 1;
-            storageController.ProductDictionary[1].StorageWithAmount.Add(room.ID, 0);
-            storageController.ProductDictionary[2].StorageWithAmount.Add(room.ID, 0);
-            storageController.ProductDictionary[3].StorageWithAmount.Add(room.ID, 0);
+            storageController.ProductDictionary[1].StorageWithAmount.TryAdd(room.ID, 0);
+            storageController.ProductDictionary[2].StorageWithAmount.TryAdd(room.ID, 0);
+            storageController.ProductDictionary[3].StorageWithAmount.TryAdd(room.ID, 0);
             storageController.StorageRoomDictionary.TryAdd(room.ID, room);
 
             storageController.DeleteStorageRoom(room.ID);

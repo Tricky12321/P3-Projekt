@@ -113,7 +113,7 @@ namespace P3_Projekt_WPF.Classes.Utilities.Tests
             POSController POSC = new POSController(SC);
             POSC.StartPurchase();
             SC.ProductDictionary.TryAdd(0, new Product(1,"test1", "blabla", 1.25m, 0, false, 5.0m, 3.0m));
-            SC.ProductDictionary[0].StorageWithAmount.Add(0, 9);
+            SC.ProductDictionary[0].StorageWithAmount.TryAdd(0, 9);
             POSC.PlacerholderReceipt.Transactions.Add(new SaleTransaction(SC.ProductDictionary[0], 5, 0));
 
             POSC.ExecuteReceipt();
@@ -130,9 +130,9 @@ namespace P3_Projekt_WPF.Classes.Utilities.Tests
             SC.ProductDictionary.TryAdd(0, new Product(1,"test1", "blabla", 1.25m, 0, false, 5.0m, 3.0m));
             SC.ProductDictionary.TryAdd(1, new Product(2,"test1", "blabla", 1.25m, 0, false, 5.0m, 3.0m));
             SC.ProductDictionary.TryAdd(2, new Product(3,"test1", "blabla", 1.25m, 0, false, 5.0m, 3.0m));
-            SC.ProductDictionary[0].StorageWithAmount.Add(0, 9);
-            SC.ProductDictionary[1].StorageWithAmount.Add(0, 15);
-            SC.ProductDictionary[2].StorageWithAmount.Add(0, 2);
+            SC.ProductDictionary[0].StorageWithAmount.TryAdd(0, 9);
+            SC.ProductDictionary[1].StorageWithAmount.TryAdd(0, 15);
+            SC.ProductDictionary[2].StorageWithAmount.TryAdd(0, 2);
             POSC.PlacerholderReceipt.Transactions.Add(new SaleTransaction(SC.ProductDictionary[0], 6, 0));
             POSC.PlacerholderReceipt.Transactions.Add(new SaleTransaction(SC.ProductDictionary[1], 8, 0));
             POSC.PlacerholderReceipt.Transactions.Add(new SaleTransaction(SC.ProductDictionary[2], 1, 0));
