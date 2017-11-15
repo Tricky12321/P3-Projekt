@@ -742,5 +742,10 @@ namespace P3_Projekt_WPF
             LoadProductGrid(productSearch);
             
         }
+
+        private void btn_IcecreamID_Click(object sender, RoutedEventArgs e)
+        {
+            _settingsController.SpecifyIcecreamID(Int32.Parse(textBox_IceID.Text));
+        }
     }
 }
