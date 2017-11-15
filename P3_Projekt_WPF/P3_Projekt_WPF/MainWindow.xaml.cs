@@ -33,13 +33,13 @@ namespace P3_Projekt_WPF
 
     public partial class MainWindow : Window
     {
-        SettingsController _settingsController;
-        StorageController _storageController;
-        POSController _POSController;
-        StatisticsController _statisticsController;
-        Grid productGrid = new Grid();
+        private SettingsController _settingsController;
+        private StorageController _storageController;
+        private POSController _POSController;
+        private StatisticsController _statisticsController;
+        private Grid productGrid = new Grid();
 
-        Dictionary<int, ProductControl> _productControlDictionary = new Dictionary<int, ProductControl>();
+        private Dictionary<int, ProductControl> _productControlDictionary = new Dictionary<int, ProductControl>();
         private bool _ctrlDown = false;
         public static bool runLoading = true;
         public MainWindow()
@@ -61,8 +61,6 @@ namespace P3_Projekt_WPF
 
         private void Windows_Loaded(object sender, RoutedEventArgs e)
         {
-            InitComponents();
-            Debug.WriteLine("Hello World");
             Thread NewThread2 = new Thread(new ThreadStart(showloadform));
             NewThread2.SetApartmentState(ApartmentState.STA);
             NewThread2.Start();
