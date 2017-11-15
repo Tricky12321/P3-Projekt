@@ -134,18 +134,17 @@ namespace P3_Projekt_WPF.Classes.Utilities
         #region SearchAlgorithm
 
         static List<SearchProduct> weigthedSearchList;
-        public static ConcurrentDictionary<int, Product> SearchForProduct(string searchString, ConcurrentDictionary<int, Product> productDictionary, ConcurrentDictionary<int, Group> groupDictionary)
+        public static ConcurrentDictionary<int, SearchProduct> SearchForProduct(string searchString, ConcurrentDictionary<int, Product> productDictionary, ConcurrentDictionary<int, Group> groupDictionary)
         {
             weigthedSearchList = new List<SearchProduct>();
-            searchString.ToLower();
-            ConcurrentDictionary<int, Product> productsToReturn = new ConcurrentDictionary<int, Product>();
+            ConcurrentDictionary<int, SearchProduct> productsToReturn = new ConcurrentDictionary<int, SearchProduct>();
             int isNumber;
 
             if (int.TryParse(searchString, out isNumber))
             {
                 if (productDictionary.Keys.Contains(isNumber))
                 {
-                    productsToReturn.TryAdd(isNumber, productDictionary[isNumber]);
+                    productsToReturn.TryAdd(isNumber, new SearchProduct(productDictionary[isNumber]));
                 }
             }
 
@@ -155,17 +154,16 @@ namespace P3_Projekt_WPF.Classes.Utilities
                 GroupSearch(searchString, productDictionary, groupDictionary);
                 BrandSearch(searchString, productDictionary);
             }
-            SortWeightedSearchList(ref productsToReturn);
+            TakeProductsToReturnFromWeightedList(ref productsToReturn);
 
             return productsToReturn;
         }
 
-        private static void SortWeightedSearchList(ref ConcurrentDictionary<int, Product> productsToReturn)
+        private static void TakeProductsToReturnFromWeightedList(ref ConcurrentDictionary<int, SearchProduct> productsToReturn)
         {
-            weigthedSearchList.Sort();
-            foreach (SearchProduct searchproduct in weigthedSearchList.TakeWhile(x => (x.BrandMatch + x.GroupMatch + x.NameMatch) > 0))
+            foreach (SearchProduct searchproduct in weigthedSearchList.Where(x => (x.BrandMatch + x.GroupMatch + x.NameMatch) > 0))
             {
-                productsToReturn.TryAdd(searchproduct.CurrentProduct.ID, searchproduct.CurrentProduct);
+                productsToReturn.TryAdd(searchproduct.CurrentProduct.ID, searchproduct);
             }
         }
 
@@ -174,7 +172,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
             SearchProduct productToAdd = new SearchProduct(productToConvert);
 
             string[] searchSplit = searchStringElement.Split(' ');
-            string[] productSplit = productToConvert.Name.ToLower().Split(' ');
+            string[] productSplit = productToConvert.Name.Split(' ');
 
             foreach (string s in searchSplit)
             {
@@ -189,7 +187,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
             weigthedSearchList.Add(productToAdd);
         }
 
-        private static bool LevenshteinsGroupAndProductSearch(string[] searchedString, string stringToCompare, out int charDifference)//tested
+        private static bool LevenshteinsGroupAndProductSearch(string[] searchedString, string stringToCompare, out int charDifference)
         {//setup for levenshteins
             string[] compareSplit = stringToCompare.Split(' ');
 
@@ -213,10 +211,10 @@ namespace P3_Projekt_WPF.Classes.Utilities
         }
 
 
-        private static void GroupSearch(string searchString, ConcurrentDictionary<int, Product> productDictionary, ConcurrentDictionary<int, Group> groupDictionary)//tested
+        private static void GroupSearch(string searchString, ConcurrentDictionary<int, Product> productDictionary, ConcurrentDictionary<int, Group> groupDictionary)
         {
             //divides all the elements in the string, to evaluate each element
-            string[] dividedString = searchString.ToLower().Split(' ');
+            string[] dividedString = searchString.Split(' ');
             //checking all groups to to match with the searched string elements
             foreach (Group group in groupDictionary.Values)
             {
@@ -240,10 +238,10 @@ namespace P3_Projekt_WPF.Classes.Utilities
             }
         }
 
-        private static void BrandSearch(string searchString, ConcurrentDictionary<int, Product> productDictionary)//tested
+        private static void BrandSearch(string searchString, ConcurrentDictionary<int, Product> productDictionary)
         {
             //divides all the elements in the string, to evaluate each element
-            string[] dividedString = searchString.ToLower().Split(' ');
+            string[] dividedString = searchString.Split(' ');
             //checking all products to to match the brands with the searched string elements
             foreach (Product product in productDictionary.Values)
             {
@@ -266,11 +264,11 @@ namespace P3_Projekt_WPF.Classes.Utilities
 
         private static bool LevenstheinProductSearch(string searchEle, string ProductEle)
         {
-            int charDifference = ComputeLevenshteinsDistance(searchEle, ProductEle);
+            int charDifference = ComputeLevenshteinsDistance(searchEle.ToLower(), ProductEle.ToLower());
             return EvaluateStringLimit(searchEle.Length, charDifference);
         }
 
-        private static bool EvaluateStringLimit(int searchedStringLength, int charDiff)//tested
+        private static bool EvaluateStringLimit(int searchedStringLength, int charDiff)
         {
             int limitOfChanges;
 
@@ -287,7 +285,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
             return limitOfChanges >= charDiff;
         }
 
-        private static int ComputeLevenshteinsDistance(string searchedString, string productToCompare)//tested
+        private static int ComputeLevenshteinsDistance(string searchedString, string productToCompare)
         {
             //searchString Length
             int searchStringLength = searchedString.Length;
