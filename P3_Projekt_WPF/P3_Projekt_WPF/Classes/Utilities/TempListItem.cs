@@ -8,7 +8,6 @@ namespace P3_Projekt_WPF.Classes.Utilities
 {
     class TempListItem
     {
-        public string Amount { get; set; }
         public string Description { get; set; }
         public decimal Price { get; set; }
     }
