@@ -55,14 +55,7 @@ namespace P3_Projekt_WPF
             this.KeyDown += new KeyEventHandler(KeyboardHook);
             this.KeyDown += new KeyEventHandler(CtrlHookDown);
             this.KeyUp += new KeyEventHandler(CtrlHookUp);
-            Loaded += Windows_Loaded;
 
-        }
-
-        private void Windows_Loaded(object sender, RoutedEventArgs e)
-        {
-            InitComponents();
-            LoadDatabase();
         }
 
         public void ReloadProducts()
@@ -187,10 +180,15 @@ namespace P3_Projekt_WPF
             _storageController.GetAll();
             while (!_storageController.ThreadsDone)
             {
-                Thread.Sleep(5000);
+                Thread.Sleep(10);
             }
             runLoading = false;
             TimeTester.Stop();
+            string Output = "";
+            while (_storageController.TimerStrings.TryDequeue(out Output))
+            {
+                Debug.WriteLine(Output);
+            }
             Debug.WriteLine("[P3] Det tog " + TimeTester.ElapsedMilliseconds + "ms at hente alt fra databasen");
         }
 
@@ -296,11 +294,11 @@ namespace P3_Projekt_WPF
         public void LoadProductGrid(ConcurrentDictionary<int, Product> productDictionary)
         {
             productGrid.RowDefinitions.Clear();
+            productGrid.ColumnDefinitions.Clear();
+            InitStorageGridProducts();
             productGrid.Children.Clear();
             productGrid.Children.Add(addProductButton);
 
-
-            productGrid.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(380) });
             int i = 1;
 
             foreach (KeyValuePair<int, Product> product in productDictionary.OrderBy(x => x.Key))
@@ -688,7 +686,6 @@ namespace P3_Projekt_WPF
         }
 
         ResovleTempProduct _resolveTempProduct;
-
         private void btn_MergeTempProduct_Click(object sender, RoutedEventArgs e)
         {
             int index = 0;
@@ -696,12 +693,15 @@ namespace P3_Projekt_WPF
             if (_resolveTempProduct == null)
             {
                 _resolveTempProduct = new ResovleTempProduct();
+                _resolveTempProduct.button_Merge.IsEnabled = false;
                 _resolveTempProduct.Closed += delegate { _resolveTempProduct = null; };
                 _resolveTempProduct.MouseLeftButtonUp += delegate 
                 {
                     index = _resolveTempProduct.listview_ProductsToMerge.SelectedIndex;
-                    _resolveTempProduct.label_TempProductInfo.Content = _storageController.TempProductList[index].Description;
+                    _resolveTempProduct.textBox_TempProductInfo.Text = _storageController.TempProductList[index].Description;
                 };
+                _resolveTempProduct.textBox_IDToMerge.KeyUp += delegate { IDToMerge(); };
+                _resolveTempProduct.button_Merge.Click += delegate { _storageController.MergeTempProduct(_storageController.TempProductList[index], int.Parse(_resolveTempProduct.textBox_IDToMerge.Text)); };
             }
             var tempProducts = _storageController.TempProductList.Where(x => x.Resolved == false);
 
@@ -713,6 +713,32 @@ namespace P3_Projekt_WPF
             _resolveTempProduct.listview_ProductsToMerge.ItemsSource = ItemList;
             _resolveTempProduct.Show();
             _resolveTempProduct.Activate();
+        }
+
+        private void IDToMerge()
+        {
+            int validInput = 0;
+            bool input = true;
+            if(int.TryParse(_resolveTempProduct.textBox_IDToMerge.Text, out validInput))
+            {
+                try
+                {
+                    var ok = _storageController.ProductDictionary[int.Parse(_resolveTempProduct.textBox_IDToMerge.Text)];
+                    _resolveTempProduct.Label_MergeInfo.Content = ok.Name;
+                    _resolveTempProduct.button_Merge.IsEnabled = true;
+                }
+                catch (System.Collections.Generic.KeyNotFoundException)
+                {
+                    
+                    _resolveTempProduct.Label_MergeInfo.Content = "Ugyldigt Produkt ID";
+                    _resolveTempProduct.button_Merge.IsEnabled = false;
+                }
+            }
+            else
+            {
+                _resolveTempProduct.Label_MergeInfo.Content = "Forkert Input";
+                _resolveTempProduct.button_Merge.IsEnabled = false;
+            }
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)

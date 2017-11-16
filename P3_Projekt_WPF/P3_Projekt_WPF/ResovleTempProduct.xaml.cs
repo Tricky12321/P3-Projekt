@@ -34,5 +34,10 @@ namespace P3_Projekt_WPF
             }
 
         }
+
+        private void listview_ProductsToMerge_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+        }
     }
 }
