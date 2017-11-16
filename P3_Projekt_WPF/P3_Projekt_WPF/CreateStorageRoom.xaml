@@ -1,0 +1,54 @@
+﻿<Window x:Class="P3_Projekt_WPF.CreateStorageRoom"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:P3_Projekt_WPF"
+        mc:Ignorable="d"
+        Title="CreateStorageRoom" Height="482.5" Width="956">
+    <Grid>
+        <TextBlock x:Name="label_name" HorizontalAlignment="Left" Margin="10,10,0,0" TextWrapping="Wrap" Text="Navn" FontSize="30" VerticalAlignment="Top" MinHeight="40" Height="40" Width="76"/>
+        <TextBox Padding="0,0,0,0" x:Name="textBox_Name" FontSize="30" HorizontalAlignment="Left" Height="42" MinHeight="40" Margin="190,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="280">
+            <TextBox.Resources>
+                <Style TargetType="{x:Type Border}">
+                    <Setter Property="CornerRadius" Value="10"/>
+                </Style>
+            </TextBox.Resources>
+        </TextBox>
+        <TextBlock IsHitTestVisible="False" Foreground="DarkGray" FontSize="30" HorizontalAlignment="Left" Margin="206,10,0,0" TextWrapping="Wrap" Text="Navn" VerticalAlignment="Top" Height="40" MinHeight="40" Width="228">
+            <TextBlock.Style>
+                <Style TargetType="{x:Type TextBlock}">
+                    <Setter Property="Visibility" Value="Collapsed"/>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding Text, ElementName=textBox_Name}" Value="">
+                            <Setter Property="Visibility" Value="Visible"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </TextBlock.Style>
+        </TextBlock>
+        <TextBlock x:Name="textBlock_descr" HorizontalAlignment="Left" FontSize="30" Margin="10,80,0,0" TextWrapping="Wrap" Text="Beskrivelse" VerticalAlignment="Top"/>
+        <TextBox x:Name="textBox_descr" HorizontalAlignment="Left" Height="254" Margin="190,80,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="738">
+            <TextBox.Resources>
+                <Style TargetType="{x:Type Border}">
+                    <Setter Property="CornerRadius" Value="10"/>
+                </Style>
+            </TextBox.Resources>
+        </TextBox>
+        <TextBlock IsHitTestVisible="False" Foreground="DarkGray" FontSize="30" HorizontalAlignment="Left" Margin="206,88,0,0" TextWrapping="Wrap" Text="Beskrivelse for lagerrum..." VerticalAlignment="Top">
+            <TextBlock.Style>
+                <Style TargetType="{x:Type TextBlock}">
+                    <Setter Property="Visibility" Value="Collapsed"/>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding Text, ElementName=textBox_descr}" Value="">
+                            <Setter Property="Visibility" Value="Visible"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </TextBlock.Style>
+        </TextBlock>
+
+        <Button Style="{StaticResource Flat_Button}" x:Name="btn_SaveAndQuit" Content="Gem og Afslut"  FontSize="30" Margin="0,396,10,0" Height="45" VerticalAlignment="Top" HorizontalAlignment="Right" Width="220"/>
+        <Button Style="{StaticResource Flat_Button}" x:Name="btn_JustQuit" Content="Afbryd"  FontSize="30" Margin="486,396,0,0" Height="45" VerticalAlignment="Top" HorizontalAlignment="Left" Width="220"/>
+    </Grid>
+</Window>

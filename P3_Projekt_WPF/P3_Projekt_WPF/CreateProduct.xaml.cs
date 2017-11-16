@@ -23,7 +23,7 @@ namespace P3_Projekt_WPF
     {
         public event ImageChosen ImageChosenEvent;
         public string ChosenFilePath;
-        public ConcurrentDictionary<int, int> StorageWithAmount = new ConcurrentDictionary<int, int>();
+        private ConcurrentDictionary<int, int> _storageWithAmount = new ConcurrentDictionary<int, int>();
         private ConcurrentDictionary<int, StorageRoom> _storageRooms;
         private ConcurrentDictionary<int, StorageRoom> _groups;
         private StorageController _storageController;
@@ -46,14 +46,8 @@ namespace P3_Projekt_WPF
             {
                 image_Product.Source = prod.Image.Source;
             }
-            output_ProductID.Text = prod.ID.ToString();
-            textbox_Name.Text = prod.Name;
-            textbox_PurchasePrice.Text = prod.PurchasePrice.ToString();
-            textbox_SalePrice.Text = prod.SalePrice.ToString();
-            textbox_DiscountPrice.Text = prod.DiscountPrice.ToString();
-            comboBox_Brand.Text = prod.Brand;
-            comboBox_Group.Text = storageController.GroupDictionary[prod.ProductGroupID].Name;
-            StorageWithAmount = prod.StorageWithAmount;
+            FillBoxesWithExistingProduct(prod);
+
             ReloadAddedStorageRooms();
             btn_AddPicture.Click += PickImage;
             btn_ServiceAddPicture.Click += PickImage;
@@ -66,6 +60,18 @@ namespace P3_Projekt_WPF
             btn_AddStorageRoomWithAmount.Click += AddStorageWithAmount;
             btn_JustQuit.Click += delegate { this.Close(); };
             btn_ServiceJustQuit.Click += delegate { this.Close(); };
+        }
+
+        private void FillBoxesWithExistingProduct(Product prod)
+        {
+            output_ProductID.Text = prod.ID.ToString();
+            textbox_Name.Text = prod.Name;
+            textbox_PurchasePrice.Text = prod.PurchasePrice.ToString();
+            textbox_SalePrice.Text = prod.SalePrice.ToString();
+            textbox_DiscountPrice.Text = prod.DiscountPrice.ToString();
+            comboBox_Brand.Text = prod.Brand;
+            comboBox_Group.Text = _storageController.GroupDictionary[prod.ProductGroupID].Name;
+            _storageWithAmount = prod.StorageWithAmount;
         }
 
         public CreateProduct(StorageController storageController, MainWindow MainWin)
@@ -98,7 +104,7 @@ namespace P3_Projekt_WPF
             foreach (KeyValuePair<int, StorageRoom> StorageRoom in storageRooms)
             {
                 comboBox_StorageRoom.Items.Add($"{StorageRoom.Key.ToString()} {StorageRoom.Value.Name}");
-                StorageWithAmount.TryAdd(StorageRoom.Key, 0);
+                _storageWithAmount.TryAdd(StorageRoom.Key, 0);
             }
         }
 
@@ -119,7 +125,7 @@ namespace P3_Projekt_WPF
             if (comboBox_StorageRoom.Text != "")
             {
                 int addedStorageRoomID = Int32.Parse(comboBox_StorageRoom.Text.Substring(0, comboBox_StorageRoom.Text.IndexOf(' ')));
-                StorageWithAmount[addedStorageRoomID] += textbox_Amount.Text != "" ? Int32.Parse(textbox_Amount.Text) : 0;
+                _storageWithAmount[addedStorageRoomID] += textbox_Amount.Text != "" ? Int32.Parse(textbox_Amount.Text) : 0;
             }
             ReloadAddedStorageRooms();
 
@@ -132,9 +138,9 @@ namespace P3_Projekt_WPF
 
             foreach (KeyValuePair<int, StorageRoom> storageRoom in _storageRooms)
             {
-                if (StorageWithAmount.ContainsKey(storageRoom.Key) && StorageWithAmount[storageRoom.Key] > 0)
+                if (_storageWithAmount.ContainsKey(storageRoom.Key) && _storageWithAmount[storageRoom.Key] > 0)
                 {
-                    listview_AddedStorageRooms.Items.Add(new Classes.Utilities.StorageListItem(storageRoom.Value.Name, StorageWithAmount[storageRoom.Key], storageRoom.Key));
+                    listview_AddedStorageRooms.Items.Add(new Classes.Utilities.StorageListItem(storageRoom.Value.Name, _storageWithAmount[storageRoom.Key], storageRoom.Key));
                 }
             }
         }
@@ -230,7 +236,7 @@ namespace P3_Projekt_WPF
         private void btn_DeleteStorage_Click(object sender, RoutedEventArgs e)
         {
             int IDToRemove = Convert.ToInt32((sender as Button).Tag);
-            StorageWithAmount[IDToRemove] = 0;
+            _storageWithAmount[IDToRemove] = 0;
             ReloadAddedStorageRooms();
         }
 
@@ -242,18 +248,17 @@ namespace P3_Projekt_WPF
                 // TODO: Give ability to make a service product
                 if (UpdateProductSec)
                 {
-                    UpdateProduct(this);
+                    UpdateProduct();
                     AddProductImage(this, UpdateProductID);
                     MainWin.ReloadProducts();
                 }
                 else
                 {
-                    AddProduct(this);
+                    AddProduct();
                     AddProductImage(this, Product.GetNextID());
                     MainWin.ReloadProducts();
 
                 }
-
                 this.Close();
             }
         }
@@ -266,40 +271,40 @@ namespace P3_Projekt_WPF
             }
         }
 
-        private void UpdateProduct(CreateProduct addProductWindow)
+        private void UpdateProduct()
         {
             _storageController.UpdateProduct(UpdateProductID,
-                                             addProductWindow.textbox_Name.Text,
-                                             addProductWindow.comboBox_Brand.Text,
-                                             Decimal.Parse(addProductWindow.textbox_PurchasePrice.Text),
-                                             _storageController.GroupDictionary.First(x => x.Value.Name == addProductWindow.comboBox_Group.Text).Key,
-                                             (addProductWindow.textbox_DiscountPrice.Text != "0") ? true : false,
-                                             Decimal.Parse(addProductWindow.textbox_DiscountPrice.Text),
-                                             Decimal.Parse(addProductWindow.textbox_SalePrice.Text),
-                                             addProductWindow.StorageWithAmount);
+                                             textbox_Name.Text,
+                                             comboBox_Brand.Text,
+                                             Decimal.Parse(textbox_PurchasePrice.Text),
+                                             _storageController.GroupDictionary.First(x => x.Value.Name == comboBox_Group.Text).Key,
+                                             (textbox_DiscountPrice.Text != "0") ? true : false,
+                                             Decimal.Parse(textbox_DiscountPrice.Text),
+                                             Decimal.Parse(textbox_SalePrice.Text),
+                                             _storageWithAmount);
         }
 
-        private void AddProduct(CreateProduct addProductWindow)
+        private void AddProduct()
         {
             _storageController.CreateProduct(Product.GetNextID(),
-                                             addProductWindow.textbox_Name.Text,
-                                             addProductWindow.comboBox_Brand.Text,
-                                             Decimal.Parse(addProductWindow.textbox_PurchasePrice.Text),
-                                             _storageController.GroupDictionary.First(x => x.Value.Name == addProductWindow.comboBox_Group.Text).Key,
-                                             (addProductWindow.textbox_DiscountPrice.Text != "0") ? true : false,
-                                             Decimal.Parse(addProductWindow.textbox_DiscountPrice.Text),
-                                             Decimal.Parse(addProductWindow.textbox_SalePrice.Text),
-                                             addProductWindow.StorageWithAmount);
+                                             textbox_Name.Text,
+                                             comboBox_Brand.Text,
+                                             Decimal.Parse(textbox_PurchasePrice.Text),
+                                             _storageController.GroupDictionary.First(x => x.Value.Name == comboBox_Group.Text).Key,
+                                             (textbox_DiscountPrice.Text != "0") ? true : false,
+                                             Decimal.Parse(textbox_DiscountPrice.Text),
+                                             Decimal.Parse(textbox_SalePrice.Text),
+                                             _storageWithAmount);
         }
 
-        private void AddServiceProduct(CreateProduct addProductWindow)
+        private void AddServiceProduct()
         {
             _storageController.CreateServiceProduct(ServiceProduct.GetNextID(),
-                                                    Decimal.Parse(addProductWindow.textbox_ServiceSalePrice.Text),
-                                                    Decimal.Parse(addProductWindow.textbox_ServiceGroupPrice.Text),
-                                                    Int32.Parse(addProductWindow.textbox_ServiceGroupLimit.Text),
-                                                    addProductWindow.textbox_ServiceName.Text,
-                                                    _storageController.GroupDictionary.First(X => X.Value.Name == addProductWindow.comboBox_ServiceGroup.Text).Key);
+                                                    Decimal.Parse(textbox_ServiceSalePrice.Text),
+                                                    Decimal.Parse(textbox_ServiceGroupPrice.Text),
+                                                    Int32.Parse(textbox_ServiceGroupLimit.Text),
+                                                    textbox_ServiceName.Text,
+                                                    _storageController.GroupDictionary.First(X => X.Value.Name == comboBox_ServiceGroup.Text).Key);
         }
 
         private void btn_ServiceSaveAndQuit_Click(object sender, RoutedEventArgs e)
@@ -309,7 +314,7 @@ namespace P3_Projekt_WPF
                 // TODO: Skal lige laves så det virker med service produkter.
                 //AddProductImage(this);
                 // TODO: Give ability to make a service product
-                AddProduct(this);
+                AddServiceProduct();
                 this.Close();
             }
         }
