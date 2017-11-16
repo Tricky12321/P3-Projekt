@@ -15,7 +15,7 @@
                 </Style>
             </TextBox.Resources>
         </TextBox>
-        <TextBlock IsHitTestVisible="False" Foreground="DarkGray" FontSize="30" HorizontalAlignment="Left" Margin="206,10,0,0" TextWrapping="Wrap" Text="Navn" VerticalAlignment="Top" Height="40" MinHeight="40" Width="228">
+        <TextBlock IsHitTestVisible="False" x:Name="TextBlock_name" Foreground="DarkGray" FontSize="30" HorizontalAlignment="Left" Margin="206,10,0,0" TextWrapping="Wrap" Text="Navn" VerticalAlignment="Top" Height="40" MinHeight="40" Width="228">
             <TextBlock.Style>
                 <Style TargetType="{x:Type TextBlock}">
                     <Setter Property="Visibility" Value="Collapsed"/>
@@ -28,7 +28,7 @@
             </TextBlock.Style>
         </TextBlock>
         <TextBlock x:Name="textBlock_descr" HorizontalAlignment="Left" FontSize="30" Margin="10,80,0,0" TextWrapping="Wrap" Text="Beskrivelse" VerticalAlignment="Top"/>
-        <TextBox x:Name="textBox_descr" HorizontalAlignment="Left" Height="254" Margin="190,80,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="738">
+        <TextBox x:Name="textBox_descr" FontSize="30" HorizontalAlignment="Left" Height="254" Margin="190,80,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="738">
             <TextBox.Resources>
                 <Style TargetType="{x:Type Border}">
                     <Setter Property="CornerRadius" Value="10"/>
@@ -48,7 +48,10 @@
             </TextBlock.Style>
         </TextBlock>
 
-        <Button Style="{StaticResource Flat_Button}" x:Name="btn_SaveAndQuit" Content="Gem og Afslut"  FontSize="30" Margin="0,396,10,0" Height="45" VerticalAlignment="Top" HorizontalAlignment="Right" Width="220"/>
-        <Button Style="{StaticResource Flat_Button}" x:Name="btn_JustQuit" Content="Afbryd"  FontSize="30" Margin="486,396,0,0" Height="45" VerticalAlignment="Top" HorizontalAlignment="Left" Width="220"/>
+        <TextBlock x:Name="label_StorageID" Margin="520,0,0,403" Text="Storage ID:" FontSize="24" MinHeight="24" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="118" Height="32"/>
+        <TextBlock x:Name="output_StorageID" HorizontalAlignment="Right" Margin="0,0,28,403" TextWrapping="Wrap" Text=""  FontSize="24" VerticalAlignment="Bottom" Grid.Column="1" Height="32"/>
+
+        <Button Style="{StaticResource Flat_Button}" x:Name="btn_SaveAndQuit" Content="Gem og Afslut"  FontSize="30" Margin="0,0,10,15" Height="45" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="220"/>
+        <Button Style="{StaticResource Flat_Button}" x:Name="btn_JustQuit" Content="Afbryd"  FontSize="30" Margin="480,0,0,15" Height="45" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="220"/>
     </Grid>
 </Window>
