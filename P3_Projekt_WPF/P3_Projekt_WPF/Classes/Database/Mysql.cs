@@ -28,14 +28,6 @@ namespace P3_Projekt_WPF.Classes.Database
         private static ConcurrentQueue<string> _queryTasks = new ConcurrentQueue<string>();
         private const int _queryThreadCount = 1;
 
-        private static void StartQueryThreads()
-        {
-            Thread NewThread = new Thread(new ThreadStart(RunQuery_thread));
-            NewThread.Name = "Mysql Thread";
-            NewThread.Start();
-            _queryThreads.Add(NewThread);
-        }
-
         public static void Disconnect(MySqlConnection connection)
         {
             connection.Close();
@@ -90,15 +82,6 @@ namespace P3_Projekt_WPF.Classes.Database
                         break;
                 }
                 return null;
-            }
-        }
-
-        public static void RunQuery_thread()
-        {
-            string Query = "";
-            while (_queryTasks.TryDequeue(out Query))
-            {
-                
             }
         }
 

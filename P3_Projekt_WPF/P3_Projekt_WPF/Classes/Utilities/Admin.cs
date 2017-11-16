@@ -11,9 +11,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
 
         public static void CreateNewPassword (string passwordInput)
         {
-            string pwdSaltedAndHashed = SaltAndHashPassword(passwordInput);
-
-            string setQuery = $"UPDATE `admin_password` SET `admin_password` = '{pwdSaltedAndHashed}' WHERE `id` = '1'";
+            string setQuery = $"UPDATE `admin_password` SET `admin_password` = '{SaltAndHashPassword(passwordInput)}' WHERE `id` = '1'";
             Mysql.RunQuery(setQuery);
         }
         
@@ -41,10 +39,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
             string getQuery = $"SELECT `admin_password` FROM `admin_password` WHERE `id` = '1'";
             string storedPassword = Mysql.RunQueryWithReturn(getQuery).RowData[0].Values[0];
 
-            string storedPasswordSaltedAndHashed = SaltAndHashPassword(passwordInput);
-
-            return storedPasswordSaltedAndHashed.Equals(storedPassword);
-
+            return SaltAndHashPassword(passwordInput).Equals(storedPassword);
         }
 
         public static string SaltAndHashPassword (string passwordInput)
