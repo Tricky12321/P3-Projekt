@@ -88,7 +88,7 @@ namespace P3_Projekt_WPF
 
             btn_AddPicture.Click += PickImage;
             btn_ServiceAddPicture.Click += PickImage;
-            ImageChosenEvent += (FilePath) => 
+            ImageChosenEvent += (FilePath) =>
             {
                 image_Product.Source = new BitmapImage(new Uri(FilePath));
                 image_ServiceProduct.Source = new BitmapImage(new Uri(FilePath));
@@ -113,7 +113,7 @@ namespace P3_Projekt_WPF
             using (var dialog = new System.Windows.Forms.OpenFileDialog())
             {
                 System.Windows.Forms.DialogResult result = dialog.ShowDialog();
-                if (dialog.FileName != null && dialog.FileName != "")
+                if (dialog.FileName != null && dialog.FileName.Length > 0)
                 {
                     ImageChosenEvent(dialog.FileName);
                 }
@@ -122,13 +122,22 @@ namespace P3_Projekt_WPF
 
         public void AddStorageWithAmount(object sender, RoutedEventArgs e)
         {
-            if (comboBox_StorageRoom.Text != "")
+            if (comboBox_StorageRoom.Text.Length > 0)
             {
                 int addedStorageRoomID = Int32.Parse(comboBox_StorageRoom.Text.Substring(0, comboBox_StorageRoom.Text.IndexOf(' ')));
-                _storageWithAmount[addedStorageRoomID] += textbox_Amount.Text != "" ? Int32.Parse(textbox_Amount.Text) : 0;
+                if (textbox_Amount.Text.Length > 0)
+                {
+                    if (!_storageWithAmount.ContainsKey(addedStorageRoomID))
+                    {
+                        _storageWithAmount.TryAdd(addedStorageRoomID, Convert.ToInt32(textbox_Amount.Text));
+                    }
+                    else
+                    {
+                        _storageWithAmount[addedStorageRoomID] += Convert.ToInt32(textbox_Amount.Text);
+                    }
+                }
             }
             ReloadAddedStorageRooms();
-
             textbox_Amount.Text = "";
         }
 

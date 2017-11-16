@@ -55,14 +55,7 @@ namespace P3_Projekt_WPF
             this.KeyDown += new KeyEventHandler(KeyboardHook);
             this.KeyDown += new KeyEventHandler(CtrlHookDown);
             this.KeyUp += new KeyEventHandler(CtrlHookUp);
-            Loaded += Windows_Loaded;
 
-        }
-
-        private void Windows_Loaded(object sender, RoutedEventArgs e)
-        {
-            InitComponents();
-            LoadDatabase();
         }
 
         public void ReloadProducts()
@@ -187,10 +180,15 @@ namespace P3_Projekt_WPF
             _storageController.GetAll();
             while (!_storageController.ThreadsDone)
             {
-                Thread.Sleep(5000);
+                Thread.Sleep(10);
             }
             runLoading = false;
             TimeTester.Stop();
+            string Output = "";
+            while (_storageController.TimerStrings.TryDequeue(out Output))
+            {
+                Debug.WriteLine(Output);
+            }
             Debug.WriteLine("[P3] Det tog " + TimeTester.ElapsedMilliseconds + "ms at hente alt fra databasen");
         }
 
