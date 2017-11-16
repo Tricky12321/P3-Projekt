@@ -281,15 +281,14 @@ namespace P3_Projekt_WPF
             }
         }
 
-
         public void LoadProductGrid(ConcurrentDictionary<int, Product> productDictionary)
         {
             productGrid.RowDefinitions.Clear();
+            productGrid.ColumnDefinitions.Clear();
+            InitStorageGridProducts();
             productGrid.Children.Clear();
             productGrid.Children.Add(addProductButton);
 
-
-            productGrid.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(380) });
             int i = 1;
 
             foreach (KeyValuePair<int, Product> product in productDictionary.OrderBy(x => x.Key))

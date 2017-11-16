@@ -10,7 +10,7 @@
         <Button x:Name="button" Content="Button" HorizontalAlignment="Left" Margin="462,621,0,0" VerticalAlignment="Top" Width="120" Style="{StaticResource Flat_Button}" Height="38"/>
         <TextBlock x:Name="txt_blockTempProduct" HorizontalAlignment="Left" Margin="10,359,0,0" TextWrapping="Wrap" Text="Midlertidigt Produkt:" Width="auto" FontSize="30" Height="41" VerticalAlignment="Top" />
         <TextBlock x:Name="txt_blockMergeProduct" HorizontalAlignment="Left" Margin="10,553,0,71" TextWrapping="Wrap" Text="Sammensæt med Produkt:" Width="auto" RenderTransformOrigin="1.269,0.536" FontSize="30"/>
-        <ListView x:Name="listview_ProductsToMerge" Height="350" Margin="0,4,0,0" VerticalAlignment="Top" Grid.RowSpan="2" >
+        <ListView x:Name="listview_ProductsToMerge" Height="350" Margin="0,4,0,0" VerticalAlignment="Top" Grid.RowSpan="2" SelectionChanged="listview_ProductsToMerge_SelectionChanged" >
             <ListView.View>
                 <GridView>
 
