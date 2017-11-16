@@ -235,7 +235,7 @@
                                 <RowDefinition Height="2*"/>
                             </Grid.RowDefinitions>
                             <Image x:Name="image_ChosenProduct" Margin="0,0,0,0"/>
-                            <TextBlock x:Name="textBlock_ChosenProduct" TextWrapping="Wrap" Grid.Row="1" Margin="0,0,0,0"/>
+                            <TextBlock x:Name="textBlock_ChosenProduct" TextWrapping="Wrap" Grid.Row="1" Margin="0,0.143,0.143,64"/>
                         </Grid>
                     </Border>
                     <TextBox Padding="10,0,0,0" x:Name="txtBox_SearchField_Storage" Margin="0,10,74,0" FontSize="33" HorizontalAlignment="Right" Width="503" Grid.Column="1" Height="50" VerticalAlignment="Top">
@@ -258,6 +258,7 @@
                         </TextBlock.Style>
                     </TextBlock>
                     <Button x:Name="btn_search_Storage" Content="🔎" Background="#FF767676" Margin="0,10,10,0" VerticalAlignment="Top" Height="50" Style="{StaticResource Flat_Button}" FontSize="21" HorizontalAlignment="Right" Width="50" Grid.Column="1" Click="btn_search_Storage_Click"/>
+                    <Button x:Name="btn_EditProduct" Content="Rediger Produkt" Margin="0,0,10,10.143" Style="{StaticResource Flat_Button}" Grid.Column="1" HorizontalAlignment="Right" Width="250" Height="50" VerticalAlignment="Bottom" Click="EditProductClick" Visibility="Hidden"/>
                 </Grid>
             </TabItem>
             <TabItem x:Name="tab_Statisticsc" Header="Statistik" Width="190">
@@ -494,11 +495,13 @@
                                         </Style>
                                     </TextBlock.Style>
                                 </TextBlock>
-                                <Button Style="{StaticResource Flat_Button}" x:Name="btn_newStorageRoom" Content="Tilføj nyt Lagerrum" HorizontalAlignment="Left" Margin="50,0,0,310" VerticalAlignment="Bottom" Width="466" Height="100" Click="btn_PictureFilePath_Click" />
-                                <Button Style="{StaticResource Flat_Button}" x:Name="btn_editStorageRoom" Content="Rediger Lagerrum" HorizontalAlignment="Left" Margin="50,0,0,30" VerticalAlignment="Bottom" Width="466" Height="100" Click="btn_PictureFilePath_Click" />
-                                <ComboBox x:Name="comboBox_storageRoomSelect" Height="100" Margin="50,716,1133,170"/>
-                                <Border BorderBrush="Black" BorderThickness="2" HorizontalAlignment="Left" Height="380" Margin="619,578,0,0" VerticalAlignment="Top" Width="999" >
-                                    <TextBlock x:Name="textBlock_StorageDescr" TextWrapping="Wrap" Text="STORAGE ROOM BESKRIVELSE HER KOMMER SNART, I GRUPPERUMMET DEN 16 NOVEMBER 2017!" Margin="10,0,0,0" HorizontalAlignment="Left"/>
+                                <Button Style="{StaticResource Flat_Button}" x:Name="btn_newStorageRoom" Content="Tilføj nyt Lagerrum" HorizontalAlignment="Left" Margin="50,0,0,190" VerticalAlignment="Bottom" Width="466" Height="50" Click="btn_PictureFilePath_Click" />
+                                <Button Style="{StaticResource Flat_Button}" x:Name="btn_editStorageRoom" Content="Rediger Lagerrum" HorizontalAlignment="Left" Margin="50,0,0,30" VerticalAlignment="Bottom" Width="466" Height="50" Click="btn_PictureFilePath_Click" />
+                                <ComboBox x:Name="comboBox_storageRoomSelect" Height="50" Margin="50,0,1133,109" VerticalAlignment="Bottom"/>
+                                <Border BorderBrush="Black" BorderThickness="2" HorizontalAlignment="Left" Height="230" Margin="561,0,0,10" VerticalAlignment="Bottom" Width="1048" >
+                                    <ScrollViewer>
+                                        <TextBlock x:Name="textBlock_StorageDescr" TextWrapping="Wrap" Text="STORAGE ROOM BESKRIVELSE HER KOMMER SNART, I GRUPPERUMMET DEN 16 NOVEMBER 2017!" Margin="10,8,0,-8" HorizontalAlignment="Left"/>
+                                    </ScrollViewer>
                                 </Border>
 
 

@@ -153,7 +153,6 @@ namespace P3_Projekt_WPF
 
         }
 
-
         private void UpdateReceiptList()
         {
             listView_Receipt.Items.Clear();
@@ -236,26 +235,40 @@ namespace P3_Projekt_WPF
             addProductWindow.Show();
         }
 
-     
+        private bool _firstClick = true;
+        private Product _productToEdit = null;
+        private void EditProductClick(object sender, RoutedEventArgs e)
+        {
+            CreateProduct EditProductForm = new CreateProduct(_productToEdit, _storageController, this);
+            EditProductForm.Show();
+        }
 
         private void ShowSpecificInfoProductStorage(object sender, RoutedEventArgs e)
         {
-            Debug.Print((sender as Button).Tag.ToString());
-            Product placeholder = _storageController.ProductDictionary[Convert.ToInt32((sender as Button).Tag)];
-
-            image_ChosenProduct.Source = Utils.ImageSourceForBitmap(Properties.Resources.questionmark_png);
-
-            if (placeholder.Image != null)
+            // Hvis det er første gang, skal EditProduct lige hookes op på edit product
+            if (_firstClick)
             {
-                image_ChosenProduct.Source = placeholder.Image.Source;
+                _firstClick = false;
+                btn_EditProduct.Visibility = Visibility.Visible;
             }
 
-            textBlock_ChosenProduct.Text = $"ID: {placeholder.ID}\nNavn: {placeholder.Name}\nGruppe: {_storageController.GroupDictionary[placeholder.ProductGroupID].Name}\nMærke: {placeholder.Brand}\nPris: {placeholder.SalePrice}\nTilbudspris: {placeholder.DiscountPrice}\nIndkøbspris: {placeholder.PurchasePrice}\nLagerstatus:";
-            foreach (KeyValuePair<int, int> storageWithAmount in placeholder.StorageWithAmount)
+            Debug.Print((sender as Button).Tag.ToString());
+            _productToEdit = _storageController.ProductDictionary[Convert.ToInt32((sender as Button).Tag)];
+            image_ChosenProduct.Source = Utils.ImageSourceForBitmap(Properties.Resources.questionmark_png);
+
+            if (_productToEdit.Image != null)
+            {
+                image_ChosenProduct.Source = _productToEdit.Image.Source;
+            }
+
+            textBlock_ChosenProduct.Text = $"ID: {_productToEdit.ID}\nNavn: {_productToEdit.Name}\nGruppe: {_storageController.GroupDictionary[_productToEdit.ProductGroupID].Name}\nMærke: {_productToEdit.Brand}\nPris: {_productToEdit.SalePrice}\nTilbudspris: {_productToEdit.DiscountPrice}\nIndkøbspris: {_productToEdit.PurchasePrice}\nLagerstatus:";
+            foreach (KeyValuePair<int, int> storageWithAmount in _productToEdit.StorageWithAmount)
             {
                 textBlock_ChosenProduct.Text += $"\n  - {_storageController.StorageRoomDictionary[storageWithAmount.Key].Name} har {storageWithAmount.Value} stk.";
             }
         }
+
+
 
         public void StorageTabClick(object sender, RoutedEventArgs e)
         {
@@ -266,7 +279,6 @@ namespace P3_Projekt_WPF
         {
             LoadProductGrid(_storageController.ProductDictionary);
         }
-
 
         private void LoadProductControlDictionary()
         {
@@ -280,7 +292,6 @@ namespace P3_Projekt_WPF
                 _productControlDictionary.Add(product.Value.ID, productControl);
             }
         }
-
 
         public void LoadProductGrid(ConcurrentDictionary<int, Product> productDictionary)
         {
