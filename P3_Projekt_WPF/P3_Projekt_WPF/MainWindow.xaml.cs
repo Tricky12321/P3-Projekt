@@ -153,7 +153,6 @@ namespace P3_Projekt_WPF
 
         }
 
-
         private void UpdateReceiptList()
         {
             listView_Receipt.Items.Clear();
@@ -236,26 +235,40 @@ namespace P3_Projekt_WPF
             addProductWindow.Show();
         }
 
-     
+        private bool _firstClick = true;
+        private Product _productToEdit = null;
+        private void EditProductClick(object sender, RoutedEventArgs e)
+        {
+            CreateProduct EditProductForm = new CreateProduct(_productToEdit, _storageController, this);
+            EditProductForm.Show();
+        }
 
         private void ShowSpecificInfoProductStorage(object sender, RoutedEventArgs e)
         {
-            Debug.Print((sender as Button).Tag.ToString());
-            Product placeholder = _storageController.ProductDictionary[Convert.ToInt32((sender as Button).Tag)];
-
-            image_ChosenProduct.Source = Utils.ImageSourceForBitmap(Properties.Resources.questionmark_png);
-
-            if (placeholder.Image != null)
+            // Hvis det er første gang, skal EditProduct lige hookes op på edit product
+            if (_firstClick)
             {
-                image_ChosenProduct.Source = placeholder.Image.Source;
+                _firstClick = false;
+                btn_EditProduct.Visibility = Visibility.Visible;
             }
 
-            textBlock_ChosenProduct.Text = $"ID: {placeholder.ID}\nNavn: {placeholder.Name}\nGruppe: {_storageController.GroupDictionary[placeholder.ProductGroupID].Name}\nMærke: {placeholder.Brand}\nPris: {placeholder.SalePrice}\nTilbudspris: {placeholder.DiscountPrice}\nIndkøbspris: {placeholder.PurchasePrice}\nLagerstatus:";
-            foreach (KeyValuePair<int, int> storageWithAmount in placeholder.StorageWithAmount)
+            Debug.Print((sender as Button).Tag.ToString());
+            _productToEdit = _storageController.ProductDictionary[Convert.ToInt32((sender as Button).Tag)];
+            image_ChosenProduct.Source = Utils.ImageSourceForBitmap(Properties.Resources.questionmark_png);
+
+            if (_productToEdit.Image != null)
+            {
+                image_ChosenProduct.Source = _productToEdit.Image.Source;
+            }
+
+            textBlock_ChosenProduct.Text = $"ID: {_productToEdit.ID}\nNavn: {_productToEdit.Name}\nGruppe: {_storageController.GroupDictionary[_productToEdit.ProductGroupID].Name}\nMærke: {_productToEdit.Brand}\nPris: {_productToEdit.SalePrice}\nTilbudspris: {_productToEdit.DiscountPrice}\nIndkøbspris: {_productToEdit.PurchasePrice}\nLagerstatus:";
+            foreach (KeyValuePair<int, int> storageWithAmount in _productToEdit.StorageWithAmount)
             {
                 textBlock_ChosenProduct.Text += $"\n  - {_storageController.StorageRoomDictionary[storageWithAmount.Key].Name} har {storageWithAmount.Value} stk.";
             }
         }
+
+
 
         public void StorageTabClick(object sender, RoutedEventArgs e)
         {
@@ -266,7 +279,6 @@ namespace P3_Projekt_WPF
         {
             LoadProductGrid(_storageController.ProductDictionary);
         }
-
 
         private void LoadProductControlDictionary()
         {
@@ -676,7 +688,6 @@ namespace P3_Projekt_WPF
         }
 
         ResovleTempProduct _resolveTempProduct;
-
         private void btn_MergeTempProduct_Click(object sender, RoutedEventArgs e)
         {
             int index = 0;
@@ -684,12 +695,15 @@ namespace P3_Projekt_WPF
             if (_resolveTempProduct == null)
             {
                 _resolveTempProduct = new ResovleTempProduct();
+                _resolveTempProduct.button_Merge.IsEnabled = false;
                 _resolveTempProduct.Closed += delegate { _resolveTempProduct = null; };
                 _resolveTempProduct.MouseLeftButtonUp += delegate 
                 {
                     index = _resolveTempProduct.listview_ProductsToMerge.SelectedIndex;
-                    _resolveTempProduct.label_TempProductInfo.Content = _storageController.TempProductList[index].Description;
+                    _resolveTempProduct.textBox_TempProductInfo.Text = _storageController.TempProductList[index].Description;
                 };
+                _resolveTempProduct.textBox_IDToMerge.KeyUp += delegate { IDToMerge(); };
+                _resolveTempProduct.button_Merge.Click += delegate { _storageController.MergeTempProduct(_storageController.TempProductList[index], int.Parse(_resolveTempProduct.textBox_IDToMerge.Text)); };
             }
             var tempProducts = _storageController.TempProductList.Where(x => x.Resolved == false);
 
@@ -701,6 +715,32 @@ namespace P3_Projekt_WPF
             _resolveTempProduct.listview_ProductsToMerge.ItemsSource = ItemList;
             _resolveTempProduct.Show();
             _resolveTempProduct.Activate();
+        }
+
+        private void IDToMerge()
+        {
+            int validInput = 0;
+            bool input = true;
+            if(int.TryParse(_resolveTempProduct.textBox_IDToMerge.Text, out validInput))
+            {
+                try
+                {
+                    var ok = _storageController.ProductDictionary[int.Parse(_resolveTempProduct.textBox_IDToMerge.Text)];
+                    _resolveTempProduct.Label_MergeInfo.Content = ok.Name;
+                    _resolveTempProduct.button_Merge.IsEnabled = true;
+                }
+                catch (System.Collections.Generic.KeyNotFoundException)
+                {
+                    
+                    _resolveTempProduct.Label_MergeInfo.Content = "Ugyldigt Produkt ID";
+                    _resolveTempProduct.button_Merge.IsEnabled = false;
+                }
+            }
+            else
+            {
+                _resolveTempProduct.Label_MergeInfo.Content = "Forkert Input";
+                _resolveTempProduct.button_Merge.IsEnabled = false;
+            }
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)

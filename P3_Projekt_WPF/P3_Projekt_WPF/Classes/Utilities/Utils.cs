@@ -15,7 +15,7 @@ using System.Windows;
 using System.Windows.Media.Imaging;
 using System.Threading;
 using System.Collections.Concurrent;
-
+using System.Windows.Controls;
 namespace P3_Projekt_WPF.Classes.Utilities
 {
     public static class Utils
@@ -346,5 +346,6 @@ namespace P3_Projekt_WPF.Classes.Utilities
 
             #endregion
         }
+
     }
 }
