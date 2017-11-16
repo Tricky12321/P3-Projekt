@@ -151,8 +151,8 @@ namespace P3_Projekt_WPF.Classes.Utilities
             foreach (Product product in productDictionary.Values)
             {
                 ProductSearch(searchString, product);
-                GroupSearch(searchString, productDictionary, groupDictionary);
-                BrandSearch(searchString, productDictionary);
+                GroupSearch(searchString, product, groupDictionary);
+                BrandSearch(searchString, product);
             }
             TakeProductsToReturnFromWeightedList(ref productsToReturn);
 
@@ -196,7 +196,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
                 foreach (string compareString in compareSplit)
                 {
                     //getting the chardifference between the searchedstring and the productname
-                    charDifference = ComputeLevenshteinsDistance(sString, compareString);
+                    charDifference = ComputeLevenshteinsDistance(sString.ToLower(), compareString.ToLower());
                     //Evaluate if the chardifference is in between the changelimit of the string
                     if (EvaluateStringLimit(sString.Length, charDifference))
                     {
@@ -211,55 +211,47 @@ namespace P3_Projekt_WPF.Classes.Utilities
         }
 
 
-        private static void GroupSearch(string searchString, ConcurrentDictionary<int, Product> productDictionary, ConcurrentDictionary<int, Group> groupDictionary)
+        private static void GroupSearch(string searchString, Product product, ConcurrentDictionary<int, Group> groupDictionary)
         {
             //divides all the elements in the string, to evaluate each element
             string[] dividedString = searchString.Split(' ');
-            //checking all groups to to match with the searched string elements
-            foreach (Group group in groupDictionary.Values)
+            //matching on each element in the string
+            int MatchedValue;
+            //if the string contains a name of a group, or the string is matched, each product with the same group 
+            //is added to the list of products to show.
+            if (LevenshteinsGroupAndProductSearch(dividedString, groupDictionary[product.ProductGroupID].Name, out MatchedValue))
             {
-                //matching on each element in the string
-                int MatchedValue;
-                //if the string contains a name of a group, or the string is matched, each product with the same group 
-                //is added to the list of products to show.
-                if (LevenshteinsGroupAndProductSearch(dividedString, group.Name, out MatchedValue))
+                if (weigthedSearchList.Where(x => x.CurrentProduct.ID == product.ID).Count() > 0)
                 {
-                    foreach (Product product in productDictionary.Values.Where(x => x.ProductGroupID == group.ID))
+                    if (weigthedSearchList.Where(x => x.CurrentProduct.ID == product.ID).First() != null)
                     {
-                        if (weigthedSearchList.Where(x => x.CurrentProduct.ID == product.ID).Count() > 0)
-                        {
-                            if (weigthedSearchList.Where(x => x.CurrentProduct.ID == product.ID).First() != null)
-                            {
-                                weigthedSearchList.Where(x => x.CurrentProduct.ID == product.ID).First().GroupMatch = MatchedValue;
-                            }
-                        }
+                        weigthedSearchList.Where(x => x.CurrentProduct.ID == product.ID).First().GroupMatch += 1;
                     }
                 }
             }
+
         }
 
-        private static void BrandSearch(string searchString, ConcurrentDictionary<int, Product> productDictionary)
+        private static void BrandSearch(string searchString, Product product)
         {
             //divides all the elements in the string, to evaluate each element
             string[] dividedString = searchString.Split(' ');
             //checking all products to to match the brands with the searched string elements
-            foreach (Product product in productDictionary.Values)
+            int MatchedValues;
+            //matching on each element in the string
+            //if the string contains a product brand, or the string is matched, each product with the same brand
+            //is added to the list of products to show.
+            if (LevenshteinsGroupAndProductSearch(dividedString, product.Brand, out MatchedValues))
             {
-                int MatchedValues;
-                //matching on each element in the string
-                //if the string contains a product brand, or the string is matched, each product with the same brand
-                //is added to the list of products to show.
-                if (LevenshteinsGroupAndProductSearch(dividedString, product.Brand, out MatchedValues))
+                if (weigthedSearchList.Where(x => x.CurrentProduct.ID == product.ID).Count() > 0)
                 {
-                    if (weigthedSearchList.Where(x => x.CurrentProduct.ID == product.ID).Count() > 0)
+                    if (weigthedSearchList.Where(x => x.CurrentProduct.ID == product.ID).First() != null) ;
                     {
-                        if (weigthedSearchList.Where(x => x.CurrentProduct.ID == product.ID).First() != null) ;
-                        {
-                            weigthedSearchList.Where(x => x.CurrentProduct.ID == product.ID).First().BrandMatch = MatchedValues;
-                        }
+                        weigthedSearchList.Where(x => x.CurrentProduct.ID == product.ID).First().BrandMatch += 1;
                     }
                 }
             }
+
         }
 
         private static bool LevenstheinProductSearch(string searchEle, string ProductEle)
@@ -273,14 +265,18 @@ namespace P3_Projekt_WPF.Classes.Utilities
             int limitOfChanges;
 
             // Determines how many changes is allowed, depending on how long the string is
-            if (searchedStringLength < 5)
+            if (searchedStringLength < 3)
+                limitOfChanges = 0;
+            else if (searchedStringLength < 5)
                 limitOfChanges = 1;
-            else if (searchedStringLength < 10 && searchedStringLength >= 5)
+            else if (searchedStringLength < 8)
+                limitOfChanges = 2;
+            else if (searchedStringLength < 12)
                 limitOfChanges = 3;
-            else if (searchedStringLength >= 10 && searchedStringLength < 20)
-                limitOfChanges = 6;
             else
-                limitOfChanges = 9;
+            {
+                limitOfChanges = 4;
+            }
 
             return limitOfChanges >= charDiff;
         }
@@ -344,6 +340,8 @@ namespace P3_Projekt_WPF.Classes.Utilities
                 }
             }
             //returns the value of the last coloumn and last row of the array, which is the amount that is needed to change between the words.
+            var test = d[d.GetUpperBound(0), d.GetUpperBound(1)];
+
             return d[d.GetUpperBound(0), d.GetUpperBound(1)];
 
             #endregion
