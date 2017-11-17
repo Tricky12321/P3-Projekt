@@ -396,7 +396,6 @@ namespace P3_Projekt_WPF.Classes.Utilities
         {
             TempProduct newTempProduct = new TempProduct(description, salePrice);
             TempProductList.Add(newTempProduct);
-            newTempProduct.UploadToDatabase();
             return newTempProduct;
         }
 
@@ -405,12 +404,15 @@ namespace P3_Projekt_WPF.Classes.Utilities
          * Second line subtracts the amound sold from storage*/
         public void MergeTempProduct(TempProduct tempProductToMerge, int matchedProductID)
         {
-            SaleTransaction tempProductsTransaction = tempProductToMerge.GetTempProductsSaleTransaction();
-            ProductDictionary[matchedProductID].StorageWithAmount[0] -= tempProductsTransaction.Amount;
-            tempProductsTransaction.EditSaleTransactionFromTempProduct(ProductDictionary[matchedProductID]);
             Product MergedProduct = ProductDictionary[matchedProductID];
             tempProductToMerge.Resolve(MergedProduct);
             TempProductList.Remove(tempProductToMerge);
+            SaleTransaction tempProductsTransaction = tempProductToMerge.GetTempProductsSaleTransaction();
+            var StorageRoomStatus = ProductDictionary[matchedProductID].StorageWithAmount.Where(x => x.Value >= tempProductsTransaction.Amount).OrderBy(x => x.Key).First();
+            int StorageRoomKey = StorageRoomStatus.Key;
+            int StorageRoomAmount = StorageRoomStatus.Value;
+            MergedProduct.StorageWithAmount[StorageRoomKey] = StorageRoomAmount - tempProductsTransaction.Amount;
+            MergedProduct.UpdateInDatabase();
         }
 
         public void EditTempProduct(TempProduct tempProductToEdit, string description, decimal salePrice)

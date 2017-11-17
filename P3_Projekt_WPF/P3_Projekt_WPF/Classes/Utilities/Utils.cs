@@ -20,6 +20,8 @@ namespace P3_Projekt_WPF.Classes.Utilities
 {
     public static class Utils
     {
+        public static ImageSource NoImage = Utils.ImageSourceForBitmap(Properties.Resources.questionmark_png);
+
         public static void ShowErrorWarning(string text)
         {
             MessageBox.Show(text);
@@ -129,6 +131,12 @@ namespace P3_Projekt_WPF.Classes.Utilities
                 return Imaging.CreateBitmapSourceFromHBitmap(handle, IntPtr.Zero, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
             }
             finally { DeleteObject(handle); }
+        }
+
+        public static void FixStorageStatus()
+        {
+            string sql = "DELETE FROM `storage_status` WHERE `amount` <= '0'";
+            Mysql.RunQuery(sql);
         }
 
         #region SearchAlgorithm

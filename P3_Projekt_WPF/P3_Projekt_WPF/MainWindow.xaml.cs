@@ -55,8 +55,9 @@ namespace P3_Projekt_WPF
 
             this.KeyDown += new KeyEventHandler(KeyboardHook);
             this.KeyDown += new KeyEventHandler(CtrlHookDown);
+            this.KeyDown += new KeyEventHandler(EnterKeyPressedSearch);
             this.KeyUp += new KeyEventHandler(CtrlHookUp);
-
+            this.WindowState = WindowState.Maximized;
         }
 
         public void ReloadProducts()
@@ -543,23 +544,23 @@ namespace P3_Projekt_WPF
 
         private void btn_Temporary_Click(object sender, RoutedEventArgs e)
         {
-            if (_createTempProduct == null)
-            {
-                _createTempProduct = new CreateTemporaryProduct();
-                _createTempProduct.Closed += delegate { _createTempProduct = null; };
-                _createTempProduct.btn_AddTempProduct.Click += delegate
+                if (_createTempProduct == null)
                 {
-                    string description = _createTempProduct.textbox_Description.Text;
-                    decimal price = decimal.Parse(_createTempProduct.textbox_Price.Text);
-                    int amount = int.Parse(_createTempProduct.textBox_ProductAmount.Text);
-                    TempProduct NewTemp = _storageController.CreateTempProduct(description, price);
-                    _POSController.AddSaleTransaction(NewTemp, amount);
-                    UpdateReceiptList();
-                    _createTempProduct.Close();
-                };
-            }
-            _createTempProduct.Activate();
-            _createTempProduct.Show();
+                    _createTempProduct = new CreateTemporaryProduct();
+                    _createTempProduct.Closed += delegate { _createTempProduct = null; };
+                    _createTempProduct.btn_AddTempProduct.Click += delegate
+                    {
+                        string description = _createTempProduct.textbox_Description.Text;
+                        decimal price = decimal.Parse(_createTempProduct.textbox_Price.Text);
+                        int amount = int.Parse(_createTempProduct.textBox_ProductAmount.Text);
+                        TempProduct NewTemp = _storageController.CreateTempProduct(description, price);
+                        _POSController.AddSaleTransaction(NewTemp, amount);
+                        UpdateReceiptList();
+                        _createTempProduct.Close();
+                    };
+                }
+                _createTempProduct.Activate();
+                _createTempProduct.Show();
         }
 
         private void btn_PictureFilePath_Click(object sender, RoutedEventArgs e)
@@ -672,8 +673,6 @@ namespace P3_Projekt_WPF
 
         }
 
-
-
         private void TextInputNoNumberWithComma(object sender, TextCompositionEventArgs e)
         {
             // Only allows number in textfield, also with comma
@@ -691,16 +690,21 @@ namespace P3_Projekt_WPF
             InformationGrid.UpdateLayout();
         }
 
-        private void button_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
         ResovleTempProduct _resolveTempProduct;
         private void btn_MergeTempProduct_Click(object sender, RoutedEventArgs e)
         {
+            if(_storageController.TempProductList.Where(x => x.Resolved == false).Count() > 0)
+            {
+                InitMergeWindow();
+            }
+        }
+
+        private void InitMergeWindow()
+        {
             int index = 0;
             List<TempListItem> ItemList = new List<TempListItem>();
+            var tempProducts = _storageController.TempProductList.Where(x => x.Resolved == false).ToList();
+
             if (_resolveTempProduct == null)
             {
                 _resolveTempProduct = new ResovleTempProduct();
@@ -709,14 +713,15 @@ namespace P3_Projekt_WPF
                 _resolveTempProduct.MouseLeftButtonUp += delegate
                 {
                     index = _resolveTempProduct.listview_ProductsToMerge.SelectedIndex;
-                    _resolveTempProduct.textBox_TempProductInfo.Text = _storageController.TempProductList[index].Description;
+                    _resolveTempProduct.textBox_TempProductInfo.Text = tempProducts[index].Description;
                 };
                 _resolveTempProduct.textBox_IDToMerge.KeyUp += delegate { IDToMerge(); };
-                _resolveTempProduct.button_Merge.Click += delegate { _storageController.MergeTempProduct(_storageController.TempProductList[index], int.Parse(_resolveTempProduct.textBox_IDToMerge.Text)); };
-            }
-            var tempProducts = _storageController.TempProductList.Where(x => x.Resolved == false);
+                _resolveTempProduct.button_Merge.Click += delegate {
+                    _storageController.MergeTempProduct(tempProducts[index], int.Parse(_resolveTempProduct.textBox_IDToMerge.Text));
 
-            //_resolveTempProduct.listview_ProductsToMerge.Items.Add(new { Amount = "Antal", Description = "Beskrivelse", Price = "Pris" });
+                };
+            }
+
             foreach (TempProduct tempProductsToListView in tempProducts)
             {
                 ItemList.Add(new TempListItem { Description = tempProductsToListView.Description, Price = tempProductsToListView.SalePrice });
@@ -726,7 +731,7 @@ namespace P3_Projekt_WPF
             _resolveTempProduct.Activate();
         }
 
-        private void IDToMerge()
+        private Product IDToMerge()
         {
             int validInput = 0;
             bool input = true;
@@ -734,9 +739,10 @@ namespace P3_Projekt_WPF
             {
                 try
                 {
-                    var ok = _storageController.ProductDictionary[int.Parse(_resolveTempProduct.textBox_IDToMerge.Text)];
-                    _resolveTempProduct.Label_MergeInfo.Content = ok.Name;
+                    var productToMerge = _storageController.ProductDictionary[int.Parse(_resolveTempProduct.textBox_IDToMerge.Text)];
+                    _resolveTempProduct.Label_MergeInfo.Content = productToMerge.Name;
                     _resolveTempProduct.button_Merge.IsEnabled = true;
+                    return productToMerge;
                 }
                 catch (System.Collections.Generic.KeyNotFoundException)
                 {
@@ -750,6 +756,7 @@ namespace P3_Projekt_WPF
                 _resolveTempProduct.Label_MergeInfo.Content = "Forkert Input";
                 _resolveTempProduct.button_Merge.IsEnabled = false;
             }
+            return null;
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
@@ -759,18 +766,38 @@ namespace P3_Projekt_WPF
 
         private void btn_search_Click(object sender, RoutedEventArgs e)
         {
-            Utils.SearchForProduct(txtBox_SearchField.Text, _storageController.ProductDictionary, _storageController.GroupDictionary);
+            listBox_SearchResultsSaleTab.Visibility = Visibility.Visible;
+            ConcurrentDictionary<int, SearchProduct> productSearchResults = Utils.SearchForProduct(txtBox_SearchField.Text, _storageController.ProductDictionary, _storageController.GroupDictionary);
+            listBox_SearchResultsSaleTab.Items.Clear();
+            foreach (SearchProduct product in productSearchResults.Values.OrderByDescending(x=> x.BrandMatch + x.GroupMatch + x.NameMatch))
+            {
+                var item = new ListBoxItem();
+                item.Tag = product.CurrentProduct.ID;
+                item.Content = new SaleSearchResultItemControl(product.CurrentProduct.Image, $"{product.CurrentProduct.Name}\n{product.CurrentProduct.ID}");
+                listBox_SearchResultsSaleTab.Items.Add(item);
+            } 
         }
 
-        private void btn_MergeTempProduct_Click_1(object sender, RoutedEventArgs e)
+        public void SearchFieldLostFocus(object sender, RoutedEventArgs e)
         {
+            listBox_SearchResultsSaleTab.Visibility = Visibility.Hidden;
+        }
 
+        private void EnterKeyPressedSearch(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter && txtBox_SearchField_Storage.IsFocused)
+            {
+                btn_search_Storage_Click(sender, e);
+            } else if (e.Key == Key.Enter && txtBox_SearchField.IsFocused)
+            {
+                btn_search_Click(sender, e);
+            }
         }
 
         private void btn_search_Storage_Click(object sender, RoutedEventArgs e)
         {
-            ConcurrentDictionary<int, SearchProduct> productSearch = Utils.SearchForProduct(txtBox_SearchField_Storage.Text, _storageController.ProductDictionary, _storageController.GroupDictionary);
-            LoadProductGrid(productSearch);
+            ConcurrentDictionary<int, SearchProduct> productSearchResults = Utils.SearchForProduct(txtBox_SearchField_Storage.Text, _storageController.ProductDictionary, _storageController.GroupDictionary);
+            LoadProductGrid(productSearchResults);
         }
 
         private void btn_IcecreamID_Click(object sender, RoutedEventArgs e)
@@ -825,6 +852,7 @@ namespace P3_Projekt_WPF
             _createStorageRoom.Show();
         }
 
+
         private void LoadStorageRooms()
         {
             comboBox_storageRoomSelect.Items.Clear();
@@ -866,7 +894,35 @@ namespace P3_Projekt_WPF
 
         private void btn_Cash_Click(object sender, RoutedEventArgs e)
         {
+            _POSController.PlacerholderReceipt.CashOrCard = 1;
             _POSController.ExecuteReceipt();
+            listView_Receipt.Items.Clear();
+            label_TotalPrice.Content = null;
+        }
+
+        private void btn_OpenAdmin_Click(object sender, RoutedEventArgs e)
+        {
+            new AdminValidation().Show();
+        }
+
+        private void btn_ChangePassword_Click(object sender, RoutedEventArgs e)
+        {
+            var check = new AdminValidation();
+            check.Closed += delegate
+            {
+                if (check.IsPasswordCorrect)
+                    new AdminNewPassword().Show();
+            };
+            check.Show();
+        }
+
+        private void ListBoxItem_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (_POSController.GetProductFromID(int.Parse((sender as ListBoxItem).Tag.ToString())) != null)
+            {
+                _POSController.AddSaleTransaction(_POSController.GetProductFromID(int.Parse((sender as ListBoxItem).Tag.ToString())), 1);
+                UpdateReceiptList();
+            }
         }
     }
 }
