@@ -54,8 +54,8 @@ namespace P3_Projekt_WPF
 
             this.KeyDown += new KeyEventHandler(KeyboardHook);
             this.KeyDown += new KeyEventHandler(CtrlHookDown);
+            this.KeyDown += new KeyEventHandler(EnterKeyPressedSearch);
             this.KeyUp += new KeyEventHandler(CtrlHookUp);
-
         }
 
         public void ReloadProducts()
@@ -748,7 +748,13 @@ namespace P3_Projekt_WPF
 
         private void btn_search_Click(object sender, RoutedEventArgs e)
         {
-            Utils.SearchForProduct(txtBox_SearchField.Text, _storageController.ProductDictionary, _storageController.GroupDictionary);
+            listBox_SearchResultsSaleTab.Visibility = Visibility.Visible;
+            ConcurrentDictionary<int, SearchProduct> productSearchResults = Utils.SearchForProduct(txtBox_SearchField.Text, _storageController.ProductDictionary, _storageController.GroupDictionary);
+            listBox_SearchResultsSaleTab.Items.Clear();
+            foreach (SearchProduct product in productSearchResults.Values.OrderByDescending(x=> x.BrandMatch + x.GroupMatch + x.NameMatch))
+            {
+                listBox_SearchResultsSaleTab.Items.Add(new SaleSearchResultItemControl(product.CurrentProduct.Image, product.CurrentProduct.Name));
+            } 
         }
 
         private void btn_MergeTempProduct_Click_1(object sender, RoutedEventArgs e)
@@ -756,10 +762,26 @@ namespace P3_Projekt_WPF
 
         }
 
+        public void SearchFieldLostFocus(object sender, RoutedEventArgs e)
+        {
+            listBox_SearchResultsSaleTab.Visibility = Visibility.Hidden;
+        }
+
+        private void EnterKeyPressedSearch(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter && txtBox_SearchField_Storage.IsFocused)
+            {
+                btn_search_Storage_Click(sender, e);
+            } else if (e.Key == Key.Enter && txtBox_SearchField.IsFocused)
+            {
+                btn_search_Click(sender, e);
+            }
+        }
+
         private void btn_search_Storage_Click(object sender, RoutedEventArgs e)
         {
-            ConcurrentDictionary<int, SearchProduct> productSearch = Utils.SearchForProduct(txtBox_SearchField_Storage.Text, _storageController.ProductDictionary, _storageController.GroupDictionary);
-            LoadProductGrid(productSearch);
+            ConcurrentDictionary<int, SearchProduct> productSearchResults = Utils.SearchForProduct(txtBox_SearchField_Storage.Text, _storageController.ProductDictionary, _storageController.GroupDictionary);
+            LoadProductGrid(productSearchResults);
         }
 
         private void btn_IcecreamID_Click(object sender, RoutedEventArgs e)
@@ -827,6 +849,11 @@ namespace P3_Projekt_WPF
             {
                 LoadStorageRooms();
             }
+
+        }
+
+        private void Grid_MouseDown(object sender, MouseButtonEventArgs e)
+        {
 
         }
     }
