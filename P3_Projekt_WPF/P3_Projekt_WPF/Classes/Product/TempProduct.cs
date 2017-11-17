@@ -30,6 +30,13 @@ namespace P3_Projekt_WPF.Classes
             CreateFromRow(row);
         }
 
+        public static int GetNextID()
+        {
+            string sql = "SHOW TABLE STATUS LIKE 'temp_products'";
+            TableDecode Results = Mysql.RunQueryWithReturn(sql);
+            return Convert.ToInt32(Results.RowData[0].Values[10]);
+        }
+
         public override string GetName()
         {
             return Description;
