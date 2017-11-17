@@ -23,28 +23,43 @@ namespace P3_Projekt_WPF
         public AdminNewPassword()
         {
             InitializeComponent();
-            this.passwordBox_InputPassword.PasswordChanged += new RoutedEventHandler(GreyTextRemover);
+            passwordBox_InputPassword.PasswordChanged += new RoutedEventHandler(GreyTextRemover);
+            passwordBox_InputPasswordAgain.PasswordChanged += new RoutedEventHandler(GreyTextAgainRemover);
         }
 
         private void btn_Validate_Click(object sender, RoutedEventArgs e)
         {
-            if (passwordBox_InputPassword.Password.Length > 0)
+            if (passwordBox_InputPassword.Password != passwordBox_InputPasswordAgain.Password)
+            {
+                label_InputTooShort.Visibility = Visibility.Hidden;
+                label_InputNotSame.Visibility = Visibility.Visible;
+            }
+            else if (passwordBox_InputPassword.Password.Length < 1)
+            {
+                label_InputNotSame.Visibility = Visibility.Hidden;
+                label_InputTooShort.Visibility = Visibility.Visible;
+            }
+            else
             {
                 Admin.CreateNewPassword(passwordBox_InputPassword.Password);
                 this.Close();
             }
-            else
-                label_InputNotValid.Visibility = Visibility.Visible;
         }
 
         private void GreyTextRemover(object sender, RoutedEventArgs e)
         {
             if (passwordBox_InputPassword.Password.Length == 0)
-            {
-                GreyText.Visibility = Visibility.Collapsed;
-            }
-            else
                 GreyText.Visibility = Visibility.Visible;
+            else
+                GreyText.Visibility = Visibility.Collapsed;
+        }
+        
+        private void GreyTextAgainRemover(object sender, RoutedEventArgs e)
+        {
+            if (passwordBox_InputPasswordAgain.Password.Length == 0)
+                GreyTextAgain.Visibility = Visibility.Visible;
+            else
+                GreyTextAgain.Visibility = Visibility.Collapsed;
         }
     }
 }
