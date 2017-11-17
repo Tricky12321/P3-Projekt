@@ -428,12 +428,15 @@ namespace P3_Projekt_WPF.Classes.Utilities
             {
                 product.StorageWithAmount.TryAdd(newRoom.ID, 0);
             }
+            newRoom.UploadToDatabase();
         }
 
         public void EditStorageRoom(int id, string name, string description)
         {
-            StorageRoomDictionary[id].Name = name;
-            StorageRoomDictionary[id].Description = description;
+            StorageRoom roomToEdit = StorageRoomDictionary[id];
+            roomToEdit.Name = name;
+            roomToEdit.Description = description;
+            roomToEdit.UpdateInDatabase();
         }
 
         //Removes storage room from dictionary, and all products

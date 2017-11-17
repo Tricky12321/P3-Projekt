@@ -77,47 +77,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
             TransactionsForStatistics = new List<SaleTransaction>(_saleTransactions);
         }
 
-        /*public void RequestStatisticsToday()
-        {
-            _saleTransactionsCreated = 0;
-            _saleTransactions = new ConcurrentQueue<SaleTransaction>();
-            TransactionsForStatistics = new List<SaleTransaction>();
-            DateTime today = DateTime.Now;
-
-            string requestStatisticsQuery =
-                $"SELECT * FROM `sale_transactions` WHERE FROM_UNIXTIME(`datetime`) == '{today}';";
-
-            _dataQueue = new ConcurrentQueue<Row>(Mysql.RunQueryWithReturn(requestStatisticsQuery).RowData);
-            int TransCount = _dataQueue.Count;
-            CreateThreads();
-            while (_saleTransactionsCreated != TransCount)
-            {
-                Thread.Sleep(5);
-            }
-            TransactionsForStatistics = new List<SaleTransaction>(_saleTransactions);
-        }
-
-        public void RequestStatisticsYesterday()
-        {
-            _saleTransactionsCreated = 0;
-            _saleTransactions = new ConcurrentQueue<SaleTransaction>();
-            TransactionsForStatistics = new List<SaleTransaction>();
-            DateTime yesterday = DateTime.Now.AddDays(-1);
-
-            string requestStatisticsQuery =
-                $"SELECT * FROM `sale_transactions` WHERE FROM_UNIXTIME(`datetime`) == '{yesterday}';";
-
-            _dataQueue = new ConcurrentQueue<Row>(Mysql.RunQueryWithReturn(requestStatisticsQuery).RowData);
-            int TransCount = _dataQueue.Count;
-            CreateThreads();
-            while (_saleTransactionsCreated != TransCount)
-            {
-                Thread.Sleep(5);
-            }
-            TransactionsForStatistics = new List<SaleTransaction>(_saleTransactions);
-        }*/
-
-        public void RequestStatisticsWithParameters(string productID, string brand, Group group)
+        public void FilterByParameters(string productID, string brand, Group group)
         {
             if (productID != null)
             {
