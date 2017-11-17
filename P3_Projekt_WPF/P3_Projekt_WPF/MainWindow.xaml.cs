@@ -57,6 +57,7 @@ namespace P3_Projekt_WPF
             this.KeyDown += new KeyEventHandler(CtrlHookDown);
             this.KeyDown += new KeyEventHandler(EnterKeyPressedSearch);
             this.KeyUp += new KeyEventHandler(CtrlHookUp);
+            this.WindowState = WindowState.Maximized;
         }
 
         public void ReloadProducts()
