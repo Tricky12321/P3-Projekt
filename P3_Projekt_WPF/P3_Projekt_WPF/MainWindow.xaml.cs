@@ -821,13 +821,14 @@ namespace P3_Projekt_WPF
                     _createStorageRoom.Close();
                 };
                 _createStorageRoom.btn_deleteStorageRoom.Click += delegate 
-                {
+                {/*
                     MessageBoxResult results = MessageBox.Show($"Er du sikker på at du vil slette dette lagerrum: {chosenStorage.Name} ?", "Slet lagerrum:", MessageBoxButton.YesNo, MessageBoxImage.Question);
                     if(results == MessageBoxResult.Yes)
-                    {
+                    {*/
                         _storageController.DeleteStorageRoom(storageID);
+                        LoadStorageRooms();
                         _createStorageRoom.Close();
-                    }
+                    //}
                 };
             }
             _createStorageRoom.Activate();
@@ -836,7 +837,7 @@ namespace P3_Projekt_WPF
 
         private void LoadStorageRooms()
         {
-            comboBox_storageRoomSelect.Items.Clear();
+           comboBox_storageRoomSelect.Items.Clear();
             foreach (KeyValuePair<int, StorageRoom> StorageRoom in _storageController.StorageRoomDictionary)
             {
                 comboBox_storageRoomSelect.Items.Add($"{StorageRoom.Key.ToString()} {StorageRoom.Value.Name}");
@@ -853,6 +854,8 @@ namespace P3_Projekt_WPF
             }
 
         }
+
+        
 
         private void btn_Cash_Click(object sender, RoutedEventArgs e)
         {
