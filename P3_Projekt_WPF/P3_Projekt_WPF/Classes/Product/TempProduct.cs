@@ -53,7 +53,7 @@ namespace P3_Projekt_WPF.Classes
         {
             if (Resolved)
             {
-                string sql = $"SELECT * FROM `sale_transactions` WHERE `product_type` = 'temp_products' AND `product_id` = '{this.ResolvedProductID}'";
+                string sql = $"SELECT * FROM `sale_transactions` WHERE `product_type` = 'temp_products' AND `product_id` = '{this.ID}'";
                 TableDecode getTransaction = Mysql.RunQueryWithReturn(sql);
                 SaleTransaction saleTrans = new SaleTransaction(getTransaction.RowData[0]);
                 return saleTrans;
