@@ -446,8 +446,9 @@ namespace P3_Projekt_WPF.Classes.Utilities
             {
                 int h = 0;
                 product.StorageWithAmount.TryRemove(id, out h);
-                product.UpdateInDatabase();
             }
+            string sql = $"DELETE FROM `storage_status` where `storageroom` == '{id}'";
+            Mysql.RunQuery(sql);
             StorageRoom outVal = null;
             StorageRoomDictionary.TryRemove(id, out outVal);
             string deleteQuery = $"DELETE FROM `storagerooms` WHERE `id` = '{id}'";
