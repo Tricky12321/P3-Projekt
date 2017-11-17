@@ -497,8 +497,8 @@
                                 </TextBlock>
                                 <Button Style="{StaticResource Flat_Button}" x:Name="btn_newStorageRoom" Content="Tilføj nyt Lagerrum" HorizontalAlignment="Left" Margin="50,0,0,190" VerticalAlignment="Bottom" Width="466" Height="50" Click="btn_newStorageRoom_Click" />
                                 <Button Style="{StaticResource Flat_Button}" x:Name="btn_editStorageRoom" Content="Rediger Lagerrum" HorizontalAlignment="Left" Margin="50,0,0,30" VerticalAlignment="Bottom" Width="466" Height="50" Click="btn_editStorageRoom_Click" />
-                                <ComboBox x:Name="comboBox_storageRoomSelect" Height="50" Margin="50,0,1133,109" VerticalAlignment="Bottom"/>
-                                <Border BorderBrush="Black" BorderThickness="2" HorizontalAlignment="Left" Height="230" Margin="561,0,0,10" VerticalAlignment="Bottom" Width="1048" >
+                                <ComboBox x:Name="comboBox_storageRoomSelect" Height="50" Margin="50,0,0,109" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="466" FontSize="30" IsSynchronizedWithCurrentItem="True"/>
+                                <Border BorderBrush="Black" BorderThickness="2" HorizontalAlignment="Right" Height="230" Margin="0,0,15,10" VerticalAlignment="Bottom" Width="1073" >
                                     <ScrollViewer>
                                         <TextBlock x:Name="textBlock_StorageDescr" TextWrapping="Wrap" Text="STORAGE ROOM BESKRIVELSE HER KOMMER SNART, I GRUPPERUMMET DEN 16 NOVEMBER 2017!" Margin="10,8,0,-8" HorizontalAlignment="Left"/>
                                     </ScrollViewer>

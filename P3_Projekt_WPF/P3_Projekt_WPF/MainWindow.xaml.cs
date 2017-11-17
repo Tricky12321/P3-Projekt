@@ -767,20 +767,20 @@ namespace P3_Projekt_WPF
             _settingsController.SpecifyIcecreamID(Int32.Parse(textBox_IceID.Text));
         }
 
-        CreateStorageRoom _createStorageRoom;//mangler at ordne på buttons at comboboxen bliver opdateret.
+        CreateStorageRoom _createStorageRoom;
         private void btn_newStorageRoom_Click(object sender, RoutedEventArgs e)
         {
             if (_createStorageRoom == null)
             {
                 _createStorageRoom = new CreateStorageRoom();
                 _createStorageRoom.Closed += delegate { _createStorageRoom = null; };
-                _createStorageRoom.btn_JustQuit.Click += delegate { _createStorageRoom = null; };
+                _createStorageRoom.btn_JustQuit.Click += delegate { _createStorageRoom.Close(); _createStorageRoom = null;};
                 _createStorageRoom.btn_SaveAndQuit.Click += delegate
                 {
-                    string storageRoomName = _createStorageRoom.TextBlock_name.Text;
-                    string storageRoomDescr = _createStorageRoom.textBlock_descr.Text;
-                    StorageRoom newStorageRoom = new StorageRoom(storageRoomName, storageRoomDescr);
-                    //LoadStorageRooms();
+                    string storageRoomName = _createStorageRoom.textBox_Name.Text;
+                    string storageRoomDescr = _createStorageRoom.textBox_descr.Text;
+                    _storageController.CreateStorageRoom(storageRoomName, storageRoomDescr);
+                    LoadStorageRooms();
                     _createStorageRoom.Close();
                 };
             }
@@ -795,17 +795,17 @@ namespace P3_Projekt_WPF
             if (_createStorageRoom == null)
             {
                 _createStorageRoom = new CreateStorageRoom();
-                _createStorageRoom.TextBlock_name.Text = chosenStorage.Name;
-                _createStorageRoom.textBlock_descr.Text = chosenStorage.Description;
+                _createStorageRoom.textBox_Name.Text = chosenStorage.Name;
+                _createStorageRoom.textBox_descr.Text = chosenStorage.Description;
                 _createStorageRoom.output_StorageID.Text = chosenStorage.ID.ToString();
                 _createStorageRoom.Closed += delegate { _createStorageRoom = null; };
-                _createStorageRoom.btn_JustQuit.Click += delegate { _createStorageRoom = null; };
+                _createStorageRoom.btn_JustQuit.Click += delegate { _createStorageRoom.Close(); _createStorageRoom = null; };
                 _createStorageRoom.btn_SaveAndQuit.Click += delegate
                 {
-                    string storageRoomName = _createStorageRoom.TextBlock_name.Text;
-                    string storageRoomDescr = _createStorageRoom.textBlock_descr.Text;
-                    StorageRoom newStorageRoom = new StorageRoom(storageRoomName, storageRoomDescr);
-                    //LoadStorageRooms();
+                    string storageRoomName = _createStorageRoom.textBox_Name.Text;
+                    string storageRoomDescr = _createStorageRoom.textBox_descr.Text;
+                    _storageController.EditStorageRoom(storageID, storageRoomName, storageRoomDescr);
+                    LoadStorageRooms();
                     _createStorageRoom.Close();
                 };
             }
@@ -815,17 +815,20 @@ namespace P3_Projekt_WPF
 
         private void LoadStorageRooms()
         {
+            comboBox_storageRoomSelect.Items.Clear();
             foreach (KeyValuePair<int, StorageRoom> StorageRoom in _storageController.StorageRoomDictionary)
             {
                 comboBox_storageRoomSelect.Items.Add($"{StorageRoom.Key.ToString()} {StorageRoom.Value.Name}");
             }
         }
 
+        private bool firstLoad = true;
         private void TabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (settingsTab.IsSelected)
+            if (settingsTab.IsSelected && firstLoad)
             {
                 LoadStorageRooms();
+                firstLoad = false;
             }
 
         }
