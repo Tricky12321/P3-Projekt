@@ -404,12 +404,12 @@ namespace P3_Projekt_WPF.Classes.Utilities
          * Second line subtracts the amound sold from storage*/
         public void MergeTempProduct(TempProduct tempProductToMerge, int matchedProductID)
         {
-            SaleTransaction tempProductsTransaction = tempProductToMerge.GetTempProductsSaleTransaction();
-            ProductDictionary[matchedProductID].StorageWithAmount[0] -= tempProductsTransaction.Amount;
-            tempProductsTransaction.EditSaleTransactionFromTempProduct(ProductDictionary[matchedProductID]);
             Product MergedProduct = ProductDictionary[matchedProductID];
             tempProductToMerge.Resolve(MergedProduct);
             TempProductList.Remove(tempProductToMerge);
+            SaleTransaction tempProductsTransaction = tempProductToMerge.GetTempProductsSaleTransaction();
+            ProductDictionary[matchedProductID].StorageWithAmount[1] -= tempProductsTransaction.Amount;
+            tempProductsTransaction.EditSaleTransactionFromTempProduct(ProductDictionary[matchedProductID]);
         }
 
         public void EditTempProduct(TempProduct tempProductToEdit, string description, decimal salePrice)
