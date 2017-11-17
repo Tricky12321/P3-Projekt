@@ -767,8 +767,8 @@ namespace P3_Projekt_WPF
         {
             _settingsController.SpecifyIcecreamID(Int32.Parse(textBox_IceID.Text));
         }
-
-        CreateStorageRoom _createStorageRoom;
+        
+        CreateStorageRoom _createStorageRoom;//mangler at ordne på buttons at comboboxen bliver opdateret.
         private void btn_newStorageRoom_Click(object sender, RoutedEventArgs e)
         {
             if (_createStorageRoom == null)
@@ -796,6 +796,7 @@ namespace P3_Projekt_WPF
             if (_createStorageRoom == null)
             {
                 _createStorageRoom = new CreateStorageRoom();
+                _createStorageRoom.btn_deleteStorageRoom.Visibility = Visibility.Visible;
                 _createStorageRoom.textBox_Name.Text = chosenStorage.Name;
                 _createStorageRoom.textBox_descr.Text = chosenStorage.Description;
                 _createStorageRoom.output_StorageID.Text = chosenStorage.ID.ToString();
@@ -809,6 +810,7 @@ namespace P3_Projekt_WPF
                     LoadStorageRooms();
                     _createStorageRoom.Close();
                 };
+                _createStorageRoom.btn_deleteStorageRoom.Click += delegate { };
             }
             _createStorageRoom.Activate();
             _createStorageRoom.Show();
@@ -832,6 +834,11 @@ namespace P3_Projekt_WPF
                 firstLoad = false;
             }
 
+        }
+
+        private void btn_Cash_Click(object sender, RoutedEventArgs e)
+        {
+            _POSController.ExecuteReceipt();
         }
     }
 }
