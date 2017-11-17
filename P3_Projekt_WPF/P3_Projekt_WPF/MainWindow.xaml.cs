@@ -221,7 +221,7 @@ namespace P3_Projekt_WPF
                     LoadProductImages();
                 }
             };
-            
+
             addProductWindow.btn_ServiceSaveAndQuit.Click += delegate
             {
                 if (addProductWindow.IsServiceProductInputValid())
@@ -229,7 +229,7 @@ namespace P3_Projekt_WPF
                     LoadProductImages();
                 }
             };
-            
+
             addProductWindow.Show();
         }
 
@@ -577,7 +577,7 @@ namespace P3_Projekt_WPF
             ResetStatisticsView();
 
             string id = null;
-            if(textBox_StatisticsProductID.Text.Length > 0)
+            if (textBox_StatisticsProductID.Text.Length > 0)
             {
                 id = textBox_StatisticsProductID.Text;
             }
@@ -595,7 +595,7 @@ namespace P3_Projekt_WPF
             _statisticsController.RequestStatisticsWithParameters(id, brand, group);
 
             DisplayStatistics();
-            if(_statisticsController.TransactionsForStatistics.Count == 0)
+            if (_statisticsController.TransactionsForStatistics.Count == 0)
             {
                 label_NoTransactions.Visibility = Visibility.Visible;
             }
@@ -689,13 +689,13 @@ namespace P3_Projekt_WPF
         private void btn_MergeTempProduct_Click(object sender, RoutedEventArgs e)
         {
             int index = 0;
-            List<TempListItem> ItemList = new List<TempListItem>();   
+            List<TempListItem> ItemList = new List<TempListItem>();
             if (_resolveTempProduct == null)
             {
                 _resolveTempProduct = new ResovleTempProduct();
                 _resolveTempProduct.button_Merge.IsEnabled = false;
                 _resolveTempProduct.Closed += delegate { _resolveTempProduct = null; };
-                _resolveTempProduct.MouseLeftButtonUp += delegate 
+                _resolveTempProduct.MouseLeftButtonUp += delegate
                 {
                     index = _resolveTempProduct.listview_ProductsToMerge.SelectedIndex;
                     _resolveTempProduct.textBox_TempProductInfo.Text = _storageController.TempProductList[index].Description;
@@ -708,7 +708,7 @@ namespace P3_Projekt_WPF
             //_resolveTempProduct.listview_ProductsToMerge.Items.Add(new { Amount = "Antal", Description = "Beskrivelse", Price = "Pris" });
             foreach (TempProduct tempProductsToListView in tempProducts)
             {
-                ItemList.Add(new TempListItem { Description = tempProductsToListView.Description, Price = tempProductsToListView.SalePrice }); 
+                ItemList.Add(new TempListItem { Description = tempProductsToListView.Description, Price = tempProductsToListView.SalePrice });
             }
             _resolveTempProduct.listview_ProductsToMerge.ItemsSource = ItemList;
             _resolveTempProduct.Show();
@@ -765,6 +765,69 @@ namespace P3_Projekt_WPF
         private void btn_IcecreamID_Click(object sender, RoutedEventArgs e)
         {
             _settingsController.SpecifyIcecreamID(Int32.Parse(textBox_IceID.Text));
+        }
+
+        CreateStorageRoom _createStorageRoom;//mangler at ordne på buttons at comboboxen bliver opdateret.
+        private void btn_newStorageRoom_Click(object sender, RoutedEventArgs e)
+        {
+            if (_createStorageRoom == null)
+            {
+                _createStorageRoom = new CreateStorageRoom();
+                _createStorageRoom.Closed += delegate { _createStorageRoom = null; };
+                _createStorageRoom.btn_JustQuit.Click += delegate { _createStorageRoom = null; };
+                _createStorageRoom.btn_SaveAndQuit.Click += delegate
+                {
+                    string storageRoomName = _createStorageRoom.TextBlock_name.Text;
+                    string storageRoomDescr = _createStorageRoom.textBlock_descr.Text;
+                    StorageRoom newStorageRoom = new StorageRoom(storageRoomName, storageRoomDescr);
+                    //LoadStorageRooms();
+                    _createStorageRoom.Close();
+                };
+            }
+            _createStorageRoom.Activate();
+            _createStorageRoom.Show();
+        }
+
+        private void btn_editStorageRoom_Click(object sender, RoutedEventArgs e)
+        {
+            int storageID = Convert.ToInt32(comboBox_storageRoomSelect.Text.Split(' ').First());
+            StorageRoom chosenStorage = _storageController.StorageRoomDictionary[storageID];
+            if (_createStorageRoom == null)
+            {
+                _createStorageRoom = new CreateStorageRoom();
+                _createStorageRoom.TextBlock_name.Text = chosenStorage.Name;
+                _createStorageRoom.textBlock_descr.Text = chosenStorage.Description;
+                _createStorageRoom.output_StorageID.Text = chosenStorage.ID.ToString();
+                _createStorageRoom.Closed += delegate { _createStorageRoom = null; };
+                _createStorageRoom.btn_JustQuit.Click += delegate { _createStorageRoom = null; };
+                _createStorageRoom.btn_SaveAndQuit.Click += delegate
+                {
+                    string storageRoomName = _createStorageRoom.TextBlock_name.Text;
+                    string storageRoomDescr = _createStorageRoom.textBlock_descr.Text;
+                    StorageRoom newStorageRoom = new StorageRoom(storageRoomName, storageRoomDescr);
+                    //LoadStorageRooms();
+                    _createStorageRoom.Close();
+                };
+            }
+            _createStorageRoom.Activate();
+            _createStorageRoom.Show();
+        }
+
+        private void LoadStorageRooms()
+        {
+            foreach (KeyValuePair<int, StorageRoom> StorageRoom in _storageController.StorageRoomDictionary)
+            {
+                comboBox_storageRoomSelect.Items.Add($"{StorageRoom.Key.ToString()} {StorageRoom.Value.Name}");
+            }
+        }
+
+        private void TabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (settingsTab.IsSelected)
+            {
+                LoadStorageRooms();
+            }
+
         }
     }
 }

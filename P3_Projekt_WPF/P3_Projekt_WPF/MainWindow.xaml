@@ -387,7 +387,7 @@
                     <Border BorderBrush="Black" BorderThickness="1" Height="1" VerticalAlignment="Top" Margin="-34,0,-79,0" Grid.Row="1"/>
 
 
-                    <TabControl x:Name="tab_WithSettings" TabStripPlacement="Left" Background="Transparent" Margin="0,81,0,0">
+                    <TabControl x:Name="tab_WithSettings" TabStripPlacement="Left" Background="Transparent" Margin="0,81,0,0" SelectionChanged="TabControl_SelectionChanged">
                         <TabItem Header="Salgs Indstillinger" >
                             <Grid x:Name="indstillinger_Grid" Margin="5,0">
                                 <Grid.RowDefinitions>
@@ -472,7 +472,7 @@
 
                             </Grid>
                         </TabItem>
-                        <TabItem Header="Lager Indstillinger">
+                        <TabItem Header="Lager Indstillinger" x:Name="settingsTab">
                             <Grid>
                                 <Button Style="{StaticResource Flat_Button}" x:Name="btn_PictureFilePath" Content="Vælg billedmappe til produkter" HorizontalAlignment="Left" Margin="50,50,0,0" VerticalAlignment="Top" Width="466" Height="100" Click="btn_PictureFilePath_Click" />
                                 <Button Style="{StaticResource Flat_Button}" x:Name="btn_IcecreamID" Content="Gem nyt ID til is" HorizontalAlignment="Left" Margin="650,50,0,0" VerticalAlignment="Top" Width="242" Height="100" Click="btn_IcecreamID_Click" />
@@ -495,8 +495,8 @@
                                         </Style>
                                     </TextBlock.Style>
                                 </TextBlock>
-                                <Button Style="{StaticResource Flat_Button}" x:Name="btn_newStorageRoom" Content="Tilføj nyt Lagerrum" HorizontalAlignment="Left" Margin="50,0,0,190" VerticalAlignment="Bottom" Width="466" Height="50" Click="btn_PictureFilePath_Click" />
-                                <Button Style="{StaticResource Flat_Button}" x:Name="btn_editStorageRoom" Content="Rediger Lagerrum" HorizontalAlignment="Left" Margin="50,0,0,30" VerticalAlignment="Bottom" Width="466" Height="50" Click="btn_PictureFilePath_Click" />
+                                <Button Style="{StaticResource Flat_Button}" x:Name="btn_newStorageRoom" Content="Tilføj nyt Lagerrum" HorizontalAlignment="Left" Margin="50,0,0,190" VerticalAlignment="Bottom" Width="466" Height="50" Click="btn_newStorageRoom_Click" />
+                                <Button Style="{StaticResource Flat_Button}" x:Name="btn_editStorageRoom" Content="Rediger Lagerrum" HorizontalAlignment="Left" Margin="50,0,0,30" VerticalAlignment="Bottom" Width="466" Height="50" Click="btn_editStorageRoom_Click" />
                                 <ComboBox x:Name="comboBox_storageRoomSelect" Height="50" Margin="50,0,1133,109" VerticalAlignment="Bottom"/>
                                 <Border BorderBrush="Black" BorderThickness="2" HorizontalAlignment="Left" Height="230" Margin="561,0,0,10" VerticalAlignment="Bottom" Width="1048" >
                                     <ScrollViewer>
