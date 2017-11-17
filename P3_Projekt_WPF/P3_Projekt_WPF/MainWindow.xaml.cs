@@ -835,5 +835,20 @@ namespace P3_Projekt_WPF
             }
 
         }
+
+        private void btn_OpenAdmin_Click(object sender, RoutedEventArgs e)
+        {
+            new AdminValidation().Show();
+        }
+
+        private void btn_ChangePassword_Click(object sender, RoutedEventArgs e)
+        {
+            var check = new AdminValidation();
+            check.Closed += delegate
+            {
+                new AdminNewPassword().Show();
+            };
+            check.Show();
+        }
     }
 }
