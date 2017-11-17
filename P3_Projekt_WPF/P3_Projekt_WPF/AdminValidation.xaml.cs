@@ -20,6 +20,8 @@ namespace P3_Projekt_WPF
     /// </summary>
     public partial class AdminValidation : Window
     {
+        public bool IsPasswordCorrect;
+
         public AdminValidation()
         {
             InitializeComponent();
@@ -31,6 +33,7 @@ namespace P3_Projekt_WPF
         {
             if (Admin.VerifyPassword(passwordBox_InputPassword.Password))
             {
+                IsPasswordCorrect = true;
                 this.Close();
             }
             else

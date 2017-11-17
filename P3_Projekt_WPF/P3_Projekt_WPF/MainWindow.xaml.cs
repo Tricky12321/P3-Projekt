@@ -910,7 +910,8 @@ namespace P3_Projekt_WPF
             var check = new AdminValidation();
             check.Closed += delegate
             {
-                new AdminNewPassword().Show();
+                if (check.IsPasswordCorrect)
+                    new AdminNewPassword().Show();
             };
             check.Show();
         }
