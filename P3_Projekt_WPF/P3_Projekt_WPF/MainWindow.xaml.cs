@@ -766,7 +766,7 @@ namespace P3_Projekt_WPF
         {
             _settingsController.SpecifyIcecreamID(Int32.Parse(textBox_IceID.Text));
         }
-
+        
         CreateStorageRoom _createStorageRoom;//mangler at ordne på buttons at comboboxen bliver opdateret.
         private void btn_newStorageRoom_Click(object sender, RoutedEventArgs e)
         {
@@ -828,6 +828,11 @@ namespace P3_Projekt_WPF
                 LoadStorageRooms();
             }
 
+        }
+
+        private void btn_Cash_Click(object sender, RoutedEventArgs e)
+        {
+            _POSController.ExecuteReceipt();
         }
     }
 }
