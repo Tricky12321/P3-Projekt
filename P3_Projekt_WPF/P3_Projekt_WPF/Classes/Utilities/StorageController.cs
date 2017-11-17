@@ -408,8 +408,11 @@ namespace P3_Projekt_WPF.Classes.Utilities
             tempProductToMerge.Resolve(MergedProduct);
             TempProductList.Remove(tempProductToMerge);
             SaleTransaction tempProductsTransaction = tempProductToMerge.GetTempProductsSaleTransaction();
-            ProductDictionary[matchedProductID].StorageWithAmount[1] -= tempProductsTransaction.Amount;
-            tempProductsTransaction.EditSaleTransactionFromTempProduct(ProductDictionary[matchedProductID]);
+            var StorageRoomStatus = ProductDictionary[matchedProductID].StorageWithAmount.Where(x => x.Value >= tempProductsTransaction.Amount).OrderBy(x => x.Key).First();
+            int StorageRoomKey = StorageRoomStatus.Key;
+            int StorageRoomAmount = StorageRoomStatus.Value;
+            MergedProduct.StorageWithAmount[StorageRoomKey] = StorageRoomAmount - tempProductsTransaction.Amount;
+            MergedProduct.UpdateInDatabase();
         }
 
         public void EditTempProduct(TempProduct tempProductToEdit, string description, decimal salePrice)

@@ -71,7 +71,7 @@ namespace P3_Projekt_WPF.Classes
 
         public override void GetFromDatabase()
         {
-            string sql = $"SELECT * FROM `temp_product` where `id` = '{ID}'";
+            string sql = $"SELECT * FROM `temp_products` where `id` = '{ID}'";
             CreateFromRow(Mysql.RunQueryWithReturn(sql).RowData[0]);
         }
 
