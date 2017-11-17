@@ -17,6 +17,7 @@ namespace P3_Projekt_WPF.Classes
         {
             Name = name;
             Description = description;
+            ID = GetNextID();
         }
 
         public StorageRoom(int id)

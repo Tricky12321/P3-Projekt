@@ -396,7 +396,6 @@ namespace P3_Projekt_WPF.Classes.Utilities
         {
             TempProduct newTempProduct = new TempProduct(description, salePrice);
             TempProductList.Add(newTempProduct);
-            newTempProduct.UploadToDatabase();
             return newTempProduct;
         }
 

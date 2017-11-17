@@ -138,7 +138,8 @@ namespace P3_Projekt_WPF.Classes
             {
                 transaction.Execute();
             }
-           //ReceiptPrinter printReceipt = new ReceiptPrinter(this);
+            //ReceiptPrinter printReceipt = new ReceiptPrinter(this);
+            UploadToDatabase();
         }
 
         public static int GetNextID()
