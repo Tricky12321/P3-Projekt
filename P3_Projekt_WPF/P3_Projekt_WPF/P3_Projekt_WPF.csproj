@@ -95,6 +95,7 @@
     <Compile Include="Classes\Database\Mysql.cs" />
     <Compile Include="Classes\Database\MysqlObject.cs" />
     <Compile Include="Classes\Database\Row.cs" />
+    <Compile Include="Classes\Database\TableDecodeQueue.cs" />
     <Compile Include="Classes\Database\TableDecode.cs" />
     <Compile Include="Classes\Exceptions\EmptyTableException.cs" />
     <Compile Include="Classes\Exceptions\NoInternetConnectionException.cs" />

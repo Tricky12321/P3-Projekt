@@ -4,27 +4,33 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using MySql.Data.MySqlClient;
-
+using System.Data.Common;
+using System.Threading;
 namespace P3_Projekt_WPF.Classes.Database
 {
     public class TableDecode
     {
         public List<Row> RowData = new List<Row>();
-        public TableDecode(MySqlDataReader Reader)
+        public int RowCounter = 0;
+        public TableDecode(Task<DbDataReader> Reader)
         {
-            if (Reader != null)
+            while (Reader.IsCompleted == false)
             {
-                int row = 0;
-                while (Reader.Read())
+                Thread.Sleep(1);
+            }
+            if (Reader.Result != null)
+            {
+                
+                while (Reader.Result.Read())
                 {
                     RowData.Add(new Row());
-                    int fieldCount = Reader.FieldCount;
+                    int fieldCount = Reader.Result.FieldCount;
                     for (int i = 0; i < fieldCount; i++)
                     {
-                        RowData[row].Colums.Add(Reader[i].Equals(DBNull.Value) ? String.Empty : Reader.GetName(i));     // Navnet på den kolonne man henter
-                        RowData[row].Values.Add(Reader[i].Equals(DBNull.Value) ? String.Empty : Reader.GetString(i));   // Værdien på den kolonne man henter
+                        RowData[RowCounter].Colums.Add(Reader.Result[i].Equals(DBNull.Value) ? String.Empty : Reader.Result.GetName(i));     // Navnet på den kolonne man henter
+                        RowData[RowCounter].Values.Add(Reader.Result[i].Equals(DBNull.Value) ? String.Empty : Reader.Result.GetString(i));   // Værdien på den kolonne man henter
                     }
-                    row++;
+                    RowCounter++;
                 }
             }
 

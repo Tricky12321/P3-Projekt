@@ -27,7 +27,7 @@ namespace P3_Projekt_WPF.Classes.Database
         private static List<Thread> _queryThreads = new List<Thread>();
         private static ConcurrentQueue<string> _queryTasks = new ConcurrentQueue<string>();
         private const int _queryThreadCount = 1;
-
+        private static MySqlConnection _connection = null;
         public static void Disconnect(MySqlConnection connection)
         {
             connection.Close();
@@ -51,63 +51,75 @@ namespace P3_Projekt_WPF.Classes.Database
 
         public static MySqlConnection Connect(int fails = 0)
         {
-            CheckInternet();
-            MySqlConnection connection = new MySqlConnection(_connectionString);
-            try
-            {
-                connection.Open();
-                if (connection == null)
-                {
-                    if (fails < 5)
-                    {
-                        return Connect();
-                    }
-                    else
-                    {
-                        throw new NotConnectedException("Der er ingen forbindelse til databasen");
-                    }
-                }
-                return connection;
-            }
-            catch (MySqlException ex)
-            {
-                switch (ex.Number)
-                {
-                    case 0:
-                        //MessageBox.Show("Cannot connect to server.  Contact administrator");
-                        break;
 
-                    case 1045:
-                        //MessageBox.Show("Invalid username/password, please try again");
-                        break;
+            //CheckInternet();
+            Stopwatch ConnectionTimer = new Stopwatch();
+            ConnectionTimer.Start();
+            MySqlConnection connection = null;
+            connection = new MySqlConnection(_connectionString);
+            connection.Open();
+            ConnectionTimer.Stop();
+            Debug.WriteLine("[DATABASE] Database ConnectionTimer = " + ConnectionTimer.ElapsedMilliseconds + "ms");
+            if (connection == null)
+            {
+                if (fails < 5)
+                {
+                    return Connect(fails + 1);
                 }
-                return null;
+                else
+                {
+                    throw new NotConnectedException("Der er ingen forbindelse til databasen");
+                }
             }
+
+            return connection;
         }
 
         public static void RunQuery(string Query)
         {
             using (MySqlConnection connection = Connect())
             {
-                try
+                using (MySqlCommand cmd = connection.CreateCommand())
                 {
-                    using (MySqlCommand cmd = connection.CreateCommand())
+                    if (_debug)
                     {
-                        if (_debug)
-                        {
-                            Debug.WriteLine("SQL: "+Query);
-                        }
-                        cmd.CommandText = Query;
-                        cmd.ExecuteScalarAsync();
+                        Debug.WriteLine("SQL: " + Query);
                     }
-                }
-                finally
-                {
-                    Disconnect(connection);
+                    cmd.CommandText = Query;
+                    cmd.ExecuteScalarAsync();
                 }
             }
         }
 
+        public static TableDecodeQueue RunQueryWithReturnQueue(string Query)
+        {
+            Stopwatch DatabaseTimer = new Stopwatch();
+            DatabaseTimer.Start();
+            MySqlConnection connection = Connect();
+            DatabaseTimer.Stop();
+            TableDecodeQueue TableContent;
+            lock (connection)
+            {
+
+                using (MySqlCommand cmd = connection.CreateCommand())
+                {
+                    if (_debug)
+                    {
+                        Debug.WriteLine("SQL: " + Query);
+                    }
+
+                    cmd.CommandText = Query;
+
+                    using (var Reader = cmd.ExecuteReaderAsync())
+                    {
+                        TableContent = new TableDecodeQueue(Reader);
+                    }
+                }
+            }
+
+            Debug.WriteLine("[DATABASE] Det tog " + DatabaseTimer.ElapsedMilliseconds + "ms at oprette mysql forbindelse");
+            return TableContent;
+        }
 
         public static TableDecode RunQueryWithReturn(string Query)
         {
@@ -122,7 +134,7 @@ namespace P3_Projekt_WPF.Classes.Database
                         Debug.WriteLine("SQL: " + Query);
                     }
                     cmd.CommandText = Query;
-                    using (MySqlDataReader Reader = cmd.ExecuteReader())
+                    using (var Reader = cmd.ExecuteReaderAsync())
                     {
                         TableContent = new TableDecode(Reader);
                     }

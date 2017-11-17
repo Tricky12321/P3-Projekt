@@ -11,6 +11,10 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using P3_Projekt_WPF.Classes.Database;
+using P3_Projekt_WPF.Classes.Utilities;
+using P3_Projekt_WPF.Classes.Exceptions;
+using P3_Projekt_WPF.Classes;
 
 namespace P3_Projekt_WPF
 {

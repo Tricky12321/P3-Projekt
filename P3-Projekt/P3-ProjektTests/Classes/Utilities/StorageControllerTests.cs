@@ -18,7 +18,6 @@ namespace P3_Projekt_WPF.Classes.Utilities.Tests
         [TearDown]
         public void ResetStatic()
         {
-            StorageRoom.IDCounter = 0;
             Group.IDCounter = 0;
             Transaction.IDCounter = 0;
             Receipt.IDCounter = 0;
