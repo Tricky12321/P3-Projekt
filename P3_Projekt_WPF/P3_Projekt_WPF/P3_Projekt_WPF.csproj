@@ -160,6 +160,9 @@
     <Compile Include="ResovleTempProduct.xaml.cs">
       <DependentUpon>ResovleTempProduct.xaml</DependentUpon>
     </Compile>
+    <Compile Include="SaleSearchResultItemControl.xaml.cs">
+      <DependentUpon>SaleSearchResultItemControl.xaml</DependentUpon>
+    </Compile>
     <Page Include="AdminNewPassword.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -207,6 +210,14 @@
     <Page Include="ResovleTempProduct.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SaleSearchResultItemControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Themes\Generic.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
   </ItemGroup>
   <ItemGroup>

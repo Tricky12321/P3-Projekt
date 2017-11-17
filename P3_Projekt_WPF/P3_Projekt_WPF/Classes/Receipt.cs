@@ -138,7 +138,8 @@ namespace P3_Projekt_WPF.Classes
             {
                 transaction.Execute();
             }
-           //ReceiptPrinter printReceipt = new ReceiptPrinter(this);
+            //ReceiptPrinter printReceipt = new ReceiptPrinter(this);
+            UploadToDatabase();
         }
 
         public static int GetNextID()
@@ -182,9 +183,16 @@ namespace P3_Projekt_WPF.Classes
 
         public void UploadToDatabase()
         {
+            int ID = GetNextID();
+            this.ID = ID;
             string sql = "INSERT INTO `receipt` (`id`, `number_of_products`, `total_price`, `payment_method`, `datetime`)"+
                 $" VALUES (NULL, '{NumberOfProducts}', '{TotalPrice}', '{CashOrCard}', FROM_UNIXTIME('{Utils.GetUnixTime(Date)}'));";
             Mysql.RunQuery(sql);
+            foreach (var item in Transactions)
+            {
+                item.ReceiptID = ID;
+                item.UploadToDatabase();
+            }
         }
 
         public void UpdateInDatabase()

@@ -55,8 +55,8 @@ namespace P3_Projekt_WPF
 
             this.KeyDown += new KeyEventHandler(KeyboardHook);
             this.KeyDown += new KeyEventHandler(CtrlHookDown);
+            this.KeyDown += new KeyEventHandler(EnterKeyPressedSearch);
             this.KeyUp += new KeyEventHandler(CtrlHookUp);
-
         }
 
         public void ReloadProducts()
@@ -110,7 +110,11 @@ namespace P3_Projekt_WPF
             InitGridQuickButtons();
             InitStorageGridProducts();
             AddProductButton();
+            Stopwatch Timer1 = new Stopwatch();
+            Timer1.Start();
             LoadProductImages();
+            Timer1.Stop();
+            Debug.WriteLine("[LoadProductImages] took "+Timer1.ElapsedMilliseconds+"ms");
             LoadProductGrid(_storageController.ProductDictionary);
             BuildInformationTable();
             InitStatisticsTab();
@@ -178,10 +182,11 @@ namespace P3_Projekt_WPF
         {
             Stopwatch TimeTester = new Stopwatch();
             TimeTester.Start();
-            _storageController.GetAll();
+            Thread GetAllThread = new Thread(new ThreadStart(_storageController.GetAll));
+            GetAllThread.Start();
             while (!_storageController.ThreadsDone)
             {
-                Thread.Sleep(10);
+                Thread.Sleep(1);
             }
             runLoading = false;
             TimeTester.Stop();
@@ -281,8 +286,11 @@ namespace P3_Projekt_WPF
 
         private void LoadProductControlDictionary()
         {
+            Stopwatch Timer2 = new Stopwatch();
+            Timer2.Start();
             _productControlDictionary.Clear();
-            foreach (KeyValuePair<int, Product> product in _storageController.ProductDictionary.OrderBy(x => x.Key))
+            var ProductList = _storageController.ProductDictionary.OrderBy(x => x.Key);
+            foreach (var product in ProductList)
             {
                 ProductControl productControl = new ProductControl(product.Value, _storageController.GroupDictionary);
                 productControl.btn_ShowMoreInformation.Tag = product.Value.ID;
@@ -290,6 +298,8 @@ namespace P3_Projekt_WPF
 
                 _productControlDictionary.Add(product.Value.ID, productControl);
             }
+            Timer2.Stop();
+            Debug.WriteLine("[LoadProductControlDictionary] took "+Timer2.ElapsedMilliseconds+"ms");
         }
 
         public void LoadProductGrid(ConcurrentDictionary<int, Product> productDictionary)
@@ -301,8 +311,8 @@ namespace P3_Projekt_WPF
             productGrid.Children.Add(addProductButton);
 
             int i = 1;
-
-            foreach (KeyValuePair<int, Product> product in productDictionary.OrderBy(x => x.Key))
+            var ProductListSorted = productDictionary.OrderBy(x => x.Key);
+            foreach (var product in ProductListSorted)
             {
                 if (i % 5 == 0)
                 {
@@ -533,23 +543,23 @@ namespace P3_Projekt_WPF
 
         private void btn_Temporary_Click(object sender, RoutedEventArgs e)
         {
-            if (_createTempProduct == null)
-            {
-                _createTempProduct = new CreateTemporaryProduct();
-                _createTempProduct.Closed += delegate { _createTempProduct = null; };
-                _createTempProduct.btn_AddTempProduct.Click += delegate
+                if (_createTempProduct == null)
                 {
-                    string description = _createTempProduct.textbox_Description.Text;
-                    decimal price = decimal.Parse(_createTempProduct.textbox_Price.Text);
-                    int amount = int.Parse(_createTempProduct.textBox_ProductAmount.Text);
-                    TempProduct NewTemp = _storageController.CreateTempProduct(description, price);
-                    _POSController.AddSaleTransaction(NewTemp, amount);
-                    UpdateReceiptList();
-                    _createTempProduct.Close();
-                };
-            }
-            _createTempProduct.Activate();
-            _createTempProduct.Show();
+                    _createTempProduct = new CreateTemporaryProduct();
+                    _createTempProduct.Closed += delegate { _createTempProduct = null; };
+                    _createTempProduct.btn_AddTempProduct.Click += delegate
+                    {
+                        string description = _createTempProduct.textbox_Description.Text;
+                        decimal price = decimal.Parse(_createTempProduct.textbox_Price.Text);
+                        int amount = int.Parse(_createTempProduct.textBox_ProductAmount.Text);
+                        TempProduct NewTemp = _storageController.CreateTempProduct(description, price);
+                        _POSController.AddSaleTransaction(NewTemp, amount);
+                        UpdateReceiptList();
+                        _createTempProduct.Close();
+                    };
+                }
+                _createTempProduct.Activate();
+                _createTempProduct.Show();
         }
 
         private void btn_PictureFilePath_Click(object sender, RoutedEventArgs e)
@@ -689,8 +699,18 @@ namespace P3_Projekt_WPF
         ResovleTempProduct _resolveTempProduct;
         private void btn_MergeTempProduct_Click(object sender, RoutedEventArgs e)
         {
+            if(_storageController.TempProductList.Where(x => x.Resolved == false).Count() > 0)
+            {
+                InitMergeWindow();
+            }
+        }
+
+        private void InitMergeWindow()
+        {
             int index = 0;
             List<TempListItem> ItemList = new List<TempListItem>();
+            var tempProducts = _storageController.TempProductList.Where(x => x.Resolved == false);
+
             if (_resolveTempProduct == null)
             {
                 _resolveTempProduct = new ResovleTempProduct();
@@ -702,11 +722,13 @@ namespace P3_Projekt_WPF
                     _resolveTempProduct.textBox_TempProductInfo.Text = _storageController.TempProductList[index].Description;
                 };
                 _resolveTempProduct.textBox_IDToMerge.KeyUp += delegate { IDToMerge(); };
-                _resolveTempProduct.button_Merge.Click += delegate { _storageController.MergeTempProduct(_storageController.TempProductList[index], int.Parse(_resolveTempProduct.textBox_IDToMerge.Text)); };
-            }
-            var tempProducts = _storageController.TempProductList.Where(x => x.Resolved == false);
+                _resolveTempProduct.button_Merge.Click += delegate {
+                    tempProducts.ToList()[index].Resolve(IDToMerge());
+                    _storageController.MergeTempProduct(_storageController.TempProductList[index], int.Parse(_resolveTempProduct.textBox_IDToMerge.Text));
 
-            //_resolveTempProduct.listview_ProductsToMerge.Items.Add(new { Amount = "Antal", Description = "Beskrivelse", Price = "Pris" });
+                };
+            }
+
             foreach (TempProduct tempProductsToListView in tempProducts)
             {
                 ItemList.Add(new TempListItem { Description = tempProductsToListView.Description, Price = tempProductsToListView.SalePrice });
@@ -716,21 +738,22 @@ namespace P3_Projekt_WPF
             _resolveTempProduct.Activate();
         }
 
-        private void IDToMerge()
+        private Product IDToMerge()
         {
             int validInput = 0;
             bool input = true;
-            if(int.TryParse(_resolveTempProduct.textBox_IDToMerge.Text, out validInput))
+            if (int.TryParse(_resolveTempProduct.textBox_IDToMerge.Text, out validInput))
             {
                 try
                 {
-                    var ok = _storageController.ProductDictionary[int.Parse(_resolveTempProduct.textBox_IDToMerge.Text)];
-                    _resolveTempProduct.Label_MergeInfo.Content = ok.Name;
+                    var productToMerge = _storageController.ProductDictionary[int.Parse(_resolveTempProduct.textBox_IDToMerge.Text)];
+                    _resolveTempProduct.Label_MergeInfo.Content = productToMerge.Name;
                     _resolveTempProduct.button_Merge.IsEnabled = true;
+                    return productToMerge;
                 }
                 catch (System.Collections.Generic.KeyNotFoundException)
                 {
-                    
+
                     _resolveTempProduct.Label_MergeInfo.Content = "Ugyldigt Produkt ID";
                     _resolveTempProduct.button_Merge.IsEnabled = false;
                 }
@@ -740,6 +763,7 @@ namespace P3_Projekt_WPF
                 _resolveTempProduct.Label_MergeInfo.Content = "Forkert Input";
                 _resolveTempProduct.button_Merge.IsEnabled = false;
             }
+            return null;
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
@@ -749,7 +773,13 @@ namespace P3_Projekt_WPF
 
         private void btn_search_Click(object sender, RoutedEventArgs e)
         {
-            Utils.SearchForProduct(txtBox_SearchField.Text, _storageController.ProductDictionary, _storageController.GroupDictionary);
+            listBox_SearchResultsSaleTab.Visibility = Visibility.Visible;
+            ConcurrentDictionary<int, SearchProduct> productSearchResults = Utils.SearchForProduct(txtBox_SearchField.Text, _storageController.ProductDictionary, _storageController.GroupDictionary);
+            listBox_SearchResultsSaleTab.Items.Clear();
+            foreach (SearchProduct product in productSearchResults.Values.OrderByDescending(x=> x.BrandMatch + x.GroupMatch + x.NameMatch))
+            {
+                listBox_SearchResultsSaleTab.Items.Add(new SaleSearchResultItemControl(product.CurrentProduct.Image, product.CurrentProduct.Name));
+            } 
         }
 
         private void btn_MergeTempProduct_Click_1(object sender, RoutedEventArgs e)
@@ -757,10 +787,26 @@ namespace P3_Projekt_WPF
 
         }
 
+        public void SearchFieldLostFocus(object sender, RoutedEventArgs e)
+        {
+            listBox_SearchResultsSaleTab.Visibility = Visibility.Hidden;
+        }
+
+        private void EnterKeyPressedSearch(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter && txtBox_SearchField_Storage.IsFocused)
+            {
+                btn_search_Storage_Click(sender, e);
+            } else if (e.Key == Key.Enter && txtBox_SearchField.IsFocused)
+            {
+                btn_search_Click(sender, e);
+            }
+        }
+
         private void btn_search_Storage_Click(object sender, RoutedEventArgs e)
         {
-            ConcurrentDictionary<int, SearchProduct> productSearch = Utils.SearchForProduct(txtBox_SearchField_Storage.Text, _storageController.ProductDictionary, _storageController.GroupDictionary);
-            LoadProductGrid(productSearch);
+            ConcurrentDictionary<int, SearchProduct> productSearchResults = Utils.SearchForProduct(txtBox_SearchField_Storage.Text, _storageController.ProductDictionary, _storageController.GroupDictionary);
+            LoadProductGrid(productSearchResults);
         }
 
         private void btn_IcecreamID_Click(object sender, RoutedEventArgs e)
@@ -768,14 +814,14 @@ namespace P3_Projekt_WPF
             _settingsController.SpecifyIcecreamID(Int32.Parse(textBox_IceID.Text));
         }
 
-        CreateStorageRoom _createStorageRoom;
+        CreateStorageRoom _createStorageRoom;//mangler at ordne på buttons at comboboxen bliver opdateret.
         private void btn_newStorageRoom_Click(object sender, RoutedEventArgs e)
         {
             if (_createStorageRoom == null)
             {
                 _createStorageRoom = new CreateStorageRoom();
                 _createStorageRoom.Closed += delegate { _createStorageRoom = null; };
-                _createStorageRoom.btn_JustQuit.Click += delegate { _createStorageRoom.Close(); _createStorageRoom = null;};
+                _createStorageRoom.btn_JustQuit.Click += delegate { _createStorageRoom.Close(); _createStorageRoom = null; };
                 _createStorageRoom.btn_SaveAndQuit.Click += delegate
                 {
                     string storageRoomName = _createStorageRoom.textBox_Name.Text;
@@ -810,7 +856,16 @@ namespace P3_Projekt_WPF
                     LoadStorageRooms();
                     _createStorageRoom.Close();
                 };
-                _createStorageRoom.btn_deleteStorageRoom.Click += delegate { };
+                _createStorageRoom.btn_deleteStorageRoom.Click += delegate 
+                {/*
+                    MessageBoxResult results = MessageBox.Show($"Er du sikker på at du vil slette dette lagerrum: {chosenStorage.Name} ?", "Slet lagerrum:", MessageBoxButton.YesNo, MessageBoxImage.Question);
+                    if(results == MessageBoxResult.Yes)
+                    {*/
+                        _storageController.DeleteStorageRoom(storageID);
+                        LoadStorageRooms();
+                        _createStorageRoom.Close();
+                    //}
+                };
             }
             _createStorageRoom.Activate();
             _createStorageRoom.Show();
@@ -818,7 +873,7 @@ namespace P3_Projekt_WPF
 
         private void LoadStorageRooms()
         {
-            comboBox_storageRoomSelect.Items.Clear();
+           comboBox_storageRoomSelect.Items.Clear();
             foreach (KeyValuePair<int, StorageRoom> StorageRoom in _storageController.StorageRoomDictionary)
             {
                 comboBox_storageRoomSelect.Items.Add($"{StorageRoom.Key.ToString()} {StorageRoom.Value.Name}");
@@ -834,6 +889,16 @@ namespace P3_Projekt_WPF
                 firstLoad = false;
             }
 
+        }
+
+        
+
+        private void btn_Cash_Click(object sender, RoutedEventArgs e)
+        {
+            _POSController.PlacerholderReceipt.CashOrCard = 1;
+            _POSController.ExecuteReceipt();
+            listView_Receipt.Items.Clear();
+            label_TotalPrice.Content = null;
         }
 
         private void btn_OpenAdmin_Click(object sender, RoutedEventArgs e)

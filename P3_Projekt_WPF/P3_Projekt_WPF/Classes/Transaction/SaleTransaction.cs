@@ -32,14 +32,19 @@ namespace P3_Projekt_WPF.Classes
             _id = id;
             GetFromDatabase();
         }
-
+        
         //If transaction contains Product, decrements the shop storage room(ID 0) by amount
         //If transaction contains Temporary- or ServiceProduct, does nothing, since these do not have storage amounts
         public override void Execute()
         {
             if (Product is Product)
             {
-                (Product as Product).StorageWithAmount[0] -= Amount;
+                (Product as Product).StorageWithAmount[1] -= Amount;
+                Product.UpdateInDatabase();
+            }
+            else if (Product is TempProduct)
+            {
+                Product.UploadToDatabase();
             }
         }
 
