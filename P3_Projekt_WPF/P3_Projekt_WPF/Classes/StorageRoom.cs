@@ -8,7 +8,6 @@ namespace P3_Projekt_WPF.Classes
 {
     public class StorageRoom : MysqlObject
     {
-        private static int _idCounter = 0;
         public static int IDCounter { get { return _idCounter; } set { _idCounter = value; } }
 
         public int ID;
@@ -19,7 +18,6 @@ namespace P3_Projekt_WPF.Classes
         {
             Name = name;
             Description = description;
-            ID = _idCounter++;
         }
 
         public StorageRoom(int id)
@@ -31,6 +29,13 @@ namespace P3_Projekt_WPF.Classes
         public StorageRoom(Row row)
         {
             CreateFromRow(row);
+        }
+
+        public static int GetNextID()
+        {
+            string sql = "SHOW TABLE STATUS LIKE 'storagerooms'";
+            TableDecode Results = Mysql.RunQueryWithReturn(sql);
+            return Convert.ToInt32(Results.RowData[0].Values[10]);
         }
 
         public void GetFromDatabase()

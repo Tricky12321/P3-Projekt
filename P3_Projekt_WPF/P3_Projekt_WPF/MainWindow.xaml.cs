@@ -110,7 +110,11 @@ namespace P3_Projekt_WPF
             InitGridQuickButtons();
             InitStorageGridProducts();
             AddProductButton();
+            Stopwatch Timer1 = new Stopwatch();
+            Timer1.Start();
             LoadProductImages();
+            Timer1.Stop();
+            Debug.WriteLine("[LoadProductImages] took "+Timer1.ElapsedMilliseconds+"ms");
             LoadProductGrid(_storageController.ProductDictionary);
             BuildInformationTable();
             InitStatisticsTab();
@@ -178,10 +182,11 @@ namespace P3_Projekt_WPF
         {
             Stopwatch TimeTester = new Stopwatch();
             TimeTester.Start();
-            _storageController.GetAll();
+            Thread GetAllThread = new Thread(new ThreadStart(_storageController.GetAll));
+            GetAllThread.Start();
             while (!_storageController.ThreadsDone)
             {
-                Thread.Sleep(10);
+                Thread.Sleep(1);
             }
             runLoading = false;
             TimeTester.Stop();
@@ -281,8 +286,11 @@ namespace P3_Projekt_WPF
 
         private void LoadProductControlDictionary()
         {
+            Stopwatch Timer2 = new Stopwatch();
+            Timer2.Start();
             _productControlDictionary.Clear();
-            foreach (KeyValuePair<int, Product> product in _storageController.ProductDictionary.OrderBy(x => x.Key))
+            var ProductList = _storageController.ProductDictionary.OrderBy(x => x.Key);
+            foreach (var product in ProductList)
             {
                 ProductControl productControl = new ProductControl(product.Value, _storageController.GroupDictionary);
                 productControl.btn_ShowMoreInformation.Tag = product.Value.ID;
@@ -290,6 +298,8 @@ namespace P3_Projekt_WPF
 
                 _productControlDictionary.Add(product.Value.ID, productControl);
             }
+            Timer2.Stop();
+            Debug.WriteLine("[LoadProductControlDictionary] took "+Timer2.ElapsedMilliseconds+"ms");
         }
 
         public void LoadProductGrid(ConcurrentDictionary<int, Product> productDictionary)
@@ -301,8 +311,8 @@ namespace P3_Projekt_WPF
             productGrid.Children.Add(addProductButton);
 
             int i = 1;
-
-            foreach (KeyValuePair<int, Product> product in productDictionary.OrderBy(x => x.Key))
+            var ProductListSorted = productDictionary.OrderBy(x => x.Key);
+            foreach (var product in ProductListSorted)
             {
                 if (i % 5 == 0)
                 {
