@@ -141,6 +141,13 @@ namespace P3_Projekt_WPF.Classes
            //ReceiptPrinter printReceipt = new ReceiptPrinter(this);
         }
 
+        public static int GetNextID()
+        {
+            string sql = "SHOW TABLE STATUS LIKE 'receipt'";
+            TableDecode Results = Mysql.RunQueryWithReturn(sql);
+            return Convert.ToInt32(Results.RowData[0].Values[10]);
+        }
+
         public void GetFromDatabase()
         {
             string sql = $"SELECT * FROM `receipt` WHERE `id` = '{ID}'";

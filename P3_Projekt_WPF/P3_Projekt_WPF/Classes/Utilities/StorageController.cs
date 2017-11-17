@@ -80,7 +80,6 @@ namespace P3_Projekt_WPF.Classes.Utilities
                 //Debug.WriteLine("ProductQue: Done");
                 _productQueueDone = true;
                 _storageStatusTimer.Start();
-                UpdateStorageStatus();
                 AddInformation("Product count", _productsCreateByThreads);
                 _productStatusTimer.Stop();
                 TimerStrings.Enqueue("[P3] Det tog " + _productStatusTimer.ElapsedMilliseconds + "ms at oprette produkter");
@@ -120,6 +119,10 @@ namespace P3_Projekt_WPF.Classes.Utilities
 
         private void UpdateStorageStatus_Thread()
         {
+            while(!_productQueueDone)
+            {
+                Thread.Sleep(5);
+            }
             Row Data = null;
             while (_storageStatusInformation.TryDequeue(out Data))
             {
@@ -132,7 +135,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
         {
             string sql = "SELECT * FROM `storage_status`";
             TableDecode Results = Mysql.RunQueryWithReturn(sql);
-            _storageStatusInformation = new ConcurrentQueue<Row>(Results.RowData);
+            _storageStatusInformation = Mysql.RunQueryWithReturnQueue(sql).RowData;
             CreateStorageStatusThreads();
         }
 
@@ -152,21 +155,22 @@ namespace P3_Projekt_WPF.Classes.Utilities
         public void GetAllProductsFromDatabase()
         {
             string sql = "SELECT * FROM `products` WHERE `id` > '0'";
-            TableDecode Results = Mysql.RunQueryWithReturn(sql);
-            _productsLoadedFromDatabase = Results.RowData.Count;
-            _productInformation = new ConcurrentQueue<Row>(Results.RowData);
+            _productInformation = Mysql.RunQueryWithReturnQueue(sql).RowData;
             _productQueueLoaded = true;
             _productStatusTimer.Start();
             CreateProductThreads(); // Opretter tråde til at behandle data
-            
+
         }
 
         public void GetAllGroupsFromDatabase()
         {
             string sql = "SELECT * FROM `groups`";
             Stopwatch GroupTimer = new Stopwatch();
+            Stopwatch DatabaseTimer = new Stopwatch();
+            DatabaseTimer.Start();
             GroupTimer.Start();
-            ConcurrentQueue<Row> GroupsQueue = new ConcurrentQueue<Row>(Mysql.RunQueryWithReturn(sql).RowData);
+            ConcurrentQueue<Row> GroupsQueue = Mysql.RunQueryWithReturnQueue(sql).RowData;
+            DatabaseTimer.Stop();
             Row Data = null;
             while (GroupsQueue.TryDequeue(out Data))
             {
@@ -174,7 +178,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
                 GroupDictionary.TryAdd(NewGroup.ID, NewGroup);
             }
             GroupTimer.Stop();
-            TimerStrings.Enqueue("[P3] Det tog " + GroupTimer.ElapsedMilliseconds + "ms at oprette grupper");
+            TimerStrings.Enqueue("[P3] Det tog " + GroupTimer.ElapsedMilliseconds + "ms at oprette grupper [" + DatabaseTimer.ElapsedMilliseconds + "ms]");
             Debug.WriteLine("GroupQue: Done!");
             _groupQueueDone = true;
             AddInformation("Groups count", GroupDictionary.Count);
@@ -185,8 +189,11 @@ namespace P3_Projekt_WPF.Classes.Utilities
         {
             string sql = "SELECT * FROM `storagerooms`";
             Stopwatch StorageRoomTimer = new Stopwatch();
+            Stopwatch DatabaseTimer = new Stopwatch();
+            DatabaseTimer.Start();
             StorageRoomTimer.Start();
-            ConcurrentQueue<Row> StorageRoomsQueue = new ConcurrentQueue<Row>(Mysql.RunQueryWithReturn(sql).RowData);
+            ConcurrentQueue<Row> StorageRoomsQueue = Mysql.RunQueryWithReturnQueue(sql).RowData;
+            DatabaseTimer.Stop();
             Row Data = null;
             while (StorageRoomsQueue.TryDequeue(out Data))
             {
@@ -194,7 +201,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
                 StorageRoomDictionary.TryAdd(NewStorageRoom.ID, NewStorageRoom);
             }
             StorageRoomTimer.Stop();
-            TimerStrings.Enqueue("[P3] Det tog " + StorageRoomTimer.ElapsedMilliseconds + "ms at oprette Storage rooms");
+            TimerStrings.Enqueue("[P3] Det tog " + StorageRoomTimer.ElapsedMilliseconds + "ms at oprette Storage rooms [" + DatabaseTimer.ElapsedMilliseconds + "ms]");
             Debug.WriteLine("StorageRoomQue: Done!");
             _storageRoomQueueDone = true;
             AddInformation("Storageroom count", StorageRoomDictionary.Count);
@@ -204,8 +211,11 @@ namespace P3_Projekt_WPF.Classes.Utilities
         {
             string sql = "SELECT * FROM `temp_products`";
             Stopwatch TempProductTimer = new Stopwatch();
+            Stopwatch DatabaseTimer = new Stopwatch();
+            DatabaseTimer.Start();
             TempProductTimer.Start();
-            ConcurrentQueue<Row> TempProductQueue = new ConcurrentQueue<Row>(Mysql.RunQueryWithReturn(sql).RowData);
+            ConcurrentQueue<Row> TempProductQueue = Mysql.RunQueryWithReturnQueue(sql).RowData;
+            DatabaseTimer.Stop();
             Row Data = null;
             while (TempProductQueue.TryDequeue(out Data))
             {
@@ -213,7 +223,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
                 TempProductList.Add(NewTempProduct);
             }
             TempProductTimer.Stop();
-            TimerStrings.Enqueue("[P3] Det tog " + TempProductTimer.ElapsedMilliseconds + "ms at oprette Temp produkter");
+            TimerStrings.Enqueue("[P3] Det tog " + TempProductTimer.ElapsedMilliseconds + "ms at oprette Temp produkter [" + DatabaseTimer.ElapsedMilliseconds + "ms]");
 
             Debug.WriteLine("TempProductQue: Done!");
             _tempProductQueueDone = true;
@@ -224,23 +234,19 @@ namespace P3_Projekt_WPF.Classes.Utilities
         {
             string sql = "SELECT * FROM `service_products`";
             Stopwatch ServiceProductTimer = new Stopwatch();
+            Stopwatch DatabaseTimer = new Stopwatch();
+            DatabaseTimer.Start();
             ServiceProductTimer.Start();
-            try
+            ConcurrentQueue<Row> ServiceProductQueue = Mysql.RunQueryWithReturnQueue(sql).RowData;
+            DatabaseTimer.Stop();
+            Row Data = null;
+            while (ServiceProductQueue.TryDequeue(out Data))
             {
-                ConcurrentQueue<Row> ServiceProductQueue = new ConcurrentQueue<Row>(Mysql.RunQueryWithReturn(sql).RowData);
-                Row Data = null;
-                while (ServiceProductQueue.TryDequeue(out Data))
-                {
-                    ServiceProduct NewServiceProduct = new ServiceProduct(Data);
-                    ServiceProductDictionary.TryAdd(NewServiceProduct.ID, NewServiceProduct);
-                }
-            }
-            catch (EmptyTableException)
-            {
-
+                ServiceProduct NewServiceProduct = new ServiceProduct(Data);
+                ServiceProductDictionary.TryAdd(NewServiceProduct.ID, NewServiceProduct);
             }
             ServiceProductTimer.Stop();
-            TimerStrings.Enqueue("[P3] Det tog "+ServiceProductTimer.ElapsedMilliseconds+"ms at oprette Service Produkter");
+            TimerStrings.Enqueue("[P3] Det tog " + ServiceProductTimer.ElapsedMilliseconds + "ms at oprette Service Produkter ["+DatabaseTimer.ElapsedMilliseconds+"ms]");
             Debug.WriteLine("ServiceProductQueue: Done!");
             _serviceProductQueueDone = true;
             AddInformation("ServiceProduct count", ServiceProductDictionary.Count);
@@ -261,11 +267,13 @@ namespace P3_Projekt_WPF.Classes.Utilities
             Thread GetAllTempProductsThread = new Thread(new ThreadStart(GetAllTempProductsFromDatabase));
             Thread GetAllStorageRoomsThread = new Thread(new ThreadStart(GetAllStorageRoomsFromDatabase));
             Thread GetAllServiceProductsThread = new Thread(new ThreadStart(GetAllServiceProductsFromDatabase));
+            Thread GetAllStorageStatusThread = new Thread(new ThreadStart(UpdateStorageStatus));
             GetAllProductsThread.Name = "GetAllProductsThread";
             GetAllGroupsThread.Name = "GetAllGroupsThread";
             GetAllTempProductsThread.Name = "GetAllTempProductsThread";
             GetAllStorageRoomsThread.Name = "GetAllStorageRoomsThread";
             GetAllServiceProductsThread.Name = "GetAllServiceProductsThread";
+            GetAllStorageStatusThread.Name = "GetAllStorageStatusThread";
             lock (ThreadLock)
             {
                 Threads.Add(GetAllProductsThread);
@@ -273,12 +281,14 @@ namespace P3_Projekt_WPF.Classes.Utilities
                 Threads.Add(GetAllTempProductsThread);
                 Threads.Add(GetAllStorageRoomsThread);
                 Threads.Add(GetAllServiceProductsThread);
+                Threads.Add(GetAllStorageStatusThread);
             }
             GetAllProductsThread.Start();
             GetAllGroupsThread.Start();
             GetAllStorageRoomsThread.Start();
             GetAllTempProductsThread.Start();
             GetAllServiceProductsThread.Start();
+            GetAllStorageStatusThread.Start();
         }
 
         #endregion
@@ -418,12 +428,15 @@ namespace P3_Projekt_WPF.Classes.Utilities
             {
                 product.StorageWithAmount.TryAdd(newRoom.ID, 0);
             }
+            newRoom.UploadToDatabase();
         }
 
         public void EditStorageRoom(int id, string name, string description)
         {
-            StorageRoomDictionary[id].Name = name;
-            StorageRoomDictionary[id].Description = description;
+            StorageRoom roomToEdit = StorageRoomDictionary[id];
+            roomToEdit.Name = name;
+            roomToEdit.Description = description;
+            roomToEdit.UpdateInDatabase();
         }
 
         //Removes storage room from dictionary, and all products
