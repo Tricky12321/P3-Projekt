@@ -710,7 +710,7 @@ namespace P3_Projekt_WPF
         {
             int index = 0;
             List<TempListItem> ItemList = new List<TempListItem>();
-            var tempProducts = _storageController.TempProductList.Where(x => x.Resolved == false);
+            var tempProducts = _storageController.TempProductList.Where(x => x.Resolved == false).ToList();
 
             if (_resolveTempProduct == null)
             {
@@ -720,12 +720,11 @@ namespace P3_Projekt_WPF
                 _resolveTempProduct.MouseLeftButtonUp += delegate
                 {
                     index = _resolveTempProduct.listview_ProductsToMerge.SelectedIndex;
-                    _resolveTempProduct.textBox_TempProductInfo.Text = _storageController.TempProductList[index].Description;
+                    _resolveTempProduct.textBox_TempProductInfo.Text = tempProducts[index].Description;
                 };
                 _resolveTempProduct.textBox_IDToMerge.KeyUp += delegate { IDToMerge(); };
                 _resolveTempProduct.button_Merge.Click += delegate {
-                    tempProducts.ToList()[index].Resolve(IDToMerge());
-                    _storageController.MergeTempProduct(_storageController.TempProductList[index], int.Parse(_resolveTempProduct.textBox_IDToMerge.Text));
+                    _storageController.MergeTempProduct(tempProducts[index], int.Parse(_resolveTempProduct.textBox_IDToMerge.Text));
 
                 };
             }
@@ -900,6 +899,22 @@ namespace P3_Projekt_WPF
             _POSController.ExecuteReceipt();
             listView_Receipt.Items.Clear();
             label_TotalPrice.Content = null;
+        }
+
+        private void btn_OpenAdmin_Click(object sender, RoutedEventArgs e)
+        {
+            new AdminValidation().Show();
+        }
+
+        private void btn_ChangePassword_Click(object sender, RoutedEventArgs e)
+        {
+            var check = new AdminValidation();
+            check.Closed += delegate
+            {
+                if (check.IsPasswordCorrect)
+                    new AdminNewPassword().Show();
+            };
+            check.Show();
         }
     }
 }

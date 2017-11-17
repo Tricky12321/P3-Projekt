@@ -509,7 +509,16 @@
                             </Grid>
                         </TabItem>
 
-                        <TabItem Header="Admin Indstilling"/>
+                        <TabItem Header="Admin Indstilling">
+                            <Grid>
+                                <Button Style="{StaticResource Flat_Button}" x:Name="btn_ChangePassword" Content="Skift adgangskode" Height="100" Width="277" Margin="67,42,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Click="btn_ChangePassword_Click"/>
+                                <Button Style="{StaticResource Flat_Button}" x:Name="btn_OpenAdmin" Content="åbn kodevindue" Height="100" Width="277" Margin="367,42,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Click="btn_OpenAdmin_Click"/>
+
+                            </Grid>
+
+
+
+                        </TabItem>
                         <TabItem Header="Information">
                             <DataGrid x:Name="InformationGrid" Margin="2,0,-3,-7" IsReadOnly="True" EnableColumnVirtualization="True">
                                 <DataGrid.Columns>

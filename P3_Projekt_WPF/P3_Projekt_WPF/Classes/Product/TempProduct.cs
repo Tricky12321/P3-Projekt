@@ -60,7 +60,7 @@ namespace P3_Projekt_WPF.Classes
         {
             if (Resolved)
             {
-                string sql = $"SELECT * FROM `sale_transactions` WHERE `product_type` = 'temp_products' AND `product_id` = '{this.ID}'";
+                string sql = $"SELECT * FROM `sale_transactions` WHERE `product_type` = 'temp_product' AND `product_id` = '{this.ID}'";
                 TableDecode getTransaction = Mysql.RunQueryWithReturn(sql);
                 SaleTransaction saleTrans = new SaleTransaction(getTransaction.RowData[0]);
                 return saleTrans;
@@ -71,7 +71,7 @@ namespace P3_Projekt_WPF.Classes
 
         public override void GetFromDatabase()
         {
-            string sql = $"SELECT * FROM `temp_product` where `id` = '{ID}'";
+            string sql = $"SELECT * FROM `temp_products` where `id` = '{ID}'";
             CreateFromRow(Mysql.RunQueryWithReturn(sql).RowData[0]);
         }
 
