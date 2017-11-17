@@ -8,7 +8,6 @@ namespace P3_Projekt_WPF.Classes
 {
     public class StorageRoom : MysqlObject
     {
-        public static int IDCounter { get { return _idCounter; } set { _idCounter = value; } }
 
         public int ID;
         public string Name;
