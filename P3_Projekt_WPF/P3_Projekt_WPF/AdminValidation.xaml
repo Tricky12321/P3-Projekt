@@ -9,7 +9,10 @@
     <Grid>
         <TextBlock x:Name="label_InputPassword" HorizontalAlignment="Center" TextWrapping="Wrap" Text="Indtast kode for at tilgå denne funktion" FontSize="30" Margin="0,10,0,0" MinHeight="40" VerticalAlignment="Top" Height="94" Width="268"/>
 
-        <PasswordBox x:Name="passwordBox_InputPassword" FontSize="30" HorizontalAlignment="Center" Margin="0,110,0,0" VerticalAlignment="Top" Height="40" Width="280"/>
+        <Border BorderThickness="1" BorderBrush="Black" CornerRadius="10" HorizontalAlignment="Center" Height="40" Margin="0,110,0,0" VerticalAlignment="Top" Width="280">
+            <PasswordBox x:Name="passwordBox_InputPassword" Background="Transparent" BorderThickness="0" FontSize="30" HorizontalAlignment="Center" Margin="0,0,0,0" VerticalAlignment="Top" Height="40" Width="280"/>
+        </Border>
+        
         <TextBlock x:Name="GreyText" IsHitTestVisible="False" Text="Kode" Margin="0,110,0,0" Foreground="DarkGray" FontSize="30" HorizontalAlignment="Center" Width="255" Height="40" VerticalAlignment="Top">
             <TextBlock.Style>
                 <Style TargetType="{x:Type TextBlock}">

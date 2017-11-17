@@ -40,9 +40,7 @@ namespace P3_Projekt_WPF
         private void GreyTextRemover(object sender, RoutedEventArgs e)
         {
             if (passwordBox_InputPassword.Password.Length == 0)
-            {
                 GreyText.Visibility = Visibility.Visible;
-            }
             else
                 GreyText.Visibility = Visibility.Collapsed;
         }
