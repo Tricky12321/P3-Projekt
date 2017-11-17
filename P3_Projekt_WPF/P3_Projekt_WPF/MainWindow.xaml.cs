@@ -114,7 +114,7 @@ namespace P3_Projekt_WPF
             Timer1.Start();
             LoadProductImages();
             Timer1.Stop();
-            Debug.WriteLine("[LoadProductImages] took "+Timer1.ElapsedMilliseconds+"ms");
+            Debug.WriteLine("[LoadProductImages] took " + Timer1.ElapsedMilliseconds + "ms");
             LoadProductGrid(_storageController.ProductDictionary);
             BuildInformationTable();
             InitStatisticsTab();
@@ -299,7 +299,7 @@ namespace P3_Projekt_WPF
                 _productControlDictionary.Add(product.Value.ID, productControl);
             }
             Timer2.Stop();
-            Debug.WriteLine("[LoadProductControlDictionary] took "+Timer2.ElapsedMilliseconds+"ms");
+            Debug.WriteLine("[LoadProductControlDictionary] took " + Timer2.ElapsedMilliseconds + "ms");
         }
 
         public void LoadProductGrid(ConcurrentDictionary<int, Product> productDictionary)
@@ -730,7 +730,7 @@ namespace P3_Projekt_WPF
         {
             int validInput = 0;
             bool input = true;
-            if(int.TryParse(_resolveTempProduct.textBox_IDToMerge.Text, out validInput))
+            if (int.TryParse(_resolveTempProduct.textBox_IDToMerge.Text, out validInput))
             {
                 try
                 {
@@ -740,7 +740,7 @@ namespace P3_Projekt_WPF
                 }
                 catch (System.Collections.Generic.KeyNotFoundException)
                 {
-                    
+
                     _resolveTempProduct.Label_MergeInfo.Content = "Ugyldigt Produkt ID";
                     _resolveTempProduct.button_Merge.IsEnabled = false;
                 }
@@ -777,24 +777,14 @@ namespace P3_Projekt_WPF
         {
             _settingsController.SpecifyIcecreamID(Int32.Parse(textBox_IceID.Text));
         }
-        
-        CreateStorageRoom _createStorageRoom;//mangler at ordne på buttons at comboboxen bliver opdateret.
+
+        CreateStorageRoom _createStorageRoom;
         private void btn_newStorageRoom_Click(object sender, RoutedEventArgs e)
         {
-            if (_createStorageRoom == null)
-            {
-                _createStorageRoom = new CreateStorageRoom();
-                _createStorageRoom.Closed += delegate { _createStorageRoom = null; };
-                _createStorageRoom.btn_JustQuit.Click += delegate { _createStorageRoom.Close(); _createStorageRoom = null;};
-                _createStorageRoom.btn_SaveAndQuit.Click += delegate
-                {
-                    string storageRoomName = _createStorageRoom.textBox_Name.Text;
-                    string storageRoomDescr = _createStorageRoom.textBox_descr.Text;
-                    _storageController.CreateStorageRoom(storageRoomName, storageRoomDescr);
-                    LoadStorageRooms();
-                    _createStorageRoom.Close();
-                };
-            }
+
+            _createStorageRoom = new CreateStorageRoom(_storageController, this);
+            LoadStorageRooms();
+     
             _createStorageRoom.Activate();
             _createStorageRoom.Show();
         }
@@ -820,15 +810,15 @@ namespace P3_Projekt_WPF
                     LoadStorageRooms();
                     _createStorageRoom.Close();
                 };
-                _createStorageRoom.btn_deleteStorageRoom.Click += delegate 
-                {/*
+                _createStorageRoom.btn_deleteStorageRoom.Click += delegate
+                {
                     MessageBoxResult results = MessageBox.Show($"Er du sikker på at du vil slette dette lagerrum: {chosenStorage.Name} ?", "Slet lagerrum:", MessageBoxButton.YesNo, MessageBoxImage.Question);
-                    if(results == MessageBoxResult.Yes)
-                    {*/
+                    if (results == MessageBoxResult.Yes)
+                    {
                         _storageController.DeleteStorageRoom(storageID);
                         LoadStorageRooms();
                         _createStorageRoom.Close();
-                    //}
+                    }
                 };
             }
             _createStorageRoom.Activate();
@@ -837,7 +827,7 @@ namespace P3_Projekt_WPF
 
         private void LoadStorageRooms()
         {
-           comboBox_storageRoomSelect.Items.Clear();
+            comboBox_storageRoomSelect.Items.Clear();
             foreach (KeyValuePair<int, StorageRoom> StorageRoom in _storageController.StorageRoomDictionary)
             {
                 comboBox_storageRoomSelect.Items.Add($"{StorageRoom.Key.ToString()} {StorageRoom.Value.Name}");
@@ -855,7 +845,24 @@ namespace P3_Projekt_WPF
 
         }
 
-        
+        private void comboBox_storageRoomSelect_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            btn_editStorageRoom.IsHitTestVisible = true;
+            if (comboBox_storageRoomSelect.SelectedItem != null)
+            {
+                int storageID = Convert.ToInt32(comboBox_storageRoomSelect.SelectedItem.ToString().Split(' ').First());
+                StorageRoom chosenStorage = _storageController.StorageRoomDictionary[storageID];
+                textBlock_StorageDescr.Foreground = Brushes.Black;
+                textBlock_StorageDescr.Text = $"{chosenStorage.ID}. {chosenStorage.Name}: {chosenStorage.Description}";
+            }
+            else
+            {
+                textBlock_StorageDescr.Text = null;
+            }
+
+
+        }
+
 
         private void btn_Cash_Click(object sender, RoutedEventArgs e)
         {

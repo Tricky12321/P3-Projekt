@@ -25,7 +25,7 @@ namespace P3_Projekt_WPF
         public string ChosenFilePath;
         private ConcurrentDictionary<int, int> _storageWithAmount = new ConcurrentDictionary<int, int>();
         private ConcurrentDictionary<int, StorageRoom> _storageRooms;
-        private ConcurrentDictionary<int, StorageRoom> _groups;
+        private ConcurrentDictionary<int, Group> _groups;
         private StorageController _storageController;
         private bool UpdateProductSec = false;
         private int UpdateProductID = 0;
