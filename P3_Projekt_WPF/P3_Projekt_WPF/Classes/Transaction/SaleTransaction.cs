@@ -41,7 +41,12 @@ namespace P3_Projekt_WPF.Classes
             {
                 (Product as Product).StorageWithAmount[1] -= Amount;
                 Product.UpdateInDatabase();
-                UploadToDatabase();
+            }
+            else if (Product is TempProduct)
+            {
+                Product.ID = TempProduct.GetNextID();
+                
+                Product.UploadToDatabase();
             }
         }
 

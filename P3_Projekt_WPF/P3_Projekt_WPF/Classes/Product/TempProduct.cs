@@ -30,6 +30,13 @@ namespace P3_Projekt_WPF.Classes
             CreateFromRow(row);
         }
 
+        public static int GetNextID()
+        {
+            string sql = "SHOW TABLE STATUS LIKE 'temp_products'";
+            TableDecode Results = Mysql.RunQueryWithReturn(sql);
+            return Convert.ToInt32(Results.RowData[0].Values[10]);
+        }
+
         public override string GetName()
         {
             return Description;
@@ -53,7 +60,7 @@ namespace P3_Projekt_WPF.Classes
         {
             if (Resolved)
             {
-                string sql = $"SELECT * FROM `sale_transactions` WHERE `product_type` = 'temp_products' AND `product_id` = '{this.ID}'";
+                string sql = $"SELECT * FROM `sale_transactions` WHERE `product_type` = 'temp_product' AND `product_id` = '{this.ID}'";
                 TableDecode getTransaction = Mysql.RunQueryWithReturn(sql);
                 SaleTransaction saleTrans = new SaleTransaction(getTransaction.RowData[0]);
                 return saleTrans;
@@ -64,7 +71,7 @@ namespace P3_Projekt_WPF.Classes
 
         public override void GetFromDatabase()
         {
-            string sql = $"SELECT * FROM `temp_product` where `id` = '{ID}'";
+            string sql = $"SELECT * FROM `temp_products` where `id` = '{ID}'";
             CreateFromRow(Mysql.RunQueryWithReturn(sql).RowData[0]);
         }
 

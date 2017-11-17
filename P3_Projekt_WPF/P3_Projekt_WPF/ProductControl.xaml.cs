@@ -33,7 +33,7 @@ namespace P3_Projekt_WPF
                 }
                 else
                 {
-                    img_ProductImage.Source = Utils.ImageSourceForBitmap(Properties.Resources.questionmark_png);
+                    img_ProductImage.Source = Utils.NoImage;
                     img_ProductImage.VerticalAlignment = VerticalAlignment.Center;
                     img_ProductImage.HorizontalAlignment = HorizontalAlignment.Center;
                     img_ProductImage.Stretch = Stretch.Uniform;

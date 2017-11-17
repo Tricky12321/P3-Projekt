@@ -150,7 +150,9 @@ namespace P3_Projekt_WPF.Classes
         private void UpdateStorageStatus()
         {
             DeleteAllStorageData();
-            foreach (var Storage_Room in StorageWithAmount)
+            // Sørger for at der ikke bliver indsat nogle storage rooms som er Void eller der ikke er nogen produkter i. 
+            var StorageRoomsTotal = StorageWithAmount.Where(x => x.Key >= 1 && x.Value > 0);
+            foreach (var Storage_Room in StorageRoomsTotal)
             {
                 string sql = "INSERT INTO `storage_status` (`id`, `product_id`, `storageroom`, `amount`)" +
                         $" VALUES (NULL, '{ID}', '{Storage_Room.Key}', '{Storage_Room.Value}');";
