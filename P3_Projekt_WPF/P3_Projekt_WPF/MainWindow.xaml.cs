@@ -899,5 +899,20 @@ namespace P3_Projekt_WPF
             listView_Receipt.Items.Clear();
             label_TotalPrice.Content = null;
         }
+
+        private void btn_OpenAdmin_Click(object sender, RoutedEventArgs e)
+        {
+            new AdminValidation().Show();
+        }
+
+        private void btn_ChangePassword_Click(object sender, RoutedEventArgs e)
+        {
+            var check = new AdminValidation();
+            check.Closed += delegate
+            {
+                new AdminNewPassword().Show();
+            };
+            check.Show();
+        }
     }
 }
