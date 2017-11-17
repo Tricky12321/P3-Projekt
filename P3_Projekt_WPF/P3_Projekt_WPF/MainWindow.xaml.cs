@@ -820,7 +820,15 @@ namespace P3_Projekt_WPF
                     LoadStorageRooms();
                     _createStorageRoom.Close();
                 };
-                _createStorageRoom.btn_deleteStorageRoom.Click += delegate { };
+                _createStorageRoom.btn_deleteStorageRoom.Click += delegate 
+                {
+                    MessageBoxResult results = MessageBox.Show($"Er du sikker på at du vil slette dette lagerrum: {chosenStorage.Name} ?", "Slet lagerrum:", MessageBoxButton.YesNo, MessageBoxImage.Question);
+                    if(results == MessageBoxResult.Yes)
+                    {
+                        _storageController.DeleteStorageRoom(storageID);
+                        _createStorageRoom.Close();
+                    }
+                };
             }
             _createStorageRoom.Activate();
             _createStorageRoom.Show();
