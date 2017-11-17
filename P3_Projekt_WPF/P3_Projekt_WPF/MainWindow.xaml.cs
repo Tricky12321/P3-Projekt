@@ -672,8 +672,6 @@ namespace P3_Projekt_WPF
 
         }
 
-
-
         private void TextInputNoNumberWithComma(object sender, TextCompositionEventArgs e)
         {
             // Only allows number in textfield, also with comma
@@ -689,11 +687,6 @@ namespace P3_Projekt_WPF
                 InformationGrid.Items.Add(new { title = item[0], value = item[1] });
             }
             InformationGrid.UpdateLayout();
-        }
-
-        private void button_Click(object sender, RoutedEventArgs e)
-        {
-
         }
 
         ResovleTempProduct _resolveTempProduct;
@@ -764,13 +757,11 @@ namespace P3_Projekt_WPF
             listBox_SearchResultsSaleTab.Items.Clear();
             foreach (SearchProduct product in productSearchResults.Values.OrderByDescending(x=> x.BrandMatch + x.GroupMatch + x.NameMatch))
             {
-                listBox_SearchResultsSaleTab.Items.Add(new SaleSearchResultItemControl(product.CurrentProduct.Image, product.CurrentProduct.Name));
+                var item = new ListBoxItem();
+                item.Tag = product.CurrentProduct.ID;
+                item.Content = new SaleSearchResultItemControl(product.CurrentProduct.Image, $"{product.CurrentProduct.Name}\n{product.CurrentProduct.ID}");
+                listBox_SearchResultsSaleTab.Items.Add(item);
             } 
-        }
-
-        private void btn_MergeTempProduct_Click_1(object sender, RoutedEventArgs e)
-        {
-
         }
 
         public void SearchFieldLostFocus(object sender, RoutedEventArgs e)
@@ -857,6 +848,7 @@ namespace P3_Projekt_WPF
             _createStorageRoom.Show();
         }
 
+
         private void LoadStorageRooms()
         {
            comboBox_storageRoomSelect.Items.Clear();
@@ -882,6 +874,15 @@ namespace P3_Projekt_WPF
         private void btn_Cash_Click(object sender, RoutedEventArgs e)
         {
             _POSController.ExecuteReceipt();
+        }
+
+        private void ListBoxItem_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (_POSController.GetProductFromID(int.Parse((sender as ListBoxItem).Tag.ToString())) != null)
+            {
+                _POSController.AddSaleTransaction(_POSController.GetProductFromID(int.Parse((sender as ListBoxItem).Tag.ToString())), 1);
+                UpdateReceiptList();
+            }
         }
     }
 }

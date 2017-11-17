@@ -106,14 +106,14 @@
                     <Button x:Name="btn_Temporary"  Content="Opret Midlertidigt Produkt" Margin="0,0,12,10" Background="#FFC5C5C5" Style="{StaticResource Flat_Button}" Height="50" Width="438" VerticalAlignment="Bottom" HorizontalAlignment="Right" Grid.Row="1" Click="btn_Temporary_Click"/>
                     <Button x:Name="btn_Cancel"  Content="Afbryd" Margin="13,0,0,10" Background="#FFC5C5C5" Style="{StaticResource Flat_Button}" Height="50" VerticalAlignment="Bottom" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Left" Width="260"/>
 
-                    <TextBox TextCompositionManager.PreviewTextInput="TextInputNoNumberWithComma" Padding="10,0,0,0" x:Name="PayWithAmount" Margin="13,0,275,121" FontSize="33" Grid.Row="1" Height="50" VerticalAlignment="Bottom" Grid.Column="1">
+                    <TextBox TextCompositionManager.PreviewTextInput="TextInputNoNumberWithComma" Padding="10,0,0,0" x:Name="PayWithAmount" Margin="10,0,275,121" FontSize="33" Grid.Row="1" Height="50" VerticalAlignment="Bottom" Grid.Column="1">
                         <TextBox.Resources>
                             <Style TargetType="{x:Type Border}">
                                 <Setter Property="CornerRadius" Value="10"/>
                             </Style>
                         </TextBox.Resources>
                     </TextBox>
-                    <TextBlock IsHitTestVisible="False" Text="Betalt Beløb" Margin="23,0,360,119" Foreground="DarkGray" FontSize="33" Grid.Row="1" Height="50" VerticalAlignment="Bottom" Grid.Column="1">
+                    <TextBlock IsHitTestVisible="False" Text="Betalt Beløb" Margin="20,0,360,119" Foreground="DarkGray" FontSize="33" Grid.Row="1" Height="50" VerticalAlignment="Bottom" Grid.Column="1">
                         <TextBlock.Style>
                             <Style TargetType="{x:Type TextBlock}">
                                 <Setter Property="Visibility" Value="Collapsed"/>
@@ -128,7 +128,7 @@
 
 
 
-                    <ListView x:Name="listView_Receipt" Margin="13,67,10,230" Grid.Row="1" Grid.Column="1">
+                    <ListView x:Name="listView_Receipt" Margin="10,67,10,230" Grid.Row="1" Grid.Column="1">
                         <ListView.View>
                             <GridView x:Name="grid_Receipt">
                                 <GridView.ColumnHeaderContainerStyle>
@@ -177,15 +177,15 @@
                                     </GridViewColumn.CellTemplate>
                                 </GridViewColumn>
 
-                                <GridViewColumn x:Name="column_Product" Width="auto" >
+                                <GridViewColumn x:Name="column_Product" Width="Auto" >
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate>
-                                            <TextBlock Text="{Binding String_Product}" TextWrapping="Wrap" MaxWidth="400"/>
+                                            <TextBlock Text="{Binding String_Product}" TextWrapping="Wrap" MaxWidth="600"/>
                                         </DataTemplate>
                                     </GridViewColumn.CellTemplate>
                                 </GridViewColumn>
 
-                                <GridViewColumn>
+                                <GridViewColumn Width="100">
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate>
                                             <TextBlock Text="{Binding Price}"/>
@@ -212,9 +212,15 @@
                         </ListView.View>
                     </ListView>
                     <Label x:Name="label" Content="Kvittering" Margin="13,71,0,0" Height="68" VerticalAlignment="Top" FontSize="35" Grid.RowSpan="2" Grid.Column="1" HorizontalAlignment="Left" Width="312"/>
-                    <Label x:Name="label_TotalPrice" Content="Total" Margin="13,0,10,176" Grid.Row="1" VerticalAlignment="Bottom" Height="49" BorderThickness="1" Background="White" BorderBrush="#FF858585" Grid.Column="1"/>
+                    <Label x:Name="label_TotalPrice" Content="Total" Margin="10,0,10,176" Grid.Row="1" VerticalAlignment="Bottom" Height="49" BorderThickness="1" Background="White" BorderBrush="#FF858585" Grid.Column="1"/>
                     <Button x:Name="btn_MergeTempProduct" Content="Ret et Midlertidigt Produkt" Background="#FFC5C5C5" HorizontalAlignment="Left" Margin="10,0,0,6" Grid.Row="1" Width="430" Style="{StaticResource Flat_Button}" Height="46" VerticalAlignment="Bottom" Click="btn_MergeTempProduct_Click"/>
-                    <ListBox x:Name="listBox_SearchResultsSaleTab" HorizontalContentAlignment="Stretch" Visibility="Hidden" Grid.RowSpan="3" Panel.ZIndex="3" Grid.Column="1" Margin="0,61,74,0" HorizontalAlignment="Right" Width="503" Height="auto"  MaxHeight="600" VerticalAlignment="Top"/>
+                    <ListBox x:Name="listBox_SearchResultsSaleTab"  HorizontalContentAlignment="Stretch" Visibility="Hidden" Grid.RowSpan="3" Panel.ZIndex="3" Grid.Column="1" Margin="0,61,74,0" HorizontalAlignment="Right" Width="503" Height="auto"  MaxHeight="600" VerticalAlignment="Top">
+                        <ListBox.ItemContainerStyle>
+                            <Style TargetType="ListBoxItem">
+                                <EventSetter Event="PreviewMouseLeftButtonDown" Handler="ListBoxItem_MouseDown"/>
+                            </Style>
+                        </ListBox.ItemContainerStyle>
+                    </ListBox>
                 </Grid>
             </TabItem>
 
