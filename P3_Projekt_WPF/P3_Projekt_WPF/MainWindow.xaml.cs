@@ -592,7 +592,7 @@ namespace P3_Projekt_WPF
             CheckboxChecker(ref id, ref brand, ref group);
 
             _statisticsController.RequestStatisticsDate(startDate, endDate);
-            _statisticsController.RequestStatisticsWithParameters(id, brand, group);
+            _statisticsController.FilterByParameters(id, brand, group);
 
             DisplayStatistics();
             if (_statisticsController.TransactionsForStatistics.Count == 0)
