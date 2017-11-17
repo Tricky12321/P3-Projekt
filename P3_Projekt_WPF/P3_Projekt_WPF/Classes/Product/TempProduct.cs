@@ -51,10 +51,15 @@ namespace P3_Projekt_WPF.Classes
 
         public SaleTransaction GetTempProductsSaleTransaction()
         {
-            string sql = $"SELECT * FROM `sale_transactions` WHERE `product_type` = 'temp_products' AND `product_id` = '{this.ID}'";
-            TableDecode getTransaction = Mysql.RunQueryWithReturn(sql);
-            SaleTransaction saleTrans = new SaleTransaction(getTransaction.RowData[0]);
-            return saleTrans;
+            if (Resolved)
+            {
+                string sql = $"SELECT * FROM `sale_transactions` WHERE `product_type` = 'temp_products' AND `product_id` = '{this.ID}'";
+                TableDecode getTransaction = Mysql.RunQueryWithReturn(sql);
+                SaleTransaction saleTrans = new SaleTransaction(getTransaction.RowData[0]);
+                return saleTrans;
+            }
+            //TODO: Lave custom exception
+            throw new Exception("Dette tempproduct er ikke resolved");
         }
 
         public override void GetFromDatabase()
@@ -84,7 +89,7 @@ namespace P3_Projekt_WPF.Classes
             string sql = $"UPDATE `temp_products` SET " +
                 $"`sale_price` = '{SalePrice}'," +
                 $"`description` = '{GetName()}'," +
-                $"`resolved` = '{Convert.ToInt32(Resolved)}' " +
+                $"`resolved` = '{Convert.ToInt32(Resolved)}'," +
                 $"`resolved_product_id` = '{ResolvedProductID}' " +
                 $"WHERE `id` = {ID};";
             Mysql.RunQuery(sql);
