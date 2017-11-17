@@ -795,6 +795,7 @@ namespace P3_Projekt_WPF
             if (_createStorageRoom == null)
             {
                 _createStorageRoom = new CreateStorageRoom();
+                _createStorageRoom.btn_deleteStorageRoom.Visibility = Visibility.Visible;
                 _createStorageRoom.textBox_Name.Text = chosenStorage.Name;
                 _createStorageRoom.textBox_descr.Text = chosenStorage.Description;
                 _createStorageRoom.output_StorageID.Text = chosenStorage.ID.ToString();
@@ -808,6 +809,7 @@ namespace P3_Projekt_WPF
                     LoadStorageRooms();
                     _createStorageRoom.Close();
                 };
+                _createStorageRoom.btn_deleteStorageRoom.Click += delegate { };
             }
             _createStorageRoom.Activate();
             _createStorageRoom.Show();
