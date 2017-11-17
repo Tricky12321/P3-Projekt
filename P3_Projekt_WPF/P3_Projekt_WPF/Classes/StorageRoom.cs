@@ -57,7 +57,7 @@ namespace P3_Projekt_WPF.Classes
         {
             string sql = $"UPDATE `storagerooms` SET" +
                $"`name` = '{Name}'," +
-               $"`description` = '{Description}'," +
+               $"`description` = '{Description}' " +
                $"WHERE `id` = {ID};";
             Mysql.RunQuery(sql);
         }

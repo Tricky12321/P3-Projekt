@@ -49,6 +49,7 @@ namespace P3_Projekt_WPF
             _settingsController = new SettingsController();
             _statisticsController = new StatisticsController();
             InitializeComponent();
+            Mysql.Connect();
             LoadDatabase();
             InitComponents();
 
