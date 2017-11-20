@@ -13,9 +13,9 @@ namespace P3_Projekt_WPF.Classes.Utilities
     {
         public List<SaleTransaction> TransactionsForStatistics = new List<SaleTransaction>();
 
-        public StatisticsController()
+        public StatisticsController(StorageController storageController)
         {
-
+            _storageController = storageController;
         }
 
         /* Man anmoder altid om dato først, men kun én af dato-metoderne af gangen.
@@ -31,6 +31,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
         private int _threadCount = 30;
         private int _saleTransactionsCreated = 0;
         private ConcurrentQueue<Row> _dataQueue;
+        private StorageController _storageController = null;
 
         private void CreateThreads()
         {
@@ -48,9 +49,17 @@ namespace P3_Projekt_WPF.Classes.Utilities
             Row data;
             while (_dataQueue.TryDequeue(out data))
             {
-                SaleTransaction NewTransaction = new SaleTransaction(data);
-                _saleTransactions.Enqueue(NewTransaction);
-                Interlocked.Increment(ref _saleTransactionsCreated);
+                if (_storageController != null)
+                {
+                    SaleTransaction NewTransaction = new SaleTransaction(data, _storageController);
+                    _saleTransactions.Enqueue(NewTransaction);
+                }
+                else
+                {
+                    SaleTransaction NewTransaction = new SaleTransaction(data);
+                    _saleTransactions.Enqueue(NewTransaction);
+                }
+
             }
 
         }
@@ -64,12 +73,11 @@ namespace P3_Projekt_WPF.Classes.Utilities
             int toUnixTime = Utils.GetUnixTime(EndDate(to));
             string requestStatisticsQuery =
             $"SELECT * FROM `sale_transactions` WHERE UNIX_TIMESTAMP(`datetime`) >= '{fromUnixTime}' AND UNIX_TIMESTAMP(`datetime`) <= '{toUnixTime}';";
-
-            _dataQueue = new ConcurrentQueue<Row>(Mysql.RunQueryWithReturn(requestStatisticsQuery).RowData);
+            _dataQueue = Mysql.RunQueryWithReturnQueue(requestStatisticsQuery).RowData;
             int TransCount = _dataQueue.Count;
             Stopwatch Timer1 = new Stopwatch();
             CreateThreads();
-            while (_saleTransactionsCreated != TransCount)
+            while (!_dataQueue.IsEmpty)
             {
                 Thread.Sleep(5);
             }
