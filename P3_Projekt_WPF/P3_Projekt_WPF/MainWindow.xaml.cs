@@ -44,20 +44,33 @@ namespace P3_Projekt_WPF
         public static bool runLoading = true;
         public MainWindow()
         {
+            List<string> OutputList = new List<string>();
+            Stopwatch LoadingTimer = new Stopwatch();
+            LoadingTimer.Start();
             _storageController = new StorageController();
             _POSController = new POSController(_storageController);
             _settingsController = new SettingsController();
             _statisticsController = new StatisticsController();
+            OutputList.Add("[1. TIMER] took " + LoadingTimer.ElapsedMilliseconds + "ms");
             InitializeComponent();
-            Mysql.Connect();
+            OutputList.Add("[2. TIMER] took " + LoadingTimer.ElapsedMilliseconds + "ms");
             LoadDatabase();
+            OutputList.Add("[3. TIMER] took " + LoadingTimer.ElapsedMilliseconds + "ms");
             InitComponents();
+            OutputList.Add("[4. TIMER] took " + LoadingTimer.ElapsedMilliseconds + "ms");
 
             this.KeyDown += new KeyEventHandler(KeyboardHook);
             this.KeyDown += new KeyEventHandler(CtrlHookDown);
             this.KeyDown += new KeyEventHandler(EnterKeyPressedSearch);
             this.KeyUp += new KeyEventHandler(CtrlHookUp);
             this.WindowState = WindowState.Maximized;
+
+            LoadingTimer.Stop();
+            OutputList.Add("[TOTAL TIMER] took "+LoadingTimer.ElapsedMilliseconds+"ms");
+            foreach (var item in OutputList)
+            {
+                Debug.WriteLine(item);
+            }
         }
 
         public void ReloadProducts()
@@ -108,8 +121,16 @@ namespace P3_Projekt_WPF
 
         private void InitComponents()
         {
+            Stopwatch GridButtonTimer = new Stopwatch();
+            GridButtonTimer.Start();
             InitGridQuickButtons();
+            GridButtonTimer.Stop();
+            Debug.WriteLine("[InitGridQuickButtons] took " + GridButtonTimer.ElapsedMilliseconds + "ms");
+            Stopwatch StorageGridTimer = new Stopwatch();
+            StorageGridTimer.Start();
             InitStorageGridProducts();
+            StorageGridTimer.Stop();
+            Debug.WriteLine("[InitStorageGridProducts] took " + StorageGridTimer.ElapsedMilliseconds + "ms");
             AddProductButton();
             Stopwatch Timer1 = new Stopwatch();
             Timer1.Start();
@@ -141,7 +162,8 @@ namespace P3_Projekt_WPF
         {
             datePicker_StartDate.SelectedDate = DateTime.Now;
             datePicker_EndDate.SelectedDate = DateTime.Now;
-            foreach (string brand in _storageController.ProductDictionary.Values.Select(x => x.Brand).Distinct())
+            var products = _storageController.ProductDictionary.Values.Select(x => x.Brand).Distinct();
+            foreach (string brand in products)
             {
                 comboBox_Brand.Items.Add(brand);
             }
@@ -149,7 +171,7 @@ namespace P3_Projekt_WPF
             {
                 comboBox_Group.Items.Add(group.Name);
             }
-
+            
         }
 
         private void UpdateReceiptList()
@@ -338,8 +360,8 @@ namespace P3_Projekt_WPF
 
             productGrid.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(380) });
             int i = 1;
-
-            foreach (KeyValuePair<int, SearchProduct> product in productDictionary.OrderByDescending(x => x.Value.BrandMatch + x.Value.GroupMatch + x.Value.NameMatch))
+            var products = productDictionary.OrderByDescending(x => x.Value.BrandMatch + x.Value.GroupMatch + x.Value.NameMatch);
+            foreach (KeyValuePair<int, SearchProduct> product in products)
             {
                 if (i % 5 == 0)
                 {
@@ -776,7 +798,8 @@ namespace P3_Projekt_WPF
             listBox_SearchResultsSaleTab.Visibility = Visibility.Visible;
             ConcurrentDictionary<int, SearchProduct> productSearchResults = Utils.SearchForProduct(txtBox_SearchField.Text, _storageController.ProductDictionary, _storageController.GroupDictionary);
             listBox_SearchResultsSaleTab.Items.Clear();
-            foreach (SearchProduct product in productSearchResults.Values.OrderByDescending(x=> x.BrandMatch + x.GroupMatch + x.NameMatch))
+            var searchResults = productSearchResults.Values.OrderByDescending(x => x.BrandMatch + x.GroupMatch + x.NameMatch);
+            foreach (SearchProduct product in searchResults)
             {
                 listBox_SearchResultsSaleTab.Items.Add(new SaleSearchResultItemControl(product.CurrentProduct.Image, product.CurrentProduct.Name));
             } 
