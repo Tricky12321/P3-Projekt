@@ -28,14 +28,14 @@ namespace P3_Projekt_WPF.Classes.Utilities
         private bool _allStatisticsDone = false;
         private ConcurrentQueue<SaleTransaction> _saleTransactions;
         private List<Thread> _saleTransactionThreads = new List<Thread>();
-        private int _threadCount = 30;
+        private int _threadCount = 4;
         private int _saleTransactionsCreated = 0;
         private ConcurrentQueue<Row> _dataQueue;
         private StorageController _storageController = null;
 
         private void CreateThreads()
         {
-            for (int i = 0; i < _threadCount; i++)
+            for (int i = 0; i < _threadCount - 1; i++)
             {
                 Thread NewThread = new Thread(new ThreadStart(ThreadWork));
                 NewThread.Name = "Statistics Controller Thread";
@@ -49,23 +49,15 @@ namespace P3_Projekt_WPF.Classes.Utilities
             Row data;
             while (_dataQueue.TryDequeue(out data))
             {
-                if (_storageController != null)
-                {
-                    SaleTransaction NewTransaction = new SaleTransaction(data, _storageController);
-                    _saleTransactions.Enqueue(NewTransaction);
-                }
-                else
-                {
-                    SaleTransaction NewTransaction = new SaleTransaction(data);
-                    _saleTransactions.Enqueue(NewTransaction);
-                }
-
+                SaleTransaction NewTransaction = new SaleTransaction(data, _storageController);
+                _saleTransactions.Enqueue(NewTransaction);
             }
-
         }
 
         public void RequestStatisticsDate(DateTime from, DateTime to)
         {
+            Stopwatch Timer1 = new Stopwatch();
+            Timer1.Start();
             _saleTransactionsCreated = 0;
             _saleTransactions = new ConcurrentQueue<SaleTransaction>();
             TransactionsForStatistics = new List<SaleTransaction>();
@@ -75,14 +67,17 @@ namespace P3_Projekt_WPF.Classes.Utilities
             $"SELECT * FROM `sale_transactions` WHERE UNIX_TIMESTAMP(`datetime`) >= '{fromUnixTime}' AND UNIX_TIMESTAMP(`datetime`) <= '{toUnixTime}';";
             _dataQueue = Mysql.RunQueryWithReturnQueue(requestStatisticsQuery).RowData;
             int TransCount = _dataQueue.Count;
-            Stopwatch Timer1 = new Stopwatch();
             CreateThreads();
+            ThreadWork();
             while (!_dataQueue.IsEmpty)
             {
-                Thread.Sleep(5);
+                Thread.Sleep(1);
             }
+            
             _allStatisticsDone = true;
             TransactionsForStatistics = new List<SaleTransaction>(_saleTransactions);
+            Timer1.Stop();
+            Debug.WriteLine("[StatisticsController] took " + Timer1.ElapsedMilliseconds + "ms to fetch");
         }
 
         public void FilterByParameters(string productID, string brand, Group group)
