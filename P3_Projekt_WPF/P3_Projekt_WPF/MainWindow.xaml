@@ -128,9 +128,9 @@
 
 
 
-                    <ListView x:Name="listView_Receipt" Margin="10,67,10,230" Grid.Row="1" Grid.Column="1">
+                    <ListView x:Name="listView_Receipt" HorizontalContentAlignment="Stretch" Margin="10,67,10,230" Grid.Row="1" Grid.Column="1">
                         <ListView.View>
-                            <GridView x:Name="grid_Receipt">
+                            <GridView x:Name="grid_Receipt" >
                                 <GridView.ColumnHeaderContainerStyle>
                                     <Style>
                                         <Setter Property="UIElement.Visibility"  Value="Collapsed"/>
@@ -169,18 +169,18 @@
                                     </GridViewColumn.CellTemplate>
                                 </GridViewColumn>
 
-                                <GridViewColumn Width="100">
-                                    <GridViewColumn.CellTemplate>
+                                <GridViewColumn >
+                                    <GridViewColumn.CellTemplate >
                                         <DataTemplate>
                                             <TextBlock Text="{Binding Amount}"/>
                                         </DataTemplate>
                                     </GridViewColumn.CellTemplate>
                                 </GridViewColumn>
 
-                                <GridViewColumn x:Name="column_Product" Width="Auto" >
+                                <GridViewColumn x:Name="column_Product" Width="auto">
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate>
-                                            <TextBlock Text="{Binding String_Product}" TextWrapping="Wrap" MaxWidth="600"/>
+                                            <TextBlock Text="{Binding String_Product}" HorizontalAlignment="Stretch"/>
                                         </DataTemplate>
                                     </GridViewColumn.CellTemplate>
                                 </GridViewColumn>
