@@ -544,23 +544,23 @@ namespace P3_Projekt_WPF
 
         private void btn_Temporary_Click(object sender, RoutedEventArgs e)
         {
-                if (_createTempProduct == null)
+            if (_createTempProduct == null)
+            {
+                _createTempProduct = new CreateTemporaryProduct();
+                _createTempProduct.Closed += delegate { _createTempProduct = null; };
+                _createTempProduct.btn_AddTempProduct.Click += delegate
                 {
-                    _createTempProduct = new CreateTemporaryProduct();
-                    _createTempProduct.Closed += delegate { _createTempProduct = null; };
-                    _createTempProduct.btn_AddTempProduct.Click += delegate
-                    {
-                        string description = _createTempProduct.textbox_Description.Text;
-                        decimal price = decimal.Parse(_createTempProduct.textbox_Price.Text);
-                        int amount = int.Parse(_createTempProduct.textBox_ProductAmount.Text);
-                        TempProduct NewTemp = _storageController.CreateTempProduct(description, price);
-                        _POSController.AddSaleTransaction(NewTemp, amount);
-                        UpdateReceiptList();
-                        _createTempProduct.Close();
-                    };
-                }
-                _createTempProduct.Activate();
-                _createTempProduct.Show();
+                    string description = _createTempProduct.textbox_Description.Text;
+                    decimal price = decimal.Parse(_createTempProduct.textbox_Price.Text);
+                    int amount = int.Parse(_createTempProduct.textBox_ProductAmount.Text);
+                    TempProduct NewTemp = _storageController.CreateTempProduct(description, price);
+                    _POSController.AddSaleTransaction(NewTemp, amount);
+                    UpdateReceiptList();
+                    _createTempProduct.Close();
+                };
+            }
+            _createTempProduct.Activate();
+            _createTempProduct.Show();
         }
 
         private void btn_PictureFilePath_Click(object sender, RoutedEventArgs e)
@@ -693,7 +693,7 @@ namespace P3_Projekt_WPF
         ResovleTempProduct _resolveTempProduct;
         private void btn_MergeTempProduct_Click(object sender, RoutedEventArgs e)
         {
-            if(_storageController.TempProductList.Where(x => x.Resolved == false).Count() > 0)
+            if (_storageController.TempProductList.Where(x => x.Resolved == false).Count() > 0)
             {
                 InitMergeWindow();
             }
@@ -716,7 +716,8 @@ namespace P3_Projekt_WPF
                     _resolveTempProduct.textBox_TempProductInfo.Text = tempProducts[index].Description;
                 };
                 _resolveTempProduct.textBox_IDToMerge.KeyUp += delegate { IDToMerge(); };
-                _resolveTempProduct.button_Merge.Click += delegate {
+                _resolveTempProduct.button_Merge.Click += delegate
+                {
                     _storageController.MergeTempProduct(tempProducts[index], int.Parse(_resolveTempProduct.textBox_IDToMerge.Text));
 
                 };
@@ -769,13 +770,13 @@ namespace P3_Projekt_WPF
             listBox_SearchResultsSaleTab.Visibility = Visibility.Visible;
             ConcurrentDictionary<int, SearchProduct> productSearchResults = Utils.SearchForProduct(txtBox_SearchField.Text, _storageController.ProductDictionary, _storageController.GroupDictionary);
             listBox_SearchResultsSaleTab.Items.Clear();
-            foreach (SearchProduct product in productSearchResults.Values.OrderByDescending(x=> x.BrandMatch + x.GroupMatch + x.NameMatch))
+            foreach (SearchProduct product in productSearchResults.Values.OrderByDescending(x => x.BrandMatch + x.GroupMatch + x.NameMatch))
             {
                 var item = new ListBoxItem();
                 item.Tag = product.CurrentProduct.ID;
                 item.Content = new SaleSearchResultItemControl(product.CurrentProduct.Image, $"{product.CurrentProduct.Name}\n{product.CurrentProduct.ID}");
                 listBox_SearchResultsSaleTab.Items.Add(item);
-            } 
+            }
         }
 
         public void SearchFieldLostFocus(object sender, RoutedEventArgs e)
@@ -788,7 +789,8 @@ namespace P3_Projekt_WPF
             if (e.Key == Key.Enter && txtBox_SearchField_Storage.IsFocused)
             {
                 btn_search_Storage_Click(sender, e);
-            } else if (e.Key == Key.Enter && txtBox_SearchField.IsFocused)
+            }
+            else if (e.Key == Key.Enter && txtBox_SearchField.IsFocused)
             {
                 btn_search_Click(sender, e);
             }
@@ -805,13 +807,13 @@ namespace P3_Projekt_WPF
             _settingsController.SpecifyIcecreamID(Int32.Parse(textBox_IceID.Text));
         }
 
+        #region StorageRoomCreateAddDelete
         CreateStorageRoom _createStorageRoom;
         private void btn_newStorageRoom_Click(object sender, RoutedEventArgs e)
         {
 
             _createStorageRoom = new CreateStorageRoom(_storageController, this);
-            LoadStorageRooms();
-     
+
             _createStorageRoom.Activate();
             _createStorageRoom.Show();
         }
@@ -820,40 +822,12 @@ namespace P3_Projekt_WPF
         {
             int storageID = Convert.ToInt32(comboBox_storageRoomSelect.Text.Split(' ').First());
             StorageRoom chosenStorage = _storageController.StorageRoomDictionary[storageID];
-            if (_createStorageRoom == null)
-            {
-                _createStorageRoom = new CreateStorageRoom();
-                _createStorageRoom.btn_deleteStorageRoom.Visibility = Visibility.Visible;
-                _createStorageRoom.textBox_Name.Text = chosenStorage.Name;
-                _createStorageRoom.textBox_descr.Text = chosenStorage.Description;
-                _createStorageRoom.output_StorageID.Text = chosenStorage.ID.ToString();
-                _createStorageRoom.Closed += delegate { _createStorageRoom = null; };
-                _createStorageRoom.btn_JustQuit.Click += delegate { _createStorageRoom.Close(); _createStorageRoom = null; };
-                _createStorageRoom.btn_SaveAndQuit.Click += delegate
-                {
-                    string storageRoomName = _createStorageRoom.textBox_Name.Text;
-                    string storageRoomDescr = _createStorageRoom.textBox_descr.Text;
-                    _storageController.EditStorageRoom(storageID, storageRoomName, storageRoomDescr);
-                    LoadStorageRooms();
-                    _createStorageRoom.Close();
-                };
-                _createStorageRoom.btn_deleteStorageRoom.Click += delegate
-                {
-                    MessageBoxResult results = MessageBox.Show($"Er du sikker på at du vil slette dette lagerrum: {chosenStorage.Name} ?", "Slet lagerrum:", MessageBoxButton.YesNo, MessageBoxImage.Question);
-                    if (results == MessageBoxResult.Yes)
-                    {
-                        _storageController.DeleteStorageRoom(storageID);
-                        LoadStorageRooms();
-                        _createStorageRoom.Close();
-                    }
-                };
-            }
+            _createStorageRoom = new CreateStorageRoom(_storageController, this, chosenStorage);
             _createStorageRoom.Activate();
             _createStorageRoom.Show();
         }
 
-
-        private void LoadStorageRooms()
+        public void LoadStorageRooms()
         {
             comboBox_storageRoomSelect.Items.Clear();
             foreach (KeyValuePair<int, StorageRoom> StorageRoom in _storageController.StorageRoomDictionary)
@@ -870,7 +844,6 @@ namespace P3_Projekt_WPF
                 LoadStorageRooms();
                 firstLoad = false;
             }
-
         }
 
         private void comboBox_storageRoomSelect_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -887,10 +860,8 @@ namespace P3_Projekt_WPF
             {
                 textBlock_StorageDescr.Text = null;
             }
-
-
         }
-
+        #endregion
 
         private void btn_Cash_Click(object sender, RoutedEventArgs e)
         {
