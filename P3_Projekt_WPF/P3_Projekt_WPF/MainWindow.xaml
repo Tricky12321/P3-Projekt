@@ -572,6 +572,11 @@
             </TabItem>
         </TabControl>
 
+        <TextBlock x:Name="label_AdminStatus" Text="Admin:" Height="40" Width="75" FontSize="24" Margin="0,9,136,0" HorizontalAlignment="Right" VerticalAlignment="Top"/>
+        <TextBlock x:Name="label_AdminStatusOnOff" Text="Fra" Height="40" Width="40" FontSize="24" Margin="0,9,90,0" HorizontalAlignment="Right" VerticalAlignment="Top"/>
+
+        <Button x:Name="btn_AdminLogin" Content="Log ind" Height="40" Width="84" FontSize="24" Margin="0,5,5,0" HorizontalAlignment="Right" VerticalAlignment="Top"/>
+
 
     </Grid>
 </Window>
