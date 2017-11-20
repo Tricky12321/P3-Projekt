@@ -50,7 +50,7 @@ namespace P3_Projekt_WPF
             _storageController = new StorageController();
             _POSController = new POSController(_storageController);
             _settingsController = new SettingsController();
-            _statisticsController = new StatisticsController();
+            _statisticsController = new StatisticsController(_storageController);
             OutputList.Add("[1. TIMER] took " + LoadingTimer.ElapsedMilliseconds + "ms");
             InitializeComponent();
             OutputList.Add("[2. TIMER] took " + LoadingTimer.ElapsedMilliseconds + "ms");
@@ -71,9 +71,7 @@ namespace P3_Projekt_WPF
             {
                 Debug.WriteLine(item);
             }
-            ServiceProduct TestProd = new ServiceProduct(1);
-            CreateProduct EditServiceProd = new CreateProduct(TestProd, _storageController, this);
-            EditServiceProd.Show();
+
         }
 
         public void ReloadProducts()
@@ -726,7 +724,7 @@ namespace P3_Projekt_WPF
         ResovleTempProduct _resolveTempProduct;
         private void btn_MergeTempProduct_Click(object sender, RoutedEventArgs e)
         {
-            if (_storageController.TempProductList.Where(x => x.Resolved == false).Count() > 0)
+            if (_storageController.TempProductList.Where(x => x.Value.Resolved == false).Count() > 0)
             {
                 InitMergeWindow();
             }
@@ -736,7 +734,7 @@ namespace P3_Projekt_WPF
         {
             int index = 0;
             List<TempListItem> ItemList = new List<TempListItem>();
-            var tempProducts = _storageController.TempProductList.Where(x => x.Resolved == false).ToList();
+            var tempProducts = _storageController.TempProductList.Where(x => x.Value.Resolved == false).ToList();
 
             if (_resolveTempProduct == null)
             {
@@ -746,19 +744,19 @@ namespace P3_Projekt_WPF
                 _resolveTempProduct.MouseLeftButtonUp += delegate
                 {
                     index = _resolveTempProduct.listview_ProductsToMerge.SelectedIndex;
-                    _resolveTempProduct.textBox_TempProductInfo.Text = tempProducts[index].Description;
+                    _resolveTempProduct.textBox_TempProductInfo.Text = tempProducts[index].Value.Description;
                 };
                 _resolveTempProduct.textBox_IDToMerge.KeyUp += delegate { IDToMerge(); };
                 _resolveTempProduct.button_Merge.Click += delegate
                 {
-                    _storageController.MergeTempProduct(tempProducts[index], int.Parse(_resolveTempProduct.textBox_IDToMerge.Text));
+                    _storageController.MergeTempProduct(tempProducts[index].Value, int.Parse(_resolveTempProduct.textBox_IDToMerge.Text));
 
                 };
             }
 
-            foreach (TempProduct tempProductsToListView in tempProducts)
+            foreach (var tempProductsToListView in tempProducts)
             {
-                ItemList.Add(new TempListItem { Description = tempProductsToListView.Description, Price = tempProductsToListView.SalePrice });
+                ItemList.Add(new TempListItem { Description = tempProductsToListView.Value.Description, Price = tempProductsToListView.Value.SalePrice });
             }
             _resolveTempProduct.listview_ProductsToMerge.ItemsSource = ItemList;
             _resolveTempProduct.Show();
@@ -930,5 +928,6 @@ namespace P3_Projekt_WPF
                 UpdateReceiptList();
             }
         }
+
     }
 }

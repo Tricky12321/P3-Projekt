@@ -46,5 +46,17 @@ namespace P3_Projekt_WPF.Properties {
                 this["IcecreamID"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string QuickButton {
+            get {
+                return ((string)(this["QuickButton"]));
+            }
+            set {
+                this["QuickButton"] = value;
+            }
+        }
     }
 }
