@@ -505,16 +505,28 @@
                                         </Style>
                                     </TextBlock.Style>
                                 </TextBlock>
-                                <Button Style="{StaticResource Flat_Button}" x:Name="btn_newStorageRoom" Content="Tilføj nyt Lagerrum" HorizontalAlignment="Left" Margin="50,0,0,190" VerticalAlignment="Bottom" Width="466" Height="50" Click="btn_newStorageRoom_Click" />
-                                <Button Style="{StaticResource Flat_Button}" x:Name="btn_editStorageRoom" Content="Rediger Lagerrum" HorizontalAlignment="Left" Margin="50,0,0,30" VerticalAlignment="Bottom" Width="466" Height="50" Click="btn_editStorageRoom_Click" IsHitTestVisible="False"/>
-                                <ComboBox x:Name="comboBox_storageRoomSelect" Height="50" Margin="50,0,0,109" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="466" FontSize="30" IsSynchronizedWithCurrentItem="True" SelectionChanged="comboBox_storageRoomSelect_SelectionChanged"/>
+                                <Button Style="{StaticResource Flat_Button}" Background="#FFC5C5C5" x:Name="btn_newStorageRoom" Content="Tilføj nyt Lagerrum" HorizontalAlignment="Left" Margin="10,0,0,190" VerticalAlignment="Bottom" Width="466" Height="50" Click="btn_newStorageRoom_Click" />
+                                <Button Style="{StaticResource Flat_Button}" Background="#FFC5C5C5" x:Name="btn_editStorageRoom" Content="Rediger Lagerrum" HorizontalAlignment="Left" Margin="10,0,0,10" VerticalAlignment="Bottom" Width="466" Height="50" Click="btn_editStorageRoom_Click" IsHitTestVisible="False"/>
+                                <ComboBox x:Name="comboBox_storageRoomSelect" Background="#FFC5C5C5" Height="50" Margin="10,0,0,70" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="466" FontSize="30" IsSynchronizedWithCurrentItem="True" SelectionChanged="comboBox_storageRoomSelect_SelectionChanged"/>
 
-                                <Border BorderBrush="Black" BorderThickness="2"  Height="230" Margin="561,0,15,10" VerticalAlignment="Bottom" >
+                                <TextBlock x:Name="comboBox_text" Height="40" TextWrapping="Wrap" Foreground="DarkGray" Text="---Vælg Lagerrum---" Margin="104,0,0,77" FontSize="30" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="277">
+                                    <TextBlock.Style>
+                                        <Style TargetType="{x:Type TextBlock}">
+                                            <Setter Property="Visibility" Value="Collapsed"/>
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding Text, ElementName=comboBox_storageRoomSelect}" Value="">
+                                                    <Setter Property="Visibility" Value="Visible"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </TextBlock.Style>
+                                </TextBlock>
+                                <Border BorderBrush="Black" BorderThickness="2"  Height="230" Margin="500,0,10,10" VerticalAlignment="Bottom" >
                                     <Grid>
                                         <ScrollViewer>
                                             <TextBlock x:Name="textBlock_StorageDescr" TextWrapping="Wrap" Text="" Margin="10,8,0,-8" HorizontalAlignment="Left"/>
                                         </ScrollViewer>
-                                        <TextBlock x:Name="text_empty_descr" Height="100" TextWrapping="Wrap" Foreground="DarkGray" Text="Vælg lagerrum for beskrivelse..." Margin="10,0,0,116" FontSize="30" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="452">
+                                        <TextBlock x:Name="text_empty_descr" Height="100" TextWrapping="Wrap" Foreground="DarkGray" Text="Vælg lagerrum for beskrivelse..." Margin="4,0,0,126" FontSize="30" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="452">
                                             <TextBlock.Style>
                                                 <Style TargetType="{x:Type TextBlock}">
                                                     <Setter Property="Visibility" Value="Collapsed"/>
