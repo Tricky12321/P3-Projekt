@@ -15,6 +15,7 @@ namespace P3_Projekt_WPF.Classes
         public decimal Price;
         public bool Discount;
         public decimal TotalPrice => Price * Amount;
+        private StorageController _storageController = null;
         public SaleTransaction(BaseProduct product, int amount, int receiptID) : base(product, amount)
         {
             ReceiptID = receiptID;
@@ -23,7 +24,12 @@ namespace P3_Projekt_WPF.Classes
 
         public SaleTransaction(Row RowData) : base(null, 0)
         {
-            _id = Convert.ToInt32(RowData.Values[0]);
+            CreateFromRow(RowData);
+        }
+
+        public SaleTransaction(Row RowData, StorageController storageController) : base(null, 0)
+        {
+            _storageController = storageController;
             CreateFromRow(RowData);
         }
 
@@ -32,7 +38,7 @@ namespace P3_Projekt_WPF.Classes
             _id = id;
             GetFromDatabase();
         }
-        
+
         //If transaction contains Product, decrements the shop storage room(ID 0) by amount
         //If transaction contains Temporary- or ServiceProduct, does nothing, since these do not have storage amounts
         public override void Execute()
@@ -45,7 +51,7 @@ namespace P3_Projekt_WPF.Classes
             else if (Product is TempProduct)
             {
                 Product.ID = TempProduct.GetNextID();
-                
+
                 Product.UploadToDatabase();
             }
         }
@@ -92,7 +98,7 @@ namespace P3_Projekt_WPF.Classes
 
         public int GetGroupID()
         {
-            if(Product is Product)
+            if (Product is Product)
             {
                 return (Product as Product).ProductGroupID;
             }
@@ -111,11 +117,11 @@ namespace P3_Projekt_WPF.Classes
         {
             if (Product is Product)
             {
-                    return $"{(Product as Product).Name}";
+                return $"{(Product as Product).Name}";
             }
             else if (Product is ServiceProduct)
             {
-                    return $"{(Product as ServiceProduct).Name}";
+                return $"{(Product as ServiceProduct).Name}";
             }
             else
             {
@@ -127,21 +133,42 @@ namespace P3_Projekt_WPF.Classes
         {
             if (Type == "product")
             {
+                if (_storageController != null)
+                {
+                    return _storageController.ProductDictionary[id];
+                }
                 return new Product(id);
             }
             else if (Type == "temp_product")
             {
-                TempProduct ResultsProduct = new TempProduct(id);
+                TempProduct ResultsProduct;
+                if (_storageController != null)
+                {
+                    ResultsProduct = _storageController.TempProductList[id];
+                }
+                else
+                {
+                    ResultsProduct = new TempProduct(id);
+                }
                 if (ResultsProduct.ResolvedProductID != 0)
                 {
+                    if (_storageController != null)
+                    {
+                        return _storageController.ProductDictionary[ResultsProduct.ResolvedProductID];
+                    }
                     return new Product(ResultsProduct.ResolvedProductID);
-                } else
+                }
+                else
                 {
                     return ResultsProduct;
                 }
             }
             else if (Type == "service_product")
             {
+                if (_storageController != null)
+                {
+                    return _storageController.ServiceProductDictionary[id];
+                }
                 return new ServiceProduct(id);
             }
             else
