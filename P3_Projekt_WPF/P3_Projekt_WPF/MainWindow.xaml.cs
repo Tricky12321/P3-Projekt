@@ -851,7 +851,8 @@ namespace P3_Projekt_WPF
 
         private void btn_editStorageRoom_Click(object sender, RoutedEventArgs e)
         {
-            int storageID = Convert.ToInt32(comboBox_storageRoomSelect.Text.Split(' ').First());
+            //int storageID = Convert.ToInt32(comboBox_storageRoomSelect.Text.Split(' ').First());
+            int storageID = Convert.ToInt32((sender as Button).Tag);
             StorageRoom chosenStorage = _storageController.StorageRoomDictionary[storageID];
             _createStorageRoom = new CreateStorageRoom(_storageController, this, chosenStorage);
             _createStorageRoom.Activate();
@@ -863,6 +864,7 @@ namespace P3_Projekt_WPF
             comboBox_storageRoomSelect.Items.Clear();
             foreach (KeyValuePair<int, StorageRoom> StorageRoom in _storageController.StorageRoomDictionary)
             {
+                listView_StorageRoom.Items.Add(new { storageID = StorageRoom.Key, storageName = StorageRoom.Value.Name, storageDescription = StorageRoom.Value.Description, Tag = StorageRoom.Key});
                 comboBox_storageRoomSelect.Items.Add($"{StorageRoom.Key.ToString()} {StorageRoom.Value.Name}");
             }
         }
