@@ -5,19 +5,19 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:P3_Projekt_WPF"
         mc:Ignorable="d"
-        Title="CreateStorageRoom" Height="482.5" Width="956">
+        Title="Lav et nyt lagerrum" Height="440" Width="950" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
     <Grid>
         <TextBlock x:Name="label_name" HorizontalAlignment="Left" Margin="10,10,0,0" TextWrapping="Wrap" Text="Navn" FontSize="30" VerticalAlignment="Top" MinHeight="40" Height="40" Width="76"/>
-        <TextBox Padding="0,0,0,0" x:Name="textBox_Name" FontSize="30" HorizontalAlignment="Left" Height="42" MinHeight="40" Margin="190,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="280">
+        <TextBox Padding="0,0,0,0" x:Name="textBox_Name" FontSize="30" HorizontalAlignment="Left" Height="42" MinHeight="40" Margin="190,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="424">
             <TextBox.Resources>
                 <Style TargetType="{x:Type Border}">
                     <Setter Property="CornerRadius" Value="10"/>
                 </Style>
             </TextBox.Resources>
         </TextBox>
-        <TextBlock IsHitTestVisible="False" x:Name="TextBlock_name_insert" Foreground="DarkGray" FontSize="30" HorizontalAlignment="Left" Margin="206,10,0,0" TextWrapping="Wrap" Text="Navn" VerticalAlignment="Top" Height="40" MinHeight="40" Width="228">
+        <TextBlock IsHitTestVisible="False" x:Name="TextBlock_name_insert" Foreground="DarkGray" FontSize="30" HorizontalAlignment="Left" Margin="194,10,0,0" TextWrapping="Wrap" Text="Navn" VerticalAlignment="Top" Height="40" MinHeight="40" Width="228">
             <TextBlock.Style>
-                <Style x:Name="name_insert_style" TargetType="{x:Type TextBlock}">
+                <Style TargetType="{x:Type TextBlock}">
                     <Setter Property="Visibility" Value="Collapsed"/>
                     <Style.Triggers>
                         <DataTrigger Binding="{Binding Text, ElementName=textBox_Name}" Value="">
@@ -35,7 +35,7 @@
                 </Style>
             </TextBox.Resources>
         </TextBox>
-        <TextBlock x:Name="TextBlock_descr_insert" IsHitTestVisible="False" Foreground="DarkGray" FontSize="30" HorizontalAlignment="Left" Margin="206,88,0,0" TextWrapping="Wrap" Text="Beskrivelse for lagerrum..." VerticalAlignment="Top">
+        <TextBlock x:Name="TextBlock_descr_insert" IsHitTestVisible="False" Foreground="DarkGray" FontSize="30" HorizontalAlignment="Left" Margin="194,80,0,0" TextWrapping="Wrap" Text="Beskrivelse for lagerrum..." VerticalAlignment="Top">
             <TextBlock.Style>
                 <Style TargetType="{x:Type TextBlock}">
                     <Setter Property="Visibility" Value="Collapsed"/>
@@ -48,11 +48,11 @@
             </TextBlock.Style>
         </TextBlock>
 
-        <TextBlock x:Name="label_StorageID" Margin="520,0,0,403" Text="Storage ID:" FontSize="24" MinHeight="24" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="118" Height="32"/>
-        <TextBlock x:Name="output_StorageID" HorizontalAlignment="Right" Margin="0,0,28,403" TextWrapping="Wrap" Text=""  FontSize="24" VerticalAlignment="Bottom" Grid.Column="1" Height="32"/>
+        <TextBlock x:Name="label_StorageID" Margin="632,10,0,0" Text="Storage ID:" FontSize="24" MinHeight="24" VerticalAlignment="Top" HorizontalAlignment="Left" Width="118" Height="32"/>
+        <TextBlock x:Name="output_StorageID" HorizontalAlignment="Right" Margin="0,10,20,0" TextWrapping="Wrap" Text=""  FontSize="24" VerticalAlignment="Top" Height="32"/>
 
-        <Button Style="{StaticResource Flat_Button}" x:Name="btn_SaveAndQuit" Content="Gem og Afslut"  FontSize="30" Margin="0,0,10,15" Height="45" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="220"/>
-        <Button Style="{StaticResource Flat_Button}" x:Name="btn_JustQuit" Content="Afbryd"  FontSize="30" Margin="0,0,248,15" Height="45" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="220"/>
-        <Button Style="{StaticResource Flat_Button}" x:Name="btn_deleteStorageRoom" Content="Slet dette lager"  FontSize="30" Margin="10,0,0,15" Height="45" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="300" Visibility="Hidden"/>
+        <Button Style="{StaticResource Flat_Button}" Background="#FFC5C5C5" x:Name="btn_SaveAndQuit" Content="Gem og Afslut"  FontSize="30" Margin="0,0,10,15" Height="45" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="220"/>
+        <Button Style="{StaticResource Flat_Button}" Background="#FFC5C5C5" x:Name="btn_JustQuit" Content="Afbryd"  FontSize="30" Margin="0,0,248,15" Height="45" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="220"/>
+        <Button Style="{StaticResource Flat_Button}" Background="#FFC5C5C5" x:Name="btn_deleteStorageRoom" Content="Slet dette lager"  FontSize="30" Margin="10,0,0,15" Height="45" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="300" Visibility="Hidden"/>
     </Grid>
 </Window>

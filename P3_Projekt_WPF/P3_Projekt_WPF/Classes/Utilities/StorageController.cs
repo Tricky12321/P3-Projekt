@@ -317,7 +317,8 @@ namespace P3_Projekt_WPF.Classes.Utilities
         public void DeleteGroup(int GroupID)
         {
             //Mulighed for at flytte alle produkter til en bestem gruppe???
-            foreach (Product product in ProductDictionary.Values.Where(x => x.ProductGroupID == GroupID))
+            var groups = ProductDictionary.Values.Where(x => x.ProductGroupID == GroupID);
+            foreach (Product product in groups)
             {
                 product.ProductGroupID = GroupDictionary[0].ID;
             }
@@ -329,7 +330,8 @@ namespace P3_Projekt_WPF.Classes.Utilities
         //Removes group from dictionary
         public void DeleteGroupAndMove(int removeID, int moveID)
         {
-            foreach (Product product in ProductDictionary.Values.Where(x => x.ProductGroupID == removeID))
+            var groups = ProductDictionary.Values.Where(x => x.ProductGroupID == removeID);
+            foreach (Product product in groups)
             {
                 product.ProductGroupID = GroupDictionary[moveID].ID;
             }

@@ -44,20 +44,36 @@ namespace P3_Projekt_WPF
         public static bool runLoading = true;
         public MainWindow()
         {
+            List<string> OutputList = new List<string>();
+            Stopwatch LoadingTimer = new Stopwatch();
+            LoadingTimer.Start();
             _storageController = new StorageController();
             _POSController = new POSController(_storageController);
             _settingsController = new SettingsController();
             _statisticsController = new StatisticsController();
+            OutputList.Add("[1. TIMER] took " + LoadingTimer.ElapsedMilliseconds + "ms");
             InitializeComponent();
-            Mysql.Connect();
+            OutputList.Add("[2. TIMER] took " + LoadingTimer.ElapsedMilliseconds + "ms");
             LoadDatabase();
+            OutputList.Add("[3. TIMER] took " + LoadingTimer.ElapsedMilliseconds + "ms");
             InitComponents();
+            OutputList.Add("[4. TIMER] took " + LoadingTimer.ElapsedMilliseconds + "ms");
 
             this.KeyDown += new KeyEventHandler(KeyboardHook);
             this.KeyDown += new KeyEventHandler(CtrlHookDown);
             this.KeyDown += new KeyEventHandler(EnterKeyPressedSearch);
             this.KeyUp += new KeyEventHandler(CtrlHookUp);
             this.WindowState = WindowState.Maximized;
+
+            LoadingTimer.Stop();
+            OutputList.Add("[TOTAL TIMER] took "+LoadingTimer.ElapsedMilliseconds+"ms");
+            foreach (var item in OutputList)
+            {
+                Debug.WriteLine(item);
+            }
+            ServiceProduct TestProd = new ServiceProduct(1);
+            CreateProduct EditServiceProd = new CreateProduct(TestProd, _storageController, this);
+            EditServiceProd.Show();
         }
 
         public void ReloadProducts()
@@ -108,14 +124,22 @@ namespace P3_Projekt_WPF
 
         private void InitComponents()
         {
+            Stopwatch GridButtonTimer = new Stopwatch();
+            GridButtonTimer.Start();
             InitGridQuickButtons();
+            GridButtonTimer.Stop();
+            Debug.WriteLine("[InitGridQuickButtons] took " + GridButtonTimer.ElapsedMilliseconds + "ms");
+            Stopwatch StorageGridTimer = new Stopwatch();
+            StorageGridTimer.Start();
             InitStorageGridProducts();
+            StorageGridTimer.Stop();
+            Debug.WriteLine("[InitStorageGridProducts] took " + StorageGridTimer.ElapsedMilliseconds + "ms");
             AddProductButton();
             Stopwatch Timer1 = new Stopwatch();
             Timer1.Start();
             LoadProductImages();
             Timer1.Stop();
-            Debug.WriteLine("[LoadProductImages] took "+Timer1.ElapsedMilliseconds+"ms");
+            Debug.WriteLine("[LoadProductImages] took " + Timer1.ElapsedMilliseconds + "ms");
             LoadProductGrid(_storageController.ProductDictionary);
             BuildInformationTable();
             InitStatisticsTab();
@@ -141,7 +165,8 @@ namespace P3_Projekt_WPF
         {
             datePicker_StartDate.SelectedDate = DateTime.Now;
             datePicker_EndDate.SelectedDate = DateTime.Now;
-            foreach (string brand in _storageController.ProductDictionary.Values.Select(x => x.Brand).Distinct())
+            var products = _storageController.ProductDictionary.Values.Select(x => x.Brand).Distinct();
+            foreach (string brand in products)
             {
                 comboBox_Brand.Items.Add(brand);
             }
@@ -149,7 +174,7 @@ namespace P3_Projekt_WPF
             {
                 comboBox_Group.Items.Add(group.Name);
             }
-
+            
         }
 
         private void UpdateReceiptList()
@@ -237,7 +262,7 @@ namespace P3_Projekt_WPF
                 }
             };
 
-            addProductWindow.Show();
+            addProductWindow.ShowDialog();
         }
 
         private bool _firstClick = true;
@@ -300,7 +325,7 @@ namespace P3_Projekt_WPF
                 _productControlDictionary.Add(product.Value.ID, productControl);
             }
             Timer2.Stop();
-            Debug.WriteLine("[LoadProductControlDictionary] took "+Timer2.ElapsedMilliseconds+"ms");
+            Debug.WriteLine("[LoadProductControlDictionary] took " + Timer2.ElapsedMilliseconds + "ms");
         }
 
         public void LoadProductGrid(ConcurrentDictionary<int, Product> productDictionary)
@@ -338,8 +363,8 @@ namespace P3_Projekt_WPF
 
             productGrid.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(380) });
             int i = 1;
-
-            foreach (KeyValuePair<int, SearchProduct> product in productDictionary.OrderByDescending(x => x.Value.BrandMatch + x.Value.GroupMatch + x.Value.NameMatch))
+            var products = productDictionary.OrderByDescending(x => x.Value.BrandMatch + x.Value.GroupMatch + x.Value.NameMatch);
+            foreach (KeyValuePair<int, SearchProduct> product in products)
             {
                 if (i % 5 == 0)
                 {
@@ -544,23 +569,23 @@ namespace P3_Projekt_WPF
 
         private void btn_Temporary_Click(object sender, RoutedEventArgs e)
         {
-                if (_createTempProduct == null)
+            if (_createTempProduct == null)
+            {
+                _createTempProduct = new CreateTemporaryProduct();
+                _createTempProduct.Closed += delegate { _createTempProduct = null; };
+                _createTempProduct.btn_AddTempProduct.Click += delegate
                 {
-                    _createTempProduct = new CreateTemporaryProduct();
-                    _createTempProduct.Closed += delegate { _createTempProduct = null; };
-                    _createTempProduct.btn_AddTempProduct.Click += delegate
-                    {
-                        string description = _createTempProduct.textbox_Description.Text;
-                        decimal price = decimal.Parse(_createTempProduct.textbox_Price.Text);
-                        int amount = int.Parse(_createTempProduct.textBox_ProductAmount.Text);
-                        TempProduct NewTemp = _storageController.CreateTempProduct(description, price);
-                        _POSController.AddSaleTransaction(NewTemp, amount);
-                        UpdateReceiptList();
-                        _createTempProduct.Close();
-                    };
-                }
-                _createTempProduct.Activate();
-                _createTempProduct.Show();
+                    string description = _createTempProduct.textbox_Description.Text;
+                    decimal price = decimal.Parse(_createTempProduct.textbox_Price.Text);
+                    int amount = int.Parse(_createTempProduct.textBox_ProductAmount.Text);
+                    TempProduct NewTemp = _storageController.CreateTempProduct(description, price);
+                    _POSController.AddSaleTransaction(NewTemp, amount);
+                    UpdateReceiptList();
+                    _createTempProduct.Close();
+                };
+            }
+            _createTempProduct.Activate();
+            _createTempProduct.Show();
         }
 
         private void btn_PictureFilePath_Click(object sender, RoutedEventArgs e)
@@ -584,33 +609,41 @@ namespace P3_Projekt_WPF
         //Today?? Yesterday??
         private void Button_CreateStatistics_Click(object sender, RoutedEventArgs e)
         {
-            DateTime startDate = datePicker_StartDate.SelectedDate.Value;
-            DateTime endDate = datePicker_EndDate.SelectedDate.Value;
-            ResetStatisticsView();
-
-            string id = null;
-            if (textBox_StatisticsProductID.Text.Length > 0)
+            var check = new AdminValidation();
+            check.Closed += delegate
             {
-                id = textBox_StatisticsProductID.Text;
-            }
-            string brand = comboBox_Brand.Text;
-            string groupString = comboBox_Group.Text;
-            Group group = null;
-            if (comboBox_Group.Text != "")
-            {
-                group = _storageController.GroupDictionary.Values.First(x => x.Name == groupString);
-            }
+                if (check.IsPasswordCorrect)
+                {
+                    DateTime startDate = datePicker_StartDate.SelectedDate.Value;
+                    DateTime endDate = datePicker_EndDate.SelectedDate.Value;
+                    ResetStatisticsView();
 
-            CheckboxChecker(ref id, ref brand, ref group);
+                    string id = null;
+                    if (textBox_StatisticsProductID.Text.Length > 0)
+                    {
+                        id = textBox_StatisticsProductID.Text;
+                    }
+                    string brand = comboBox_Brand.Text;
+                    string groupString = comboBox_Group.Text;
+                    Group group = null;
+                    if (comboBox_Group.Text != "")
+                    {
+                        group = _storageController.GroupDictionary.Values.First(x => x.Name == groupString);
+                    }
 
-            _statisticsController.RequestStatisticsDate(startDate, endDate);
-            _statisticsController.FilterByParameters(id, brand, group);
+                    CheckboxChecker(ref id, ref brand, ref group);
 
-            DisplayStatistics();
-            if (_statisticsController.TransactionsForStatistics.Count == 0)
-            {
-                label_NoTransactions.Visibility = Visibility.Visible;
-            }
+                    _statisticsController.RequestStatisticsDate(startDate, endDate);
+                    _statisticsController.FilterByParameters(id, brand, group);
+
+                    DisplayStatistics();
+                    if (_statisticsController.TransactionsForStatistics.Count == 0)
+                    {
+                        label_NoTransactions.Visibility = Visibility.Visible;
+                    }
+                }
+            };
+            check.ShowDialog();
         }
 
         private void ResetStatisticsView()
@@ -693,7 +726,7 @@ namespace P3_Projekt_WPF
         ResovleTempProduct _resolveTempProduct;
         private void btn_MergeTempProduct_Click(object sender, RoutedEventArgs e)
         {
-            if(_storageController.TempProductList.Where(x => x.Resolved == false).Count() > 0)
+            if (_storageController.TempProductList.Where(x => x.Resolved == false).Count() > 0)
             {
                 InitMergeWindow();
             }
@@ -716,7 +749,8 @@ namespace P3_Projekt_WPF
                     _resolveTempProduct.textBox_TempProductInfo.Text = tempProducts[index].Description;
                 };
                 _resolveTempProduct.textBox_IDToMerge.KeyUp += delegate { IDToMerge(); };
-                _resolveTempProduct.button_Merge.Click += delegate {
+                _resolveTempProduct.button_Merge.Click += delegate
+                {
                     _storageController.MergeTempProduct(tempProducts[index], int.Parse(_resolveTempProduct.textBox_IDToMerge.Text));
 
                 };
@@ -746,7 +780,6 @@ namespace P3_Projekt_WPF
                 }
                 catch (System.Collections.Generic.KeyNotFoundException)
                 {
-
                     _resolveTempProduct.Label_MergeInfo.Content = "Ugyldigt Produkt ID";
                     _resolveTempProduct.button_Merge.IsEnabled = false;
                 }
@@ -769,13 +802,14 @@ namespace P3_Projekt_WPF
             listBox_SearchResultsSaleTab.Visibility = Visibility.Visible;
             ConcurrentDictionary<int, SearchProduct> productSearchResults = Utils.SearchForProduct(txtBox_SearchField.Text, _storageController.ProductDictionary, _storageController.GroupDictionary);
             listBox_SearchResultsSaleTab.Items.Clear();
-            foreach (SearchProduct product in productSearchResults.Values.OrderByDescending(x=> x.BrandMatch + x.GroupMatch + x.NameMatch))
+            var searchResults = productSearchResults.Values.OrderByDescending(x => x.BrandMatch + x.GroupMatch + x.NameMatch);
+            foreach (SearchProduct product in searchResults)
             {
                 var item = new ListBoxItem();
                 item.Tag = product.CurrentProduct.ID;
                 item.Content = new SaleSearchResultItemControl(product.CurrentProduct.Image, $"{product.CurrentProduct.Name}\n{product.CurrentProduct.ID}");
                 listBox_SearchResultsSaleTab.Items.Add(item);
-            } 
+            }
         }
 
         public void SearchFieldLostFocus(object sender, RoutedEventArgs e)
@@ -784,11 +818,12 @@ namespace P3_Projekt_WPF
         }
 
         private void EnterKeyPressedSearch(object sender, KeyEventArgs e)
-        {
+        { 
             if (e.Key == Key.Enter && txtBox_SearchField_Storage.IsFocused)
             {
                 btn_search_Storage_Click(sender, e);
-            } else if (e.Key == Key.Enter && txtBox_SearchField.IsFocused)
+            }
+            else if (e.Key == Key.Enter && txtBox_SearchField.IsFocused)
             {
                 btn_search_Click(sender, e);
             }
@@ -805,23 +840,13 @@ namespace P3_Projekt_WPF
             _settingsController.SpecifyIcecreamID(Int32.Parse(textBox_IceID.Text));
         }
 
-        CreateStorageRoom _createStorageRoom;//mangler at ordne på buttons at comboboxen bliver opdateret.
+        #region StorageRoomCreateAddDelete
+        CreateStorageRoom _createStorageRoom;
         private void btn_newStorageRoom_Click(object sender, RoutedEventArgs e)
         {
-            if (_createStorageRoom == null)
-            {
-                _createStorageRoom = new CreateStorageRoom();
-                _createStorageRoom.Closed += delegate { _createStorageRoom = null; };
-                _createStorageRoom.btn_JustQuit.Click += delegate { _createStorageRoom.Close(); _createStorageRoom = null; };
-                _createStorageRoom.btn_SaveAndQuit.Click += delegate
-                {
-                    string storageRoomName = _createStorageRoom.textBox_Name.Text;
-                    string storageRoomDescr = _createStorageRoom.textBox_descr.Text;
-                    _storageController.CreateStorageRoom(storageRoomName, storageRoomDescr);
-                    LoadStorageRooms();
-                    _createStorageRoom.Close();
-                };
-            }
+
+            _createStorageRoom = new CreateStorageRoom(_storageController, this);
+
             _createStorageRoom.Activate();
             _createStorageRoom.Show();
         }
@@ -830,42 +855,14 @@ namespace P3_Projekt_WPF
         {
             int storageID = Convert.ToInt32(comboBox_storageRoomSelect.Text.Split(' ').First());
             StorageRoom chosenStorage = _storageController.StorageRoomDictionary[storageID];
-            if (_createStorageRoom == null)
-            {
-                _createStorageRoom = new CreateStorageRoom();
-                _createStorageRoom.btn_deleteStorageRoom.Visibility = Visibility.Visible;
-                _createStorageRoom.textBox_Name.Text = chosenStorage.Name;
-                _createStorageRoom.textBox_descr.Text = chosenStorage.Description;
-                _createStorageRoom.output_StorageID.Text = chosenStorage.ID.ToString();
-                _createStorageRoom.Closed += delegate { _createStorageRoom = null; };
-                _createStorageRoom.btn_JustQuit.Click += delegate { _createStorageRoom.Close(); _createStorageRoom = null; };
-                _createStorageRoom.btn_SaveAndQuit.Click += delegate
-                {
-                    string storageRoomName = _createStorageRoom.textBox_Name.Text;
-                    string storageRoomDescr = _createStorageRoom.textBox_descr.Text;
-                    _storageController.EditStorageRoom(storageID, storageRoomName, storageRoomDescr);
-                    LoadStorageRooms();
-                    _createStorageRoom.Close();
-                };
-                _createStorageRoom.btn_deleteStorageRoom.Click += delegate 
-                {/*
-                    MessageBoxResult results = MessageBox.Show($"Er du sikker på at du vil slette dette lagerrum: {chosenStorage.Name} ?", "Slet lagerrum:", MessageBoxButton.YesNo, MessageBoxImage.Question);
-                    if(results == MessageBoxResult.Yes)
-                    {*/
-                        _storageController.DeleteStorageRoom(storageID);
-                        LoadStorageRooms();
-                        _createStorageRoom.Close();
-                    //}
-                };
-            }
+            _createStorageRoom = new CreateStorageRoom(_storageController, this, chosenStorage);
             _createStorageRoom.Activate();
             _createStorageRoom.Show();
         }
 
-
-        private void LoadStorageRooms()
+        public void LoadStorageRooms()
         {
-           comboBox_storageRoomSelect.Items.Clear();
+            comboBox_storageRoomSelect.Items.Clear();
             foreach (KeyValuePair<int, StorageRoom> StorageRoom in _storageController.StorageRoomDictionary)
             {
                 comboBox_storageRoomSelect.Items.Add($"{StorageRoom.Key.ToString()} {StorageRoom.Value.Name}");
@@ -880,10 +877,24 @@ namespace P3_Projekt_WPF
                 LoadStorageRooms();
                 firstLoad = false;
             }
-
         }
 
-        
+        private void comboBox_storageRoomSelect_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            btn_editStorageRoom.IsHitTestVisible = true;
+            if (comboBox_storageRoomSelect.SelectedItem != null)
+            {
+                int storageID = Convert.ToInt32(comboBox_storageRoomSelect.SelectedItem.ToString().Split(' ').First());
+                StorageRoom chosenStorage = _storageController.StorageRoomDictionary[storageID];
+                textBlock_StorageDescr.Foreground = Brushes.Black;
+                textBlock_StorageDescr.Text = $"{chosenStorage.ID}. {chosenStorage.Name}: {chosenStorage.Description}";
+            }
+            else
+            {
+                textBlock_StorageDescr.Text = null;
+            }
+        }
+        #endregion
 
         private void btn_Cash_Click(object sender, RoutedEventArgs e)
         {
@@ -895,7 +906,7 @@ namespace P3_Projekt_WPF
 
         private void btn_OpenAdmin_Click(object sender, RoutedEventArgs e)
         {
-            new AdminValidation().Show();
+            new AdminValidation().ShowDialog();
         }
 
         private void btn_ChangePassword_Click(object sender, RoutedEventArgs e)
@@ -904,9 +915,9 @@ namespace P3_Projekt_WPF
             check.Closed += delegate
             {
                 if (check.IsPasswordCorrect)
-                    new AdminNewPassword().Show();
+                    new AdminNewPassword().ShowDialog();
             };
-            check.Show();
+            check.ShowDialog();
         }
 
         private void ListBoxItem_MouseDown(object sender, MouseButtonEventArgs e)

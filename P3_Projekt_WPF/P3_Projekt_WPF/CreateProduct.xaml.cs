@@ -25,11 +25,39 @@ namespace P3_Projekt_WPF
         public string ChosenFilePath;
         private ConcurrentDictionary<int, int> _storageWithAmount = new ConcurrentDictionary<int, int>();
         private ConcurrentDictionary<int, StorageRoom> _storageRooms;
-        private ConcurrentDictionary<int, StorageRoom> _groups;
+        private ConcurrentDictionary<int, Group> _groups;
         private StorageController _storageController;
         private bool UpdateProductSec = false;
+        private bool UpdateServiceProductSec = false;
         private int UpdateProductID = 0;
         private MainWindow MainWin = null;
+
+        public CreateProduct(ServiceProduct prod, StorageController storageController, MainWindow MainWin)
+        {
+            this.MainWin = MainWin;
+            InitializeComponent();
+            comboBox_Group.ItemsSource = (storageController.GroupDictionary.Values.Select(x => x.Name));
+            comboBox_ServiceGroup.ItemsSource = (storageController.GroupDictionary.Values.Select(x => x.Name));
+            comboBox_Brand.ItemsSource = (storageController.GetProductBrands());
+            _storageRooms = storageController.StorageRoomDictionary;
+
+            LoadStorageRooms(_storageRooms);
+            output_ProductID.Text = Product.GetNextID().ToString();
+            output_ServiceProductID.Text = prod.ID.ToString();
+
+            btn_AddPicture.Click += PickImage;
+            btn_ServiceAddPicture.Click += PickImage;
+            ImageChosenEvent += (FilePath) =>
+            {
+                image_Product.Source = new BitmapImage(new Uri(FilePath));
+                image_ServiceProduct.Source = new BitmapImage(new Uri(FilePath));
+                ChosenFilePath = FilePath;
+            };
+            btn_AddStorageRoomWithAmount.Click += AddStorageWithAmount;
+            btn_JustQuit.Click += delegate { this.Close(); };
+            btn_ServiceJustQuit.Click += delegate { this.Close(); };
+        }
+
         public CreateProduct(Product prod, StorageController storageController, MainWindow MainWin)
         {
             this.MainWin = MainWin;
@@ -74,6 +102,18 @@ namespace P3_Projekt_WPF
             _storageWithAmount = prod.StorageWithAmount;
         }
 
+        private void FillBoxesWithExistingServiceProduct(ServiceProduct prod)
+        {
+            textbox_ServiceName.Text = prod.Name;
+            comboBox_ServiceGroup.Text = _storageController.GroupDictionary[prod.ServiceProductGroupID].Name;
+            textbox_ServiceSalePrice.Text = prod.SalePrice.ToString();
+            textbox_ServiceGroupLimit.Text = prod.GroupLimit.ToString();
+            textbox_ServiceGroupPrice.Text = prod.GroupPrice.ToString();
+            image_ServiceProduct.Source = prod.ProductPicture;
+          
+        }
+
+
         public CreateProduct(StorageController storageController, MainWindow MainWin)
         {
             this.MainWin = MainWin;
@@ -85,6 +125,7 @@ namespace P3_Projekt_WPF
 
             LoadStorageRooms(_storageRooms);
             output_ProductID.Text = Product.GetNextID().ToString();
+            output_ServiceProductID.Text = ServiceProduct.GetNextID().ToString();
 
             btn_AddPicture.Click += PickImage;
             btn_ServiceAddPicture.Click += PickImage;
@@ -171,14 +212,14 @@ namespace P3_Projekt_WPF
 
             TextBox[] textboxes = new TextBox[] { textbox_Name, textbox_SalePrice, textbox_PurchasePrice };
             ComboBox[] comboboxes = new ComboBox[] { comboBox_Brand, comboBox_Group };
-            bool ReturnVal = true;
+            bool returnVal = true;
             foreach (TextBox textbox in textboxes)
             {
                 if (textbox.Text == "")
                 {
                     textbox.BorderBrush = System.Windows.Media.Brushes.Red;
                     textbox.BorderThickness = new Thickness(2, 2, 2, 2);
-                    ReturnVal = false;
+                    returnVal = false;
                 }
                 else
                 {
@@ -192,7 +233,7 @@ namespace P3_Projekt_WPF
                 {
                     //combobox.BorderBrush = System.Windows.Media.Brushes.Red;
                     combobox.BorderThickness = new Thickness(2, 2, 2, 2);
-                    ReturnVal = false;
+                    returnVal = false;
                 }
                 else
                 {
@@ -200,13 +241,11 @@ namespace P3_Projekt_WPF
                     combobox.BorderThickness = new Thickness(1, 1, 1, 1);
                 }
             }
-            if (!ReturnVal)
+            if (!returnVal)
             {
                 label_InputNotValid.Visibility = Visibility.Visible;
-
             }
-            return ReturnVal;
-
+            return returnVal;
         }
 
         public bool IsServiceProductInputValid()
@@ -237,6 +276,11 @@ namespace P3_Projekt_WPF
             else
             {
                 comboBox_ServiceGroup.BorderThickness = new Thickness(1, 1, 1, 1);
+            }
+
+            if (!returnVal)
+            {
+                label_ServiceInputNotValid.Visibility = Visibility.Visible;
             }
             return returnVal;
 

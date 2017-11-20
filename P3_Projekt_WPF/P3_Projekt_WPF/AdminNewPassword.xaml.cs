@@ -25,25 +25,13 @@ namespace P3_Projekt_WPF
             InitializeComponent();
             passwordBox_InputPassword.PasswordChanged += new RoutedEventHandler(GreyTextRemover);
             passwordBox_InputPasswordAgain.PasswordChanged += new RoutedEventHandler(GreyTextAgainRemover);
+            this.KeyDown += new KeyEventHandler(KeyboardHook);
+            passwordBox_InputPassword.Focus();
         }
 
         private void btn_Validate_Click(object sender, RoutedEventArgs e)
         {
-            if (passwordBox_InputPassword.Password != passwordBox_InputPasswordAgain.Password)
-            {
-                label_InputTooShort.Visibility = Visibility.Hidden;
-                label_InputNotSame.Visibility = Visibility.Visible;
-            }
-            else if (passwordBox_InputPassword.Password.Length < 1)
-            {
-                label_InputNotSame.Visibility = Visibility.Hidden;
-                label_InputTooShort.Visibility = Visibility.Visible;
-            }
-            else
-            {
-                Admin.CreateNewPassword(passwordBox_InputPassword.Password);
-                this.Close();
-            }
+            Validate();
         }
 
         private void GreyTextRemover(object sender, RoutedEventArgs e)
@@ -60,6 +48,33 @@ namespace P3_Projekt_WPF
                 GreyTextAgain.Visibility = Visibility.Visible;
             else
                 GreyTextAgain.Visibility = Visibility.Collapsed;
+        }
+
+        private void KeyboardHook(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                Validate();
+            }
+        }
+
+        private void Validate()
+        {
+            if (passwordBox_InputPassword.Password != passwordBox_InputPasswordAgain.Password)
+            {
+                label_InputTooShort.Visibility = Visibility.Hidden;
+                label_InputNotSame.Visibility = Visibility.Visible;
+            }
+            else if (passwordBox_InputPassword.Password.Length < 1)
+            {
+                label_InputNotSame.Visibility = Visibility.Hidden;
+                label_InputTooShort.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                Admin.CreateNewPassword(passwordBox_InputPassword.Password);
+                this.Close();
+            }
         }
     }
 }
