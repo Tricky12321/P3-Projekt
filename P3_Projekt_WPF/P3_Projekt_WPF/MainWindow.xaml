@@ -508,23 +508,27 @@
                                 <Button Style="{StaticResource Flat_Button}" x:Name="btn_newStorageRoom" Content="Tilføj nyt Lagerrum" HorizontalAlignment="Left" Margin="50,0,0,190" VerticalAlignment="Bottom" Width="466" Height="50" Click="btn_newStorageRoom_Click" />
                                 <Button Style="{StaticResource Flat_Button}" x:Name="btn_editStorageRoom" Content="Rediger Lagerrum" HorizontalAlignment="Left" Margin="50,0,0,30" VerticalAlignment="Bottom" Width="466" Height="50" Click="btn_editStorageRoom_Click" IsHitTestVisible="False"/>
                                 <ComboBox x:Name="comboBox_storageRoomSelect" Height="50" Margin="50,0,0,109" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="466" FontSize="30" IsSynchronizedWithCurrentItem="True" SelectionChanged="comboBox_storageRoomSelect_SelectionChanged"/>
-                                <Border BorderBrush="Black" BorderThickness="2" HorizontalAlignment="Right" Height="230" Margin="0,0,15,10" VerticalAlignment="Bottom" Width="1073" >
-                                    <ScrollViewer>
-                                        <TextBlock x:Name="textBlock_StorageDescr" TextWrapping="Wrap" Text="" Margin="10,8,0,-8" HorizontalAlignment="Left"/>
-                                    </ScrollViewer>
+
+                                <Border BorderBrush="Black" BorderThickness="2"  Height="230" Margin="561,0,15,10" VerticalAlignment="Bottom" >
+                                    <Grid>
+                                        <ScrollViewer>
+                                            <TextBlock x:Name="textBlock_StorageDescr" TextWrapping="Wrap" Text="" Margin="10,8,0,-8" HorizontalAlignment="Left"/>
+                                        </ScrollViewer>
+                                        <TextBlock x:Name="text_empty_descr" Height="100" TextWrapping="Wrap" Foreground="DarkGray" Text="Vælg lagerrum for beskrivelse..." Margin="10,0,0,116" FontSize="30" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="452">
+                                            <TextBlock.Style>
+                                                <Style TargetType="{x:Type TextBlock}">
+                                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding Text, ElementName=textBlock_StorageDescr}" Value="">
+                                                            <Setter Property="Visibility" Value="Visible"/>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </TextBlock.Style>
+                                        </TextBlock>
+                                    </Grid>
+
                                 </Border>
-                                <TextBlock x:Name="text_empty_descr" Height="100" TextWrapping="Wrap" Foreground="DarkGray" Text="Vælg lagerrum for beskrivelse..." Margin="584,0,0,130" FontSize="30" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="452">
-                                    <TextBlock.Style>
-                                        <Style TargetType="{x:Type TextBlock}">
-                                            <Setter Property="Visibility" Value="Collapsed"/>
-                                            <Style.Triggers>
-                                                <DataTrigger Binding="{Binding Text, ElementName=textBlock_StorageDescr}" Value="">
-                                                    <Setter Property="Visibility" Value="Visible"/>
-                                                </DataTrigger>
-                                            </Style.Triggers>
-                                        </Style>
-                                    </TextBlock.Style>
-                                </TextBlock>
 
 
 

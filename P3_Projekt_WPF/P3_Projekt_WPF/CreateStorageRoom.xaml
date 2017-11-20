@@ -15,7 +15,7 @@
                 </Style>
             </TextBox.Resources>
         </TextBox>
-        <TextBlock IsHitTestVisible="False" x:Name="TextBlock_name_insert" Foreground="DarkGray" FontSize="30" HorizontalAlignment="Left" Margin="206,10,0,0" TextWrapping="Wrap" Text="Navn" VerticalAlignment="Top" Height="40" MinHeight="40" Width="228">
+        <TextBlock IsHitTestVisible="False" x:Name="TextBlock_name_insert" Foreground="DarkGray" FontSize="30" HorizontalAlignment="Left" Margin="194,10,0,0" TextWrapping="Wrap" Text="Navn" VerticalAlignment="Top" Height="40" MinHeight="40" Width="228">
             <TextBlock.Style>
                 <Style TargetType="{x:Type TextBlock}">
                     <Setter Property="Visibility" Value="Collapsed"/>
@@ -35,7 +35,7 @@
                 </Style>
             </TextBox.Resources>
         </TextBox>
-        <TextBlock x:Name="TextBlock_descr_insert" IsHitTestVisible="False" Foreground="DarkGray" FontSize="30" HorizontalAlignment="Left" Margin="206,88,0,0" TextWrapping="Wrap" Text="Beskrivelse for lagerrum..." VerticalAlignment="Top">
+        <TextBlock x:Name="TextBlock_descr_insert" IsHitTestVisible="False" Foreground="DarkGray" FontSize="30" HorizontalAlignment="Left" Margin="194,80,0,0" TextWrapping="Wrap" Text="Beskrivelse for lagerrum..." VerticalAlignment="Top">
             <TextBlock.Style>
                 <Style TargetType="{x:Type TextBlock}">
                     <Setter Property="Visibility" Value="Collapsed"/>
