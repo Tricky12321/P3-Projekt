@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using P3_Projekt_WPF.Classes.Database;
+using System.Windows.Input;
+using System.Windows.Media;
 namespace P3_Projekt_WPF.Classes
 {
     public class ServiceProduct : BaseProduct
@@ -12,6 +14,7 @@ namespace P3_Projekt_WPF.Classes
         public decimal GroupPrice;
         public int GroupLimit;
         public int ServiceProductGroupID;
+        public ImageSource ProductPicture = null;
 
         public ServiceProduct(int id, decimal salePrice, decimal groupPrice, int groupLimit, string name, int serviceProductGroupID) : base(salePrice)
         {
@@ -55,8 +58,8 @@ namespace P3_Projekt_WPF.Classes
             ID = Convert.ToInt32(results.Values[0]);                         // id
             Name = results.Values[1];                                        // name
             ServiceProductGroupID = Convert.ToInt32(results.Values[2]);
-            SalePrice = Convert.ToInt32(results.Values[3]);                  // price
-            GroupPrice = Convert.ToInt32(results.Values[4]);                 // price
+            SalePrice = Convert.ToDecimal(results.Values[3]);                  // price
+            GroupPrice = Convert.ToDecimal(results.Values[4]);                 // price
             GroupLimit = Convert.ToInt32(results.Values[5]);                 // price
         }
 

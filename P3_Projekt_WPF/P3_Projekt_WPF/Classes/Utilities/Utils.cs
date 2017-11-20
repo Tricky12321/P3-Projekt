@@ -169,7 +169,8 @@ namespace P3_Projekt_WPF.Classes.Utilities
 
         private static void TakeProductsToReturnFromWeightedList(ref ConcurrentDictionary<int, SearchProduct> productsToReturn)
         {
-            foreach (SearchProduct searchproduct in weigthedSearchList.Where(x => (x.BrandMatch + x.GroupMatch + x.NameMatch) > 0))
+            var searchList = weigthedSearchList.Where(x => (x.BrandMatch + x.GroupMatch + x.NameMatch) > 0);
+            foreach (SearchProduct searchproduct in searchList)
             {
                 productsToReturn.TryAdd(searchproduct.CurrentProduct.ID, searchproduct);
             }
