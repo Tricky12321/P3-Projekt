@@ -59,7 +59,7 @@ namespace P3_Projekt_WPF.Classes
             Name = results.Values[1];                                        // name
             ServiceProductGroupID = Convert.ToInt32(results.Values[2]);
             SalePrice = Convert.ToDecimal(results.Values[3]);                  // price
-            GroupPrice = Convert.ToInt32(results.Values[4]);                 // price
+            GroupPrice = Convert.ToDecimal(results.Values[4]);                 // price
             GroupLimit = Convert.ToInt32(results.Values[5]);                 // price
         }
 
