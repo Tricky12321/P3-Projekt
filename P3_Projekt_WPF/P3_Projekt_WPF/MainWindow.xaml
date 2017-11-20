@@ -129,9 +129,9 @@
 
 
 
-                    <ListView x:Name="listView_Receipt" Margin="10,67,10,230" Grid.Row="1" Grid.Column="1">
+                    <ListView x:Name="listView_Receipt" HorizontalContentAlignment="Stretch" Margin="10,67,10,230" Grid.Row="1" Grid.Column="1">
                         <ListView.View>
-                            <GridView x:Name="grid_Receipt">
+                            <GridView x:Name="grid_Receipt" >
                                 <GridView.ColumnHeaderContainerStyle>
                                     <Style>
                                         <Setter Property="UIElement.Visibility"  Value="Collapsed"/>
@@ -170,18 +170,18 @@
                                     </GridViewColumn.CellTemplate>
                                 </GridViewColumn>
 
-                                <GridViewColumn Width="100">
-                                    <GridViewColumn.CellTemplate>
+                                <GridViewColumn >
+                                    <GridViewColumn.CellTemplate >
                                         <DataTemplate>
                                             <TextBlock Text="{Binding Amount}"/>
                                         </DataTemplate>
                                     </GridViewColumn.CellTemplate>
                                 </GridViewColumn>
 
-                                <GridViewColumn x:Name="column_Product" Width="Auto" >
+                                <GridViewColumn x:Name="column_Product" Width="auto">
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate>
-                                            <TextBlock Text="{Binding String_Product}" TextWrapping="Wrap" MaxWidth="600"/>
+                                            <TextBlock Text="{Binding String_Product}" HorizontalAlignment="Stretch"/>
                                         </DataTemplate>
                                     </GridViewColumn.CellTemplate>
                                 </GridViewColumn>
@@ -270,18 +270,17 @@
                     <Border BorderBrush="Black" BorderThickness="1" Margin="0,71,0,-103" HorizontalAlignment="Right" Width="1"/>
                 </Grid>
             </TabItem>
+
+
+
             <TabItem x:Name="tab_Statisticsc" Header="Statistik" Width="190">
                 <Grid Background="#FFE5E5E5" Margin="0">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="70*"/>
-                        <RowDefinition Height="1241*"/>
-                    </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="auto"/>
-                        <ColumnDefinition Width="340*"/>
-                        <ColumnDefinition Width="613*"/>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="2*"/>
                     </Grid.ColumnDefinitions>
-                    <ListView x:Name="listView_Statistics" HorizontalContentAlignment="Stretch" Grid.Column="2" Margin="74,14,14,14" Grid.Row="1" FontSize="20">
+                    <ListView x:Name="listView_Statistics" Width="auto" Height="auto" HorizontalContentAlignment="Stretch" Grid.Column="2" Margin="10,86,10,10" FontSize="20">
                         <ListView.View>
                             <GridView>
                                 <GridViewColumn Header="Dato" Width="120">
@@ -315,81 +314,82 @@
                             </GridView>
                         </ListView.View>
                     </ListView>
-                    <Border BorderBrush="Black" BorderThickness="1" Height="1" VerticalAlignment="Top" Margin="-34,1,-79,0" Grid.ColumnSpan="3" Grid.Row="1"/>
-                    <Grid Grid.ColumnSpan="2" Margin="5,3,4,6" Grid.Row="1">
-                        <TextBlock x:Name="label_StartDate" Margin="30,20,0,0" TextWrapping="Wrap" Text="Start Dato" VerticalAlignment="Top" FontSize="30" HorizontalAlignment="Left" Width="266"/>
-                        <TextBlock x:Name="label_EndDate" Margin="30,70,0,0" TextWrapping="Wrap" Text="Slut Dato" VerticalAlignment="Top" FontSize="30" HorizontalAlignment="Left" Width="254"/>
-                        <DatePicker Margin="425,28,0,0" VerticalAlignment="Top" FirstDayOfWeek="Monday" x:Name="datePicker_StartDate" Height="24" RenderTransformOrigin="0.5,0.5" SelectedDateChanged="OnSelectedStartDateChanged" BorderBrush="#00000000" HorizontalAlignment="Left" Width="32">
-                            <DatePicker.RenderTransform>
-                                <TransformGroup>
-                                    <ScaleTransform ScaleX="1.8" ScaleY="1.8"/>
-                                    <SkewTransform/>
-                                    <RotateTransform/>
-                                    <TranslateTransform/>
-                                </TransformGroup>
-                            </DatePicker.RenderTransform>
-                        </DatePicker>
-                        <DatePicker Margin="425,83,0,0" VerticalAlignment="Top" FirstDayOfWeek="Monday" x:Name="datePicker_EndDate" Height="24" RenderTransformOrigin="0.5,0.5" SelectedDateChanged="OnSelectedEndDateChanged" BorderBrush="#00000000" HorizontalAlignment="Left" Width="32">
-                            <DatePicker.RenderTransform>
-                                <TransformGroup>
-                                    <ScaleTransform ScaleX="1.8" ScaleY="1.8"/>
-                                    <SkewTransform/>
-                                    <RotateTransform/>
-                                    <TranslateTransform/>
-                                </TransformGroup>
-                            </DatePicker.RenderTransform>
-                        </DatePicker>
-                        <CheckBox x:Name="checkBox_Product" Margin="35,0,0,300" VerticalAlignment="Bottom" RenderTransformOrigin="0.5,0.5" HorizontalAlignment="Left" Width="16">
-                            <CheckBox.RenderTransform>
-                                <TransformGroup>
-                                    <ScaleTransform ScaleX="3" ScaleY="3"/>
-                                </TransformGroup>
-                            </CheckBox.RenderTransform>
-                        </CheckBox>
-                        <CheckBox x:Name="checkBox_Brand" Margin="35,0,0,238" VerticalAlignment="Bottom" RenderTransformOrigin="0.5,0.5" HorizontalAlignment="Left" Width="16">
-                            <CheckBox.RenderTransform>
-                                <TransformGroup>
-                                    <ScaleTransform ScaleX="3" ScaleY="3"/>
-                                </TransformGroup>
-                            </CheckBox.RenderTransform>
-                        </CheckBox>
-                        <CheckBox x:Name="checkBox_Group" Margin="35,0,0,180" VerticalAlignment="Bottom" RenderTransformOrigin="0.5,0.5" HorizontalAlignment="Left" Width="16">
-                            <CheckBox.RenderTransform>
-                                <TransformGroup>
-                                    <ScaleTransform ScaleX="3" ScaleY="3"/>
-                                </TransformGroup>
-                            </CheckBox.RenderTransform>
-                        </CheckBox>
-                        <ComboBox x:Name="comboBox_Brand" Height="40" Margin="85,0,0,225" VerticalAlignment="Bottom" SelectedValuePath="Content" HorizontalAlignment="Left" Width="381"/>
-                        <ComboBox x:Name="comboBox_Group" Height="40" Margin="85,0,0,165" VerticalAlignment="Bottom" SelectedValuePath="Content" HorizontalAlignment="Left" Width="381"/>
-                        <Button x:Name="Button_CreateStatistics" Content="Opret Statistik" Margin="11,0,14,13" Background="#FFC5C5C5" Style="{StaticResource Flat_Button}" Height="118" VerticalAlignment="Bottom" Click="Button_CreateStatistics_Click"/>
-                        <TextBox Padding="10,0,0,0"  TextCompositionManager.PreviewTextInput="TextInputNoNumber" x:Name="textBox_StatisticsProductID" Margin="85,0,0,285" FontSize="33" Height="50" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="383">
-                            <TextBox.Resources>
-                                <Style TargetType="{x:Type Border}">
-                                    <Setter Property="CornerRadius" Value="10"/>
-                                </Style>
-                            </TextBox.Resources>
-                        </TextBox>
-                        <TextBlock IsHitTestVisible="False" Text="Indtast Produkt ID" Margin="98,0,0,282" Foreground="DarkGray" FontSize="30" Height="50" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="353">
-                            <TextBlock.Style>
-                                <Style TargetType="{x:Type TextBlock}">
-                                    <Setter Property="Visibility" Value="Collapsed"/>
-                                    <Style.Triggers>
-                                        <DataTrigger Binding="{Binding Text, ElementName=textBox_StatisticsProductID}" Value="">
-                                            <Setter Property="Visibility" Value="Visible"/>
-                                        </DataTrigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </TextBlock.Style>
-                        </TextBlock>
-                        <TextBlock x:Name="label_CurrentStartDate" Margin="260,20,0,0" TextWrapping="Wrap" Text="dd/mm/åå" VerticalAlignment="Top" FontSize="30" HorizontalAlignment="Left" Width="166"/>
-                        <TextBlock x:Name="label_CurrentEndDate" Margin="260,72,0,0" TextWrapping="Wrap" Text="dd/mm/åå" VerticalAlignment="Top" FontSize="30" HorizontalAlignment="Left" Width="154"/>
-                        <TextBlock x:Name="label_NoTransactions" Margin="30,172,0,0" TextWrapping="Wrap" Text="Ingen transaktioner fundet" VerticalAlignment="Top" FontWeight="Bold" Foreground="Red" Height="64" FontSize="30" RenderTransformOrigin="0.5,0.5" Visibility="Hidden" HorizontalAlignment="Left" Width="398"/>
-                        <Button x:Name="Button_DateToday" Content="I dag" Margin="30,120,0,0" Background="#FFC5C5C5" Style="{StaticResource Flat_Button}" Height="48" VerticalAlignment="Top" Click="Button_DateToday_Click" HorizontalAlignment="Left" Width="200"/>
-                        <Button x:Name="Button_DateYesterday" Content="I går" Margin="258,120,0,0" Background="#FFC5C5C5" Style="{StaticResource Flat_Button}" Height="48" VerticalAlignment="Top" Click="Button_DateYesterday_Click" HorizontalAlignment="Left" Width="200"/>
-                    </Grid>
+                    <Border BorderBrush="Black" BorderThickness="1" Margin="-34,71,-79,0" Height="1" VerticalAlignment="Top" Grid.ColumnSpan="3" Grid.Row="1"/>
+
+                    <TextBlock x:Name="label_StartDate" Margin="10,119,0,0" TextWrapping="Wrap" Text="Start Dato" VerticalAlignment="Top" FontSize="30" HorizontalAlignment="Left" Width="266"/>
+                    <TextBlock x:Name="label_EndDate" Margin="10,81,0,0" TextWrapping="Wrap" Text="Slut Dato" VerticalAlignment="Top" FontSize="30" HorizontalAlignment="Left" Width="254"/>
+                    <DatePicker Margin="413,133,0,0" VerticalAlignment="Top" FirstDayOfWeek="Monday" x:Name="datePicker_StartDate" Height="24" RenderTransformOrigin="0.5,0.5" SelectedDateChanged="OnSelectedStartDateChanged" BorderBrush="#00000000" HorizontalAlignment="Left" Width="32" Grid.Row="1">
+                        <DatePicker.RenderTransform>
+                            <TransformGroup>
+                                <ScaleTransform ScaleX="1.8" ScaleY="1.8"/>
+                                <SkewTransform/>
+                                <RotateTransform/>
+                                <TranslateTransform/>
+                            </TransformGroup>
+                        </DatePicker.RenderTransform>
+                    </DatePicker>
+                    <DatePicker Margin="415,73,0,0" VerticalAlignment="Top" FirstDayOfWeek="Monday" x:Name="datePicker_EndDate" Height="24" RenderTransformOrigin="0.5,0.5" SelectedDateChanged="OnSelectedEndDateChanged" BorderBrush="#00000000" HorizontalAlignment="Left" Width="32" Grid.Row="1">
+                        <DatePicker.RenderTransform>
+                            <TransformGroup>
+                                <ScaleTransform ScaleX="1.8" ScaleY="1.8"/>
+                                <SkewTransform/>
+                                <RotateTransform/>
+                                <TranslateTransform/>
+                            </TransformGroup>
+                        </DatePicker.RenderTransform>
+                    </DatePicker>
+                    <CheckBox x:Name="checkBox_Product" Margin="37,0,0,420" VerticalAlignment="Bottom" RenderTransformOrigin="0.5,0.5" HorizontalAlignment="Left" Width="16" Grid.Row="1">
+                        <CheckBox.RenderTransform>
+                            <TransformGroup>
+                                <ScaleTransform ScaleX="3" ScaleY="3"/>
+                            </TransformGroup>
+                        </CheckBox.RenderTransform>
+                    </CheckBox>
+                    <CheckBox x:Name="checkBox_Brand" Margin="39,0,0,370" VerticalAlignment="Bottom" RenderTransformOrigin="0.5,0.5" HorizontalAlignment="Left" Width="16" Grid.Row="1">
+                        <CheckBox.RenderTransform>
+                            <TransformGroup>
+                                <ScaleTransform ScaleX="3" ScaleY="3"/>
+                            </TransformGroup>
+                        </CheckBox.RenderTransform>
+                    </CheckBox>
+                    <CheckBox x:Name="checkBox_Group" Margin="35,0,0,318" VerticalAlignment="Bottom" RenderTransformOrigin="0.5,0.5" HorizontalAlignment="Left" Width="16" Grid.Row="1">
+                        <CheckBox.RenderTransform>
+                            <TransformGroup>
+                                <ScaleTransform ScaleX="3" ScaleY="3"/>
+                            </TransformGroup>
+                        </CheckBox.RenderTransform>
+                    </CheckBox>
+                    <ComboBox x:Name="comboBox_Brand" Height="40" Margin="83,0,0,354" VerticalAlignment="Bottom" SelectedValuePath="Content" HorizontalAlignment="Left" Width="381" Grid.Row="1"/>
+                    <ComboBox x:Name="comboBox_Group" Height="40" Margin="81,0,0,304" VerticalAlignment="Bottom" SelectedValuePath="Content" HorizontalAlignment="Left" Width="381" Grid.Row="1"/>
+                    <Button x:Name="Button_CreateStatistics" Content="Opret Statistik" Margin="10,0,10,10" Background="#FFC5C5C5" Style="{StaticResource Flat_Button}" Height="106" VerticalAlignment="Bottom" Click="Button_CreateStatistics_Click" Grid.Row="1" Grid.ColumnSpan="2"/>
+                    <TextBox Padding="10,0,0,0"  TextCompositionManager.PreviewTextInput="TextInputNoNumber" x:Name="textBox_StatisticsProductID" Margin="89,0,0,394" FontSize="33" Height="50" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="383" Grid.Row="1">
+                        <TextBox.Resources>
+                            <Style TargetType="{x:Type Border}">
+                                <Setter Property="CornerRadius" Value="10"/>
+                            </Style>
+                        </TextBox.Resources>
+                    </TextBox>
+                    <TextBlock IsHitTestVisible="False" Text="Indtast Produkt ID" Margin="102,0,0,392" Foreground="DarkGray" FontSize="30" Height="50" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="353" Grid.Row="1">
+                        <TextBlock.Style>
+                            <Style TargetType="{x:Type TextBlock}">
+                                <Setter Property="Visibility" Value="Collapsed"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Text, ElementName=textBox_StatisticsProductID}" Value="">
+                                        <Setter Property="Visibility" Value="Visible"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </TextBlock.Style>
+                    </TextBlock>
+                    <TextBlock x:Name="label_CurrentStartDate" Margin="212,121,0,0" TextWrapping="Wrap" Text="dd/mm/åå" VerticalAlignment="Top" FontSize="30" HorizontalAlignment="Left" Width="166" Grid.Row="1"/>
+                    <TextBlock x:Name="label_CurrentEndDate" Margin="212,73,0,0" TextWrapping="Wrap" Text="dd/mm/åå" VerticalAlignment="Top" FontSize="30" HorizontalAlignment="Left" Width="154" Grid.Row="1"/>
+                    <TextBlock x:Name="label_NoTransactions" Margin="38,201,0,0" TextWrapping="Wrap" Text="Ingen transaktioner fundet" VerticalAlignment="Top" FontWeight="Bold" Foreground="Red" Height="64" FontSize="30" RenderTransformOrigin="0.5,0.5" Visibility="Visible" HorizontalAlignment="Left" Width="398" Grid.Row="1"/>
+                    <Button x:Name="Button_DateToday" Content="I dag" Margin="10,250,5,0" Background="#FFC5C5C5" Style="{StaticResource Flat_Button}" Height="48" VerticalAlignment="Top" Click="Button_DateToday_Click" Grid.Row="1"/>
+                    <Button x:Name="Button_DateYesterday" Content="I går" Grid.Column="1" Margin="5,250,10,0" Background="#FFC5C5C5" Style="{StaticResource Flat_Button}" Height="48" VerticalAlignment="Top" Click="Button_DateYesterday_Click" Grid.Row="1"/>
                 </Grid>
             </TabItem>
+
+
             <TabItem x:Name="tab_Settings" Header="Indstillinger" Width="190" Margin="0">
 
                 <Grid Background="#FFE5E5E5">
@@ -483,16 +483,16 @@
                         </TabItem>
                         <TabItem Header="Lager" x:Name="settingsTab" Width="300" Height="70">
                             <Grid>
-                                <Button Style="{StaticResource Flat_Button}" x:Name="btn_PictureFilePath" Content="Vælg billedmappe til produkter" HorizontalAlignment="Left" Margin="50,50,0,0" VerticalAlignment="Top" Width="466" Height="100" Click="btn_PictureFilePath_Click" />
-                                <Button Style="{StaticResource Flat_Button}" x:Name="btn_IcecreamID" Content="Gem nyt ID til is" HorizontalAlignment="Left" Margin="650,50,0,0" VerticalAlignment="Top" Width="242" Height="100" Click="btn_IcecreamID_Click" />
-                                <TextBox x:Name="textBox_IceID" TextWrapping="Wrap" Text="" TextCompositionManager.PreviewTextInput="TextInputNoNumber" FontSize="30" Width="84" Margin="561,79,0,0" HorizontalAlignment="Left" Height="50" VerticalAlignment="Top">
+                                <Button Style="{StaticResource Flat_Button}" x:Name="btn_PictureFilePath" Content="Vælg billedmappe til produkter" HorizontalAlignment="Left" Margin="32,550,0,0" VerticalAlignment="Top" Width="466" Height="100" Click="btn_PictureFilePath_Click" />
+                                <Button Style="{StaticResource Flat_Button}" x:Name="btn_IcecreamID" Content="Gem nyt ID til is" HorizontalAlignment="Left" Margin="632,550,0,0" VerticalAlignment="Top" Width="242" Height="100" Click="btn_IcecreamID_Click" />
+                                <TextBox x:Name="textBox_IceID" TextWrapping="Wrap" Text="" TextCompositionManager.PreviewTextInput="TextInputNoNumber" FontSize="30" Width="84" Margin="543,579,0,0" HorizontalAlignment="Left" Height="50" VerticalAlignment="Top">
                                     <TextBox.Resources>
                                         <Style TargetType="{x:Type Border}">
                                             <Setter Property="CornerRadius" Value="10"/>
                                         </Style>
                                     </TextBox.Resources>
                                 </TextBox>
-                                <TextBlock IsHitTestVisible="False" Text="ID" Margin="570,85,0,0" Foreground="DarkGray" FontSize="30" HorizontalAlignment="Left" Width="64" Height="50" VerticalAlignment="Top">
+                                <TextBlock IsHitTestVisible="False" Text="ID" Margin="552,585,0,0" Foreground="DarkGray" FontSize="30" HorizontalAlignment="Left" Width="64" Height="50" VerticalAlignment="Top">
                                     <TextBlock.Style>
                                         <Style TargetType="{x:Type TextBlock}">
                                             <Setter Property="Visibility" Value="Collapsed"/>
@@ -504,6 +504,49 @@
                                         </Style>
                                     </TextBlock.Style>
                                 </TextBlock>
+
+                                <ListView x:Name="listView_StorageRoom" HorizontalContentAlignment="Stretch" Margin="10,10,400,400" FontSize="20" VerticalAlignment="Stretch">
+                                    <ListView.View>
+                                        <GridView>
+                                            <GridViewColumn Header="ID" Width="40">
+                                                <GridViewColumn.CellTemplate>
+                                                    <DataTemplate>
+                                                        <TextBlock Text="{Binding storageID}" TextWrapping="WrapWithOverflow"/>
+                                                    </DataTemplate>
+                                                </GridViewColumn.CellTemplate>
+                                            </GridViewColumn>
+                                            <GridViewColumn Header="Navn" Width="300">
+                                                <GridViewColumn.CellTemplate>
+                                                    <DataTemplate>
+                                                        <TextBlock Text="{Binding storageName}" TextWrapping="WrapWithOverflow"/>
+                                                    </DataTemplate>
+                                                </GridViewColumn.CellTemplate>
+                                            </GridViewColumn>
+                                            <GridViewColumn Header="Beskrivelse" Width="700">
+                                                <GridViewColumn.CellTemplate>
+                                                    <DataTemplate>
+                                                        <TextBlock Text="{Binding storageDescription}" TextWrapping="WrapWithOverflow"/>
+                                                    </DataTemplate>
+                                                </GridViewColumn.CellTemplate>
+                                            </GridViewColumn>
+                                            <GridViewColumn Header="Rediger" Width="100">
+                                                <GridViewColumn.CellTemplate>
+                                                    <DataTemplate>
+                                                        <Button Style="{StaticResource Flat_Button}"
+                                                Content = "Rediger"
+                                                Width="auto"
+                                                Height="35"
+                                                VerticalAlignment = "Center"
+                                                Click="btn_editStorageRoom_Click"
+                                                Tag="{Binding storageEdit}"
+                                            />
+                                                    </DataTemplate>
+                                                </GridViewColumn.CellTemplate>
+                                            </GridViewColumn>
+                                        </GridView>
+                                    </ListView.View>
+                                </ListView>
+
                                 <Button Style="{StaticResource Flat_Button}" Background="#FFC5C5C5" x:Name="btn_newStorageRoom" Content="Tilføj nyt Lagerrum" HorizontalAlignment="Left" Margin="10,0,0,190" VerticalAlignment="Bottom" Width="466" Height="50" Click="btn_newStorageRoom_Click" />
                                 <Button Style="{StaticResource Flat_Button}" Background="#FFC5C5C5" x:Name="btn_editStorageRoom" Content="Rediger Lagerrum" HorizontalAlignment="Left" Margin="10,0,0,10" VerticalAlignment="Bottom" Width="466" Height="50" Click="btn_editStorageRoom_Click" IsHitTestVisible="False"/>
                                 <ComboBox x:Name="comboBox_storageRoomSelect" Background="#FFC5C5C5" Height="50" Margin="10,0,0,70" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="466" FontSize="30" IsSynchronizedWithCurrentItem="True" SelectionChanged="comboBox_storageRoomSelect_SelectionChanged"/>
@@ -572,26 +615,11 @@
             </TabItem>
         </TabControl>
 
+        <TextBlock x:Name="label_AdminStatus" Text="Admin:" Height="40" Width="75" FontSize="24" Margin="0,9,136,0" HorizontalAlignment="Right" VerticalAlignment="Top"/>
+        <TextBlock x:Name="label_AdminStatusOnOff" Text="Fra" Height="40" Width="40" FontSize="24" Margin="0,9,90,0" HorizontalAlignment="Right" VerticalAlignment="Top"/>
 
-        <TextBlock IsHitTestVisible="False" Text="SØG ERFTER ET PRODUKT" Margin="0,70,0,0" VerticalAlignment="Top" HorizontalAlignment="Right" Foreground="Red" Height="200" Width="200" Grid.Column="1" Grid.RowSpan="2">
-            <TextBlock.Style>
-                <Style TargetType="{x:Type TextBlock}">
-                    <Setter Property="Visibility" Value="Collapsed"/>
-                    <Style.Triggers>
-                        <DataTrigger Binding="{Binding Text, ElementName=textbox}" Value="">
-                            <Setter Property="Visibility" Value="Visible"/>
-                        </DataTrigger>
-                    </Style.Triggers>
-                </Style>
-            </TextBlock.Style>
-        </TextBlock>
-
-
-
-
+        <Button x:Name="btn_AdminLogin" Content="Log ind" Height="40" Width="84" FontSize="24" Margin="0,5,5,0" HorizontalAlignment="Right" VerticalAlignment="Top"/>
 
 
     </Grid>
-
-
 </Window>

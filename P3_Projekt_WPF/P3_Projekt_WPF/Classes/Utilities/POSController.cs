@@ -88,7 +88,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
                 Debug.Print(e.Message);
             }
             ReceiptList.Add(PlacerholderReceipt);
-            PlacerholderReceipt = null;
+            PlacerholderReceipt = new Receipt();
         }
 
         //Event for when the amount of a product in storage drops below a certain limit

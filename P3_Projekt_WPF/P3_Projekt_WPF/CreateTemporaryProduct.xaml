@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:P3_Projekt_WPF"
         mc:Ignorable="d"
-        Title="CreateTemporaryProduct" Height="500" Width="600" Background="White">
+        Title="CreateTemporaryProduct" MinHeight="500" MaxHeight="600" MinWidth="350" MaxWidth="800" Background="White">
     <Grid Background="#FFE5E5E5">
         <TextBox Padding="4,0,0,0" x:Name="textbox_Description" FontSize="30" Grid.ColumnSpan="1" MinHeight="40" VerticalAlignment="Top" Margin="10,10,10,0" Height="225" TextWrapping="Wrap">
             <TextBox.Resources>
@@ -14,7 +14,7 @@
                 </Style>
             </TextBox.Resources>
         </TextBox>
-        <TextBlock IsHitTestVisible="False" Text="Beskrivelse af Produkt" Margin="16,11,0,0" Foreground="DarkGray" FontSize="30" HorizontalAlignment="Left" Width="409" Height="40" VerticalAlignment="Top">
+        <TextBlock IsHitTestVisible="False" Text="Beskrivelse af Produkt" Margin="16,11,0,0" Foreground="DarkGray" FontSize="30" Height="40" VerticalAlignment="Top" HorizontalAlignment="Left" Width="318">
             <TextBlock.Style>
                 <Style TargetType="{x:Type TextBlock}">
                     <Setter Property="Visibility" Value="Collapsed"/>
@@ -33,7 +33,7 @@
                 </Style>
             </TextBox.Resources>
         </TextBox>
-        <TextBlock IsHitTestVisible="False" Text="Pris" Margin="16,250,0,0" Foreground="DarkGray" FontSize="30" HorizontalAlignment="Left" Width="255" Height="40" VerticalAlignment="Top">
+        <TextBlock IsHitTestVisible="False" Text="Pris" Margin="16,250,0,0" Foreground="DarkGray" FontSize="30" Height="40" VerticalAlignment="Top" HorizontalAlignment="Left" Width="92">
             <TextBlock.Style>
                 <Style TargetType="{x:Type TextBlock}">
                     <Setter Property="Visibility" Value="Collapsed"/>

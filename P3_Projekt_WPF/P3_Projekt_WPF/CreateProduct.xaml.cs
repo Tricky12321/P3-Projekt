@@ -35,6 +35,7 @@ namespace P3_Projekt_WPF
         public CreateProduct(ServiceProduct prod, StorageController storageController, MainWindow MainWin)
         {
             this.MainWin = MainWin;
+            _storageController = storageController;
             InitializeComponent();
             comboBox_Group.ItemsSource = (storageController.GroupDictionary.Values.Select(x => x.Name));
             comboBox_ServiceGroup.ItemsSource = (storageController.GroupDictionary.Values.Select(x => x.Name));
@@ -56,6 +57,10 @@ namespace P3_Projekt_WPF
             btn_AddStorageRoomWithAmount.Click += AddStorageWithAmount;
             btn_JustQuit.Click += delegate { this.Close(); };
             btn_ServiceJustQuit.Click += delegate { this.Close(); };
+            UpdateProductID = prod.ID;
+            UpdateServiceProductSec = true;
+            FillBoxesWithExistingServiceProduct(prod);
+            tabControl.SelectedIndex = 1;
         }
 
         public CreateProduct(Product prod, StorageController storageController, MainWindow MainWin)
@@ -109,10 +114,11 @@ namespace P3_Projekt_WPF
             textbox_ServiceSalePrice.Text = prod.SalePrice.ToString();
             textbox_ServiceGroupLimit.Text = prod.GroupLimit.ToString();
             textbox_ServiceGroupPrice.Text = prod.GroupPrice.ToString();
-            image_ServiceProduct.Source = prod.ProductPicture;
-          
+            if (prod.ProductPicture != null)
+            {
+                image_ServiceProduct.Source = prod.ProductPicture;
+            }
         }
-
 
         public CreateProduct(StorageController storageController, MainWindow MainWin)
         {
@@ -360,6 +366,16 @@ namespace P3_Projekt_WPF
                                                     _storageController.GroupDictionary.First(X => X.Value.Name == comboBox_ServiceGroup.Text).Key);
         }
 
+        private void UpdateServiceProduct()
+        {
+            _storageController.UpdateServiceProduct(UpdateProductID,
+                                                    Decimal.Parse(textbox_ServiceSalePrice.Text),
+                                                    Decimal.Parse(textbox_ServiceGroupPrice.Text),
+                                                    Int32.Parse(textbox_ServiceGroupLimit.Text),
+                                                    textbox_ServiceName.Text,
+                                                    _storageController.GroupDictionary.First(X => X.Value.Name == comboBox_ServiceGroup.Text).Key);
+        }
+
         private void btn_ServiceSaveAndQuit_Click(object sender, RoutedEventArgs e)
         {
             if (IsServiceProductInputValid())
@@ -367,7 +383,15 @@ namespace P3_Projekt_WPF
                 // TODO: Skal lige laves så det virker med service produkter.
                 //AddProductImage(this);
                 // TODO: Give ability to make a service product
-                AddServiceProduct();
+                if (UpdateServiceProductSec)
+                {
+                    UpdateServiceProduct();
+                }
+                else
+                {
+                    AddServiceProduct();
+                }
+
                 this.Close();
             }
         }
