@@ -207,7 +207,7 @@
                         <Style TargetType="{x:Type TextBlock}">
                             <Setter Property="Visibility" Value="Collapsed"/>
                             <Style.Triggers>
-                                <DataTrigger Binding="{Binding Text, ElementName=textbox_Name}" Value="">
+                                <DataTrigger Binding="{Binding Text, ElementName=textbox_ServiceName}" Value="">
                                     <Setter Property="Visibility" Value="Visible"/>
                                 </DataTrigger>
                             </Style.Triggers>
@@ -215,7 +215,7 @@
                     </TextBlock.Style>
                 </TextBlock>
                 <TextBlock x:Name="label_ServiceGroup" HorizontalAlignment="Left" Margin="10,0,0,426" TextWrapping="Wrap" Text="Varegruppe" FontSize="30" MinHeight="24" VerticalAlignment="Bottom" Height="40" Width="165"/>
-                <ComboBox x:Name="comboBox_ServiceGroup" HorizontalAlignment="Left" Margin="180,0,0,426" VerticalAlignment="Bottom" Width="280" Height="40" FontSize="24">
+                <ComboBox x:Name="comboBox_ServiceGroup"  Padding="10,0,0,0" HorizontalAlignment="Left" Margin="180,0,0,426" VerticalAlignment="Bottom" Width="280" Height="40" FontSize="24">
 
                 </ComboBox>
                 <TextBlock x:Name="label_ServiceSalePrice" HorizontalAlignment="Left" Margin="10,0,0,376" TextWrapping="Wrap" Text="Salgspris" FontSize="30" MinHeight="24" VerticalAlignment="Bottom" Height="40" Width="117"/>
@@ -231,7 +231,7 @@
                         <Style TargetType="{x:Type TextBlock}">
                             <Setter Property="Visibility" Value="Collapsed"/>
                             <Style.Triggers>
-                                <DataTrigger Binding="{Binding Text, ElementName=textbox_SalePrice}" Value="">
+                                <DataTrigger Binding="{Binding Text, ElementName=textbox_ServiceSalePrice}" Value="">
                                     <Setter Property="Visibility" Value="Visible"/>
                                 </DataTrigger>
                             </Style.Triggers>
@@ -251,7 +251,7 @@
                         <Style TargetType="{x:Type TextBlock}">
                             <Setter Property="Visibility" Value="Collapsed"/>
                             <Style.Triggers>
-                                <DataTrigger Binding="{Binding Text, ElementName=textbox_DiscountPrice}" Value="">
+                                <DataTrigger Binding="{Binding Text, ElementName=textbox_ServiceGroupLimit}" Value="">
                                     <Setter Property="Visibility" Value="Visible"/>
                                 </DataTrigger>
                             </Style.Triggers>
@@ -272,7 +272,7 @@
                         <Style TargetType="{x:Type TextBlock}">
                             <Setter Property="Visibility" Value="Collapsed"/>
                             <Style.Triggers>
-                                <DataTrigger Binding="{Binding Text, ElementName=textbox_DiscountPrice}" Value="">
+                                <DataTrigger Binding="{Binding Text, ElementName=textbox_ServiceGroupPrice}" Value="">
                                     <Setter Property="Visibility" Value="Visible"/>
                                 </DataTrigger>
                             </Style.Triggers>

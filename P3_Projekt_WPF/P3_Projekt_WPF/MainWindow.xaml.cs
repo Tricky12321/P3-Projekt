@@ -237,7 +237,7 @@ namespace P3_Projekt_WPF
                 }
             };
 
-            addProductWindow.Show();
+            addProductWindow.ShowDialog();
         }
 
         private bool _firstClick = true;
@@ -618,9 +618,7 @@ namespace P3_Projekt_WPF
                     }
                 }
             };
-            check.Show();
-
-            
+            check.ShowDialog();
         }
 
         private void ResetStatisticsView()
@@ -883,7 +881,7 @@ namespace P3_Projekt_WPF
 
         private void btn_OpenAdmin_Click(object sender, RoutedEventArgs e)
         {
-            new AdminValidation().Show();
+            new AdminValidation().ShowDialog();
         }
 
         private void btn_ChangePassword_Click(object sender, RoutedEventArgs e)
@@ -892,9 +890,9 @@ namespace P3_Projekt_WPF
             check.Closed += delegate
             {
                 if (check.IsPasswordCorrect)
-                    new AdminNewPassword().Show();
+                    new AdminNewPassword().ShowDialog();
             };
-            check.Show();
+            check.ShowDialog();
         }
 
         private void ListBoxItem_MouseDown(object sender, MouseButtonEventArgs e)
