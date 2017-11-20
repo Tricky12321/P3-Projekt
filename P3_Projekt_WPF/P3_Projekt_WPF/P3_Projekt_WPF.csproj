@@ -156,7 +156,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="Resources\Class1.cs" />
     <Compile Include="ResovleTempProduct.xaml.cs">
       <DependentUpon>ResovleTempProduct.xaml</DependentUpon>
     </Compile>
@@ -238,8 +237,9 @@
     </None>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
-      <Generator>SettingsSingleFileGenerator</Generator>
+      <Generator>PublicSettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </None>
     <AppDesigner Include="Properties\" />
   </ItemGroup>
