@@ -25,7 +25,7 @@ namespace P3_Projekt_WPF
         public string ChosenFilePath;
         private ConcurrentDictionary<int, int> _storageWithAmount = new ConcurrentDictionary<int, int>();
         private ConcurrentDictionary<int, StorageRoom> _storageRooms;
-        private ConcurrentDictionary<int, StorageRoom> _groups;
+        private ConcurrentDictionary<int, Group> _groups;
         private StorageController _storageController;
         private bool UpdateProductSec = false;
         private int UpdateProductID = 0;
@@ -85,6 +85,7 @@ namespace P3_Projekt_WPF
 
             LoadStorageRooms(_storageRooms);
             output_ProductID.Text = Product.GetNextID().ToString();
+            output_ServiceProductID.Text = ServiceProduct.GetNextID().ToString();
 
             btn_AddPicture.Click += PickImage;
             btn_ServiceAddPicture.Click += PickImage;
@@ -171,14 +172,14 @@ namespace P3_Projekt_WPF
 
             TextBox[] textboxes = new TextBox[] { textbox_Name, textbox_SalePrice, textbox_PurchasePrice };
             ComboBox[] comboboxes = new ComboBox[] { comboBox_Brand, comboBox_Group };
-            bool ReturnVal = true;
+            bool returnVal = true;
             foreach (TextBox textbox in textboxes)
             {
                 if (textbox.Text == "")
                 {
                     textbox.BorderBrush = System.Windows.Media.Brushes.Red;
                     textbox.BorderThickness = new Thickness(2, 2, 2, 2);
-                    ReturnVal = false;
+                    returnVal = false;
                 }
                 else
                 {
@@ -192,7 +193,7 @@ namespace P3_Projekt_WPF
                 {
                     //combobox.BorderBrush = System.Windows.Media.Brushes.Red;
                     combobox.BorderThickness = new Thickness(2, 2, 2, 2);
-                    ReturnVal = false;
+                    returnVal = false;
                 }
                 else
                 {
@@ -200,13 +201,11 @@ namespace P3_Projekt_WPF
                     combobox.BorderThickness = new Thickness(1, 1, 1, 1);
                 }
             }
-            if (!ReturnVal)
+            if (!returnVal)
             {
                 label_InputNotValid.Visibility = Visibility.Visible;
-
             }
-            return ReturnVal;
-
+            return returnVal;
         }
 
         public bool IsServiceProductInputValid()
@@ -237,6 +236,11 @@ namespace P3_Projekt_WPF
             else
             {
                 comboBox_ServiceGroup.BorderThickness = new Thickness(1, 1, 1, 1);
+            }
+
+            if (!returnVal)
+            {
+                label_ServiceInputNotValid.Visibility = Visibility.Visible;
             }
             return returnVal;
 
