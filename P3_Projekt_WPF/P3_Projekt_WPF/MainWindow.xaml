@@ -573,25 +573,5 @@
         </TabControl>
 
 
-        <TextBlock IsHitTestVisible="False" Text="SØG ERFTER ET PRODUKT" Margin="0,70,0,0" VerticalAlignment="Top" HorizontalAlignment="Right" Foreground="Red" Height="200" Width="200" Grid.Column="1" Grid.RowSpan="2">
-            <TextBlock.Style>
-                <Style TargetType="{x:Type TextBlock}">
-                    <Setter Property="Visibility" Value="Collapsed"/>
-                    <Style.Triggers>
-                        <DataTrigger Binding="{Binding Text, ElementName=textbox}" Value="">
-                            <Setter Property="Visibility" Value="Visible"/>
-                        </DataTrigger>
-                    </Style.Triggers>
-                </Style>
-            </TextBlock.Style>
-        </TextBlock>
-
-
-
-
-
-
     </Grid>
-
-
 </Window>
