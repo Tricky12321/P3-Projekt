@@ -584,33 +584,43 @@ namespace P3_Projekt_WPF
         //Today?? Yesterday??
         private void Button_CreateStatistics_Click(object sender, RoutedEventArgs e)
         {
-            DateTime startDate = datePicker_StartDate.SelectedDate.Value;
-            DateTime endDate = datePicker_EndDate.SelectedDate.Value;
-            ResetStatisticsView();
-
-            string id = null;
-            if (textBox_StatisticsProductID.Text.Length > 0)
+            var check = new AdminValidation();
+            check.Closed += delegate
             {
-                id = textBox_StatisticsProductID.Text;
-            }
-            string brand = comboBox_Brand.Text;
-            string groupString = comboBox_Group.Text;
-            Group group = null;
-            if (comboBox_Group.Text != "")
-            {
-                group = _storageController.GroupDictionary.Values.First(x => x.Name == groupString);
-            }
+                if (check.IsPasswordCorrect)
+                {
+                    DateTime startDate = datePicker_StartDate.SelectedDate.Value;
+                    DateTime endDate = datePicker_EndDate.SelectedDate.Value;
+                    ResetStatisticsView();
 
-            CheckboxChecker(ref id, ref brand, ref group);
+                    string id = null;
+                    if (textBox_StatisticsProductID.Text.Length > 0)
+                    {
+                        id = textBox_StatisticsProductID.Text;
+                    }
+                    string brand = comboBox_Brand.Text;
+                    string groupString = comboBox_Group.Text;
+                    Group group = null;
+                    if (comboBox_Group.Text != "")
+                    {
+                        group = _storageController.GroupDictionary.Values.First(x => x.Name == groupString);
+                    }
 
-            _statisticsController.RequestStatisticsDate(startDate, endDate);
-            _statisticsController.FilterByParameters(id, brand, group);
+                    CheckboxChecker(ref id, ref brand, ref group);
 
-            DisplayStatistics();
-            if (_statisticsController.TransactionsForStatistics.Count == 0)
-            {
-                label_NoTransactions.Visibility = Visibility.Visible;
-            }
+                    _statisticsController.RequestStatisticsDate(startDate, endDate);
+                    _statisticsController.FilterByParameters(id, brand, group);
+
+                    DisplayStatistics();
+                    if (_statisticsController.TransactionsForStatistics.Count == 0)
+                    {
+                        label_NoTransactions.Visibility = Visibility.Visible;
+                    }
+                }
+            };
+            check.Show();
+
+            
         }
 
         private void ResetStatisticsView()

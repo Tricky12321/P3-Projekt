@@ -26,18 +26,13 @@ namespace P3_Projekt_WPF
         {
             InitializeComponent();
             this.passwordBox_InputPassword.PasswordChanged += new RoutedEventHandler(GreyTextRemover);
-
+            this.KeyDown += new KeyEventHandler(KeyboardHook);
+            passwordBox_InputPassword.Focus();
         }
 
         private void btn_Validate_Click(object sender, RoutedEventArgs e)
         {
-            if (Admin.VerifyPassword(passwordBox_InputPassword.Password))
-            {
-                IsPasswordCorrect = true;
-                this.Close();
-            }
-            else
-                label_InputNotValid.Visibility = Visibility.Visible;
+            Validate();
         }
 
         private void GreyTextRemover(object sender, RoutedEventArgs e)
@@ -46,6 +41,25 @@ namespace P3_Projekt_WPF
                 GreyText.Visibility = Visibility.Visible;
             else
                 GreyText.Visibility = Visibility.Collapsed;
+        }
+
+        private void KeyboardHook(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                Validate();
+            }
+        }
+
+        private void Validate()
+        {
+            if (Admin.VerifyPassword(passwordBox_InputPassword.Password))
+            {
+                IsPasswordCorrect = true;
+                this.Close();
+            }
+            else
+                label_InputNotValid.Visibility = Visibility.Visible;
         }
     }
 }
