@@ -28,8 +28,36 @@ namespace P3_Projekt_WPF
         private ConcurrentDictionary<int, Group> _groups;
         private StorageController _storageController;
         private bool UpdateProductSec = false;
+        private bool UpdateServiceProductSec = false;
         private int UpdateProductID = 0;
         private MainWindow MainWin = null;
+
+        public CreateProduct(ServiceProduct prod, StorageController storageController, MainWindow MainWin)
+        {
+            this.MainWin = MainWin;
+            InitializeComponent();
+            comboBox_Group.ItemsSource = (storageController.GroupDictionary.Values.Select(x => x.Name));
+            comboBox_ServiceGroup.ItemsSource = (storageController.GroupDictionary.Values.Select(x => x.Name));
+            comboBox_Brand.ItemsSource = (storageController.GetProductBrands());
+            _storageRooms = storageController.StorageRoomDictionary;
+
+            LoadStorageRooms(_storageRooms);
+            output_ProductID.Text = Product.GetNextID().ToString();
+            output_ServiceProductID.Text = prod.ID.ToString();
+
+            btn_AddPicture.Click += PickImage;
+            btn_ServiceAddPicture.Click += PickImage;
+            ImageChosenEvent += (FilePath) =>
+            {
+                image_Product.Source = new BitmapImage(new Uri(FilePath));
+                image_ServiceProduct.Source = new BitmapImage(new Uri(FilePath));
+                ChosenFilePath = FilePath;
+            };
+            btn_AddStorageRoomWithAmount.Click += AddStorageWithAmount;
+            btn_JustQuit.Click += delegate { this.Close(); };
+            btn_ServiceJustQuit.Click += delegate { this.Close(); };
+        }
+
         public CreateProduct(Product prod, StorageController storageController, MainWindow MainWin)
         {
             this.MainWin = MainWin;
@@ -73,6 +101,18 @@ namespace P3_Projekt_WPF
             comboBox_Group.Text = _storageController.GroupDictionary[prod.ProductGroupID].Name;
             _storageWithAmount = prod.StorageWithAmount;
         }
+
+        private void FillBoxesWithExistingServiceProduct(ServiceProduct prod)
+        {
+            textbox_ServiceName.Text = prod.Name;
+            comboBox_ServiceGroup.Text = _storageController.GroupDictionary[prod.ServiceProductGroupID].Name;
+            textbox_ServiceSalePrice.Text = prod.SalePrice.ToString();
+            textbox_ServiceGroupLimit.Text = prod.GroupLimit.ToString();
+            textbox_ServiceGroupPrice.Text = prod.GroupPrice.ToString();
+            image_ServiceProduct.Source = prod.ProductPicture;
+          
+        }
+
 
         public CreateProduct(StorageController storageController, MainWindow MainWin)
         {
