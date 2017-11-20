@@ -780,7 +780,6 @@ namespace P3_Projekt_WPF
                 }
                 catch (System.Collections.Generic.KeyNotFoundException)
                 {
-
                     _resolveTempProduct.Label_MergeInfo.Content = "Ugyldigt Produkt ID";
                     _resolveTempProduct.button_Merge.IsEnabled = false;
                 }
@@ -819,7 +818,7 @@ namespace P3_Projekt_WPF
         }
 
         private void EnterKeyPressedSearch(object sender, KeyEventArgs e)
-        {
+        { 
             if (e.Key == Key.Enter && txtBox_SearchField_Storage.IsFocused)
             {
                 btn_search_Storage_Click(sender, e);
