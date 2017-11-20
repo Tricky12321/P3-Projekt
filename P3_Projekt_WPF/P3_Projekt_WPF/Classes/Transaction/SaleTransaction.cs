@@ -171,7 +171,7 @@ namespace P3_Projekt_WPF.Classes
 
         public StatisticsListItem StatisticsStrings()
         {
-            return new StatisticsListItem(Date.ToString("dd/mm/yy"), Product.GetName(), Amount.ToString(), TotalPrice.ToString());
+            return new StatisticsListItem(Date.ToString("dd/MM/yy"), Product.GetName(), Amount.ToString(), TotalPrice.ToString());
         }
 
         public override void GetFromDatabase()
