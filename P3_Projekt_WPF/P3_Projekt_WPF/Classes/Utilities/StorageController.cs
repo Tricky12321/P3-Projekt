@@ -19,7 +19,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
         public ConcurrentDictionary<int, StorageRoom> StorageRoomDictionary = new ConcurrentDictionary<int, StorageRoom>();
         public ConcurrentDictionary<int, SaleTransaction> SaleTransactionsDictionary = new ConcurrentDictionary<int, SaleTransaction>();
         public ConcurrentDictionary<int, Receipt> ReceiptDictionary = new ConcurrentDictionary<int, Receipt>();
-        public List<TempProduct> TempProductList = new List<TempProduct>();
+        public ConcurrentDictionary<int, TempProduct> TempProductList = new ConcurrentDictionary<int, TempProduct>();
         public List<string[]> InformationGridData = new List<string[]>();
         private object InformationGridLock = new object();
         private ConcurrentQueue<Product> _productResults = new ConcurrentQueue<Product>();
@@ -220,7 +220,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
             while (TempProductQueue.TryDequeue(out Data))
             {
                 TempProduct NewTempProduct = new TempProduct(Data);
-                TempProductList.Add(NewTempProduct);
+                TempProductList.TryAdd(NewTempProduct.ID,NewTempProduct);
             }
             TempProductTimer.Stop();
             TimerStrings.Enqueue("[P3] Det tog " + TempProductTimer.ElapsedMilliseconds + "ms at oprette Temp produkter [" + DatabaseTimer.ElapsedMilliseconds + "ms]");
@@ -406,7 +406,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
         public TempProduct CreateTempProduct(string description, decimal salePrice)
         {
             TempProduct newTempProduct = new TempProduct(description, salePrice);
-            TempProductList.Add(newTempProduct);
+            TempProductList.TryAdd(newTempProduct.ID,newTempProduct);
             return newTempProduct;
         }
 
@@ -417,7 +417,6 @@ namespace P3_Projekt_WPF.Classes.Utilities
         {
             Product MergedProduct = ProductDictionary[matchedProductID];
             tempProductToMerge.Resolve(MergedProduct);
-            TempProductList.Remove(tempProductToMerge);
             SaleTransaction tempProductsTransaction = tempProductToMerge.GetTempProductsSaleTransaction();
             var StorageRoomStatus = ProductDictionary[matchedProductID].StorageWithAmount.Where(x => x.Value >= tempProductsTransaction.Amount).OrderBy(x => x.Key).First();
             int StorageRoomKey = StorageRoomStatus.Key;
