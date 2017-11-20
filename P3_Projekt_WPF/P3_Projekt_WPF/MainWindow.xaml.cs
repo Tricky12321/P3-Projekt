@@ -71,9 +71,7 @@ namespace P3_Projekt_WPF
             {
                 Debug.WriteLine(item);
             }
-            ServiceProduct TestProd = new ServiceProduct(1);
-            CreateProduct EditServiceProd = new CreateProduct(TestProd, _storageController, this);
-            EditServiceProd.Show();
+
         }
 
         public void ReloadProducts()
