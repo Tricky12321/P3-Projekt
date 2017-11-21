@@ -148,7 +148,7 @@ namespace P3_Projekt_WPF
             grid_QuickButton.ColumnDefinitions.Add(new ColumnDefinition());
             grid_QuickButton.ColumnDefinitions.Add(new ColumnDefinition());
 
-            for (int i = 0; i < 7; ++i)
+            for (int i = 0; i < 10; ++i)
             {
                 grid_QuickButton.RowDefinitions.Add(new RowDefinition());
             }
@@ -928,6 +928,5 @@ namespace P3_Projekt_WPF
                 UpdateReceiptList();
             }
         }
-
     }
 }
