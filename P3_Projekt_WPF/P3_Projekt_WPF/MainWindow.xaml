@@ -547,7 +547,7 @@
                                     </ListView.View>
                                 </ListView>
 
-                                <Button Style="{StaticResource Flat_Button}" Background="#FFC5C5C5" x:Name="btn_newStorageRoom" Content="Tilføj nyt lagerrum" FontSize="30"  Margin="10,10,0,0" VerticalAlignment="Top" Height="50" Click="btn_newStorageRoom_Click" HorizontalAlignment="Left" Width="398" />
+                                <Button Style="{StaticResource Flat_Button}" Background="#FFC5C5C5" x:Name="btn_newStorageRoom" Content="Opret nyt lagerrum" FontSize="30"  Margin="10,10,0,0" VerticalAlignment="Top" Height="50" Click="btn_newStorageRoom_Click" HorizontalAlignment="Left" Width="398" />
 
                                 <TextBlock x:Name="comboBox_text" Height="40" TextWrapping="Wrap" Foreground="DarkGray" Text="---Vælg Lagerrum---" Margin="104,0,0,77" FontSize="30" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="277">
                                     <TextBlock.Style>
