@@ -361,13 +361,6 @@ namespace P3_Projekt_WPF.Classes.Utilities
 
         public void UpdateProduct(int id, string name, string brand, decimal purchasePrice, int groupID, bool discount, decimal discountPrice, decimal salePrice, ConcurrentDictionary<int, int> storageWithAmount, bool UploadToDatabase = true)
         {
-            if (discountPrice > 0)
-            {
-                discount = true;
-            } else
-            {
-                discount = false;
-            }
             Product newProduct = new Product(id, name, brand, purchasePrice, groupID, discount, salePrice, discountPrice);
             newProduct.StorageWithAmount = storageWithAmount;
             ProductDictionary[newProduct.ID] = newProduct;
