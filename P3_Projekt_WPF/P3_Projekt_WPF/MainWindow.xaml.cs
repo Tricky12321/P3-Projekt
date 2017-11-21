@@ -66,7 +66,7 @@ namespace P3_Projekt_WPF
             this.WindowState = WindowState.Maximized;
 
             LoadingTimer.Stop();
-            OutputList.Add("[TOTAL TIMER] took "+LoadingTimer.ElapsedMilliseconds+"ms");
+            OutputList.Add("[TOTAL TIMER] took " + LoadingTimer.ElapsedMilliseconds + "ms");
             foreach (var item in OutputList)
             {
                 Debug.WriteLine(item);
@@ -141,6 +141,7 @@ namespace P3_Projekt_WPF
             LoadProductGrid(_storageController.ProductDictionary);
             BuildInformationTable();
             InitStatisticsTab();
+            InitAdminLogin();
         }
 
         private void InitGridQuickButtons()
@@ -172,7 +173,7 @@ namespace P3_Projekt_WPF
             {
                 comboBox_Group.Items.Add(group.Name);
             }
-            
+
         }
 
         private void UpdateReceiptList()
@@ -604,41 +605,44 @@ namespace P3_Projekt_WPF
         //Today?? Yesterday??
         private void Button_CreateStatistics_Click(object sender, RoutedEventArgs e)
         {
-            var check = new AdminValidation();
-            check.Closed += delegate
+            DateTime startDate = datePicker_StartDate.SelectedDate.Value;
+            DateTime endDate = datePicker_EndDate.SelectedDate.Value;
+
+            if (_settingsController.isAdmin)
             {
-                if (check.IsPasswordCorrect)
+                ResetStatisticsView();
+
+                string id = null;
+                if (textBox_StatisticsProductID.Text.Length > 0)
                 {
-                    DateTime startDate = datePicker_StartDate.SelectedDate.Value;
-                    DateTime endDate = datePicker_EndDate.SelectedDate.Value;
-                    ResetStatisticsView();
-
-                    string id = null;
-                    if (textBox_StatisticsProductID.Text.Length > 0)
-                    {
-                        id = textBox_StatisticsProductID.Text;
-                    }
-                    string brand = comboBox_Brand.Text;
-                    string groupString = comboBox_Group.Text;
-                    Group group = null;
-                    if (comboBox_Group.Text != "")
-                    {
-                        group = _storageController.GroupDictionary.Values.First(x => x.Name == groupString);
-                    }
-
-                    CheckboxChecker(ref id, ref brand, ref group);
-
-                    _statisticsController.RequestStatisticsDate(startDate, endDate);
-                    _statisticsController.FilterByParameters(id, brand, group);
-
-                    DisplayStatistics();
-                    if (_statisticsController.TransactionsForStatistics.Count == 0)
-                    {
-                        label_NoTransactions.Visibility = Visibility.Visible;
-                    }
+                    id = textBox_StatisticsProductID.Text;
                 }
-            };
-            check.ShowDialog();
+                string brand = comboBox_Brand.Text;
+                string groupString = comboBox_Group.Text;
+                Group group = null;
+                if (comboBox_Group.Text != "")
+                {
+                    group = _storageController.GroupDictionary.Values.First(x => x.Name == groupString);
+                }
+
+                CheckboxChecker(ref id, ref brand, ref group);
+
+                _statisticsController.RequestStatisticsDate(startDate, endDate);
+                _statisticsController.FilterByParameters(id, brand, group);
+
+                DisplayStatistics();
+                if (_statisticsController.TransactionsForStatistics.Count == 0)
+                {
+                    label_NoTransactions.Visibility = Visibility.Visible;
+                }
+            }
+            else
+            {
+                label_NoTransactions.Text = "Ikke admin, kan kun oprette statistik for dagen";
+                startDate = datePicker_StartDate.SelectedDate.Value;
+                endDate = datePicker_EndDate.SelectedDate.Value;
+                _statisticsController.RequestStatisticsDate(startDate, endDate);
+            }
         }
 
         private void ResetStatisticsView()
@@ -813,7 +817,7 @@ namespace P3_Projekt_WPF
         }
 
         private void EnterKeyPressedSearch(object sender, KeyEventArgs e)
-        { 
+        {
             if (e.Key == Key.Enter && txtBox_SearchField_Storage.IsFocused)
             {
                 btn_search_Storage_Click(sender, e);
@@ -940,6 +944,37 @@ namespace P3_Projekt_WPF
 
             label_TotalPrice.Content = "Retur: " + (PriceToPay - PaymentAmount).ToString();
             PayWithAmount.Text = "";
+        }
+
+        AdminValidation adminValid;
+        private void InitAdminLogin()
+        {
+            ImageBrush locked = new ImageBrush();
+            ImageBrush unlocked = new ImageBrush();
+            locked.ImageSource = Utils.ImageSourceForBitmap(Properties.Resources.if_102_111044LOCK);
+            unlocked.ImageSource = Utils.ImageSourceForBitmap(Properties.Resources.if_103_111043UNLOCK);
+            image_Admin.Stretch = Stretch.Uniform;
+
+            image_Admin.Source = locked.ImageSource;
+
+            btn_AdminLogin.Click += delegate
+            {
+                if (_settingsController.isAdmin)
+                {
+                    _settingsController.isAdmin = false;
+                    btn_AdminLogin.Content = "Log ind";
+                    image_Admin.Source = locked.ImageSource;
+
+                }
+                else
+                {
+                    adminValid = new AdminValidation();
+                    adminValid.ShowDialog();
+                    _settingsController.isAdmin = true;
+                    btn_AdminLogin.Content = "Log ud";
+                    image_Admin.Source = unlocked.ImageSource;
+                }
+            };
         }
     }
 }
