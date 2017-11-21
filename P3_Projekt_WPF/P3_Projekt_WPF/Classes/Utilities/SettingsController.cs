@@ -16,6 +16,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
     {
         public List<FastButton> quickButtonList = new List<FastButton>();
         public Dictionary<Key, FastButton> quickButtonKeyList = new Dictionary<Key, FastButton>();
+        public bool isAdmin = false;
 
         public void AddNewQuickButton(string buttonText, int productID, double gridWidth, double gridHeight, RoutedEventHandler btn_FastButton_click)
         {

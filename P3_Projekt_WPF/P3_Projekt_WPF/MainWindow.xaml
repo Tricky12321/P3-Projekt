@@ -383,7 +383,7 @@
                     </TextBlock>
                     <TextBlock x:Name="label_CurrentStartDate" Margin="212,121,0,0" TextWrapping="Wrap" Text="dd/mm/åå" VerticalAlignment="Top" FontSize="30" HorizontalAlignment="Left" Width="166" Grid.Row="1"/>
                     <TextBlock x:Name="label_CurrentEndDate" Margin="212,73,0,0" TextWrapping="Wrap" Text="dd/mm/åå" VerticalAlignment="Top" FontSize="30" HorizontalAlignment="Left" Width="154" Grid.Row="1"/>
-                    <TextBlock x:Name="label_NoTransactions" Margin="38,201,0,0" TextWrapping="Wrap" Text="Ingen transaktioner fundet" VerticalAlignment="Top" FontWeight="Bold" Foreground="Red" Height="64" FontSize="30" RenderTransformOrigin="0.5,0.5" Visibility="Visible" HorizontalAlignment="Left" Width="398" Grid.Row="1"/>
+                    <TextBlock x:Name="label_NoTransactions" Margin="38,201,0,0" TextWrapping="Wrap" Text="Ingen transaktioner fundet" VerticalAlignment="Top" FontWeight="Bold" Foreground="Red" Height="64" FontSize="30" RenderTransformOrigin="0.5,0.5" Visibility="Visible" HorizontalAlignment="Left" Width="668" Grid.ColumnSpan="2"/>
                     <Button x:Name="Button_DateToday" Content="I dag" Margin="10,250,5,0" Background="#FFC5C5C5" Style="{StaticResource Flat_Button}" Height="48" VerticalAlignment="Top" Click="Button_DateToday_Click" Grid.Row="1"/>
                     <Button x:Name="Button_DateYesterday" Content="I går" Grid.Column="1" Margin="5,250,10,0" Background="#FFC5C5C5" Style="{StaticResource Flat_Button}" Height="48" VerticalAlignment="Top" Click="Button_DateYesterday_Click" Grid.Row="1"/>
                 </Grid>
@@ -614,12 +614,8 @@
                 </Grid>
             </TabItem>
         </TabControl>
-
-        <TextBlock x:Name="label_AdminStatus" Text="Admin:" Height="40" Width="75" FontSize="24" Margin="0,9,136,0" HorizontalAlignment="Right" VerticalAlignment="Top"/>
-        <TextBlock x:Name="label_AdminStatusOnOff" Text="Fra" Height="40" Width="40" FontSize="24" Margin="0,9,90,0" HorizontalAlignment="Right" VerticalAlignment="Top"/>
-
-        <Button x:Name="btn_AdminLogin" Content="Log ind" Height="40" Width="84" FontSize="24" Margin="0,5,5,0" HorizontalAlignment="Right" VerticalAlignment="Top"/>
-
-
+        <Image x:Name="image_Admin" Margin="0,2,4,0" Height="40" Width="40" VerticalAlignment="Top" HorizontalAlignment="Right"/>
+        <TextBlock x:Name="label_AdminStatus" Text="Admin:" Height="40" Width="75" FontSize="24" Margin="0,9,190,0" HorizontalAlignment="Right" VerticalAlignment="Top"/>
+        <Button x:Name="btn_AdminLogin" Background="LightGray" Style="{StaticResource Flat_Button}" Content="Log ind" Height="40" Width="130" FontSize="24" Margin="0,5,50,0" HorizontalAlignment="Right" VerticalAlignment="Top"/>
     </Grid>
 </Window>
