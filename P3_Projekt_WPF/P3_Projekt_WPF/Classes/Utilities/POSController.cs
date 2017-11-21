@@ -58,8 +58,8 @@ namespace P3_Projekt_WPF.Classes.Utilities
             // Der er et felt i settings og en knap i settings tab til at angive is ID, men intet er hooket up
             PlacerholderReceipt.AddTransaction(
                 new SaleTransaction(
-                    new ServiceProduct (Properties.Settings.Default.IcecreamID, price,price,0,"Is",_storageController.GroupDictionary.Values.First(x => x.Name == "Is").ID), 
-                    1, 
+                    new ServiceProduct(Properties.Settings.Default.IcecreamID, price, price, 0, "Is", _storageController.GroupDictionary.Values.First(x => x.Name == "Is").ID),
+                    1,
                     PlacerholderReceipt.ID));
         }
 
@@ -78,15 +78,10 @@ namespace P3_Projekt_WPF.Classes.Utilities
 
         public void ExecuteReceipt()
         {
-            try
-            {
-                PlacerholderReceipt.Execute();
-                CheckStorageLevel();
-            }
-            catch (NullReferenceException e)
-            {
-                Debug.Print(e.Message);
-            }
+            
+            PlacerholderReceipt.Execute();
+            CheckStorageLevel();
+
             ReceiptList.Add(PlacerholderReceipt);
             PlacerholderReceipt = new Receipt();
         }
@@ -102,7 +97,10 @@ namespace P3_Projekt_WPF.Classes.Utilities
                 //Limit??
                 if (product.StorageWithAmount.Values.Sum() < 5)
                 {
-                    LowStorageWarning(product);
+                    if (LowStorageWarning != null)
+                    {
+                        LowStorageWarning.Invoke(product);
+                    }
                 }
             }
         }

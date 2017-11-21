@@ -10,7 +10,7 @@ using System.Windows.Controls;
 using System.Windows.Xps.Packaging;
 using System.Windows.Documents;
 using P3_Projekt_WPF.Properties;
-using P3_Projekt_WPF.Resources;
+//using P3_Projekt_WPF.Resources;
 using System.Diagnostics;
 using System.Windows.Xps;
 namespace P3_Projekt_WPF.Classes

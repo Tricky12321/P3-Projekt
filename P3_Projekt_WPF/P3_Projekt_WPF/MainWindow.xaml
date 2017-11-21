@@ -64,15 +64,11 @@
 
                     <Button x:Name="btn_Cash"  Content="Kontant" Margin="0,0,10,121" Background="#FFC5C5C5" Style="{StaticResource Flat_Button}" Height="50" Width="260" VerticalAlignment="Bottom" HorizontalAlignment="Right" Grid.Column="1" Grid.Row="1" Click="btn_Cash_Click"/>
                     <Border BorderBrush="Black" BorderThickness="1" Height="1" VerticalAlignment="Top" Margin="-34,71,-79,0" Grid.ColumnSpan="2"/>
-                    <Button x:Name="btn_Card"  Content="Dankort" Margin="0,0,10,66" Background="#FFC5C5C5" Style="{StaticResource Flat_Button}" Height="50" Width="260" VerticalAlignment="Bottom" HorizontalAlignment="Right" Grid.Column="1" Grid.Row="1"/>
+                    <Button x:Name="btn_Card"  Content="Dankort" Margin="0,0,10,66" Background="#FFC5C5C5" Style="{StaticResource Flat_Button}" Height="50" Width="260" VerticalAlignment="Bottom" HorizontalAlignment="Right" Grid.Column="1" Grid.Row="1" RenderTransformOrigin="0.502,0.5" Click="btn_Dankort_Click"/>
                     <Button x:Name="btn_MobilePay"  Content="MobilePay" Margin="0,0,10,11" Background="#FFC5C5C5" Style="{StaticResource Flat_Button}" Click="btn_MobilePay_Click" Height="50" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="260" Grid.Column="1" Grid.Row="1"/>
-
-
-
-                    <Button x:Name="btn_EditReceipt"  Content="Rediger Kvittering" Margin="10,10,0,12" Background="#FFC5C5C5" Style="{StaticResource Flat_Button}" HorizontalAlignment="Left" Width="250"/>
                     <Grid x:Name="grid_QuickButton" Margin="10,73,5,66" Grid.Row="1"/>
                     <Border BorderBrush="Black" BorderThickness="1" Background="Black" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Left" Width="1"/>
-                    <Button x:Name="btn_AddProduct"  Content="Tilføj Produkt" Margin="518,16,12,0" Background="#FFC5C5C5" Style="{StaticResource Flat_Button}" Grid.Row="1" Height="50" VerticalAlignment="Top" Click="btn_AddProduct_Click"/>
+                    <Button x:Name="btn_AddProduct"  Content="Tilføj Produkt" Margin="0,16,12,0" Background="#FFC5C5C5" Style="{StaticResource Flat_Button}" Grid.Row="1" Height="50" VerticalAlignment="Top" Click="btn_AddProduct_Click" HorizontalAlignment="Right" Width="300"/>
                     <Button x:Name="btn_PlusToReciept" Content="+" HorizontalAlignment="Left" Margin="365,17,0,0" Width="35" Style="{StaticResource Flat_Button}" RenderTransformOrigin="-0.486,0.333" Grid.Row="1" Height="50" VerticalAlignment="Top" Click="btn_PlusToReciept_Click"/>
                     <Button x:Name="btn_MinusToReciept" Content="-" HorizontalAlignment="Left" Margin="405,17,0,0" Width="35" Style="{StaticResource Flat_Button}" FontSize="30" Grid.Row="1" Height="50" VerticalAlignment="Top" Click="btn_MinusToReciept_Click"/>
 
@@ -104,10 +100,10 @@
                             </Style>
                         </TextBox.Resources>
                     </TextBox>
-                    <Button x:Name="btn_Temporary"  Content="Opret Midlertidigt Produkt" Margin="0,0,12,10" Background="#FFC5C5C5" Style="{StaticResource Flat_Button}" Height="50" Width="438" VerticalAlignment="Bottom" HorizontalAlignment="Right" Grid.Row="1" Click="btn_Temporary_Click"/>
+                    <Button x:Name="btn_Temporary"  Content="Opret Midlertidigt Produkt" Margin="0,0,10,10" Background="#FFC5C5C5" Style="{StaticResource Flat_Button}" Height="50" Width="400" VerticalAlignment="Bottom" HorizontalAlignment="Right" Grid.Row="1" Click="btn_Temporary_Click"/>
                     <Button x:Name="btn_Cancel"  Content="Afbryd" Margin="13,0,0,10" Background="#FFC5C5C5" Style="{StaticResource Flat_Button}" Height="50" VerticalAlignment="Bottom" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Left" Width="260"/>
 
-                    <TextBox TextCompositionManager.PreviewTextInput="TextInputNoNumberWithComma" Padding="10,0,0,0" x:Name="PayWithAmount" Margin="10,0,275,121" FontSize="33" Grid.Row="1" Height="50" VerticalAlignment="Bottom" Grid.Column="1">
+                    <TextBox TextCompositionManager.PreviewTextInput="TextInputNoNumberWithComma" Padding="10,0,0,0" x:Name="PayWithAmount" Margin="13,0,275,121.143" FontSize="33" Grid.Row="1" Height="50" VerticalAlignment="Bottom" Grid.Column="1">
                         <TextBox.Resources>
                             <Style TargetType="{x:Type Border}">
                                 <Setter Property="CornerRadius" Value="10"/>
@@ -129,19 +125,22 @@
 
 
 
-                    <ListView x:Name="listView_Receipt" HorizontalContentAlignment="Stretch" Margin="10,67,10,230" Grid.Row="1" Grid.Column="1">
-                        <ListView.View>
-                            <GridView x:Name="grid_Receipt" >
-                                <GridView.ColumnHeaderContainerStyle>
-                                    <Style>
-                                        <Setter Property="UIElement.Visibility"  Value="Collapsed"/>
-                                    </Style>
-                                </GridView.ColumnHeaderContainerStyle>
+                    <ListView x:Name="listView_Receipt" ScrollViewer.HorizontalScrollBarVisibility="Disabled" HorizontalContentAlignment="Stretch" Margin="10,67,10,230" Grid.Row="1" Grid.Column="1">
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="auto"/>
+                                        <ColumnDefinition Width="auto"/>
+                                        <ColumnDefinition Width="auto"/>
+                                        <ColumnDefinition Width="1*"/>
+                                        <ColumnDefinition Width="auto"/>
+                                        <ColumnDefinition Width="auto"/>
+                                    </Grid.ColumnDefinitions>
 
-                                <GridViewColumn>
-                                    <GridViewColumn.CellTemplate>
-                                        <DataTemplate>
-                                            <Button Style="{StaticResource Flat_Button}"
+
+
+                                    <Button Style="{StaticResource Flat_Button}"
                                                 Content = "+"
                                                 FontSize="30"
                                                 Width="40"
@@ -149,15 +148,10 @@
                                                 VerticalAlignment = "Center"
                                                 Click="btn_Increment_Click"
                                                 Tag="{Binding IDTag}"
+                                                Grid.Column="0"
                                             />
-                                        </DataTemplate>
-                                    </GridViewColumn.CellTemplate>
-                                </GridViewColumn>
 
-                                <GridViewColumn>
-                                    <GridViewColumn.CellTemplate>
-                                        <DataTemplate>
-                                            <Button Style="{StaticResource Flat_Button}"
+                                    <Button Style="{StaticResource Flat_Button}"
                                                 Content = "-"
                                                 Width="40"
                                                 Height="50"
@@ -165,39 +159,16 @@
                                                 VerticalAlignment = "Center"
                                                 Click="btn_Decrement_Click"
                                                 Tag="{Binding IDTag}"
+                                                Grid.Column="1"
                                             />
-                                        </DataTemplate>
-                                    </GridViewColumn.CellTemplate>
-                                </GridViewColumn>
 
-                                <GridViewColumn >
-                                    <GridViewColumn.CellTemplate >
-                                        <DataTemplate>
-                                            <TextBlock Text="{Binding Amount}"/>
-                                        </DataTemplate>
-                                    </GridViewColumn.CellTemplate>
-                                </GridViewColumn>
+                                    <TextBlock Text="{Binding Amount}" Grid.Column="2" VerticalAlignment = "Center" Padding="10" MinWidth="60"/>
 
-                                <GridViewColumn x:Name="column_Product" Width="auto">
-                                    <GridViewColumn.CellTemplate>
-                                        <DataTemplate>
-                                            <TextBlock Text="{Binding String_Product}" HorizontalAlignment="Stretch"/>
-                                        </DataTemplate>
-                                    </GridViewColumn.CellTemplate>
-                                </GridViewColumn>
+                                    <TextBlock Text="{Binding String_Product}" Grid.Column="3" HorizontalAlignment="Stretch" VerticalAlignment = "Center" TextWrapping="Wrap"/>
 
-                                <GridViewColumn Width="100">
-                                    <GridViewColumn.CellTemplate>
-                                        <DataTemplate>
-                                            <TextBlock Text="{Binding Price}"/>
-                                        </DataTemplate>
-                                    </GridViewColumn.CellTemplate>
-                                </GridViewColumn>
+                                    <TextBlock Text="{Binding Price}" Grid.Column="4" VerticalAlignment = "Center" MinWidth="100"/>
 
-                                <GridViewColumn>
-                                    <GridViewColumn.CellTemplate>
-                                        <DataTemplate>
-                                            <Button Style="{StaticResource Flat_Button}"
+                                    <Button Style="{StaticResource Flat_Button}"
                                                 Content = "x"
                                                 Width="40"
                                                 Height="50"
@@ -205,16 +176,16 @@
                                                 VerticalAlignment = "Center"
                                                 Click="btn_DeleteProduct_Click"
                                                 Tag="{Binding IDTag}"
+                                                Grid.Column="5"
                                             />
-                                        </DataTemplate>
-                                    </GridViewColumn.CellTemplate>
-                                </GridViewColumn>
-                            </GridView>
-                        </ListView.View>
+                                </Grid>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+
                     </ListView>
                     <Label x:Name="label" Content="Kvittering" Margin="13,71,0,0" Height="68" VerticalAlignment="Top" FontSize="35" Grid.RowSpan="2" Grid.Column="1" HorizontalAlignment="Left" Width="312"/>
                     <Label x:Name="label_TotalPrice" Content="Total" Margin="10,0,10,176" Grid.Row="1" VerticalAlignment="Bottom" Height="49" BorderThickness="1" Background="White" BorderBrush="#FF858585" Grid.Column="1"/>
-                    <Button x:Name="btn_MergeTempProduct" Content="Ret et Midlertidigt Produkt" Background="#FFC5C5C5" HorizontalAlignment="Left" Margin="10,0,0,6" Grid.Row="1" Width="430" Style="{StaticResource Flat_Button}" Height="46" VerticalAlignment="Bottom" Click="btn_MergeTempProduct_Click"/>
+                    <Button x:Name="btn_MergeTempProduct" Content="Ret et Midlertidigt Produkt" Background="#FFC5C5C5" HorizontalAlignment="Left" Margin="10,10,0,10" Grid.Row="0" Width="400" Style="{StaticResource Flat_Button}" Click="btn_MergeTempProduct_Click"/>
                     <ListBox x:Name="listBox_SearchResultsSaleTab"  HorizontalContentAlignment="Stretch" Visibility="Hidden" Grid.RowSpan="3" Panel.ZIndex="3" Grid.Column="1" Margin="0,57,74,0" HorizontalAlignment="Right" Width="503" Height="auto"  MaxHeight="600" VerticalAlignment="Top">
                         <ListBox.ItemContainerStyle>
                             <Style TargetType="ListBoxItem">
@@ -316,9 +287,9 @@
                     </ListView>
                     <Border BorderBrush="Black" BorderThickness="1" Margin="-34,71,-79,0" Height="1" VerticalAlignment="Top" Grid.ColumnSpan="3" Grid.Row="1"/>
 
-                    <TextBlock x:Name="label_StartDate" Margin="10,119,0,0" TextWrapping="Wrap" Text="Start Dato" VerticalAlignment="Top" FontSize="30" HorizontalAlignment="Left" Width="266"/>
+                    <TextBlock x:Name="label_StartDate" Margin="10,126,0,0" TextWrapping="Wrap" Text="Start Dato" VerticalAlignment="Top" FontSize="30" HorizontalAlignment="Left" Width="266"/>
                     <TextBlock x:Name="label_EndDate" Margin="10,81,0,0" TextWrapping="Wrap" Text="Slut Dato" VerticalAlignment="Top" FontSize="30" HorizontalAlignment="Left" Width="254"/>
-                    <DatePicker Margin="413,133,0,0" VerticalAlignment="Top" FirstDayOfWeek="Monday" x:Name="datePicker_StartDate" Height="24" RenderTransformOrigin="0.5,0.5" SelectedDateChanged="OnSelectedStartDateChanged" BorderBrush="#00000000" HorizontalAlignment="Left" Width="32" Grid.Row="1">
+                    <DatePicker Margin="400,137,0,0" Grid.ColumnSpan="2" VerticalAlignment="Top" FirstDayOfWeek="Monday" x:Name="datePicker_StartDate" Height="24" RenderTransformOrigin="0.5,0.5" SelectedDateChanged="OnSelectedStartDateChanged" BorderBrush="#00000000" HorizontalAlignment="Left" Width="32">
                         <DatePicker.RenderTransform>
                             <TransformGroup>
                                 <ScaleTransform ScaleX="1.8" ScaleY="1.8"/>
@@ -328,7 +299,7 @@
                             </TransformGroup>
                         </DatePicker.RenderTransform>
                     </DatePicker>
-                    <DatePicker Margin="415,73,0,0" VerticalAlignment="Top" FirstDayOfWeek="Monday" x:Name="datePicker_EndDate" Height="24" RenderTransformOrigin="0.5,0.5" SelectedDateChanged="OnSelectedEndDateChanged" BorderBrush="#00000000" HorizontalAlignment="Left" Width="32" Grid.Row="1">
+                    <DatePicker Margin="400,93,0,0" Grid.ColumnSpan="2" VerticalAlignment="Top" FirstDayOfWeek="Monday" x:Name="datePicker_EndDate" Height="24" RenderTransformOrigin="0.5,0.5" SelectedDateChanged="OnSelectedEndDateChanged" BorderBrush="#00000000" HorizontalAlignment="Left" Width="32">
                         <DatePicker.RenderTransform>
                             <TransformGroup>
                                 <ScaleTransform ScaleX="1.8" ScaleY="1.8"/>
@@ -338,38 +309,38 @@
                             </TransformGroup>
                         </DatePicker.RenderTransform>
                     </DatePicker>
-                    <CheckBox x:Name="checkBox_Product" Margin="37,0,0,420" VerticalAlignment="Bottom" RenderTransformOrigin="0.5,0.5" HorizontalAlignment="Left" Width="16" Grid.Row="1">
+                    <CheckBox x:Name="checkBox_Product" Margin="25,0,0,240" RenderTransformOrigin="0.5,0.5" HorizontalAlignment="Left" Width="16" Height="15" VerticalAlignment="Bottom">
                         <CheckBox.RenderTransform>
                             <TransformGroup>
                                 <ScaleTransform ScaleX="3" ScaleY="3"/>
                             </TransformGroup>
                         </CheckBox.RenderTransform>
                     </CheckBox>
-                    <CheckBox x:Name="checkBox_Brand" Margin="39,0,0,370" VerticalAlignment="Bottom" RenderTransformOrigin="0.5,0.5" HorizontalAlignment="Left" Width="16" Grid.Row="1">
+                    <CheckBox x:Name="checkBox_Brand" Margin="25,0,0,190" VerticalAlignment="Bottom" RenderTransformOrigin="0.5,0.5" HorizontalAlignment="Left" Width="16" Grid.Row="1">
                         <CheckBox.RenderTransform>
                             <TransformGroup>
                                 <ScaleTransform ScaleX="3" ScaleY="3"/>
                             </TransformGroup>
                         </CheckBox.RenderTransform>
                     </CheckBox>
-                    <CheckBox x:Name="checkBox_Group" Margin="35,0,0,318" VerticalAlignment="Bottom" RenderTransformOrigin="0.5,0.5" HorizontalAlignment="Left" Width="16" Grid.Row="1">
+                    <CheckBox x:Name="checkBox_Group" Margin="25,0,0,140" VerticalAlignment="Bottom" RenderTransformOrigin="0.5,0.5" HorizontalAlignment="Left" Width="16">
                         <CheckBox.RenderTransform>
                             <TransformGroup>
                                 <ScaleTransform ScaleX="3" ScaleY="3"/>
                             </TransformGroup>
                         </CheckBox.RenderTransform>
                     </CheckBox>
-                    <ComboBox x:Name="comboBox_Brand" Height="40" Margin="83,0,0,354" VerticalAlignment="Bottom" SelectedValuePath="Content" HorizontalAlignment="Left" Width="381" Grid.Row="1"/>
-                    <ComboBox x:Name="comboBox_Group" Height="40" Margin="81,0,0,304" VerticalAlignment="Bottom" SelectedValuePath="Content" HorizontalAlignment="Left" Width="381" Grid.Row="1"/>
+                    <ComboBox x:Name="comboBox_Brand" MinWidth="500" Height="40" Margin="70,0,0,175" VerticalAlignment="Bottom" SelectedValuePath="Content" Grid.ColumnSpan="2" HorizontalAlignment="Left" Width="500"/>
+                    <ComboBox x:Name="comboBox_Group" MinWidth="500" Height="40" Margin="70,0,0,126" VerticalAlignment="Bottom" SelectedValuePath="Content" Grid.ColumnSpan="2" HorizontalAlignment="Left" Width="500"/>
                     <Button x:Name="Button_CreateStatistics" Content="Opret Statistik" Margin="10,0,10,10" Background="#FFC5C5C5" Style="{StaticResource Flat_Button}" Height="106" VerticalAlignment="Bottom" Click="Button_CreateStatistics_Click" Grid.Row="1" Grid.ColumnSpan="2"/>
-                    <TextBox Padding="10,0,0,0"  TextCompositionManager.PreviewTextInput="TextInputNoNumber" x:Name="textBox_StatisticsProductID" Margin="89,0,0,394" FontSize="33" Height="50" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="383" Grid.Row="1">
+                    <TextBox Padding="10,0,0,0" MinWidth="500" TextCompositionManager.PreviewTextInput="TextInputNoNumber" x:Name="textBox_StatisticsProductID" Margin="70,0,0,222" FontSize="33" Height="50" VerticalAlignment="Bottom" Grid.ColumnSpan="2" HorizontalAlignment="Left" Width="500">
                         <TextBox.Resources>
                             <Style TargetType="{x:Type Border}">
                                 <Setter Property="CornerRadius" Value="10"/>
                             </Style>
                         </TextBox.Resources>
                     </TextBox>
-                    <TextBlock IsHitTestVisible="False" Text="Indtast Produkt ID" Margin="102,0,0,392" Foreground="DarkGray" FontSize="30" Height="50" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="353" Grid.Row="1">
+                    <TextBlock IsHitTestVisible="False" Text="Indtast Produkt ID" Margin="84,0,0,220" Foreground="DarkGray" FontSize="30" Height="50" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="248">
                         <TextBlock.Style>
                             <Style TargetType="{x:Type TextBlock}">
                                 <Setter Property="Visibility" Value="Collapsed"/>
@@ -381,11 +352,11 @@
                             </Style>
                         </TextBlock.Style>
                     </TextBlock>
-                    <TextBlock x:Name="label_CurrentStartDate" Margin="212,121,0,0" TextWrapping="Wrap" Text="dd/mm/åå" VerticalAlignment="Top" FontSize="30" HorizontalAlignment="Left" Width="166" Grid.Row="1"/>
-                    <TextBlock x:Name="label_CurrentEndDate" Margin="212,73,0,0" TextWrapping="Wrap" Text="dd/mm/åå" VerticalAlignment="Top" FontSize="30" HorizontalAlignment="Left" Width="154" Grid.Row="1"/>
-                    <TextBlock x:Name="label_NoTransactions" Margin="38,201,0,0" TextWrapping="Wrap" Text="Ingen transaktioner fundet" VerticalAlignment="Top" FontWeight="Bold" Foreground="Red" Height="64" FontSize="30" RenderTransformOrigin="0.5,0.5" Visibility="Visible" HorizontalAlignment="Left" Width="668" Grid.ColumnSpan="2"/>
-                    <Button x:Name="Button_DateToday" Content="I dag" Margin="10,250,5,0" Background="#FFC5C5C5" Style="{StaticResource Flat_Button}" Height="48" VerticalAlignment="Top" Click="Button_DateToday_Click" Grid.Row="1"/>
-                    <Button x:Name="Button_DateYesterday" Content="I går" Grid.Column="1" Margin="5,250,10,0" Background="#FFC5C5C5" Style="{StaticResource Flat_Button}" Height="48" VerticalAlignment="Top" Click="Button_DateYesterday_Click" Grid.Row="1"/>
+                    <TextBlock x:Name="label_CurrentStartDate" Grid.ColumnSpan="2" Margin="200,126,0,0" TextWrapping="Wrap" Text="dd/mm/åå" VerticalAlignment="Top" FontSize="30" HorizontalAlignment="Left" Width="166" Grid.Row="1"/>
+                    <TextBlock x:Name="label_CurrentEndDate" Grid.ColumnSpan="2" Margin="200,81,0,0" TextWrapping="Wrap" Text="dd/mm/åå" VerticalAlignment="Top" FontSize="30" HorizontalAlignment="Left" Width="154" Grid.Row="1"/>
+                    <TextBlock x:Name="label_NoTransactions" Grid.ColumnSpan="2" Width="auto" HorizontalAlignment="Center" Margin="56,181,39,0" TextWrapping="Wrap" Text="Ingen transaktioner fundet" VerticalAlignment="Top" FontWeight="Bold" Foreground="Red" Height="64" FontSize="30" RenderTransformOrigin="0.5,0.5" Visibility="Hidden"/>
+                    <Button x:Name="Button_DateToday" Content="I dag" Margin="10,245,5,0" Background="#FFC5C5C5" Style="{StaticResource Flat_Button}" Height="48" VerticalAlignment="Top" Click="Button_DateToday_Click"/>
+                    <Button x:Name="Button_DateYesterday" Content="I går" Grid.Column="1" Margin="5,245,10,0" Background="#FFC5C5C5" Style="{StaticResource Flat_Button}" Height="48" VerticalAlignment="Top" Click="Button_DateYesterday_Click"/>
                 </Grid>
             </TabItem>
 
@@ -422,7 +393,7 @@
                                     </TextBlock.Style>
                                 </TextBlock>
                                 <Button x:Name="btn_SettingFastBtnAdd"  Content="Tilføj Hurtigknap" Margin="732,10,0,0" Background="#FFC5C5C5" Style="{StaticResource Flat_Button}" Height="50" VerticalAlignment="Top" Click="btn_SettingFastBtnAdd_Click" HorizontalAlignment="Left" Width="260"/>
-                                <TextBox Padding="10,0,0,0" x:Name="textBox_CreateQuickBtnName" Margin="204,11,0,0" FontSize="33" Height="50" VerticalAlignment="Top" HorizontalAlignment="Left" Width="372" MaxLength="10">
+                                <TextBox Padding="10,0,0,0" x:Name="textBox_CreateQuickBtnName" Margin="204,11,0,0" FontSize="33" Height="50" VerticalAlignment="Top" HorizontalAlignment="Left" Width="400" MaxLength="20">
                                     <TextBox.Resources>
                                         <Style TargetType="{x:Type Border}">
                                             <Setter Property="CornerRadius" Value="10"/>
@@ -441,58 +412,49 @@
                                         </Style>
                                     </TextBlock.Style>
                                 </TextBlock>
-                                <ListView x:Name="listView_QuickBtn" Margin="24,139,0,-610" HorizontalAlignment="Left" Width="982" Height="572" VerticalAlignment="Top" >
-                                    <ListView.View>
-                                        <GridView>
-                                            <GridViewColumn>
-                                                <GridViewColumn.CellTemplate>
-                                                    <DataTemplate>
-                                                        <TextBlock Text="{Binding Button_Name}"/>
-                                                    </DataTemplate>
-                                                </GridViewColumn.CellTemplate>
-                                            </GridViewColumn>
 
-                                            <GridViewColumn>
-                                                <GridViewColumn.CellTemplate>
-                                                    <DataTemplate>
-                                                        <TextBlock Text="{Binding ProductID}"/>
-                                                    </DataTemplate>
-                                                </GridViewColumn.CellTemplate>
-                                            </GridViewColumn>
+                                <ListView x:Name="listView_QuickBtn" Margin="10,67,596,-466" Height="500" HorizontalContentAlignment="Stretch" VerticalAlignment="Top">
+                                    <ListView.ItemTemplate>
+                                        <DataTemplate>
+                                            <Grid>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="1*"/>
+                                                    <ColumnDefinition Width="100"/>
+                                                    <ColumnDefinition Width="auto"/>
+                                                </Grid.ColumnDefinitions>
 
-                                            <GridViewColumn>
-                                                <GridViewColumn.CellTemplate>
-                                                    <DataTemplate>
-                                                        <Button Style="{StaticResource Flat_Button}"
+                                                <TextBlock Text="{Binding Button_Name}" Grid.Column="0"/>
+
+                                                <TextBlock Text="{Binding ProductID}" Grid.Column="1"/>
+
+                                                <Button Style="{StaticResource Flat_Button}"
                                                 Content = "+"
-                                                Width="30"
-                                                Height="30"
+                                                Width="50"
+                                                Height="50"
                                                 VerticalAlignment = "Center"
                                                 Click="btn_Remove_Quick_Button"
                                                 Tag="{Binding ProductID}"
+                                                        Grid.Column="2"
                                             />
-                                                    </DataTemplate>
-                                                </GridViewColumn.CellTemplate>
-                                            </GridViewColumn>
-
-                                        </GridView>
-                                    </ListView.View>
+                                            </Grid>
+                                        </DataTemplate>
+                                    </ListView.ItemTemplate>
                                 </ListView>
 
                             </Grid>
                         </TabItem>
                         <TabItem Header="Lager" x:Name="settingsTab" Width="300" Height="70">
                             <Grid>
-                                <Button Style="{StaticResource Flat_Button}" x:Name="btn_PictureFilePath" Content="Vælg billedmappe til produkter" HorizontalAlignment="Left" Margin="32,550,0,0" VerticalAlignment="Top" Width="466" Height="100" Click="btn_PictureFilePath_Click" />
-                                <Button Style="{StaticResource Flat_Button}" x:Name="btn_IcecreamID" Content="Gem nyt ID til is" HorizontalAlignment="Left" Margin="632,550,0,0" VerticalAlignment="Top" Width="242" Height="100" Click="btn_IcecreamID_Click" />
-                                <TextBox x:Name="textBox_IceID" TextWrapping="Wrap" Text="" TextCompositionManager.PreviewTextInput="TextInputNoNumber" FontSize="30" Width="84" Margin="543,579,0,0" HorizontalAlignment="Left" Height="50" VerticalAlignment="Top">
+                                <Button Style="{StaticResource Flat_Button}" x:Name="btn_PictureFilePath" Content="Vælg billedmappe til produkter" HorizontalAlignment="Left" Margin="10,808,0,0" VerticalAlignment="Top" Width="466" Height="100" Click="btn_PictureFilePath_Click" />
+                                <Button Style="{StaticResource Flat_Button}" x:Name="btn_IcecreamID" Content="Gem nyt ID til is" HorizontalAlignment="Left" Margin="610,808,0,0" VerticalAlignment="Top" Width="242" Height="100" Click="btn_IcecreamID_Click" />
+                                <TextBox x:Name="textBox_IceID" TextWrapping="Wrap" Text="" TextCompositionManager.PreviewTextInput="TextInputNoNumber" FontSize="30" Width="84" Margin="521,837,0,0" HorizontalAlignment="Left" Height="50" VerticalAlignment="Top">
                                     <TextBox.Resources>
                                         <Style TargetType="{x:Type Border}">
                                             <Setter Property="CornerRadius" Value="10"/>
                                         </Style>
                                     </TextBox.Resources>
                                 </TextBox>
-                                <TextBlock IsHitTestVisible="False" Text="ID" Margin="552,585,0,0" Foreground="DarkGray" FontSize="30" HorizontalAlignment="Left" Width="64" Height="50" VerticalAlignment="Top">
+                                <TextBlock IsHitTestVisible="False" Text="ID" Margin="530,843,0,0" Foreground="DarkGray" FontSize="30" HorizontalAlignment="Left" Width="64" Height="50" VerticalAlignment="Top">
                                     <TextBlock.Style>
                                         <Style TargetType="{x:Type TextBlock}">
                                             <Setter Property="Visibility" Value="Collapsed"/>
@@ -505,31 +467,31 @@
                                     </TextBlock.Style>
                                 </TextBlock>
 
-                                <ListView x:Name="listView_StorageRoom" HorizontalContentAlignment="Stretch" Margin="10,10,400,400" FontSize="20" VerticalAlignment="Stretch">
+                                <ListView x:Name="listView_StorageRoom" HorizontalContentAlignment="Stretch" Margin="10,70,10,350" FontSize="20">
                                     <ListView.View>
                                         <GridView>
                                             <GridViewColumn Header="ID" Width="40">
                                                 <GridViewColumn.CellTemplate>
-                                                    <DataTemplate>
+                                                    <DataTemplate x:Name="idRoom">
                                                         <TextBlock Text="{Binding storageID}" TextWrapping="WrapWithOverflow"/>
                                                     </DataTemplate>
                                                 </GridViewColumn.CellTemplate>
                                             </GridViewColumn>
-                                            <GridViewColumn Header="Navn" Width="300">
+                                            <GridViewColumn Header="Navn" Width="400">
                                                 <GridViewColumn.CellTemplate>
                                                     <DataTemplate>
                                                         <TextBlock Text="{Binding storageName}" TextWrapping="WrapWithOverflow"/>
                                                     </DataTemplate>
                                                 </GridViewColumn.CellTemplate>
                                             </GridViewColumn>
-                                            <GridViewColumn Header="Beskrivelse" Width="700">
+                                            <GridViewColumn Header="Beskrivelse" Width="900">
                                                 <GridViewColumn.CellTemplate>
                                                     <DataTemplate>
                                                         <TextBlock Text="{Binding storageDescription}" TextWrapping="WrapWithOverflow"/>
                                                     </DataTemplate>
                                                 </GridViewColumn.CellTemplate>
                                             </GridViewColumn>
-                                            <GridViewColumn Header="Rediger" Width="100">
+                                            <GridViewColumn Header="Rediger" Width="200">
                                                 <GridViewColumn.CellTemplate>
                                                     <DataTemplate>
                                                         <Button Style="{StaticResource Flat_Button}"
@@ -538,7 +500,7 @@
                                                 Height="35"
                                                 VerticalAlignment = "Center"
                                                 Click="btn_editStorageRoom_Click"
-                                                Tag="{Binding storageEdit}"
+                                                Tag="{Binding storageEditWithID}"
                                             />
                                                     </DataTemplate>
                                                 </GridViewColumn.CellTemplate>
@@ -547,9 +509,7 @@
                                     </ListView.View>
                                 </ListView>
 
-                                <Button Style="{StaticResource Flat_Button}" Background="#FFC5C5C5" x:Name="btn_newStorageRoom" Content="Tilføj nyt Lagerrum" HorizontalAlignment="Left" Margin="10,0,0,190" VerticalAlignment="Bottom" Width="466" Height="50" Click="btn_newStorageRoom_Click" />
-                                <Button Style="{StaticResource Flat_Button}" Background="#FFC5C5C5" x:Name="btn_editStorageRoom" Content="Rediger Lagerrum" HorizontalAlignment="Left" Margin="10,0,0,10" VerticalAlignment="Bottom" Width="466" Height="50" Click="btn_editStorageRoom_Click" IsHitTestVisible="False"/>
-                                <ComboBox x:Name="comboBox_storageRoomSelect" Background="#FFC5C5C5" Height="50" Margin="10,0,0,70" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="466" FontSize="30" IsSynchronizedWithCurrentItem="True" SelectionChanged="comboBox_storageRoomSelect_SelectionChanged"/>
+                                <Button Style="{StaticResource Flat_Button}" Background="#FFC5C5C5" x:Name="btn_newStorageRoom" Content="Opret nyt lagerrum" FontSize="30"  Margin="10,10,0,0" VerticalAlignment="Top" Height="50" Click="btn_newStorageRoom_Click" HorizontalAlignment="Left" Width="398" />
 
                                 <TextBlock x:Name="comboBox_text" Height="40" TextWrapping="Wrap" Foreground="DarkGray" Text="---Vælg Lagerrum---" Margin="104,0,0,77" FontSize="30" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="277">
                                     <TextBlock.Style>
@@ -563,26 +523,6 @@
                                         </Style>
                                     </TextBlock.Style>
                                 </TextBlock>
-                                <Border BorderBrush="Black" BorderThickness="2"  Height="230" Margin="500,0,10,10" VerticalAlignment="Bottom" >
-                                    <Grid>
-                                        <ScrollViewer>
-                                            <TextBlock x:Name="textBlock_StorageDescr" TextWrapping="Wrap" Text="" Margin="10,8,0,-8" HorizontalAlignment="Left"/>
-                                        </ScrollViewer>
-                                        <TextBlock x:Name="text_empty_descr" Height="100" TextWrapping="Wrap" Foreground="DarkGray" Text="Vælg lagerrum for beskrivelse..." Margin="4,0,0,126" FontSize="30" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="452">
-                                            <TextBlock.Style>
-                                                <Style TargetType="{x:Type TextBlock}">
-                                                    <Setter Property="Visibility" Value="Collapsed"/>
-                                                    <Style.Triggers>
-                                                        <DataTrigger Binding="{Binding Text, ElementName=textBlock_StorageDescr}" Value="">
-                                                            <Setter Property="Visibility" Value="Visible"/>
-                                                        </DataTrigger>
-                                                    </Style.Triggers>
-                                                </Style>
-                                            </TextBlock.Style>
-                                        </TextBlock>
-                                    </Grid>
-
-                                </Border>
 
 
 
@@ -595,8 +535,6 @@
                                 <Button Style="{StaticResource Flat_Button}" x:Name="btn_OpenAdmin" Content="åbn kodevindue" Height="100" Width="277" Margin="367,42,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Click="btn_OpenAdmin_Click"/>
 
                             </Grid>
-
-
 
                         </TabItem>
                         <TabItem Header="Information" Height="70" Width="300">

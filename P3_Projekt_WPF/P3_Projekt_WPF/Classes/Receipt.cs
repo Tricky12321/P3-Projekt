@@ -16,7 +16,7 @@ namespace P3_Projekt_WPF.Classes
         public List<SaleTransaction> Transactions = new List<SaleTransaction>();
         public int NumberOfProducts;
         public decimal TotalPrice;
-        public int CashOrCard;
+        public PaymentMethod_Enum PaymentMethod;
         public DateTime Date;
  
         public Receipt()
@@ -161,7 +161,7 @@ namespace P3_Projekt_WPF.Classes
             NumberOfProducts = Convert.ToInt32(Table.Values[1]);
             TotalPrice = Convert.ToDecimal(Table.Values[2]);
             //PaidPrice = Convert.ToDecimal(Table.Values[3]);
-            CashOrCard = Convert.ToInt32(Table.Values[3]);
+            PaymentMethod = (PaymentMethod_Enum)Convert.ToInt32(Table.Values[3]);
             string sql = $"SELECT * FROM `sale_transactions` WHERE `receipt_id` = '{ID}' AND `amount` != 0";
             try
             {
@@ -186,7 +186,7 @@ namespace P3_Projekt_WPF.Classes
             int ID = GetNextID();
             this.ID = ID;
             string sql = "INSERT INTO `receipt` (`id`, `number_of_products`, `total_price`, `payment_method`, `datetime`)"+
-                $" VALUES (NULL, '{NumberOfProducts}', '{TotalPrice}', '{CashOrCard}', FROM_UNIXTIME('{Utils.GetUnixTime(Date)}'));";
+                $" VALUES (NULL, '{NumberOfProducts}', '{TotalPrice}', '{(int)PaymentMethod}', FROM_UNIXTIME('{Utils.GetUnixTime(Date)}'));";
             Mysql.RunQuery(sql);
             foreach (var item in Transactions)
             {
@@ -201,7 +201,7 @@ namespace P3_Projekt_WPF.Classes
                 $"`number_of_products` = '{NumberOfProducts}'," +
                 $"`total_price` = '{TotalPrice}'," +
                 //$"`paid_price` = '{PaidPrice}'," +
-                $"`payment_method` = '{CashOrCard}'," +
+                $"`payment_method` = '{(int)PaymentMethod}'," +
                 $"`datetime` = FROM_UNIXTIME('{Utils.GetUnixTime(Date)}') "+
                 $"WHERE `id` = {ID};";
             Mysql.RunQuery(sql);
