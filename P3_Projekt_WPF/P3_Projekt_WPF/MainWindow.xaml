@@ -575,6 +575,5 @@
         <TextBlock x:Name="label_AdminStatusOnOff" Text="Fra" Height="40" Width="40" FontSize="24" Margin="0,9,90,0" HorizontalAlignment="Right" VerticalAlignment="Top"/>
 
         <Button x:Name="btn_AdminLogin"  Content="Log ind" Height="40" Width="84" FontSize="24" Margin="0,5,5,0" HorizontalAlignment="Right" VerticalAlignment="Top"/>
-        <ScrollBar x:Name="scrollBar" HorizontalAlignment="Left" Margin="1756,-114,0,0" VerticalAlignment="Top"/>
     </Grid>
 </Window>
