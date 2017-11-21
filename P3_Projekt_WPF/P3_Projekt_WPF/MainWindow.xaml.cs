@@ -431,10 +431,7 @@ namespace P3_Projekt_WPF
             }
         }
 
-        private void btn_MobilePay_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
+        
 
         private void btn_Increment_Click(object sender, RoutedEventArgs e)
         {
@@ -475,10 +472,10 @@ namespace P3_Projekt_WPF
         {
             int inputInt;
             int.TryParse(textBox_AddProductID.Text, out inputInt);
-
-            if (_POSController.GetProductFromID(inputInt) != null)
+            Product ProductToAdd = _POSController.GetProductFromID(inputInt);
+            if (ProductToAdd != null)
             {
-                _POSController.AddSaleTransaction(_POSController.GetProductFromID(inputInt), int.Parse(textBox_ProductAmount.Text));
+                _POSController.AddSaleTransaction(ProductToAdd, int.Parse(textBox_ProductAmount.Text));
                 UpdateReceiptList();
             }
             else
@@ -861,11 +858,10 @@ namespace P3_Projekt_WPF
 
         public void LoadStorageRooms()
         {
-            comboBox_storageRoomSelect.Items.Clear();
+            listView_StorageRoom.Items.Clear();
             foreach (KeyValuePair<int, StorageRoom> StorageRoom in _storageController.StorageRoomDictionary)
             {
-                listView_StorageRoom.Items.Add(new { storageID = StorageRoom.Key, storageName = StorageRoom.Value.Name, storageDescription = StorageRoom.Value.Description, Tag = StorageRoom.Key});
-                comboBox_storageRoomSelect.Items.Add($"{StorageRoom.Key.ToString()} {StorageRoom.Value.Name}");
+                listView_StorageRoom.Items.Add(new { storageID = StorageRoom.Key, storageName = StorageRoom.Value.Name, storageDescription = StorageRoom.Value.Description, storageEditWithID = StorageRoom.Key});
             }
         }
 
@@ -878,31 +874,9 @@ namespace P3_Projekt_WPF
                 firstLoad = false;
             }
         }
-
-        private void comboBox_storageRoomSelect_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            btn_editStorageRoom.IsHitTestVisible = true;
-            if (comboBox_storageRoomSelect.SelectedItem != null)
-            {
-                int storageID = Convert.ToInt32(comboBox_storageRoomSelect.SelectedItem.ToString().Split(' ').First());
-                StorageRoom chosenStorage = _storageController.StorageRoomDictionary[storageID];
-                textBlock_StorageDescr.Foreground = Brushes.Black;
-                textBlock_StorageDescr.Text = $"{chosenStorage.ID}. {chosenStorage.Name}: {chosenStorage.Description}";
-            }
-            else
-            {
-                textBlock_StorageDescr.Text = null;
-            }
-        }
         #endregion
 
-        private void btn_Cash_Click(object sender, RoutedEventArgs e)
-        {
-            _POSController.PlacerholderReceipt.CashOrCard = 1;
-            _POSController.ExecuteReceipt();
-            listView_Receipt.Items.Clear();
-            label_TotalPrice.Content = null;
-        }
+        
 
         private void btn_OpenAdmin_Click(object sender, RoutedEventArgs e)
         {
@@ -927,6 +901,45 @@ namespace P3_Projekt_WPF
                 _POSController.AddSaleTransaction(_POSController.GetProductFromID(int.Parse((sender as ListBoxItem).Tag.ToString())), 1);
                 UpdateReceiptList();
             }
+        }
+
+        private void btn_Cash_Click(object sender, RoutedEventArgs e)
+        {
+            CompletePurchase(PaymentMethod_Enum.Cash);
+
+        }
+
+        private void btn_Dankort_Click(object sender, RoutedEventArgs e)
+        {
+            CompletePurchase(PaymentMethod_Enum.Card);
+        }
+
+        private void btn_MobilePay_Click(object sender, RoutedEventArgs e)
+        {
+            CompletePurchase(PaymentMethod_Enum.MobilePay);
+
+        }
+
+        private void CompletePurchase(PaymentMethod_Enum PaymentMethod)
+        {
+            decimal PriceToPay = Convert.ToDecimal(label_TotalPrice.Content);
+            decimal PaymentAmount = Convert.ToDecimal(PayWithAmount.Text);
+            if (PriceToPay > PaymentAmount)
+            {
+                MessageBox.Show("Det betale beløb er ikke højere end prisen for varene.");
+            } else
+            {
+
+            }
+            SaleTransaction.SetStorageController(_storageController);
+            _POSController.PlacerholderReceipt.PaymentMethod = PaymentMethod;
+            Thread NewThread = new Thread(new ThreadStart(_POSController.ExecuteReceipt));
+            NewThread.Name = "ExecuteReceipt Thread";
+            NewThread.Start();
+            listView_Receipt.Items.Clear();
+
+            label_TotalPrice.Content = "Retur: " + (PriceToPay - PaymentAmount).ToString();
+            PayWithAmount.Text = "";
         }
     }
 }
