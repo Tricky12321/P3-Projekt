@@ -505,7 +505,7 @@
                                     </TextBlock.Style>
                                 </TextBlock>
 
-                                <ListView x:Name="listView_StorageRoom" HorizontalContentAlignment="Stretch" Margin="10,70,10,194" FontSize="20">
+                                <ListView x:Name="listView_StorageRoom" HorizontalContentAlignment="Stretch" Margin="10,70,10,350" FontSize="20">
                                     <ListView.View>
                                         <GridView>
                                             <GridViewColumn Header="ID" Width="40">
