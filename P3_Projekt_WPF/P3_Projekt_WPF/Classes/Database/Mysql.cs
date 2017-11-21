@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Threading;
 using MySql.Data.MySqlClient;
 using System.Diagnostics;
 using P3_Projekt_WPF.Classes.Exceptions;
@@ -24,7 +23,6 @@ namespace P3_Projekt_WPF.Classes.Database
         private static string _connectionString = $"Server={_ip};Port={_port};Database={_database};Uid={_username};Pwd={_password};";
         private static bool _internetConnection = false;
         private static int _connectionCounter => Connection.Count;
-        private static List<Thread> _queryThreads = new List<Thread>();
         private static ConcurrentQueue<string> _queryTasks = new ConcurrentQueue<string>();
         private const int _queryThreadCount = 1;
         private static MySqlConnection _connection = null;

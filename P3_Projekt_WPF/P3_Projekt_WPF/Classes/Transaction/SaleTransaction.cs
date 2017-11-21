@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using P3_Projekt_WPF.Classes.Database;
 using P3_Projekt_WPF.Classes.Exceptions;
 using P3_Projekt_WPF.Classes.Utilities;
+using System.Windows;
 namespace P3_Projekt_WPF.Classes
 {
     public class SaleTransaction : Transaction
@@ -15,7 +16,10 @@ namespace P3_Projekt_WPF.Classes
         public decimal Price;
         public bool Discount;
         public decimal TotalPrice => Price * Amount;
-        private StorageController _storageController = null;
+        private static StorageController _storageController = null;
+
+        
+
         public SaleTransaction(BaseProduct product, int amount, int receiptID) : base(product, amount)
         {
             ReceiptID = receiptID;
@@ -39,13 +43,51 @@ namespace P3_Projekt_WPF.Classes
             GetFromDatabase();
         }
 
+        public static void SetStorageController(StorageController SC)
+        {
+            _storageController = SC;
+        }
         //If transaction contains Product, decrements the shop storage room(ID 0) by amount
         //If transaction contains Temporary- or ServiceProduct, does nothing, since these do not have storage amounts
         public override void Execute()
         {
             if (Product is Product)
             {
-                (Product as Product).StorageWithAmount[1] -= Amount;
+                Product prod = (Product as Product);
+                if (!prod.StorageWithAmount.ContainsKey(1))
+                {
+                    prod.StorageWithAmount.TryAdd(1, -Amount);
+                }
+                else
+                {
+                    (Product as Product).StorageWithAmount[1] -= Amount;
+                }
+
+                // TODO: Implementere så der kommer en warning hvis et produkt kommer under 0 på lageret.
+                if (prod.StorageWithAmount.Where(x => x.Value < 0).Count() > 0)
+                {
+                    // Hvis det er nogle storageroom med negativ værdi
+                    StringBuilder Text = new StringBuilder();
+
+                    Text.Append("Produktet: " + prod.Name + "'s lager status er korrupt.\n");
+                    foreach (var item in prod.StorageWithAmount)
+                    {
+                        string AppendString = "";
+                        if (item.Value < 0)
+                        {
+                            AppendString = " **** - "+ _storageController.StorageRoomDictionary[item.Key].Name + " har " + item.Value.ToString() + " stk\n";
+                        }
+                        else
+                        {
+                            AppendString = " - " + _storageController.StorageRoomDictionary[item.Key].Name + " har " + item.Value.ToString() + " stk\n";
+                        }
+                        Text.Append(AppendString);
+                    }
+                    string Output = Text.ToString();
+                    var NewBox = MessageBox.Show(Text.ToString());
+
+                }
+
                 Product.UpdateInDatabase();
             }
             else if (Product is TempProduct)

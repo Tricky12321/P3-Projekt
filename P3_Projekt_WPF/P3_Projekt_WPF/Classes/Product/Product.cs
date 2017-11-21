@@ -151,7 +151,7 @@ namespace P3_Projekt_WPF.Classes
         {
             DeleteAllStorageData();
             // Sørger for at der ikke bliver indsat nogle storage rooms som er Void eller der ikke er nogen produkter i. 
-            var StorageRoomsTotal = StorageWithAmount.Where(x => x.Key >= 1 && x.Value > 0);
+            var StorageRoomsTotal = StorageWithAmount.Where(x => x.Key >= 1);
             foreach (var Storage_Room in StorageRoomsTotal)
             {
                 string sql = "INSERT INTO `storage_status` (`id`, `product_id`, `storageroom`, `amount`)" +
