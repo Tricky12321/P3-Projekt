@@ -431,10 +431,7 @@ namespace P3_Projekt_WPF
             }
         }
 
-        private void btn_MobilePay_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
+        
 
         private void btn_Increment_Click(object sender, RoutedEventArgs e)
         {
@@ -475,10 +472,10 @@ namespace P3_Projekt_WPF
         {
             int inputInt;
             int.TryParse(textBox_AddProductID.Text, out inputInt);
-
-            if (_POSController.GetProductFromID(inputInt) != null)
+            Product ProductToAdd = _POSController.GetProductFromID(inputInt);
+            if (ProductToAdd != null)
             {
-                _POSController.AddSaleTransaction(_POSController.GetProductFromID(inputInt), int.Parse(textBox_ProductAmount.Text));
+                _POSController.AddSaleTransaction(ProductToAdd, int.Parse(textBox_ProductAmount.Text));
                 UpdateReceiptList();
             }
             else
@@ -896,13 +893,7 @@ namespace P3_Projekt_WPF
         }
         #endregion
 
-        private void btn_Cash_Click(object sender, RoutedEventArgs e)
-        {
-            _POSController.PlacerholderReceipt.CashOrCard = 1;
-            _POSController.ExecuteReceipt();
-            listView_Receipt.Items.Clear();
-            label_TotalPrice.Content = null;
-        }
+        
 
         private void btn_OpenAdmin_Click(object sender, RoutedEventArgs e)
         {
@@ -929,5 +920,31 @@ namespace P3_Projekt_WPF
             }
         }
 
+        private void btn_Cash_Click(object sender, RoutedEventArgs e)
+        {
+            CompletePurchase(PaymentMethod_Enum.Cash);
+
+        }
+
+        private void btn_Dankort_Click(object sender, RoutedEventArgs e)
+        {
+            CompletePurchase(PaymentMethod_Enum.Card);
+        }
+
+        private void btn_MobilePay_Click(object sender, RoutedEventArgs e)
+        {
+            CompletePurchase(PaymentMethod_Enum.MobilePay);
+
+        }
+
+        private void CompletePurchase(PaymentMethod_Enum PaymentMethod)
+        {
+            SaleTransaction.SetStorageController(_storageController);
+            _POSController.PlacerholderReceipt.PaymentMethod = PaymentMethod;
+            _POSController.ExecuteReceipt();
+            listView_Receipt.Items.Clear();
+            label_TotalPrice.Content = null;
+            PayWithAmount.Text = "";
+        }
     }
 }
