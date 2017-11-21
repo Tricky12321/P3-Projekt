@@ -66,7 +66,7 @@ namespace P3_Projekt_WPF
             this.WindowState = WindowState.Maximized;
 
             LoadingTimer.Stop();
-            OutputList.Add("[TOTAL TIMER] took "+LoadingTimer.ElapsedMilliseconds+"ms");
+            OutputList.Add("[TOTAL TIMER] took " + LoadingTimer.ElapsedMilliseconds + "ms");
             foreach (var item in OutputList)
             {
                 Debug.WriteLine(item);
@@ -172,7 +172,7 @@ namespace P3_Projekt_WPF
             {
                 comboBox_Group.Items.Add(group.Name);
             }
-            
+
         }
 
         private void UpdateReceiptList()
@@ -431,7 +431,7 @@ namespace P3_Projekt_WPF
             }
         }
 
-        
+
 
         private void btn_Increment_Click(object sender, RoutedEventArgs e)
         {
@@ -813,7 +813,7 @@ namespace P3_Projekt_WPF
         }
 
         private void EnterKeyPressedSearch(object sender, KeyEventArgs e)
-        { 
+        {
             if (e.Key == Key.Enter && txtBox_SearchField_Storage.IsFocused)
             {
                 btn_search_Storage_Click(sender, e);
@@ -861,7 +861,7 @@ namespace P3_Projekt_WPF
             listView_StorageRoom.Items.Clear();
             foreach (KeyValuePair<int, StorageRoom> StorageRoom in _storageController.StorageRoomDictionary)
             {
-                listView_StorageRoom.Items.Add(new { storageID = StorageRoom.Key, storageName = StorageRoom.Value.Name, storageDescription = StorageRoom.Value.Description, storageEditWithID = StorageRoom.Key});
+                listView_StorageRoom.Items.Add(new { storageID = StorageRoom.Key, storageName = StorageRoom.Value.Name, storageDescription = StorageRoom.Value.Description, storageEditWithID = StorageRoom.Key });
             }
         }
 
@@ -876,7 +876,7 @@ namespace P3_Projekt_WPF
         }
         #endregion
 
-        
+
 
         private void btn_OpenAdmin_Click(object sender, RoutedEventArgs e)
         {
@@ -922,12 +922,25 @@ namespace P3_Projekt_WPF
 
         private void CompletePurchase(PaymentMethod_Enum PaymentMethod)
         {
-            SaleTransaction.SetStorageController(_storageController);
-            _POSController.PlacerholderReceipt.PaymentMethod = PaymentMethod;
-            _POSController.ExecuteReceipt();
-            listView_Receipt.Items.Clear();
-            label_TotalPrice.Content = null;
-            PayWithAmount.Text = "";
+            decimal paymentAmount = Convert.ToDecimal(PayWithAmount.Text);
+            decimal amountToPay = Convert.ToDecimal(label_TotalPrice.Content);
+            if (paymentAmount >= amountToPay)
+            {
+                SaleTransaction.SetStorageController(_storageController);
+                _POSController.PlacerholderReceipt.PaymentMethod = PaymentMethod;
+                Thread NewThread = new Thread(new ThreadStart(_POSController.ExecuteReceipt));
+                NewThread.Name = "ExecuteReceiptThread";
+                NewThread.Start();
+                _POSController.ExecuteReceipt();
+                listView_Receipt.Items.Clear();
+                decimal Difference = Convert.ToDecimal(label_TotalPrice.Content) - Convert.ToDecimal(PayWithAmount.Text);
+                label_TotalPrice.Content = "Retur: " + Difference.ToString();
+                PayWithAmount.Text = "";
+            }
+            else
+            {
+                MessageBox.Show("Dette er ikke nok til at betale for varene");
+            }
         }
     }
 }

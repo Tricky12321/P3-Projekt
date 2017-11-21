@@ -68,7 +68,6 @@ namespace P3_Projekt_WPF.Classes
                 {
                     // Hvis det er nogle storageroom med negativ værdi
                     StringBuilder Text = new StringBuilder();
-
                     Text.Append("Produktet: " + prod.Name + "'s lager status er korrupt.\n");
                     foreach (var item in prod.StorageWithAmount)
                     {
