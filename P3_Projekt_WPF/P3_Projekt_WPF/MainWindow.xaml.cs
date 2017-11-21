@@ -922,11 +922,23 @@ namespace P3_Projekt_WPF
 
         private void CompletePurchase(PaymentMethod_Enum PaymentMethod)
         {
+            decimal PriceToPay = Convert.ToDecimal(label_TotalPrice.Content);
+            decimal PaymentAmount = Convert.ToDecimal(PayWithAmount.Text);
+            if (PriceToPay > PaymentAmount)
+            {
+                MessageBox.Show("Det betale beløb er ikke højere end prisen for varene.");
+            } else
+            {
+
+            }
             SaleTransaction.SetStorageController(_storageController);
             _POSController.PlacerholderReceipt.PaymentMethod = PaymentMethod;
-            _POSController.ExecuteReceipt();
+            Thread NewThread = new Thread(new ThreadStart(_POSController.ExecuteReceipt));
+            NewThread.Name = "ExecuteReceipt Thread";
+            NewThread.Start();
             listView_Receipt.Items.Clear();
-            label_TotalPrice.Content = null;
+
+            label_TotalPrice.Content = "Retur: " + (PriceToPay - PaymentAmount).ToString();
             PayWithAmount.Text = "";
         }
     }
