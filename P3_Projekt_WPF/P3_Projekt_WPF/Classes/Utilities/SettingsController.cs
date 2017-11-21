@@ -52,5 +52,15 @@ namespace P3_Projekt_WPF.Classes.Utilities
         {
             Properties.Settings.Default.IcecreamID = ID;
         }
+
+        private void SaveFastButtons()
+        {
+           
+        }
+
+        private void LoadFastButtons()
+        {
+            // string[] FastButtonsString = Properties.Settings.Default.FastButtons.Split(':');
+        }
     }
 }
