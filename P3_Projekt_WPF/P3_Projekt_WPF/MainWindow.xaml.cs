@@ -861,11 +861,10 @@ namespace P3_Projekt_WPF
 
         public void LoadStorageRooms()
         {
-            comboBox_storageRoomSelect.Items.Clear();
+            listView_StorageRoom.Items.Clear();
             foreach (KeyValuePair<int, StorageRoom> StorageRoom in _storageController.StorageRoomDictionary)
             {
-                listView_StorageRoom.Items.Add(new { storageID = StorageRoom.Key, storageName = StorageRoom.Value.Name, storageDescription = StorageRoom.Value.Description, Tag = StorageRoom.Key});
-                comboBox_storageRoomSelect.Items.Add($"{StorageRoom.Key.ToString()} {StorageRoom.Value.Name}");
+                listView_StorageRoom.Items.Add(new { storageID = StorageRoom.Key, storageName = StorageRoom.Value.Name, storageDescription = StorageRoom.Value.Description, storageEditWithID = StorageRoom.Key});
             }
         }
 
@@ -876,22 +875,6 @@ namespace P3_Projekt_WPF
             {
                 LoadStorageRooms();
                 firstLoad = false;
-            }
-        }
-
-        private void comboBox_storageRoomSelect_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            btn_editStorageRoom.IsHitTestVisible = true;
-            if (comboBox_storageRoomSelect.SelectedItem != null)
-            {
-                int storageID = Convert.ToInt32(comboBox_storageRoomSelect.SelectedItem.ToString().Split(' ').First());
-                StorageRoom chosenStorage = _storageController.StorageRoomDictionary[storageID];
-                textBlock_StorageDescr.Foreground = Brushes.Black;
-                textBlock_StorageDescr.Text = $"{chosenStorage.ID}. {chosenStorage.Name}: {chosenStorage.Description}";
-            }
-            else
-            {
-                textBlock_StorageDescr.Text = null;
             }
         }
         #endregion

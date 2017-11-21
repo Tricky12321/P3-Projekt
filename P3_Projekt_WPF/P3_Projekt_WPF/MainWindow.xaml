@@ -483,16 +483,16 @@
                         </TabItem>
                         <TabItem Header="Lager Indstillinger" x:Name="settingsTab" Width="300" Height="60">
                             <Grid>
-                                <Button Style="{StaticResource Flat_Button}" x:Name="btn_PictureFilePath" Content="Vælg billedmappe til produkter" HorizontalAlignment="Left" Margin="32,550,0,0" VerticalAlignment="Top" Width="466" Height="100" Click="btn_PictureFilePath_Click" />
-                                <Button Style="{StaticResource Flat_Button}" x:Name="btn_IcecreamID" Content="Gem nyt ID til is" HorizontalAlignment="Left" Margin="632,550,0,0" VerticalAlignment="Top" Width="242" Height="100" Click="btn_IcecreamID_Click" />
-                                <TextBox x:Name="textBox_IceID" TextWrapping="Wrap" Text="" TextCompositionManager.PreviewTextInput="TextInputNoNumber" FontSize="30" Width="84" Margin="543,579,0,0" HorizontalAlignment="Left" Height="50" VerticalAlignment="Top">
+                                <Button Style="{StaticResource Flat_Button}" x:Name="btn_PictureFilePath" Content="Vælg billedmappe til produkter" HorizontalAlignment="Left" Margin="10,808,0,0" VerticalAlignment="Top" Width="466" Height="100" Click="btn_PictureFilePath_Click" />
+                                <Button Style="{StaticResource Flat_Button}" x:Name="btn_IcecreamID" Content="Gem nyt ID til is" HorizontalAlignment="Left" Margin="610,808,0,0" VerticalAlignment="Top" Width="242" Height="100" Click="btn_IcecreamID_Click" />
+                                <TextBox x:Name="textBox_IceID" TextWrapping="Wrap" Text="" TextCompositionManager.PreviewTextInput="TextInputNoNumber" FontSize="30" Width="84" Margin="521,837,0,0" HorizontalAlignment="Left" Height="50" VerticalAlignment="Top">
                                     <TextBox.Resources>
                                         <Style TargetType="{x:Type Border}">
                                             <Setter Property="CornerRadius" Value="10"/>
                                         </Style>
                                     </TextBox.Resources>
                                 </TextBox>
-                                <TextBlock IsHitTestVisible="False" Text="ID" Margin="552,585,0,0" Foreground="DarkGray" FontSize="30" HorizontalAlignment="Left" Width="64" Height="50" VerticalAlignment="Top">
+                                <TextBlock IsHitTestVisible="False" Text="ID" Margin="530,843,0,0" Foreground="DarkGray" FontSize="30" HorizontalAlignment="Left" Width="64" Height="50" VerticalAlignment="Top">
                                     <TextBlock.Style>
                                         <Style TargetType="{x:Type TextBlock}">
                                             <Setter Property="Visibility" Value="Collapsed"/>
@@ -505,31 +505,31 @@
                                     </TextBlock.Style>
                                 </TextBlock>
 
-                                <ListView x:Name="listView_StorageRoom" HorizontalContentAlignment="Stretch" Margin="10,10,400,400" FontSize="20" VerticalAlignment="Stretch">
+                                <ListView x:Name="listView_StorageRoom" HorizontalContentAlignment="Stretch" Margin="10,70,10,194" FontSize="20">
                                     <ListView.View>
                                         <GridView>
                                             <GridViewColumn Header="ID" Width="40">
                                                 <GridViewColumn.CellTemplate>
-                                                    <DataTemplate>
+                                                    <DataTemplate x:Name="idRoom">
                                                         <TextBlock Text="{Binding storageID}" TextWrapping="WrapWithOverflow"/>
                                                     </DataTemplate>
                                                 </GridViewColumn.CellTemplate>
                                             </GridViewColumn>
-                                            <GridViewColumn Header="Navn" Width="300">
+                                            <GridViewColumn Header="Navn" Width="400">
                                                 <GridViewColumn.CellTemplate>
                                                     <DataTemplate>
                                                         <TextBlock Text="{Binding storageName}" TextWrapping="WrapWithOverflow"/>
                                                     </DataTemplate>
                                                 </GridViewColumn.CellTemplate>
                                             </GridViewColumn>
-                                            <GridViewColumn Header="Beskrivelse" Width="700">
+                                            <GridViewColumn Header="Beskrivelse" Width="900">
                                                 <GridViewColumn.CellTemplate>
                                                     <DataTemplate>
                                                         <TextBlock Text="{Binding storageDescription}" TextWrapping="WrapWithOverflow"/>
                                                     </DataTemplate>
                                                 </GridViewColumn.CellTemplate>
                                             </GridViewColumn>
-                                            <GridViewColumn Header="Rediger" Width="100">
+                                            <GridViewColumn Header="Rediger" Width="200">
                                                 <GridViewColumn.CellTemplate>
                                                     <DataTemplate>
                                                         <Button Style="{StaticResource Flat_Button}"
@@ -538,7 +538,7 @@
                                                 Height="35"
                                                 VerticalAlignment = "Center"
                                                 Click="btn_editStorageRoom_Click"
-                                                Tag="{Binding storageEdit}"
+                                                Tag="{Binding storageEditWithID}"
                                             />
                                                     </DataTemplate>
                                                 </GridViewColumn.CellTemplate>
@@ -547,9 +547,7 @@
                                     </ListView.View>
                                 </ListView>
 
-                                <Button Style="{StaticResource Flat_Button}" Background="#FFC5C5C5" x:Name="btn_newStorageRoom" Content="Tilføj nyt Lagerrum" HorizontalAlignment="Left" Margin="10,0,0,190" VerticalAlignment="Bottom" Width="466" Height="50" Click="btn_newStorageRoom_Click" />
-                                <Button Style="{StaticResource Flat_Button}" Background="#FFC5C5C5" x:Name="btn_editStorageRoom" Content="Rediger Lagerrum" HorizontalAlignment="Left" Margin="10,0,0,10" VerticalAlignment="Bottom" Width="466" Height="50" Click="btn_editStorageRoom_Click" IsHitTestVisible="False"/>
-                                <ComboBox x:Name="comboBox_storageRoomSelect" Background="#FFC5C5C5" Height="50" Margin="10,0,0,70" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="466" FontSize="30" IsSynchronizedWithCurrentItem="True" SelectionChanged="comboBox_storageRoomSelect_SelectionChanged"/>
+                                <Button Style="{StaticResource Flat_Button}" Background="#FFC5C5C5" x:Name="btn_newStorageRoom" Content="Tilføj nyt lagerrum" FontSize="30"  Margin="10,10,0,0" VerticalAlignment="Top" Height="50" Click="btn_newStorageRoom_Click" HorizontalAlignment="Left" Width="398" />
 
                                 <TextBlock x:Name="comboBox_text" Height="40" TextWrapping="Wrap" Foreground="DarkGray" Text="---Vælg Lagerrum---" Margin="104,0,0,77" FontSize="30" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="277">
                                     <TextBlock.Style>
@@ -563,26 +561,6 @@
                                         </Style>
                                     </TextBlock.Style>
                                 </TextBlock>
-                                <Border BorderBrush="Black" BorderThickness="2"  Height="230" Margin="500,0,10,10" VerticalAlignment="Bottom" >
-                                    <Grid>
-                                        <ScrollViewer>
-                                            <TextBlock x:Name="textBlock_StorageDescr" TextWrapping="Wrap" Text="" Margin="10,8,0,-8" HorizontalAlignment="Left"/>
-                                        </ScrollViewer>
-                                        <TextBlock x:Name="text_empty_descr" Height="100" TextWrapping="Wrap" Foreground="DarkGray" Text="Vælg lagerrum for beskrivelse..." Margin="4,0,0,126" FontSize="30" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="452">
-                                            <TextBlock.Style>
-                                                <Style TargetType="{x:Type TextBlock}">
-                                                    <Setter Property="Visibility" Value="Collapsed"/>
-                                                    <Style.Triggers>
-                                                        <DataTrigger Binding="{Binding Text, ElementName=textBlock_StorageDescr}" Value="">
-                                                            <Setter Property="Visibility" Value="Visible"/>
-                                                        </DataTrigger>
-                                                    </Style.Triggers>
-                                                </Style>
-                                            </TextBlock.Style>
-                                        </TextBlock>
-                                    </Grid>
-
-                                </Border>
 
 
 
