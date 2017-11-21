@@ -56,7 +56,7 @@ namespace P3_Projekt_WPF.Classes.Database
             MySqlConnection connection = null;
             connection = new MySqlConnection(_connectionString);
             connection.Open();
-            ConnectionTimer.Stop();
+            ////ConnectionTimer.Stop();
             Debug.WriteLine("[DATABASE] Database ConnectionTimer = " + ConnectionTimer.ElapsedMilliseconds + "ms");
             if (connection == null)
             {
