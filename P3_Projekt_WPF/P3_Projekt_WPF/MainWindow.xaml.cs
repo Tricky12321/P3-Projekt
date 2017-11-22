@@ -565,19 +565,28 @@ namespace P3_Projekt_WPF
 
         private void btn_Temporary_Click(object sender, RoutedEventArgs e)
         {
+            decimal price;
             if (_createTempProduct == null)
             {
                 _createTempProduct = new CreateTemporaryProduct();
                 _createTempProduct.Closed += delegate { _createTempProduct = null; };
                 _createTempProduct.btn_AddTempProduct.Click += delegate
                 {
-                    string description = _createTempProduct.textbox_Description.Text;
-                    decimal price = decimal.Parse(_createTempProduct.textbox_Price.Text);
-                    int amount = int.Parse(_createTempProduct.textBox_ProductAmount.Text);
-                    TempProduct NewTemp = _storageController.CreateTempProduct(description, price);
-                    _POSController.AddSaleTransaction(NewTemp, amount);
-                    UpdateReceiptList();
-                    _createTempProduct.Close();
+                    if(decimal.TryParse(_createTempProduct.textbox_Price.Text, out price) && _createTempProduct.textbox_Description != null)
+                    {
+                        string description = _createTempProduct.textbox_Description.Text;
+                        price = decimal.Parse(_createTempProduct.textbox_Price.Text);
+                        int amount = int.Parse(_createTempProduct.textBox_ProductAmount.Text);
+                        TempProduct NewTemp = _storageController.CreateTempProduct(description, price);
+                        _POSController.AddSaleTransaction(NewTemp, amount);
+                        UpdateReceiptList();
+                        _createTempProduct.Close();
+                    }
+                    else
+                    {
+                        _createTempProduct.textbox_Description.BorderBrush = Brushes.Red;
+                        _createTempProduct.textbox_Price.BorderBrush = Brushes.Red;
+                    }
                 };
             }
             _createTempProduct.Activate();
