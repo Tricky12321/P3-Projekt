@@ -1014,7 +1014,13 @@ namespace P3_Projekt_WPF
 
         private void btn_MoveProduct_Click(object sender, RoutedEventArgs e)
         {
+            productMove = new MoveProduct();
+            productMove.Show();
+        }
 
+        private MoveProduct productMove;
+        private void MoveProductWindow()
+        {
         }
     }
 }
