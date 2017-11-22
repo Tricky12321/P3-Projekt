@@ -18,7 +18,6 @@ using P3_Projekt_WPF.Classes.Exceptions;
 using P3_Projekt_WPF.Classes;
 using System.Diagnostics;
 using System.Threading;
-using System.Windows.Controls;
 using System.Collections;
 using System.IO;
 using System.Collections.Concurrent;
@@ -978,6 +977,11 @@ namespace P3_Projekt_WPF
                     image_Admin.Source = unlocked.ImageSource;
                 }
             };
+        }
+
+        private void btn_MoveProduct_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }

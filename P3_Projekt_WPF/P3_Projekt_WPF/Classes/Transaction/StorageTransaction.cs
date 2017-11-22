@@ -5,6 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using P3_Projekt_WPF.Classes.Database;
 using P3_Projekt_WPF.Classes.Utilities;
+using System.Collections.Concurrent;
+
 namespace P3_Projekt_WPF.Classes
 {
     public class StorageTransaction : Transaction
@@ -12,15 +14,13 @@ namespace P3_Projekt_WPF.Classes
         private StorageRoom _source;
         private StorageRoom _destination;
 
-        public StorageTransaction(Product product, int amount, StorageRoom source, StorageRoom destination) : base(product, amount)
+        public StorageTransaction(Product product, int amount, int sourceInt, int destinationInt, ConcurrentDictionary<int, StorageRoom> storageWithAmountDictionary) : base(product, amount)
         {
-            _source = source;
-            _destination = destination;
-            Amount = amount;
-            Product = product;
+            _source = storageWithAmountDictionary[sourceInt];
+            _destination = storageWithAmountDictionary[destinationInt];
         }
 
-        public StorageTransaction(int id) : base(null,0)
+        public StorageTransaction(int id) : base(null, 0)
         {
             _id = id;
             GetFromDatabase();
@@ -36,7 +36,6 @@ namespace P3_Projekt_WPF.Classes
         {
             string sql = $"SELECT * FROM `storage_transaction` WHERE `id` = '{_id}'";
             CreateFromRow(Mysql.RunQueryWithReturn(sql).RowData[0]);
-
         }
 
         public override void CreateFromRow(Row Table)
@@ -51,7 +50,7 @@ namespace P3_Projekt_WPF.Classes
 
         public override void UploadToDatabase()
         {
-            string sql = "INSERT INTO `storage_transaction` (`id`, `product_id`, `amount`, `datetime`, `source_storageroom_id`, `destination_storageroom_id`)"+
+            string sql = "INSERT INTO `storage_transaction` (`id`, `product_id`, `amount`, `datetime`, `source_storageroom_id`, `destination_storageroom_id`)" +
                 $" VALUES (NULL, '{Product.ID}', '{Amount}', FROM_UNIXTIME('{Utils.GetUnixTime(Date)}'), '{_source.ID}', '{_destination.ID}');";
         }
 
@@ -65,6 +64,6 @@ namespace P3_Projekt_WPF.Classes
                $"`destination_storageroom_id` = '{_destination.ID}' " +
                $"WHERE `id` = {_id};";
             Mysql.RunQuery(sql);
-        } 
+        }
     }
 }

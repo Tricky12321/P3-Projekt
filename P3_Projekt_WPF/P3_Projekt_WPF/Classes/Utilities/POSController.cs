@@ -78,7 +78,6 @@ namespace P3_Projekt_WPF.Classes.Utilities
 
         public void ExecuteReceipt()
         {
-            
             PlacerholderReceipt.Execute();
             CheckStorageLevel();
 
@@ -92,16 +91,19 @@ namespace P3_Projekt_WPF.Classes.Utilities
         //Checks the updated products after execution of receipt, to see if storage amount drops below limit
         private void CheckStorageLevel()
         {
-            foreach (Product product in PlacerholderReceipt.Products())
+            foreach (BaseProduct product in PlacerholderReceipt.GetProducts())
             {
-                //Limit??
-                if (product.StorageWithAmount.Values.Sum() < 5)
+                if (product is Product)
                 {
-                    if (LowStorageWarning != null)
+                    if ((product as Product).StorageWithAmount.Values.Sum() < 5)
                     {
-                        LowStorageWarning.Invoke(product);
+                        if (LowStorageWarning != null)
+                        {
+                            LowStorageWarning.Invoke(product as Product);
+                        }
                     }
                 }
+                //Limit??
             }
         }
     }
