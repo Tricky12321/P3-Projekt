@@ -857,7 +857,7 @@ namespace P3_Projekt_WPF
         public void LoadStorageRooms()
         {
             listView_StorageRoom.Items.Clear();
-            foreach (KeyValuePair<int, StorageRoom> StorageRoom in _storageController.StorageRoomDictionary)
+            foreach (KeyValuePair<int, StorageRoom> StorageRoom in _storageController.StorageRoomDictionary.Where( x => x.Value.ID != 0))
             {
                 listView_StorageRoom.Items.Add(new { storageID = StorageRoom.Key, storageName = StorageRoom.Value.Name, storageDescription = StorageRoom.Value.Description, storageEditWithID = StorageRoom.Key });
             }
