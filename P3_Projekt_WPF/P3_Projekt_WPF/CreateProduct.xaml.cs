@@ -128,6 +128,7 @@ namespace P3_Projekt_WPF
             comboBox_ServiceGroup.ItemsSource = (storageController.GroupDictionary.Values.Select(x => x.Name));
             comboBox_Brand.ItemsSource = (storageController.GetProductBrands());
             _storageRooms = storageController.StorageRoomDictionary;
+            _storageController = storageController;
 
             LoadStorageRooms(_storageRooms);
             output_ProductID.Text = Product.GetNextID().ToString();

@@ -932,7 +932,7 @@ namespace P3_Projekt_WPF
                 decimal PaymentAmount = Convert.ToDecimal(PayWithAmount.Text);
                 if (PriceToPay > PaymentAmount)
                 {
-                    MessageBox.Show("Det betale beløb er ikke højere end prisen for varene.");
+                    MessageBox.Show("Det betalte beløb er ikke højere end prisen for varene.");
                 }
                 else
                 {
