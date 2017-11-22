@@ -125,13 +125,13 @@ namespace P3_Projekt_WPF.Classes
         }
 
         //Returns a list of the products present in the receipt
-        public List<Product> Products()
+        public List<BaseProduct> GetProducts()
         {
-            var products = new List<Product>();
+            var products = new List<BaseProduct>();
 
-            foreach(Transaction transaction in Transactions)
+            foreach(SaleTransaction transaction in Transactions)
             {
-                products.Add(transaction.Product as Product);
+                products.Add(transaction.Product);
             }
             return products;
         }
@@ -144,7 +144,7 @@ namespace P3_Projekt_WPF.Classes
         public void Execute()
         {
             UploadToDatabase();
-            foreach (Transaction transaction in Transactions)
+            foreach (SaleTransaction transaction in Transactions)
             {
                 transaction.Execute();
             }

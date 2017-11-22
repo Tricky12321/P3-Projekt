@@ -13,6 +13,9 @@ using System.Windows.Shapes;
 using System.Collections.Concurrent;
 using P3_Projekt_WPF.Classes;
 using P3_Projekt_WPF.Classes.Utilities;
+using System.IO;
+using System.Diagnostics;
+
 namespace P3_Projekt_WPF
 {
     public delegate void ImageChosen(string ImageName);
@@ -61,6 +64,7 @@ namespace P3_Projekt_WPF
             UpdateServiceProductSec = true;
             FillBoxesWithExistingServiceProduct(prod);
             tabControl.SelectedIndex = 1;
+            this.Title = "Rediger Service Produkt";
         }
 
         public CreateProduct(Product prod, StorageController storageController, MainWindow MainWin)
@@ -93,6 +97,7 @@ namespace P3_Projekt_WPF
             btn_AddStorageRoomWithAmount.Click += AddStorageWithAmount;
             btn_JustQuit.Click += delegate { this.Close(); };
             btn_ServiceJustQuit.Click += delegate { this.Close(); };
+            this.Title = "Rediger Produkt";
         }
 
         private void FillBoxesWithExistingProduct(Product prod)
@@ -145,6 +150,7 @@ namespace P3_Projekt_WPF
             btn_AddStorageRoomWithAmount.Click += AddStorageWithAmount;
             btn_JustQuit.Click += delegate { this.Close(); };
             btn_ServiceJustQuit.Click += delegate { this.Close(); };
+            this.Title = "Opret Produkt";
         }
 
         private void LoadStorageRooms(ConcurrentDictionary<int, StorageRoom> storageRooms)
@@ -304,19 +310,18 @@ namespace P3_Projekt_WPF
         {
             if (IsProductInputValid())
             {
-
                 if (UpdateProductSec)
                 {
                     UpdateProduct();
                     AddProductImage(this, UpdateProductID);
                     MainWin.ReloadProducts();
+                    MainWin.ShowSpecificInfoProductStorage(UpdateProductID);
                 }
                 else
                 {
-                    AddProduct();
                     AddProductImage(this, Product.GetNextID());
+                    AddProduct();
                     MainWin.ReloadProducts();
-
                 }
                 this.Close();
             }
@@ -326,7 +331,15 @@ namespace P3_Projekt_WPF
         {
             if (addProductWindow.ChosenFilePath != null)
             {
-                System.IO.File.Copy(addProductWindow.ChosenFilePath, Properties.Settings.Default.PictureFilePath + "\\" + id + ".jpg", true);
+                Debug.Print(addProductWindow.ChosenFilePath);
+                try
+                {
+                    File.Copy(addProductWindow.ChosenFilePath, Properties.Settings.Default.PictureFilePath + "\\" + id + ".jpg", true);
+                }
+                catch (IOException e)
+                {
+
+                }
             }
         }
 

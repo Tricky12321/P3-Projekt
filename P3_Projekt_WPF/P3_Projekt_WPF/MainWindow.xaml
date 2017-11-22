@@ -34,7 +34,7 @@
                     </Grid.RowDefinitions>
 
 
-                    <Button x:Name="btn_search" Content="🔎" Background="#FF767676" Margin="0,10,10,0" VerticalAlignment="Top" Height="50" Style="{StaticResource Flat_Button}" FontSize="21" HorizontalAlignment="Right" Width="50" Grid.Column="1" Click="btn_search_Click"/>
+                    <Button x:Name="btn_search" Content="🔎" Background="#FFC5C5C5" Margin="0,10,10,0" VerticalAlignment="Top" Height="50" Style="{StaticResource Flat_Button}" FontSize="21" HorizontalAlignment="Right" Width="50" Grid.Column="1" Click="btn_search_Click"/>
 
                     <Grid Grid.ColumnSpan="2">
                         <TextBox Padding="10,0,0,0" x:Name="txtBox_SearchField" LostFocus="SearchFieldLostFocus" Margin="0,10,74,12" FontSize="33" HorizontalAlignment="Right" Width="503">
@@ -65,9 +65,9 @@
                     <Button x:Name="btn_MobilePay"  Content="MobilePay" Margin="0,0,10,11" Background="#FFC5C5C5" Style="{StaticResource Flat_Button}" Click="btn_MobilePay_Click" Height="50" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="260" Grid.Column="1" Grid.Row="1"/>
                     <Grid x:Name="grid_QuickButton" Margin="10,73,5,66" Grid.Row="1"/>
                     <Border BorderBrush="Black" BorderThickness="1" Background="Black" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Left" Width="1"/>
-                    <Button x:Name="btn_AddProduct"  Content="Tilføj Produkt" Margin="0,16,12,0" Background="#FFC5C5C5" Style="{StaticResource Flat_Button}" Grid.Row="1" Height="50" VerticalAlignment="Top" Click="btn_AddProduct_Click" HorizontalAlignment="Right" Width="300"/>
-                    <Button x:Name="btn_PlusToReciept" Content="+" HorizontalAlignment="Left" Margin="365,17,0,0" Width="35" Style="{StaticResource Flat_Button}" RenderTransformOrigin="-0.486,0.333" Grid.Row="1" Height="50" VerticalAlignment="Top" Click="btn_PlusToReciept_Click"/>
-                    <Button x:Name="btn_MinusToReciept" Content="-" HorizontalAlignment="Left" Margin="405,17,0,0" Width="35" Style="{StaticResource Flat_Button}" FontSize="30" Grid.Row="1" Height="50" VerticalAlignment="Top" Click="btn_MinusToReciept_Click"/>
+                    <Button x:Name="btn_AddProduct"  Content="Tilføj Produkt" Margin="568,16,12,0" Background="#FFC5C5C5" Style="{StaticResource Flat_Button}" Grid.Row="1" Height="50" VerticalAlignment="Top" Click="btn_AddProduct_Click"/>
+                    <Button x:Name="btn_PlusToReciept" Content="+" HorizontalAlignment="Left" Margin="370,17,0,0" Width="50" Style="{StaticResource Flat_Button}" RenderTransformOrigin="-0.486,0.333" Grid.Row="1" Height="50" VerticalAlignment="Top" Click="btn_PlusToReciept_Click"/>
+                    <Button x:Name="btn_MinusToReciept" Content="-" HorizontalAlignment="Left" Margin="430,17,0,0" Width="50" Style="{StaticResource Flat_Button}" FontSize="30" Grid.Row="1" Height="50" VerticalAlignment="Top" Click="btn_MinusToReciept_Click"/>
 
 
 
@@ -90,7 +90,7 @@
                             </Style>
                         </TextBlock.Style>
                     </TextBlock>
-                    <TextBox x:Name="textBox_ProductAmount"  TextCompositionManager.PreviewTextInput="TextInputNoNumber" Padding="10,0,0,0" HorizontalAlignment="Left" Margin="445,17,0,0" TextWrapping="Wrap" Text="1" Width="68" MaxLines="1" MaxLength="2" FontSize="33" Grid.Row="1" Height="50" VerticalAlignment="Top">
+                    <TextBox x:Name="textBox_ProductAmount"  TextCompositionManager.PreviewTextInput="TextInputNoNumber" Padding="10,0,0,0" HorizontalAlignment="Left" Margin="490,17,0,0" TextWrapping="Wrap" Text="1" Width="70" MaxLines="1" MaxLength="2" FontSize="33" Grid.Row="1" Height="50" VerticalAlignment="Top">
                         <TextBox.Resources>
                             <Style TargetType="{x:Type Border}">
                                 <Setter Property="CornerRadius" Value="10"/>
@@ -203,7 +203,7 @@
                         <ColumnDefinition Width="643*"/>
                     </Grid.ColumnDefinitions>
                     <Border BorderBrush="Black" BorderThickness="1" Height="1" VerticalAlignment="Top" Margin="-34,71,-79,0" Grid.ColumnSpan="2"/>
-                    <Button x:Name="btn_MoveProduct" Content="Flyt Produkt" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="250" Height="50" Style="{StaticResource Flat_Button}"/>
+                    <Button x:Name="btn_MoveProduct" Background="#FFC5C5C5" Content="Flyt Produkt" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="250" Height="50" Style="{StaticResource Flat_Button}" Click="btn_MoveProduct_Click"/>
                     <ScrollViewer x:Name="scroll_StorageProduct" Margin="5,72,5,5" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" Grid.Column="0"/>
 
 
@@ -287,9 +287,9 @@
                     </ListView>
                     <Border BorderBrush="Black" BorderThickness="1" Margin="-34,71,-79,0" Height="1" VerticalAlignment="Top" Grid.ColumnSpan="3" Grid.Row="1"/>
 
-                    <TextBlock x:Name="label_StartDate" Margin="10,126,0,0" TextWrapping="Wrap" Text="Start Dato" VerticalAlignment="Top" FontSize="30" HorizontalAlignment="Left" Width="266"/>
-                    <TextBlock x:Name="label_EndDate" Margin="10,81,0,0" TextWrapping="Wrap" Text="Slut Dato" VerticalAlignment="Top" FontSize="30" HorizontalAlignment="Left" Width="254"/>
-                    <DatePicker Margin="400,137,0,0" Grid.ColumnSpan="2" VerticalAlignment="Top" FirstDayOfWeek="Monday" x:Name="datePicker_StartDate" Height="24" RenderTransformOrigin="0.5,0.5" SelectedDateChanged="OnSelectedStartDateChanged" BorderBrush="#00000000" HorizontalAlignment="Left" Width="32">
+                    <TextBlock x:Name="label_StartDate" Margin="10,81,0,0" TextWrapping="Wrap" Text="Start Dato" VerticalAlignment="Top" FontSize="30" HorizontalAlignment="Left" Width="266"/>
+                    <TextBlock x:Name="label_EndDate" Margin="10,126,0,0" TextWrapping="Wrap" Text="Slut Dato" VerticalAlignment="Top" FontSize="30" HorizontalAlignment="Left" Width="254"/>
+                    <DatePicker Margin="400,93,0,0" Grid.ColumnSpan="2" VerticalAlignment="Top" FirstDayOfWeek="Monday" x:Name="datePicker_StartDate" Height="24" RenderTransformOrigin="0.5,0.5" SelectedDateChanged="OnSelectedStartDateChanged" BorderBrush="#00000000" HorizontalAlignment="Left" Width="32">
                         <DatePicker.RenderTransform>
                             <TransformGroup>
                                 <ScaleTransform ScaleX="1.8" ScaleY="1.8"/>
@@ -299,7 +299,7 @@
                             </TransformGroup>
                         </DatePicker.RenderTransform>
                     </DatePicker>
-                    <DatePicker Margin="400,93,0,0" Grid.ColumnSpan="2" VerticalAlignment="Top" FirstDayOfWeek="Monday" x:Name="datePicker_EndDate" Height="24" RenderTransformOrigin="0.5,0.5" SelectedDateChanged="OnSelectedEndDateChanged" BorderBrush="#00000000" HorizontalAlignment="Left" Width="32">
+                    <DatePicker Margin="400,137,0,0" Grid.ColumnSpan="2" VerticalAlignment="Top" FirstDayOfWeek="Monday" x:Name="datePicker_EndDate" Height="24" RenderTransformOrigin="0.5,0.5" SelectedDateChanged="OnSelectedEndDateChanged" BorderBrush="#00000000" HorizontalAlignment="Left" Width="32">
                         <DatePicker.RenderTransform>
                             <TransformGroup>
                                 <ScaleTransform ScaleX="1.8" ScaleY="1.8"/>
@@ -330,8 +330,32 @@
                             </TransformGroup>
                         </CheckBox.RenderTransform>
                     </CheckBox>
-                    <ComboBox x:Name="comboBox_Brand" MinWidth="500" Height="40" Margin="70,0,0,175" VerticalAlignment="Bottom" SelectedValuePath="Content" Grid.ColumnSpan="2" HorizontalAlignment="Left" Width="500"/>
-                    <ComboBox x:Name="comboBox_Group" MinWidth="500" Height="40" Margin="70,0,0,126" VerticalAlignment="Bottom" SelectedValuePath="Content" Grid.ColumnSpan="2" HorizontalAlignment="Left" Width="500"/>
+                    <ComboBox x:Name="comboBox_Brand" MinWidth="500" Height="40" Margin="70,0,0,175" FontSize="25" VerticalAlignment="Bottom" SelectedValuePath="Content" Grid.ColumnSpan="2" HorizontalAlignment="Left" Width="500"/>
+                    <TextBlock x:Name="combo_text_brand" IsHitTestVisible="False" HorizontalAlignment="Left" Margin="200,0,0,175" TextWrapping="Wrap" Foreground="DarkGray" Text="Vælg Mærke" Height="40" VerticalAlignment="Bottom">
+                        <TextBlock.Style>
+                            <Style TargetType="{x:Type TextBlock}">
+                                <Setter Property="Visibility" Value="Collapsed"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Text, ElementName=comboBox_Brand}" Value="">
+                                        <Setter Property="Visibility" Value="Visible"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </TextBlock.Style>
+                    </TextBlock>
+                    <ComboBox x:Name="comboBox_Group" MinWidth="500" Height="40" Margin="70,0,0,126" VerticalAlignment="Bottom" FontSize="25" SelectedValuePath="Content" Grid.ColumnSpan="2" HorizontalAlignment="Left" Width="500"/>
+                    <TextBlock x:Name="combo_text_group" HorizontalAlignment="Left" IsHitTestVisible="False" Margin="200,0,0,125" TextWrapping="Wrap" Text="Vælg Gruppe" Foreground="DarkGray" VerticalAlignment="Bottom" Width="306" Grid.ColumnSpan="2">
+                        <TextBlock.Style>
+                            <Style TargetType="{x:Type TextBlock}">
+                                <Setter Property="Visibility" Value="Collapsed"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Text, ElementName=comboBox_Group}" Value="">
+                                        <Setter Property="Visibility" Value="Visible"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </TextBlock.Style>
+                    </TextBlock>
                     <Button x:Name="Button_CreateStatistics" Content="Opret Statistik" Margin="10,0,10,10" Background="#FFC5C5C5" Style="{StaticResource Flat_Button}" Height="106" VerticalAlignment="Bottom" Click="Button_CreateStatistics_Click" Grid.Row="1" Grid.ColumnSpan="2"/>
                     <TextBox Padding="10,0,0,0" MinWidth="500" TextCompositionManager.PreviewTextInput="TextInputNoNumber" x:Name="textBox_StatisticsProductID" Margin="70,0,0,222" FontSize="33" Height="50" VerticalAlignment="Bottom" Grid.ColumnSpan="2" HorizontalAlignment="Left" Width="500">
                         <TextBox.Resources>
@@ -352,8 +376,8 @@
                             </Style>
                         </TextBlock.Style>
                     </TextBlock>
-                    <TextBlock x:Name="label_CurrentStartDate" Grid.ColumnSpan="2" Margin="200,126,0,0" TextWrapping="Wrap" Text="dd/mm/åå" VerticalAlignment="Top" FontSize="30" HorizontalAlignment="Left" Width="166" Grid.Row="1"/>
-                    <TextBlock x:Name="label_CurrentEndDate" Grid.ColumnSpan="2" Margin="200,81,0,0" TextWrapping="Wrap" Text="dd/mm/åå" VerticalAlignment="Top" FontSize="30" HorizontalAlignment="Left" Width="154" Grid.Row="1"/>
+                    <TextBlock x:Name="label_CurrentStartDate" Grid.ColumnSpan="2" Margin="200,81,0,0" TextWrapping="Wrap" Text="dd/mm/åå" VerticalAlignment="Top" FontSize="30" HorizontalAlignment="Left" Width="166" Grid.Row="1"/>
+                    <TextBlock x:Name="label_CurrentEndDate" Grid.ColumnSpan="2" Margin="200,126,0,0" TextWrapping="Wrap" Text="dd/mm/åå" VerticalAlignment="Top" FontSize="30" HorizontalAlignment="Left" Width="154" Grid.Row="1"/>
                     <TextBlock x:Name="label_NoTransactions" Grid.ColumnSpan="2" Width="auto" HorizontalAlignment="Center" Margin="56,181,39,0" TextWrapping="Wrap" Text="Ingen transaktioner fundet" VerticalAlignment="Top" FontWeight="Bold" Foreground="Red" Height="64" FontSize="30" RenderTransformOrigin="0.5,0.5" Visibility="Hidden"/>
                     <Button x:Name="Button_DateToday" Content="I dag" Margin="10,245,5,0" Background="#FFC5C5C5" Style="{StaticResource Flat_Button}" Height="48" VerticalAlignment="Top" Click="Button_DateToday_Click"/>
                     <Button x:Name="Button_DateYesterday" Content="I går" Grid.Column="1" Margin="5,245,10,0" Background="#FFC5C5C5" Style="{StaticResource Flat_Button}" Height="48" VerticalAlignment="Top" Click="Button_DateYesterday_Click"/>
@@ -371,73 +395,94 @@
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="100"/>
                                 </Grid.RowDefinitions>
-                                <TextBox TextCompositionManager.PreviewTextInput="TextInputNoNumber" Padding="10,0,0,0" x:Name="textBox_CreateQuickBtnID" Margin="10,11,0,0" FontSize="33" Height="50" VerticalAlignment="Top" HorizontalAlignment="Left" Width="182" MaxLength="10">
-                                    <TextBox.Resources>
-                                        <Style TargetType="{x:Type Border}">
-                                            <Setter Property="CornerRadius" Value="10"/>
-                                        </Style>
-                                    </TextBox.Resources>
-                                </TextBox>
-                                <TextBlock IsHitTestVisible="False" Text="Produkt ID" Margin="24,12,0,0" Foreground="DarkGray" FontSize="33" HorizontalAlignment="Left" Width="168" Height="50" VerticalAlignment="Top">
-                                    <TextBlock.Style>
-                                        <Style TargetType="{x:Type TextBlock}">
-                                            <Setter Property="Visibility" Value="Collapsed"/>
-                                            <Style.Triggers>
-                                                <DataTrigger Binding="{Binding Text, ElementName=textBox_CreateQuickBtnID}" Value="">
-                                                    <Setter Property="Visibility" Value="Visible"/>
-                                                </DataTrigger>
-                                            </Style.Triggers>
-                                        </Style>
-                                    </TextBlock.Style>
-                                </TextBlock>
-                                <Button x:Name="btn_SettingFastBtnAdd"  Content="Tilføj Hurtigknap" Margin="732,10,0,0" Background="#FFC5C5C5" Style="{StaticResource Flat_Button}" Height="50" VerticalAlignment="Top" Click="btn_SettingFastBtnAdd_Click" HorizontalAlignment="Left" Width="260"/>
-                                <TextBox Padding="10,0,0,0" x:Name="textBox_CreateQuickBtnName" Margin="204,11,0,0" FontSize="33" Height="50" VerticalAlignment="Top" HorizontalAlignment="Left" Width="400" MaxLength="20">
-                                    <TextBox.Resources>
-                                        <Style TargetType="{x:Type Border}">
-                                            <Setter Property="CornerRadius" Value="10"/>
-                                        </Style>
-                                    </TextBox.Resources>
-                                </TextBox>
-                                <TextBlock IsHitTestVisible="False" Text="Knappens Navn" Margin="218,12,0,0" Foreground="DarkGray" FontSize="33" HorizontalAlignment="Left" Width="273" Height="50" VerticalAlignment="Top">
-                                    <TextBlock.Style>
-                                        <Style TargetType="{x:Type TextBlock}">
-                                            <Setter Property="Visibility" Value="Collapsed"/>
-                                            <Style.Triggers>
-                                                <DataTrigger Binding="{Binding Text, ElementName=textBox_CreateQuickBtnName}" Value="">
-                                                    <Setter Property="Visibility" Value="Visible"/>
-                                                </DataTrigger>
-                                            </Style.Triggers>
-                                        </Style>
-                                    </TextBlock.Style>
-                                </TextBlock>
 
-                                <ListView x:Name="listView_QuickBtn" Margin="10,67,596,-466" Height="500" HorizontalContentAlignment="Stretch" VerticalAlignment="Top">
-                                    <ListView.ItemTemplate>
-                                        <DataTemplate>
-                                            <Grid>
-                                                <Grid.ColumnDefinitions>
-                                                    <ColumnDefinition Width="1*"/>
-                                                    <ColumnDefinition Width="100"/>
-                                                    <ColumnDefinition Width="auto"/>
-                                                </Grid.ColumnDefinitions>
+                                <Grid Margin="0,10,0,-470" HorizontalAlignment="Center" MinWidth="900">
+                                    <TextBox TextCompositionManager.PreviewTextInput="TextInputNoNumber" Padding="10,0,0,0" x:Name="textBox_CreateQuickBtnID" Margin="0,0,714,0" FontSize="33" Height="50" VerticalAlignment="Top" HorizontalAlignment="Center" Width="182" MaxLength="10">
+                                        <TextBox.Resources>
+                                            <Style TargetType="{x:Type Border}">
+                                                <Setter Property="CornerRadius" Value="10"/>
+                                            </Style>
+                                        </TextBox.Resources>
+                                    </TextBox>
+                                    <TextBlock IsHitTestVisible="False" Text="Produkt ID" Margin="10,1,718,0" Foreground="DarkGray" FontSize="33" HorizontalAlignment="Center" Width="168" Height="50" VerticalAlignment="Top">
+                                        <TextBlock.Style>
+                                            <Style TargetType="{x:Type TextBlock}">
+                                                <Setter Property="Visibility" Value="Collapsed"/>
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding Text, ElementName=textBox_CreateQuickBtnID}" Value="">
+                                                        <Setter Property="Visibility" Value="Visible"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </TextBlock.Style>
+                                    </TextBlock>
+                                    <Button x:Name="btn_SettingFastBtnAdd" HorizontalAlignment="Center" Content="Tilføj Hurtigknap" Margin="636,0,0,0" Background="#FFC5C5C5" Style="{StaticResource Flat_Button}" Height="50" VerticalAlignment="Top" Click="btn_SettingFastBtnAdd_Click"  Width="260"/>
+                                    <TextBox Padding="10,0,0,0" HorizontalAlignment="Center" x:Name="textBox_CreateQuickBtnName" Margin="198,0,298,0" FontSize="33" Height="50" VerticalAlignment="Top" Width="400" MaxLength="15">
+                                        <TextBox.Resources>
+                                            <Style TargetType="{x:Type Border}">
+                                                <Setter Property="CornerRadius" Value="10"/>
+                                            </Style>
+                                        </TextBox.Resources>
+                                    </TextBox>
+                                    <TextBlock IsHitTestVisible="False" Text="Knappens Navn" Margin="210,1,414,0" Foreground="DarkGray" FontSize="33" HorizontalAlignment="Center" Width="272" Height="50" VerticalAlignment="Top">
+                                        <TextBlock.Style>
+                                            <Style TargetType="{x:Type TextBlock}">
+                                                <Setter Property="Visibility" Value="Collapsed"/>
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding Text, ElementName=textBox_CreateQuickBtnName}" Value="">
+                                                        <Setter Property="Visibility" Value="Visible"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </TextBlock.Style>
+                                    </TextBlock>
 
-                                                <TextBlock Text="{Binding Button_Name}" Grid.Column="0"/>
+                                    <ListView x:Name="listView_QuickBtn" Margin="0,61,-1,0" MinWidth="600" MaxWidth="900" HorizontalAlignment="Center" Height="500" HorizontalContentAlignment="Stretch" VerticalAlignment="Top" Width="897">
+                                        <ListView.Template>
+                                            <ControlTemplate>
+                                                <DockPanel LastChildFill="True" Background="white">
+                                                    <Grid DockPanel.Dock="Top" Height="auto">
+                                                        <Grid.ColumnDefinitions>
+                                                            <ColumnDefinition Width="1*"/>
+                                                            <ColumnDefinition Width="100"/>
+                                                            <ColumnDefinition Width="100"/>
+                                                        </Grid.ColumnDefinitions>
+                                                        <Label Background="LightGray" Grid.Column="0" FontStyle="Italic" Content="Navn"/>
+                                                        <Label Background="LightGray" Grid.Column="1"  FontStyle="Italic" Content="ID"/>
+                                                        <Label Background="Lightgray" Grid.Column="2"/>
+                                                    </Grid>
+                                                    <ItemsPresenter/>
+                                                </DockPanel>
+                                            </ControlTemplate>
+                                        </ListView.Template>
+                                        <ListView.ItemTemplate>
+                                            <DataTemplate>
+                                                <Grid>
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="1*"/>
+                                                        <ColumnDefinition Width="100"/>
+                                                        <ColumnDefinition Width="100"/>
+                                                    </Grid.ColumnDefinitions>
 
-                                                <TextBlock Text="{Binding ProductID}" Grid.Column="1"/>
+                                                    <TextBlock Text="{Binding Button_Name}" Grid.Column="0"/>
 
-                                                <Button Style="{StaticResource Flat_Button}"
-                                                Content = "+"
-                                                Width="50"
-                                                Height="50"
-                                                VerticalAlignment = "Center"
-                                                Click="btn_Remove_Quick_Button"
-                                                Tag="{Binding ProductID}"
+                                                    <TextBlock Text="{Binding ProductID}" Grid.Column="1"/>
+
+                                                    <Button Style="{StaticResource Flat_Button}"
+                                                        Content = "+"
+                                                        Width="50"
+                                                        Height="50"
+                                                        VerticalAlignment = "Center"
+                                                        Click="btn_Remove_Quick_Button"
+                                                        Tag="{Binding ProductID}"
                                                         Grid.Column="2"
                                             />
-                                            </Grid>
-                                        </DataTemplate>
-                                    </ListView.ItemTemplate>
-                                </ListView>
+                                                </Grid>
+                                            </DataTemplate>
+                                        </ListView.ItemTemplate>
+                                    </ListView>
+
+                                </Grid>
 
                             </Grid>
                         </TabItem>
@@ -445,7 +490,7 @@
                             <Grid>
                                 <Button Style="{StaticResource Flat_Button}" x:Name="btn_PictureFilePath" Content="Vælg billedmappe til produkter" HorizontalAlignment="Left" Margin="10,0,0,10" Width="466" Click="btn_PictureFilePath_Click" Height="100" VerticalAlignment="Bottom" />
                                 <Button Style="{StaticResource Flat_Button}" x:Name="btn_IcecreamID" Content="Gem nyt ID til is" HorizontalAlignment="Left" Margin="610,0,0,10" Width="242" Click="btn_IcecreamID_Click" Height="100" VerticalAlignment="Bottom" />
-                                <TextBox x:Name="textBox_IceID" TextWrapping="Wrap" Text="" TextCompositionManager.PreviewTextInput="TextInputNoNumber" FontSize="30" Width="84" Margin="521,0,0,31" HorizontalAlignment="Left" Height="50" VerticalAlignment="Bottom">
+                                <TextBox x:Name="textBox_IceID" Text="" TextCompositionManager.PreviewTextInput="TextInputNoNumber" FontSize="30" Width="84" Margin="521,0,0,31" HorizontalAlignment="Left" Height="50" VerticalAlignment="Bottom">
                                     <TextBox.Resources>
                                         <Style TargetType="{x:Type Border}">
                                             <Setter Property="CornerRadius" Value="10"/>
@@ -466,6 +511,25 @@
                                 </TextBlock>
 
                                 <ListView x:Name="listView_StorageRoom" HorizontalContentAlignment="Stretch" ScrollViewer.HorizontalScrollBarVisibility="Disabled" Margin="10,70,10,350" FontSize="20">
+                                    <ListBox.Template>
+                                        <ControlTemplate>
+                                            <DockPanel LastChildFill="True" Background="white">
+                                                <Grid DockPanel.Dock="Top" Height="auto">
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="50"/>
+                                                        <ColumnDefinition Width="1*"/>
+                                                        <ColumnDefinition Width="3*"/>
+                                                        <ColumnDefinition Width="100"/>
+                                                    </Grid.ColumnDefinitions>
+                                                    <Label Background="LightGray" Grid.Column="0" FontStyle="Italic" FontSize="30">ID</Label>
+                                                    <Label Background="LightGray" Grid.Column="1" FontStyle="Italic" FontSize="30">Navn</Label>
+                                                    <Label Background="Lightgray" Grid.Column="2" FontStyle="Italic" FontSize="30">Beskrivelse</Label>
+                                                    <Label Background="Lightgray" Grid.Column="3" FontStyle="Italic"></Label>
+                                                </Grid>
+                                                <ItemsPresenter></ItemsPresenter>
+                                            </DockPanel>
+                                        </ControlTemplate>
+                                    </ListBox.Template>
                                     <ListView.ItemTemplate>
                                         <DataTemplate>
                                             <Grid>
@@ -473,7 +537,7 @@
                                                     <ColumnDefinition Width="50"/>
                                                     <ColumnDefinition Width="1*"/>
                                                     <ColumnDefinition Width="3*"/>
-                                                    <ColumnDefinition Width="auto"/>
+                                                    <ColumnDefinition Width="100"/>
                                                 </Grid.ColumnDefinitions>
 
                                                 <TextBlock VerticalAlignment = "Center" Text="{Binding storageID}" TextWrapping="WrapWithOverflow"/>
