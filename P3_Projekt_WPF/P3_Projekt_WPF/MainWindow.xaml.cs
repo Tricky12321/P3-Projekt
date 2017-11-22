@@ -351,7 +351,6 @@ namespace P3_Projekt_WPF
                 productGrid.Children.Add(productControl);
                 i++;
             }
-
         }
 
         public void LoadProductGrid(ConcurrentDictionary<int, SearchProduct> productDictionary)
@@ -405,6 +404,10 @@ namespace P3_Projekt_WPF
 
                         _storageController.ProductDictionary[productID].Image = image;
                     }
+                }
+                catch (KeyNotFoundException e)
+                {
+                    
                 }
                 catch (UnauthorizedAccessException e)
                 {
