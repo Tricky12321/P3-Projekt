@@ -628,10 +628,11 @@ namespace P3_Projekt_WPF
             }
             else
             {
-                label_NoTransactions.Text = "Ikke admin, kan kun oprette statistik for dagen";
-                startDate = datePicker_StartDate.SelectedDate.Value;
-                endDate = datePicker_EndDate.SelectedDate.Value;
+                startDate = DateTime.Today;
+                endDate = DateTime.Today;
                 _statisticsController.RequestStatisticsDate(startDate, endDate);
+                ResetStatisticsView();
+                DisplayStatistics();
             }
         }
 
@@ -735,7 +736,10 @@ namespace P3_Projekt_WPF
                 _resolveTempProduct.MouseLeftButtonUp += delegate
                 {
                     index = _resolveTempProduct.listview_ProductsToMerge.SelectedIndex;
-                    _resolveTempProduct.textBox_TempProductInfo.Text = tempProducts[index].Value.Description;
+                    if (index <= tempProducts.Count() && index >= 0)
+                    {
+                        _resolveTempProduct.textBox_TempProductInfo.Text = tempProducts[index].Value.Description;
+                    }
                 };
                 _resolveTempProduct.textBox_IDToMerge.KeyUp += delegate { IDToMerge(); };
                 _resolveTempProduct.button_Merge.Click += delegate
@@ -967,7 +971,7 @@ namespace P3_Projekt_WPF
                     _settingsController.isAdmin = false;
                     btn_AdminLogin.Content = "Log ind";
                     image_Admin.Source = locked.ImageSource;
-
+                    label_NoAdmin.Visibility = Visibility.Visible;
                 }
                 else
                 {
@@ -976,6 +980,8 @@ namespace P3_Projekt_WPF
                     _settingsController.isAdmin = true;
                     btn_AdminLogin.Content = "Log ud";
                     image_Admin.Source = unlocked.ImageSource;
+                    label_NoAdmin.Visibility = Visibility.Collapsed;
+
                 }
             };
         }
