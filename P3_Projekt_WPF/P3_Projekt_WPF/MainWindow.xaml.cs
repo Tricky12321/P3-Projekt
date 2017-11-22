@@ -247,9 +247,15 @@ namespace P3_Projekt_WPF
         {
             CreateProduct EditProductForm = new CreateProduct(_productToEdit, _storageController, this);
             EditProductForm.Show();
+
         }
 
         private void ShowSpecificInfoProductStorage(object sender, RoutedEventArgs e)
+        {
+            ShowSpecificInfoProductStorage(int.Parse((sender as Button).Tag.ToString()));
+        }
+
+        public void ShowSpecificInfoProductStorage(int id)
         {
             // Hvis det er første gang, skal EditProduct lige hookes op på edit product
             if (_firstClick)
@@ -258,8 +264,7 @@ namespace P3_Projekt_WPF
                 btn_EditProduct.Visibility = Visibility.Visible;
             }
 
-            Debug.Print((sender as Button).Tag.ToString());
-            _productToEdit = _storageController.ProductDictionary[Convert.ToInt32((sender as Button).Tag)];
+            _productToEdit = _storageController.ProductDictionary[id];
             image_ChosenProduct.Source = Utils.ImageSourceForBitmap(Properties.Resources.questionmark_png);
 
             if (_productToEdit.Image != null)
