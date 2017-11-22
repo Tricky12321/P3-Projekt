@@ -14,10 +14,6 @@ namespace P3_Projekt_WPF.Classes.Utilities.Tests
         [TearDown]
         public void ResetStatic()
         {
-            StorageRoom.IDCounter = 0;
-            Group.IDCounter = 0; 
-            Transaction.IDCounter = 0;
-            Receipt.IDCounter = 0;
         }
 
         [Test()]
@@ -55,7 +51,7 @@ namespace P3_Projekt_WPF.Classes.Utilities.Tests
 
             POSC.AddIcecreamTransaction(25m);
 
-            //Assert.IsTrue((POSC.PlacerholderReceipt.Transactions.First().Product as ServiceProduct).ServiceProductGroup == "Is");
+            Assert.IsTrue((POSC.PlacerholderReceipt.Transactions.First().GetProductName() == "Is"));
         }
 
         [Test()]
