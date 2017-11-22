@@ -792,7 +792,7 @@ namespace P3_Projekt_WPF
         private void btn_search_Click(object sender, RoutedEventArgs e)
         {
             listBox_SearchResultsSaleTab.Visibility = Visibility.Visible;
-            ConcurrentDictionary<int, SearchProduct> productSearchResults = Utils.SearchForProduct(txtBox_SearchField.Text, _storageController.ProductDictionary, _storageController.GroupDictionary);
+            ConcurrentDictionary<int, SearchProduct> productSearchResults = _storageController.SearchForProduct(txtBox_SearchField.Text);
             listBox_SearchResultsSaleTab.Items.Clear();
             var searchResults = productSearchResults.Values.OrderByDescending(x => x.BrandMatch + x.GroupMatch + x.NameMatch);
             foreach (SearchProduct product in searchResults)
@@ -823,7 +823,7 @@ namespace P3_Projekt_WPF
 
         private void btn_search_Storage_Click(object sender, RoutedEventArgs e)
         {
-            ConcurrentDictionary<int, SearchProduct> productSearchResults = Utils.SearchForProduct(txtBox_SearchField_Storage.Text, _storageController.ProductDictionary, _storageController.GroupDictionary);
+            ConcurrentDictionary<int, SearchProduct> productSearchResults = _storageController.SearchForProduct(txtBox_SearchField_Storage.Text);
             LoadProductGrid(productSearchResults);
         }
 
