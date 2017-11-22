@@ -135,7 +135,6 @@ namespace P3_Projekt_WPF.Classes
         public void Execute()
         {
             UploadToDatabase();
-            foreach (Transaction transaction in Transactions)
             foreach (SaleTransaction transaction in Transactions)
             {
                 transaction.Execute();

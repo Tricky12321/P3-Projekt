@@ -978,6 +978,7 @@ namespace P3_Projekt_WPF
                     _settingsController.isAdmin = false;
                     btn_AdminLogin.Content = "Log ind";
                     image_Admin.Source = locked.ImageSource;
+                    
                     label_NoAdmin.Visibility = Visibility.Visible;
                 }
                 else
