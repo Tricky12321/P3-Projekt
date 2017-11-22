@@ -329,6 +329,14 @@ namespace P3_Projekt_WPF
 
         private void AddProductImage(CreateProduct addProductWindow, int id)
         {
+            /*
+                        DirectoryInfo directory = new DirectoryInfo($@"{ Properties.Settings.Default.PictureFilePath }");
+                        string[] allowedExtensions = new string[] { ".jpg", ".bmp", ".png", ".jpeg", ".tiff", ".gif" };
+
+                        IEnumerable<FileInfo> imageFiles = from file in directory.EnumerateFiles("*", SearchOption.AllDirectories)
+                                                           where allowedExtensions.Contains(file.Extension.ToLower())
+                                                           select file; 
+            */
             if (addProductWindow.ChosenFilePath != null)
             {
                 Debug.Print(addProductWindow.ChosenFilePath);
