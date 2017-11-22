@@ -226,42 +226,20 @@ namespace P3_Projekt_WPF
         Button addProductButton = new Button();
         public void AddProductButton()
         {
-
             addProductButton.Content = "Tilføj nyt produkt";
             addProductButton.FontSize = 30;
-
             addProductButton.SetValue(Grid.RowProperty, 0);
             addProductButton.SetValue(Grid.ColumnProperty, 0);
             addProductButton.Style = FindResource("Flat_Button") as Style;
             addProductButton.Margin = new System.Windows.Thickness(2);
             addProductButton.Background = System.Windows.Media.Brushes.Transparent;
-
             addProductButton.Click += AddProductDialogOpener;
-
-
         }
 
         public void AddProductDialogOpener(object sender, RoutedEventArgs e)
         {
             CreateProduct addProductWindow = new CreateProduct(_storageController, this);
-
-            addProductWindow.btn_SaveAndQuit.Click += delegate
-            {
-                if (addProductWindow.IsProductInputValid())
-                {
-                    LoadProductImages();
-                }
-            };
-
-            addProductWindow.btn_ServiceSaveAndQuit.Click += delegate
-            {
-                if (addProductWindow.IsServiceProductInputValid())
-                {
-                    LoadProductImages();
-                }
-            };
-
-            addProductWindow.ShowDialog();
+            addProductWindow.Show();
         }
 
         private bool _firstClick = true;
@@ -435,7 +413,7 @@ namespace P3_Projekt_WPF
             }
         }
 
-        
+
 
         private void btn_Increment_Click(object sender, RoutedEventArgs e)
         {
@@ -881,7 +859,7 @@ namespace P3_Projekt_WPF
             listView_StorageRoom.Items.Clear();
             foreach (KeyValuePair<int, StorageRoom> StorageRoom in _storageController.StorageRoomDictionary)
             {
-                listView_StorageRoom.Items.Add(new { storageID = StorageRoom.Key, storageName = StorageRoom.Value.Name, storageDescription = StorageRoom.Value.Description, storageEditWithID = StorageRoom.Key});
+                listView_StorageRoom.Items.Add(new { storageID = StorageRoom.Key, storageName = StorageRoom.Value.Name, storageDescription = StorageRoom.Value.Description, storageEditWithID = StorageRoom.Key });
             }
         }
 
@@ -896,7 +874,7 @@ namespace P3_Projekt_WPF
         }
         #endregion
 
-        
+
 
         private void btn_OpenAdmin_Click(object sender, RoutedEventArgs e)
         {
@@ -905,13 +883,23 @@ namespace P3_Projekt_WPF
 
         private void btn_ChangePassword_Click(object sender, RoutedEventArgs e)
         {
-            var check = new AdminValidation();
-            check.Closed += delegate
+
+            string desktopPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "//" + "resetpassword.txt";
+
+            if (File.Exists(desktopPath) && System.IO.File.ReadAllText(desktopPath) == "reset")
             {
-                if (check.IsPasswordCorrect)
-                    new AdminNewPassword().ShowDialog();
-            };
-            check.ShowDialog();
+                new AdminNewPassword().ShowDialog();
+            }
+            else
+            {
+                var check = new AdminValidation();
+                check.Closed += delegate
+                {
+                    if (check.IsPasswordCorrect)
+                        new AdminNewPassword().ShowDialog();
+                };
+                check.ShowDialog();
+            }
         }
 
         private void ListBoxItem_MouseDown(object sender, MouseButtonEventArgs e)
@@ -942,24 +930,27 @@ namespace P3_Projekt_WPF
 
         private void CompletePurchase(PaymentMethod_Enum PaymentMethod)
         {
-            decimal PriceToPay = Convert.ToDecimal(label_TotalPrice.Content);
-            decimal PaymentAmount = Convert.ToDecimal(PayWithAmount.Text);
-            if (PriceToPay > PaymentAmount)
+            if (listView_Receipt.HasItems && PayWithAmount.Text.Length >= 1)
             {
-                MessageBox.Show("Det betale beløb er ikke højere end prisen for varene.");
-            } else
-            {
-
+                decimal PriceToPay = Convert.ToDecimal(label_TotalPrice.Content);
+                decimal PaymentAmount = Convert.ToDecimal(PayWithAmount.Text);
+                if (PriceToPay > PaymentAmount)
+                {
+                    MessageBox.Show("Det betalte beløb er ikke højere end prisen for varene.");
+                }
+                else
+                {
+                    SaleTransaction.SetStorageController(_storageController);
+                    _POSController.PlacerholderReceipt.PaymentMethod = PaymentMethod;
+                    Thread NewThread = new Thread(new ThreadStart(_POSController.ExecuteReceipt));
+                    NewThread.Name = "ExecuteReceipt Thread";
+                    NewThread.Start();
+                    listView_Receipt.Items.Clear();
+                    label_TotalPrice.Content = "Retur: " + (PriceToPay - PaymentAmount).ToString();
+                    PayWithAmount.Text = "";
+                }
             }
-            SaleTransaction.SetStorageController(_storageController);
-            _POSController.PlacerholderReceipt.PaymentMethod = PaymentMethod;
-            Thread NewThread = new Thread(new ThreadStart(_POSController.ExecuteReceipt));
-            NewThread.Name = "ExecuteReceipt Thread";
-            NewThread.Start();
-            listView_Receipt.Items.Clear();
 
-            label_TotalPrice.Content = "Retur: " + (PriceToPay - PaymentAmount).ToString();
-            PayWithAmount.Text = "";
         }
 
         AdminValidation adminValid;

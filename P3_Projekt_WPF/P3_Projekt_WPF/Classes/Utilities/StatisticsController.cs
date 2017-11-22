@@ -23,7 +23,6 @@ namespace P3_Projekt_WPF.Classes.Utilities
          * Derefter skal formen kalde RequestStatisticsWithParameters */
 
 
-        // TODO: Tjek om det virker
 
         private bool _allStatisticsDone = false;
         private ConcurrentQueue<SaleTransaction> _saleTransactions;

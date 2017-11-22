@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using P3_Projekt_WPF.Classes.Database;
 using P3_Projekt_WPF.Classes.Utilities;
+using P3_Projekt_WPF.Classes.Exceptions;
 namespace P3_Projekt_WPF.Classes
 {
     public class TempProduct : BaseProduct
@@ -65,8 +66,7 @@ namespace P3_Projekt_WPF.Classes
                 SaleTransaction saleTrans = new SaleTransaction(getTransaction.RowData[0]);
                 return saleTrans;
             }
-            //TODO: Lave custom exception
-            throw new Exception("Dette tempproduct er ikke resolved");
+            throw new TempProductResolvedException("Dette tempproduct er ikke resolved");
         }
 
         public override void GetFromDatabase()

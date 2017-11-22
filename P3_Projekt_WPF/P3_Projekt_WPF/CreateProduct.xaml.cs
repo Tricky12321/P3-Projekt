@@ -128,6 +128,7 @@ namespace P3_Projekt_WPF
             comboBox_ServiceGroup.ItemsSource = (storageController.GroupDictionary.Values.Select(x => x.Name));
             comboBox_Brand.ItemsSource = (storageController.GetProductBrands());
             _storageRooms = storageController.StorageRoomDictionary;
+            _storageController = storageController;
 
             LoadStorageRooms(_storageRooms);
             output_ProductID.Text = Product.GetNextID().ToString();
@@ -194,7 +195,7 @@ namespace P3_Projekt_WPF
 
             foreach (KeyValuePair<int, StorageRoom> storageRoom in _storageRooms)
             {
-                if (_storageWithAmount.ContainsKey(storageRoom.Key) && _storageWithAmount[storageRoom.Key] > 0)
+                if (_storageWithAmount.ContainsKey(storageRoom.Key) && _storageWithAmount[storageRoom.Key] != 0)
                 {
                     listview_AddedStorageRooms.Items.Add(new Classes.Utilities.StorageListItem(storageRoom.Value.Name, _storageWithAmount[storageRoom.Key], storageRoom.Key));
                 }
@@ -304,7 +305,6 @@ namespace P3_Projekt_WPF
             if (IsProductInputValid())
             {
 
-                // TODO: Give ability to make a service product
                 if (UpdateProductSec)
                 {
                     UpdateProduct();
@@ -380,9 +380,7 @@ namespace P3_Projekt_WPF
         {
             if (IsServiceProductInputValid())
             {
-                // TODO: Skal lige laves så det virker med service produkter.
-                //AddProductImage(this);
-                // TODO: Give ability to make a service product
+
                 if (UpdateServiceProductSec)
                 {
                     UpdateServiceProduct();

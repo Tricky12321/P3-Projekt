@@ -369,11 +369,10 @@ namespace P3_Projekt_WPF.Classes.Utilities
                 discount = false;
             }
             Product newProduct = new Product(id, name, brand, purchasePrice, groupID, discount, salePrice, discountPrice);
-            newProduct.StorageWithAmount = storageWithAmount;
+            newProduct.StorageWithAmount = new ConcurrentDictionary<int, int>(storageWithAmount.Where(x => x.Value != 0));
             ProductDictionary[newProduct.ID] = newProduct;
             newProduct.UpdateInDatabase();
         }
-
 
         public void CreateServiceProduct(int id, decimal salePrice, decimal groupPrice, int groupLimit, string name, int serviceProductGroupID, bool UploadToDatabase = true)
         {

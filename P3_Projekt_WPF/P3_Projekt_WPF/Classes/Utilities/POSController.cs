@@ -42,7 +42,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
             if (_storageController.ProductDictionary.Keys.Contains(id))
             {
                 return _storageController.ProductDictionary[id];
-            }
+            } 
             return null;
         }
 
@@ -53,12 +53,9 @@ namespace P3_Projekt_WPF.Classes.Utilities
 
         public void AddIcecreamTransaction(decimal price)
         {
-            // TODO: Den giver ikke rigtige argumenter til constructoren
-            // Der mangler at få rigtig ID til is
-            // Der er et felt i settings og en knap i settings tab til at angive is ID, men intet er hooket up
             PlacerholderReceipt.AddTransaction(
                 new SaleTransaction(
-                    new ServiceProduct(Properties.Settings.Default.IcecreamID, price, price, 0, "Is", _storageController.GroupDictionary.Values.First(x => x.Name == "Is").ID),
+                    new ServiceProduct(Properties.Settings.Default.IcecreamID, price, price, 0, "Is", Properties.Settings.Default.IcecreamID),
                     1,
                     PlacerholderReceipt.ID));
         }
@@ -81,7 +78,6 @@ namespace P3_Projekt_WPF.Classes.Utilities
             
             PlacerholderReceipt.Execute();
             CheckStorageLevel();
-
             ReceiptList.Add(PlacerholderReceipt);
             PlacerholderReceipt = new Receipt();
         }
