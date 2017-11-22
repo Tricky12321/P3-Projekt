@@ -493,6 +493,7 @@ namespace P3_Projekt_WPF.Classes.Utilities.Tests
             Assert.IsTrue(productList.Contains(productToBeCompared));
         }
         */
+        /*
         [Test()]
         public void CreateTempProductTest()
         {
@@ -503,7 +504,7 @@ namespace P3_Projekt_WPF.Classes.Utilities.Tests
             //TODO: Exists does not exist
             //Assert.IsTrue(strContr.TempProductList.Exists(x => x.Description == "A blue shirt with yellow bananas"));
         }
-
+        */
         [Test()]
         public void EditTempProductTest()
         {
