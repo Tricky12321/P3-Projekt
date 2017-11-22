@@ -194,7 +194,7 @@ namespace P3_Projekt_WPF
 
             foreach (KeyValuePair<int, StorageRoom> storageRoom in _storageRooms)
             {
-                if (_storageWithAmount.ContainsKey(storageRoom.Key) && _storageWithAmount[storageRoom.Key] > 0)
+                if (_storageWithAmount.ContainsKey(storageRoom.Key) && _storageWithAmount[storageRoom.Key] != 0)
                 {
                     listview_AddedStorageRooms.Items.Add(new Classes.Utilities.StorageListItem(storageRoom.Value.Name, _storageWithAmount[storageRoom.Key], storageRoom.Key));
                 }

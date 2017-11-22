@@ -134,12 +134,12 @@ namespace P3_Projekt_WPF.Classes
 
         public void Execute()
         {
+            UploadToDatabase();
             foreach (Transaction transaction in Transactions)
             {
                 transaction.Execute();
             }
             //ReceiptPrinter printReceipt = new ReceiptPrinter(this);
-            UploadToDatabase();
         }
 
         public static int GetNextID()
@@ -185,8 +185,8 @@ namespace P3_Projekt_WPF.Classes
         {
             int ID = GetNextID();
             this.ID = ID;
-            string sql = "INSERT INTO `receipt` (`id`, `number_of_products`, `total_price`, `payment_method`, `datetime`)"+
-                $" VALUES (NULL, '{NumberOfProducts}', '{TotalPrice}', '{(int)PaymentMethod}', FROM_UNIXTIME('{Utils.GetUnixTime(Date)}'));";
+            string sql = "INSERT INTO `receipt` (`id`, `number_of_products`, `total_price`, `payment_method`)"+
+                $" VALUES (NULL, '{NumberOfProducts}', '{TotalPrice}', '{Convert.ToInt32(PaymentMethod)}')";
             Mysql.RunQuery(sql);
             foreach (var item in Transactions)
             {
@@ -201,7 +201,7 @@ namespace P3_Projekt_WPF.Classes
                 $"`number_of_products` = '{NumberOfProducts}'," +
                 $"`total_price` = '{TotalPrice}'," +
                 //$"`paid_price` = '{PaidPrice}'," +
-                $"`payment_method` = '{(int)PaymentMethod}'," +
+                $"`payment_method` = '{Convert.ToInt32(PaymentMethod)}'," +
                 $"`datetime` = FROM_UNIXTIME('{Utils.GetUnixTime(Date)}') "+
                 $"WHERE `id` = {ID};";
             Mysql.RunQuery(sql);
