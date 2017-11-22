@@ -46,5 +46,20 @@ namespace P3_Projekt_WPF
             textBox_ProductAmount.Text = amount.ToString();
         }
 
+        private void TextInputNoNumber(object sender, TextCompositionEventArgs e)
+        {
+            // Only allows number in textfield
+            if (e.Text.Length > 0)
+            {
+                if (!char.IsDigit(e.Text, e.Text.Length - 1))
+                    e.Handled = true;
+            }
+
+        }
+
+        private void textBox_ProductAmount_PreviewTextInput(object sender, TextCompositionEventArgs e)
+        {
+
+        }
     }
 }

@@ -106,6 +106,15 @@ namespace P3_Projekt_WPF.Classes
             UpdateNumberOfProducts();
         }
 
+        public void RemoveTransaction(string tempID)
+        {
+            int ID = int.Parse(tempID.Remove(0, 1));
+            SaleTransaction placeholderTransaction = Transactions.Where(x => x.Product is TempProduct && x.Product.ID == ID).First();
+            Transactions.Remove(placeholderTransaction);
+            UpdateTotalPrice();
+            UpdateNumberOfProducts();
+        }
+
         private void UpdateNumberOfProducts()
         {
             NumberOfProducts = 0;
