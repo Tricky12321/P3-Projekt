@@ -7,30 +7,40 @@
         mc:Ignorable="d"
         Title="Ret Midlertidigt Produkt" Height="700" Width="600">
     <Grid>
-        <Button x:Name="button_Merge" Content="Foren Produkter" Background="Transparent" Margin="0,0,10,10" Style="{StaticResource Flat_Button}" HorizontalAlignment="Right" Width="120" Height="38" VerticalAlignment="Bottom"/>
+        <Button x:Name="button_Merge" Content="Foren Produkter" Background="Transparent" Margin="0,0,10,10" Style="{StaticResource Flat_Button}" HorizontalAlignment="Right" Width="176" Height="38" VerticalAlignment="Bottom" FontSize="20"/>
         <TextBlock x:Name="txt_blockTempProduct" HorizontalAlignment="Left" Margin="10,359,0,0" TextWrapping="Wrap" Text="Midlertidigt Produkt:" Width="auto" FontSize="30" Height="41" VerticalAlignment="Top" />
         <TextBlock x:Name="txt_blockMergeProduct" HorizontalAlignment="Left" Margin="10,553,0,0" TextWrapping="Wrap" Text="Sammensæt med Produkt:" Width="auto" RenderTransformOrigin="1.269,0.536" FontSize="30" Height="45" VerticalAlignment="Top"/>
-        <ListView x:Name="listview_ProductsToMerge" Height="350" Margin="0,4,0,0" VerticalAlignment="Top" Grid.RowSpan="2" SelectionChanged="listview_ProductsToMerge_SelectionChanged" >
-            <ListView.View>
-                <GridView>
+        <ListView x:Name="listview_ProductsToMerge" Height="344" Margin="10,10,10,0" HorizontalContentAlignment="Stretch"  VerticalAlignment="Top" SelectionChanged="listview_ProductsToMerge_SelectionChanged" >
+            <ListBox.Template>
+                <ControlTemplate>
+                    <DockPanel LastChildFill="True" Background="white">
+                        <Grid DockPanel.Dock="Top" Height="auto">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="1*"/>
+                                <ColumnDefinition Width="150"/>
+                            </Grid.ColumnDefinitions>
+                            <Label Background="LightGray" Grid.Column="1" FontSize="30" FontStyle="Italic">Pris</Label>
+                            <Label Background="LightGray" Grid.Column="0" FontSize="30" FontStyle="Italic">Beskrivelse</Label>
+                        </Grid>
+                        <ItemsPresenter></ItemsPresenter>
+                    </DockPanel>
+                </ControlTemplate>
+            </ListBox.Template>
 
-                    <GridViewColumn Width="auto" Header="Description">
-                        <GridViewColumn.CellTemplate>
-                            <DataTemplate>
-                                <TextBlock Text="{Binding Description}" FontSize="30" MaxWidth="400" TextWrapping="Wrap"/>
-                            </DataTemplate>
-                        </GridViewColumn.CellTemplate>
-                    </GridViewColumn>
 
-                    <GridViewColumn Width="auto" Header="Price">
-                        <GridViewColumn.CellTemplate>
-                            <DataTemplate>
-                                <TextBlock Text="{Binding Price}" FontSize="30" Width="auto" TextWrapping="Wrap"/>
-                            </DataTemplate>
-                        </GridViewColumn.CellTemplate>
-                    </GridViewColumn>
-                </GridView>
-            </ListView.View>
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="1*"/>
+                            <ColumnDefinition Width="150"/>
+                        </Grid.ColumnDefinitions>
+
+                        <TextBlock Text="{Binding Description}" FontSize="30" TextWrapping="Wrap" VerticalAlignment="Center"/>
+                        <TextBlock Text="{Binding Price}" FontSize="30" Width="auto" Padding="10" Grid.Column="1" VerticalAlignment="Center" TextWrapping="Wrap"/>
+                    </Grid>
+                </DataTemplate>
+            </ListView.ItemTemplate>
         </ListView>
         <TextBox Padding="10,0,0,0"  TextCompositionManager.PreviewTextInput="TextInputNoNumber" x:Name="textBox_IDToMerge" Margin="370,553,0,0" FontSize="33" HorizontalAlignment="Left" Width="70" Height="45" VerticalAlignment="Top">
             <TextBox.Resources>

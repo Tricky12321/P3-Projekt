@@ -78,7 +78,24 @@ namespace P3_Projekt_WPF.Classes
         {
             string sql = "SHOW TABLE STATUS LIKE 'products'";
             TableDecode Results = Mysql.RunQueryWithReturn(sql);
-            return Convert.ToInt32(Results.RowData[0].Values[10]);
+            int product_AC = Convert.ToInt32(Results.RowData[0].Values[10]);
+            sql = "SHOW TABLE STATUS LIKE 'service_products'";
+            Results = Mysql.RunQueryWithReturn(sql);
+            int service_AC = Convert.ToInt32(Results.RowData[0].Values[10]);
+            int return_AC = 0;
+            if (service_AC != product_AC)
+            {
+                if (service_AC > product_AC)
+                {
+                    sql = $"ALTER TABLE 'products' AUTO_INCREMENT={service_AC};";
+                    return_AC = service_AC;
+                } else
+                {
+                    sql = $"ALTER TABLE 'service_products' AUTO_INCREMENT={product_AC};";
+                    return_AC = product_AC;
+                }
+            }
+            return return_AC;
         }
 
         //modtage storage transaction?
@@ -151,7 +168,7 @@ namespace P3_Projekt_WPF.Classes
         {
             DeleteAllStorageData();
             // Sørger for at der ikke bliver indsat nogle storage rooms som er Void eller der ikke er nogen produkter i. 
-            var StorageRoomsTotal = StorageWithAmount.Where(x => x.Key >= 1);
+            var StorageRoomsTotal = StorageWithAmount.Where(x => x.Key >= 1).Where(x => x.Value != 0);
             foreach (var Storage_Room in StorageRoomsTotal)
             {
                 string sql = "INSERT INTO `storage_status` (`id`, `product_id`, `storageroom`, `amount`)" +
@@ -163,7 +180,7 @@ namespace P3_Projekt_WPF.Classes
         public override void UploadToDatabase()
         {
             string sql = $"INSERT INTO `products` (`id`, `name`, `brand`, `groups`, `price`, `purchase_price` ,`discount`, `discount_price`)" +
-            $"VALUES (NULL, '{Name}', '{Brand}', '{ProductGroupID}', '{SalePrice}','{PurchasePrice}' '{Convert.ToInt32(DiscountBool)}', '{DiscountPrice}');";
+            $" VALUES (NULL, '{Name}', '{Brand}', '{ProductGroupID}', '{SalePrice}','{PurchasePrice}', '{Convert.ToInt32(DiscountBool)}', '{DiscountPrice}');";
             Mysql.RunQuery(sql);
             UpdateStorageStatus();
             CreatedTime = DateTime.Now;

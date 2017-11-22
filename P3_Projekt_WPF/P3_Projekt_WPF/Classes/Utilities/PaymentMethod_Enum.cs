@@ -7,5 +7,5 @@ using System.Threading.Tasks;
 namespace P3_Projekt_WPF.Classes.Utilities
 {
     public enum PaymentMethod_Enum
-    {Cash, Card, MobilePay}
+    {None, Cash,Card, MobilePay}
 }

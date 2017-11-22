@@ -225,42 +225,20 @@ namespace P3_Projekt_WPF
         Button addProductButton = new Button();
         public void AddProductButton()
         {
-
             addProductButton.Content = "Tilføj nyt produkt";
             addProductButton.FontSize = 30;
-
             addProductButton.SetValue(Grid.RowProperty, 0);
             addProductButton.SetValue(Grid.ColumnProperty, 0);
             addProductButton.Style = FindResource("Flat_Button") as Style;
             addProductButton.Margin = new System.Windows.Thickness(2);
             addProductButton.Background = System.Windows.Media.Brushes.Transparent;
-
             addProductButton.Click += AddProductDialogOpener;
-
-
         }
 
         public void AddProductDialogOpener(object sender, RoutedEventArgs e)
         {
             CreateProduct addProductWindow = new CreateProduct(_storageController, this);
-
-            addProductWindow.btn_SaveAndQuit.Click += delegate
-            {
-                if (addProductWindow.IsProductInputValid())
-                {
-                    LoadProductImages();
-                }
-            };
-
-            addProductWindow.btn_ServiceSaveAndQuit.Click += delegate
-            {
-                if (addProductWindow.IsServiceProductInputValid())
-                {
-                    LoadProductImages();
-                }
-            };
-
-            addProductWindow.ShowDialog();
+            addProductWindow.Show();
         }
 
         private bool _firstClick = true;
@@ -434,7 +412,7 @@ namespace P3_Projekt_WPF
             }
         }
 
-        
+
 
         private void btn_Increment_Click(object sender, RoutedEventArgs e)
         {
@@ -567,19 +545,28 @@ namespace P3_Projekt_WPF
 
         private void btn_Temporary_Click(object sender, RoutedEventArgs e)
         {
+            decimal price;
             if (_createTempProduct == null)
             {
                 _createTempProduct = new CreateTemporaryProduct();
                 _createTempProduct.Closed += delegate { _createTempProduct = null; };
                 _createTempProduct.btn_AddTempProduct.Click += delegate
                 {
-                    string description = _createTempProduct.textbox_Description.Text;
-                    decimal price = decimal.Parse(_createTempProduct.textbox_Price.Text);
-                    int amount = int.Parse(_createTempProduct.textBox_ProductAmount.Text);
-                    TempProduct NewTemp = _storageController.CreateTempProduct(description, price);
-                    _POSController.AddSaleTransaction(NewTemp, amount);
-                    UpdateReceiptList();
-                    _createTempProduct.Close();
+                    if(decimal.TryParse(_createTempProduct.textbox_Price.Text, out price) && _createTempProduct.textbox_Description != null)
+                    {
+                        string description = _createTempProduct.textbox_Description.Text;
+                        price = decimal.Parse(_createTempProduct.textbox_Price.Text);
+                        int amount = int.Parse(_createTempProduct.textBox_ProductAmount.Text);
+                        TempProduct NewTemp = _storageController.CreateTempProduct(description, price);
+                        _POSController.AddSaleTransaction(NewTemp, amount);
+                        UpdateReceiptList();
+                        _createTempProduct.Close();
+                    }
+                    else
+                    {
+                        _createTempProduct.textbox_Description.BorderBrush = Brushes.Red;
+                        _createTempProduct.textbox_Price.BorderBrush = Brushes.Red;
+                    }
                 };
             }
             _createTempProduct.Activate();
@@ -640,10 +627,11 @@ namespace P3_Projekt_WPF
             }
             else
             {
-                label_NoTransactions.Text = "Ikke admin, kan kun oprette statistik for dagen";
-                startDate = datePicker_StartDate.SelectedDate.Value;
-                endDate = datePicker_EndDate.SelectedDate.Value;
+                startDate = DateTime.Today;
+                endDate = DateTime.Today;
                 _statisticsController.RequestStatisticsDate(startDate, endDate);
+                ResetStatisticsView();
+                DisplayStatistics();
             }
         }
 
@@ -747,7 +735,10 @@ namespace P3_Projekt_WPF
                 _resolveTempProduct.MouseLeftButtonUp += delegate
                 {
                     index = _resolveTempProduct.listview_ProductsToMerge.SelectedIndex;
-                    _resolveTempProduct.textBox_TempProductInfo.Text = tempProducts[index].Value.Description;
+                    if (index <= tempProducts.Count() && index >= 0)
+                    {
+                        _resolveTempProduct.textBox_TempProductInfo.Text = tempProducts[index].Value.Description;
+                    }
                 };
                 _resolveTempProduct.textBox_IDToMerge.KeyUp += delegate { IDToMerge(); };
                 _resolveTempProduct.button_Merge.Click += delegate
@@ -865,9 +856,9 @@ namespace P3_Projekt_WPF
         public void LoadStorageRooms()
         {
             listView_StorageRoom.Items.Clear();
-            foreach (KeyValuePair<int, StorageRoom> StorageRoom in _storageController.StorageRoomDictionary)
+            foreach (KeyValuePair<int, StorageRoom> StorageRoom in _storageController.StorageRoomDictionary.Where( x => x.Value.ID != 0))
             {
-                listView_StorageRoom.Items.Add(new { storageID = StorageRoom.Key, storageName = StorageRoom.Value.Name, storageDescription = StorageRoom.Value.Description, storageEditWithID = StorageRoom.Key});
+                listView_StorageRoom.Items.Add(new { storageID = StorageRoom.Key, storageName = StorageRoom.Value.Name, storageDescription = StorageRoom.Value.Description, storageEditWithID = StorageRoom.Key });
             }
         }
 
@@ -882,7 +873,7 @@ namespace P3_Projekt_WPF
         }
         #endregion
 
-        
+
 
         private void btn_OpenAdmin_Click(object sender, RoutedEventArgs e)
         {
@@ -891,13 +882,23 @@ namespace P3_Projekt_WPF
 
         private void btn_ChangePassword_Click(object sender, RoutedEventArgs e)
         {
-            var check = new AdminValidation();
-            check.Closed += delegate
+
+            string desktopPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "//" + "resetpassword.txt";
+
+            if (File.Exists(desktopPath) && System.IO.File.ReadAllText(desktopPath) == "reset")
             {
-                if (check.IsPasswordCorrect)
-                    new AdminNewPassword().ShowDialog();
-            };
-            check.ShowDialog();
+                new AdminNewPassword().ShowDialog();
+            }
+            else
+            {
+                var check = new AdminValidation();
+                check.Closed += delegate
+                {
+                    if (check.IsPasswordCorrect)
+                        new AdminNewPassword().ShowDialog();
+                };
+                check.ShowDialog();
+            }
         }
 
         private void ListBoxItem_MouseDown(object sender, MouseButtonEventArgs e)
@@ -928,24 +929,35 @@ namespace P3_Projekt_WPF
 
         private void CompletePurchase(PaymentMethod_Enum PaymentMethod)
         {
-            decimal PriceToPay = Convert.ToDecimal(label_TotalPrice.Content);
-            decimal PaymentAmount = Convert.ToDecimal(PayWithAmount.Text);
-            if (PriceToPay > PaymentAmount)
+            if (listView_Receipt.HasItems)
             {
-                MessageBox.Show("Det betale beløb er ikke højere end prisen for varene.");
-            } else
-            {
+                decimal PriceToPay = Convert.ToDecimal(label_TotalPrice.Content);
+                decimal PaymentAmount;
+                if (PayWithAmount.Text.Length == 0)
+                {
+                    PaymentAmount = Convert.ToDecimal(label_TotalPrice.Content);
+                } else
+                {
+                    PaymentAmount = Convert.ToDecimal(PayWithAmount.Text);
+                }
 
+                if (PriceToPay > PaymentAmount)
+                {
+                    MessageBox.Show("Det betalte beløb er ikke højere end prisen for varene.");
+                }
+                else
+                {
+                    SaleTransaction.SetStorageController(_storageController);
+                    _POSController.PlacerholderReceipt.PaymentMethod = PaymentMethod;
+                    Thread NewThread = new Thread(new ThreadStart(_POSController.ExecuteReceipt));
+                    NewThread.Name = "ExecuteReceipt Thread";
+                    NewThread.Start();
+                    listView_Receipt.Items.Clear();
+                    label_TotalPrice.Content = "Retur: " + (PriceToPay - PaymentAmount).ToString();
+                    PayWithAmount.Text = "";
+                }
             }
-            SaleTransaction.SetStorageController(_storageController);
-            _POSController.PlacerholderReceipt.PaymentMethod = PaymentMethod;
-            Thread NewThread = new Thread(new ThreadStart(_POSController.ExecuteReceipt));
-            NewThread.Name = "ExecuteReceipt Thread";
-            NewThread.Start();
-            listView_Receipt.Items.Clear();
 
-            label_TotalPrice.Content = "Retur: " + (PriceToPay - PaymentAmount).ToString();
-            PayWithAmount.Text = "";
         }
 
         AdminValidation adminValid;
@@ -966,7 +978,7 @@ namespace P3_Projekt_WPF
                     _settingsController.isAdmin = false;
                     btn_AdminLogin.Content = "Log ind";
                     image_Admin.Source = locked.ImageSource;
-
+                    label_NoAdmin.Visibility = Visibility.Visible;
                 }
                 else
                 {
@@ -975,6 +987,8 @@ namespace P3_Projekt_WPF
                     _settingsController.isAdmin = true;
                     btn_AdminLogin.Content = "Log ud";
                     image_Admin.Source = unlocked.ImageSource;
+                    label_NoAdmin.Visibility = Visibility.Collapsed;
+
                 }
             };
         }

@@ -14,6 +14,7 @@
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <WarningLevel>4</WarningLevel>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
     <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
@@ -26,8 +27,8 @@
     <MapFileExtensions>true</MapFileExtensions>
     <ApplicationRevision>0</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
-    <IsWebBootstrapper>false</IsWebBootstrapper>
     <UseApplicationTrust>false</UseApplicationTrust>
+    <PublishWizardCompleted>true</PublishWizardCompleted>
     <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -52,6 +53,21 @@
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationManifest>app.manifest</ApplicationManifest>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ManifestCertificateThumbprint>870F507E66CC6B364826C83DAD390BEF1B1B2DDA</ManifestCertificateThumbprint>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ManifestKeyFile>P3_Projekt_WPF_1_TemporaryKey.pfx</ManifestKeyFile>
+  </PropertyGroup>
+  <PropertyGroup>
+    <GenerateManifests>false</GenerateManifests>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignManifests>false</SignManifests>
+  </PropertyGroup>
+  <PropertyGroup>
+    <TargetZone>LocalIntranet</TargetZone>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="FontAwesome.WPF, Version=4.7.0.37774, Culture=neutral, PublicKeyToken=0758b07a11a4f466, processorArchitecture=MSIL">
@@ -104,6 +120,7 @@
     <Compile Include="Classes\Database\Row.cs" />
     <Compile Include="Classes\Database\TableDecodeQueue.cs" />
     <Compile Include="Classes\Database\TableDecode.cs" />
+    <Compile Include="Classes\Exceptions\TempProductResolvedException.cs" />
     <Compile Include="Classes\Exceptions\EmptyTableException.cs" />
     <Compile Include="Classes\Exceptions\NoInternetConnectionException.cs" />
     <Compile Include="Classes\Exceptions\NotConnectedException.cs" />
@@ -120,7 +137,6 @@
     <Compile Include="Classes\Product\TempProduct.cs" />
     <Compile Include="Classes\Receipt.cs" />
     <Compile Include="Classes\ReceiptPrinter.cs" />
-    <Compile Include="Classes\Statistics.cs" />
     <Compile Include="Classes\StorageRoom.cs" />
     <Compile Include="Classes\Transaction\OrderTransaction.cs" />
     <Compile Include="Classes\Transaction\SaleTransaction.cs" />

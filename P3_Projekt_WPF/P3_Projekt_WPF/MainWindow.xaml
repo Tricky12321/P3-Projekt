@@ -354,6 +354,7 @@
                     <TextBlock x:Name="label_NoTransactions" Grid.ColumnSpan="2" Width="auto" HorizontalAlignment="Center" Margin="56,181,39,0" TextWrapping="Wrap" Text="Ingen transaktioner fundet" VerticalAlignment="Top" FontWeight="Bold" Foreground="Red" Height="64" FontSize="30" RenderTransformOrigin="0.5,0.5" Visibility="Hidden"/>
                     <Button x:Name="Button_DateToday" Content="I dag" Margin="10,245,5,0" Background="#FFC5C5C5" Style="{StaticResource Flat_Button}" Height="48" VerticalAlignment="Top" Click="Button_DateToday_Click"/>
                     <Button x:Name="Button_DateYesterday" Content="I går" Grid.Column="1" Margin="5,245,10,0" Background="#FFC5C5C5" Style="{StaticResource Flat_Button}" Height="48" VerticalAlignment="Top" Click="Button_DateYesterday_Click"/>
+                    <Label x:Name="label_NoAdmin" Content="Ikke Admin, kan kun vise stastik for dagen" HorizontalAlignment="Left" Margin="200,470,0,0" VerticalAlignment="Top" Width="667" Grid.ColumnSpan="2" Height="120" FontSize="35" Foreground="Red"/>
                 </Grid>
             </TabItem>
 
@@ -556,7 +557,6 @@
                         <TabItem Header="Admin" Height="70" Width="300">
                             <Grid>
                                 <Button Style="{StaticResource Flat_Button}" x:Name="btn_ChangePassword" Content="Skift adgangskode" Height="100" Width="277" Margin="67,42,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Click="btn_ChangePassword_Click"/>
-                                <Button Style="{StaticResource Flat_Button}" x:Name="btn_OpenAdmin" Content="åbn kodevindue" Height="100" Width="277" Margin="367,42,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Click="btn_OpenAdmin_Click"/>
 
                             </Grid>
 
