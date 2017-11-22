@@ -5,8 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:P3_Projekt_WPF"
         mc:Ignorable="d"
-        Title="Lav et nyt lagerrum" Height="434" Width="932" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
-    <Grid Margin="0,0,0,9">
+        Title="Lav et nyt lagerrum" Height="423" Width="932" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" Topmost="True">
+    <Grid Margin="0,-2,0,0">
         <TextBlock x:Name="label_name" HorizontalAlignment="Left" Margin="10,10,0,0" TextWrapping="Wrap" Text="Navn" FontSize="30" VerticalAlignment="Top" MinHeight="40" Height="40" Width="76"/>
         <TextBox Padding="0,0,0,0" x:Name="textBox_Name" FontSize="30" HorizontalAlignment="Right" Height="42" MinHeight="40" Margin="0,10,369,0" VerticalAlignment="Top" Width="379">
             <TextBox.Resources>
@@ -28,7 +28,7 @@
             </TextBlock.Style>
         </TextBlock>
         <TextBlock x:Name="textBlock_descr" HorizontalAlignment="Left" FontSize="30" Margin="10,73,0,0" TextWrapping="Wrap" Text="Beskrivelse" VerticalAlignment="Top"/>
-        <TextBox x:Name="textBox_descr" FontSize="30" HorizontalAlignment="Right" Height="254" Margin="163,72,10,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="738" ScrollViewer.VerticalScrollBarVisibility="Auto">
+        <TextBox x:Name="textBox_descr" FontSize="30" HorizontalAlignment="Right" Margin="0,72,10,70" TextWrapping="Wrap" Width="738" ScrollViewer.VerticalScrollBarVisibility="Auto">
             <TextBox.Resources>
                 <Style TargetType="{x:Type Border}">
                     <Setter Property="CornerRadius" Value="10"/>
@@ -51,8 +51,8 @@
         <TextBlock x:Name="label_StorageID" Margin="584,16,0,0" Text="Storage ID:" FontSize="24" MinHeight="24" VerticalAlignment="Top" HorizontalAlignment="Left" Width="118" Height="32"/>
         <TextBlock x:Name="output_StorageID" HorizontalAlignment="Right" Margin="0,16,22,0" TextWrapping="Wrap" Text=""  FontSize="24" VerticalAlignment="Top" Height="32"/>
 
-        <Button Style="{StaticResource Flat_Button}" Background="#FFC5C5C5" x:Name="btn_SaveAndQuit" Content="Gem og Afslut"  FontSize="30" Margin="0,0,10,10" Height="45" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="220"/>
-        <Button Style="{StaticResource Flat_Button}" Background="#FFC5C5C5" x:Name="btn_JustQuit" Content="Afbryd"  FontSize="30" Margin="0,0,240,10" Height="45" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="220"/>
-        <Button Style="{StaticResource Flat_Button}" Background="#FFC5C5C5" x:Name="btn_deleteStorageRoom" Content="Slet dette lager"  FontSize="30" Margin="10,0,0,15" Height="45" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="300" Visibility="Hidden"/>
+        <Button Style="{StaticResource Flat_Button}" Background="#FFC5C5C5" x:Name="btn_SaveAndQuit" Content="Gem og Afslut"  FontSize="30" Margin="0,0,10,10" Height="50" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="220"/>
+        <Button Style="{StaticResource Flat_Button}" Background="#FFC5C5C5" x:Name="btn_JustQuit" Content="Afbryd"  FontSize="30" Margin="0,0,242,10" Height="50" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="220"/>
+        <Button Style="{StaticResource Flat_Button}" Visibility="Visible" Background="#FFC5C5C5" x:Name="btn_deleteStorageRoom" Content="Slet dette lager"  FontSize="30" Margin="10,0,0,10" Height="50" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="300"/>
     </Grid>
 </Window>
