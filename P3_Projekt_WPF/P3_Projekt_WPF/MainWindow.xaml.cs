@@ -18,7 +18,6 @@ using P3_Projekt_WPF.Classes.Exceptions;
 using P3_Projekt_WPF.Classes;
 using System.Diagnostics;
 using System.Threading;
-using System.Windows.Controls;
 using System.Collections;
 using System.IO;
 using System.Collections.Concurrent;
@@ -930,10 +929,18 @@ namespace P3_Projekt_WPF
 
         private void CompletePurchase(PaymentMethod_Enum PaymentMethod)
         {
-            if (listView_Receipt.HasItems && PayWithAmount.Text.Length >= 1)
+            if (listView_Receipt.HasItems)
             {
                 decimal PriceToPay = Convert.ToDecimal(label_TotalPrice.Content);
-                decimal PaymentAmount = Convert.ToDecimal(PayWithAmount.Text);
+                decimal PaymentAmount;
+                if (PayWithAmount.Text.Length == 0)
+                {
+                    PaymentAmount = Convert.ToDecimal(label_TotalPrice.Content);
+                } else
+                {
+                    PaymentAmount = Convert.ToDecimal(PayWithAmount.Text);
+                }
+
                 if (PriceToPay > PaymentAmount)
                 {
                     MessageBox.Show("Det betalte beløb er ikke højere end prisen for varene.");
@@ -971,6 +978,7 @@ namespace P3_Projekt_WPF
                     _settingsController.isAdmin = false;
                     btn_AdminLogin.Content = "Log ind";
                     image_Admin.Source = locked.ImageSource;
+                    
                     label_NoAdmin.Visibility = Visibility.Visible;
                 }
                 else
@@ -984,6 +992,11 @@ namespace P3_Projekt_WPF
 
                 }
             };
+        }
+
+        private void btn_MoveProduct_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }
