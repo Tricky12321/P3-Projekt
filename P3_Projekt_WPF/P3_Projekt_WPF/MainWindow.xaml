@@ -463,7 +463,7 @@
                             <Grid>
                                 <Button Style="{StaticResource Flat_Button}" x:Name="btn_PictureFilePath" Content="Vælg billedmappe til produkter" HorizontalAlignment="Left" Margin="10,0,0,10" Width="466" Click="btn_PictureFilePath_Click" Height="100" VerticalAlignment="Bottom" />
                                 <Button Style="{StaticResource Flat_Button}" x:Name="btn_IcecreamID" Content="Gem nyt ID til is" HorizontalAlignment="Left" Margin="610,0,0,10" Width="242" Click="btn_IcecreamID_Click" Height="100" VerticalAlignment="Bottom" />
-                                <TextBox x:Name="textBox_IceID" TextWrapping="Wrap" Text="" TextCompositionManager.PreviewTextInput="TextInputNoNumber" FontSize="30" Width="84" Margin="521,0,0,31" HorizontalAlignment="Left" Height="50" VerticalAlignment="Bottom">
+                                <TextBox x:Name="textBox_IceID" Text="" TextCompositionManager.PreviewTextInput="TextInputNoNumber" FontSize="30" Width="84" Margin="521,0,0,31" HorizontalAlignment="Left" Height="50" VerticalAlignment="Bottom">
                                     <TextBox.Resources>
                                         <Style TargetType="{x:Type Border}">
                                             <Setter Property="CornerRadius" Value="10"/>
