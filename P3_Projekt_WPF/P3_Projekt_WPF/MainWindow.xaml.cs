@@ -148,7 +148,7 @@ namespace P3_Projekt_WPF
             grid_QuickButton.ColumnDefinitions.Add(new ColumnDefinition());
             grid_QuickButton.ColumnDefinitions.Add(new ColumnDefinition());
 
-            for (int i = 0; i < 10; ++i)
+            for (int i = 0; i < 7; ++i)
             {
                 grid_QuickButton.RowDefinitions.Add(new RowDefinition());
             }
@@ -501,8 +501,9 @@ namespace P3_Projekt_WPF
         {
             int inputInt;
             int.TryParse(textBox_CreateQuickBtnID.Text, out inputInt);
+            int maxButtons = 14;
 
-            if (_POSController.GetProductFromID(inputInt) != null && !_settingsController.quickButtonList.Any(x => x.ProductID == inputInt))
+            if (_POSController.GetProductFromID(inputInt) != null && !_settingsController.quickButtonList.Any(x => x.ProductID == inputInt) && checkIfTooManyQuickButtons(maxButtons))
             {
                 _settingsController.AddNewQuickButton(textBox_CreateQuickBtnName.Text, inputInt, grid_QuickButton.Width, grid_QuickButton.Height, btn_FastButton_click);
                 listView_QuickBtn.Items.Add(new FastButton() { Button_Name = textBox_CreateQuickBtnName.Text, ProductID = inputInt });
@@ -511,9 +512,25 @@ namespace P3_Projekt_WPF
             {
                 Utils.ShowErrorWarning($"Produkt med dette ID {inputInt} er allerede oprettet");
             }
+            else if (!checkIfTooManyQuickButtons(maxButtons))
+            {
+                Utils.ShowErrorWarning($"Der kan ikke oprettes flere hurtigknapper, der må højest være {maxButtons} hurtigknapper ");
+            }
             else
             {
                 Utils.ShowErrorWarning($"Produkt med ID {inputInt} findes ikke på lageret");
+            }
+        }
+
+        private bool checkIfTooManyQuickButtons(int maximumButtons)
+        {
+            if(_settingsController.quickButtonList.Count < maximumButtons)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
             }
         }
 
