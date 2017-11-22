@@ -51,7 +51,7 @@ namespace P3_Projekt_WPF.Classes.Utilities.Tests
 
             POSC.AddIcecreamTransaction(25m);
 
-            //Assert.IsTrue((POSC.PlacerholderReceipt.Transactions.First().Product as ServiceProduct).ServiceProductGroup == "Is");
+            Assert.IsTrue((POSC.PlacerholderReceipt.Transactions.First().GetProductName() == "Is"));
         }
 
         [Test()]

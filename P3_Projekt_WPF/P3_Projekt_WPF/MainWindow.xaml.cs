@@ -18,7 +18,6 @@ using P3_Projekt_WPF.Classes.Exceptions;
 using P3_Projekt_WPF.Classes;
 using System.Diagnostics;
 using System.Threading;
-using System.Windows.Controls;
 using System.Collections;
 using System.IO;
 using System.Collections.Concurrent;
@@ -979,6 +978,7 @@ namespace P3_Projekt_WPF
                     _settingsController.isAdmin = false;
                     btn_AdminLogin.Content = "Log ind";
                     image_Admin.Source = locked.ImageSource;
+                    
                     label_NoAdmin.Visibility = Visibility.Visible;
                 }
                 else
@@ -992,6 +992,11 @@ namespace P3_Projekt_WPF
 
                 }
             };
+        }
+
+        private void btn_MoveProduct_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }
