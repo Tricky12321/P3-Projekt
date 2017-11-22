@@ -200,7 +200,7 @@
                         <ColumnDefinition Width="643*"/>
                     </Grid.ColumnDefinitions>
                     <Border BorderBrush="Black" BorderThickness="1" Height="1" VerticalAlignment="Top" Margin="-34,71,-79,0" Grid.ColumnSpan="2"/>
-                    <Button x:Name="btn_MoveProduct" Background="#FFC5C5C5" Content="Flyt Produkt" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="250" Height="50" Style="{StaticResource Flat_Button}" Click="btn_MoveProduct_Click"/>
+                    <Button x:Name="btn_MoveProduct" Background="#FFC5C5C5" Content="Flyt Produkt" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="250" Height="50" Style="{StaticResource Flat_Button}"/>
                     <ScrollViewer x:Name="scroll_StorageProduct" Margin="5,72,5,5" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" Grid.Column="0"/>
 
 
@@ -368,7 +368,7 @@
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="100"/>
                                 </Grid.RowDefinitions>
-                                
+
                                 <Grid Margin="0,10,0,-470" HorizontalAlignment="Center" MinWidth="900">
                                     <TextBox TextCompositionManager.PreviewTextInput="TextInputNoNumber" Padding="10,0,0,0" x:Name="textBox_CreateQuickBtnID" Margin="0,0,714,0" FontSize="33" Height="50" VerticalAlignment="Top" HorizontalAlignment="Center" Width="182" MaxLength="10">
                                         <TextBox.Resources>
@@ -462,26 +462,6 @@
                         <TabItem Header="Lager" x:Name="settingsTab" Width="300" Height="70">
                             <Grid>
                                 <Button Style="{StaticResource Flat_Button}" x:Name="btn_PictureFilePath" Content="Vælg billedmappe til produkter" HorizontalAlignment="Left" Margin="10,0,0,10" Width="466" Click="btn_PictureFilePath_Click" Height="100" VerticalAlignment="Bottom" />
-                                <Button Style="{StaticResource Flat_Button}" x:Name="btn_IcecreamID" Content="Gem nyt ID til is" HorizontalAlignment="Left" Margin="610,0,0,10" Width="242" Click="btn_IcecreamID_Click" Height="100" VerticalAlignment="Bottom" />
-                                <TextBox x:Name="textBox_IceID" TextWrapping="Wrap" Text="" TextCompositionManager.PreviewTextInput="TextInputNoNumber" FontSize="30" Width="84" Margin="521,0,0,31" HorizontalAlignment="Left" Height="50" VerticalAlignment="Bottom">
-                                    <TextBox.Resources>
-                                        <Style TargetType="{x:Type Border}">
-                                            <Setter Property="CornerRadius" Value="10"/>
-                                        </Style>
-                                    </TextBox.Resources>
-                                </TextBox>
-                                <TextBlock IsHitTestVisible="False" Text="ID" Margin="530,0,0,25" Foreground="DarkGray" FontSize="30" HorizontalAlignment="Left" Width="64" Height="50" VerticalAlignment="Bottom">
-                                    <TextBlock.Style>
-                                        <Style TargetType="{x:Type TextBlock}">
-                                            <Setter Property="Visibility" Value="Collapsed"/>
-                                            <Style.Triggers>
-                                                <DataTrigger Binding="{Binding Text, ElementName=textBox_IceID}" Value="">
-                                                    <Setter Property="Visibility" Value="Visible"/>
-                                                </DataTrigger>
-                                            </Style.Triggers>
-                                        </Style>
-                                    </TextBlock.Style>
-                                </TextBlock>
 
                                 <ListView x:Name="listView_StorageRoom" HorizontalContentAlignment="Stretch" ScrollViewer.HorizontalScrollBarVisibility="Disabled" Margin="10,70,10,350" FontSize="20">
                                     <ListBox.Template>
@@ -567,9 +547,7 @@
                                     <DataGridTextColumn Header="Title" x:Name="title" Binding="{Binding title}" ClipboardContentBinding="{x:Null}"/>
                                     <DataGridTextColumn Header="Værdi" x:Name="value" Binding="{Binding value}" ClipboardContentBinding="{x:Null}"/>
                                 </DataGrid.Columns>
-
                             </DataGrid>
-
                         </TabItem>
                     </TabControl>
                     <Border BorderBrush="Black" BorderThickness="1" Height="1" VerticalAlignment="Top" Margin="-34,71,-79,0"/>

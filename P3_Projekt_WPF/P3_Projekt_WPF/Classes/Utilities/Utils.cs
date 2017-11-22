@@ -139,6 +139,23 @@ namespace P3_Projekt_WPF.Classes.Utilities
             Mysql.RunQuery(sql);
         }
 
+
+        public static void GetIceCreameID()
+        {
+            string sql = "SELECT `id` FROM `groups` WHERE `name` LIKE 'is'";
+            var asdf = Mysql.RunQueryWithReturn(sql);
+            if (asdf.RowCounter == 0)
+            {
+                Properties.Settings.Default.IcecreamID = -1;
+                Properties.Settings.Default.Save();
+            }
+            else
+            {
+                int IsID = Convert.ToInt32(asdf.RowData[0].Values[0]);
+                Properties.Settings.Default.IcecreamID = IsID;
+                Properties.Settings.Default.Save();
+            }
+        }
         #region SearchAlgorithm
 
         static List<SearchProduct> weigthedSearchList;

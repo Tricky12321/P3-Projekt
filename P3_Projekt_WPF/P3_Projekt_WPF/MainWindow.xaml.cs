@@ -70,7 +70,7 @@ namespace P3_Projekt_WPF
             {
                 Debug.WriteLine(item);
             }
-
+            Utils.GetIceCreameID();
         }
 
         public void ReloadProducts()
@@ -222,10 +222,10 @@ namespace P3_Projekt_WPF
             Debug.WriteLine("[P3] Det tog " + TimeTester.ElapsedMilliseconds + "ms at hente alt fra databasen");
         }
 
-        Button addProductButton = new Button();
+        private Button addProductButton = new Button();
         public void AddProductButton()
         {
-            addProductButton.Content = "Tilføj nyt produkt";
+            addProductButton.Content = "Tilføj nyt\nprodukt";
             addProductButton.FontSize = 30;
             addProductButton.SetValue(Grid.RowProperty, 0);
             addProductButton.SetValue(Grid.ColumnProperty, 0);
@@ -827,11 +827,6 @@ namespace P3_Projekt_WPF
             LoadProductGrid(productSearchResults);
         }
 
-        private void btn_IcecreamID_Click(object sender, RoutedEventArgs e)
-        {
-            _settingsController.SpecifyIcecreamID(Int32.Parse(textBox_IceID.Text));
-        }
-
         #region StorageRoomCreateAddDelete
         CreateStorageRoom _createStorageRoom;
         private void btn_newStorageRoom_Click(object sender, RoutedEventArgs e)
@@ -994,9 +989,5 @@ namespace P3_Projekt_WPF
             };
         }
 
-        private void btn_MoveProduct_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
     }
 }
