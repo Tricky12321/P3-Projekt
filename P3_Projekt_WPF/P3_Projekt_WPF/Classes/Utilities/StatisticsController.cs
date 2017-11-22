@@ -88,7 +88,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
             }
             if (brand != null)
             {
-                TransactionsForStatistics = TransactionsForStatistics.Where(x => (x.Product as Product).Brand == brand).ToList();
+                TransactionsForStatistics = TransactionsForStatistics.Where(x => x.GetBrand() == brand).ToList();
             }
             if (group != null)
             {

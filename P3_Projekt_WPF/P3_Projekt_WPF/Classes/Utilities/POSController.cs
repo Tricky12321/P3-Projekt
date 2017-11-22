@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Diagnostics;
 using P3_Projekt_WPF.Classes.Database;
 using P3_Projekt_WPF;
+using System.Windows;
 namespace P3_Projekt_WPF.Classes.Utilities
 {
     public delegate void LowStorageNotification(Product product);
@@ -53,11 +54,26 @@ namespace P3_Projekt_WPF.Classes.Utilities
 
         public void AddIcecreamTransaction(decimal price)
         {
-            PlacerholderReceipt.AddTransaction(
-                new SaleTransaction(
-                    new ServiceProduct(Properties.Settings.Default.IcecreamID, price, price, 0, "Is", Properties.Settings.Default.IcecreamID),
-                    1,
-                    PlacerholderReceipt.ID));
+            if (Properties.Settings.Default.IcecreamID != -1)
+            {
+                PlacerholderReceipt.AddTransaction(
+                                new SaleTransaction(
+                                    new ServiceProduct(Properties.Settings.Default.IcecreamID, price, price, 0, "Is", Properties.Settings.Default.IcecreamID),
+                                    1,
+                                    PlacerholderReceipt.ID));
+            } else
+            {
+                Utils.GetIceCreameID();
+                if (Properties.Settings.Default.IcecreamID == -1)
+                {
+                    MessageBox.Show("Du skal oprette en gruppen med navnet \"is\", for at kunne sælge is.");
+
+                } else
+                {
+                    AddIcecreamTransaction(price);
+                }
+            }
+            
         }
 
         public void AddFreeSaleTransaction(BaseProduct product, int amount)

@@ -70,7 +70,7 @@ namespace P3_Projekt_WPF
             {
                 Debug.WriteLine(item);
             }
-
+            Utils.GetIceCreameID();
         }
 
         public void ReloadProducts()
@@ -148,7 +148,7 @@ namespace P3_Projekt_WPF
             grid_QuickButton.ColumnDefinitions.Add(new ColumnDefinition());
             grid_QuickButton.ColumnDefinitions.Add(new ColumnDefinition());
 
-            for (int i = 0; i < 10; ++i)
+            for (int i = 0; i < 7; ++i)
             {
                 grid_QuickButton.RowDefinitions.Add(new RowDefinition());
             }
@@ -222,10 +222,10 @@ namespace P3_Projekt_WPF
             Debug.WriteLine("[P3] Det tog " + TimeTester.ElapsedMilliseconds + "ms at hente alt fra databasen");
         }
 
-        Button addProductButton = new Button();
+        private Button addProductButton = new Button();
         public void AddProductButton()
         {
-            addProductButton.Content = "Tilføj nyt produkt";
+            addProductButton.Content = "Tilføj nyt\nprodukt";
             addProductButton.FontSize = 30;
             addProductButton.SetValue(Grid.RowProperty, 0);
             addProductButton.SetValue(Grid.ColumnProperty, 0);
@@ -278,8 +278,6 @@ namespace P3_Projekt_WPF
                 textBlock_ChosenProduct.Text += $"\n  - {_storageController.StorageRoomDictionary[storageWithAmount.Key].Name} har {storageWithAmount.Value} stk.";
             }
         }
-
-
 
         public void StorageTabClick(object sender, RoutedEventArgs e)
         {
@@ -371,7 +369,6 @@ namespace P3_Projekt_WPF
                 IEnumerable<FileInfo> imageFiles = from file in directory.EnumerateFiles("*", SearchOption.AllDirectories)
                                                    where allowedExtensions.Contains(file.Extension.ToLower())
                                                    select file;
-
                 try
                 {
                     foreach (FileInfo productImage in imageFiles)
@@ -501,8 +498,9 @@ namespace P3_Projekt_WPF
         {
             int inputInt;
             int.TryParse(textBox_CreateQuickBtnID.Text, out inputInt);
+            int maxButtons = 14;
 
-            if (_POSController.GetProductFromID(inputInt) != null && !_settingsController.quickButtonList.Any(x => x.ProductID == inputInt))
+            if (_POSController.GetProductFromID(inputInt) != null && !_settingsController.quickButtonList.Any(x => x.ProductID == inputInt) && checkIfTooManyQuickButtons(maxButtons))
             {
                 _settingsController.AddNewQuickButton(textBox_CreateQuickBtnName.Text, inputInt, grid_QuickButton.Width, grid_QuickButton.Height, btn_FastButton_click);
                 listView_QuickBtn.Items.Add(new FastButton() { Button_Name = textBox_CreateQuickBtnName.Text, ProductID = inputInt });
@@ -511,9 +509,25 @@ namespace P3_Projekt_WPF
             {
                 Utils.ShowErrorWarning($"Produkt med dette ID {inputInt} er allerede oprettet");
             }
+            else if (!checkIfTooManyQuickButtons(maxButtons))
+            {
+                Utils.ShowErrorWarning($"Der kan ikke oprettes flere hurtigknapper, der må højest være {maxButtons} hurtigknapper ");
+            }
             else
             {
                 Utils.ShowErrorWarning($"Produkt med ID {inputInt} findes ikke på lageret");
+            }
+        }
+
+        private bool checkIfTooManyQuickButtons(int maximumButtons)
+        {
+            if(_settingsController.quickButtonList.Count < maximumButtons)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
             }
         }
 
@@ -554,7 +568,7 @@ namespace P3_Projekt_WPF
         }
 
 
-        CreateTemporaryProduct _createTempProduct;
+        private CreateTemporaryProduct _createTempProduct;
         private int tempID = TempProduct.GetNextID();
 
         private void btn_Temporary_Click(object sender, RoutedEventArgs e)
@@ -845,11 +859,6 @@ namespace P3_Projekt_WPF
             LoadProductGrid(productSearchResults);
         }
 
-        private void btn_IcecreamID_Click(object sender, RoutedEventArgs e)
-        {
-            _settingsController.SpecifyIcecreamID(Int32.Parse(textBox_IceID.Text));
-        }
-
         #region StorageRoomCreateAddDelete
         CreateStorageRoom _createStorageRoom;
         private void btn_newStorageRoom_Click(object sender, RoutedEventArgs e)
@@ -1012,6 +1021,13 @@ namespace P3_Projekt_WPF
             };
         }
 
+        private void btn_Cancel_Click(object sender, RoutedEventArgs e)
+        {
+            _POSController.PlacerholderReceipt = new Receipt();
+            listView_Receipt.Items.Clear();
+            label_TotalPrice.Content = "Total";
+            PayWithAmount.Clear();
+        }
         private void btn_MoveProduct_Click(object sender, RoutedEventArgs e)
         {
             productMove = new MoveProduct();
