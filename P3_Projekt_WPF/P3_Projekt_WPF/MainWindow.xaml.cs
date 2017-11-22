@@ -385,7 +385,7 @@ namespace P3_Projekt_WPF
                 }
                 catch (KeyNotFoundException e)
                 {
-                    
+
                 }
                 catch (UnauthorizedAccessException e)
                 {
@@ -405,11 +405,11 @@ namespace P3_Projekt_WPF
         {
             if (transaction.Product is TempProduct)
             {
-                listView_Receipt.Items.Add(new ReceiptListItem { String_Product = (transaction.Product as TempProduct).Description, Amount = transaction.Amount, Price = $"{transaction.GetProductPrice()}", IDTag = transaction.Product.ID });
+                listView_Receipt.Items.Add(new ReceiptListItem { String_Product = (transaction.Product as TempProduct).Description, Amount = transaction.Amount, Price = $"{transaction.GetProductPrice()}", IDTag = $"t{transaction.Product.ID}" });
             }
             else
             {
-                listView_Receipt.Items.Add(new ReceiptListItem { String_Product = transaction.GetProductName(), Amount = transaction.Amount, Price = $"{transaction.GetProductPrice()},-", IDTag = transaction.Product.ID });
+                listView_Receipt.Items.Add(new ReceiptListItem { String_Product = transaction.GetProductName(), Amount = transaction.Amount, Price = $"{transaction.GetProductPrice()},-", IDTag = transaction.Product.ID.ToString() });
             }
         }
 
@@ -434,9 +434,17 @@ namespace P3_Projekt_WPF
 
         private void btn_DeleteProduct_Click(object sender, RoutedEventArgs e)
         {
-            int productID = Convert.ToInt32((sender as Button).Tag);
-            _POSController.PlacerholderReceipt.RemoveTransaction(productID);
-            _POSController.PlacerholderReceipt.UpdateTotalPrice();
+            if((sender as Button).Tag.ToString().Contains("t"))
+            {
+                string tempID = Convert.ToString((sender as Button).Tag);
+                _POSController.PlacerholderReceipt.RemoveTransaction(tempID);
+            }
+            else
+            {
+                int productID = Convert.ToInt32((sender as Button).Tag);
+                _POSController.PlacerholderReceipt.RemoveTransaction(productID);
+                _POSController.PlacerholderReceipt.UpdateTotalPrice();
+            }
             UpdateReceiptList();
         }
 
@@ -543,25 +551,30 @@ namespace P3_Projekt_WPF
 
 
         CreateTemporaryProduct _createTempProduct;
+        private int tempID = TempProduct.GetNextID();
 
         private void btn_Temporary_Click(object sender, RoutedEventArgs e)
         {
             decimal price;
+
+
             if (_createTempProduct == null)
             {
                 _createTempProduct = new CreateTemporaryProduct();
                 _createTempProduct.Closed += delegate { _createTempProduct = null; };
                 _createTempProduct.btn_AddTempProduct.Click += delegate
                 {
-                    if(decimal.TryParse(_createTempProduct.textbox_Price.Text, out price) && _createTempProduct.textbox_Description != null)
+                    if (decimal.TryParse(_createTempProduct.textbox_Price.Text, out price) && _createTempProduct.textbox_Description != null)
                     {
                         string description = _createTempProduct.textbox_Description.Text;
                         price = decimal.Parse(_createTempProduct.textbox_Price.Text);
                         int amount = int.Parse(_createTempProduct.textBox_ProductAmount.Text);
                         TempProduct NewTemp = _storageController.CreateTempProduct(description, price);
                         _POSController.AddSaleTransaction(NewTemp, amount);
+                        NewTemp.ID = tempID;
                         UpdateReceiptList();
                         _createTempProduct.Close();
+                        ++tempID;
                     }
                     else
                     {

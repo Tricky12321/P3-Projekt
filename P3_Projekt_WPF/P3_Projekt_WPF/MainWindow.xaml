@@ -144,6 +144,7 @@
                                                 Height="50"
                                                 VerticalAlignment = "Center"
                                                 Click="btn_Increment_Click"
+                                            Background="Transparent"
                                                 Tag="{Binding IDTag}"
                                                 Grid.Column="0"
                                             />
@@ -153,6 +154,7 @@
                                                 Width="40"
                                                 Height="50"
                                                 FontSize="30"
+                                            Background="Transparent"
                                                 VerticalAlignment = "Center"
                                                 Click="btn_Decrement_Click"
                                                 Tag="{Binding IDTag}"
@@ -171,6 +173,7 @@
                                                 Height="50"
                                                 FontSize="30"
                                                 VerticalAlignment = "Center"
+                                            Background="Transparent"
                                                 Click="btn_DeleteProduct_Click"
                                                 Tag="{Binding IDTag}"
                                                 Grid.Column="5"
@@ -354,7 +357,7 @@
                     <TextBlock x:Name="label_NoTransactions" Grid.ColumnSpan="2" Width="auto" HorizontalAlignment="Center" Margin="56,181,39,0" TextWrapping="Wrap" Text="Ingen transaktioner fundet" VerticalAlignment="Top" FontWeight="Bold" Foreground="Red" Height="64" FontSize="30" RenderTransformOrigin="0.5,0.5" Visibility="Hidden"/>
                     <Button x:Name="Button_DateToday" Content="I dag" Margin="10,245,5,0" Background="#FFC5C5C5" Style="{StaticResource Flat_Button}" Height="48" VerticalAlignment="Top" Click="Button_DateToday_Click"/>
                     <Button x:Name="Button_DateYesterday" Content="I går" Grid.Column="1" Margin="5,245,10,0" Background="#FFC5C5C5" Style="{StaticResource Flat_Button}" Height="48" VerticalAlignment="Top" Click="Button_DateYesterday_Click"/>
-                    <Label x:Name="label_NoAdmin" Content="Ikke Admin, kan kun vise stastik for dagen" HorizontalAlignment="Left" Margin="200,470,0,0" VerticalAlignment="Top" Width="667" Grid.ColumnSpan="2" Height="120" FontSize="35" Foreground="Red"/>
+                    <Label x:Name="label_NoAdmin" Content="Ikke Admin, kan kun vise statistik for dagen" Margin="100,468,100,0" VerticalAlignment="Top" Grid.ColumnSpan="2" Height="120" FontSize="35" Foreground="Red"/>
                 </Grid>
             </TabItem>
 
