@@ -120,6 +120,7 @@
     <Compile Include="Classes\Database\Row.cs" />
     <Compile Include="Classes\Database\TableDecodeQueue.cs" />
     <Compile Include="Classes\Database\TableDecode.cs" />
+    <Compile Include="Classes\Exceptions\TempProductResolvedException.cs" />
     <Compile Include="Classes\Exceptions\EmptyTableException.cs" />
     <Compile Include="Classes\Exceptions\NoInternetConnectionException.cs" />
     <Compile Include="Classes\Exceptions\NotConnectedException.cs" />
@@ -136,7 +137,6 @@
     <Compile Include="Classes\Product\TempProduct.cs" />
     <Compile Include="Classes\Receipt.cs" />
     <Compile Include="Classes\ReceiptPrinter.cs" />
-    <Compile Include="Classes\Statistics.cs" />
     <Compile Include="Classes\StorageRoom.cs" />
     <Compile Include="Classes\Transaction\OrderTransaction.cs" />
     <Compile Include="Classes\Transaction\SaleTransaction.cs" />

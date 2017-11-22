@@ -61,7 +61,6 @@ namespace P3_Projekt_WPF.Classes
                     (Product as Product).StorageWithAmount[1] -= Amount;
                 }
 
-                // TODO: Implementere så der kommer en warning hvis et produkt kommer under 0 på lageret.
                 if (prod.StorageWithAmount.Where(x => x.Value < 0).Count() > 0)
                 {
                     // Hvis det er nogle storageroom med negativ værdi

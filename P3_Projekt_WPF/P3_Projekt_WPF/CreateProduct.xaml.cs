@@ -304,7 +304,6 @@ namespace P3_Projekt_WPF
             if (IsProductInputValid())
             {
 
-                // TODO: Give ability to make a service product
                 if (UpdateProductSec)
                 {
                     UpdateProduct();
@@ -380,9 +379,7 @@ namespace P3_Projekt_WPF
         {
             if (IsServiceProductInputValid())
             {
-                // TODO: Skal lige laves så det virker med service produkter.
-                //AddProductImage(this);
-                // TODO: Give ability to make a service product
+
                 if (UpdateServiceProductSec)
                 {
                     UpdateServiceProduct();
