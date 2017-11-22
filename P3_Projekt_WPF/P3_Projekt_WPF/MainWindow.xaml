@@ -516,7 +516,6 @@
                         <TabItem Header="Admin" Height="70" Width="300">
                             <Grid>
                                 <Button Style="{StaticResource Flat_Button}" x:Name="btn_ChangePassword" Content="Skift adgangskode" Height="100" Width="277" Margin="67,42,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Click="btn_ChangePassword_Click"/>
-                                <Button Style="{StaticResource Flat_Button}" x:Name="btn_OpenAdmin" Content="åbn kodevindue" Height="100" Width="277" Margin="367,42,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Click="btn_OpenAdmin_Click"/>
 
                             </Grid>
 

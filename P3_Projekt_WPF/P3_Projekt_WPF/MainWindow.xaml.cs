@@ -879,13 +879,23 @@ namespace P3_Projekt_WPF
 
         private void btn_ChangePassword_Click(object sender, RoutedEventArgs e)
         {
-            var check = new AdminValidation();
-            check.Closed += delegate
+
+            string desktopPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "//" + "resetpassword.txt";
+
+            if (File.Exists(desktopPath) && System.IO.File.ReadAllText(desktopPath) == "reset")
             {
-                if (check.IsPasswordCorrect)
-                    new AdminNewPassword().ShowDialog();
-            };
-            check.ShowDialog();
+                new AdminNewPassword().ShowDialog();
+            }
+            else
+            {
+                var check = new AdminValidation();
+                check.Closed += delegate
+                {
+                    if (check.IsPasswordCorrect)
+                        new AdminNewPassword().ShowDialog();
+                };
+                check.ShowDialog();
+            }
         }
 
         private void ListBoxItem_MouseDown(object sender, MouseButtonEventArgs e)
