@@ -930,10 +930,18 @@ namespace P3_Projekt_WPF
 
         private void CompletePurchase(PaymentMethod_Enum PaymentMethod)
         {
-            if (listView_Receipt.HasItems && PayWithAmount.Text.Length >= 1)
+            if (listView_Receipt.HasItems)
             {
                 decimal PriceToPay = Convert.ToDecimal(label_TotalPrice.Content);
-                decimal PaymentAmount = Convert.ToDecimal(PayWithAmount.Text);
+                decimal PaymentAmount;
+                if (PayWithAmount.Text.Length == 0)
+                {
+                    PaymentAmount = Convert.ToDecimal(label_TotalPrice.Content);
+                } else
+                {
+                    PaymentAmount = Convert.ToDecimal(PayWithAmount.Text);
+                }
+
                 if (PriceToPay > PaymentAmount)
                 {
                     MessageBox.Show("Det betalte beløb er ikke højere end prisen for varene.");
