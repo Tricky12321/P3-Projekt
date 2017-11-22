@@ -247,9 +247,15 @@ namespace P3_Projekt_WPF
         {
             CreateProduct EditProductForm = new CreateProduct(_productToEdit, _storageController, this);
             EditProductForm.Show();
+
         }
 
         private void ShowSpecificInfoProductStorage(object sender, RoutedEventArgs e)
+        {
+            ShowSpecificInfoProductStorage(int.Parse((sender as Button).Tag.ToString()));
+        }
+
+        public void ShowSpecificInfoProductStorage(int id)
         {
             // Hvis det er første gang, skal EditProduct lige hookes op på edit product
             if (_firstClick)
@@ -258,8 +264,7 @@ namespace P3_Projekt_WPF
                 btn_EditProduct.Visibility = Visibility.Visible;
             }
 
-            Debug.Print((sender as Button).Tag.ToString());
-            _productToEdit = _storageController.ProductDictionary[Convert.ToInt32((sender as Button).Tag)];
+            _productToEdit = _storageController.ProductDictionary[id];
             image_ChosenProduct.Source = Utils.ImageSourceForBitmap(Properties.Resources.questionmark_png);
 
             if (_productToEdit.Image != null)
@@ -384,7 +389,7 @@ namespace P3_Projekt_WPF
                 }
                 catch (KeyNotFoundException e)
                 {
-                    
+
                 }
                 catch (UnauthorizedAccessException e)
                 {
@@ -404,11 +409,11 @@ namespace P3_Projekt_WPF
         {
             if (transaction.Product is TempProduct)
             {
-                listView_Receipt.Items.Add(new ReceiptListItem { String_Product = (transaction.Product as TempProduct).Description, Amount = transaction.Amount, Price = $"{transaction.GetProductPrice()}", IDTag = transaction.Product.ID });
+                listView_Receipt.Items.Add(new ReceiptListItem { String_Product = (transaction.Product as TempProduct).Description, Amount = transaction.Amount, Price = $"{transaction.GetProductPrice()}", IDTag = $"t{transaction.Product.ID}" });
             }
             else
             {
-                listView_Receipt.Items.Add(new ReceiptListItem { String_Product = transaction.GetProductName(), Amount = transaction.Amount, Price = $"{transaction.GetProductPrice()},-", IDTag = transaction.Product.ID });
+                listView_Receipt.Items.Add(new ReceiptListItem { String_Product = transaction.GetProductName(), Amount = transaction.Amount, Price = $"{transaction.GetProductPrice()},-", IDTag = transaction.Product.ID.ToString() });
             }
         }
 
@@ -433,9 +438,17 @@ namespace P3_Projekt_WPF
 
         private void btn_DeleteProduct_Click(object sender, RoutedEventArgs e)
         {
-            int productID = Convert.ToInt32((sender as Button).Tag);
-            _POSController.PlacerholderReceipt.RemoveTransaction(productID);
-            _POSController.PlacerholderReceipt.UpdateTotalPrice();
+            if((sender as Button).Tag.ToString().Contains("t"))
+            {
+                string tempID = Convert.ToString((sender as Button).Tag);
+                _POSController.PlacerholderReceipt.RemoveTransaction(tempID);
+            }
+            else
+            {
+                int productID = Convert.ToInt32((sender as Button).Tag);
+                _POSController.PlacerholderReceipt.RemoveTransaction(productID);
+                _POSController.PlacerholderReceipt.UpdateTotalPrice();
+            }
             UpdateReceiptList();
         }
 
@@ -542,25 +555,30 @@ namespace P3_Projekt_WPF
 
 
         CreateTemporaryProduct _createTempProduct;
+        private int tempID = TempProduct.GetNextID();
 
         private void btn_Temporary_Click(object sender, RoutedEventArgs e)
         {
             decimal price;
+
+
             if (_createTempProduct == null)
             {
                 _createTempProduct = new CreateTemporaryProduct();
                 _createTempProduct.Closed += delegate { _createTempProduct = null; };
                 _createTempProduct.btn_AddTempProduct.Click += delegate
                 {
-                    if(decimal.TryParse(_createTempProduct.textbox_Price.Text, out price) && _createTempProduct.textbox_Description != null)
+                    if (decimal.TryParse(_createTempProduct.textbox_Price.Text, out price) && _createTempProduct.textbox_Description != null)
                     {
                         string description = _createTempProduct.textbox_Description.Text;
                         price = decimal.Parse(_createTempProduct.textbox_Price.Text);
                         int amount = int.Parse(_createTempProduct.textBox_ProductAmount.Text);
                         TempProduct NewTemp = _storageController.CreateTempProduct(description, price);
                         _POSController.AddSaleTransaction(NewTemp, amount);
+                        NewTemp.ID = tempID;
                         UpdateReceiptList();
                         _createTempProduct.Close();
+                        ++tempID;
                     }
                     else
                     {
@@ -792,7 +810,7 @@ namespace P3_Projekt_WPF
         private void btn_search_Click(object sender, RoutedEventArgs e)
         {
             listBox_SearchResultsSaleTab.Visibility = Visibility.Visible;
-            ConcurrentDictionary<int, SearchProduct> productSearchResults = Utils.SearchForProduct(txtBox_SearchField.Text, _storageController.ProductDictionary, _storageController.GroupDictionary);
+            ConcurrentDictionary<int, SearchProduct> productSearchResults = _storageController.SearchForProduct(txtBox_SearchField.Text);
             listBox_SearchResultsSaleTab.Items.Clear();
             var searchResults = productSearchResults.Values.OrderByDescending(x => x.BrandMatch + x.GroupMatch + x.NameMatch);
             foreach (SearchProduct product in searchResults)
@@ -823,7 +841,7 @@ namespace P3_Projekt_WPF
 
         private void btn_search_Storage_Click(object sender, RoutedEventArgs e)
         {
-            ConcurrentDictionary<int, SearchProduct> productSearchResults = Utils.SearchForProduct(txtBox_SearchField_Storage.Text, _storageController.ProductDictionary, _storageController.GroupDictionary);
+            ConcurrentDictionary<int, SearchProduct> productSearchResults = _storageController.SearchForProduct(txtBox_SearchField_Storage.Text);
             LoadProductGrid(productSearchResults);
         }
 

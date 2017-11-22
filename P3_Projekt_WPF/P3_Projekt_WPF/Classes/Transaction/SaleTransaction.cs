@@ -152,6 +152,19 @@ namespace P3_Projekt_WPF.Classes
             return -1;
         }
 
+        public string GetBrand()
+        {
+            if(Product is Product)
+            {
+                return (Product as Product).Brand;
+            }
+            else
+            {
+                //ServiceProduct and TempProdcut do not contain brands
+                return "";
+            }
+        }
+
         public string GetProductName()
         {
             if (Product is Product)
