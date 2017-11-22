@@ -51,16 +51,18 @@ namespace P3_Projekt_WPF.Classes
 
         public override void UploadToDatabase()
         {
-            string sql = "INSERT INTO `storage_transaction` (`id`, `product_id`, `amount`, `datetime`, `source_storageroom_id`, `destination_storageroom_id`)"+
-                $" VALUES (NULL, '{Product.ID}', '{Amount}', FROM_UNIXTIME('{Utils.GetUnixTime(Date)}'), '{_source.ID}', '{_destination.ID}');";
+            string sql = "INSERT INTO `storage_transaction` (`id`, `product_id`, `amount`, `source_storageroom_id`, `destination_storageroom_id`)"+
+                $" VALUES (NULL, '{Product.ID}', '{Amount}', '{_source.ID}', '{_destination.ID}');";
+            Mysql.RunQuery(sql);
+            Product.UpdateInDatabase();
         }
+
 
         public override void UpdateInDatabase()
         {
             string sql = $"UPDATE `storage_transaction` SET " +
                $"`product_id` = '{Product.ID}'," +
                $"`amount` = '{Amount}'," +
-               $"`datetime` = FROM_UNIXTIME('{Utils.GetUnixTime(Date)}')," +
                $"`source_storageroom_id` = '{_source.ID}'," +
                $"`destination_storageroom_id` = '{_destination.ID}' " +
                $"WHERE `id` = {_id};";

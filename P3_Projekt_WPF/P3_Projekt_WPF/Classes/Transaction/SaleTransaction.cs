@@ -18,8 +18,6 @@ namespace P3_Projekt_WPF.Classes
         public decimal TotalPrice => Price * Amount;
         private static StorageController _storageController = null;
 
-        
-
         public SaleTransaction(BaseProduct product, int amount, int receiptID) : base(product, amount)
         {
             ReceiptID = receiptID;
@@ -88,7 +86,7 @@ namespace P3_Projekt_WPF.Classes
 
                 }
 
-                Product.UpdateInDatabase();
+                prod.UpdateInDatabase();
             }
             else if (Product is TempProduct)
             {
@@ -262,8 +260,8 @@ namespace P3_Projekt_WPF.Classes
 
         public override void UploadToDatabase()
         {
-            string sql = "INSERT INTO `sale_transactions` (`id`, `product_id`, `product_type`,`amount`, `datetime`, `receipt_id`, `price`, `total_price`, `discount`)" +
-                $" VALUES (NULL, '{Product.ID}', '{_getProductType()}','{Amount}', FROM_UNIXTIME('{Utils.GetUnixTime(Date)}'), '{ReceiptID}', '{Price}', '{TotalPrice}', '{Discount}');";
+            string sql = "INSERT INTO `sale_transactions` (`id`, `product_id`, `product_type`,`amount`, `receipt_id`, `price`, `total_price`, `discount`)" +
+                $" VALUES (NULL, '{Product.ID}', '{_getProductType()}','{Amount}', '{ReceiptID}', '{Price}', '{TotalPrice}', '{Discount}');";
             Mysql.RunQuery(sql);
         }
 

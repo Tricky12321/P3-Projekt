@@ -81,7 +81,6 @@ namespace P3_Projekt_WPF.Classes.Utilities
             
             PlacerholderReceipt.Execute();
             CheckStorageLevel();
-
             ReceiptList.Add(PlacerholderReceipt);
             PlacerholderReceipt = new Receipt();
         }
