@@ -279,8 +279,6 @@ namespace P3_Projekt_WPF
             }
         }
 
-
-
         public void StorageTabClick(object sender, RoutedEventArgs e)
         {
             //LoadProductGrid();
@@ -371,7 +369,6 @@ namespace P3_Projekt_WPF
                 IEnumerable<FileInfo> imageFiles = from file in directory.EnumerateFiles("*", SearchOption.AllDirectories)
                                                    where allowedExtensions.Contains(file.Extension.ToLower())
                                                    select file;
-
                 try
                 {
                     foreach (FileInfo productImage in imageFiles)
@@ -554,7 +551,7 @@ namespace P3_Projekt_WPF
         }
 
 
-        CreateTemporaryProduct _createTempProduct;
+        private CreateTemporaryProduct _createTempProduct;
         private int tempID = TempProduct.GetNextID();
 
         private void btn_Temporary_Click(object sender, RoutedEventArgs e)
@@ -1007,5 +1004,12 @@ namespace P3_Projekt_WPF
             };
         }
 
+        private void btn_Cancel_Click(object sender, RoutedEventArgs e)
+        {
+            _POSController.PlacerholderReceipt = new Receipt();
+            listView_Receipt.Items.Clear();
+            label_TotalPrice.Content = "Total";
+            PayWithAmount.Clear();
+        }
     }
 }
