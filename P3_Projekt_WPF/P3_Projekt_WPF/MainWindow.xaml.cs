@@ -141,6 +141,7 @@ namespace P3_Projekt_WPF
             LoadProductGrid(_storageController.ProductDictionary);
             BuildInformationTable();
             InitStatisticsTab();
+            InitAdminLogin();
         }
 
         private void InitGridQuickButtons()
@@ -148,7 +149,7 @@ namespace P3_Projekt_WPF
             grid_QuickButton.ColumnDefinitions.Add(new ColumnDefinition());
             grid_QuickButton.ColumnDefinitions.Add(new ColumnDefinition());
 
-            for (int i = 0; i < 7; ++i)
+            for (int i = 0; i < 10; ++i)
             {
                 grid_QuickButton.RowDefinitions.Add(new RowDefinition());
             }
@@ -328,7 +329,6 @@ namespace P3_Projekt_WPF
                 productGrid.Children.Add(productControl);
                 i++;
             }
-
         }
 
         public void LoadProductGrid(ConcurrentDictionary<int, SearchProduct> productDictionary)
@@ -382,6 +382,10 @@ namespace P3_Projekt_WPF
 
                         _storageController.ProductDictionary[productID].Image = image;
                     }
+                }
+                catch (KeyNotFoundException e)
+                {
+                    
                 }
                 catch (UnauthorizedAccessException e)
                 {
@@ -542,19 +546,28 @@ namespace P3_Projekt_WPF
 
         private void btn_Temporary_Click(object sender, RoutedEventArgs e)
         {
+            decimal price;
             if (_createTempProduct == null)
             {
                 _createTempProduct = new CreateTemporaryProduct();
                 _createTempProduct.Closed += delegate { _createTempProduct = null; };
                 _createTempProduct.btn_AddTempProduct.Click += delegate
                 {
-                    string description = _createTempProduct.textbox_Description.Text;
-                    decimal price = decimal.Parse(_createTempProduct.textbox_Price.Text);
-                    int amount = int.Parse(_createTempProduct.textBox_ProductAmount.Text);
-                    TempProduct NewTemp = _storageController.CreateTempProduct(description, price);
-                    _POSController.AddSaleTransaction(NewTemp, amount);
-                    UpdateReceiptList();
-                    _createTempProduct.Close();
+                    if(decimal.TryParse(_createTempProduct.textbox_Price.Text, out price) && _createTempProduct.textbox_Description != null)
+                    {
+                        string description = _createTempProduct.textbox_Description.Text;
+                        price = decimal.Parse(_createTempProduct.textbox_Price.Text);
+                        int amount = int.Parse(_createTempProduct.textBox_ProductAmount.Text);
+                        TempProduct NewTemp = _storageController.CreateTempProduct(description, price);
+                        _POSController.AddSaleTransaction(NewTemp, amount);
+                        UpdateReceiptList();
+                        _createTempProduct.Close();
+                    }
+                    else
+                    {
+                        _createTempProduct.textbox_Description.BorderBrush = Brushes.Red;
+                        _createTempProduct.textbox_Price.BorderBrush = Brushes.Red;
+                    }
                 };
             }
             _createTempProduct.Activate();
@@ -582,41 +595,44 @@ namespace P3_Projekt_WPF
         //Today?? Yesterday??
         private void Button_CreateStatistics_Click(object sender, RoutedEventArgs e)
         {
-            var check = new AdminValidation();
-            check.Closed += delegate
+            DateTime startDate = datePicker_StartDate.SelectedDate.Value;
+            DateTime endDate = datePicker_EndDate.SelectedDate.Value;
+
+            if (_settingsController.isAdmin)
             {
-                if (check.IsPasswordCorrect)
+                ResetStatisticsView();
+
+                string id = null;
+                if (textBox_StatisticsProductID.Text.Length > 0)
                 {
-                    DateTime startDate = datePicker_StartDate.SelectedDate.Value;
-                    DateTime endDate = datePicker_EndDate.SelectedDate.Value;
-                    ResetStatisticsView();
-
-                    string id = null;
-                    if (textBox_StatisticsProductID.Text.Length > 0)
-                    {
-                        id = textBox_StatisticsProductID.Text;
-                    }
-                    string brand = comboBox_Brand.Text;
-                    string groupString = comboBox_Group.Text;
-                    Group group = null;
-                    if (comboBox_Group.Text != "")
-                    {
-                        group = _storageController.GroupDictionary.Values.First(x => x.Name == groupString);
-                    }
-
-                    CheckboxChecker(ref id, ref brand, ref group);
-
-                    _statisticsController.RequestStatisticsDate(startDate, endDate);
-                    _statisticsController.FilterByParameters(id, brand, group);
-
-                    DisplayStatistics();
-                    if (_statisticsController.TransactionsForStatistics.Count == 0)
-                    {
-                        label_NoTransactions.Visibility = Visibility.Visible;
-                    }
+                    id = textBox_StatisticsProductID.Text;
                 }
-            };
-            check.ShowDialog();
+                string brand = comboBox_Brand.Text;
+                string groupString = comboBox_Group.Text;
+                Group group = null;
+                if (comboBox_Group.Text != "")
+                {
+                    group = _storageController.GroupDictionary.Values.First(x => x.Name == groupString);
+                }
+
+                CheckboxChecker(ref id, ref brand, ref group);
+
+                _statisticsController.RequestStatisticsDate(startDate, endDate);
+                _statisticsController.FilterByParameters(id, brand, group);
+
+                DisplayStatistics();
+                if (_statisticsController.TransactionsForStatistics.Count == 0)
+                {
+                    label_NoTransactions.Visibility = Visibility.Visible;
+                }
+            }
+            else
+            {
+                label_NoTransactions.Text = "Ikke admin, kan kun oprette statistik for dagen";
+                startDate = datePicker_StartDate.SelectedDate.Value;
+                endDate = datePicker_EndDate.SelectedDate.Value;
+                _statisticsController.RequestStatisticsDate(startDate, endDate);
+            }
         }
 
         private void ResetStatisticsView()
@@ -921,6 +937,37 @@ namespace P3_Projekt_WPF
                 }
             }
 
+        }
+
+        AdminValidation adminValid;
+        private void InitAdminLogin()
+        {
+            ImageBrush locked = new ImageBrush();
+            ImageBrush unlocked = new ImageBrush();
+            locked.ImageSource = Utils.ImageSourceForBitmap(Properties.Resources.if_102_111044LOCK);
+            unlocked.ImageSource = Utils.ImageSourceForBitmap(Properties.Resources.if_103_111043UNLOCK);
+            image_Admin.Stretch = Stretch.Uniform;
+
+            image_Admin.Source = locked.ImageSource;
+
+            btn_AdminLogin.Click += delegate
+            {
+                if (_settingsController.isAdmin)
+                {
+                    _settingsController.isAdmin = false;
+                    btn_AdminLogin.Content = "Log ind";
+                    image_Admin.Source = locked.ImageSource;
+
+                }
+                else
+                {
+                    adminValid = new AdminValidation();
+                    adminValid.ShowDialog();
+                    _settingsController.isAdmin = true;
+                    btn_AdminLogin.Content = "Log ud";
+                    image_Admin.Source = unlocked.ImageSource;
+                }
+            };
         }
     }
 }

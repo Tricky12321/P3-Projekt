@@ -7,10 +7,10 @@
         mc:Ignorable="d"
         Title="Ret Midlertidigt Produkt" Height="700" Width="600">
     <Grid>
-        <Button x:Name="button_Merge" Content="Foren Produkter" Background="Transparent" Margin="0,0,10,10" Style="{StaticResource Flat_Button}" HorizontalAlignment="Right" Width="120" Height="38" VerticalAlignment="Bottom"/>
+        <Button x:Name="button_Merge" Content="Foren Produkter" Background="Transparent" Margin="0,0,10,10" Style="{StaticResource Flat_Button}" HorizontalAlignment="Right" Width="176" Height="38" VerticalAlignment="Bottom" FontSize="20"/>
         <TextBlock x:Name="txt_blockTempProduct" HorizontalAlignment="Left" Margin="10,359,0,0" TextWrapping="Wrap" Text="Midlertidigt Produkt:" Width="auto" FontSize="30" Height="41" VerticalAlignment="Top" />
         <TextBlock x:Name="txt_blockMergeProduct" HorizontalAlignment="Left" Margin="10,553,0,0" TextWrapping="Wrap" Text="Sammensæt med Produkt:" Width="auto" RenderTransformOrigin="1.269,0.536" FontSize="30" Height="45" VerticalAlignment="Top"/>
-        <ListView x:Name="listview_ProductsToMerge" Height="350" Margin="0,4,0,0" VerticalAlignment="Top" Grid.RowSpan="2" SelectionChanged="listview_ProductsToMerge_SelectionChanged" >
+        <ListView x:Name="listview_ProductsToMerge" Height="344" Margin="10,10,10,0" VerticalAlignment="Top" SelectionChanged="listview_ProductsToMerge_SelectionChanged" >
             <ListView.View>
                 <GridView>
 
