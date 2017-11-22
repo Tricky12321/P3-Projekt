@@ -414,7 +414,7 @@
                                         </TextBlock.Style>
                                     </TextBlock>
                                     <Button x:Name="btn_SettingFastBtnAdd" HorizontalAlignment="Center" Content="Tilføj Hurtigknap" Margin="636,0,0,0" Background="#FFC5C5C5" Style="{StaticResource Flat_Button}" Height="50" VerticalAlignment="Top" Click="btn_SettingFastBtnAdd_Click"  Width="260"/>
-                                    <TextBox Padding="10,0,0,0" HorizontalAlignment="Center" x:Name="textBox_CreateQuickBtnName" Margin="198,0,298,0" FontSize="33" Height="50" VerticalAlignment="Top" Width="400" MaxLength="20">
+                                    <TextBox Padding="10,0,0,0" HorizontalAlignment="Center" x:Name="textBox_CreateQuickBtnName" Margin="198,0,298,0" FontSize="33" Height="50" VerticalAlignment="Top" Width="400" MaxLength="15">
                                         <TextBox.Resources>
                                             <Style TargetType="{x:Type Border}">
                                                 <Setter Property="CornerRadius" Value="10"/>
