@@ -61,7 +61,7 @@ namespace P3_Projekt_WPF.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        [global::System.Configuration.DefaultSettingValueAttribute("localhost")]
         public string lcl_ip {
             get {
                 return ((string)(this["lcl_ip"]));
@@ -73,7 +73,7 @@ namespace P3_Projekt_WPF.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        [global::System.Configuration.DefaultSettingValueAttribute("v-world.dk")]
         public string rmt_ip {
             get {
                 return ((string)(this["rmt_ip"]));
@@ -85,10 +85,10 @@ namespace P3_Projekt_WPF.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string lcl_port {
+        [global::System.Configuration.DefaultSettingValueAttribute("3306")]
+        public int lcl_port {
             get {
-                return ((string)(this["lcl_port"]));
+                return ((int)(this["lcl_port"]));
             }
             set {
                 this["lcl_port"] = value;
@@ -97,10 +97,10 @@ namespace P3_Projekt_WPF.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string rmt_port {
+        [global::System.Configuration.DefaultSettingValueAttribute("3306")]
+        public int rmt_port {
             get {
-                return ((string)(this["rmt_port"]));
+                return ((int)(this["rmt_port"]));
             }
             set {
                 this["rmt_port"] = value;
@@ -109,7 +109,7 @@ namespace P3_Projekt_WPF.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        [global::System.Configuration.DefaultSettingValueAttribute("P3")]
         public string lcl_username {
             get {
                 return ((string)(this["lcl_username"]));
@@ -121,19 +121,7 @@ namespace P3_Projekt_WPF.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string remote_username {
-            get {
-                return ((string)(this["remote_username"]));
-            }
-            set {
-                this["remote_username"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        [global::System.Configuration.DefaultSettingValueAttribute("frankythefish")]
         public string lcl_password {
             get {
                 return ((string)(this["lcl_password"]));
@@ -157,7 +145,7 @@ namespace P3_Projekt_WPF.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        [global::System.Configuration.DefaultSettingValueAttribute("P3")]
         public string lcl_db {
             get {
                 return ((string)(this["lcl_db"]));
@@ -169,13 +157,25 @@ namespace P3_Projekt_WPF.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        [global::System.Configuration.DefaultSettingValueAttribute("P3")]
         public string rmt_db {
             get {
                 return ((string)(this["rmt_db"]));
             }
             set {
                 this["rmt_db"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string rmt_username {
+            get {
+                return ((string)(this["rmt_username"]));
+            }
+            set {
+                this["rmt_username"] = value;
             }
         }
     }

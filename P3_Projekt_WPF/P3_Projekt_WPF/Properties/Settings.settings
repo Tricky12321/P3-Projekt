@@ -12,33 +12,33 @@
       <Value Profile="(Default)">False</Value>
     </Setting>
     <Setting Name="lcl_ip" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
+      <Value Profile="(Default)">localhost</Value>
     </Setting>
     <Setting Name="rmt_ip" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
+      <Value Profile="(Default)">v-world.dk</Value>
     </Setting>
-    <Setting Name="lcl_port" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
+    <Setting Name="lcl_port" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">3306</Value>
     </Setting>
-    <Setting Name="rmt_port" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
+    <Setting Name="rmt_port" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">3306</Value>
     </Setting>
     <Setting Name="lcl_username" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
-    </Setting>
-    <Setting Name="remote_username" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
+      <Value Profile="(Default)">P3</Value>
     </Setting>
     <Setting Name="lcl_password" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
+      <Value Profile="(Default)">frankythefish</Value>
     </Setting>
     <Setting Name="rmt_password" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
     <Setting Name="lcl_db" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
+      <Value Profile="(Default)">P3</Value>
     </Setting>
     <Setting Name="rmt_db" Type="System.String" Scope="User">
+      <Value Profile="(Default)">P3</Value>
+    </Setting>
+    <Setting Name="rmt_username" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
   </Settings>

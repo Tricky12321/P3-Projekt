@@ -8,17 +8,18 @@ using System.Diagnostics;
 using P3_Projekt_WPF.Classes.Exceptions;
 using P3_Projekt_WPF.Classes.Utilities;
 using System.Collections.Concurrent;
+using System.Windows;
 namespace P3_Projekt_WPF.Classes.Database
 {
     public static class Mysql
     {
+        private static Properties.Settings sett = Properties.Settings.Default;
         private const bool _debug = true;
-        private const string _username = "P3";
-        private const string _password = "frankythefish";
-        private const bool _remoteDB = true;
-        private const string _ip = _remoteDB ? "v-world.dk" : "192.168.2.1";
-        private const int _port = 3306;
-        private const string _database = "P3";
+        private static string _username = sett.local_or_remote ? sett.lcl_username : sett.rmt_username;
+        private static string _password = sett.local_or_remote ? sett.lcl_password : sett.rmt_password;
+        private static string _ip = sett.local_or_remote ? sett.lcl_ip : sett.rmt_ip;
+        private static int _port = sett.local_or_remote ? sett.lcl_port : sett.rmt_port;
+        private static string _database = sett.local_or_remote ? sett.lcl_db : sett.rmt_db;
         public static List<MySqlConnection> Connection = new List<MySqlConnection>();
         private static string _connectionString = $"Server={_ip};Port={_port};Database={_database};Uid={_username};Pwd={_password};";
         private static bool _internetConnection = false;
@@ -26,6 +27,8 @@ namespace P3_Projekt_WPF.Classes.Database
         private static ConcurrentQueue<string> _queryTasks = new ConcurrentQueue<string>();
         private const int _queryThreadCount = 1;
         private static MySqlConnection _connection = null;
+        public static bool ConnectionWorking = false;
+
         public static void Disconnect(MySqlConnection connection)
         {
             connection.Close();
@@ -47,9 +50,38 @@ namespace P3_Projekt_WPF.Classes.Database
             }
         }
 
+        public static void CheckDatabaseConnection()
+        {
+            CheckInternet();
+            if (_internetConnection == false)
+            {
+                MessageBox.Show("Der er ikke forbindelse til internettet!\nDette betyder at programmet ikke kan forbinde til fjern databaser");
+            } else
+            {
+                try
+                {
+                    MySqlConnection Test = Connect();
+                    if (Test.State == System.Data.ConnectionState.Open)
+                    {
+                        Test.Close();
+                        ConnectionWorking = true;
+                    }
+                    else
+                    {
+                        MessageBox.Show("Der er ingen forbindelse til Databasen, og der vil derfor ikke blive hentet noget data\nSørg for at dine database indstillinger er sat rigtigt op, og genstart programmet");
+                    }
+                }
+                catch (Exception)
+                {
+                    MessageBox.Show("Der er ingen forbindelse til Databasen, og der vil derfor ikke blive hentet noget data\nSørg for at dine database indstillinger er sat rigtigt op, og genstart programmet");
+
+                }
+
+            }
+        }
+
         public static MySqlConnection Connect(int fails = 0)
         {
-
             //CheckInternet();
             Stopwatch ConnectionTimer = new Stopwatch();
             ConnectionTimer.Start();
@@ -91,6 +123,10 @@ namespace P3_Projekt_WPF.Classes.Database
 
         public static TableDecodeQueue RunQueryWithReturnQueue(string Query)
         {
+            if (!ConnectionWorking)
+            {
+                return null;
+            }
             Stopwatch DatabaseTimer = new Stopwatch();
             DatabaseTimer.Start();
             MySqlConnection connection = Connect();
@@ -121,6 +157,10 @@ namespace P3_Projekt_WPF.Classes.Database
 
         public static TableDecode RunQueryWithReturn(string Query)
         {
+            if (!ConnectionWorking)
+            {
+                return null;
+            }
             MySqlConnection connection = Connect();
             TableDecode TableContent;
             try

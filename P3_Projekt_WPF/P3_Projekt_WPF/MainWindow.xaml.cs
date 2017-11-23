@@ -43,6 +43,7 @@ namespace P3_Projekt_WPF
         public static bool runLoading = true;
         public MainWindow()
         {
+            Mysql.CheckDatabaseConnection();
             List<string> OutputList = new List<string>();
             Stopwatch LoadingTimer = new Stopwatch();
             LoadingTimer.Start();
@@ -205,22 +206,27 @@ namespace P3_Projekt_WPF
 
         public void LoadDatabase()
         {
-            Stopwatch TimeTester = new Stopwatch();
-            TimeTester.Start();
-            Thread GetAllThread = new Thread(new ThreadStart(_storageController.GetAll));
-            GetAllThread.Start();
-            while (!_storageController.ThreadsDone)
+            if (Mysql.ConnectionWorking)
             {
-                Thread.Sleep(1);
+
+                Stopwatch TimeTester = new Stopwatch();
+                TimeTester.Start();
+                Thread GetAllThread = new Thread(new ThreadStart(_storageController.GetAll));
+                GetAllThread.Start();
+                while (!_storageController.ThreadsDone)
+                {
+                    Thread.Sleep(1);
+                }
+                runLoading = false;
+                TimeTester.Stop();
+                string Output = "";
+                while (_storageController.TimerStrings.TryDequeue(out Output))
+                {
+                    Debug.WriteLine(Output);
+                }
+                Debug.WriteLine("[P3] Det tog " + TimeTester.ElapsedMilliseconds + "ms at hente alt fra databasen");
             }
-            runLoading = false;
-            TimeTester.Stop();
-            string Output = "";
-            while (_storageController.TimerStrings.TryDequeue(out Output))
-            {
-                Debug.WriteLine(Output);
-            }
-            Debug.WriteLine("[P3] Det tog " + TimeTester.ElapsedMilliseconds + "ms at hente alt fra databasen");
+
         }
 
         private Button addProductButton = new Button();
@@ -436,7 +442,7 @@ namespace P3_Projekt_WPF
 
         private void btn_DeleteProduct_Click(object sender, RoutedEventArgs e)
         {
-            if((sender as Button).Tag.ToString().Contains("t"))
+            if ((sender as Button).Tag.ToString().Contains("t"))
             {
                 string tempID = Convert.ToString((sender as Button).Tag);
                 _POSController.PlacerholderReceipt.RemoveTransaction(tempID);
@@ -522,7 +528,7 @@ namespace P3_Projekt_WPF
 
         private bool checkIfTooManyQuickButtons(int maximumButtons)
         {
-            if(_settingsController.quickButtonList.Count < maximumButtons)
+            if (_settingsController.quickButtonList.Count < maximumButtons)
             {
                 return true;
             }
@@ -570,12 +576,15 @@ namespace P3_Projekt_WPF
 
 
         private CreateTemporaryProduct _createTempProduct;
-        private int tempID = TempProduct.GetNextID();
+        private int _tempID = -1;
 
         private void btn_Temporary_Click(object sender, RoutedEventArgs e)
         {
             decimal price;
-
+            if (_tempID == -1)
+            {
+                _tempID = TempProduct.GetNextID();
+            }
 
             if (_createTempProduct == null)
             {
@@ -590,10 +599,10 @@ namespace P3_Projekt_WPF
                         int amount = int.Parse(_createTempProduct.textBox_ProductAmount.Text);
                         TempProduct NewTemp = _storageController.CreateTempProduct(description, price);
                         _POSController.AddSaleTransaction(NewTemp, amount);
-                        NewTemp.ID = tempID;
+                        NewTemp.ID = _tempID;
                         UpdateReceiptList();
                         _createTempProduct.Close();
-                        ++tempID;
+                        ++_tempID;
                     }
                     else
                     {
@@ -895,7 +904,7 @@ namespace P3_Projekt_WPF
         public void LoadStorageRooms()
         {
             listView_StorageRoom.Items.Clear();
-            foreach (KeyValuePair<int, StorageRoom> StorageRoom in _storageController.StorageRoomDictionary.Where( x => x.Value.ID != 0))
+            foreach (KeyValuePair<int, StorageRoom> StorageRoom in _storageController.StorageRoomDictionary.Where(x => x.Value.ID != 0))
             {
                 listView_StorageRoom.Items.Add(new { storageID = StorageRoom.Key, storageName = StorageRoom.Value.Name, storageDescription = StorageRoom.Value.Description, storageEditWithID = StorageRoom.Key });
             }
@@ -975,7 +984,8 @@ namespace P3_Projekt_WPF
                 if (PayWithAmount.Text.Length == 0)
                 {
                     PaymentAmount = Convert.ToDecimal(label_TotalPrice.Content);
-                } else
+                }
+                else
                 {
                     PaymentAmount = Convert.ToDecimal(PayWithAmount.Text);
                 }
@@ -1017,7 +1027,7 @@ namespace P3_Projekt_WPF
                     _settingsController.isAdmin = false;
                     btn_AdminLogin.Content = "Log ind";
                     image_Admin.Source = locked.ImageSource;
-                    
+
                     label_NoAdmin.Visibility = Visibility.Visible;
                 }
                 else
@@ -1059,6 +1069,11 @@ namespace P3_Projekt_WPF
         private void button_Click(object sender, RoutedEventArgs e)
         {
             listView_Receipt.UnselectAll();
+        }
+
+        private void SaveDBSettings(object sender, RoutedEventArgs e)
+        {
+            Utils.SaveDBData(this);
         }
     }
 }
