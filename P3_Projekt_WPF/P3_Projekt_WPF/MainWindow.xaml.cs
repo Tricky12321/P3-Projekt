@@ -669,9 +669,7 @@ namespace P3_Projekt_WPF
             }
             else
             {
-                startDate = DateTime.Today;
-                endDate = DateTime.Today;
-                _statisticsController.RequestStatisticsDate(startDate, endDate);
+                _statisticsController.RequestStatisticsDate(DateTime.Today, DateTime.Today);
                 ResetStatisticsView();
                 DisplayStatistics();
             }
@@ -703,8 +701,6 @@ namespace P3_Projekt_WPF
         {
             int productAmount = 0;
             decimal totalTransactionPrice = 0;
-            /*int receiptCount = 0;
-            decimal totalReceiptPrice = 0;*/
 
             foreach (SaleTransaction transaction in _statisticsController.TransactionsForStatistics)
             {
@@ -714,12 +710,13 @@ namespace P3_Projekt_WPF
             }
             listView_Statistics.Items.Insert(0, new StatisticsListItem("", "Total", $"{productAmount}", $"{totalTransactionPrice}"));
 
-            /*foreach(Receipt receipt in _statisticsController.ReceiptsForStatistics)
+            /*listView_Statistics.Items.Insert(1, _statisticsController.GetReceiptStatistics());
+
+            _statisticsController.GenerateGroupSales();
+            foreach(int groupID in _statisticsController.SalesPerGroup.Keys)
             {
-                receiptCount++;
-                totalReceiptPrice += receipt.TotalPrice;
-            }
-            listView_Statistics.Items.Insert(1, new StatisticsListItem("", "Gennemsnitlig kvitteringspris", $"{ receiptCount}", $"{totalReceiptPrice / receiptCount}"));*/
+                listView_GroupStatistics.Items.Add(_statisticsController.GroupSalesStrings(groupID, totalTransactionPrice));
+            }*/
         }
 
         private void Button_DateToday_Click(object sender, RoutedEventArgs e)
