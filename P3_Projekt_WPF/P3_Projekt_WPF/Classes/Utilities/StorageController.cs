@@ -482,8 +482,9 @@ namespace P3_Projekt_WPF.Classes.Utilities
             weigthedSearchList = new List<SearchProduct>();
             ConcurrentDictionary<int, SearchProduct> productsToReturn = new ConcurrentDictionary<int, SearchProduct>();
             int isNumber;
+            string searchStringLower = searchString.ToLower();
 
-            if (int.TryParse(searchString, out isNumber))
+            if (int.TryParse(searchStringLower, out isNumber))
             {
                 if (ProductDictionary.Keys.Contains(isNumber))
                 {
@@ -495,9 +496,9 @@ namespace P3_Projekt_WPF.Classes.Utilities
 
             foreach (Product product in ProductDictionary.Values)
             {
-                ProductSearch(searchString, product);
-                GroupSearch(searchString, product);
-                BrandSearch(searchString, product);
+                ProductSearch(searchStringLower, product);
+                GroupSearch(searchStringLower, product);
+                BrandSearch(searchStringLower, product);
             }
             TakeProductsToReturnFromWeightedList(ref productsToReturn);
 
@@ -518,13 +519,17 @@ namespace P3_Projekt_WPF.Classes.Utilities
             SearchProduct productToAdd = new SearchProduct(productToConvert);
 
             string[] searchSplit = searchStringElement.Split(' ');
-            string[] productSplit = productToConvert.Name.Split(' ');
+            string[] productSplit = productToConvert.Name.ToLower().Split(' ');
 
             foreach (string s in searchSplit)
             {
                 foreach (string t in productSplit)
                 {
-                    if (LevenstheinProductSearch(s, t))
+                    if(s == t)
+                    {
+                        productToAdd.NameMatch += 100;
+                    }
+                    else if (LevenstheinProductSearch(s, t))
                     {
                         productToAdd.NameMatch += 1;
                     }
@@ -535,14 +540,15 @@ namespace P3_Projekt_WPF.Classes.Utilities
 
         private bool LevenshteinsGroupAndProductSearch(string[] searchedString, string stringToCompare, out int charDifference)
         {//setup for levenshteins
-            string[] compareSplit = stringToCompare.Split(' ');
+            string[] compareSplit = stringToCompare.ToLower().Split(' ');
 
             foreach (string sString in searchedString)
             {
                 foreach (string compareString in compareSplit)
                 {
+
                     //getting the chardifference between the searchedstring and the productname
-                    charDifference = ComputeLevenshteinsDistance(sString.ToLower(), compareString.ToLower());
+                    charDifference = ComputeLevenshteinsDistance(sString, compareString);
                     //Evaluate if the chardifference is in between the changelimit of the string
                     if (EvaluateStringLimit(sString.Length, charDifference))
                     {
@@ -550,7 +556,6 @@ namespace P3_Projekt_WPF.Classes.Utilities
                         return true;
                     }
                 }
-
             }
             charDifference = -1;
             return false;
@@ -565,6 +570,13 @@ namespace P3_Projekt_WPF.Classes.Utilities
             int MatchedValue;
             //if the string contains a name of a group, or the string is matched, each product with the same group 
             //is added to the list of products to show.
+            foreach(string searchedString in dividedString)
+            {
+                if (GroupDictionary[product.ProductGroupID].Name.Contains(searchedString))
+                {
+                    weigthedSearchList.Where(x => x.CurrentProduct.ID == product.ID).First().GroupMatch += 100;
+                }
+            }
             if (LevenshteinsGroupAndProductSearch(dividedString, GroupDictionary[product.ProductGroupID].Name, out MatchedValue))
             {
                 if (weigthedSearchList.Where(x => x.CurrentProduct.ID == product.ID).Count() > 0)
@@ -575,7 +587,6 @@ namespace P3_Projekt_WPF.Classes.Utilities
                     }
                 }
             }
-
         }
 
         private void BrandSearch(string searchString, Product product)
@@ -587,6 +598,13 @@ namespace P3_Projekt_WPF.Classes.Utilities
             //matching on each element in the string
             //if the string contains a product brand, or the string is matched, each product with the same brand
             //is added to the list of products to show.
+            foreach (string searchedString in dividedString)
+            {
+                if (product.Brand.Contains(searchedString))
+                {
+                    weigthedSearchList.Where(x => x.CurrentProduct.ID == product.ID).First().BrandMatch += 100;
+                }
+            }
             if (LevenshteinsGroupAndProductSearch(dividedString, product.Brand, out MatchedValues))
             {
                 if (weigthedSearchList.Where(x => x.CurrentProduct.ID == product.ID).Count() > 0)
@@ -602,7 +620,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
 
         private bool LevenstheinProductSearch(string searchEle, string ProductEle)
         {
-            int charDifference = ComputeLevenshteinsDistance(searchEle.ToLower(), ProductEle.ToLower());
+            int charDifference = ComputeLevenshteinsDistance(searchEle, ProductEle);
             return EvaluateStringLimit(searchEle.Length, charDifference);
         }
 
