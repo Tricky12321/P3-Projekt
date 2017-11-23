@@ -17,6 +17,9 @@ using System.Threading;
 using System.Collections.Concurrent;
 using System.Windows.Controls;
 using System.Windows.Media;
+using System.Text.RegularExpressions;
+using System.Windows.Input;
+
 namespace P3_Projekt_WPF.Classes.Utilities
 {
     public static class Utils
@@ -160,6 +163,17 @@ namespace P3_Projekt_WPF.Classes.Utilities
                 }
             }
 
+        }
+
+        public static bool RegexCheckDecimal(string input)
+        {
+            Regex reg = new Regex(@"^((\d+)(,{0,1})(\d{0,2}))$");
+            return !reg.IsMatch(input);
+        }
+        public static bool RegexCheckNumber(string input)
+        {
+            Regex reg = new Regex(@"^(\d+)$");
+            return !reg.IsMatch(input);
         }
 
         public static void LoadDatabaseSettings(MainWindow MainWin)

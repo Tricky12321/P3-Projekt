@@ -1082,5 +1082,10 @@ namespace P3_Projekt_WPF
             listView_Receipt.LostFocus += delegate { ReleaseMouseCapture(); listView_Receipt.UnselectAll(); };
         }
 
+        private void PortNumberControl(object sender, TextCompositionEventArgs e)
+        {
+            
+        }
+
     }
 }
