@@ -54,6 +54,10 @@ namespace P3_Projekt_WPF.Classes
                     Mysql.RunQuery(sql);
                 }
             }
+            else
+            {
+                return_AC = service_AC;
+            }
             return return_AC;
         }
 
