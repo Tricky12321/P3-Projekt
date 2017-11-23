@@ -160,7 +160,7 @@ namespace P3_Projekt_WPF.Classes
             }
             else
             {
-                //ServiceProduct and TempProdcut do not contain brands
+                //ServiceProduct and TempProduct do not contain brands
                 return "";
             }
         }

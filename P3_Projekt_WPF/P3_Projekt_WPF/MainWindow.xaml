@@ -197,6 +197,7 @@
                             </Style>
                         </ListBox.ItemContainerStyle>
                     </ListBox>
+                    <Button x:Name="button" Content="Button" Grid.Column="1" HorizontalAlignment="Left" Margin="399,16,0,0" Grid.Row="1" VerticalAlignment="Top" Width="97" Click="button_Click"/>
                 </Grid>
             </TabItem>
 
@@ -335,7 +336,7 @@
                         </CheckBox.RenderTransform>
                     </CheckBox>
                     <ComboBox x:Name="comboBox_Brand" MinWidth="500" Height="40" Margin="70,0,0,175" FontSize="25" VerticalAlignment="Bottom" SelectedValuePath="Content" Grid.ColumnSpan="2" HorizontalAlignment="Left" Width="500"/>
-                    <TextBlock x:Name="combo_text_brand" IsHitTestVisible="False" HorizontalAlignment="Left" Margin="200,0,0,175" TextWrapping="Wrap" Foreground="DarkGray" Text="Vælg Mærke" Height="40" VerticalAlignment="Bottom">
+                    <TextBlock x:Name="combo_text_brand" IsHitTestVisible="False" HorizontalAlignment="Left" Margin="84,0,0,175" TextWrapping="Wrap" Foreground="DarkGray" Text="Vælg Mærke" Height="40" VerticalAlignment="Bottom" Grid.ColumnSpan="2" Width="168">
                         <TextBlock.Style>
                             <Style TargetType="{x:Type TextBlock}">
                                 <Setter Property="Visibility" Value="Collapsed"/>
@@ -348,7 +349,7 @@
                         </TextBlock.Style>
                     </TextBlock>
                     <ComboBox x:Name="comboBox_Group" MinWidth="500" Height="40" Margin="70,0,0,126" VerticalAlignment="Bottom" FontSize="25" SelectedValuePath="Content" Grid.ColumnSpan="2" HorizontalAlignment="Left" Width="500"/>
-                    <TextBlock x:Name="combo_text_group" HorizontalAlignment="Left" IsHitTestVisible="False" Margin="200,0,0,125" TextWrapping="Wrap" Text="Vælg Gruppe" Foreground="DarkGray" VerticalAlignment="Bottom" Width="306" Grid.ColumnSpan="2">
+                    <TextBlock x:Name="combo_text_group" HorizontalAlignment="Left" IsHitTestVisible="False" Margin="84,0,0,125" TextWrapping="Wrap" Text="Vælg Gruppe" Foreground="DarkGray" VerticalAlignment="Bottom" Width="306" Grid.ColumnSpan="2">
                         <TextBlock.Style>
                             <Style TargetType="{x:Type TextBlock}">
                                 <Setter Property="Visibility" Value="Collapsed"/>
@@ -385,7 +386,7 @@
                     <TextBlock x:Name="label_NoTransactions" Grid.ColumnSpan="2" Width="auto" HorizontalAlignment="Center" Margin="56,181,39,0" TextWrapping="Wrap" Text="Ingen transaktioner fundet" VerticalAlignment="Top" FontWeight="Bold" Foreground="Red" Height="64" FontSize="30" RenderTransformOrigin="0.5,0.5" Visibility="Hidden"/>
                     <Button x:Name="Button_DateToday" Content="I dag" Margin="10,245,5,0" Background="#FFC5C5C5" Style="{StaticResource Flat_Button}" Height="48" VerticalAlignment="Top" Click="Button_DateToday_Click"/>
                     <Button x:Name="Button_DateYesterday" Content="I går" Grid.Column="1" Margin="5,245,10,0" Background="#FFC5C5C5" Style="{StaticResource Flat_Button}" Height="48" VerticalAlignment="Top" Click="Button_DateYesterday_Click"/>
-                    <Label x:Name="label_NoAdmin" Content="Ikke Admin, kan kun vise statistik for dagen" Margin="100,468,100,0" VerticalAlignment="Top" Grid.ColumnSpan="2" Height="120" FontSize="35" Foreground="Red"/>
+                    <Label x:Name="label_NoAdmin" Content="Ikke Admin, kan kun vise statistik for dagen" Margin="5,287,655,0" VerticalAlignment="Top" Grid.ColumnSpan="3" Height="57" FontSize="35" Foreground="Red"/>
                 </Grid>
             </TabItem>
 
@@ -596,10 +597,92 @@
 
                         <TabItem Header="Admin" Height="70" Width="300">
                             <Grid>
-                                <Button Style="{StaticResource Flat_Button}" x:Name="btn_ChangePassword" Content="Skift adgangskode" Height="100" Width="277" Margin="67,42,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Click="btn_ChangePassword_Click"/>
+                                <Viewbox>
+                                    <GroupBox x:Name="groupBox" Header="Admin Indstillinger&#xD;&#xA;" Margin="10,10,-3.571,717.571" Width="1564">
+                                        <Viewbox HorizontalAlignment="Left" Height="120" Margin="10,-25,0,0" VerticalAlignment="Top" Width="335">
+                                            <Button Style="{StaticResource Flat_Button}" x:Name="btn_ChangePassword" Content="Skift adgangskode" Height="100" Width="277" Margin="0" HorizontalAlignment="Left" VerticalAlignment="Top" Click="btn_ChangePassword_Click"/>
+                                        </Viewbox>
+                                    </GroupBox>
+                                </Viewbox>
+                                <Viewbox>
+                                    <GroupBox x:Name="groupBox2" Header="Database Indstillinger" Margin="10,197,10.429,10.143">
+                                        <Grid>
+                                            <Button x:Name="btn_RmtLcl" Content="Remote" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="150" Click="btn_RmtLcl_Click"/>
+                                            <GroupBox x:Name="GroupLocal" Header="Local" Margin="10,60,794,9.857">
+                                                <Grid>
+                                                    <Viewbox>
+                                                        <Grid>
+                                                            <Label x:Name="lbl_lcl_ip" Content="IP" Margin="9,10,529,485.286"></Label>
+                                                            <ComboBox x:Name="cmb_lcl_ip" HorizontalAlignment="Left" Margin="222,10,0,485.286" Width="523">
+                                                                <ComboBoxItem Content="localhost"/>
+                                                                <ComboBoxItem Content="127.0.0.1"/>
+                                                            </ComboBox>
+                                                        </Grid>
+                                                    </Viewbox>
+                                                    <Viewbox>
+                                                        <Grid>
+                                                            <Label x:Name="lbl_lcl_port" Content="Port" Margin="9,85,530,410.286"/>
+                                                            <ComboBox x:Name="cmb_lcl_port" HorizontalAlignment="Left" Margin="222,85,0,410.286" Width="523" IsEditable="True">
+                                                                <ComboBoxItem Content="3306"/>
+                                                            </ComboBox>
+                                                        </Grid>
+                                                    </Viewbox>
+                                                    <Viewbox>
+                                                        <Grid>
+                                                            <Label x:Name="lbl_lcl_db" Content="DB" Margin="9,158,529,337.286"/>
+                                                            <ComboBox x:Name="cmb_lcl_db" HorizontalAlignment="Left" Margin="222,158,0,337.286" Width="523" IsEditable="True">
+                                                                <ComboBoxItem Content="P3"/>
+                                                                <ComboBoxItem Content="abbey"/>
+                                                                <ComboBoxItem Content="boeglum_abbey"/>
+                                                                <ComboBoxItem Content="boeglum"/>
+                                                            </ComboBox>
+                                                        </Grid>
+                                                    </Viewbox>
+                                                    <Viewbox>
+                                                        <Grid>
+                                                            <Label x:Name="lbl_lcl_username" Content="Brugernavn" Margin="9,230,529,265.286"/>
+                                                            <TextBox x:Name="txt_lcl_username" HorizontalAlignment="Left" Height="54" Margin="222,230,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="523"/>
+                                                        </Grid>
+                                                    </Viewbox>
+                                                    <Viewbox>
+                                                        <Grid>
+                                                            <Label x:Name="lbl_lcl_password" Content="Adgangskode" Margin="9,301,530,194.286"/>
+                                                            <PasswordBox x:Name="txt_lcl_password" HorizontalAlignment="Left" Margin="222,301,0,0" VerticalAlignment="Top" Width="523" Height="55"/>
+                                                        </Grid>
+                                                    </Viewbox>
+                                                </Grid>
+                                            </GroupBox>
 
+                                            <GroupBox x:Name="GroupRemote" Header="Remote" Margin="779,60,10,9.857">
+                                                <Grid>
+                                                    <Label x:Name="lbl_rmt_ip" Content="IP" Margin="9,10,529,485.286"></Label>
+                                                    <ComboBox x:Name="cmb_rmt_ip" HorizontalAlignment="Left" Margin="222,10,0,485.286" Width="523" IsEditable="True">
+                                                        <ComboBoxItem Content="localhost"/>
+                                                        <ComboBoxItem Content="127.0.0.1"/>
+                                                    </ComboBox>
+                                                    <Label x:Name="lbl_rmt_port" Content="Port" Margin="9,85,530,410.286"/>
+                                                    <ComboBox x:Name="cmb_rmt_port" HorizontalAlignment="Left" Margin="222,85,0,410.286" Width="523" IsEditable="True">
+                                                        <ComboBoxItem Content="3306"/>
+                                                    </ComboBox>
+                                                    <Label x:Name="lbl_rmt_db" Content="DB" Margin="9,158,529,337.286"/>
+                                                    <ComboBox x:Name="cmb_rmt_db" HorizontalAlignment="Left" Margin="222,158,0,337.286" Width="523" IsEditable="True">
+                                                        <ComboBoxItem Content="P3"/>
+                                                        <ComboBoxItem Content="abbey"/>
+                                                        <ComboBoxItem Content="boeglum_abbey"/>
+                                                        <ComboBoxItem Content="boeglum"/>
+                                                    </ComboBox>
+                                                    <Label x:Name="lbl_rmt_username" Content="Brugernavn" Margin="9,230,529,265.286"/>
+                                                    <TextBox x:Name="txt_rmt_username" HorizontalAlignment="Left" Height="54" Margin="222,230,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="523"/>
+                                                    <Label x:Name="lbl_rmt_password" Content="Adgangskode" Margin="9,301,530,194.286"/>
+                                                    <PasswordBox x:Name="txt_rmt_password" HorizontalAlignment="Left" Margin="222,301,0,0" VerticalAlignment="Top" Width="523" Height="55"/>
+
+                                                </Grid>
+                                            </GroupBox>
+
+                                        </Grid>
+                                    </GroupBox>
+                                </Viewbox>
                             </Grid>
-
                         </TabItem>
                         <TabItem Header="Information" Height="70" Width="300">
                             <DataGrid x:Name="InformationGrid" Margin="2,0,-3,-7" IsReadOnly="True" EnableColumnVirtualization="True">
@@ -609,7 +692,8 @@
                                 </DataGrid.Columns>
                             </DataGrid>
                         </TabItem>
-                        <ListBox x:Name="listBox" Height="83" Width="97"/>
+
+
                     </TabControl>
                     <Border BorderBrush="Black" BorderThickness="1" Height="1" VerticalAlignment="Top" Margin="-34,71,-79,0"/>
                 </Grid>

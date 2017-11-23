@@ -12,6 +12,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
     public class StatisticsController
     {
         public List<SaleTransaction> TransactionsForStatistics = new List<SaleTransaction>();
+        public List<Receipt> ReceiptsForStatistics = new List<Receipt>();
 
         public StatisticsController(StorageController storageController)
         {
@@ -59,7 +60,6 @@ namespace P3_Projekt_WPF.Classes.Utilities
             Timer1.Start();
             _saleTransactionsCreated = 0;
             _saleTransactions = new ConcurrentQueue<SaleTransaction>();
-            TransactionsForStatistics = new List<SaleTransaction>();
             int fromUnixTime = Utils.GetUnixTime(from);
             int toUnixTime = Utils.GetUnixTime(EndDate(to));
             string requestStatisticsQuery =
@@ -83,7 +83,6 @@ namespace P3_Projekt_WPF.Classes.Utilities
         {
             if (productID != null)
             {
-                // TODO: Lav input validering af product id
                 TransactionsForStatistics = TransactionsForStatistics.Where(x => x.Product.ID == Int32.Parse(productID)).ToList();
             }
             if (brand != null)

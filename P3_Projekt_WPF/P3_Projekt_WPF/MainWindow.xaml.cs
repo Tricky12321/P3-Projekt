@@ -141,6 +141,7 @@ namespace P3_Projekt_WPF
             BuildInformationTable();
             InitStatisticsTab();
             InitAdminLogin();
+            Utils.LoadDatabaseSettings(this);
         }
 
         private void InitGridQuickButtons()
@@ -691,28 +692,39 @@ namespace P3_Projekt_WPF
 
         private void DisplayStatistics()
         {
-            int totalAmount = 0;
-            decimal totalPrice = 0;
+            int productAmount = 0;
+            decimal totalTransactionPrice = 0;
+            /*int receiptCount = 0;
+            decimal totalReceiptPrice = 0;*/
 
             foreach (SaleTransaction transaction in _statisticsController.TransactionsForStatistics)
             {
                 listView_Statistics.Items.Add(transaction.StatisticsStrings());
-                totalAmount += transaction.Amount;
-                totalPrice += transaction.TotalPrice;
+                productAmount += transaction.Amount;
+                totalTransactionPrice += transaction.TotalPrice;
             }
-            listView_Statistics.Items.Insert(0, new StatisticsListItem("", "Total", $"{totalAmount}", $"{totalPrice}"));
+            listView_Statistics.Items.Insert(0, new StatisticsListItem("", "Total", $"{productAmount}", $"{totalTransactionPrice}"));
+
+            /*foreach(Receipt receipt in _statisticsController.ReceiptsForStatistics)
+            {
+                receiptCount++;
+                totalReceiptPrice += receipt.TotalPrice;
+            }
+            listView_Statistics.Items.Insert(1, new StatisticsListItem("", "Gennemsnitlig kvitteringspris", $"{ receiptCount}", $"{totalReceiptPrice / receiptCount}"));*/
         }
 
         private void Button_DateToday_Click(object sender, RoutedEventArgs e)
         {
             datePicker_StartDate.SelectedDate = DateTime.Today;
             datePicker_EndDate.SelectedDate = DateTime.Today;
+            Button_CreateStatistics_Click(sender, e);
         }
 
         private void Button_DateYesterday_Click(object sender, RoutedEventArgs e)
         {
             datePicker_StartDate.SelectedDate = DateTime.Today.AddDays(-1);
             datePicker_EndDate.SelectedDate = DateTime.Today.AddDays(-1);
+            Button_CreateStatistics_Click(sender, e);
         }
 
 
@@ -1038,5 +1050,22 @@ namespace P3_Projekt_WPF
         private void MoveProductWindow()
         {
         }
+
+        private void btn_RmtLcl_Click(object sender, RoutedEventArgs e)
+        {
+            Utils.FlipRemoteLocal(this);
+        }
+
+        private void button_Click(object sender, RoutedEventArgs e)
+        {
+            listView_Receipt.UnselectAll();
+        }
+
+        private void Receipt_Click(object sender, RoutedEventArgs e)
+        {
+            listView_Receipt.SelectionChanged += delegate { Mouse.Capture(listView_Receipt); };
+            listView_Receipt.LostFocus += delegate { ReleaseMouseCapture(); listView_Receipt.UnselectAll(); };
+        }
+
     }
 }
