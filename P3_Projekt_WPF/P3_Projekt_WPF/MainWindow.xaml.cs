@@ -1055,5 +1055,10 @@ namespace P3_Projekt_WPF
         {
             Utils.FlipRemoteLocal(this);
         }
+
+        private void button_Click(object sender, RoutedEventArgs e)
+        {
+            listView_Receipt.UnselectAll();
+        }
     }
 }
