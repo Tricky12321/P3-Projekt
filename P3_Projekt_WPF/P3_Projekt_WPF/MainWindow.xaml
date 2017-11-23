@@ -496,7 +496,6 @@
                         <TabItem Header="Lager" x:Name="settingsTab" Width="300" Height="70">
                             <Grid>
                                 <Button Style="{StaticResource Flat_Button}" x:Name="btn_PictureFilePath" Content="Vælg billedmappe til produkter" HorizontalAlignment="Left" Margin="10,0,0,10" Width="466" Click="btn_PictureFilePath_Click" Height="100" VerticalAlignment="Bottom" />
-                                <Button Style="{StaticResource Flat_Button}" x:Name="btn_IcecreamID" Content="Gem nyt ID til is" HorizontalAlignment="Left" Margin="1346,0,0,0" Width="242" Click="btn_IcecreamID_Click" Height="100" VerticalAlignment="Bottom" />
                                 <TextBox x:Name="textBox_IceID" Text="" TextCompositionManager.PreviewTextInput="TextInputNoNumber" FontSize="30" Width="84" Margin="1257,0,0,21" HorizontalAlignment="Left" Height="50" VerticalAlignment="Bottom">
                                     <TextBox.Resources>
                                         <Style TargetType="{x:Type Border}">
@@ -552,11 +551,11 @@
                                                         <ColumnDefinition MinWidth="200"/>
                                                     </Grid.ColumnDefinitions>
 
-                                                    <TextBlock VerticalAlignment = "Center" Text="{Binding storageID}"/>
+                                                    <TextBlock VerticalAlignment = "Center" Text="{Binding storageID}" Width="50"/>
 
-                                                    <TextBlock VerticalAlignment = "Center" Text="{Binding storageName}" Width="auto" Grid.Column="1" TextWrapping="WrapWithOverflow" />
+                                                    <TextBlock VerticalAlignment = "Center" Text="{Binding storageName}" Width="201" Grid.Column="1" TextWrapping="WrapWithOverflow" />
 
-                                                    <TextBlock VerticalAlignment = "Center" Text="{Binding storageDescription}" Width="auto" Grid.Column="2" Padding="0,0,10,0" TextWrapping="WrapWithOverflow"/>
+                                                    <TextBlock VerticalAlignment = "Center" Text="{Binding storageDescription}" Width="403" Grid.Column="2" Padding="0,0,10,0" TextWrapping="WrapWithOverflow"/>
 
                                                     <Button Style="{StaticResource Flat_Button}"
                                                         Grid.Column="3"
