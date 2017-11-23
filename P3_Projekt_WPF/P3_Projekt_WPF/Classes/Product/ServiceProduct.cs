@@ -43,14 +43,20 @@ namespace P3_Projekt_WPF.Classes
             {
                 if (service_AC > product_AC)
                 {
-                    sql = $"ALTER TABLE 'products' AUTO_INCREMENT={service_AC};";
                     return_AC = service_AC;
+                    sql = $"ALTER TABLE products AUTO_INCREMENT={service_AC};";
+                    Mysql.RunQuery(sql);
                 }
                 else
                 {
-                    sql = $"ALTER TABLE 'service_products' AUTO_INCREMENT={product_AC};";
                     return_AC = product_AC;
+                    sql = $"ALTER TABLE service_products AUTO_INCREMENT={product_AC};";
+                    Mysql.RunQuery(sql);
                 }
+            }
+            else
+            {
+                return_AC = service_AC;
             }
             return return_AC;
         }
