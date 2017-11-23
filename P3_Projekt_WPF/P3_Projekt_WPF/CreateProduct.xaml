@@ -41,7 +41,7 @@
                 <TextBlock x:Name="label_Group" HorizontalAlignment="Left" Margin="10,0,0,426" TextWrapping="Wrap" Text="Varegruppe" FontSize="30" MinHeight="24" VerticalAlignment="Bottom" Height="40" Width="154"/>
                 <ComboBox x:Name="comboBox_Group" Width="280" VerticalAlignment="Bottom" Margin="180,0,0,425.571" Height="40" HorizontalAlignment="Left" FontSize="24"/>
                 <TextBlock x:Name="label_PurchasePrice" HorizontalAlignment="Left" Margin="10,0,0,376" TextWrapping="Wrap" Text="Indkøbspris" FontSize="30" MinHeight="24" VerticalAlignment="Bottom" Height="40" Width="154"/>
-                <TextBox Padding="10,0,0,0" x:Name="textbox_PurchasePrice" TextCompositionManager.PreviewTextInput="AmountInputOnlyNumbers" Margin="180,0,0,376" FontSize="30" Height="40" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="280">
+                <TextBox Padding="10,0,0,0" x:Name="textbox_PurchasePrice" TextCompositionManager.PreviewTextInput="AmountInputOnlyNumbersButAllowOneComma" Margin="180,0,0,376" FontSize="30" Height="40" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="280">
                     <TextBox.Resources>
                         <Style TargetType="{x:Type Border}">
                             <Setter Property="CornerRadius" Value="10"/>
@@ -61,7 +61,7 @@
                     </TextBlock.Style>
                 </TextBlock>
                 <TextBlock x:Name="label_SalePrice" HorizontalAlignment="Left" Margin="10,0,0,326" TextWrapping="Wrap" Text="Salgspris" FontSize="30" MinHeight="24" VerticalAlignment="Bottom" Height="40" Width="117"/>
-                <TextBox Padding="10,0,0,0" x:Name="textbox_SalePrice" TextCompositionManager.PreviewTextInput="AmountInputOnlyNumbers" Margin="180,0,0,326" FontSize="30" HorizontalAlignment="Left" Width="280" Height="40" VerticalAlignment="Bottom">
+                <TextBox Padding="10,0,0,0" x:Name="textbox_SalePrice" TextCompositionManager.PreviewTextInput="AmountInputOnlyNumbersButAllowOneComma" Margin="180,0,0,326" FontSize="30" HorizontalAlignment="Left" Width="280" Height="40" VerticalAlignment="Bottom">
                     <TextBox.Resources>
                         <Style TargetType="{x:Type Border}">
                             <Setter Property="CornerRadius" Value="10"/>
@@ -81,7 +81,7 @@
                     </TextBlock.Style>
                 </TextBlock>
                 <TextBlock x:Name="label_DiscountPrice" HorizontalAlignment="Left" Margin="10,0,0,276" TextWrapping="Wrap" Text="Tilbudspris" FontSize="30" MinHeight="24" VerticalAlignment="Bottom" Height="40" Width="154"/>
-                <TextBox Padding="10,0,0,0" x:Name="textbox_DiscountPrice" TextCompositionManager.PreviewTextInput="AmountInputOnlyNumbers" Margin="180,0,0,276" FontSize="30" HorizontalAlignment="Left" Width="280" Height="40" VerticalAlignment="Bottom">
+                <TextBox Padding="10,0,0,0" x:Name="textbox_DiscountPrice" TextCompositionManager.PreviewTextInput="AmountInputOnlyNumbersButAllowOneComma" Margin="180,0,0,276" FontSize="30" HorizontalAlignment="Left" Width="280" Height="40" VerticalAlignment="Bottom">
                     <TextBox.Resources>
                         <Style TargetType="{x:Type Border}">
                             <Setter Property="CornerRadius" Value="10"/>
@@ -216,7 +216,7 @@
 
                 </ComboBox>
                 <TextBlock x:Name="label_ServiceSalePrice" HorizontalAlignment="Left" Margin="10,0,0,423.571" TextWrapping="Wrap" Text="Salgspris" FontSize="30" MinHeight="24" VerticalAlignment="Bottom" Height="40" Width="117"/>
-                <TextBox Padding="10,0,0,0" x:Name="textbox_ServiceSalePrice" TextCompositionManager.PreviewTextInput="AmountInputOnlyNumbers" Margin="180,0,0,423.571" FontSize="30" HorizontalAlignment="Left" Width="280" Height="40" VerticalAlignment="Bottom">
+                <TextBox Padding="10,0,0,0" x:Name="textbox_ServiceSalePrice" TextCompositionManager.PreviewTextInput="AmountInputOnlyNumbersButAllowOneComma" Margin="180,0,0,423.571" FontSize="30" HorizontalAlignment="Left" Width="280" Height="40" VerticalAlignment="Bottom">
                     <TextBox.Resources>
                         <Style TargetType="{x:Type Border}">
                             <Setter Property="CornerRadius" Value="10"/>
@@ -257,7 +257,7 @@
                 </TextBlock>
 
                 <TextBlock x:Name="label_ServiceGroupPrice" HorizontalAlignment="Left" Margin="10,0,0,323.571" TextWrapping="Wrap" Text="Grp. Pris" FontSize="30" MinHeight="24" VerticalAlignment="Bottom" Height="40" Width="154"/>
-                <TextBox Padding="10,0,0,0" x:Name="textbox_ServiceGroupPrice" TextCompositionManager.PreviewTextInput="AmountInputOnlyNumbers" Margin="180,0,0,323.571" FontSize="30" HorizontalAlignment="Left" Width="280" Height="40" VerticalAlignment="Bottom">
+                <TextBox Padding="10,0,0,0" x:Name="textbox_ServiceGroupPrice" TextCompositionManager.PreviewTextInput="AmountInputOnlyNumbersButAllowOneComma" Margin="180,0,0,323.571" FontSize="30" HorizontalAlignment="Left" Width="280" Height="40" VerticalAlignment="Bottom">
                     <TextBox.Resources>
                         <Style TargetType="{x:Type Border}">
                             <Setter Property="CornerRadius" Value="10"/>
