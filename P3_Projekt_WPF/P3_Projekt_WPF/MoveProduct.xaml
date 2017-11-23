@@ -6,8 +6,30 @@
         xmlns:local="clr-namespace:P3_Projekt_WPF"
         mc:Ignorable="d"
         Background="#FFE5E5E5"
-        Title="MoveProduct" Height="400" Width="350">
+        Title="MoveProduct" Height="300" Width="500">
     <Grid>
 
+        <Button x:Name="button_DropDownStorate" Height="20" Width="100" ContextMenuService.IsEnabled="False" Margin="10,70,0,0" Click="button_DropDownStorate_Click" VerticalAlignment="Top" HorizontalAlignment="Left">
+            <Button.Content>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="Rotate"/>
+                    <Path x:Name="BtnArrow" Margin="4" VerticalAlignment="Center" Width="6" Fill="#FF527DB5" Stretch="Uniform" HorizontalAlignment="Right" Data="F1 M 301.14,-189.041L 311.57,-189.041L 306.355,-182.942L 301.14,-189.041 Z"/>
+                </StackPanel>
+            </Button.Content>
+            <Button.ContextMenu>
+                <ContextMenu>
+                    <MenuItem Header="hej"></MenuItem>
+                </ContextMenu>
+            </Button.ContextMenu>
+
+        </Button>
+
+
+        <Button x:Name="button_MoveProduct" Content="Flyt Produkt" Style="{StaticResource Flat_Button}" Background="Transparent" Margin="0,0,10,10" Height="28" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="91"/>
+        <Label x:Name="label_ID" Content="Label" HorizontalAlignment="Left" Margin="97,30,0,0" VerticalAlignment="Top" Background="White" Height="24" Width="123" />
+        <Label x:Name="label_Description" Content="Label" Background="White" HorizontalAlignment="Left" Margin="249,30,0,0" VerticalAlignment="Top" Width="70"/>
+        <Label x:Name="label" Content="Lagerrum" HorizontalAlignment="Left" Margin="10,10,0,0" Padding="0" VerticalAlignment="Top" Width="91"/>
+        <Label x:Name="label1" Content="Navn" HorizontalAlignment="Left" Margin="141,4,0,0" VerticalAlignment="Top" Width="79"/>
+        <Label x:Name="label2" Content="ID" HorizontalAlignment="Left" Margin="249,4,0,0" VerticalAlignment="Top" Width="84"/>
     </Grid>
 </Window>
