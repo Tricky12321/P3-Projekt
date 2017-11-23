@@ -489,7 +489,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
                 if (ProductDictionary.Keys.Contains(isNumber))
                 {
                     SearchProduct matchedProduct = new SearchProduct(ProductDictionary[isNumber]);
-                    matchedProduct.NameMatch = 100;
+                    matchedProduct.NameMatch = 100000;
                     productsToReturn.TryAdd(isNumber, matchedProduct);
                 }
             }
