@@ -156,6 +156,48 @@ namespace P3_Projekt_WPF.Classes.Utilities
                 Properties.Settings.Default.Save();
             }
         }
+
+        public static void LoadDatabaseSettings(MainWindow MainWin)
+        {
+            var sett = Properties.Settings.Default;
+            bool Local = false;
+            bool Remote = false;
+            if (sett.local_or_remote == true)
+            {
+                MainWin.btn_RmtLcl.Content = "Local";
+                Local = true;
+            }
+            else
+            {
+                MainWin.btn_RmtLcl.Content = "Remote";
+                Remote = true;
+            }
+            UpdateDisabledFields(Local, Remote, MainWin);
+        }
+
+        public static void UpdateDisabledFields(bool Local, bool Remote, MainWindow MainWin)
+        {
+            MainWin.cmb_lcl_db.IsEnabled = Local;
+            MainWin.cmb_lcl_ip.IsEnabled = Local;
+            MainWin.cmb_lcl_port.IsEnabled = Local;
+            MainWin.txt_lcl_password.IsEnabled = Local;
+            MainWin.txt_lcl_username.IsEnabled = Local;
+            MainWin.cmb_rmt_db.IsEnabled = Remote;
+            MainWin.cmb_rmt_ip.IsEnabled = Remote;
+            MainWin.cmb_rmt_port.IsEnabled = Remote;
+            MainWin.txt_rmt_password.IsEnabled = Remote;
+            MainWin.txt_rmt_username.IsEnabled = Remote;
+        }
+
+        public static void FlipRemoteLocal(MainWindow MainWin)
+        {
+            var sett = Properties.Settings.Default;
+            sett.local_or_remote = !sett.local_or_remote;
+            sett.Save();
+            LoadDatabaseSettings(MainWin);
+        }
+
+
         #region SearchAlgorithm
 
         static List<SearchProduct> weigthedSearchList;
@@ -170,7 +212,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
                 if (productDictionary.Keys.Contains(isNumber))
                 {
                     SearchProduct matchedProduct = new SearchProduct(productDictionary[isNumber]);
-                    matchedProduct.NameMatch = Int32.MaxValue;
+                    matchedProduct.NameMatch = 100;
                     productsToReturn.TryAdd(isNumber, matchedProduct);
                 }
             }
