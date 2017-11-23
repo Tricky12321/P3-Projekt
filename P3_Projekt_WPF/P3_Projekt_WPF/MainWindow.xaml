@@ -197,6 +197,7 @@
                             </Style>
                         </ListBox.ItemContainerStyle>
                     </ListBox>
+                    <Button x:Name="button" Content="Button" Grid.Column="1" HorizontalAlignment="Left" Margin="399,16,0,0" Grid.Row="1" VerticalAlignment="Top" Width="97"/>
                 </Grid>
             </TabItem>
 
