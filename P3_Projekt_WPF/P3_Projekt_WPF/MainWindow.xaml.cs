@@ -1075,5 +1075,12 @@ namespace P3_Projekt_WPF
         {
             Utils.SaveDBData(this);
         }
+
+        private void Receipt_Click(object sender, RoutedEventArgs e)
+        {
+            listView_Receipt.SelectionChanged += delegate { Mouse.Capture(listView_Receipt); };
+            listView_Receipt.LostFocus += delegate { ReleaseMouseCapture(); listView_Receipt.UnselectAll(); };
+        }
+
     }
 }
