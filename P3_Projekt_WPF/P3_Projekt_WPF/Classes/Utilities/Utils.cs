@@ -16,6 +16,7 @@ using System.Windows.Media.Imaging;
 using System.Threading;
 using System.Collections.Concurrent;
 using System.Windows.Controls;
+using System.Windows.Media;
 namespace P3_Projekt_WPF.Classes.Utilities
 {
     public static class Utils
@@ -142,19 +143,23 @@ namespace P3_Projekt_WPF.Classes.Utilities
 
         public static void GetIceCreameID()
         {
-            string sql = "SELECT `id` FROM `groups` WHERE `name` LIKE 'is'";
-            var asdf = Mysql.RunQueryWithReturn(sql);
-            if (asdf.RowCounter == 0)
+            if (Mysql.ConnectionWorking)
             {
-                Properties.Settings.Default.IcecreamID = -1;
-                Properties.Settings.Default.Save();
+                string sql = "SELECT `id` FROM `groups` WHERE `name` LIKE 'is'";
+                var asdf = Mysql.RunQueryWithReturn(sql);
+                if (asdf.RowCounter == 0)
+                {
+                    Properties.Settings.Default.IcecreamID = -1;
+                    Properties.Settings.Default.Save();
+                }
+                else
+                {
+                    int IsID = Convert.ToInt32(asdf.RowData[0].Values[0]);
+                    Properties.Settings.Default.IcecreamID = IsID;
+                    Properties.Settings.Default.Save();
+                }
             }
-            else
-            {
-                int IsID = Convert.ToInt32(asdf.RowData[0].Values[0]);
-                Properties.Settings.Default.IcecreamID = IsID;
-                Properties.Settings.Default.Save();
-            }
+
         }
 
         public static void LoadDatabaseSettings(MainWindow MainWin)
@@ -173,20 +178,43 @@ namespace P3_Projekt_WPF.Classes.Utilities
                 Remote = true;
             }
             UpdateDisabledFields(Local, Remote, MainWin);
+            LoadDBSettingsData(MainWin);
         }
 
         public static void UpdateDisabledFields(bool Local, bool Remote, MainWindow MainWin)
         {
+            SolidColorBrush BaseColor = new SolidColorBrush(System.Windows.Media.Color.FromRgb(Convert.ToByte(229), Convert.ToByte(229), Convert.ToByte(229)));
+            SolidColorBrush DiabledColor = new SolidColorBrush(System.Windows.Media.Color.FromRgb(Convert.ToByte(159), Convert.ToByte(159), Convert.ToByte(159)));
+            // LOCAL STARTS HERE
             MainWin.cmb_lcl_db.IsEnabled = Local;
             MainWin.cmb_lcl_ip.IsEnabled = Local;
             MainWin.cmb_lcl_port.IsEnabled = Local;
             MainWin.txt_lcl_password.IsEnabled = Local;
             MainWin.txt_lcl_username.IsEnabled = Local;
+            MainWin.btn_lcl_saveDBSettings.IsEnabled = Local;
+
+            if (Local)
+            {
+                MainWin.GroupLocal.Background = BaseColor;
+            } else
+            {
+                MainWin.GroupLocal.Background = DiabledColor;
+            }
+            // REMOTE STARTS HERE
             MainWin.cmb_rmt_db.IsEnabled = Remote;
             MainWin.cmb_rmt_ip.IsEnabled = Remote;
             MainWin.cmb_rmt_port.IsEnabled = Remote;
             MainWin.txt_rmt_password.IsEnabled = Remote;
             MainWin.txt_rmt_username.IsEnabled = Remote;
+            MainWin.btn_rmt_saveDBSettings.IsEnabled = Remote;
+            if (Remote)
+            {
+                MainWin.GroupRemote.Background = BaseColor;
+            }
+            else
+            {
+                MainWin.GroupRemote.Background = DiabledColor;
+            }
         }
 
         public static void FlipRemoteLocal(MainWindow MainWin)
@@ -197,6 +225,38 @@ namespace P3_Projekt_WPF.Classes.Utilities
             LoadDatabaseSettings(MainWin);
         }
 
+
+        public static void SaveDBData(MainWindow MainWin)
+        {
+            var sett = Properties.Settings.Default;
+            sett.lcl_db = MainWin.cmb_lcl_db.Text;
+            sett.lcl_ip = MainWin.cmb_lcl_ip.Text;
+            sett.lcl_port = Convert.ToInt32(MainWin.cmb_lcl_port.Text);
+            sett.lcl_password = MainWin.txt_lcl_password.Password;
+            sett.lcl_username = MainWin.txt_lcl_username.Text;
+            sett.rmt_db = MainWin.cmb_rmt_db.Text;
+            sett.rmt_ip = MainWin.cmb_rmt_ip.Text;
+            sett.rmt_port = Convert.ToInt32(MainWin.cmb_rmt_port.Text);
+            sett.rmt_password = MainWin.txt_rmt_password.Password;
+            sett.rmt_username = MainWin.txt_rmt_username.Text;
+            sett.Save();
+        }
+
+        public static void LoadDBSettingsData(MainWindow MainWin)
+        {
+            var sett = Properties.Settings.Default;
+                
+            MainWin.cmb_rmt_db.Text = sett.rmt_db;
+            MainWin.cmb_rmt_ip.Text = sett.rmt_ip;
+            MainWin.cmb_rmt_port.Text = sett.rmt_port.ToString();
+            MainWin.txt_rmt_password.Password = sett.rmt_password;
+            MainWin.txt_rmt_username.Text = sett.rmt_username;
+            MainWin.cmb_lcl_db.Text = sett.lcl_db;
+            MainWin.cmb_lcl_ip.Text = sett.lcl_ip;
+            MainWin.cmb_lcl_port.Text = sett.lcl_port.ToString();
+            MainWin.txt_lcl_password.Password = sett.lcl_password;
+            MainWin.txt_lcl_username.Text = sett.lcl_username;
+        }
 
         #region SearchAlgorithm
 
