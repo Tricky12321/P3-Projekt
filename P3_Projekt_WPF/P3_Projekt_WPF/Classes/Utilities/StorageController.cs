@@ -521,15 +521,15 @@ namespace P3_Projekt_WPF.Classes.Utilities
             string[] searchSplit = searchStringElement.Split(' ');
             string[] productSplit = productToConvert.Name.ToLower().Split(' ');
 
-            foreach (string s in searchSplit)
+            foreach (string searchEle in searchSplit)
             {
-                foreach (string t in productSplit)
+                foreach (string productNameEle in productSplit)
                 {
-                    if(s == t)
+                    if(searchEle == productNameEle)
                     {
                         productToAdd.NameMatch += 100;
                     }
-                    else if (LevenstheinProductSearch(s, t))
+                    else if (LevenstheinProductSearch(searchEle, productNameEle))
                     {
                         productToAdd.NameMatch += 1;
                     }
