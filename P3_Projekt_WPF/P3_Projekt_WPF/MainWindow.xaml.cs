@@ -1063,7 +1063,6 @@ namespace P3_Projekt_WPF
             productMove.Activate();
         }
 
-        private MoveProduct productMove;
         private void MoveProductWindow()
         {
         }
