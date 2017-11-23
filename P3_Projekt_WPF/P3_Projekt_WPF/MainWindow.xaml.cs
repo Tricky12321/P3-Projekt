@@ -141,6 +141,7 @@ namespace P3_Projekt_WPF
             BuildInformationTable();
             InitStatisticsTab();
             InitAdminLogin();
+            Utils.LoadDatabaseSettings(this);
         }
 
         private void InitGridQuickButtons()
@@ -1027,6 +1028,11 @@ namespace P3_Projekt_WPF
             listView_Receipt.Items.Clear();
             label_TotalPrice.Content = "Total";
             PayWithAmount.Clear();
+        }
+
+        private void btn_RmtLcl_Click(object sender, RoutedEventArgs e)
+        {
+            Utils.FlipRemoteLocal(this);
         }
     }
 }
