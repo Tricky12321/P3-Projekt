@@ -570,7 +570,6 @@ namespace P3_Projekt_WPF
 
         private CreateTemporaryProduct _createTempProduct;
         private int tempID = TempProduct.GetNextID();
-
         private void btn_Temporary_Click(object sender, RoutedEventArgs e)
         {
             decimal price;
@@ -1028,15 +1027,14 @@ namespace P3_Projekt_WPF
             label_TotalPrice.Content = "Total";
             PayWithAmount.Clear();
         }
-        private void btn_MoveProduct_Click(object sender, RoutedEventArgs e)
-        {
-            productMove = new MoveProduct();
-            productMove.Show();
-        }
 
         private MoveProduct productMove;
-        private void MoveProductWindow()
+        private void btn_MoveProduct_Click(object sender, RoutedEventArgs e)
         {
+            productMove = new MoveProduct(_storageController, _POSController);
+
+            productMove.Show();
+            productMove.Activate();
         }
     }
 }
