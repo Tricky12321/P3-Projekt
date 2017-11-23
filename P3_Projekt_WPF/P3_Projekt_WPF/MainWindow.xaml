@@ -208,7 +208,7 @@
                         <ColumnDefinition Width="643*"/>
                     </Grid.ColumnDefinitions>
                     <Border BorderBrush="Black" BorderThickness="1" Height="1" VerticalAlignment="Top" Margin="-34,71,-79,0" Grid.ColumnSpan="2"/>
-                    <Button x:Name="btn_MoveProduct" Background="#FFC5C5C5" Content="Flyt Produkt" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="250" Height="50" Style="{StaticResource Flat_Button}"/>
+                    <Button x:Name="btn_MoveProduct" Background="#FFC5C5C5" Content="Flyt Produkt" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="250" Height="50" Style="{StaticResource Flat_Button}" Click="btn_MoveProduct_Click"/>
                     <ScrollViewer x:Name="scroll_StorageProduct" Margin="5,72,5,5" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" Grid.Column="0"/>
 
 

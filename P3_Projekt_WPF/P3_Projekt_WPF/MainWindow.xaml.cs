@@ -1050,13 +1050,16 @@ namespace P3_Projekt_WPF
             label_TotalPrice.Content = "Total";
             PayWithAmount.Clear();
         }
-        private void btn_MoveProduct_Click(object sender, RoutedEventArgs e)
-        {
-            productMove = new MoveProduct();
-            productMove.Show();
-        }
 
         private MoveProduct productMove;
+        private void btn_MoveProduct_Click(object sender, RoutedEventArgs e)
+        {
+            productMove = new MoveProduct(_storageController, _POSController);
+
+            productMove.Show();
+            productMove.Activate();
+        }
+
         private void MoveProductWindow()
         {
         }
