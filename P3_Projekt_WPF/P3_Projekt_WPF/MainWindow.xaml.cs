@@ -750,9 +750,12 @@ namespace P3_Projekt_WPF
 
         private void TextInputNoNumberWithComma(object sender, TextCompositionEventArgs e)
         {
-            // Only allows number in textfield, also with comma
-            if (!char.IsDigit(e.Text, e.Text.Length - 1) && !(e.Text[e.Text.Length - 1] == ','))
-                e.Handled = true;
+
+            TextBox input = (sender as TextBox);
+            //The input string has the format: An unlimited amount of numbers, then 0-1 commas, then 0-2 numbers
+            var re = new System.Text.RegularExpressions.Regex(@"^((\d+)(,{0,1})(\d{0,2}))$");
+
+            e.Handled = !re.IsMatch(input.Text.Insert(input.CaretIndex, e.Text));
         }
 
         private void BuildInformationTable()
