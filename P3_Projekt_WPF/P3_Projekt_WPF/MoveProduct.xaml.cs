@@ -65,7 +65,6 @@ namespace P3_Projekt_WPF
             }
         }
 
-
         private void ProductSearch()
         {
             listBox_SearchResultsSaleTab.Visibility = Visibility.Visible;
