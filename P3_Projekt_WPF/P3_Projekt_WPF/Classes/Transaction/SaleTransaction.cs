@@ -82,9 +82,7 @@ namespace P3_Projekt_WPF.Classes
                     }
                     string Output = Text.ToString();
                     var NewBox = MessageBox.Show(Text.ToString());
-
                 }
-
                 prod.UpdateInDatabase();
             }
             else if (Product is TempProduct)

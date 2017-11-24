@@ -55,10 +55,11 @@ namespace P3_Projekt_WPF.Classes.Utilities
             }
         }
 
-        public string GetQueryString(bool SearchID, int IDToSearch, bool SearchGroup, int GroupToSearch, bool SearchBrand, string BrandToSearch)
+        public string GetQueryString(bool SearchID, int IDToSearch, bool SearchGroup, int GroupToSearch, bool SearchBrand, string BrandToSearch, DateTime From, DateTime To)
         {
             StringBuilder NewString = new StringBuilder("SELECT `sale_transactions`.*, `products`.`brand`, `products`.`groups` " +
-                "FROM `products`, `sale_transactions` WHERE `products`.`id` = `sale_transactions`.`product_id`");
+                "FROM `products`, `sale_transactions` WHERE `products`.`id` = `sale_transactions`.`product_id`"+
+                $" AND UNIX_TIMESTAMP(`datetime`) >= '{From}' AND UNIX_TIMESTAMP(`datetime`) <= '{To}'");
             if (SearchID)
             {
                 NewString.Append($" AND `products`.`id` = '{IDToSearch}'");
