@@ -6,8 +6,11 @@
         xmlns:local="clr-namespace:P3_Projekt_WPF"
         mc:Ignorable="d"
         Background="#FFE5E5E5"
-        Title="MoveProduct" Height="480" Width="540">
-    <Grid Margin="0,1,0,-1">
+        Title="MoveProduct" Height="480" Width="540"
+        Focusable="True"
+        KeyDown="Window_KeyDown"
+        >
+    <Grid Margin="0,1,0,-1" MouseLeftButtonDown="Grid_MouseLeftButtonDown">
 
 
         <Button x:Name="button_MoveProduct" FontSize="24" Content="Flyt Produkt" Style="{StaticResource Flat_Button}" Background="Transparent" Margin="0,0,10,10" Height="50" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="176" Click="button_MoveProduct_Click"/>
@@ -16,7 +19,7 @@
         <ComboBox x:Name="comboBox_StorageRooms" FontSize="20" Background="White" BorderBrush="Black" BorderThickness="1" Margin="10,205,10,0" VerticalAlignment="Top" Height="40"/>
         <Label x:Name="label_lagerrum" Padding="0" FontSize="30" Content="Fra Lagerrum" HorizontalAlignment="Left" Margin="10,160,0,0" VerticalAlignment="Top"/>
         <ComboBox x:Name="comboBox_Destination" FontSize="20" Margin="10,295,10,0" VerticalAlignment="Top" Height="40"/>
-        <Label x:Name="label_LagerrumDestination" FontSize="30" Padding="0" Content="Lagerums Destination" HorizontalAlignment="Left" Margin="10,250,0,0" VerticalAlignment="Top" Width="312" RenderTransformOrigin="0.484,-1.25"/>
+        <Label x:Name="label_LagerrumDestination" FontSize="30" Padding="0" Content="Lagerrums Destination" HorizontalAlignment="Left" Margin="10,250,0,0" VerticalAlignment="Top" Width="312" RenderTransformOrigin="0.484,-1.25"/>
         <TextBox Padding="10,0,0,0" KeyUp="txtBox_SearchField_KeyUp" x:Name="txtBox_SearchField" LostFocus="txtBox_SearchField_LostFocus" Margin="10,10,75,0" FontSize="33" Height="50" VerticalAlignment="Top">
             <TextBox.Resources>
                 <Style TargetType="{x:Type Border}">
@@ -24,7 +27,7 @@
                 </Style>
             </TextBox.Resources>
         </TextBox>
-        <TextBlock IsHitTestVisible="False" Text="Søg efter produkt" Margin="22,11,220,0" Foreground="DarkGray" FontSize="33" Height="47" VerticalAlignment="Top">
+        <TextBlock IsHitTestVisible="False" Text="Søg efter produkt" Margin="22,11,220,0"  Foreground="DarkGray" FontSize="33" Height="47" VerticalAlignment="Top">
             <TextBlock.Style>
                 <Style TargetType="{x:Type TextBlock}">
                     <Setter Property="Visibility" Value="Collapsed"/>
@@ -37,7 +40,7 @@
             </TextBlock.Style>
         </TextBlock>
 
-        <ListBox x:Name="listBox_SearchResultsSaleTab"  HorizontalContentAlignment="Stretch" Visibility="Hidden" Grid.RowSpan="3" Panel.ZIndex="3" Grid.Column="1" Margin="0,57,74,0" HorizontalAlignment="Right" Width="503" Height="auto"  MaxHeight="600" VerticalAlignment="Top">
+        <ListBox x:Name="listBox_SearchResultsSaleTab"  HorizontalContentAlignment="Stretch" Width="447" Visibility="Hidden" Grid.RowSpan="3" Panel.ZIndex="3" Grid.Column="1" Margin="10,57,75,10" FontSize="20" HorizontalAlignment="Center" Height="auto"  MaxHeight="600" VerticalAlignment="Top">
             <ListBox.ItemContainerStyle>
                 <Style TargetType="ListBoxItem">
                     <EventSetter Event="PreviewMouseLeftButtonDown" Handler="ListBoxItem_PreviewMouseLeftButtonDown"/>
