@@ -290,7 +290,14 @@ namespace P3_Projekt_WPF
                     image_ChosenProduct.Source = (_productToEdit as Product).Image.Source;
                 }
 
-                textBlock_ChosenProduct.Text = $"ID: {_productToEdit.ID}\nNavn: {(_productToEdit as Product).Name}\nGruppe: {_storageController.GroupDictionary[(_productToEdit as Product).ProductGroupID].Name}\nMærke: {(_productToEdit as Product).Brand}\nPris: {_productToEdit.SalePrice}\nTilbudspris: {(_productToEdit as Product).DiscountPrice}\nIndkøbspris: {(_productToEdit as Product).PurchasePrice}\nLagerstatus:";
+                textBlock_ChosenProduct.Text = $"ID: {_productToEdit.ID}\n" +
+                                                $"{(_productToEdit as Product).Name}\n" +
+                                                $"Gruppe: {_storageController.GroupDictionary[(_productToEdit as Product).ProductGroupID].Name}\n" +
+                                                $"Mærke: {(_productToEdit as Product).Brand}\n" +
+                                                $"Pris: {_productToEdit.SalePrice}\n" +
+                                                $"Tilbudspris: {(_productToEdit as Product).DiscountPrice}\n" +
+                                                $"Indkøbspris: {(_productToEdit as Product).PurchasePrice}\n" +
+                                                $"{((_productToEdit as Product).StorageWithAmount.Count == 0 ? "Produktet er ikke på lager" : "Lagerstatus:")}";
                 foreach (KeyValuePair<int, int> storageWithAmount in (_productToEdit as Product).StorageWithAmount)
                 {
                     textBlock_ChosenProduct.Text += $"\n  - {_storageController.StorageRoomDictionary[storageWithAmount.Key].Name} har {storageWithAmount.Value} stk.";
@@ -507,7 +514,7 @@ namespace P3_Projekt_WPF
 
                 textBox_AddProductID.Text = string.Empty;
                 textBox_ProductAmount.Text = "1";
-                textBox_AddProductID.SelectAll();
+                textBox_AddProductID.Focus();
             }
             else
             {
@@ -880,6 +887,11 @@ namespace P3_Projekt_WPF
 
         private void btn_search_Click(object sender, RoutedEventArgs e)
         {
+            ShowSearchResultsList();
+        }
+
+        private void ShowSearchResultsList()
+        {
             listBox_SearchResultsSaleTab.Visibility = Visibility.Visible;
             ConcurrentDictionary<int, SearchProduct> productSearchResults = _storageController.SearchForProduct(txtBox_SearchField.Text);
             listBox_SearchResultsSaleTab.Items.Clear();
@@ -888,16 +900,16 @@ namespace P3_Projekt_WPF
             {
                 if (product.CurrentProduct is Product)
                 {
-                    var item = new ListBoxItem();
+                    ListBoxItem item = new ListBoxItem();
                     item.Tag = product.CurrentProduct.ID;
                     item.Content = new SaleSearchResultItemControl((product.CurrentProduct as Product).Image, $"{(product.CurrentProduct as Product).Name}\n{product.CurrentProduct.ID}");
                     listBox_SearchResultsSaleTab.Items.Add(item);
                 }
                 else if (product.CurrentProduct is ServiceProduct)
                 {
-                    var item = new ListBoxItem();
+                    ListBoxItem item = new ListBoxItem();
                     item.Tag = product.CurrentProduct.ID;
-                    item.Content = new SaleSearchResultItemControl((product.CurrentProduct as ServiceProduct).Image, $"{(product.CurrentProduct as ServiceProduct).Name}\n{product.CurrentProduct.ID}");
+                    item.Content = new SaleSearchResultItemControl((product.CurrentProduct as ServiceProduct).Image, $"{(product.CurrentProduct as ServiceProduct).Name}\n{product.CurrentProduct.ID}\n{product.CurrentProduct.SalePrice}");
                     item.Background = Brushes.LightBlue;
                     listBox_SearchResultsSaleTab.Items.Add(item);
                     listBox_SearchResultsSaleTab.SelectedIndex = 0;
@@ -916,11 +928,7 @@ namespace P3_Projekt_WPF
 
         public void SearchFieldLostFocus(object sender, RoutedEventArgs e)
         {
-            Thread.Sleep(5);
-            if (!listBox_SearchResultsSaleTab.IsFocused)
-            {
-                listBox_SearchResultsSaleTab.Visibility = Visibility.Hidden;
-            }
+            listBox_SearchResultsSaleTab.Visibility = Visibility.Hidden;
         }
 
         private void EnterKeyPressedSearch(object sender, KeyEventArgs e)
@@ -931,7 +939,8 @@ namespace P3_Projekt_WPF
             }
             else if (e.Key == Key.Enter && txtBox_SearchField.IsFocused)
             {
-                ///////////
+                btn_search.Focus();
+                ShowSearchResultsList();
             }
             else if (e.Key == Key.Enter && (textBox_AddProductID.IsFocused || textBox_ProductAmount.IsFocused))
             {
@@ -985,8 +994,6 @@ namespace P3_Projekt_WPF
             }
         }
         #endregion
-
-
 
         private void btn_OpenAdmin_Click(object sender, RoutedEventArgs e)
         {
@@ -1103,11 +1110,16 @@ namespace P3_Projekt_WPF
                 {
                     adminValid = new AdminValidation();
                     adminValid.ShowDialog();
-                    _settingsController.isAdmin = true;
-                    btn_AdminLogin.Content = "Log ud";
-                    image_Admin.Source = unlocked.ImageSource;
-                    label_NoAdmin.Visibility = Visibility.Collapsed;
-
+                    adminValid.Closed += delegate
+                    {
+                        if (adminValid.IsPasswordCorrect)
+                        {
+                            _settingsController.isAdmin = true;
+                            btn_AdminLogin.Content = "Log ud";
+                            image_Admin.Source = unlocked.ImageSource;
+                            label_NoAdmin.Visibility = Visibility.Collapsed;
+                        }
+                    };
                 }
             };
         }
@@ -1166,5 +1178,19 @@ namespace P3_Projekt_WPF
             e.Handled = Utils.RegexCheckNumber(input.Text.Insert(input.CaretIndex, e.Text));
         }
 
+        private void listBox_SearchResultsSaleTab_KeyDown(object sender, KeyEventArgs e)
+        {
+            ListBoxItem selectedItem = ((sender as ListBox).SelectedItem as ListBoxItem);
+            int selectedItemID;
+            if ( int.TryParse(selectedItem.Tag.ToString(), out selectedItemID)){
+                BaseProduct product = _POSController.GetProductFromID(selectedItemID);
+                if ( product != null && e.Key == Key.Enter)
+                {
+                    _POSController.AddSaleTransaction(product);
+                    UpdateReceiptList();
+                }
+            }
+            listBox_SearchResultsSaleTab.Visibility = Visibility.Hidden;
+        }
     }
 }
