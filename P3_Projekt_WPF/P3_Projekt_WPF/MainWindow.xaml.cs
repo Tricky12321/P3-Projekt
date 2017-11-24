@@ -1120,8 +1120,14 @@ namespace P3_Projekt_WPF
         private MoveProduct productMove;
         private void btn_MoveProduct_Click(object sender, RoutedEventArgs e)
         {
-            productMove = new MoveProduct(_storageController, _POSController);
-
+            if(productMove == null)
+            {
+                productMove = new MoveProduct(_storageController, _POSController);
+                productMove.Closing += delegate
+                {
+                    productMove = null;
+                };
+            }
             productMove.Show();
             productMove.Activate();
         }
