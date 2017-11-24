@@ -277,7 +277,13 @@ namespace P3_Projekt_WPF
 
         public bool IsServiceProductInputValid()
         {
-            TextBox[] textboxes = new TextBox[] { textbox_ServiceName, textbox_ServiceSalePrice, textbox_ServiceGroupLimit, textbox_ServiceGroupPrice };
+            TextBox[] textboxes = new TextBox[] { textbox_ServiceName, textbox_ServiceSalePrice};
+
+            if (textbox_ServiceGroupLimit.Text == "")
+                textbox_ServiceGroupLimit.Text = "0";
+
+            if (textbox_ServiceGroupPrice.Text == "")
+                textbox_ServiceGroupPrice.Text = textbox_ServiceSalePrice.Text;
 
             bool returnVal = true;
             foreach (TextBox textbox in textboxes)
