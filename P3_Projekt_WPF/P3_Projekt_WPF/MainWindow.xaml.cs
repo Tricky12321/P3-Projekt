@@ -678,23 +678,25 @@ namespace P3_Projekt_WPF
             {
                 ResetStatisticsView();
 
-                string id = null;
+                int productID = 0;
                 if (textBox_StatisticsProductID.Text.Length > 0)
                 {
-                    id = textBox_StatisticsProductID.Text;
+                    productID = int.Parse(textBox_StatisticsProductID.Text);
                 }
                 string brand = comboBox_Brand.Text;
-                string groupString = comboBox_Group.Text;
-                Group group = null;
+                int groupID = 0;
                 if (comboBox_Group.Text != "")
                 {
-                    group = _storageController.GroupDictionary.Values.First(x => x.Name == groupString);
+                    groupID = _storageController.GroupDictionary.Values.First(x => x.Name == comboBox_Group.Text).ID;
                 }
+                bool filterID = false;
+                bool filterBrand = false;
+                bool filterGroup = false;
 
-                CheckboxChecker(ref id, ref brand, ref group);
+                CheckboxChecker(ref filterID, ref filterBrand, ref filterGroup);
 
-                _statisticsController.RequestStatisticsDate(startDate, endDate);
-                _statisticsController.FilterByParameters(id, brand, group);
+                string queryString = _statisticsController.GetQueryString(filterID, productID, filterGroup, groupID, filterBrand, brand);
+                _statisticsController.RequestStatisticsDate(startDate, endDate, queryString);
 
                 DisplayStatistics();
                 if (_statisticsController.TransactionsForStatistics.Count == 0)
@@ -704,7 +706,8 @@ namespace P3_Projekt_WPF
             }
             else
             {
-                _statisticsController.RequestStatisticsDate(DateTime.Today, DateTime.Today);
+                string queryString = _statisticsController.GetQueryString(false, 0, false, 0, false, "");
+                _statisticsController.RequestStatisticsDate(DateTime.Today, DateTime.Today, queryString);
                 ResetStatisticsView();
                 DisplayStatistics();
             }
@@ -716,19 +719,19 @@ namespace P3_Projekt_WPF
             label_NoTransactions.Visibility = Visibility.Hidden;
         }
 
-        private void CheckboxChecker(ref string id, ref string brand, ref Group group)
+        private void CheckboxChecker(ref bool id, ref bool brand, ref bool group)
         {
             if (!checkBox_Product.IsChecked.Value)
             {
-                id = null;
+                id = true;
             }
             if (!checkBox_Brand.IsChecked.Value)
             {
-                brand = null;
+                brand = true;
             }
             if (!checkBox_Group.IsChecked.Value)
             {
-                group = null;
+                group = true;
             }
         }
 

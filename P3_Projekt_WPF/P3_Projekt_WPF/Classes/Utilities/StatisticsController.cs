@@ -80,7 +80,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
 
         }
 
-        public void RequestStatisticsDate(DateTime from, DateTime to)
+        public void RequestStatisticsDate(DateTime from, DateTime to, string queryString)
         {
             Stopwatch Timer1 = new Stopwatch();
             Timer1.Start();
@@ -88,9 +88,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
             _saleTransactions = new ConcurrentQueue<SaleTransaction>();
             int fromUnixTime = Utils.GetUnixTime(from);
             int toUnixTime = Utils.GetUnixTime(EndDate(to));
-            string requestStatisticsQuery =
-            $"SELECT * FROM `sale_transactions` WHERE UNIX_TIMESTAMP(`datetime`) >= '{fromUnixTime}' AND UNIX_TIMESTAMP(`datetime`) <= '{toUnixTime}';";
-            _dataQueue = Mysql.RunQueryWithReturnQueue(requestStatisticsQuery).RowData;
+            _dataQueue = Mysql.RunQueryWithReturnQueue(queryString).RowData;
             int TransCount = _dataQueue.Count;
             CreateThreads();
             ThreadWork();
@@ -111,7 +109,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
             return date + dayEnd;
         }
 
-        public void FilterByParameters(string productID, string brand, Group group)
+        /*public void FilterByParameters(string productID, string brand, Group group)
         {
             if (productID != null)
             {
@@ -125,7 +123,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
             {
                 TransactionsForStatistics = TransactionsForStatistics.Where(x => x.GetGroupID() == group.ID).ToList();
             }
-        }
+        }*/
 
 
         /*public StatisticsListItem GetReceiptStatistics()
