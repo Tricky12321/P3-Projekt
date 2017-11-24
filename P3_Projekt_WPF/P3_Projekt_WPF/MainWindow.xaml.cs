@@ -1114,19 +1114,19 @@ namespace P3_Projekt_WPF
             PayWithAmount.Clear();
         }
 
-        private MoveProduct productMove;
+        private MoveProduct _productMove;
         private void btn_MoveProduct_Click(object sender, RoutedEventArgs e)
         {
-            if(productMove == null)
+            if(_productMove == null)
             {
-                productMove = new MoveProduct(_storageController, _POSController);
-                productMove.Closing += delegate
+                _productMove = new MoveProduct(_storageController, _POSController);
+                _productMove.Closing += delegate
                 {
-                    productMove = null;
+                    _productMove = null;
                 };
             }
-            productMove.Show();
-            productMove.Activate();
+            _productMove.Show();
+            _productMove.Activate();
         }
 
         private void MoveProductWindow()
@@ -1160,5 +1160,20 @@ namespace P3_Projekt_WPF
             e.Handled = Utils.RegexCheckNumber(input.Text.Insert(input.CaretIndex, e.Text));
         }
 
+        private OrderTransactionWindow _orderTransactionWindow;
+
+        private void button_OrderTransaction_Click(object sender, RoutedEventArgs e)
+        {
+            if(_orderTransactionWindow == null)
+            {
+                _orderTransactionWindow = new OrderTransactionWindow(_storageController, _POSController);
+                _orderTransactionWindow.Closing += delegate
+                {
+                    _orderTransactionWindow = null;
+                };
+            }
+            _orderTransactionWindow.Show();
+            _orderTransactionWindow.Activate();
+        }
     }
 }
