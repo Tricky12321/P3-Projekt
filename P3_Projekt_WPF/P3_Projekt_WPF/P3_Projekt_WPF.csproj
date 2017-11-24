@@ -130,6 +130,7 @@
     <Compile Include="Classes\Exceptions\WrongProductTypeException.cs" />
     <Compile Include="Classes\Exceptions\ProductAlreadyDeActivated.cs" />
     <Compile Include="Classes\Group.cs" />
+    <Compile Include="Classes\Payment.cs" />
     <Compile Include="Classes\Product\BaseProduct.cs" />
     <Compile Include="Classes\Product\Product.cs" />
     <Compile Include="Classes\Product\SearchedProduct.cs" />
@@ -177,8 +178,8 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="ResovleTempProduct.xaml.cs">
-      <DependentUpon>ResovleTempProduct.xaml</DependentUpon>
+    <Compile Include="ResovlveTempProduct.xaml.cs">
+      <DependentUpon>ResovlveTempProduct.xaml</DependentUpon>
     </Compile>
     <Compile Include="SaleSearchResultItemControl.xaml.cs">
       <DependentUpon>SaleSearchResultItemControl.xaml</DependentUpon>
@@ -231,7 +232,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="ResovleTempProduct.xaml">
+    <Page Include="ResovlveTempProduct.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

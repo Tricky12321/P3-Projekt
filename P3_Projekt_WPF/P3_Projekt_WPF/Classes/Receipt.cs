@@ -14,17 +14,18 @@ namespace P3_Projekt_WPF.Classes
         public static int IDCounter { get { return _idCounter; } set { _idCounter = value; } }
         public int ID;
         public List<SaleTransaction> Transactions = new List<SaleTransaction>();
+        public List<Payment> Payments = new List<Payment>();
         public int NumberOfProducts;
         public decimal TotalPrice;
-        public PaymentMethod_Enum PaymentMethod;
         public DateTime Date;
- 
+        public decimal PaidPrice => Payments.Sum(x => x.Amount);
+        public decimal TotalPriceToPay = -1m;
         public Receipt()
         {
             ID = _idCounter++;
             Date = DateTime.Now;
         }
-        
+
         public Receipt(int ID)
         {
             this.ID = ID;
@@ -129,7 +130,7 @@ namespace P3_Projekt_WPF.Classes
         {
             var products = new List<BaseProduct>();
 
-            foreach(SaleTransaction transaction in Transactions)
+            foreach (SaleTransaction transaction in Transactions)
             {
                 products.Add(transaction.Product);
             }
@@ -170,23 +171,22 @@ namespace P3_Projekt_WPF.Classes
             NumberOfProducts = Convert.ToInt32(Table.Values[1]);
             TotalPrice = Convert.ToDecimal(Table.Values[2]);
             //PaidPrice = Convert.ToDecimal(Table.Values[3]);
-            PaymentMethod = (PaymentMethod_Enum)Convert.ToInt32(Table.Values[3]);
             string sql = $"SELECT * FROM `sale_transactions` WHERE `receipt_id` = '{ID}' AND `amount` != 0";
-            try
+            TableDecode Results = Mysql.RunQueryWithReturn(sql);
+            Transactions = new List<SaleTransaction>();
+            foreach (var item in Results.RowData)
             {
-                TableDecode Results = Mysql.RunQueryWithReturn(sql);
-                Transactions = new List<SaleTransaction>();
-                foreach (var item in Results.RowData)
-                {
-                    SaleTransaction newSaleTransaction = new SaleTransaction(item);
-                    Transactions.Add(newSaleTransaction);
-                }
+                SaleTransaction newSaleTransaction = new SaleTransaction(item);
+                Transactions.Add(newSaleTransaction);
             }
-            catch (EmptyTableException)
+            sql = $"SELECT * FROM `payments` WHERE `receipt_id` = '{ID}'";
+            TableDecode Pays = Mysql.RunQueryWithReturn(sql);
+            Payments = new List<Payment>();
+            foreach (var item in Pays.RowData)
             {
-                // Ignorer EmptyTableException
+                Payment NewPayment = new Payment(item);
+                Payments.Add(NewPayment);
             }
-
             Date = Convert.ToDateTime(Table.Values[5]);
         }
 
@@ -194,13 +194,17 @@ namespace P3_Projekt_WPF.Classes
         {
             int ID = GetNextID();
             this.ID = ID;
-            string sql = "INSERT INTO `receipt` (`id`, `number_of_products`, `total_price`, `payment_method`)"+
-                $" VALUES (NULL, '{NumberOfProducts}', '{TotalPrice}', '{Convert.ToInt32(PaymentMethod)}')";
+            string sql = "INSERT INTO `receipt` (`id`, `number_of_products`, `total_price`)" +
+                $" VALUES (NULL, '{NumberOfProducts}', '{TotalPrice}')";
             Mysql.RunQuery(sql);
             foreach (var item in Transactions)
             {
                 item.ReceiptID = ID;
                 item.UploadToDatabase();
+            }
+            foreach (var payment in Payments)
+            {
+                payment.UploadToDatabase();
             }
         }
 
@@ -209,12 +213,10 @@ namespace P3_Projekt_WPF.Classes
             string sql = $"UPDATE `receipt` SET " +
                 $"`number_of_products` = '{NumberOfProducts}'," +
                 $"`total_price` = '{TotalPrice}'," +
-                //$"`paid_price` = '{PaidPrice}'," +
-                $"`payment_method` = '{Convert.ToInt32(PaymentMethod)}'," +
-                $"`datetime` = FROM_UNIXTIME('{Utils.GetUnixTime(Date)}') "+
+                $"`datetime` = FROM_UNIXTIME('{Utils.GetUnixTime(Date)}') " +
                 $"WHERE `id` = {ID};";
             Mysql.RunQuery(sql);
         }
-        
+
     }
 }
