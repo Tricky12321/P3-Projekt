@@ -449,11 +449,36 @@ namespace P3_Projekt_WPF
         {
             if (transaction.Product is TempProduct)
             {
-                listView_Receipt.Items.Add(new ReceiptListItem { String_Product = (transaction.Product as TempProduct).Description, Amount = transaction.Amount, Price = $"{transaction.GetProductPrice()}", IDTag = $"t{transaction.Product.ID}" });
+                listView_Receipt.Items.Add(new ReceiptListItem
+                {
+                    String_Product = (transaction.Product as TempProduct).Description,
+                    Amount = transaction.Amount,
+                    Price = $"{transaction.TotalPrice}",
+                    IDTag = $"t{transaction.Product.ID}"
+                });
+            }
+            else if (transaction.Product is Product && (transaction.Product as Product).DiscountBool)
+            {
+                listView_Receipt.Items.Add(new ReceiptListItem
+                {
+                    String_Product = transaction.GetProductName(),
+                    Amount = transaction.Amount,
+                    //Price = $"{((transaction.Product as Product).DiscountPrice)*transaction.Amount}",
+                    Price = $"{transaction.TotalPrice}",
+                    IDTag = transaction.Product.ID.ToString(),
+                    TransID = transaction.GetID(),
+                });
             }
             else
             {
-                listView_Receipt.Items.Add(new ReceiptListItem { String_Product = transaction.GetProductName(), Amount = transaction.Amount, Price = $"{transaction.GetProductPrice()}", IDTag = transaction.Product.ID.ToString() });
+                listView_Receipt.Items.Add(new ReceiptListItem
+                {
+                    String_Product = transaction.GetProductName(),
+                    Amount = transaction.Amount,
+                    Price = $"{transaction.TotalPrice}",
+                    IDTag = transaction.Product.ID.ToString(),
+                    TransID = transaction.GetID(),
+                });
             }
         }
 
@@ -492,10 +517,6 @@ namespace P3_Projekt_WPF
             UpdateReceiptList();
         }
 
-        private void listView_Receipt_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-
-        }
 
         private void TextBlock_TargetUpdated(object sender, DataTransferEventArgs e)
         {
@@ -1191,6 +1212,16 @@ namespace P3_Projekt_WPF
                 }
             }
             listBox_SearchResultsSaleTab.Visibility = Visibility.Hidden;
+        }
+
+        private void listView_Receipt_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            btn_discount.IsHitTestVisible = true;
+        }
+
+        private void btn_discount_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }
