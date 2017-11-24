@@ -41,7 +41,7 @@
                     <Button x:Name="btn_search" Content="🔎" Background="#FFC5C5C5" Margin="0,10,10,0" VerticalAlignment="Top" Height="50" Style="{StaticResource Flat_Button}" FontSize="21" HorizontalAlignment="Right" Width="50" Grid.Column="1" Click="btn_search_Click"/>
 
                     <Grid Grid.ColumnSpan="2">
-                        <TextBox Padding="10,0,0,0" x:Name="txtBox_SearchField" LostFocus="SearchFieldLostFocus" Margin="0,10,74,12" FontSize="33" HorizontalAlignment="Right" Width="503">
+                        <TextBox Padding="10,0,0,0" x:Name="txtBox_SearchField" MouseDoubleClick="SelectAddress" GotKeyboardFocus="SelectAddress" PreviewMouseLeftButtonDown="SelectivelyIgnoreMouseButton" LostFocus="SearchFieldLostFocus" Margin="0,10,74,12" FontSize="33" HorizontalAlignment="Right" Width="503">
                             <TextBox.Resources>
                                 <Style TargetType="{x:Type Border}">
                                     <Setter Property="CornerRadius" Value="10"/>
@@ -75,7 +75,7 @@
 
 
 
-                    <TextBox Padding="10,0,0,0" TabIndex="1" TextCompositionManager.PreviewTextInput="TextInputNoNumber" x:Name="textBox_AddProductID" Margin="10,10,0,0" FontSize="33" HorizontalAlignment="Left" Width="340" Grid.Row="1" Height="50" VerticalAlignment="Top">
+                    <TextBox Padding="10,0,0,0" TabIndex="1" MouseDoubleClick="SelectAddress" GotKeyboardFocus="SelectAddress" PreviewMouseLeftButtonDown="SelectivelyIgnoreMouseButton" TextCompositionManager.PreviewTextInput="TextInputNoNumber" x:Name="textBox_AddProductID" Margin="10,10,0,0" FontSize="33" HorizontalAlignment="Left" Width="340" Grid.Row="1" Height="50" VerticalAlignment="Top">
                         <TextBox.Resources>
                             <Style TargetType="{x:Type Border}">
                                 <Setter Property="CornerRadius" Value="10"/>
@@ -94,7 +94,7 @@
                             </Style>
                         </TextBlock.Style>
                     </TextBlock>
-                    <TextBox x:Name="textBox_ProductAmount" TabIndex="2" TextCompositionManager.PreviewTextInput="TextInputNoNumber" Padding="10,0,0,0" HorizontalAlignment="Left" Margin="480,10,0,0" TextWrapping="Wrap" Text="1" Width="70" MaxLines="1" MaxLength="2" FontSize="33" Grid.Row="1" Height="50" VerticalAlignment="Top">
+                    <TextBox x:Name="textBox_ProductAmount" MouseDoubleClick="SelectAddress" GotKeyboardFocus="SelectAddress" PreviewMouseLeftButtonDown="SelectivelyIgnoreMouseButton" TabIndex="2" TextCompositionManager.PreviewTextInput="TextInputNoNumber" Padding="10,0,0,0" HorizontalAlignment="Left" Margin="480,10,0,0" TextWrapping="Wrap" Text="1" Width="70" MaxLines="1" MaxLength="2" FontSize="33" Grid.Row="1" Height="50" VerticalAlignment="Top">
                         <TextBox.Resources>
                             <Style TargetType="{x:Type Border}">
                                 <Setter Property="CornerRadius" Value="10"/>
@@ -104,7 +104,7 @@
                     <Button x:Name="btn_Temporary"  Content="Opret Midlertidigt Produkt" Margin="0,0,10,10" Background="#FFC5C5C5" Style="{StaticResource Flat_Button}" Height="50" Width="400" VerticalAlignment="Bottom" HorizontalAlignment="Right" Grid.Row="1" Click="btn_Temporary_Click"/>
                     <Button x:Name="btn_Cancel"  Content="Afbryd" Margin="13,0,0,10" Background="#FFC5C5C5" Style="{StaticResource Flat_Button}" Height="50" VerticalAlignment="Bottom" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Left" Width="260" Click="btn_Cancel_Click"/>
 
-                    <TextBox TextCompositionManager.PreviewTextInput="TextInputNoNumberWithComma" Padding="10,0,0,0" x:Name="PayWithAmount" Margin="10,0,275,121" FontSize="33" Grid.Row="1" Height="50" VerticalAlignment="Bottom" Grid.Column="1">
+                    <TextBox TextCompositionManager.PreviewTextInput="TextInputNoNumberWithComma" MouseDoubleClick="SelectAddress" GotKeyboardFocus="SelectAddress" PreviewMouseLeftButtonDown="SelectivelyIgnoreMouseButton" Padding="10,0,0,0" x:Name="PayWithAmount" Margin="10,0,275,121" FontSize="33" Grid.Row="1" Height="50" VerticalAlignment="Bottom" Grid.Column="1">
                         <TextBox.Resources>
                             <Style TargetType="{x:Type Border}">
                                 <Setter Property="CornerRadius" Value="10"/>
@@ -225,7 +225,9 @@
                                 <RowDefinition Height="2*"/>
                             </Grid.RowDefinitions>
                             <Image x:Name="image_ChosenProduct" Margin="10,10,10,10"/>
-                            <TextBlock x:Name="textBlock_ChosenProduct" TextWrapping="Wrap" Grid.Row="1" Margin="10,0,10,64" FontSize="20"/>
+                            <ScrollViewer Grid.Row="1" Margin="10,0,0,64" VerticalScrollBarVisibility="Auto" HorizontalAlignment="Left" Width="403" >
+                                <TextBlock x:Name="textBlock_ChosenProduct" TextWrapping="Wrap" FontSize="20" Height="auto" Width="403"/>
+                            </ScrollViewer>
                         </Grid>
                     </Border>
                     <TextBox Padding="10,0,0,0" x:Name="txtBox_SearchField_Storage" Margin="0,10,74,0" FontSize="33" HorizontalAlignment="Right" Width="503" Grid.Column="0" Grid.ColumnSpan="2" Height="50" VerticalAlignment="Top">
@@ -250,7 +252,7 @@
                     <Button x:Name="btn_search_Storage" Content="🔎" Background="#FF767676" Margin="0,10,10,0" VerticalAlignment="Top" Height="50" Style="{StaticResource Flat_Button}" FontSize="21" HorizontalAlignment="Right" Width="50" Grid.Column="1" Click="btn_search_Storage_Click"/>
                     <Button x:Name="btn_EditProduct" Content="Rediger Produkt" Margin="0,0,10,10" Style="{StaticResource Flat_Button}" Grid.Column="1" HorizontalAlignment="Right" Width="250" Height="50" VerticalAlignment="Bottom" Click="EditProductClick" Visibility="Hidden"/>
                     <Border BorderBrush="Black" BorderThickness="1" Margin="0,71,0,-103" HorizontalAlignment="Right" Width="1"/>
-                    <Button x:Name="button_OrderTransaction" Style="{StaticResource Flat_Button}" Background="#FFC5C5C5" Content="Modtag prodkter" HorizontalAlignment="Left" Height="50" Margin="275,10,0,0" VerticalAlignment="Top" Width="250"/>
+                    <Button x:Name="button_OrderTransaction" Style="{StaticResource Flat_Button}" Background="#FFC5C5C5" Content="Modtag produkter" HorizontalAlignment="Left" Height="50" Margin="275,10,0,0" VerticalAlignment="Top" Width="260" Click="button_OrderTransaction_Click"/>
                 </Grid>
             </TabItem>
 
@@ -505,25 +507,7 @@
                         <TabItem Header="Lager" x:Name="settingsTab" Width="300" Height="70">
                             <Grid>
                                 <Button Style="{StaticResource Flat_Button}" x:Name="btn_PictureFilePath" Content="Vælg billedmappe til produkter" HorizontalAlignment="Left" Margin="10,0,0,10" Width="466" Click="btn_PictureFilePath_Click" Height="100" VerticalAlignment="Bottom" />
-                                <TextBox x:Name="textBox_IceID" Text="" TextCompositionManager.PreviewTextInput="TextInputNoNumber" FontSize="30" Width="84" Margin="1257,0,0,21" HorizontalAlignment="Left" Height="50" VerticalAlignment="Bottom">
-                                    <TextBox.Resources>
-                                        <Style TargetType="{x:Type Border}">
-                                            <Setter Property="CornerRadius" Value="10"/>
-                                        </Style>
-                                    </TextBox.Resources>
-                                </TextBox>
-                                <TextBlock IsHitTestVisible="False" Text="ID" Margin="1266,0,0,15" Foreground="DarkGray" FontSize="30" HorizontalAlignment="Left" Width="64" Height="50" VerticalAlignment="Bottom">
-                                    <TextBlock.Style>
-                                        <Style TargetType="{x:Type TextBlock}">
-                                            <Setter Property="Visibility" Value="Collapsed"/>
-                                            <Style.Triggers>
-                                                <DataTrigger Binding="{Binding Text, ElementName=textBox_IceID}" Value="">
-                                                    <Setter Property="Visibility" Value="Visible"/>
-                                                </DataTrigger>
-                                            </Style.Triggers>
-                                        </Style>
-                                    </TextBlock.Style>
-                                </TextBlock>
+
                                 <Grid Margin="10,10,10,0" Height="430" Width="1024" MinWidth="900" VerticalAlignment="Top">
 
                                     <ListView x:Name="Header_StorageRooms" Panel.ZIndex="2" Margin="0,60,0,0" Height="50" VerticalAlignment="Top">

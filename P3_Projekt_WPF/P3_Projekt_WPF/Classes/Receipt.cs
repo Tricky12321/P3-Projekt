@@ -165,6 +165,14 @@ namespace P3_Projekt_WPF.Classes
             CreateFromRow(Mysql.RunQueryWithReturn(sql).RowData[0]);
         }
 
+        public void CreateFromRow_NORECUR(Row Table)
+        {
+            ID = Convert.ToInt32(Table.Values[0]);
+            NumberOfProducts = Convert.ToInt32(Table.Values[1]);
+            TotalPrice = Convert.ToDecimal(Table.Values[2]);
+            Date = Convert.ToDateTime(Table.Values[5]);
+        }
+
         public void CreateFromRow(Row Table)
         {
             ID = Convert.ToInt32(Table.Values[0]);
