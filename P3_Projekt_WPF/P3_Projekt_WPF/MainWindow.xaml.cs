@@ -950,6 +950,8 @@ namespace P3_Projekt_WPF
         public void SearchFieldLostFocus(object sender, RoutedEventArgs e)
         {
             listBox_SearchResultsSaleTab.Visibility = Visibility.Hidden;
+            listBox_SearchResultsSaleTab.UnselectAll();
+            listView_Receipt.UnselectAll();
         }
 
         private void EnterKeyPressedSearch(object sender, KeyEventArgs e)
@@ -1187,12 +1189,6 @@ namespace P3_Projekt_WPF
             Utils.SaveDBData(this);
         }
 
-        private void Receipt_Click(object sender, RoutedEventArgs e)
-        {
-            listView_Receipt.SelectionChanged += delegate { Mouse.Capture(listView_Receipt); };
-            listView_Receipt.LostFocus += delegate { ReleaseMouseCapture(); listView_Receipt.UnselectAll(); };
-        }
-
         private void PortNumberControl(object sender, TextCompositionEventArgs e)
         {
             TextBox input = (e.OriginalSource as TextBox);
@@ -1221,7 +1217,12 @@ namespace P3_Projekt_WPF
 
         private void btn_discount_Click(object sender, RoutedEventArgs e)
         {
-
+            ReceiptListItem selectedProduct = listView_Receipt.SelectedItem as ReceiptListItem;
+            decimal customDiscount = Convert.ToDecimal(textBox_discount.Text);
+            _POSController.PlacerholderReceipt.Transactions.Where(x => x.GetID() == selectedProduct.TransID).First().Price = customDiscount;
+            _POSController.PlacerholderReceipt.UpdateTotalPrice();
+            UpdateReceiptList();
+            Debug.Print(selectedProduct.String_Product);
         }
     }
 }
