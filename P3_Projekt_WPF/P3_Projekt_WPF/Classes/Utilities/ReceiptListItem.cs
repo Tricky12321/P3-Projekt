@@ -12,5 +12,6 @@ namespace P3_Projekt_WPF.Classes.Utilities
         public string Price { get; set; }
         public int Amount { get; set; }
         public string IDTag { get; set; }
+        public int TransID { get; set; }
     }
 }

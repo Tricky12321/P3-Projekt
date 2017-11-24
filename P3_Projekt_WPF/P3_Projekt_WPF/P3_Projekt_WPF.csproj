@@ -170,6 +170,9 @@
     <Compile Include="MoveProduct.xaml.cs">
       <DependentUpon>MoveProduct.xaml</DependentUpon>
     </Compile>
+    <Compile Include="OrderTransactionWindow.xaml.cs">
+      <DependentUpon>OrderTransactionWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ProductControl.xaml.cs">
       <DependentUpon>ProductControl.xaml</DependentUpon>
     </Compile>
@@ -225,6 +228,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="MoveProduct.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="OrderTransactionWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
