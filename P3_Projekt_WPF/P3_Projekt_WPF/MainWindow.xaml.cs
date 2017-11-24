@@ -62,7 +62,6 @@ namespace P3_Projekt_WPF
             this.KeyDown += new KeyEventHandler(CtrlHookDown);
             this.KeyDown += new KeyEventHandler(EnterKeyPressedSearch);
             this.KeyUp += new KeyEventHandler(CtrlHookUp);
-            this.WindowState = WindowState.Maximized;
 
             LoadingTimer.Stop();
             OutputList.Add("[TOTAL TIMER] took " + LoadingTimer.ElapsedMilliseconds + "ms");
@@ -75,9 +74,10 @@ namespace P3_Projekt_WPF
 
         public void ReloadProducts()
         {
+            _storageController.LoadAllProductsDictionary();
             LoadProductImages();
             LoadProductControlDictionary();
-            LoadProductGrid(_storageController.ProductDictionary);
+            LoadProductGrid(_storageController.AllProductsDictionary);
         }
 
         private void showloadform()
@@ -134,10 +134,10 @@ namespace P3_Projekt_WPF
             AddProductButton();
             Stopwatch Timer1 = new Stopwatch();
             Timer1.Start();
-            LoadProductImages();
+            ReloadProducts();
             Timer1.Stop();
             Debug.WriteLine("[LoadProductImages] took " + Timer1.ElapsedMilliseconds + "ms");
-            LoadProductGrid(_storageController.ProductDictionary);
+            LoadProductGrid(_storageController.AllProductsDictionary);
             BuildInformationTable();
             InitStatisticsTab();
             InitAdminLogin();
@@ -199,7 +199,6 @@ namespace P3_Projekt_WPF
             productGrid.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(380) });
 
             scroll_StorageProduct.Content = productGrid;
-
         }
 
         public void LoadDatabase()
@@ -242,10 +241,24 @@ namespace P3_Projekt_WPF
         }
 
         private bool _firstClick = true;
-        private Product _productToEdit = null;
+        private BaseProduct _productToEdit;
         private void EditProductClick(object sender, RoutedEventArgs e)
         {
-            CreateProduct EditProductForm = new CreateProduct(_productToEdit, _storageController, this);
+            CreateProduct EditProductForm = new CreateProduct();
+            if (_productToEdit is Product)
+            {
+                EditProductForm = new CreateProduct(_productToEdit as Product, _storageController, this);
+            }
+            else if (_productToEdit is ServiceProduct)
+            {
+                EditProductForm = new CreateProduct(_productToEdit as ServiceProduct, _storageController, this);
+            }
+            else
+            {
+                throw new WrongProductTypeException("Fejl i forsøg på at redigere produkt");
+            }
+
+
             EditProductForm.Show();
 
         }
@@ -264,18 +277,35 @@ namespace P3_Projekt_WPF
                 btn_EditProduct.Visibility = Visibility.Visible;
             }
 
-            _productToEdit = _storageController.ProductDictionary[id];
+            _productToEdit = _storageController.AllProductsDictionary[id];
             image_ChosenProduct.Source = Utils.ImageSourceForBitmap(Properties.Resources.questionmark_png);
 
-            if (_productToEdit.Image != null)
+            if (_productToEdit is Product)
             {
-                image_ChosenProduct.Source = _productToEdit.Image.Source;
-            }
+                if ((_productToEdit as Product).Image != null)
+                {
+                    image_ChosenProduct.Source = (_productToEdit as Product).Image.Source;
+                }
 
-            textBlock_ChosenProduct.Text = $"ID: {_productToEdit.ID}\nNavn: {_productToEdit.Name}\nGruppe: {_storageController.GroupDictionary[_productToEdit.ProductGroupID].Name}\nMærke: {_productToEdit.Brand}\nPris: {_productToEdit.SalePrice}\nTilbudspris: {_productToEdit.DiscountPrice}\nIndkøbspris: {_productToEdit.PurchasePrice}\nLagerstatus:";
-            foreach (KeyValuePair<int, int> storageWithAmount in _productToEdit.StorageWithAmount)
+                textBlock_ChosenProduct.Text = $"ID: {_productToEdit.ID}\nNavn: {(_productToEdit as Product).Name}\nGruppe: {_storageController.GroupDictionary[(_productToEdit as Product).ProductGroupID].Name}\nMærke: {(_productToEdit as Product).Brand}\nPris: {_productToEdit.SalePrice}\nTilbudspris: {(_productToEdit as Product).DiscountPrice}\nIndkøbspris: {(_productToEdit as Product).PurchasePrice}\nLagerstatus:";
+                foreach (KeyValuePair<int, int> storageWithAmount in (_productToEdit as Product).StorageWithAmount)
+                {
+                    textBlock_ChosenProduct.Text += $"\n  - {_storageController.StorageRoomDictionary[storageWithAmount.Key].Name} har {storageWithAmount.Value} stk.";
+                }
+
+            }
+            else if (_productToEdit is ServiceProduct)
             {
-                textBlock_ChosenProduct.Text += $"\n  - {_storageController.StorageRoomDictionary[storageWithAmount.Key].Name} har {storageWithAmount.Value} stk.";
+                if ((_productToEdit as ServiceProduct).Image != null)
+                {
+                    image_ChosenProduct.Source = (_productToEdit as ServiceProduct).Image.Source;
+                }
+
+                textBlock_ChosenProduct.Text = $"ID: {_productToEdit.ID}\nNavn: {(_productToEdit as ServiceProduct).Name}\nGruppe: {_storageController.GroupDictionary[(_productToEdit as ServiceProduct).ServiceProductGroupID].Name}\nPris: {_productToEdit.SalePrice}\nGruppepris: {(_productToEdit as ServiceProduct).GroupPrice}";
+            }
+            else
+            {
+                throw new WrongProductTypeException("Kunne ikke vise information for et produkt af denne type " + _productToEdit.GetType().ToString());
             }
         }
 
@@ -286,7 +316,7 @@ namespace P3_Projekt_WPF
 
         public void UpdateStorageTab(object sender, RoutedEventArgs e)
         {
-            LoadProductGrid(_storageController.ProductDictionary);
+            LoadProductGrid(_storageController.AllProductsDictionary);
         }
 
         private void LoadProductControlDictionary()
@@ -294,8 +324,11 @@ namespace P3_Projekt_WPF
             Stopwatch Timer2 = new Stopwatch();
             Timer2.Start();
             _productControlDictionary.Clear();
-            var ProductList = _storageController.ProductDictionary.OrderBy(x => x.Key);
-            foreach (var product in ProductList)
+
+
+
+            IOrderedEnumerable<KeyValuePair<int, BaseProduct>> ProductList = _storageController.AllProductsDictionary.OrderBy(x => x.Key);
+            foreach (KeyValuePair<int, BaseProduct> product in ProductList)
             {
                 ProductControl productControl = new ProductControl(product.Value, _storageController.GroupDictionary);
                 productControl.btn_ShowMoreInformation.Tag = product.Value.ID;
@@ -307,7 +340,7 @@ namespace P3_Projekt_WPF
             Debug.WriteLine("[LoadProductControlDictionary] took " + Timer2.ElapsedMilliseconds + "ms");
         }
 
-        public void LoadProductGrid(ConcurrentDictionary<int, Product> productDictionary)
+        public void LoadProductGrid(ConcurrentDictionary<int, BaseProduct> productDictionary)
         {
             productGrid.RowDefinitions.Clear();
             productGrid.ColumnDefinitions.Clear();
@@ -316,7 +349,7 @@ namespace P3_Projekt_WPF
             productGrid.Children.Add(addProductButton);
 
             int i = 1;
-            var ProductListSorted = productDictionary.OrderBy(x => x.Key);
+            var ProductListSorted = _storageController.AllProductsDictionary.OrderBy(x => x.Key);
             foreach (var product in ProductListSorted)
             {
                 if (i % 5 == 0)
@@ -435,7 +468,7 @@ namespace P3_Projekt_WPF
 
         private void btn_DeleteProduct_Click(object sender, RoutedEventArgs e)
         {
-            if((sender as Button).Tag.ToString().Contains("t"))
+            if ((sender as Button).Tag.ToString().Contains("t"))
             {
                 string tempID = Convert.ToString((sender as Button).Tag);
                 _POSController.PlacerholderReceipt.RemoveTransaction(tempID);
@@ -463,11 +496,15 @@ namespace P3_Projekt_WPF
         {
             int inputInt;
             int.TryParse(textBox_AddProductID.Text, out inputInt);
-            Product ProductToAdd = _POSController.GetProductFromID(inputInt);
+            BaseProduct ProductToAdd = _POSController.GetProductFromID(inputInt);
             if (ProductToAdd != null)
             {
                 _POSController.AddSaleTransaction(ProductToAdd, int.Parse(textBox_ProductAmount.Text));
                 UpdateReceiptList();
+
+                textBox_AddProductID.Text = string.Empty;
+                textBox_ProductAmount.Text = "1";
+                textBox_AddProductID.SelectAll();
             }
             else
             {
@@ -521,7 +558,7 @@ namespace P3_Projekt_WPF
 
         private bool checkIfTooManyQuickButtons(int maximumButtons)
         {
-            if(_settingsController.quickButtonList.Count < maximumButtons)
+            if (_settingsController.quickButtonList.Count < maximumButtons)
             {
                 return true;
             }
@@ -802,7 +839,7 @@ namespace P3_Projekt_WPF
                     _resolveTempProduct.button_Merge.IsEnabled = true;
                     return productToMerge;
                 }
-                catch (System.Collections.Generic.KeyNotFoundException)
+                catch (KeyNotFoundException)
                 {
                     _resolveTempProduct.Label_MergeInfo.Content = "Ugyldigt Produkt ID";
                     _resolveTempProduct.button_Merge.IsEnabled = false;
@@ -829,16 +866,41 @@ namespace P3_Projekt_WPF
             var searchResults = productSearchResults.Values.OrderByDescending(x => x.BrandMatch + x.GroupMatch + x.NameMatch);
             foreach (SearchProduct product in searchResults)
             {
-                var item = new ListBoxItem();
-                item.Tag = product.CurrentProduct.ID;
-                item.Content = new SaleSearchResultItemControl(product.CurrentProduct.Image, $"{product.CurrentProduct.Name}\n{product.CurrentProduct.ID}");
-                listBox_SearchResultsSaleTab.Items.Add(item);
+                if (product.CurrentProduct is Product)
+                {
+                    var item = new ListBoxItem();
+                    item.Tag = product.CurrentProduct.ID;
+                    item.Content = new SaleSearchResultItemControl((product.CurrentProduct as Product).Image, $"{(product.CurrentProduct as Product).Name}\n{product.CurrentProduct.ID}");
+                    listBox_SearchResultsSaleTab.Items.Add(item);
+                }
+                else if (product.CurrentProduct is ServiceProduct)
+                {
+                    var item = new ListBoxItem();
+                    item.Tag = product.CurrentProduct.ID;
+                    item.Content = new SaleSearchResultItemControl((product.CurrentProduct as ServiceProduct).Image, $"{(product.CurrentProduct as ServiceProduct).Name}\n{product.CurrentProduct.ID}");
+                    item.Background = Brushes.LightBlue;
+                    listBox_SearchResultsSaleTab.Items.Add(item);
+                    listBox_SearchResultsSaleTab.SelectedIndex = 0;
+                }
+                else
+                {
+                    throw new WrongProductTypeException("Du kan ikke søge efter denne type product");
+                }
+            }
+            if (listBox_SearchResultsSaleTab.Items.Count > 0)
+            {
+                listBox_SearchResultsSaleTab.Focus();
+                listBox_SearchResultsSaleTab.SelectedIndex = 0;
             }
         }
 
         public void SearchFieldLostFocus(object sender, RoutedEventArgs e)
         {
-            listBox_SearchResultsSaleTab.Visibility = Visibility.Hidden;
+            Thread.Sleep(5);
+            if (!listBox_SearchResultsSaleTab.IsFocused)
+            {
+                listBox_SearchResultsSaleTab.Visibility = Visibility.Hidden;
+            }
         }
 
         private void EnterKeyPressedSearch(object sender, KeyEventArgs e)
@@ -849,7 +911,11 @@ namespace P3_Projekt_WPF
             }
             else if (e.Key == Key.Enter && txtBox_SearchField.IsFocused)
             {
-                btn_search_Click(sender, e);
+                ///////////
+            }
+            else if (e.Key == Key.Enter && (textBox_AddProductID.IsFocused || textBox_ProductAmount.IsFocused))
+            {
+                btn_AddProduct_Click(sender, e);
             }
         }
 
@@ -883,7 +949,7 @@ namespace P3_Projekt_WPF
         public void LoadStorageRooms()
         {
             listView_StorageRoom.Items.Clear();
-            foreach (KeyValuePair<int, StorageRoom> StorageRoom in _storageController.StorageRoomDictionary.Where( x => x.Value.ID != 0))
+            foreach (KeyValuePair<int, StorageRoom> StorageRoom in _storageController.StorageRoomDictionary.Where(x => x.Value.ID != 0))
             {
                 listView_StorageRoom.Items.Add(new { storageID = StorageRoom.Key, storageName = StorageRoom.Value.Name, storageDescription = StorageRoom.Value.Description, storageEditWithID = StorageRoom.Key });
             }
@@ -963,7 +1029,8 @@ namespace P3_Projekt_WPF
                 if (PayWithAmount.Text.Length == 0)
                 {
                     PaymentAmount = Convert.ToDecimal(label_TotalPrice.Content);
-                } else
+                }
+                else
                 {
                     PaymentAmount = Convert.ToDecimal(PayWithAmount.Text);
                 }
@@ -1005,7 +1072,7 @@ namespace P3_Projekt_WPF
                     _settingsController.isAdmin = false;
                     btn_AdminLogin.Content = "Log ind";
                     image_Admin.Source = locked.ImageSource;
-                    
+
                     label_NoAdmin.Visibility = Visibility.Visible;
                 }
                 else
@@ -1028,7 +1095,7 @@ namespace P3_Projekt_WPF
             label_TotalPrice.Content = "Total";
             PayWithAmount.Clear();
         }
-        private void btn_MoveProduct_Click(object sender, RoutedEventArgs e)
+        /*private void btn_MoveProduct_Click(object sender, RoutedEventArgs e)
         {
             productMove = new MoveProduct();
             productMove.Show();
@@ -1037,6 +1104,6 @@ namespace P3_Projekt_WPF
         private MoveProduct productMove;
         private void MoveProductWindow()
         {
-        }
+        }*/
     }
 }

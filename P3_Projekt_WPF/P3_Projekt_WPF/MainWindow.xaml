@@ -69,20 +69,20 @@
                     <Button x:Name="btn_MobilePay"  Content="MobilePay" Margin="0,0,10,11" Background="#FFC5C5C5" Style="{StaticResource Flat_Button}" Click="btn_MobilePay_Click" Height="50" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="260" Grid.Column="1" Grid.Row="1"/>
                     <Grid x:Name="grid_QuickButton" Margin="10,73,5,66" Grid.Row="1"/>
                     <Border BorderBrush="Black" BorderThickness="1" Background="Black" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Left" Width="1"/>
-                    <Button x:Name="btn_AddProduct"  Content="Tilføj Produkt" Margin="568,16,12,0" Background="#FFC5C5C5" Style="{StaticResource Flat_Button}" Grid.Row="1" Height="50" VerticalAlignment="Top" Click="btn_AddProduct_Click"/>
-                    <Button x:Name="btn_PlusToReciept" Content="+" HorizontalAlignment="Left" Margin="370,17,0,0" Width="50" Style="{StaticResource Flat_Button}" RenderTransformOrigin="-0.486,0.333" Grid.Row="1" Height="50" VerticalAlignment="Top" Click="btn_PlusToReciept_Click"/>
-                    <Button x:Name="btn_MinusToReciept" Content="-" HorizontalAlignment="Left" Margin="430,17,0,0" Width="50" Style="{StaticResource Flat_Button}" FontSize="30" Grid.Row="1" Height="50" VerticalAlignment="Top" Click="btn_MinusToReciept_Click"/>
+                    <Button x:Name="btn_AddProduct"  Content="Tilføj Produkt" Margin="558,10,10,0" Background="#FFC5C5C5" Style="{StaticResource Flat_Button}" Grid.Row="1" Height="50" VerticalAlignment="Top" Click="btn_AddProduct_Click" />
+                    <Button x:Name="btn_PlusToReciept" Content="+" HorizontalAlignment="Left" Margin="360,10,0,0" Width="50" Style="{StaticResource Flat_Button}" RenderTransformOrigin="-0.486,0.333" Grid.Row="1" Height="50" VerticalAlignment="Top" Click="btn_PlusToReciept_Click"/>
+                    <Button x:Name="btn_MinusToReciept" Content="-" HorizontalAlignment="Left" Margin="420,10,0,0" Width="50" Style="{StaticResource Flat_Button}" FontSize="30" Grid.Row="1" Height="50" VerticalAlignment="Top" Click="btn_MinusToReciept_Click"/>
 
 
 
-                    <TextBox Padding="10,0,0,0"  TextCompositionManager.PreviewTextInput="TextInputNoNumber" x:Name="textBox_AddProductID" Margin="10,17,0,0" FontSize="33" HorizontalAlignment="Left" Width="350" Grid.Row="1" Height="50" VerticalAlignment="Top">
+                    <TextBox Padding="10,0,0,0" TabIndex="1" TextCompositionManager.PreviewTextInput="TextInputNoNumber" x:Name="textBox_AddProductID" Margin="10,10,0,0" FontSize="33" HorizontalAlignment="Left" Width="340" Grid.Row="1" Height="50" VerticalAlignment="Top">
                         <TextBox.Resources>
                             <Style TargetType="{x:Type Border}">
                                 <Setter Property="CornerRadius" Value="10"/>
                             </Style>
                         </TextBox.Resources>
                     </TextBox>
-                    <TextBlock IsHitTestVisible="False" Text="Tilføj Produkt med ID" Margin="24,18,0,0" Foreground="DarkGray" FontSize="33" HorizontalAlignment="Left" Width="326" Grid.Row="1" Height="50" VerticalAlignment="Top">
+                    <TextBlock IsHitTestVisible="False" Text="Tilføj Produkt med ID" Margin="24,11,0,0" Foreground="DarkGray" FontSize="33" HorizontalAlignment="Left" Width="317" Grid.Row="1" Height="50" VerticalAlignment="Top">
                         <TextBlock.Style>
                             <Style TargetType="{x:Type TextBlock}">
                                 <Setter Property="Visibility" Value="Collapsed"/>
@@ -94,7 +94,7 @@
                             </Style>
                         </TextBlock.Style>
                     </TextBlock>
-                    <TextBox x:Name="textBox_ProductAmount"  TextCompositionManager.PreviewTextInput="TextInputNoNumber" Padding="10,0,0,0" HorizontalAlignment="Left" Margin="490,17,0,0" TextWrapping="Wrap" Text="1" Width="70" MaxLines="1" MaxLength="2" FontSize="33" Grid.Row="1" Height="50" VerticalAlignment="Top">
+                    <TextBox x:Name="textBox_ProductAmount" TabIndex="2" TextCompositionManager.PreviewTextInput="TextInputNoNumber" Padding="10,0,0,0" HorizontalAlignment="Left" Margin="480,10,0,0" TextWrapping="Wrap" Text="1" Width="70" MaxLines="1" MaxLength="2" FontSize="33" Grid.Row="1" Height="50" VerticalAlignment="Top">
                         <TextBox.Resources>
                             <Style TargetType="{x:Type Border}">
                                 <Setter Property="CornerRadius" Value="10"/>
@@ -126,7 +126,7 @@
 
 
 
-                    <ListView x:Name="listView_Receipt" ScrollViewer.HorizontalScrollBarVisibility="Disabled" HorizontalContentAlignment="Stretch" Margin="10,67,10,230" Grid.Row="1" Grid.Column="1">
+                    <ListView x:Name="listView_Receipt" ScrollViewer.HorizontalScrollBarVisibility="Disabled" HorizontalContentAlignment="Stretch" Margin="10,60,10,230" Grid.Row="1" Grid.Column="1">
                         <ListView.ItemTemplate>
                             <DataTemplate>
                                 <Grid>
@@ -187,7 +187,7 @@
                         </ListView.ItemTemplate>
 
                     </ListView>
-                    <Label x:Name="label" Content="Kvittering" Margin="13,71,0,0" Height="68" VerticalAlignment="Top" FontSize="35" Grid.RowSpan="2" Grid.Column="1" HorizontalAlignment="Left" Width="312"/>
+                    <Label x:Name="label" Content="Kvittering" Margin="10,0,0,0" Height="68" VerticalAlignment="Top" FontSize="35" Grid.Column="1" HorizontalAlignment="Left" Width="312" Grid.Row="1"/>
                     <Label x:Name="label_TotalPrice" Content="Total" Margin="10,0,10,176" Grid.Row="1" VerticalAlignment="Bottom" Height="49" BorderThickness="1" Background="White" BorderBrush="#FF858585" Grid.Column="1"/>
                     <Button x:Name="btn_MergeTempProduct" Content="Ret et Midlertidigt Produkt" Background="#FFC5C5C5" HorizontalAlignment="Left" Margin="10,10,0,10" Grid.Row="0" Width="400" Style="{StaticResource Flat_Button}" Click="btn_MergeTempProduct_Click"/>
                     <ListBox x:Name="listBox_SearchResultsSaleTab"  HorizontalContentAlignment="Stretch" Visibility="Hidden" Grid.RowSpan="3" Panel.ZIndex="3" Grid.Column="1" Margin="0,57,74,0" HorizontalAlignment="Right" Width="503" Height="auto"  MaxHeight="600" VerticalAlignment="Top">
@@ -399,97 +399,98 @@
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="100"/>
                                 </Grid.RowDefinitions>
+                                <Grid Height="430" Width="1024" Margin="5,10,5,-339" VerticalAlignment="Top">
+                                        <TextBox TextCompositionManager.PreviewTextInput="TextInputNoNumber" Padding="10,0,0,0" x:Name="textBox_CreateQuickBtnID" Margin="0,0,0,0" FontSize="33" Height="50" VerticalAlignment="Top" HorizontalAlignment="Left" Width="178" MaxLength="10">
+                                            <TextBox.Resources>
+                                                <Style TargetType="{x:Type Border}">
+                                                    <Setter Property="CornerRadius" Value="10"/>
+                                                </Style>
+                                            </TextBox.Resources>
+                                        </TextBox>
+                                        <TextBlock IsHitTestVisible="False" Text="Produkt ID" Margin="11,0,0,0" Foreground="DarkGray" FontSize="33" Height="50" VerticalAlignment="Top" HorizontalAlignment="Left" Width="168">
+                                            <TextBlock.Style>
+                                                <Style TargetType="{x:Type TextBlock}">
+                                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding Text, ElementName=textBox_CreateQuickBtnID}" Value="">
+                                                            <Setter Property="Visibility" Value="Visible"/>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </TextBlock.Style>
+                                        </TextBlock>
+                                        <Button x:Name="btn_SettingFastBtnAdd" Content="Tilføj Hurtigknap" Margin="0" Background="#FFC5C5C5" Style="{StaticResource Flat_Button}" Height="50" VerticalAlignment="Top" Click="btn_SettingFastBtnAdd_Click"  Width="260" HorizontalAlignment="Right"/>
+                                        <TextBox Padding="10,0,0,0" x:Name="textBox_CreateQuickBtnName" Margin="183,0,270,0" FontSize="33" Height="50" VerticalAlignment="Top" MaxLength="30">
+                                            <TextBox.Resources>
+                                                <Style TargetType="{x:Type Border}">
+                                                    <Setter Property="CornerRadius" Value="10"/>
+                                                </Style>
+                                            </TextBox.Resources>
+                                        </TextBox>
+                                        <TextBlock IsHitTestVisible="False" Text="Knappens Navn" Margin="200,1,0,0" Foreground="DarkGray" FontSize="33" HorizontalAlignment="Left" Width="272" Height="50" VerticalAlignment="Top">
+                                            <TextBlock.Style>
+                                                <Style TargetType="{x:Type TextBlock}">
+                                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding Text, ElementName=textBox_CreateQuickBtnName}" Value="">
+                                                            <Setter Property="Visibility" Value="Visible"/>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </TextBlock.Style>
+                                        </TextBlock>
 
-                                <Grid Margin="10,10,0,-339" MinWidth="900" Height="430">
-                                    <TextBox TextCompositionManager.PreviewTextInput="TextInputNoNumber" Padding="10,0,0,0" x:Name="textBox_CreateQuickBtnID" Margin="0,0,0,0" FontSize="33" Height="50" VerticalAlignment="Top" HorizontalAlignment="Left" Width="178" MaxLength="10">
-                                        <TextBox.Resources>
-                                            <Style TargetType="{x:Type Border}">
-                                                <Setter Property="CornerRadius" Value="10"/>
-                                            </Style>
-                                        </TextBox.Resources>
-                                    </TextBox>
-                                    <TextBlock IsHitTestVisible="False" Text="Produkt ID" Margin="11,0,0,0" Foreground="DarkGray" FontSize="33" Height="50" VerticalAlignment="Top" HorizontalAlignment="Left" Width="168">
-                                        <TextBlock.Style>
-                                            <Style TargetType="{x:Type TextBlock}">
-                                                <Setter Property="Visibility" Value="Collapsed"/>
-                                                <Style.Triggers>
-                                                    <DataTrigger Binding="{Binding Text, ElementName=textBox_CreateQuickBtnID}" Value="">
-                                                        <Setter Property="Visibility" Value="Visible"/>
-                                                    </DataTrigger>
-                                                </Style.Triggers>
-                                            </Style>
-                                        </TextBlock.Style>
-                                    </TextBlock>
-                                    <Button x:Name="btn_SettingFastBtnAdd" Content="Tilføj Hurtigknap" Margin="0" Background="#FFC5C5C5" Style="{StaticResource Flat_Button}" Height="50" VerticalAlignment="Top" Click="btn_SettingFastBtnAdd_Click"  Width="260" HorizontalAlignment="Right"/>
-                                    <TextBox Padding="10,0,0,0" x:Name="textBox_CreateQuickBtnName" Margin="183,0,270,0" FontSize="33" Height="50" VerticalAlignment="Top" MaxLength="30">
-                                        <TextBox.Resources>
-                                            <Style TargetType="{x:Type Border}">
-                                                <Setter Property="CornerRadius" Value="10"/>
-                                            </Style>
-                                        </TextBox.Resources>
-                                    </TextBox>
-                                    <TextBlock IsHitTestVisible="False" Text="Knappens Navn" Margin="200,1,0,0" Foreground="DarkGray" FontSize="33" HorizontalAlignment="Left" Width="272" Height="50" VerticalAlignment="Top">
-                                        <TextBlock.Style>
-                                            <Style TargetType="{x:Type TextBlock}">
-                                                <Setter Property="Visibility" Value="Collapsed"/>
-                                                <Style.Triggers>
-                                                    <DataTrigger Binding="{Binding Text, ElementName=textBox_CreateQuickBtnName}" Value="">
-                                                        <Setter Property="Visibility" Value="Visible"/>
-                                                    </DataTrigger>
-                                                </Style.Triggers>
-                                            </Style>
-                                        </TextBlock.Style>
-                                    </TextBlock>
+                                        <ListView Panel.ZIndex="2" Margin="0,60,0,0" Height="50" VerticalAlignment="Top">
+                                            <ListView.Template>
+                                                <ControlTemplate>
+                                                    <DockPanel LastChildFill="True" Background="white">
+                                                        <Grid DockPanel.Dock="Top" Height="auto">
+                                                            <Grid.ColumnDefinitions>
+                                                                <ColumnDefinition Width="1*"/>
+                                                                <ColumnDefinition Width="120"/>
+                                                                <ColumnDefinition Width="100"/>
+                                                            </Grid.ColumnDefinitions>
+                                                            <Label Background="LightGray" Grid.Column="0" FontStyle="Italic" Content="Navn"/>
+                                                            <Label Background="LightGray" Grid.Column="1"  FontStyle="Italic" Content="ID"/>
+                                                            <Label Background="Lightgray" Grid.Column="2"/>
+                                                        </Grid>
+                                                        <ItemsPresenter/>
+                                                    </DockPanel>
+                                                </ControlTemplate>
+                                            </ListView.Template>
+                                        </ListView>
 
-                                    <ListView Panel.ZIndex="2" Margin="0,60,0,0" Height="50" VerticalAlignment="Top">
-                                        <ListView.Template>
-                                            <ControlTemplate>
-                                                <DockPanel LastChildFill="True" Background="white">
-                                                    <Grid DockPanel.Dock="Top" Height="auto">
+                                        <ListView x:Name="listView_QuickBtn" Height="320" Margin="0,110,0,0" HorizontalContentAlignment="Stretch" MinWidth="600">
+                                            <ListView.ItemTemplate>
+                                                <DataTemplate>
+                                                    <Grid>
                                                         <Grid.ColumnDefinitions>
                                                             <ColumnDefinition Width="1*"/>
                                                             <ColumnDefinition Width="100"/>
                                                             <ColumnDefinition Width="100"/>
                                                         </Grid.ColumnDefinitions>
-                                                        <Label Background="LightGray" Grid.Column="0" FontStyle="Italic" Content="Navn"/>
-                                                        <Label Background="LightGray" Grid.Column="1"  FontStyle="Italic" Content="ID"/>
-                                                        <Label Background="Lightgray" Grid.Column="2"/>
-                                                    </Grid>
-                                                    <ItemsPresenter/>
-                                                </DockPanel>
-                                            </ControlTemplate>
-                                        </ListView.Template>
-                                    </ListView>
 
-                                    <ListView x:Name="listView_QuickBtn" Height="320" Margin="0,110,0,0" HorizontalContentAlignment="Stretch" MinWidth="600">
-                                        <ListView.ItemTemplate>
-                                            <DataTemplate>
-                                                <Grid>
-                                                    <Grid.ColumnDefinitions>
-                                                        <ColumnDefinition Width="1*"/>
-                                                        <ColumnDefinition Width="100"/>
-                                                        <ColumnDefinition Width="100"/>
-                                                    </Grid.ColumnDefinitions>
+                                                        <TextBlock Text="{Binding Button_Name}" Grid.Column="0" TextWrapping="Wrap"/>
 
-                                                    <TextBlock Text="{Binding Button_Name}" Grid.Column="0" TextWrapping="Wrap"/>
+                                                        <TextBlock Text="{Binding ProductID}" Grid.Column="1" TextWrapping="Wrap"/>
 
-                                                    <TextBlock Text="{Binding ProductID}" Grid.Column="1" TextWrapping="Wrap"/>
-
-                                                    <Button Style="{StaticResource Flat_Button}"
-                                                        Content = "x"
-                                                        Width="50"
-                                                        Height="50"
-                                                        VerticalAlignment = "Center"
-                                                        Click="btn_Remove_Quick_Button"
-                                                        Tag="{Binding ProductID}"
-                                                        Grid.Column="2"
+                                                        <Button Style="{StaticResource Flat_Button}"
+                                                            Content = "x"
+                                                            Width="50"
+                                                            Height="50"
+                                                            VerticalAlignment = "Center"
+                                                            Click="btn_Remove_Quick_Button"
+                                                            Tag="{Binding ProductID}"
+                                                            Grid.Column="2"
                                             />
-                                                </Grid>
-                                            </DataTemplate>
-                                        </ListView.ItemTemplate>
-                                    </ListView>
+                                                    </Grid>
+                                                </DataTemplate>
+                                            </ListView.ItemTemplate>
+                                        </ListView>
 
-                                </Grid>
+                                    </Grid>
+
+                                
 
                             </Grid>
                         </TabItem>
@@ -524,10 +525,10 @@
                                                 <DockPanel LastChildFill="True" Background="white">
                                                     <Grid DockPanel.Dock="Top" Height="auto">
                                                         <Grid.ColumnDefinitions>
-                                                            <ColumnDefinition Width="50"/>
-                                                            <ColumnDefinition Width="206"/>
-                                                            <ColumnDefinition Width="618"/>
-                                                            <ColumnDefinition Width="150"/>
+                                                            <ColumnDefinition Width="100"/>
+                                                            <ColumnDefinition Width="230"/>
+                                                            <ColumnDefinition Width="510"/>
+                                                            <ColumnDefinition MinWidth="200"/>
                                                         </Grid.ColumnDefinitions>
                                                         <Label Background="LightGray" Grid.Column="0" FontStyle="Italic" FontSize="30" Content="ID"/>
                                                         <Label Background="LightGray" Grid.Column="1" FontStyle="Italic" FontSize="30" Content="Navn"/>
@@ -546,16 +547,16 @@
                                                 <Grid>
                                                     <Grid.ColumnDefinitions>
                                                         <ColumnDefinition Width="50"/>
-                                                        <ColumnDefinition Width="206*"/>
-                                                        <ColumnDefinition Width="608*"/>
+                                                        <ColumnDefinition Width="250"/>
+                                                        <ColumnDefinition Width="510"/>
                                                         <ColumnDefinition MinWidth="200"/>
                                                     </Grid.ColumnDefinitions>
 
                                                     <TextBlock VerticalAlignment = "Center" Text="{Binding storageID}" Width="50"/>
 
-                                                    <TextBlock VerticalAlignment = "Center" Text="{Binding storageName}" Width="201" Grid.Column="1" TextWrapping="WrapWithOverflow" />
+                                                    <TextBlock VerticalAlignment = "Center" Text="{Binding storageName}" Width="150" Grid.Column="1" TextWrapping="WrapWithOverflow" />
 
-                                                    <TextBlock VerticalAlignment = "Center" Text="{Binding storageDescription}" Width="403" Grid.Column="2" Padding="0,0,10,0" TextWrapping="WrapWithOverflow"/>
+                                                    <TextBlock VerticalAlignment = "Center" Text="{Binding storageDescription}" Width="460" Grid.Column="2" Padding="0,0,10,0" TextWrapping="WrapWithOverflow"/>
 
                                                     <Button Style="{StaticResource Flat_Button}"
                                                         Grid.Column="3"
