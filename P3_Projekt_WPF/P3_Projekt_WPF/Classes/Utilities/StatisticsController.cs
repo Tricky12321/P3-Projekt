@@ -55,6 +55,31 @@ namespace P3_Projekt_WPF.Classes.Utilities
             }
         }
 
+        public string GetQueryString(bool SearchID, int IDToSearch, bool SearchGroup, int GroupToSearch, bool SearchBrand, string BrandToSearch)
+        {
+            StringBuilder NewString = new StringBuilder("SELECT `sale_transactions`.*, `products`.`brand`, `products`.`groups` " +
+                "FROM `products`, `sale_transactions` WHERE `products`.`id` = `sale_transactions`.`product_id`");
+            if (SearchID)
+            {
+                NewString.Append($" AND `products`.`id` = '{IDToSearch}'");
+            }
+            else
+            {
+                if (SearchGroup)
+                {
+                    NewString.Append($" AND `products`.`group` = '{GroupToSearch}'");
+                }
+
+                if (SearchBrand)
+                {
+                    NewString.Append($" AND `products`.`brand` = '{BrandToSearch}'");
+                }
+            }
+
+            return NewString.ToString();
+
+        }
+
         public void RequestStatisticsDate(DateTime from, DateTime to)
         {
             Stopwatch Timer1 = new Stopwatch();
