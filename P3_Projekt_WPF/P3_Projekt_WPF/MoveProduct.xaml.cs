@@ -31,11 +31,10 @@ namespace P3_Projekt_WPF
             _storageController = storageController;
             _posController = posController;
             InitializeComponent();
-            initLayout();
-
+            InitWindow();
         }
 
-        public void initLayout()
+        public void InitWindow()
         {
             //comboBox_StorageRooms.IsEnabled = false;
             comboBox_Destination.ItemsSource = _storageController.StorageRoomDictionary.Where(x => x.Key > 0).Select(x => x.Value.Name);
@@ -49,7 +48,7 @@ namespace P3_Projekt_WPF
 
         private void txtBox_SearchField_LostFocus(object sender, RoutedEventArgs e)
         {
-            listBox_SearchResultsSaleTab.Visibility = Visibility.Hidden;
+            listBox_SearchResultsSaleTab.Visibility = Visibility.Collapsed;
         }
 
         private void ListBoxItem_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
@@ -59,7 +58,7 @@ namespace P3_Projekt_WPF
 
         private void txtBox_SearchField_KeyUp(object sender, KeyEventArgs e)
         {
-            if(e.Key == Key.Enter)
+            if (e.Key == Key.Enter)
             {
                 ProductSearch();
             }
@@ -121,7 +120,7 @@ namespace P3_Projekt_WPF
 
         private void btn_MinusAmount_Click(object sender, RoutedEventArgs e)
         {
-            if(_amount >= 0)
+            if (_amount >= 0)
             {
                 --_amount;
                 textBox_ProductAmount.Text = _amount.ToString();
@@ -133,6 +132,12 @@ namespace P3_Projekt_WPF
             Product product = _posController.GetProductFromID(int.Parse(label_ProduktID.Content.ToString())) as Product;
             int sourceRoom = _storageController.StorageRoomDictionary.Where(x => x.Value.Name == comboBox_StorageRooms.Text).Select(x => x.Key).First();
             int destinationRoom = _storageController.StorageRoomDictionary.Where(x => x.Value.Name == comboBox_Destination.Text).Select(x => x.Key).First();
+
+            if (!product.StorageWithAmount.Keys.Contains(_storageController.StorageRoomDictionary.Where(x => x.Value.Name == comboBox_Destination.Text).Select(x => x.Key).First()))
+            {
+                product.StorageWithAmount.TryAdd(_storageController.StorageRoomDictionary.Where(x => x.Value.Name == comboBox_Destination.Text).Select(x => x.Key).First(), 0);
+                product.UpdateInDatabase();
+            }
             StorageTransaction storageTransaction = new StorageTransaction(product, int.Parse(textBox_ProductAmount.Text), sourceRoom, destinationRoom, _storageController.StorageRoomDictionary);
             storageTransaction.Execute();
             storageTransaction.UploadToDatabase();
@@ -147,7 +152,20 @@ namespace P3_Projekt_WPF
                 if (!char.IsDigit(e.Text, e.Text.Length - 1))
                     e.Handled = true;
             }
+        }
 
+        private void Grid_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            listBox_SearchResultsSaleTab.Visibility = Visibility.Hidden;
+        }
+
+        private void Window_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Escape)
+            {
+                
+                this.Close();
+            }
         }
     }
 }
