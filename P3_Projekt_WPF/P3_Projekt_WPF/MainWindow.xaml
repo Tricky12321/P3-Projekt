@@ -623,7 +623,7 @@
                                                     <Viewbox>
                                                         <Grid>
                                                             <Label x:Name="lbl_lcl_port" Content="Port" Margin="9,85,530,410.286"/>
-                                                            <ComboBox x:Name="cmb_lcl_port" HorizontalAlignment="Left" Margin="222,85,0,410.286" Width="523" IsEditable="True">
+                                                            <ComboBox x:Name="cmb_lcl_port" HorizontalAlignment="Left" Margin="222,85,0,410.286" Width="523" IsEditable="True" PreviewTextInput="PortNumberControl">
                                                                 <ComboBoxItem Content="3306"/>
                                                             </ComboBox>
                                                         </Grid>
