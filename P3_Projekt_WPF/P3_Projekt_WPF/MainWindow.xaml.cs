@@ -1097,11 +1097,16 @@ namespace P3_Projekt_WPF
                 {
                     adminValid = new AdminValidation();
                     adminValid.ShowDialog();
-                    _settingsController.isAdmin = true;
-                    btn_AdminLogin.Content = "Log ud";
-                    image_Admin.Source = unlocked.ImageSource;
-                    label_NoAdmin.Visibility = Visibility.Collapsed;
-
+                    adminValid.Closed += delegate
+                    {
+                        if (adminValid.IsPasswordCorrect)
+                        {
+                            _settingsController.isAdmin = true;
+                            btn_AdminLogin.Content = "Log ud";
+                            image_Admin.Source = unlocked.ImageSource;
+                            label_NoAdmin.Visibility = Visibility.Collapsed;
+                        }
+                    };
                 }
             };
         }
