@@ -25,8 +25,6 @@ using System.Collections.Concurrent;
 
 namespace P3_Projekt_WPF
 {
-
-
     public partial class MainWindow : Window
     {
         private SettingsController _settingsController;
@@ -1043,7 +1041,13 @@ namespace P3_Projekt_WPF
             if (listView_Receipt.HasItems)
             {
                 decimal PriceToPay = Convert.ToDecimal(label_TotalPrice.Content);
+                if (_POSController.PlacerholderReceipt.TotalPriceToPay == -1m)
+                {
+                    _POSController.PlacerholderReceipt.TotalPriceToPay = PriceToPay;
+                }
                 decimal PaymentAmount;
+                
+                
                 if (PayWithAmount.Text.Length == 0)
                 {
                     PaymentAmount = Convert.ToDecimal(label_TotalPrice.Content);
@@ -1053,19 +1057,18 @@ namespace P3_Projekt_WPF
                     PaymentAmount = Convert.ToDecimal(PayWithAmount.Text);
                 }
 
-                if (PriceToPay > PaymentAmount)
-                {
-                    MessageBox.Show("Det betalte beløb er ikke højere end prisen for varene.");
-                }
-                else
+                Payment NewPayment = new Payment(Receipt.GetNextID(), PaymentAmount, PaymentMethod);
+                _POSController.PlacerholderReceipt.Payments.Add(NewPayment);
+                label_TotalPrice.Content = (PriceToPay - NewPayment.Amount);
+                if (_POSController.PlacerholderReceipt.PaidPrice >= _POSController.PlacerholderReceipt.TotalPriceToPay)
                 {
                     SaleTransaction.SetStorageController(_storageController);
-                    _POSController.PlacerholderReceipt.PaymentMethod = PaymentMethod;
+                    //_POSController.PlacerholderReceipt.PaymentMethod = PaymentMethod;
                     Thread NewThread = new Thread(new ThreadStart(_POSController.ExecuteReceipt));
                     NewThread.Name = "ExecuteReceipt Thread";
                     NewThread.Start();
                     listView_Receipt.Items.Clear();
-                    label_TotalPrice.Content = "Retur: " + (PriceToPay - PaymentAmount).ToString();
+                    label_TotalPrice.Content = "Retur: " + (_POSController.PlacerholderReceipt.TotalPriceToPay - _POSController.PlacerholderReceipt.PaidPrice).ToString();
                     PayWithAmount.Text = "";
                 }
             }
