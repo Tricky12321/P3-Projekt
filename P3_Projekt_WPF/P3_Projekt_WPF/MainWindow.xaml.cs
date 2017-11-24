@@ -693,8 +693,8 @@ namespace P3_Projekt_WPF
 
                 CheckboxChecker(ref filterID, ref filterBrand, ref filterGroup);
 
-                string queryString = _statisticsController.GetQueryString(filterID, productID, filterGroup, groupID, filterBrand, brand);
-                _statisticsController.RequestStatisticsDate(startDate, endDate, queryString);
+                string queryString = _statisticsController.GetQueryString(filterID, productID, filterGroup, groupID, filterBrand, brand, startDate, endDate);
+                _statisticsController.RequestStatisticsDate(queryString);
 
                 DisplayStatistics();
                 if (_statisticsController.TransactionsForStatistics.Count == 0)
@@ -704,8 +704,8 @@ namespace P3_Projekt_WPF
             }
             else
             {
-                string queryString = _statisticsController.GetQueryString(false, 0, false, 0, false, "");
-                _statisticsController.RequestStatisticsDate(DateTime.Today, DateTime.Today, queryString);
+                string queryString = _statisticsController.GetQueryString(false, 0, false, 0, false, "", DateTime.Today, DateTime.Today);
+                _statisticsController.RequestStatisticsDate(queryString);
                 ResetStatisticsView();
                 DisplayStatistics();
             }
@@ -717,11 +717,11 @@ namespace P3_Projekt_WPF
             label_NoTransactions.Visibility = Visibility.Hidden;
         }
 
-        private void CheckboxChecker(ref bool id, ref bool brand, ref bool group)
+        private void CheckboxChecker(ref bool product, ref bool brand, ref bool group)
         {
             if (!checkBox_Product.IsChecked.Value)
             {
-                id = true;
+                product = true;
             }
             if (!checkBox_Brand.IsChecked.Value)
             {
