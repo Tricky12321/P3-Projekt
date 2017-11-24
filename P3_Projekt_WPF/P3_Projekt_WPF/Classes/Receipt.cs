@@ -69,11 +69,11 @@ namespace P3_Projekt_WPF.Classes
             {
                 if ((transaction.Product as Product).DiscountBool)
                 {
-                    priceTotal = transaction.Amount * (transaction.Product as Product).DiscountPrice;
+                    priceTotal = transaction.Amount * transaction.Price;
                 }
                 else
                 {
-                    priceTotal = transaction.Amount * (transaction.Product as Product).SalePrice;
+                    priceTotal = transaction.Amount * transaction.Price;
                 }
             }
             else if (transaction.Product is TempProduct)

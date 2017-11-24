@@ -146,9 +146,14 @@ namespace P3_Projekt_WPF
             }
         }
 
+        private void Window_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            listBox_SearchResultsSaleTab.Visibility = Visibility.Hidden;
+        }
+
         private void button_OrderTransaction_Click(object sender, RoutedEventArgs e)
         {
-
+            
         }
     }
 }

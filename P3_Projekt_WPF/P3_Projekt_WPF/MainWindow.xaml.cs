@@ -180,7 +180,7 @@ namespace P3_Projekt_WPF
             {
                 AddTransactionToReceipt(transaction);
             }
-            label_TotalPrice.Content = _POSController.PlacerholderReceipt.TotalPrice;
+            label_TotalPrice.Content = _POSController.PlacerholderReceipt.TotalPrice.ToString().Replace('.', ',');
         }
 
         public void InitStorageGridProducts()
@@ -306,12 +306,16 @@ namespace P3_Projekt_WPF
             }
             else if (_productToEdit is ServiceProduct)
             {
-                if ((_productToEdit as ServiceProduct).Image != null)
+                ServiceProduct product = (_productToEdit as ServiceProduct);
+                if (product.Image != null)
                 {
                     image_ChosenProduct.Source = (_productToEdit as ServiceProduct).Image.Source;
                 }
 
-                textBlock_ChosenProduct.Text = $"ID: {_productToEdit.ID}\nNavn: {(_productToEdit as ServiceProduct).Name}\nGruppe: {_storageController.GroupDictionary[(_productToEdit as ServiceProduct).ServiceProductGroupID].Name}\nPris: {_productToEdit.SalePrice}\nGruppepris: {(_productToEdit as ServiceProduct).GroupPrice}";
+                textBlock_ChosenProduct.Text = $"ID: {product.ID}\n" +
+                                                $"Navn: {product.Name}\n" +
+                                                $"Gruppe: {_storageController.GroupDictionary[product.ServiceProductGroupID].Name}\n" +
+                                                $"{((product.SalePrice == product.GroupPrice) ? $"Pris: {product.SalePrice}\n" : $"Pris: {product.SalePrice}\nGruppepris: {product.GroupPrice}\nGruppe grænse: {product.GroupLimit}")}";
             }
             else
             {
@@ -334,8 +338,6 @@ namespace P3_Projekt_WPF
             Stopwatch Timer2 = new Stopwatch();
             Timer2.Start();
             _productControlDictionary.Clear();
-
-
 
             IOrderedEnumerable<KeyValuePair<int, BaseProduct>> ProductList = _storageController.AllProductsDictionary.OrderBy(x => x.Key);
             foreach (KeyValuePair<int, BaseProduct> product in ProductList)
@@ -945,11 +947,19 @@ namespace P3_Projekt_WPF
                 listBox_SearchResultsSaleTab.Focus();
                 listBox_SearchResultsSaleTab.SelectedIndex = 0;
             }
+            else
+            {
+                listBox_SearchResultsSaleTab.Visibility = Visibility.Hidden;
+                txtBox_SearchField.Focus();
+                txtBox_SearchField.SelectAll();
+            }
         }
 
         public void SearchFieldLostFocus(object sender, RoutedEventArgs e)
         {
             listBox_SearchResultsSaleTab.Visibility = Visibility.Hidden;
+            listBox_SearchResultsSaleTab.UnselectAll();
+            listView_Receipt.UnselectAll();
         }
 
         private void EnterKeyPressedSearch(object sender, KeyEventArgs e)
@@ -1048,6 +1058,7 @@ namespace P3_Projekt_WPF
             {
                 _POSController.AddSaleTransaction(_POSController.GetProductFromID(int.Parse((sender as ListBoxItem).Tag.ToString())), 1);
                 UpdateReceiptList();
+                listBox_SearchResultsSaleTab.Visibility = Visibility.Hidden;
             }
         }
 
@@ -1077,8 +1088,8 @@ namespace P3_Projekt_WPF
                     _POSController.PlacerholderReceipt.TotalPriceToPay = PriceToPay;
                 }
                 decimal PaymentAmount;
-                
-                
+
+
                 if (PayWithAmount.Text.Length == 0)
                 {
                     PaymentAmount = Convert.ToDecimal(label_TotalPrice.Content);
@@ -1090,8 +1101,9 @@ namespace P3_Projekt_WPF
 
                 Payment NewPayment = new Payment(Receipt.GetNextID(), PaymentAmount, PaymentMethod);
                 _POSController.PlacerholderReceipt.Payments.Add(NewPayment);
-                label_TotalPrice.Content = (PriceToPay - NewPayment.Amount);
+
                 PayWithAmount.Text = "";
+                label_TotalPrice.Content = $"{PriceToPay - NewPayment.Amount}".Replace('.', ',');
                 if (_POSController.PlacerholderReceipt.PaidPrice >= _POSController.PlacerholderReceipt.TotalPriceToPay)
                 {
                     SaleTransaction.SetStorageController(_storageController);
@@ -1187,12 +1199,6 @@ namespace P3_Projekt_WPF
             Utils.SaveDBData(this);
         }
 
-        private void Receipt_Click(object sender, RoutedEventArgs e)
-        {
-            listView_Receipt.SelectionChanged += delegate { Mouse.Capture(listView_Receipt); };
-            listView_Receipt.LostFocus += delegate { ReleaseMouseCapture(); listView_Receipt.UnselectAll(); };
-        }
-
         private void PortNumberControl(object sender, TextCompositionEventArgs e)
         {
             TextBox input = (e.OriginalSource as TextBox);
@@ -1203,15 +1209,38 @@ namespace P3_Projekt_WPF
         {
             ListBoxItem selectedItem = ((sender as ListBox).SelectedItem as ListBoxItem);
             int selectedItemID;
-            if ( int.TryParse(selectedItem.Tag.ToString(), out selectedItemID)){
+            if (int.TryParse(selectedItem.Tag.ToString(), out selectedItemID))
+            {
                 BaseProduct product = _POSController.GetProductFromID(selectedItemID);
-                if ( product != null && e.Key == Key.Enter)
+                if (product != null && e.Key == Key.Enter)
                 {
                     _POSController.AddSaleTransaction(product);
                     UpdateReceiptList();
                 }
             }
             listBox_SearchResultsSaleTab.Visibility = Visibility.Hidden;
+        }
+
+        private void SelectAddress(object sender, RoutedEventArgs e)
+        {
+            TextBox textbox = (sender as TextBox);
+            if (textbox != null)
+            {
+                textbox.SelectAll();
+            }
+        }
+
+        private void SelectivelyIgnoreMouseButton(object sender, MouseButtonEventArgs e)
+        {
+            TextBox textbox = (sender as TextBox);
+            if (textbox != null)
+            {
+                if (!textbox.IsKeyboardFocusWithin)
+                {
+                    e.Handled = true;
+                    textbox.Focus();
+                }
+            }
         }
 
         private void listView_Receipt_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -1237,7 +1266,12 @@ namespace P3_Projekt_WPF
 
         private void btn_discount_Click(object sender, RoutedEventArgs e)
         {
-
+            ReceiptListItem selectedProduct = listView_Receipt.SelectedItem as ReceiptListItem;
+            decimal customDiscount = Convert.ToDecimal(textBox_discount.Text);
+            _POSController.PlacerholderReceipt.Transactions.Where(x => x.GetID() == selectedProduct.TransID).First().Price = customDiscount;
+            _POSController.PlacerholderReceipt.UpdateTotalPrice();
+            UpdateReceiptList();
+            Debug.Print(selectedProduct.String_Product);
         }
     }
 }

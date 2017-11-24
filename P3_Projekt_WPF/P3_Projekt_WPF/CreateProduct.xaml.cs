@@ -37,57 +37,64 @@ namespace P3_Projekt_WPF
 
         public CreateProduct() { }
 
-        public CreateProduct(ServiceProduct prod, StorageController storageController, MainWindow MainWin)
+        //Creating new product
+        public CreateProduct(StorageController storageController, MainWindow MainWin)
         {
-            this.MainWin = MainWin;
-            _storageController = storageController;
-            InitializeComponent();
-            comboBox_Group.ItemsSource = (storageController.GroupDictionary.Values.Select(x => x.Name));
-            comboBox_ServiceGroup.ItemsSource = (storageController.GroupDictionary.Values.Select(x => x.Name));
-            comboBox_Brand.ItemsSource = (storageController.GetProductBrands());
-            _storageRooms = storageController.StorageRoomDictionary;
-
-            LoadStorageRooms(_storageRooms);
+            Initialize(storageController, MainWin);
             output_ProductID.Text = Product.GetNextID().ToString();
-            output_ServiceProductID.Text = prod.ID.ToString();
+            output_ServiceProductID.Text = ServiceProduct.GetNextID().ToString();
 
-            btn_AddPicture.Click += PickImage;
-            btn_ServiceAddPicture.Click += PickImage;
-            ImageChosenEvent += (FilePath) =>
-            {
-                image_Product.Source = new BitmapImage(new Uri(FilePath));
-                image_ServiceProduct.Source = new BitmapImage(new Uri(FilePath));
-                ChosenFilePath = FilePath;
-            };
-            btn_AddStorageRoomWithAmount.Click += AddStorageWithAmount;
-            btn_JustQuit.Click += delegate { this.Close(); };
-            btn_ServiceJustQuit.Click += delegate { this.Close(); };
-            UpdateProductID = prod.ID;
-            UpdateServiceProductSec = true;
-            FillBoxesWithExistingServiceProduct(prod);
-            tabControl.SelectedIndex = 1;
-            this.Title = "Rediger Service Produkt";
+            this.Title = "Opret Produkt";
         }
 
+        //Editing normal product
         public CreateProduct(Product prod, StorageController storageController, MainWindow MainWin)
         {
-            this.MainWin = MainWin;
+            Initialize(storageController, MainWin);
             UpdateProductSec = true;
-            InitializeComponent();
-            _storageRooms = storageController.StorageRoomDictionary;
-            _storageController = storageController;
-            LoadStorageRooms(_storageRooms);
+            FillBoxesWithExistingProduct(prod);
             UpdateProductID = prod.ID;
-            comboBox_Group.ItemsSource = (storageController.GroupDictionary.Values.Select(x => x.Name));
-            comboBox_ServiceGroup.ItemsSource = (storageController.GroupDictionary.Values.Select(x => x.Name));
-            comboBox_Brand.ItemsSource = (storageController.GetProductBrands());
             if (prod.Image != null)
             {
                 image_Product.Source = prod.Image.Source;
             }
-            FillBoxesWithExistingProduct(prod);
-
             ReloadAddedStorageRooms();
+
+            this.Title = "Rediger Produkt";
+        }
+
+        //Editing service product
+        public CreateProduct(ServiceProduct prod, StorageController storageController, MainWindow MainWin)
+        {
+            Initialize(storageController, MainWin);
+            UpdateServiceProductSec = true;
+            output_ProductID.Text = Product.GetNextID().ToString();
+            output_ServiceProductID.Text = prod.ID.ToString();
+            UpdateProductID = prod.ID;
+            FillBoxesWithExistingServiceProduct(prod);
+            tabControl.SelectedIndex = 1;
+            if (prod.Image != null)
+            {
+                image_ServiceProduct.Source = prod.Image.Source;
+            }
+
+            this.Title = "Rediger Service Produkt";
+        }
+
+        private void Initialize(StorageController storageController, MainWindow MainWin)
+        {
+            this.MainWin = MainWin;
+            InitializeComponent();
+
+            _storageRooms = storageController.StorageRoomDictionary;
+            _storageController = storageController;
+            LoadStorageRooms(_storageRooms);
+
+
+            comboBox_Group.ItemsSource = (storageController.GroupDictionary.Values.Select(x => x.Name));
+            comboBox_ServiceGroup.ItemsSource = (storageController.GroupDictionary.Values.Select(x => x.Name));
+            comboBox_Brand.ItemsSource = (storageController.GetProductBrands());
+
             btn_AddPicture.Click += PickImage;
             btn_ServiceAddPicture.Click += PickImage;
             ImageChosenEvent += (FilePath) =>
@@ -99,7 +106,6 @@ namespace P3_Projekt_WPF
             btn_AddStorageRoomWithAmount.Click += AddStorageWithAmount;
             btn_JustQuit.Click += delegate { this.Close(); };
             btn_ServiceJustQuit.Click += delegate { this.Close(); };
-            this.Title = "Rediger Produkt";
         }
 
         private void FillBoxesWithExistingProduct(Product prod)
@@ -125,34 +131,6 @@ namespace P3_Projekt_WPF
             {
                 image_ServiceProduct.Source = prod.Image.Source;
             }
-        }
-
-        public CreateProduct(StorageController storageController, MainWindow MainWin)
-        {
-            this.MainWin = MainWin;
-            InitializeComponent();
-            comboBox_Group.ItemsSource = (storageController.GroupDictionary.Values.Select(x => x.Name));
-            comboBox_ServiceGroup.ItemsSource = (storageController.GroupDictionary.Values.Select(x => x.Name));
-            comboBox_Brand.ItemsSource = (storageController.GetProductBrands());
-            _storageRooms = storageController.StorageRoomDictionary;
-            _storageController = storageController;
-
-            LoadStorageRooms(_storageRooms);
-            output_ProductID.Text = Product.GetNextID().ToString();
-            output_ServiceProductID.Text = ServiceProduct.GetNextID().ToString();
-
-            btn_AddPicture.Click += PickImage;
-            btn_ServiceAddPicture.Click += PickImage;
-            ImageChosenEvent += (FilePath) =>
-            {
-                image_Product.Source = new BitmapImage(new Uri(FilePath));
-                image_ServiceProduct.Source = new BitmapImage(new Uri(FilePath));
-                ChosenFilePath = FilePath;
-            };
-            btn_AddStorageRoomWithAmount.Click += AddStorageWithAmount;
-            btn_JustQuit.Click += delegate { this.Close(); };
-            btn_ServiceJustQuit.Click += delegate { this.Close(); };
-            this.Title = "Opret Produkt";
         }
 
         private void LoadStorageRooms(ConcurrentDictionary<int, StorageRoom> storageRooms)
