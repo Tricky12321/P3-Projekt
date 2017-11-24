@@ -451,11 +451,36 @@ namespace P3_Projekt_WPF
         {
             if (transaction.Product is TempProduct)
             {
-                listView_Receipt.Items.Add(new ReceiptListItem { String_Product = (transaction.Product as TempProduct).Description, Amount = transaction.Amount, Price = $"{transaction.GetProductPrice()}", IDTag = $"t{transaction.Product.ID}" });
+                listView_Receipt.Items.Add(new ReceiptListItem
+                {
+                    String_Product = (transaction.Product as TempProduct).Description,
+                    Amount = transaction.Amount,
+                    Price = $"{transaction.TotalPrice}",
+                    IDTag = $"t{transaction.Product.ID}"
+                });
+            }
+            else if (transaction.Product is Product && (transaction.Product as Product).DiscountBool)
+            {
+                listView_Receipt.Items.Add(new ReceiptListItem
+                {
+                    String_Product = transaction.GetProductName(),
+                    Amount = transaction.Amount,
+                    //Price = $"{((transaction.Product as Product).DiscountPrice)*transaction.Amount}",
+                    Price = $"{transaction.TotalPrice}",
+                    IDTag = transaction.Product.ID.ToString(),
+                    TransID = transaction.GetID(),
+                });
             }
             else
             {
-                listView_Receipt.Items.Add(new ReceiptListItem { String_Product = transaction.GetProductName(), Amount = transaction.Amount, Price = $"{transaction.GetProductPrice()}", IDTag = transaction.Product.ID.ToString() });
+                listView_Receipt.Items.Add(new ReceiptListItem
+                {
+                    String_Product = transaction.GetProductName(),
+                    Amount = transaction.Amount,
+                    Price = $"{transaction.TotalPrice}",
+                    IDTag = transaction.Product.ID.ToString(),
+                    TransID = transaction.GetID(),
+                });
             }
         }
 
@@ -494,10 +519,6 @@ namespace P3_Projekt_WPF
             UpdateReceiptList();
         }
 
-        private void listView_Receipt_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-
-        }
 
         private void TextBlock_TargetUpdated(object sender, DataTransferEventArgs e)
         {
@@ -1118,7 +1139,6 @@ namespace P3_Projekt_WPF
                 else
                 {
                     adminValid = new AdminValidation();
-                    adminValid.ShowDialog();
                     adminValid.Closed += delegate
                     {
                         if (adminValid.IsPasswordCorrect)
@@ -1129,6 +1149,7 @@ namespace P3_Projekt_WPF
                             label_NoAdmin.Visibility = Visibility.Collapsed;
                         }
                     };
+                    adminValid.ShowDialog();
                 }
             };
         }
@@ -1141,19 +1162,19 @@ namespace P3_Projekt_WPF
             PayWithAmount.Clear();
         }
 
-        private MoveProduct productMove;
+        private MoveProduct _productMove;
         private void btn_MoveProduct_Click(object sender, RoutedEventArgs e)
         {
-            if (productMove == null)
+            if(_productMove == null)
             {
-                productMove = new MoveProduct(_storageController, _POSController);
-                productMove.Closing += delegate
+                _productMove = new MoveProduct(_storageController, _POSController);
+                _productMove.Closing += delegate
                 {
-                    productMove = null;
+                    _productMove = null;
                 };
             }
-            productMove.Show();
-            productMove.Activate();
+            _productMove.Show();
+            _productMove.Activate();
         }
 
         private void MoveProductWindow()
@@ -1223,6 +1244,32 @@ namespace P3_Projekt_WPF
                     textbox.Focus();
                 }
             }
+        }
+
+        private void listView_Receipt_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            btn_discount.IsHitTestVisible = true;
+        }
+
+        private OrderTransactionWindow _orderTransactionWindow;
+
+        private void button_OrderTransaction_Click(object sender, RoutedEventArgs e)
+        {
+            if(_orderTransactionWindow == null)
+            {
+                _orderTransactionWindow = new OrderTransactionWindow(_storageController, _POSController);
+                _orderTransactionWindow.Closing += delegate
+                {
+                    _orderTransactionWindow = null;
+                };
+            }
+            _orderTransactionWindow.Show();
+            _orderTransactionWindow.Activate();
+        }
+
+        private void btn_discount_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }
