@@ -265,40 +265,6 @@
                         <ColumnDefinition Width="1*"/>
                         <ColumnDefinition Width="2*"/>
                     </Grid.ColumnDefinitions>
-                    <ListView x:Name="listView_Statistics" Width="auto" Height="auto" HorizontalContentAlignment="Stretch" Grid.Column="2" Margin="10,86,10,10" FontSize="20">
-                        <ListView.View>
-                            <GridView>
-                                <GridViewColumn Header="Dato" Width="120">
-                                    <GridViewColumn.CellTemplate>
-                                        <DataTemplate>
-                                            <TextBlock Text="{Binding Date}"/>
-                                        </DataTemplate>
-                                    </GridViewColumn.CellTemplate>
-                                </GridViewColumn>
-                                <GridViewColumn Header="Navn" Width="350">
-                                    <GridViewColumn.CellTemplate>
-                                        <DataTemplate>
-                                            <TextBlock Text="{Binding Name}"/>
-                                        </DataTemplate>
-                                    </GridViewColumn.CellTemplate>
-                                </GridViewColumn>
-                                <GridViewColumn Header="Antal" Width="70">
-                                    <GridViewColumn.CellTemplate>
-                                        <DataTemplate>
-                                            <TextBlock Text="{Binding Amount}"/>
-                                        </DataTemplate>
-                                    </GridViewColumn.CellTemplate>
-                                </GridViewColumn>
-                                <GridViewColumn Header="Pris" Width="120">
-                                    <GridViewColumn.CellTemplate>
-                                        <DataTemplate>
-                                            <TextBlock Text="{Binding Price}"/>
-                                        </DataTemplate>
-                                    </GridViewColumn.CellTemplate>
-                                </GridViewColumn>
-                            </GridView>
-                        </ListView.View>
-                    </ListView>
                     <Border BorderBrush="Black" BorderThickness="1" Margin="-34,71,-79,0" Height="1" VerticalAlignment="Top" Grid.ColumnSpan="3" Grid.Row="1"/>
 
                     <TextBlock x:Name="label_StartDate" Margin="10,81,0,0" TextWrapping="Wrap" Text="Start Dato" VerticalAlignment="Top" FontSize="30" HorizontalAlignment="Left" Width="266"/>
@@ -395,7 +361,93 @@
                     <TextBlock x:Name="label_NoTransactions" Grid.ColumnSpan="2" Width="auto" HorizontalAlignment="Center" Margin="56,181,39,0" TextWrapping="Wrap" Text="Ingen transaktioner fundet" VerticalAlignment="Top" FontWeight="Bold" Foreground="Red" Height="64" FontSize="30" RenderTransformOrigin="0.5,0.5" Visibility="Hidden"/>
                     <Button x:Name="Button_DateToday" Content="I dag" Margin="10,245,5,0" Background="#FFC5C5C5" Style="{StaticResource Flat_Button}" Height="48" VerticalAlignment="Top" Click="Button_DateToday_Click"/>
                     <Button x:Name="Button_DateYesterday" Content="I går" Grid.Column="1" Margin="5,245,10,0" Background="#FFC5C5C5" Style="{StaticResource Flat_Button}" Height="48" VerticalAlignment="Top" Click="Button_DateYesterday_Click"/>
-                    <Label x:Name="label_NoAdmin" Content="Ikke Admin, kan kun vise statistik for dagen" Margin="5,287,655,0" VerticalAlignment="Top" Grid.ColumnSpan="3" Height="57" FontSize="35" Foreground="Red"/>
+                    <Label x:Name="label_NoAdmin" Content="Ikke Admin, kan kun vise statistik for dagen" Margin="10,293,75,0" VerticalAlignment="Top" Grid.ColumnSpan="2" Height="57" FontSize="30" Foreground="Red"/>
+                    <Grid Grid.Column="2" Margin="0,0,0,0">
+                        <TabControl Background="#FFE5E5E5" Margin="0,78,0,0" FontSize="20">
+                            <TabItem Header="Per Transaktion">
+                                <ListView x:Name="listView_Statistics" Width="auto" Height="auto" HorizontalContentAlignment="Stretch" Grid.Column="2" Margin="10" FontSize="20">
+                                    <ListView.Resources>
+                                        <Style TargetType="{x:Type GridViewColumnHeader}">
+                                            <Setter Property="HorizontalContentAlignment" Value="Left" />
+                                        </Style>
+                                    </ListView.Resources>
+                                    <ListView.View>
+                                        <GridView>
+                                            <GridViewColumn Header="Dato" Width="110">
+                                                <GridViewColumn.CellTemplate>
+                                                    <DataTemplate>
+                                                        <TextBlock Text="{Binding Date}"/>
+                                                    </DataTemplate>
+                                                </GridViewColumn.CellTemplate>
+                                            </GridViewColumn>
+                                            <GridViewColumn Header="Navn" Width="350">
+                                                <GridViewColumn.CellTemplate>
+                                                    <DataTemplate>
+                                                        <TextBlock Text="{Binding Name}"/>
+                                                    </DataTemplate>
+                                                </GridViewColumn.CellTemplate>
+                                            </GridViewColumn>
+                                            <GridViewColumn Header="Antal" Width="70">
+                                                <GridViewColumn.CellTemplate>
+                                                    <DataTemplate>
+                                                        <TextBlock Text="{Binding Amount}"/>
+                                                    </DataTemplate>
+                                                </GridViewColumn.CellTemplate>
+                                            </GridViewColumn>
+                                            <GridViewColumn Header="Pris" Width="130">
+                                                <GridViewColumn.CellTemplate>
+                                                    <DataTemplate>
+                                                        <TextBlock Text="{Binding Price}"/>
+                                                    </DataTemplate>
+                                                </GridViewColumn.CellTemplate>
+                                            </GridViewColumn>
+                                        </GridView>
+                                    </ListView.View>
+                                </ListView>
+                            </TabItem>
+                            <TabItem Header="Per Gruppe">
+                                <ListView x:Name="listView_GroupStatistics" Width="auto" Height="auto" Grid.Column="2" Margin="10" FontSize="20" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Center">
+                                    <ListView.Resources>
+                                        <Style TargetType="{x:Type GridViewColumnHeader}">
+                                            <Setter Property="HorizontalContentAlignment" Value="Left" />
+                                        </Style>
+                                    </ListView.Resources>
+                                    <ListView.View>
+                                        <GridView>
+                                            <GridViewColumn Header="" Width="0">
+                                                <GridViewColumn.CellTemplate>
+                                                    <DataTemplate>
+                                                        <TextBlock Text="{Binding Date}"/>
+                                                    </DataTemplate>
+                                                </GridViewColumn.CellTemplate>
+                                            </GridViewColumn>
+                                            <GridViewColumn Header="Navn" Width="350">
+                                                <GridViewColumn.CellTemplate>
+                                                    <DataTemplate>
+                                                        <TextBlock Text="{Binding Name}"/>
+                                                    </DataTemplate>
+                                                </GridViewColumn.CellTemplate>
+                                            </GridViewColumn>
+                                            <GridViewColumn Header="Procent" Width="130">
+                                                <GridViewColumn.CellTemplate>
+                                                    <DataTemplate>
+                                                        <TextBlock Text="{Binding Amount}"/>
+                                                    </DataTemplate>
+                                                </GridViewColumn.CellTemplate>
+                                            </GridViewColumn>
+                                            <GridViewColumn Header="Kr" Width="180">
+                                                <GridViewColumn.CellTemplate>
+                                                    <DataTemplate>
+                                                        <TextBlock Text="{Binding Price}"/>
+                                                    </DataTemplate>
+                                                </GridViewColumn.CellTemplate>
+                                            </GridViewColumn>
+                                        </GridView>
+                                    </ListView.View>
+                                </ListView>
+                            </TabItem>
+                        </TabControl>
+                    </Grid>
                 </Grid>
             </TabItem>
 

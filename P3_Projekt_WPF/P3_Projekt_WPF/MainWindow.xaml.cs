@@ -717,13 +717,11 @@ namespace P3_Projekt_WPF
                 {
                     groupID = _storageController.GroupDictionary.Values.First(x => x.Name == comboBox_Group.Text).ID;
                 }
-                bool filterID = false;
-                bool filterBrand = false;
-                bool filterGroup = false;
+                bool filterProduct = checkBox_Product.IsChecked.Value;
+                bool filterBrand = checkBox_Brand.IsChecked.Value;
+                bool filterGroup = checkBox_Group.IsChecked.Value;
 
-                CheckboxChecker(ref filterID, ref filterBrand, ref filterGroup);
-
-                string queryString = _statisticsController.GetQueryString(filterID, productID, filterGroup, groupID, filterBrand, brand, startDate, endDate);
+                string queryString = _statisticsController.GetQueryString(filterProduct, productID, filterGroup, groupID, filterBrand, brand, startDate, endDate);
                 _statisticsController.RequestStatisticsDate(queryString);
 
                 DisplayStatistics();
@@ -747,22 +745,6 @@ namespace P3_Projekt_WPF
             label_NoTransactions.Visibility = Visibility.Hidden;
         }
 
-        private void CheckboxChecker(ref bool product, ref bool brand, ref bool group)
-        {
-            if (!checkBox_Product.IsChecked.Value)
-            {
-                product = true;
-            }
-            if (!checkBox_Brand.IsChecked.Value)
-            {
-                brand = true;
-            }
-            if (!checkBox_Group.IsChecked.Value)
-            {
-                group = true;
-            }
-        }
-
         private void DisplayStatistics()
         {
             int productAmount = 0;
@@ -776,13 +758,13 @@ namespace P3_Projekt_WPF
             }
             listView_Statistics.Items.Insert(0, new StatisticsListItem("", "Total", $"{productAmount}", $"{totalTransactionPrice}"));
 
-            /*listView_Statistics.Items.Insert(1, _statisticsController.GetReceiptStatistics());
+            //listView_Statistics.Items.Insert(1, _statisticsController.GetReceiptStatistics());
 
             _statisticsController.GenerateGroupSales();
             foreach(int groupID in _statisticsController.SalesPerGroup.Keys)
             {
                 listView_GroupStatistics.Items.Add(_statisticsController.GroupSalesStrings(groupID, totalTransactionPrice));
-            }*/
+            }
         }
 
         private void Button_DateToday_Click(object sender, RoutedEventArgs e)
