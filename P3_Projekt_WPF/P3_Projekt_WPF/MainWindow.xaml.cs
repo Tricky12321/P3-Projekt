@@ -1091,6 +1091,7 @@ namespace P3_Projekt_WPF
                 Payment NewPayment = new Payment(Receipt.GetNextID(), PaymentAmount, PaymentMethod);
                 _POSController.PlacerholderReceipt.Payments.Add(NewPayment);
                 label_TotalPrice.Content = (PriceToPay - NewPayment.Amount);
+                PayWithAmount.Text = "";
                 if (_POSController.PlacerholderReceipt.PaidPrice >= _POSController.PlacerholderReceipt.TotalPriceToPay)
                 {
                     SaleTransaction.SetStorageController(_storageController);
@@ -1100,7 +1101,6 @@ namespace P3_Projekt_WPF
                     NewThread.Start();
                     listView_Receipt.Items.Clear();
                     label_TotalPrice.Content = "Retur: " + (_POSController.PlacerholderReceipt.TotalPriceToPay - _POSController.PlacerholderReceipt.PaidPrice).ToString();
-                    PayWithAmount.Text = "";
                 }
             }
 
