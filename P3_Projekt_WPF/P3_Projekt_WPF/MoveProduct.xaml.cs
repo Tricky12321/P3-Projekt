@@ -158,9 +158,9 @@ namespace P3_Projekt_WPF
             }
         }
 
-        public void MoveProduct_MouseDown(object sender, MouseButtonEventArgs e)
+        private void Window_MouseDown(object sender, MouseButtonEventArgs e)
         {
-
+            listBox_SearchMoveProduct.Visibility = Visibility.Hidden;
         }
     }
 }
