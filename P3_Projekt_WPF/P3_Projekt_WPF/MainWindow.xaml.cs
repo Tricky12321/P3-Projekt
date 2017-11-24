@@ -1109,7 +1109,6 @@ namespace P3_Projekt_WPF
                 else
                 {
                     adminValid = new AdminValidation();
-                    adminValid.ShowDialog();
                     adminValid.Closed += delegate
                     {
                         if (adminValid.IsPasswordCorrect)
@@ -1120,6 +1119,7 @@ namespace P3_Projekt_WPF
                             label_NoAdmin.Visibility = Visibility.Collapsed;
                         }
                     };
+                    adminValid.ShowDialog();
                 }
             };
         }
