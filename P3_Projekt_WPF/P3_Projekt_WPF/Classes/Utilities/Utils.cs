@@ -389,7 +389,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
             {
                 if (weigthedSearchList.Where(x => x.CurrentProduct.ID == product.ID).Count() > 0)
                 {
-                    if (weigthedSearchList.Where(x => x.CurrentProduct.ID == product.ID).First() != null) ;
+                    if (weigthedSearchList.Where(x => x.CurrentProduct.ID == product.ID).First() != null)
                     {
                         weigthedSearchList.Where(x => x.CurrentProduct.ID == product.ID).First().BrandMatch += 1;
                     }

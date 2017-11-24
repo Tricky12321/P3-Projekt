@@ -74,13 +74,16 @@ namespace P3_Projekt_WPF
             var searchResults = productSearchResults.Values.OrderByDescending(x => x.BrandMatch + x.GroupMatch + x.NameMatch);
             foreach (SearchProduct product in searchResults)
             {
-                var item = new ListBoxItem();
-                item.Tag = product.CurrentProduct.ID;
-                item.Content = new SaleSearchResultItemControl(product.CurrentProduct.Image, $"{product.CurrentProduct.Name}\n{product.CurrentProduct.ID}");
-                listBox_SearchResultsSaleTab.Items.Add(item);
-                if(searchResults.Count() == 1)
+                if (product.CurrentProduct is Product)
                 {
-                    FillItemDetails(item);
+                    var item = new ListBoxItem();
+                    item.Tag = product.CurrentProduct.ID;
+                    item.Content = new SaleSearchResultItemControl((product.CurrentProduct as Product).Image, $"{(product.CurrentProduct as Product).Name}\n{product.CurrentProduct.ID}");
+                    listBox_SearchResultsSaleTab.Items.Add(item);
+                    if (searchResults.Count() == 1)
+                    {
+                        FillItemDetails(item);
+                    }
                 }
             }
         }
@@ -88,7 +91,7 @@ namespace P3_Projekt_WPF
         private void FillItemDetails(object sender)
         {
             comboBox_StorageRooms.Items.Clear();
-            var product = _posController.GetProductFromID(int.Parse((sender as ListBoxItem).Tag.ToString()));
+            var product = _posController.GetProductFromID(int.Parse((sender as ListBoxItem).Tag.ToString())) as Product;
             label_ProduktID.Content = product.ID.ToString();
             label_produktProdukt.Content = product.Name.ToString();
             if (product.StorageWithAmount.Count > 0)
@@ -128,7 +131,7 @@ namespace P3_Projekt_WPF
 
         private void button_MoveProduct_Click(object sender, RoutedEventArgs e)
         {
-            Product product = _posController.GetProductFromID(int.Parse(label_ProduktID.Content.ToString()));
+            Product product = _posController.GetProductFromID(int.Parse(label_ProduktID.Content.ToString())) as Product;
             int sourceRoom = _storageController.StorageRoomDictionary.Where(x => x.Value.Name == comboBox_StorageRooms.Text).Select(x => x.Key).First();
             int destinationRoom = _storageController.StorageRoomDictionary.Where(x => x.Value.Name == comboBox_Destination.Text).Select(x => x.Key).First();
             StorageTransaction storageTransaction = new StorageTransaction(product, int.Parse(textBox_ProductAmount.Text), sourceRoom, destinationRoom, _storageController.StorageRoomDictionary);
