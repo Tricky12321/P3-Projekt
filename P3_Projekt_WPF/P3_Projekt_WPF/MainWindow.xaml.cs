@@ -72,6 +72,7 @@ namespace P3_Projekt_WPF
                 Debug.WriteLine(item);
             }
             Utils.GetIceCreameID();
+            Console.WriteLine("Username: " + Environment.UserName);
         }
 
         public void ReloadProducts()
@@ -417,7 +418,7 @@ namespace P3_Projekt_WPF
             }
             else
             {
-                listView_Receipt.Items.Add(new ReceiptListItem { String_Product = transaction.GetProductName(), Amount = transaction.Amount, Price = $"{transaction.GetProductPrice()},-", IDTag = transaction.Product.ID.ToString() });
+                listView_Receipt.Items.Add(new ReceiptListItem { String_Product = transaction.GetProductName(), Amount = transaction.Amount, Price = $"{transaction.GetProductPrice()}", IDTag = transaction.Product.ID.ToString() });
             }
         }
 
@@ -1087,7 +1088,8 @@ namespace P3_Projekt_WPF
 
         private void PortNumberControl(object sender, TextCompositionEventArgs e)
         {
-            
+            TextBox input = (e.OriginalSource as TextBox);
+            e.Handled = Utils.RegexCheckNumber(input.Text.Insert(input.CaretIndex, e.Text));
         }
 
     }

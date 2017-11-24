@@ -17,7 +17,7 @@ namespace P3_Projekt_WPF.Classes
         public bool Discount;
         public decimal TotalPrice => Price * Amount;
         private static StorageController _storageController = null;
-
+        public string SoldBy = "";
         public SaleTransaction(BaseProduct product, int amount, int receiptID) : base(product, amount)
         {
             ReceiptID = receiptID;
@@ -268,12 +268,14 @@ namespace P3_Projekt_WPF.Classes
             ReceiptID = Convert.ToInt32(Table.Values[5]);
             Price = Convert.ToDecimal(Table.Values[6]);
             Discount = Convert.ToBoolean(Table.Values[8]);
+            SoldBy = Table.Values[9];
         }
 
         public override void UploadToDatabase()
         {
-            string sql = "INSERT INTO `sale_transactions` (`id`, `product_id`, `product_type`,`amount`, `receipt_id`, `price`, `total_price`, `discount`)" +
-                $" VALUES (NULL, '{Product.ID}', '{_getProductType()}','{Amount}', '{ReceiptID}', '{Price}', '{TotalPrice}', '{Discount}');";
+            SoldBy = Environment.UserName;
+            string sql = "INSERT INTO `sale_transactions` (`id`, `product_id`, `product_type`,`amount`, `receipt_id`, `price`, `total_price`, `discount`,`sold_by`)" +
+                $" VALUES (NULL, '{Product.ID}', '{_getProductType()}','{Amount}', '{ReceiptID}', '{Price}', '{TotalPrice}', '{Discount}','{SoldBy}');";
             Mysql.RunQuery(sql);
         }
 
@@ -287,7 +289,8 @@ namespace P3_Projekt_WPF.Classes
                 $"`receipt_id` = '{ReceiptID}'," +
                 $"`price` = '{Price}'," +
                 $"`total_price` = '{TotalPrice}'," +
-                $"`discount` = '{Convert.ToInt32(Discount)}' " +
+                $"`discount` = '{Convert.ToInt32(Discount)}'," +
+                $"`sold_by` = '{SoldBy}' "+
                 $"WHERE `id` = {_id};";
             Mysql.RunQuery(sql);
         }
