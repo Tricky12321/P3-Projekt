@@ -128,6 +128,21 @@ namespace P3_Projekt_WPF.Classes.Utilities
             }
         }
 
+        public int GetReceiptTotalPrice(DateTime From, DateTime To)
+        {
+            Int64 toUnix = Utils.GetUnixTime(To);
+            Int64 fromUnix = Utils.GetUnixTime(From);
+            string sql = $"SELECT sum(`total_price`) as atotal FROM `receipt` WHERE UNIX_TIMESTAMP(`datetime`) >= '{fromUnix}' AND UNIX_TIMESTAMP(`datetime`) <= '{toUnix}'";
+            return Convert.ToInt32(Mysql.RunQueryWithReturn(sql).RowData[0].Values[0]);
+        }
+
+        public int GetReceiptTotalCount(DateTime From, DateTime To)
+        {
+            Int64 toUnix = Utils.GetUnixTime(To);
+            Int64 fromUnix = Utils.GetUnixTime(From);
+            string sql = $"SELECT `id` FROM `receipt` WHERE UNIX_TIMESTAMP(`datetime`) >= '{fromUnix}' AND UNIX_TIMESTAMP(`datetime`) <= '{toUnix}'";
+            return Mysql.RunQueryWithReturn(sql).RowCounter;
+        }
 
         /*public StatisticsListItem GetReceiptStatistics()
         {
