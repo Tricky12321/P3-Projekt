@@ -158,9 +158,13 @@ namespace P3_Projekt_WPF.Classes
             {
                 return (Product as Product).Brand;
             }
+            else if (Product is TempProduct && (Product as TempProduct).Resolved)
+            {
+                return (_getProduct((Product as TempProduct).ResolvedProductID, "product") as Product).Brand;
+            }
             else
             {
-                //ServiceProduct and TempProdcut do not contain brands
+                //ServiceProducts and unresolved TempProducts do not contain brands
                 return "";
             }
         }

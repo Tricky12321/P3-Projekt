@@ -43,6 +43,7 @@ namespace P3_Projekt_WPF
         public static bool runLoading = true;
         public MainWindow()
         {
+            Mysql.CheckDatabaseConnection();
             List<string> OutputList = new List<string>();
             Stopwatch LoadingTimer = new Stopwatch();
             LoadingTimer.Start();
@@ -141,6 +142,7 @@ namespace P3_Projekt_WPF
             BuildInformationTable();
             InitStatisticsTab();
             InitAdminLogin();
+            Utils.LoadDatabaseSettings(this);
         }
 
         private void InitGridQuickButtons()
@@ -203,22 +205,27 @@ namespace P3_Projekt_WPF
 
         public void LoadDatabase()
         {
-            Stopwatch TimeTester = new Stopwatch();
-            TimeTester.Start();
-            Thread GetAllThread = new Thread(new ThreadStart(_storageController.GetAll));
-            GetAllThread.Start();
-            while (!_storageController.ThreadsDone)
+            if (Mysql.ConnectionWorking)
             {
-                Thread.Sleep(1);
+
+                Stopwatch TimeTester = new Stopwatch();
+                TimeTester.Start();
+                Thread GetAllThread = new Thread(new ThreadStart(_storageController.GetAll));
+                GetAllThread.Start();
+                while (!_storageController.ThreadsDone)
+                {
+                    Thread.Sleep(1);
+                }
+                runLoading = false;
+                TimeTester.Stop();
+                string Output = "";
+                while (_storageController.TimerStrings.TryDequeue(out Output))
+                {
+                    Debug.WriteLine(Output);
+                }
+                Debug.WriteLine("[P3] Det tog " + TimeTester.ElapsedMilliseconds + "ms at hente alt fra databasen");
             }
-            runLoading = false;
-            TimeTester.Stop();
-            string Output = "";
-            while (_storageController.TimerStrings.TryDequeue(out Output))
-            {
-                Debug.WriteLine(Output);
-            }
-            Debug.WriteLine("[P3] Det tog " + TimeTester.ElapsedMilliseconds + "ms at hente alt fra databasen");
+
         }
 
         private Button addProductButton = new Button();
@@ -606,12 +613,15 @@ namespace P3_Projekt_WPF
 
 
         private CreateTemporaryProduct _createTempProduct;
-        private int tempID = TempProduct.GetNextID();
+        private int _tempID = -1;
 
         private void btn_Temporary_Click(object sender, RoutedEventArgs e)
         {
             decimal price;
-
+            if (_tempID == -1)
+            {
+                _tempID = TempProduct.GetNextID();
+            }
 
             if (_createTempProduct == null)
             {
@@ -626,10 +636,10 @@ namespace P3_Projekt_WPF
                         int amount = int.Parse(_createTempProduct.textBox_ProductAmount.Text);
                         TempProduct NewTemp = _storageController.CreateTempProduct(description, price);
                         _POSController.AddSaleTransaction(NewTemp, amount);
-                        NewTemp.ID = tempID;
+                        NewTemp.ID = _tempID;
                         UpdateReceiptList();
                         _createTempProduct.Close();
-                        ++tempID;
+                        ++_tempID;
                     }
                     else
                     {
@@ -696,9 +706,7 @@ namespace P3_Projekt_WPF
             }
             else
             {
-                startDate = DateTime.Today;
-                endDate = DateTime.Today;
-                _statisticsController.RequestStatisticsDate(startDate, endDate);
+                _statisticsController.RequestStatisticsDate(DateTime.Today, DateTime.Today);
                 ResetStatisticsView();
                 DisplayStatistics();
             }
@@ -728,28 +736,38 @@ namespace P3_Projekt_WPF
 
         private void DisplayStatistics()
         {
-            int totalAmount = 0;
-            decimal totalPrice = 0;
+            int productAmount = 0;
+            decimal totalTransactionPrice = 0;
 
             foreach (SaleTransaction transaction in _statisticsController.TransactionsForStatistics)
             {
                 listView_Statistics.Items.Add(transaction.StatisticsStrings());
-                totalAmount += transaction.Amount;
-                totalPrice += transaction.TotalPrice;
+                productAmount += transaction.Amount;
+                totalTransactionPrice += transaction.TotalPrice;
             }
-            listView_Statistics.Items.Insert(0, new StatisticsListItem("", "Total", $"{totalAmount}", $"{totalPrice}"));
+            listView_Statistics.Items.Insert(0, new StatisticsListItem("", "Total", $"{productAmount}", $"{totalTransactionPrice}"));
+
+            /*listView_Statistics.Items.Insert(1, _statisticsController.GetReceiptStatistics());
+
+            _statisticsController.GenerateGroupSales();
+            foreach(int groupID in _statisticsController.SalesPerGroup.Keys)
+            {
+                listView_GroupStatistics.Items.Add(_statisticsController.GroupSalesStrings(groupID, totalTransactionPrice));
+            }*/
         }
 
         private void Button_DateToday_Click(object sender, RoutedEventArgs e)
         {
             datePicker_StartDate.SelectedDate = DateTime.Today;
             datePicker_EndDate.SelectedDate = DateTime.Today;
+            Button_CreateStatistics_Click(sender, e);
         }
 
         private void Button_DateYesterday_Click(object sender, RoutedEventArgs e)
         {
             datePicker_StartDate.SelectedDate = DateTime.Today.AddDays(-1);
             datePicker_EndDate.SelectedDate = DateTime.Today.AddDays(-1);
+            Button_CreateStatistics_Click(sender, e);
         }
 
 
@@ -766,9 +784,12 @@ namespace P3_Projekt_WPF
 
         private void TextInputNoNumberWithComma(object sender, TextCompositionEventArgs e)
         {
-            // Only allows number in textfield, also with comma
-            if (!char.IsDigit(e.Text, e.Text.Length - 1) && !(e.Text[e.Text.Length - 1] == ','))
-                e.Handled = true;
+
+            TextBox input = (sender as TextBox);
+            //The input string has the format: An unlimited amount of numbers, then 0-1 commas, then 0-2 numbers
+            var re = new System.Text.RegularExpressions.Regex(@"^((\d+)(,{0,1})(\d{0,2}))$");
+
+            e.Handled = !re.IsMatch(input.Text.Insert(input.CaretIndex, e.Text));
         }
 
         private void BuildInformationTable()
@@ -1095,15 +1116,45 @@ namespace P3_Projekt_WPF
             label_TotalPrice.Content = "Total";
             PayWithAmount.Clear();
         }
-        /*private void btn_MoveProduct_Click(object sender, RoutedEventArgs e)
-        {
-            productMove = new MoveProduct();
-            productMove.Show();
-        }
 
         private MoveProduct productMove;
+        private void btn_MoveProduct_Click(object sender, RoutedEventArgs e)
+        {
+            productMove = new MoveProduct(_storageController, _POSController);
+
+            productMove.Show();
+            productMove.Activate();
+        }
+
         private void MoveProductWindow()
         {
-        }*/
+        }
+
+        private void btn_RmtLcl_Click(object sender, RoutedEventArgs e)
+        {
+            Utils.FlipRemoteLocal(this);
+        }
+
+        private void button_Click(object sender, RoutedEventArgs e)
+        {
+            listView_Receipt.UnselectAll();
+        }
+
+        private void SaveDBSettings(object sender, RoutedEventArgs e)
+        {
+            Utils.SaveDBData(this);
+        }
+
+        private void Receipt_Click(object sender, RoutedEventArgs e)
+        {
+            listView_Receipt.SelectionChanged += delegate { Mouse.Capture(listView_Receipt); };
+            listView_Receipt.LostFocus += delegate { ReleaseMouseCapture(); listView_Receipt.UnselectAll(); };
+        }
+
+        private void PortNumberControl(object sender, TextCompositionEventArgs e)
+        {
+            
+        }
+
     }
 }

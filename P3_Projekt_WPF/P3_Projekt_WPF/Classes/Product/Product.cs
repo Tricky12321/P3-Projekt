@@ -76,26 +76,7 @@ namespace P3_Projekt_WPF.Classes
 
         public static int GetNextID()
         {
-            string sql = "SHOW TABLE STATUS LIKE 'products'";
-            TableDecode Results = Mysql.RunQueryWithReturn(sql);
-            int product_AC = Convert.ToInt32(Results.RowData[0].Values[10]);
-            sql = "SHOW TABLE STATUS LIKE 'service_products'";
-            Results = Mysql.RunQueryWithReturn(sql);
-            int service_AC = Convert.ToInt32(Results.RowData[0].Values[10]);
-            int return_AC = 0;
-            if (service_AC != product_AC)
-            {
-                if (service_AC > product_AC)
-                {
-                    sql = $"ALTER TABLE 'products' AUTO_INCREMENT={service_AC};";
-                    return_AC = service_AC;
-                } else
-                {
-                    sql = $"ALTER TABLE 'service_products' AUTO_INCREMENT={product_AC};";
-                    return_AC = product_AC;
-                }
-            }
-            return return_AC;
+            return ServiceProduct.GetNextID();
         }
 
         //modtage storage transaction?

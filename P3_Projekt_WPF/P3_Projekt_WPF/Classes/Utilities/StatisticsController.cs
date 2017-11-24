@@ -12,6 +12,8 @@ namespace P3_Projekt_WPF.Classes.Utilities
     public class StatisticsController
     {
         public List<SaleTransaction> TransactionsForStatistics = new List<SaleTransaction>();
+        public List<Receipt> ReceiptsForStatistics = new List<Receipt>();
+        public Dictionary<int, decimal> SalesPerGroup;
 
         public StatisticsController(StorageController storageController)
         {
@@ -59,7 +61,6 @@ namespace P3_Projekt_WPF.Classes.Utilities
             Timer1.Start();
             _saleTransactionsCreated = 0;
             _saleTransactions = new ConcurrentQueue<SaleTransaction>();
-            TransactionsForStatistics = new List<SaleTransaction>();
             int fromUnixTime = Utils.GetUnixTime(from);
             int toUnixTime = Utils.GetUnixTime(EndDate(to));
             string requestStatisticsQuery =
@@ -79,11 +80,16 @@ namespace P3_Projekt_WPF.Classes.Utilities
             Debug.WriteLine("[StatisticsController] took " + Timer1.ElapsedMilliseconds + "ms to fetch");
         }
 
+        public DateTime EndDate(DateTime date)
+        {
+            TimeSpan dayEnd = new TimeSpan(23, 59, 59);
+            return date + dayEnd;
+        }
+
         public void FilterByParameters(string productID, string brand, Group group)
         {
             if (productID != null)
             {
-                // TODO: Lav input validering af product id
                 TransactionsForStatistics = TransactionsForStatistics.Where(x => x.Product.ID == Int32.Parse(productID)).ToList();
             }
             if (brand != null)
@@ -96,10 +102,45 @@ namespace P3_Projekt_WPF.Classes.Utilities
             }
         }
 
-        public DateTime EndDate(DateTime date)
+
+        /*public StatisticsListItem GetReceiptStatistics()
         {
-            TimeSpan dayEnd = new TimeSpan(23, 59, 59);
-            return date + dayEnd;
+            int receiptCount = 0;
+            decimal totalReceiptPrice = 0;
+
+            foreach (Receipt receipt in ReceiptsForStatistics)
+            {
+                receiptCount++;
+                totalReceiptPrice += receipt.TotalPrice;
+            }
+
+            return new StatisticsListItem("", "Gennemsnitlig kvitteringspris", $"{ receiptCount}", $"{totalReceiptPrice / receiptCount}");
         }
+
+        public void GenerateGroupSales()
+        {
+            SalesPerGroup = new Dictionary<int, decimal>();
+            foreach (Group group in _storageController.GroupDictionary.Values)
+            {
+                SalesPerGroup.Add(group.ID, 0m);
+            }
+            GetGroupSales();
+        }
+        
+        private void GetGroupSales()
+        {
+            foreach(SaleTransaction transaction in TransactionsForStatistics)
+            {
+                if(transaction.GetGroupID() > 0)
+                {
+                    SalesPerGroup[transaction.GetGroupID()] += transaction.TotalPrice;
+                }
+            }
+        }
+
+        public StatisticsListItem GroupSalesStrings(int id, decimal totalPrice)
+        {
+            return new StatisticsListItem("", $"{_storageController.GroupDictionary[id].Name}", $"{(SalesPerGroup[id] / totalPrice) * 100m}%", $"{SalesPerGroup[id]}");
+        }*/
     }
 }

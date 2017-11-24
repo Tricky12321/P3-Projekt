@@ -212,18 +212,30 @@ namespace P3_Projekt_WPF
 
         private void AmountInputOnlyNumbers(object sender, TextCompositionEventArgs e)
         {
-            // Only allows number in textfield
+            // Only allows numbers in textfield except a single comma
             if (e.Text.Length > 0)
             {
                 if (!char.IsDigit(e.Text, e.Text.Length - 1))
+                {
                     e.Handled = true;
+                    //Handled = true means that the input will not be inputted
+                }
             }
+        }
+
+        private void AmountInputOnlyNumbersButAllowOneComma(object sender, TextCompositionEventArgs e)
+        {
+            TextBox input = (sender as TextBox);
+            //The input string has the format: An unlimited amount of numbers, then 0-1 commas, then 0-2 numbers
+            var re = new System.Text.RegularExpressions.Regex(@"^((\d+)(,{0,1})(\d{0,2}))$");
+            
+            e.Handled = !re.IsMatch(input.Text.Insert(input.CaretIndex, e.Text));
         }
 
         public bool IsProductInputValid()
         {
             if (textbox_DiscountPrice.Text == "")
-                textbox_DiscountPrice.Text = "0";
+                textbox_DiscountPrice.Text = "0,00";
 
             TextBox[] textboxes = new TextBox[] { textbox_Name, textbox_SalePrice, textbox_PurchasePrice };
             ComboBox[] comboboxes = new ComboBox[] { comboBox_Brand, comboBox_Group };
