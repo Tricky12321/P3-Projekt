@@ -31,7 +31,6 @@ namespace P3_Projekt_WPF.Classes.Utilities
             MessageBox.Show(text);
         }
 
-
         public static DateTime UnixTimeStampToDateTime(double unixTimeStamp)
         {
             // Unix timestamp is seconds past epoch
@@ -198,7 +197,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
         public static void UpdateDisabledFields(bool Local, bool Remote, MainWindow MainWin)
         {
             SolidColorBrush BaseColor = new SolidColorBrush(System.Windows.Media.Color.FromRgb(Convert.ToByte(229), Convert.ToByte(229), Convert.ToByte(229)));
-            SolidColorBrush DiabledColor = new SolidColorBrush(System.Windows.Media.Color.FromRgb(Convert.ToByte(159), Convert.ToByte(159), Convert.ToByte(159)));
+            SolidColorBrush DiabledColor = new SolidColorBrush(System.Windows.Media.Color.FromRgb(Convert.ToByte(119), Convert.ToByte(119), Convert.ToByte(119)));
             // LOCAL STARTS HERE
             MainWin.cmb_lcl_db.IsEnabled = Local;
             MainWin.cmb_lcl_ip.IsEnabled = Local;
@@ -210,7 +209,8 @@ namespace P3_Projekt_WPF.Classes.Utilities
             if (Local)
             {
                 MainWin.GroupLocal.Background = BaseColor;
-            } else
+            }
+            else
             {
                 MainWin.GroupLocal.Background = DiabledColor;
             }
@@ -259,7 +259,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
         public static void LoadDBSettingsData(MainWindow MainWin)
         {
             var sett = Properties.Settings.Default;
-                
+
             MainWin.cmb_rmt_db.Text = sett.rmt_db;
             MainWin.cmb_rmt_ip.Text = sett.rmt_ip;
             MainWin.cmb_rmt_port.Text = sett.rmt_port.ToString();

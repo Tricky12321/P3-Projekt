@@ -25,10 +25,7 @@ using System.Collections.Concurrent;
 
 namespace P3_Projekt_WPF
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
-    /// 
+
 
     public partial class MainWindow : Window
     {
@@ -1039,10 +1036,9 @@ namespace P3_Projekt_WPF
         private void btn_MobilePay_Click(object sender, RoutedEventArgs e)
         {
             CompletePurchase(PaymentMethod_Enum.MobilePay);
-
         }
 
-        private void CompletePurchase(PaymentMethod_Enum PaymentMethod)
+        public void CompletePurchase(PaymentMethod_Enum PaymentMethod)
         {
             if (listView_Receipt.HasItems)
             {
