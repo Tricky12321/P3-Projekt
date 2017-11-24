@@ -25,8 +25,6 @@ using System.Collections.Concurrent;
 
 namespace P3_Projekt_WPF
 {
-
-
     public partial class MainWindow : Window
     {
         private SettingsController _settingsController;
@@ -292,7 +290,14 @@ namespace P3_Projekt_WPF
                     image_ChosenProduct.Source = (_productToEdit as Product).Image.Source;
                 }
 
-                textBlock_ChosenProduct.Text = $"ID: {_productToEdit.ID}\nNavn: {(_productToEdit as Product).Name}\nGruppe: {_storageController.GroupDictionary[(_productToEdit as Product).ProductGroupID].Name}\nMærke: {(_productToEdit as Product).Brand}\nPris: {_productToEdit.SalePrice}\nTilbudspris: {(_productToEdit as Product).DiscountPrice}\nIndkøbspris: {(_productToEdit as Product).PurchasePrice}\nLagerstatus:";
+                textBlock_ChosenProduct.Text = $"ID: {_productToEdit.ID}\n" +
+                                                $"{(_productToEdit as Product).Name}\n" +
+                                                $"Gruppe: {_storageController.GroupDictionary[(_productToEdit as Product).ProductGroupID].Name}\n" +
+                                                $"Mærke: {(_productToEdit as Product).Brand}\n" +
+                                                $"Pris: {_productToEdit.SalePrice}\n" +
+                                                $"Tilbudspris: {(_productToEdit as Product).DiscountPrice}\n" +
+                                                $"Indkøbspris: {(_productToEdit as Product).PurchasePrice}\n" +
+                                                $"{((_productToEdit as Product).StorageWithAmount.Count == 0 ? "Produktet er ikke på lager" : "Lagerstatus:")}";
                 foreach (KeyValuePair<int, int> storageWithAmount in (_productToEdit as Product).StorageWithAmount)
                 {
                     textBlock_ChosenProduct.Text += $"\n  - {_storageController.StorageRoomDictionary[storageWithAmount.Key].Name} har {storageWithAmount.Value} stk.";
@@ -444,11 +449,36 @@ namespace P3_Projekt_WPF
         {
             if (transaction.Product is TempProduct)
             {
-                listView_Receipt.Items.Add(new ReceiptListItem { String_Product = (transaction.Product as TempProduct).Description, Amount = transaction.Amount, Price = $"{transaction.GetProductPrice()}", IDTag = $"t{transaction.Product.ID}" });
+                listView_Receipt.Items.Add(new ReceiptListItem
+                {
+                    String_Product = (transaction.Product as TempProduct).Description,
+                    Amount = transaction.Amount,
+                    Price = $"{transaction.TotalPrice}",
+                    IDTag = $"t{transaction.Product.ID}"
+                });
+            }
+            else if (transaction.Product is Product && (transaction.Product as Product).DiscountBool)
+            {
+                listView_Receipt.Items.Add(new ReceiptListItem
+                {
+                    String_Product = transaction.GetProductName(),
+                    Amount = transaction.Amount,
+                    //Price = $"{((transaction.Product as Product).DiscountPrice)*transaction.Amount}",
+                    Price = $"{transaction.TotalPrice}",
+                    IDTag = transaction.Product.ID.ToString(),
+                    TransID = transaction.GetID(),
+                });
             }
             else
             {
-                listView_Receipt.Items.Add(new ReceiptListItem { String_Product = transaction.GetProductName(), Amount = transaction.Amount, Price = $"{transaction.GetProductPrice()}", IDTag = transaction.Product.ID.ToString() });
+                listView_Receipt.Items.Add(new ReceiptListItem
+                {
+                    String_Product = transaction.GetProductName(),
+                    Amount = transaction.Amount,
+                    Price = $"{transaction.TotalPrice}",
+                    IDTag = transaction.Product.ID.ToString(),
+                    TransID = transaction.GetID(),
+                });
             }
         }
 
@@ -487,10 +517,6 @@ namespace P3_Projekt_WPF
             UpdateReceiptList();
         }
 
-        private void listView_Receipt_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-
-        }
 
         private void TextBlock_TargetUpdated(object sender, DataTransferEventArgs e)
         {
@@ -509,7 +535,7 @@ namespace P3_Projekt_WPF
 
                 textBox_AddProductID.Text = string.Empty;
                 textBox_ProductAmount.Text = "1";
-                textBox_AddProductID.SelectAll();
+                textBox_AddProductID.Focus();
             }
             else
             {
@@ -678,23 +704,25 @@ namespace P3_Projekt_WPF
             {
                 ResetStatisticsView();
 
-                string id = null;
+                int productID = 0;
                 if (textBox_StatisticsProductID.Text.Length > 0)
                 {
-                    id = textBox_StatisticsProductID.Text;
+                    productID = int.Parse(textBox_StatisticsProductID.Text);
                 }
                 string brand = comboBox_Brand.Text;
-                string groupString = comboBox_Group.Text;
-                Group group = null;
+                int groupID = 0;
                 if (comboBox_Group.Text != "")
                 {
-                    group = _storageController.GroupDictionary.Values.First(x => x.Name == groupString);
+                    groupID = _storageController.GroupDictionary.Values.First(x => x.Name == comboBox_Group.Text).ID;
                 }
+                bool filterID = false;
+                bool filterBrand = false;
+                bool filterGroup = false;
 
-                CheckboxChecker(ref id, ref brand, ref group);
+                CheckboxChecker(ref filterID, ref filterBrand, ref filterGroup);
 
-                _statisticsController.RequestStatisticsDate(startDate, endDate);
-                _statisticsController.FilterByParameters(id, brand, group);
+                string queryString = _statisticsController.GetQueryString(filterID, productID, filterGroup, groupID, filterBrand, brand, startDate, endDate);
+                _statisticsController.RequestStatisticsDate(queryString);
 
                 DisplayStatistics();
                 if (_statisticsController.TransactionsForStatistics.Count == 0)
@@ -704,7 +732,8 @@ namespace P3_Projekt_WPF
             }
             else
             {
-                _statisticsController.RequestStatisticsDate(DateTime.Today, DateTime.Today);
+                string queryString = _statisticsController.GetQueryString(false, 0, false, 0, false, "", DateTime.Today, DateTime.Today);
+                _statisticsController.RequestStatisticsDate(queryString);
                 ResetStatisticsView();
                 DisplayStatistics();
             }
@@ -716,19 +745,19 @@ namespace P3_Projekt_WPF
             label_NoTransactions.Visibility = Visibility.Hidden;
         }
 
-        private void CheckboxChecker(ref string id, ref string brand, ref Group group)
+        private void CheckboxChecker(ref bool product, ref bool brand, ref bool group)
         {
             if (!checkBox_Product.IsChecked.Value)
             {
-                id = null;
+                product = true;
             }
             if (!checkBox_Brand.IsChecked.Value)
             {
-                brand = null;
+                brand = true;
             }
             if (!checkBox_Group.IsChecked.Value)
             {
-                group = null;
+                group = true;
             }
         }
 
@@ -879,6 +908,11 @@ namespace P3_Projekt_WPF
 
         private void btn_search_Click(object sender, RoutedEventArgs e)
         {
+            ShowSearchResultsList();
+        }
+
+        private void ShowSearchResultsList()
+        {
             listBox_SearchResultsSaleTab.Visibility = Visibility.Visible;
             ConcurrentDictionary<int, SearchProduct> productSearchResults = _storageController.SearchForProduct(txtBox_SearchField.Text);
             listBox_SearchResultsSaleTab.Items.Clear();
@@ -887,16 +921,16 @@ namespace P3_Projekt_WPF
             {
                 if (product.CurrentProduct is Product)
                 {
-                    var item = new ListBoxItem();
+                    ListBoxItem item = new ListBoxItem();
                     item.Tag = product.CurrentProduct.ID;
                     item.Content = new SaleSearchResultItemControl((product.CurrentProduct as Product).Image, $"{(product.CurrentProduct as Product).Name}\n{product.CurrentProduct.ID}");
                     listBox_SearchResultsSaleTab.Items.Add(item);
                 }
                 else if (product.CurrentProduct is ServiceProduct)
                 {
-                    var item = new ListBoxItem();
+                    ListBoxItem item = new ListBoxItem();
                     item.Tag = product.CurrentProduct.ID;
-                    item.Content = new SaleSearchResultItemControl((product.CurrentProduct as ServiceProduct).Image, $"{(product.CurrentProduct as ServiceProduct).Name}\n{product.CurrentProduct.ID}");
+                    item.Content = new SaleSearchResultItemControl((product.CurrentProduct as ServiceProduct).Image, $"{(product.CurrentProduct as ServiceProduct).Name}\n{product.CurrentProduct.ID}\n{product.CurrentProduct.SalePrice}");
                     item.Background = Brushes.LightBlue;
                     listBox_SearchResultsSaleTab.Items.Add(item);
                     listBox_SearchResultsSaleTab.SelectedIndex = 0;
@@ -915,11 +949,7 @@ namespace P3_Projekt_WPF
 
         public void SearchFieldLostFocus(object sender, RoutedEventArgs e)
         {
-            Thread.Sleep(5);
-            if (!listBox_SearchResultsSaleTab.IsFocused)
-            {
-                listBox_SearchResultsSaleTab.Visibility = Visibility.Hidden;
-            }
+            listBox_SearchResultsSaleTab.Visibility = Visibility.Hidden;
         }
 
         private void EnterKeyPressedSearch(object sender, KeyEventArgs e)
@@ -930,7 +960,8 @@ namespace P3_Projekt_WPF
             }
             else if (e.Key == Key.Enter && txtBox_SearchField.IsFocused)
             {
-                ///////////
+                btn_search.Focus();
+                ShowSearchResultsList();
             }
             else if (e.Key == Key.Enter && (textBox_AddProductID.IsFocused || textBox_ProductAmount.IsFocused))
             {
@@ -984,8 +1015,6 @@ namespace P3_Projekt_WPF
             }
         }
         #endregion
-
-
 
         private void btn_OpenAdmin_Click(object sender, RoutedEventArgs e)
         {
@@ -1043,7 +1072,13 @@ namespace P3_Projekt_WPF
             if (listView_Receipt.HasItems)
             {
                 decimal PriceToPay = Convert.ToDecimal(label_TotalPrice.Content);
+                if (_POSController.PlacerholderReceipt.TotalPriceToPay == -1m)
+                {
+                    _POSController.PlacerholderReceipt.TotalPriceToPay = PriceToPay;
+                }
                 decimal PaymentAmount;
+                
+                
                 if (PayWithAmount.Text.Length == 0)
                 {
                     PaymentAmount = Convert.ToDecimal(label_TotalPrice.Content);
@@ -1053,19 +1088,18 @@ namespace P3_Projekt_WPF
                     PaymentAmount = Convert.ToDecimal(PayWithAmount.Text);
                 }
 
-                if (PriceToPay > PaymentAmount)
-                {
-                    MessageBox.Show("Det betalte beløb er ikke højere end prisen for varene.");
-                }
-                else
+                Payment NewPayment = new Payment(Receipt.GetNextID(), PaymentAmount, PaymentMethod);
+                _POSController.PlacerholderReceipt.Payments.Add(NewPayment);
+                label_TotalPrice.Content = (PriceToPay - NewPayment.Amount);
+                if (_POSController.PlacerholderReceipt.PaidPrice >= _POSController.PlacerholderReceipt.TotalPriceToPay)
                 {
                     SaleTransaction.SetStorageController(_storageController);
-                    _POSController.PlacerholderReceipt.PaymentMethod = PaymentMethod;
+                    //_POSController.PlacerholderReceipt.PaymentMethod = PaymentMethod;
                     Thread NewThread = new Thread(new ThreadStart(_POSController.ExecuteReceipt));
                     NewThread.Name = "ExecuteReceipt Thread";
                     NewThread.Start();
                     listView_Receipt.Items.Clear();
-                    label_TotalPrice.Content = "Retur: " + (PriceToPay - PaymentAmount).ToString();
+                    label_TotalPrice.Content = "Retur: " + (_POSController.PlacerholderReceipt.TotalPriceToPay - _POSController.PlacerholderReceipt.PaidPrice).ToString();
                     PayWithAmount.Text = "";
                 }
             }
@@ -1096,12 +1130,17 @@ namespace P3_Projekt_WPF
                 else
                 {
                     adminValid = new AdminValidation();
+                    adminValid.Closed += delegate
+                    {
+                        if (adminValid.IsPasswordCorrect)
+                        {
+                            _settingsController.isAdmin = true;
+                            btn_AdminLogin.Content = "Log ud";
+                            image_Admin.Source = unlocked.ImageSource;
+                            label_NoAdmin.Visibility = Visibility.Collapsed;
+                        }
+                    };
                     adminValid.ShowDialog();
-                    _settingsController.isAdmin = true;
-                    btn_AdminLogin.Content = "Log ud";
-                    image_Admin.Source = unlocked.ImageSource;
-                    label_NoAdmin.Visibility = Visibility.Collapsed;
-
                 }
             };
         }
@@ -1160,6 +1199,26 @@ namespace P3_Projekt_WPF
             e.Handled = Utils.RegexCheckNumber(input.Text.Insert(input.CaretIndex, e.Text));
         }
 
+        private void listBox_SearchResultsSaleTab_KeyDown(object sender, KeyEventArgs e)
+        {
+            ListBoxItem selectedItem = ((sender as ListBox).SelectedItem as ListBoxItem);
+            int selectedItemID;
+            if ( int.TryParse(selectedItem.Tag.ToString(), out selectedItemID)){
+                BaseProduct product = _POSController.GetProductFromID(selectedItemID);
+                if ( product != null && e.Key == Key.Enter)
+                {
+                    _POSController.AddSaleTransaction(product);
+                    UpdateReceiptList();
+                }
+            }
+            listBox_SearchResultsSaleTab.Visibility = Visibility.Hidden;
+        }
+
+        private void listView_Receipt_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            btn_discount.IsHitTestVisible = true;
+        }
+
         private OrderTransactionWindow _orderTransactionWindow;
 
         private void button_OrderTransaction_Click(object sender, RoutedEventArgs e)
@@ -1174,6 +1233,11 @@ namespace P3_Projekt_WPF
             }
             _orderTransactionWindow.Show();
             _orderTransactionWindow.Activate();
+        }
+
+        private void btn_discount_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }

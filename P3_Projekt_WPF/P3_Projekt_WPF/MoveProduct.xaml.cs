@@ -59,7 +59,6 @@ namespace P3_Projekt_WPF
             }
         }
 
-
         private void ProductSearch()
         {
             listBox_SearchMoveProduct.Visibility = Visibility.Visible;
