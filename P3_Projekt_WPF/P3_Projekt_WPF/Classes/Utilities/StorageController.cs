@@ -23,10 +23,27 @@ namespace P3_Projekt_WPF.Classes.Utilities
         public List<string[]> InformationGridData = new List<string[]>();
         private object InformationGridLock = new object();
         private ConcurrentQueue<Product> _productResults = new ConcurrentQueue<Product>();
+        public ConcurrentDictionary<int, BaseProduct> AllProductsDictionary = new ConcurrentDictionary<int, BaseProduct>();
+
         public StorageController()
         {
             //GetAllProductsFromDatabase();
             //GetAllReceiptsFromDatabase();
+        }
+
+
+        public void LoadAllProductsDictionary()
+        {
+            AllProductsDictionary.Clear();
+            foreach (KeyValuePair<int, Product> productWithID in ProductDictionary)
+            {
+                AllProductsDictionary.TryAdd(productWithID.Key, productWithID.Value as BaseProduct);
+            }
+
+            foreach (KeyValuePair<int, ServiceProduct> serviceProductWithID in ServiceProductDictionary)
+            {
+                AllProductsDictionary.TryAdd(serviceProductWithID.Key, serviceProductWithID.Value as BaseProduct);
+            }
         }
 
         #region Multithreading
@@ -119,7 +136,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
 
         private void UpdateStorageStatus_Thread()
         {
-            while(!_productQueueDone)
+            while (!_productQueueDone)
             {
                 Thread.Sleep(5);
             }
@@ -220,7 +237,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
             while (TempProductQueue.TryDequeue(out Data))
             {
                 TempProduct NewTempProduct = new TempProduct(Data);
-                TempProductList.TryAdd(NewTempProduct.ID,NewTempProduct);
+                TempProductList.TryAdd(NewTempProduct.ID, NewTempProduct);
             }
             TempProductTimer.Stop();
             TimerStrings.Enqueue("[P3] Det tog " + TempProductTimer.ElapsedMilliseconds + "ms at oprette Temp produkter [" + DatabaseTimer.ElapsedMilliseconds + "ms]");
@@ -246,7 +263,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
                 ServiceProductDictionary.TryAdd(NewServiceProduct.ID, NewServiceProduct);
             }
             ServiceProductTimer.Stop();
-            TimerStrings.Enqueue("[P3] Det tog " + ServiceProductTimer.ElapsedMilliseconds + "ms at oprette Service Produkter ["+DatabaseTimer.ElapsedMilliseconds+"ms]");
+            TimerStrings.Enqueue("[P3] Det tog " + ServiceProductTimer.ElapsedMilliseconds + "ms at oprette Service Produkter [" + DatabaseTimer.ElapsedMilliseconds + "ms]");
             Debug.WriteLine("ServiceProductQueue: Done!");
             _serviceProductQueueDone = true;
             AddInformation("ServiceProduct count", ServiceProductDictionary.Count);
@@ -364,7 +381,8 @@ namespace P3_Projekt_WPF.Classes.Utilities
             if (discountPrice > 0)
             {
                 discount = true;
-            } else
+            }
+            else
             {
                 discount = false;
             }
@@ -412,7 +430,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
         public TempProduct CreateTempProduct(string description, decimal salePrice)
         {
             TempProduct newTempProduct = new TempProduct(description, salePrice);
-            TempProductList.TryAdd(newTempProduct.ID,newTempProduct);
+            TempProductList.TryAdd(newTempProduct.ID, newTempProduct);
             return newTempProduct;
         }
 
@@ -488,13 +506,13 @@ namespace P3_Projekt_WPF.Classes.Utilities
             {
                 if (ProductDictionary.Keys.Contains(isNumber))
                 {
-                    SearchProduct matchedProduct = new SearchProduct(ProductDictionary[isNumber]);
-                    matchedProduct.NameMatch = 100000;
+                    SearchProduct matchedProduct = new SearchProduct(AllProductsDictionary[isNumber]);
+                    matchedProduct.NameMatch = 1000;
                     productsToReturn.TryAdd(isNumber, matchedProduct);
                 }
             }
 
-            foreach (Product product in ProductDictionary.Values)
+            foreach (BaseProduct product in AllProductsDictionary.Values)
             {
                 ProductSearch(searchStringLower, product);
                 GroupSearch(searchStringLower, product);
@@ -514,27 +532,54 @@ namespace P3_Projekt_WPF.Classes.Utilities
             }
         }
 
-        private void ProductSearch(string searchStringElement, Product productToConvert)
+        private void ProductSearch(string searchStringElement, BaseProduct productToConvert)
         {
             SearchProduct productToAdd = new SearchProduct(productToConvert);
 
             string[] searchSplit = searchStringElement.Split(' ');
-            string[] productSplit = productToConvert.Name.ToLower().Split(' ');
 
-            foreach (string searchEle in searchSplit)
+            if (productToConvert is Product)
             {
-                foreach (string productNameEle in productSplit)
+                string[] productSplit = (productToConvert as Product).Name.ToLower().Split(' ');
+
+                foreach (string s in searchSplit)
                 {
-                    if(searchEle == productNameEle)
+                    foreach (string t in productSplit)
                     {
-                        productToAdd.NameMatch += 100;
-                    }
-                    else if (LevenstheinProductSearch(searchEle, productNameEle))
-                    {
-                        productToAdd.NameMatch += 1;
+                        if (s == t)
+                        {
+                            productToAdd.NameMatch += 100;
+                        }
+                        else if (LevenstheinProductSearch(s, t))
+                        {
+                            productToAdd.NameMatch += 1;
+                        }
                     }
                 }
             }
+            else if (productToConvert is ServiceProduct)
+            {
+                string[] productSplit = (productToConvert as ServiceProduct).Name.ToLower().Split(' ');
+
+                foreach (string s in searchSplit)
+                {
+                    foreach (string t in productSplit)
+                    {
+                        if (s == t)
+                        {
+                            productToAdd.NameMatch += 100;
+                        }
+                        else if (LevenstheinProductSearch(s, t))
+                        {
+                            productToAdd.NameMatch += 1;
+                        }
+                    }
+                }
+            } else
+            {
+                throw new WrongProductTypeException("Produktet der søges efter er af forkert type");
+            }
+
             weigthedSearchList.Add(productToAdd);
         }
 
@@ -562,7 +607,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
         }
 
 
-        private void GroupSearch(string searchString, Product product)
+        private void GroupSearch(string searchString, BaseProduct product)
         {
             //divides all the elements in the string, to evaluate each element
             string[] dividedString = searchString.Split(' ');
@@ -570,26 +615,49 @@ namespace P3_Projekt_WPF.Classes.Utilities
             int MatchedValue;
             //if the string contains a name of a group, or the string is matched, each product with the same group 
             //is added to the list of products to show.
-            foreach(string searchedString in dividedString)
+
+            if (product is Product)
             {
-                if (GroupDictionary[product.ProductGroupID].Name.Contains(searchedString))
+                foreach (string searchedString in dividedString)
                 {
-                    weigthedSearchList.Where(x => x.CurrentProduct.ID == product.ID).First().GroupMatch += 100;
-                }
-            }
-            if (LevenshteinsGroupAndProductSearch(dividedString, GroupDictionary[product.ProductGroupID].Name, out MatchedValue))
-            {
-                if (weigthedSearchList.Where(x => x.CurrentProduct.ID == product.ID).Count() > 0)
-                {
-                    if (weigthedSearchList.Where(x => x.CurrentProduct.ID == product.ID).First() != null)
+                    if (GroupDictionary[(product as Product).ProductGroupID].Name.Contains(searchedString))
                     {
-                        weigthedSearchList.Where(x => x.CurrentProduct.ID == product.ID).First().GroupMatch += 1;
+                        weigthedSearchList.Where(x => x.CurrentProduct.ID == product.ID).First().GroupMatch += 100;
+                    }
+                }
+                if (LevenshteinsGroupAndProductSearch(dividedString, GroupDictionary[(product as Product).ProductGroupID].Name, out MatchedValue))
+                {
+                    if (weigthedSearchList.Where(x => x.CurrentProduct.ID == product.ID).Count() > 0)
+                    {
+                        if (weigthedSearchList.Where(x => x.CurrentProduct.ID == product.ID).First() != null)
+                        {
+                            weigthedSearchList.Where(x => x.CurrentProduct.ID == product.ID).First().GroupMatch += 1;
+                        }
+                    }
+                }
+            } else if (product is ServiceProduct)
+            {
+                foreach (string searchedString in dividedString)
+                {
+                    if (GroupDictionary[(product as ServiceProduct).ServiceProductGroupID].Name.Contains(searchedString))
+                    {
+                        weigthedSearchList.Where(x => x.CurrentProduct.ID == product.ID).First().GroupMatch += 100;
+                    }
+                }
+                if (LevenshteinsGroupAndProductSearch(dividedString, GroupDictionary[(product as ServiceProduct).ServiceProductGroupID].Name, out MatchedValue))
+                {
+                    if (weigthedSearchList.Where(x => x.CurrentProduct.ID == product.ID).Count() > 0)
+                    {
+                        if (weigthedSearchList.Where(x => x.CurrentProduct.ID == product.ID).First() != null)
+                        {
+                            weigthedSearchList.Where(x => x.CurrentProduct.ID == product.ID).First().GroupMatch += 1;
+                        }
                     }
                 }
             }
         }
 
-        private void BrandSearch(string searchString, Product product)
+        private void BrandSearch(string searchString, BaseProduct product)
         {
             //divides all the elements in the string, to evaluate each element
             string[] dividedString = searchString.Split(' ');
@@ -598,24 +666,26 @@ namespace P3_Projekt_WPF.Classes.Utilities
             //matching on each element in the string
             //if the string contains a product brand, or the string is matched, each product with the same brand
             //is added to the list of products to show.
-            foreach (string searchedString in dividedString)
+            if (product is Product)
             {
-                if (product.Brand.Contains(searchedString))
+                foreach (string searchedString in dividedString)
                 {
-                    weigthedSearchList.Where(x => x.CurrentProduct.ID == product.ID).First().BrandMatch += 100;
-                }
-            }
-            if (LevenshteinsGroupAndProductSearch(dividedString, product.Brand, out MatchedValues))
-            {
-                if (weigthedSearchList.Where(x => x.CurrentProduct.ID == product.ID).Count() > 0)
-                {
-                    if (weigthedSearchList.Where(x => x.CurrentProduct.ID == product.ID).First() != null) ;
+                    if ((product as Product).Brand.Contains(searchedString))
                     {
-                        weigthedSearchList.Where(x => x.CurrentProduct.ID == product.ID).First().BrandMatch += 1;
+                        weigthedSearchList.Where(x => x.CurrentProduct.ID == product.ID).First().BrandMatch += 100;
+                    }
+                }
+                if (LevenshteinsGroupAndProductSearch(dividedString, (product as Product).Brand, out MatchedValues))
+                {
+                    if (weigthedSearchList.Where(x => x.CurrentProduct.ID == product.ID).Count() > 0)
+                    {
+                        if (weigthedSearchList.Where(x => x.CurrentProduct.ID == product.ID).First() != null)
+                        {
+                            weigthedSearchList.Where(x => x.CurrentProduct.ID == product.ID).First().BrandMatch += 1;
+                        }
                     }
                 }
             }
-
         }
 
         private bool LevenstheinProductSearch(string searchEle, string ProductEle)

@@ -15,6 +15,8 @@ using System.Windows.Shapes;
 using P3_Projekt_WPF.Classes;
 using P3_Projekt_WPF.Classes.Utilities;
 using System.Collections.Concurrent;
+using P3_Projekt_WPF.Classes.Exceptions;
+
 namespace P3_Projekt_WPF
 {
     /// <summary>
@@ -22,9 +24,26 @@ namespace P3_Projekt_WPF
     /// </summary>
     public partial class ProductControl : UserControl
     {
+        private BaseProduct _displayProduct;
+
         public Image txtboxImage
         {
-            get { return _displayProduct.Image; }
+            get
+            {
+                if (_displayProduct is Product)
+                {
+                    return (_displayProduct as Product).Image;
+
+                }
+                else if(_displayProduct is ServiceProduct)
+                {
+                    return (_displayProduct as ServiceProduct).Image;
+                }
+                else
+                {
+                    throw new WrongProductTypeException("Fejl i indsættelse af billede");
+                }
+            }
             set
             {
                 if (value != null)
@@ -39,23 +58,40 @@ namespace P3_Projekt_WPF
                     img_ProductImage.Stretch = Stretch.Uniform;
                 }
             }
-        }
-        
-        private Product _displayProduct;
-        public ProductControl(Product productForDisplay, ConcurrentDictionary<int, Group> groupDict)
+        } 
+
+        public ProductControl(BaseProduct productForDisplay, ConcurrentDictionary<int, Group> groupDict)
         {
             InitializeComponent();
             _displayProduct = productForDisplay;
-            txtboxImage = productForDisplay.Image;
+            txtboxImage = txtboxImage;
+
+            if (productForDisplay is ServiceProduct)
+            {
+                btn_ShowMoreInformation.Background = Brushes.LightBlue;  
+            }
 
             ShowProductInfo(groupDict);
             this.VerticalAlignment = VerticalAlignment.Stretch;
-            this.HorizontalAlignment = HorizontalAlignment.Stretch;   
+            this.HorizontalAlignment = HorizontalAlignment.Stretch;
         }
 
         public void ShowProductInfo(ConcurrentDictionary<int, Group> groupDict)
         {
-           txtbox_Product.Text = $"ID: {_displayProduct.ID.ToString()}\nNavn: { _displayProduct.Name}\nGruppe: {groupDict[_displayProduct.ProductGroupID].Name}\nPris { _displayProduct.SalePrice.ToString()}DKK";
+            if (_displayProduct is Product)
+            {
+                txtbox_Product.Text = $"ID: {_displayProduct.ID.ToString()}\nNavn: { (_displayProduct as Product).Name}\nGruppe: {groupDict[(_displayProduct as Product).ProductGroupID].Name}\nPris { _displayProduct.SalePrice.ToString()}DKK";
+
+            }
+            else if (_displayProduct is ServiceProduct)
+            {
+                txtbox_Product.Text = $"ID: {_displayProduct.ID.ToString()}\nNavn: { (_displayProduct as ServiceProduct).Name}\nGruppe: {groupDict[(_displayProduct as ServiceProduct).ServiceProductGroupID].Name}\nPris { _displayProduct.SalePrice.ToString()}DKK";
+            }
+            else
+            {
+                throw new WrongProductTypeException("Fejl i forsøg på at vise info om produkt");
+            }
+
         }
     }
 }

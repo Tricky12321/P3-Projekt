@@ -8,13 +8,13 @@ namespace P3_Projekt_WPF.Classes
 {
     public class SearchProduct : IComparable
     {
-        public Product CurrentProduct;
+        public BaseProduct CurrentProduct;
         public int NameMatch = 0;
         public int GroupMatch = 0;
         public int BrandMatch = 0;
 
 
-        public SearchProduct(Product product)
+        public SearchProduct(BaseProduct product)
         {
             CurrentProduct = product;
         }

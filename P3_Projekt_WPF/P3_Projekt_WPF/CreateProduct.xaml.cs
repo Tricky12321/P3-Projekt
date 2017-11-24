@@ -35,6 +35,8 @@ namespace P3_Projekt_WPF
         private int UpdateProductID = 0;
         private MainWindow MainWin = null;
 
+        public CreateProduct() { }
+
         public CreateProduct(ServiceProduct prod, StorageController storageController, MainWindow MainWin)
         {
             this.MainWin = MainWin;
@@ -119,9 +121,9 @@ namespace P3_Projekt_WPF
             textbox_ServiceSalePrice.Text = prod.SalePrice.ToString();
             textbox_ServiceGroupLimit.Text = prod.GroupLimit.ToString();
             textbox_ServiceGroupPrice.Text = prod.GroupPrice.ToString();
-            if (prod.ProductPicture != null)
+            if (prod.Image != null)
             {
-                image_ServiceProduct.Source = prod.ProductPicture;
+                image_ServiceProduct.Source = prod.Image.Source;
             }
         }
 

@@ -38,11 +38,11 @@ namespace P3_Projekt_WPF.Classes.Utilities
             //PlacerholderReceipt.Delete();
         }
 
-        public Product GetProductFromID(int id)
+        public BaseProduct GetProductFromID(int id)
         {
-            if (_storageController.ProductDictionary.Keys.Contains(id))
+            if (_storageController.AllProductsDictionary.Keys.Contains(id))
             {
-                return _storageController.ProductDictionary[id];
+                return _storageController.AllProductsDictionary[id];
             } 
             return null;
         }
