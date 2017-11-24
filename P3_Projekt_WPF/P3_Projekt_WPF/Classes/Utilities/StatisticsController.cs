@@ -57,7 +57,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
 
         public string GetQueryString(bool searchID, int idToSearch, bool searchGroup, int groupToSearch, bool searchBrand, string brandToSearch, DateTime from, DateTime to)
         {
-            StringBuilder NewString = new StringBuilder("SELECT `sale_transactions`.*, `products`.`brand`, `products`.`groups` " +
+            StringBuilder NewString = new StringBuilder("SELECT `sale_transactions`.* " +
                 "FROM `products`, `sale_transactions` WHERE `products`.`id` = `sale_transactions`.`product_id`"+
                 $" AND UNIX_TIMESTAMP(`datetime`) >= '{Utils.GetUnixTime(from)}' AND UNIX_TIMESTAMP(`datetime`) <= '{Utils.GetUnixTime(EndDate(to))}'");
             if (searchID)
@@ -68,7 +68,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
             {
                 if (searchGroup)
                 {
-                    NewString.Append($" AND `products`.`group` = '{groupToSearch}'");
+                    NewString.Append($" AND `products`.`groups` = '{groupToSearch}'");
                 }
 
                 if (searchBrand)
@@ -95,7 +95,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
             int TransCount = _dataQueue.Count;
             CreateThreads();
             ThreadWork();
-            while (!_dataQueue.IsEmpty)
+            while (!_dataQueue.IsEmpty && (_saleTransactionThreads.Where(x => x.ThreadState == System.Threading.ThreadState.Running).Count() == 0))
             {
                 Thread.Sleep(1);
             }
@@ -105,25 +105,6 @@ namespace P3_Projekt_WPF.Classes.Utilities
             Timer1.Stop();
             Debug.WriteLine("[StatisticsController] took " + Timer1.ElapsedMilliseconds + "ms to fetch");
         }
-
-
-
-        /*public void FilterByParameters(string productID, string brand, Group group)
-        {
-            if (productID != null)
-            {
-                TransactionsForStatistics = TransactionsForStatistics.Where(x => x.Product.ID == Int32.Parse(productID)).ToList();
-            }
-            if (brand != null)
-            {
-                TransactionsForStatistics = TransactionsForStatistics.Where(x => x.GetBrand() == brand).ToList();
-            }
-            if (group != null)
-            {
-                TransactionsForStatistics = TransactionsForStatistics.Where(x => x.GetGroupID() == group.ID).ToList();
-            }
-        }*/
-
 
         /*public StatisticsListItem GetReceiptStatistics()
         {
@@ -137,7 +118,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
             }
 
             return new StatisticsListItem("", "Gennemsnitlig kvitteringspris", $"{ receiptCount}", $"{totalReceiptPrice / receiptCount}");
-        }
+        }*/
 
         public void GenerateGroupSales()
         {
@@ -153,7 +134,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
         {
             foreach(SaleTransaction transaction in TransactionsForStatistics)
             {
-                if(transaction.GetGroupID() > 0)
+                if(transaction.GetGroupID() >= 0)
                 {
                     SalesPerGroup[transaction.GetGroupID()] += transaction.TotalPrice;
                 }
@@ -162,7 +143,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
 
         public StatisticsListItem GroupSalesStrings(int id, decimal totalPrice)
         {
-            return new StatisticsListItem("", $"{_storageController.GroupDictionary[id].Name}", $"{(SalesPerGroup[id] / totalPrice) * 100m}%", $"{SalesPerGroup[id]}");
-        }*/
+            return new StatisticsListItem("", $"{_storageController.GroupDictionary[id].Name}", $"{Math.Round((SalesPerGroup[id] / totalPrice) * 100m, 1)}%", $"{SalesPerGroup[id]}");
+        }
     }
 }
