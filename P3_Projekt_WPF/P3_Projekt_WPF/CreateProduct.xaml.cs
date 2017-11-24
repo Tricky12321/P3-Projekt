@@ -164,7 +164,7 @@ namespace P3_Projekt_WPF
             }
         }
 
-        public void PickImage(object sender, RoutedEventArgs e)
+        private void PickImage(object sender, RoutedEventArgs e)
         {
             using (var dialog = new System.Windows.Forms.OpenFileDialog())
             {
@@ -176,7 +176,7 @@ namespace P3_Projekt_WPF
             }
         }
 
-        public void AddStorageWithAmount(object sender, RoutedEventArgs e)
+        private void AddStorageWithAmount(object sender, RoutedEventArgs e)
         {
             if (comboBox_StorageRoom.Text.Length > 0)
             {
@@ -232,7 +232,7 @@ namespace P3_Projekt_WPF
             e.Handled = !re.IsMatch(input.Text.Insert(input.CaretIndex, e.Text));
         }
 
-        public bool IsProductInputValid()
+        private bool IsProductInputValid()
         {
             if (textbox_DiscountPrice.Text == "")
                 textbox_DiscountPrice.Text = "0,00";
@@ -275,9 +275,15 @@ namespace P3_Projekt_WPF
             return returnVal;
         }
 
-        public bool IsServiceProductInputValid()
+        private bool IsServiceProductInputValid()
         {
-            TextBox[] textboxes = new TextBox[] { textbox_ServiceName, textbox_ServiceSalePrice, textbox_ServiceGroupLimit, textbox_ServiceGroupPrice };
+            TextBox[] textboxes = new TextBox[] { textbox_ServiceName, textbox_ServiceSalePrice};
+
+            if (textbox_ServiceGroupLimit.Text == "")
+                textbox_ServiceGroupLimit.Text = "0";
+
+            if (textbox_ServiceGroupPrice.Text == "")
+                textbox_ServiceGroupPrice.Text = textbox_ServiceSalePrice.Text;
 
             bool returnVal = true;
             foreach (TextBox textbox in textboxes)

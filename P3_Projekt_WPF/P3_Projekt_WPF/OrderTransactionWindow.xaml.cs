@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,37 +14,33 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using P3_Projekt_WPF.Classes;
 using P3_Projekt_WPF.Classes.Utilities;
-using System.Collections.Concurrent;
 
 namespace P3_Projekt_WPF
 {
     /// <summary>
-    /// Interaction logic for MoveProduct.xaml
+    /// Interaction logic for OrderTransactionWindow.xaml
     /// </summary>
-    public partial class MoveProduct : Window
+    public partial class OrderTransactionWindow : Window
     {
         private StorageController _storageController;
         private POSController _posController;
-        private int _amount = 1;
-
-        public MoveProduct(StorageController storageController, POSController posController)
+        private int _amount = 0;
+        public OrderTransactionWindow(StorageController storageController, POSController posController)
         {
+            InitializeComponent();
             _storageController = storageController;
             _posController = posController;
-            InitializeComponent();
-            InitWindow();
         }
 
-        public void InitWindow()
-        {
-            //comboBox_StorageRooms.IsEnabled = false;
-            comboBox_Destination.ItemsSource = _storageController.StorageRoomDictionary.Where(x => x.Key > 0).Select(x => x.Value.Name);
-
-        }
 
         private void btn_search_Click(object sender, RoutedEventArgs e)
         {
             ProductSearch();
+        }
+
+        private void txtBox_SearchField_LostFocus(object sender, RoutedEventArgs e)
+        {
+            listBox_SearchResultsSaleTab.Visibility = Visibility.Collapsed;
         }
 
         private void ListBoxItem_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
@@ -59,11 +56,12 @@ namespace P3_Projekt_WPF
             }
         }
 
+
         private void ProductSearch()
         {
-            listBox_SearchMoveProduct.Visibility = Visibility.Visible;
+            listBox_SearchResultsSaleTab.Visibility = Visibility.Visible;
             ConcurrentDictionary<int, SearchProduct> productSearchResults = _storageController.SearchForProduct(txtBox_SearchField.Text);
-            listBox_SearchMoveProduct.Items.Clear();
+            listBox_SearchResultsSaleTab.Items.Clear();
             var searchResults = productSearchResults.Values.OrderByDescending(x => x.BrandMatch + x.GroupMatch + x.NameMatch);
             foreach (SearchProduct product in searchResults)
             {
@@ -72,7 +70,7 @@ namespace P3_Projekt_WPF
                     var item = new ListBoxItem();
                     item.Tag = product.CurrentProduct.ID;
                     item.Content = new SaleSearchResultItemControl((product.CurrentProduct as Product).Image, $"{(product.CurrentProduct as Product).Name}\n{product.CurrentProduct.ID}");
-                    listBox_SearchMoveProduct.Items.Add(item);
+                    listBox_SearchResultsSaleTab.Items.Add(item);
                     if (searchResults.Count() == 1)
                     {
                         FillItemDetails(item);
@@ -80,6 +78,30 @@ namespace P3_Projekt_WPF
                 }
             }
         }
+
+        private void Window_KeyDown(object sender, KeyEventArgs e)
+        {
+            if(e.Key == Key.Escape)
+            {
+                this.Close();
+            }
+        }
+
+        private void TextInputNoNumber(object sender, TextCompositionEventArgs e)
+        {
+            // Only allows number in textfield
+            if (e.Text.Length > 0)
+            {
+                if (!char.IsDigit(e.Text, e.Text.Length - 1))
+                    e.Handled = true;
+            }
+        }
+
+        private void Grid_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            listBox_SearchResultsSaleTab.Visibility = Visibility.Hidden;
+        }
+
 
         private void FillItemDetails(object sender)
         {
@@ -93,8 +115,9 @@ namespace P3_Projekt_WPF
                 {
                     comboBox_StorageRooms.Items.Add(_storageController.StorageRoomDictionary[storagerooms.Key].Name);
                     comboBox_StorageRooms.SelectedIndex = 0;
+                    button_OrderTransaction.Background = Brushes.White;
                     comboBox_StorageRooms.IsEnabled = true;
-                    comboBox_Destination.IsEnabled = true;
+                    button_OrderTransaction.IsEnabled = true;
                 }
             }
             else
@@ -102,9 +125,10 @@ namespace P3_Projekt_WPF
                 comboBox_StorageRooms.Items.Add("Produktet er ikke på lager");
                 comboBox_StorageRooms.SelectedIndex = 0;
                 comboBox_StorageRooms.IsEnabled = false;
-                comboBox_Destination.IsEnabled = false;
+                button_OrderTransaction.IsEnabled = false;
+                button_OrderTransaction.Background = Brushes.Red;
             }
-            listBox_SearchMoveProduct.Visibility = Visibility.Collapsed;
+            listBox_SearchResultsSaleTab.Visibility = Visibility.Collapsed;
         }
 
         private void btn_PlusAmount_Click(object sender, RoutedEventArgs e)
@@ -122,43 +146,7 @@ namespace P3_Projekt_WPF
             }
         }
 
-        private void button_MoveProduct_Click(object sender, RoutedEventArgs e)
-        {
-            Product product = _posController.GetProductFromID(int.Parse(label_ProduktID.Content.ToString())) as Product;
-            int sourceRoom = _storageController.StorageRoomDictionary.Where(x => x.Value.Name == comboBox_StorageRooms.Text).Select(x => x.Key).First();
-            int destinationRoom = _storageController.StorageRoomDictionary.Where(x => x.Value.Name == comboBox_Destination.Text).Select(x => x.Key).First();
-
-            if (!product.StorageWithAmount.Keys.Contains(_storageController.StorageRoomDictionary.Where(x => x.Value.Name == comboBox_Destination.Text).Select(x => x.Key).First()))
-            {
-                product.StorageWithAmount.TryAdd(_storageController.StorageRoomDictionary.Where(x => x.Value.Name == comboBox_Destination.Text).Select(x => x.Key).First(), 0);
-                product.UpdateInDatabase();
-            }
-            StorageTransaction storageTransaction = new StorageTransaction(product, int.Parse(textBox_ProductAmount.Text), sourceRoom, destinationRoom, _storageController.StorageRoomDictionary);
-            storageTransaction.Execute();
-            storageTransaction.UploadToDatabase();
-        }
-
-
-        private void TextInputNoNumber(object sender, TextCompositionEventArgs e)
-        {
-            // Only allows number in textfield
-            if (e.Text.Length > 0)
-            {
-                if (!char.IsDigit(e.Text, e.Text.Length - 1))
-                    e.Handled = true;
-            }
-        }
-
-        private void Window_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.Key == Key.Escape)
-            {
-                
-                this.Close();
-            }
-        }
-
-        public void MoveProduct_MouseDown(object sender, MouseButtonEventArgs e)
+        private void button_OrderTransaction_Click(object sender, RoutedEventArgs e)
         {
 
         }

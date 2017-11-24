@@ -55,43 +55,43 @@ namespace P3_Projekt_WPF.Classes.Utilities
             }
         }
 
-        public string GetQueryString(bool SearchID, int IDToSearch, bool SearchGroup, int GroupToSearch, bool SearchBrand, string BrandToSearch, DateTime From, DateTime To)
+        public string GetQueryString(bool searchID, int idToSearch, bool searchGroup, int groupToSearch, bool searchBrand, string brandToSearch, DateTime from, DateTime to)
         {
             StringBuilder NewString = new StringBuilder("SELECT `sale_transactions`.*, `products`.`brand`, `products`.`groups` " +
                 "FROM `products`, `sale_transactions` WHERE `products`.`id` = `sale_transactions`.`product_id`"+
-                $" AND UNIX_TIMESTAMP(`datetime`) >= '{From}' AND UNIX_TIMESTAMP(`datetime`) <= '{To}'");
-            if (SearchID)
+                $" AND UNIX_TIMESTAMP(`datetime`) >= '{Utils.GetUnixTime(from)}' AND UNIX_TIMESTAMP(`datetime`) <= '{Utils.GetUnixTime(EndDate(to))}'");
+            if (searchID)
             {
-                NewString.Append($" AND `products`.`id` = '{IDToSearch}'");
+                NewString.Append($" AND `products`.`id` = '{idToSearch}'");
             }
             else
             {
-                if (SearchGroup)
+                if (searchGroup)
                 {
-                    NewString.Append($" AND `products`.`group` = '{GroupToSearch}'");
+                    NewString.Append($" AND `products`.`group` = '{groupToSearch}'");
                 }
 
-                if (SearchBrand)
+                if (searchBrand)
                 {
-                    NewString.Append($" AND `products`.`brand` = '{BrandToSearch}'");
+                    NewString.Append($" AND `products`.`brand` = '{brandToSearch}'");
                 }
             }
-
             return NewString.ToString();
-
         }
 
-        public void RequestStatisticsDate(DateTime from, DateTime to)
+        public DateTime EndDate(DateTime date)
+        {
+            TimeSpan dayEnd = new TimeSpan(23, 59, 59);
+            return date + dayEnd;
+        }
+
+        public void RequestStatisticsDate(string queryString)
         {
             Stopwatch Timer1 = new Stopwatch();
             Timer1.Start();
             _saleTransactionsCreated = 0;
             _saleTransactions = new ConcurrentQueue<SaleTransaction>();
-            int fromUnixTime = Utils.GetUnixTime(from);
-            int toUnixTime = Utils.GetUnixTime(EndDate(to));
-            string requestStatisticsQuery =
-            $"SELECT * FROM `sale_transactions` WHERE UNIX_TIMESTAMP(`datetime`) >= '{fromUnixTime}' AND UNIX_TIMESTAMP(`datetime`) <= '{toUnixTime}';";
-            _dataQueue = Mysql.RunQueryWithReturnQueue(requestStatisticsQuery).RowData;
+            _dataQueue = Mysql.RunQueryWithReturnQueue(queryString).RowData;
             int TransCount = _dataQueue.Count;
             CreateThreads();
             ThreadWork();
@@ -106,13 +106,9 @@ namespace P3_Projekt_WPF.Classes.Utilities
             Debug.WriteLine("[StatisticsController] took " + Timer1.ElapsedMilliseconds + "ms to fetch");
         }
 
-        public DateTime EndDate(DateTime date)
-        {
-            TimeSpan dayEnd = new TimeSpan(23, 59, 59);
-            return date + dayEnd;
-        }
 
-        public void FilterByParameters(string productID, string brand, Group group)
+
+        /*public void FilterByParameters(string productID, string brand, Group group)
         {
             if (productID != null)
             {
@@ -126,7 +122,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
             {
                 TransactionsForStatistics = TransactionsForStatistics.Where(x => x.GetGroupID() == group.ID).ToList();
             }
-        }
+        }*/
 
         public int GetReceiptTotalPrice(DateTime From, DateTime To)
         {
