@@ -1327,21 +1327,35 @@ namespace P3_Projekt_WPF
             {
                 decimal percentage = Convert.ToDecimal(textBox_discount.Text.Remove(textBox_discount.Text.Length - 1, 1));
                 totalDiscount = (_POSController.PlacerholderReceipt.TotalPrice * (percentage / 100));
+                foreach(SaleTransaction transPercent in _POSController.PlacerholderReceipt.Transactions)
+                {
+                    transPercent.Price = (transPercent.TotalPrice)-(transPercent.TotalPrice*(percentage/100)) / transPercent.Amount;
+                }
             }
             else
             {
                 decimal customDiscount = Convert.ToDecimal(textBox_discount.Text);
-                totalDiscount = customDiscount;
+                foreach(SaleTransaction transFlat in _POSController.PlacerholderReceipt.Transactions)
+                {
+                    transFlat.Price = (transFlat.TotalPrice - (customDiscount)) / transFlat.Amount;
+                }
             }
-
+            /*
             decimal cashToSplit = 0;
-            foreach(SaleTransaction trans in _POSController.PlacerholderReceipt.Transactions)
+            int amountOfTransactions = _POSController.PlacerholderReceipt.Transactions.Count();
+            foreach (SaleTransaction trans in _POSController.PlacerholderReceipt.Transactions)
             {
-                
+                if(trans.Price < (totalDiscount / amountOfTransactions))
+                {
+                    cashToSplit += (totalDiscount / amountOfTransactions) - trans.Price;
+                    trans.Price = 0;
+                }
+                else
+                {
+                    trans.Price = trans.TotalPrice - ((totalDiscount / _POSController.PlacerholderReceipt.Transactions.Count) / trans.Amount) + cashToSplit;
 
-
-                trans.Price = trans.Price - (totalDiscount / _POSController.PlacerholderReceipt.Transactions.Count);
-            }
+                }
+            }*/
             _POSController.PlacerholderReceipt.UpdateTotalPrice();
             UpdateReceiptList();
         }
