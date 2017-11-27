@@ -133,6 +133,24 @@ namespace P3_Projekt_WPF.Classes
             }
         }
 
+        public int GetProductID()
+        {
+            if (Product is Product)
+            {
+                return (Product as Product).ID;
+            }
+            else if (Product is ServiceProduct)
+            {
+                return (Product as ServiceProduct).ID;
+            }
+            else if (Product is TempProduct && (Product as TempProduct).Resolved)
+            {
+                return (_getProduct((Product as TempProduct).ResolvedProductID, "product") as Product).ID;
+            }
+            //Returns -1 for unresolved temporary products
+            return -1;
+        }
+
         public int GetGroupID()
         {
             if (Product is Product)

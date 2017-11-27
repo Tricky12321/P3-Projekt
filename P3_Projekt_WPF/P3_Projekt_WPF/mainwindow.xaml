@@ -295,7 +295,7 @@
                             </TransformGroup>
                         </DatePicker.RenderTransform>
                     </DatePicker>
-                    <CheckBox x:Name="checkBox_Product" Margin="25,0,0,194" RenderTransformOrigin="0.5,0.5" HorizontalAlignment="Left" Width="16" Height="15" VerticalAlignment="Bottom">
+                    <CheckBox x:Name="checkBox_Product" Margin="25,0,0,194" RenderTransformOrigin="0.5,0.5" HorizontalAlignment="Left" Width="16" Height="15" VerticalAlignment="Bottom" Checked="checkBox_Product_Checked" Unchecked="checkBox_Product_Unchecked">
                         <CheckBox.RenderTransform>
                             <TransformGroup>
                                 <ScaleTransform ScaleX="3.75" ScaleY="3.75"/>
@@ -366,12 +366,11 @@
                     <TextBlock x:Name="label_CurrentStartDate" Grid.ColumnSpan="2" Margin="200,60,0,0" TextWrapping="Wrap" Text="dd/mm/åå" VerticalAlignment="Top" FontSize="30" HorizontalAlignment="Left" Width="166" Grid.Row="1"/>
                     <TextBlock x:Name="label_CurrentEndDate" Grid.ColumnSpan="2" Margin="200,100,0,0" TextWrapping="Wrap" Text="dd/mm/åå" VerticalAlignment="Top" FontSize="30" HorizontalAlignment="Left" Width="154" Grid.Row="1"/>
                     <TextBlock x:Name="label_NoTransactions" Grid.ColumnSpan="2" Width="auto" HorizontalAlignment="Center" Margin="56,181,39,0" TextWrapping="Wrap" Text="Ingen transaktioner fundet" VerticalAlignment="Top"  Foreground="Red" Height="64" FontSize="30"  Visibility="Hidden"/>
-                    <Button x:Name="Button_DateToday" Content="Statistik for i dag" Margin="5,5,2.5,0" Background="#FFC5C5C5" Style="{StaticResource Flat_Button}" Height="48" VerticalAlignment="Top" Click="Button_DateToday_Click"/>
-                    <Button x:Name="Button_DateYesterday" Content="Statistik for i går" Margin="2.5,5,5,0" Background="#FFC5C5C5" Style="{StaticResource Flat_Button}" Height="48" VerticalAlignment="Top" Click="Button_DateYesterday_Click" Grid.Column="1"/>
-                    <Label x:Name="label_NoAdmin" HorizontalContentAlignment="Center" Content="Ikke Admin, kan kun vise statistik for dagen" Margin="0,140,0,0" VerticalAlignment="Top" Grid.ColumnSpan="2" Height="57" FontSize="30" Foreground="Red" Width="630" HorizontalAlignment="Center"/>
+                    <Button x:Name="Button_DateToday" Content="Dagens Tal" Margin="5,5,2.5,0" Background="#FFC5C5C5" Style="{StaticResource Flat_Button}" Height="48" VerticalAlignment="Top" Click="Button_DateToday_Click"/>
+                    <Label x:Name="label_NoAdmin" HorizontalContentAlignment="Center" Content="Ikke Admin, kan kun vise dagens tal" Margin="0,140,0,0" VerticalAlignment="Top" Grid.ColumnSpan="2" Height="57" FontSize="30" Foreground="Red" Width="630" HorizontalAlignment="Center"/>
                     <Grid Grid.Column="2" Margin="0,0,0,0">
                         <TabControl Background="#FFE5E5E5" Margin="0,60,0,0" FontSize="20">
-                            <TabItem Header="Per Transaktion">
+                            <TabItem Header="Transaktioner">
                                 <ListView x:Name="listView_Statistics" Width="auto" Height="auto" HorizontalContentAlignment="Stretch" Grid.Column="2" Margin="5,5,5,5" FontSize="20">
                                     <ListView.Resources>
                                         <Style TargetType="{x:Type GridViewColumnHeader}">
@@ -412,8 +411,49 @@
                                     </ListView.View>
                                 </ListView>
                             </TabItem>
-                            <TabItem Header="Per Gruppe">
+                            <TabItem Header="Grupper">
                                 <ListView x:Name="listView_GroupStatistics" Width="auto" Height="auto" Grid.Column="2" Margin="10" FontSize="20" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Center">
+                                    <ListView.Resources>
+                                        <Style TargetType="{x:Type GridViewColumnHeader}">
+                                            <Setter Property="HorizontalContentAlignment" Value="Left" />
+                                        </Style>
+                                    </ListView.Resources>
+                                    <ListView.View>
+                                        <GridView>
+                                            <GridViewColumn Header="" Width="0">
+                                                <GridViewColumn.CellTemplate>
+                                                    <DataTemplate>
+                                                        <TextBlock Text="{Binding Date}"/>
+                                                    </DataTemplate>
+                                                </GridViewColumn.CellTemplate>
+                                            </GridViewColumn>
+                                            <GridViewColumn Header="Navn" Width="350">
+                                                <GridViewColumn.CellTemplate>
+                                                    <DataTemplate>
+                                                        <TextBlock Text="{Binding Name}"/>
+                                                    </DataTemplate>
+                                                </GridViewColumn.CellTemplate>
+                                            </GridViewColumn>
+                                            <GridViewColumn Header="Procent" Width="130">
+                                                <GridViewColumn.CellTemplate>
+                                                    <DataTemplate>
+                                                        <TextBlock Text="{Binding Amount}"/>
+                                                    </DataTemplate>
+                                                </GridViewColumn.CellTemplate>
+                                            </GridViewColumn>
+                                            <GridViewColumn Header="Kr" Width="180">
+                                                <GridViewColumn.CellTemplate>
+                                                    <DataTemplate>
+                                                        <TextBlock Text="{Binding Price}"/>
+                                                    </DataTemplate>
+                                                </GridViewColumn.CellTemplate>
+                                            </GridViewColumn>
+                                        </GridView>
+                                    </ListView.View>
+                                </ListView>
+                            </TabItem>
+                            <TabItem Header="Mærker">
+                                <ListView x:Name="listView_BrandStatistics" Width="auto" Height="auto" Grid.Column="2" Margin="10" FontSize="20" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Center">
                                     <ListView.Resources>
                                         <Style TargetType="{x:Type GridViewColumnHeader}">
                                             <Setter Property="HorizontalContentAlignment" Value="Left" />

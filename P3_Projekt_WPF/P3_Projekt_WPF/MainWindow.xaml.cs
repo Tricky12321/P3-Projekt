@@ -162,7 +162,7 @@ namespace P3_Projekt_WPF
             datePicker_StartDate.SelectedDate = DateTime.Now;
             datePicker_EndDate.SelectedDate = DateTime.Now;
             ChangeStatisticsState();
-            var products = _storageController.ProductDictionary.Values.Select(x => x.Brand).Distinct();
+            IEnumerable products = _storageController.ProductDictionary.Values.Select(x => x.Brand).Distinct();
             foreach (string brand in products)
             {
                 comboBox_Brand.Items.Add(brand);
@@ -740,6 +740,7 @@ namespace P3_Projekt_WPF
         {
             listView_Statistics.Items.Clear();
             listView_GroupStatistics.Items.Clear();
+            listView_BrandStatistics.Items.Clear();
             label_NoTransactions.Visibility = Visibility.Hidden;
         }
 
@@ -761,10 +762,14 @@ namespace P3_Projekt_WPF
                 listView_Statistics.Items.Insert(1, _statisticsController.ReceiptStatisticsString());
             }
 
-            _statisticsController.GenerateGroupSales();
+            _statisticsController.GenerateGroupAndBrandSales();
             foreach (int groupID in _statisticsController.SalesPerGroup.Keys)
             {
                 listView_GroupStatistics.Items.Add(_statisticsController.GroupSalesStrings(groupID, totalTransactionPrice));
+            }
+            foreach (string brand in _statisticsController.SalesPerBrand.Keys)
+            {
+                listView_BrandStatistics.Items.Add(_statisticsController.BrandSalesStrings(brand, totalTransactionPrice));
             }
         }
 
@@ -772,13 +777,6 @@ namespace P3_Projekt_WPF
         {
             datePicker_StartDate.SelectedDate = DateTime.Today;
             datePicker_EndDate.SelectedDate = DateTime.Today;
-            Button_CreateStatistics_Click(sender, e);
-        }
-
-        private void Button_DateYesterday_Click(object sender, RoutedEventArgs e)
-        {
-            datePicker_StartDate.SelectedDate = DateTime.Today.AddDays(-1);
-            datePicker_EndDate.SelectedDate = DateTime.Today.AddDays(-1);
             Button_CreateStatistics_Click(sender, e);
         }
 
