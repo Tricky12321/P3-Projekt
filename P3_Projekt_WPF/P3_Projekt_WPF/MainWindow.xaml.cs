@@ -162,15 +162,16 @@ namespace P3_Projekt_WPF
             datePicker_StartDate.SelectedDate = DateTime.Now;
             datePicker_EndDate.SelectedDate = DateTime.Now;
             var products = _storageController.ProductDictionary.Values.Select(x => x.Brand).Distinct();
+
             foreach (string brand in products)
             {
                 comboBox_Brand.Items.Add(brand);
             }
+
             foreach (Group group in _storageController.GroupDictionary.Values)
             {
                 comboBox_Group.Items.Add(group.Name);
             }
-
         }
 
         private void UpdateReceiptList()

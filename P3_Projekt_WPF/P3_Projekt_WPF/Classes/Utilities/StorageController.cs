@@ -175,13 +175,24 @@ namespace P3_Projekt_WPF.Classes.Utilities
             }
             while (_storageStatusQueue.TryDequeue(out Data))
             {
-                ProductDictionary[Convert.ToInt32(Data.Values[1])].StorageWithAmount.TryAdd(Convert.ToInt32(Data.Values[2]), Convert.ToInt32(Data.Values[3]));
-                count++;
+                try
+                {
+                    ProductDictionary[Convert.ToInt32(Data.Values[1])].StorageWithAmount.TryAdd(Convert.ToInt32(Data.Values[2]), Convert.ToInt32(Data.Values[3]));
+                    count++;
+                }
+                catch (Exception)
+                {
+                    HandleQueue();
+                }
+                
             }
             // Hvis der var elementer der ikke er blevet oprettet efter første gennemgang, så køres loopet igen. 
             if (count > 0)
             {
                 HandleQueue();
+            } else
+            {
+                return;
             }
         }
 
