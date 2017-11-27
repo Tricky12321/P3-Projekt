@@ -28,7 +28,7 @@
 
         <TextBlock x:Name="label_InputNotValid" Visibility="Hidden" Margin="0,0,0,70" FontSize="26" Height="45" Foreground="Red" Text="Koden er forkert" HorizontalAlignment="Center" VerticalAlignment="Bottom"/>
 
-        <Button Style="{StaticResource Flat_Button}" x:Name="btn_Validate" Content="Godkend"  FontSize="30" Grid.Column="1" Margin="0,0,10,10" Height="45" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="220" Click="btn_Validate_Click"/>
+        <Button Style="{StaticResource Flat_Button}" x:Name="btn_Validate" Content="Godkend" Background="#FFC5C5C5" FontSize="30" Grid.Column="1" Margin="0,0,10,10" Height="45" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="220" Click="btn_Validate_Click"/>
 
     </Grid>
 </Window>
