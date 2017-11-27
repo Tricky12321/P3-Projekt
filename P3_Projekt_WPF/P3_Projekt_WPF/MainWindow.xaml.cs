@@ -542,6 +542,8 @@ namespace P3_Projekt_WPF
             {
                 Utils.ShowErrorWarning($"Produkt med ID {inputInt} findes ikke på lageret");
             }
+
+            btn_discount.IsHitTestVisible = true;
         }
 
         private void btn_PlusToReciept_Click(object sender, RoutedEventArgs e)
@@ -753,7 +755,7 @@ namespace P3_Projekt_WPF
             //listView_Statistics.Items.Insert(1, _statisticsController.GetReceiptStatistics());
 
             _statisticsController.GenerateGroupSales();
-            foreach(int groupID in _statisticsController.SalesPerGroup.Keys)
+            foreach (int groupID in _statisticsController.SalesPerGroup.Keys)
             {
                 listView_GroupStatistics.Items.Add(_statisticsController.GroupSalesStrings(groupID, totalTransactionPrice));
             }
@@ -1142,7 +1144,7 @@ namespace P3_Projekt_WPF
         private MoveProduct _productMove;
         private void btn_MoveProduct_Click(object sender, RoutedEventArgs e)
         {
-            if(_productMove == null)
+            if (_productMove == null)
             {
                 _productMove = new MoveProduct(_storageController, _POSController);
                 _productMove.Closing += delegate
@@ -1219,14 +1221,14 @@ namespace P3_Projekt_WPF
 
         private void listView_Receipt_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            btn_discount.IsHitTestVisible = true;
+            
         }
 
         private OrderTransactionWindow _orderTransactionWindow;
 
         private void button_OrderTransaction_Click(object sender, RoutedEventArgs e)
         {
-            if(_orderTransactionWindow == null)
+            if (_orderTransactionWindow == null)
             {
                 _orderTransactionWindow = new OrderTransactionWindow(_storageController, _POSController);
                 _orderTransactionWindow.Closing += delegate
@@ -1240,7 +1242,6 @@ namespace P3_Projekt_WPF
 
         private void TextInputDiscountExpression(object sender, TextCompositionEventArgs e)
         {
-
             TextBox input = (sender as TextBox);
             var discountPercent = new System.Text.RegularExpressions.Regex(@"^((?:100|[1-9]?[0-9](,{0,1})(\d{1,2}))%|((\d+)(,{0,1})(\d{0,2}))$)$");
             e.Handled = !discountPercent.IsMatch(input.Text.Insert(input.CaretIndex, e.Text));
@@ -1248,14 +1249,55 @@ namespace P3_Projekt_WPF
 
         private void btn_discount_Click(object sender, RoutedEventArgs e)
         {
+            if (listView_Receipt.SelectedItem != null)
+            {
+                discountSingleTransaction();
+            }
+            else if (listView_Receipt.SelectedItem == null)
+            {
+                discountOnReceipt();
+            }
+        }
+
+        private void discountSingleTransaction()
+        {
             ReceiptListItem selectedProduct = listView_Receipt.SelectedItem as ReceiptListItem;
-            decimal customDiscount = Convert.ToDecimal(textBox_discount.Text);
             SaleTransaction currentSaleTransaction = _POSController.PlacerholderReceipt.Transactions.Where(x => x.GetID() == selectedProduct.TransID).First();
-            currentSaleTransaction.Price = currentSaleTransaction.Price - customDiscount;
-            //.Price = customDiscount;
+            if (textBox_discount.Text.Contains('%'))
+            {
+                decimal percentage = Convert.ToDecimal(textBox_discount.Text.Remove(textBox_discount.Text.Length - 1, 1));
+                currentSaleTransaction.Price = currentSaleTransaction.Price - (currentSaleTransaction.Price * (percentage/100));
+            }
+            else
+            {
+                decimal customDiscount = Convert.ToDecimal(textBox_discount.Text);
+                currentSaleTransaction.Price = currentSaleTransaction.Price - customDiscount;
+
+            }
             _POSController.PlacerholderReceipt.UpdateTotalPrice();
             UpdateReceiptList();
-            Debug.Print(selectedProduct.String_Product);
+
+        }
+
+        private void discountOnReceipt()
+        {
+            decimal totalDiscount = 0;
+            if (textBox_discount.Text.Contains('%'))
+            {
+                decimal percentage = Convert.ToDecimal(textBox_discount.Text.Remove(textBox_discount.Text.Length - 1, 1));
+                totalDiscount = _POSController.PlacerholderReceipt.TotalPrice - (_POSController.PlacerholderReceipt.TotalPrice * (percentage / 100));
+            }
+            else
+            {
+                decimal customDiscount = Convert.ToDecimal(textBox_discount.Text);
+                totalDiscount = customDiscount;
+            }
+            foreach(SaleTransaction trans in _POSController.PlacerholderReceipt.Transactions)
+            {
+                trans.Price = trans.Price - (totalDiscount / _POSController.PlacerholderReceipt.Transactions.Count);
+            }
+            _POSController.PlacerholderReceipt.UpdateTotalPrice();
+            UpdateReceiptList();
         }
     }
 }
