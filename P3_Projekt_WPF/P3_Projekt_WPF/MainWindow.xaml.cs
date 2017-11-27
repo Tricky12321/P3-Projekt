@@ -1238,6 +1238,10 @@ namespace P3_Projekt_WPF
                 {
                     _orderTransactionWindow = null;
                 };
+                _orderTransactionWindow.button_CreateProduct.Click += delegate
+                {
+                    AddProductDialogOpener(sender, e);
+                };
             }
             _orderTransactionWindow.Show();
             _orderTransactionWindow.Activate();
