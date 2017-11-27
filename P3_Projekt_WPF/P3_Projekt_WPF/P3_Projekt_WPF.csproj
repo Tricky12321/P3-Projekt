@@ -146,7 +146,6 @@
     <Compile Include="Classes\Utilities\Admin.cs" />
     <Compile Include="Classes\Utilities\FastButton.cs" />
     <Compile Include="Classes\Utilities\PaymentMethod_Enum.cs" />
-    <Compile Include="Classes\Utilities\ReceiptListItem.cs" />
     <Compile Include="Classes\Utilities\SettingsController.cs" />
     <Compile Include="Classes\Utilities\StatisticsListItem.cs" />
     <Compile Include="Classes\Utilities\StorageListItem.cs" />
@@ -180,6 +179,9 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="ReceiptListItem.xaml.cs">
+      <DependentUpon>ReceiptListItem.xaml</DependentUpon>
     </Compile>
     <Compile Include="ResovlveTempProduct.xaml.cs">
       <DependentUpon>ResovlveTempProduct.xaml</DependentUpon>
@@ -236,6 +238,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="ProductControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ReceiptListItem.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

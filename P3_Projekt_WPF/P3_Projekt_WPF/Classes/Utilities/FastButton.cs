@@ -22,7 +22,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
         {
             ProductID = productID;
             Button_Name = button_name;
-            ForServiceOrNormal = ForServiceOrNormal;
+            ForServiceOrNormal = forServiceOrNormal;
         }
 
 
