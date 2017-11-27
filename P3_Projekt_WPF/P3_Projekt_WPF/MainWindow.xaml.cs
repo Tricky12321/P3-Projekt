@@ -1307,12 +1307,12 @@ namespace P3_Projekt_WPF
             if (textBox_discount.Text.Contains('%'))
             {
                 decimal percentage = Convert.ToDecimal(textBox_discount.Text.Remove(textBox_discount.Text.Length - 1, 1));
-                currentSaleTransaction.Price = currentSaleTransaction.Price - (currentSaleTransaction.Price * (percentage/100));
+                currentSaleTransaction.Price = ((currentSaleTransaction.TotalPrice) - (currentSaleTransaction.TotalPrice * (percentage / 100))) / currentSaleTransaction.Amount;
             }
             else
             {
                 decimal customDiscount = Convert.ToDecimal(textBox_discount.Text);
-                currentSaleTransaction.Price = currentSaleTransaction.Price - customDiscount;
+                currentSaleTransaction.Price = (currentSaleTransaction.TotalPrice - (customDiscount)) / currentSaleTransaction.Amount;
             }
             currentSaleTransaction.Price = Math.Round(currentSaleTransaction.Price, 2);
             _POSController.PlacerholderReceipt.TotalPrice = Math.Round(_POSController.PlacerholderReceipt.TotalPrice, 2);
@@ -1324,26 +1324,28 @@ namespace P3_Projekt_WPF
 
         private void discountOnReceipt()
         {
-            decimal totalDiscount = 0;
+            int amountOfTransactions = _POSController.PlacerholderReceipt.Transactions.Count();
             if (textBox_discount.Text.Contains('%'))
             {
                 decimal percentage = Convert.ToDecimal(textBox_discount.Text.Remove(textBox_discount.Text.Length - 1, 1));
-                totalDiscount = (_POSController.PlacerholderReceipt.TotalPrice * (percentage / 100));
                 foreach(SaleTransaction transPercent in _POSController.PlacerholderReceipt.Transactions)
                 {
-                    transPercent.Price = (transPercent.TotalPrice)-(transPercent.TotalPrice*(percentage/100)) / transPercent.Amount;
+                    transPercent.Price = ((transPercent.TotalPrice)-(transPercent.TotalPrice*(percentage/100))) / transPercent.Amount;
                     transPercent.Price = Math.Round(transPercent.Price, 2);
                 }
             }
+
             else
             {
                 decimal customDiscount = Convert.ToDecimal(textBox_discount.Text);
                 foreach(SaleTransaction transFlat in _POSController.PlacerholderReceipt.Transactions)
                 {
-                    transFlat.Price = (transFlat.TotalPrice - (customDiscount)) / transFlat.Amount;
+                    transFlat.Price = ((transFlat.TotalPrice - (customDiscount/ amountOfTransactions)) / transFlat.Amount);
                     transFlat.Price = Math.Round(transFlat.Price, 2);
                 }
             }
+            _POSController.PlacerholderReceipt.UpdateTotalPrice();
+            UpdateReceiptList();
         }
     }
 }
