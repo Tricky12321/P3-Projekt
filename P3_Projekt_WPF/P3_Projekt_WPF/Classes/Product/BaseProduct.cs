@@ -17,7 +17,7 @@ namespace P3_Projekt_WPF.Classes
         public BaseProduct(decimal salePrice)
         {
             //ID = id;
-            SalePrice = salePrice;
+            SalePrice = Math.Round(salePrice,2);
         }
 
         public abstract string GetName();

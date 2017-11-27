@@ -156,16 +156,20 @@ namespace P3_Projekt_WPF
 
         private void button_OrderTransaction_Click(object sender, RoutedEventArgs e)
         {
-            if(label_ProduktID.Content == "")
+            if(product == null)
             {
                 textblock_Search.Text = "Vælg et Produkt";
                 textblock_Search.Foreground = Brushes.Red;
             }
-            if(product != null && textBox_Supplier.Text != "")
+            else if(textBox_Supplier.Text != "")
             {
                 string ok = textBox_Supplier.Text;
                 OrderTransaction orderTransaction = new OrderTransaction(product, _amount, textBox_Supplier.Text, _storageController.StorageRoomDictionary.Where(x => x.Value.Name == comboBox_StorageRooms.Text).Select(x => x.Key).First());
                 orderTransaction.UploadToDatabase();
+            }
+            else
+            {
+                label_SupplierLayer.Foreground = Brushes.Red;
             }
         }
 
@@ -177,9 +181,22 @@ namespace P3_Projekt_WPF
             }
         }
 
-        private void textBox_Supplier_GotFocus(object sender, RoutedEventArgs e)
+        private void textBox_Supplier_KeyUp(object sender, KeyEventArgs e)
         {
-            label_SupplierLayer.Visibility = Visibility.Hidden;
+            int length = textBox_Supplier.Text.Count();
+            if (length == 0)
+            {
+                label_SupplierLayer.Visibility = Visibility.Visible;
+            }
+            else if (length >= 1)
+            {
+                label_SupplierLayer.Visibility = Visibility.Hidden;
+            }
+        }
+
+        private void button_CreateProduct_Click(object sender, RoutedEventArgs e)
+        {
+            
         }
     }
 }
