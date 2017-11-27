@@ -21,6 +21,7 @@ using System.Threading;
 using System.Collections;
 using System.IO;
 using System.Collections.Concurrent;
+
 //using System.Drawing;
 
 namespace P3_Projekt_WPF
@@ -1128,7 +1129,7 @@ namespace P3_Projekt_WPF
                             _settingsController.isAdmin = true;
                             btn_AdminLogin.Content = "Log ud";
                             image_Admin.Source = unlocked.ImageSource;
-                            label_NoAdmin.Visibility = Visibility.Collapsed;
+                            label_NoAdmin.Visibility = Visibility.Hidden;
                         }
                     };
                     adminValid.ShowDialog();

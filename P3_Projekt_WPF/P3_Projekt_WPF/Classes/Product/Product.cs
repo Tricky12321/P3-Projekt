@@ -33,7 +33,7 @@ namespace P3_Projekt_WPF.Classes
             PurchasePrice = purchasePrice;
             ProductGroupID = groupID;
             DiscountBool = discount;
-            DiscountPrice = discountPrice;
+            DiscountPrice = Math.Round(discountPrice,2);
         }
 
         public Product(int id) : base(0)
