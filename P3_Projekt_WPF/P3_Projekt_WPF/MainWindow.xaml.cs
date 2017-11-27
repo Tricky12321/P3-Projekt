@@ -1313,8 +1313,10 @@ namespace P3_Projekt_WPF
             {
                 decimal customDiscount = Convert.ToDecimal(textBox_discount.Text);
                 currentSaleTransaction.Price = currentSaleTransaction.Price - customDiscount;
-
             }
+            currentSaleTransaction.Price = Math.Round(currentSaleTransaction.Price, 2);
+            _POSController.PlacerholderReceipt.TotalPrice = Math.Round(_POSController.PlacerholderReceipt.TotalPrice, 2);
+
             _POSController.PlacerholderReceipt.UpdateTotalPrice();
             UpdateReceiptList();
 
@@ -1337,10 +1339,8 @@ namespace P3_Projekt_WPF
             decimal cashToSplit = 0;
             foreach(SaleTransaction trans in _POSController.PlacerholderReceipt.Transactions)
             {
-                
-
-
                 trans.Price = trans.Price - (totalDiscount / _POSController.PlacerholderReceipt.Transactions.Count);
+                trans.Price = Math.Round(trans.Price, 2);
             }
             _POSController.PlacerholderReceipt.UpdateTotalPrice();
             UpdateReceiptList();
