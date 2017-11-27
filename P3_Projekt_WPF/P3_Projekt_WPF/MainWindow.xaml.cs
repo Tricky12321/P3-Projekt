@@ -1242,7 +1242,9 @@ namespace P3_Projekt_WPF
         {
             ReceiptListItem selectedProduct = listView_Receipt.SelectedItem as ReceiptListItem;
             decimal customDiscount = Convert.ToDecimal(textBox_discount.Text);
-            _POSController.PlacerholderReceipt.Transactions.Where(x => x.GetID() == selectedProduct.TransID).First().Price = customDiscount;
+            SaleTransaction currentSaleTransaction = _POSController.PlacerholderReceipt.Transactions.Where(x => x.GetID() == selectedProduct.TransID).First();
+            currentSaleTransaction.Price = currentSaleTransaction.Price - customDiscount;
+            //.Price = customDiscount;
             _POSController.PlacerholderReceipt.UpdateTotalPrice();
             UpdateReceiptList();
             Debug.Print(selectedProduct.String_Product);
