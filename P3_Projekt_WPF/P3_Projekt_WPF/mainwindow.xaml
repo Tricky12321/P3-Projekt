@@ -358,10 +358,10 @@
                     </TextBlock>
                     <TextBlock x:Name="label_CurrentStartDate" Grid.ColumnSpan="2" Margin="200,81,0,0" TextWrapping="Wrap" Text="dd/mm/åå" VerticalAlignment="Top" FontSize="30" HorizontalAlignment="Left" Width="166" Grid.Row="1"/>
                     <TextBlock x:Name="label_CurrentEndDate" Grid.ColumnSpan="2" Margin="200,126,0,0" TextWrapping="Wrap" Text="dd/mm/åå" VerticalAlignment="Top" FontSize="30" HorizontalAlignment="Left" Width="154" Grid.Row="1"/>
-                    <TextBlock x:Name="label_NoTransactions" Grid.ColumnSpan="2" Width="auto" HorizontalAlignment="Center" Margin="56,181,39,0" TextWrapping="Wrap" Text="Ingen transaktioner fundet" VerticalAlignment="Top" FontWeight="Bold" Foreground="Red" Height="64" FontSize="30" RenderTransformOrigin="0.5,0.5" Visibility="Hidden"/>
-                    <Button x:Name="Button_DateToday" Content="I dag" Margin="10,245,5,0" Background="#FFC5C5C5" Style="{StaticResource Flat_Button}" Height="48" VerticalAlignment="Top" Click="Button_DateToday_Click"/>
-                    <Button x:Name="Button_DateYesterday" Content="I går" Grid.Column="1" Margin="5,245,10,0" Background="#FFC5C5C5" Style="{StaticResource Flat_Button}" Height="48" VerticalAlignment="Top" Click="Button_DateYesterday_Click"/>
-                    <Label x:Name="label_NoAdmin" Content="Ikke Admin, kan kun vise statistik for dagen" Margin="10,293,75,0" VerticalAlignment="Top" Grid.ColumnSpan="2" Height="57" FontSize="30" Foreground="Red"/>
+                    <TextBlock x:Name="label_NoTransactions" Grid.ColumnSpan="2" Margin="157,170,157,0" TextWrapping="Wrap" Text="Ingen transaktioner fundet" VerticalAlignment="Top" Foreground="Red" Height="46" Width="361" FontSize="30" RenderTransformOrigin="0.5,0.5" Visibility="Hidden"/>
+                    <Button x:Name="Button_DateToday" Content="I dag" Margin="10,220,5,0" Background="#FFC5C5C5" Style="{StaticResource Flat_Button}" Height="48" VerticalAlignment="Top" Click="Button_DateToday_Click"/>
+                    <Button x:Name="Button_DateYesterday" Content="I går" Grid.Column="1" Margin="5,220,10,0" Background="#FFC5C5C5" Style="{StaticResource Flat_Button}" Height="48" VerticalAlignment="Top" Click="Button_DateYesterday_Click"/>
+                    <Label x:Name="label_NoAdmin" Content="Ikke Admin, kan kun vise statistik for dagen" Margin="62,270,62,0" VerticalAlignment="Top" Grid.ColumnSpan="2" Height="58" FontSize="30" Foreground="Red" Width="551"/>
                     <Grid Grid.Column="2" Margin="0,0,0,0">
                         <TabControl Background="#FFE5E5E5" Margin="0,78,0,0" FontSize="20">
                             <TabItem Header="Per Transaktion">
