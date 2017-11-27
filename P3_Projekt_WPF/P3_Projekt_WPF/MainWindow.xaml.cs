@@ -1313,8 +1313,10 @@ namespace P3_Projekt_WPF
             {
                 decimal customDiscount = Convert.ToDecimal(textBox_discount.Text);
                 currentSaleTransaction.Price = currentSaleTransaction.Price - customDiscount;
-
             }
+            currentSaleTransaction.Price = Math.Round(currentSaleTransaction.Price, 2);
+            _POSController.PlacerholderReceipt.TotalPrice = Math.Round(_POSController.PlacerholderReceipt.TotalPrice, 2);
+
             _POSController.PlacerholderReceipt.UpdateTotalPrice();
             UpdateReceiptList();
 
@@ -1338,24 +1340,18 @@ namespace P3_Projekt_WPF
                 foreach(SaleTransaction transFlat in _POSController.PlacerholderReceipt.Transactions)
                 {
                     transFlat.Price = (transFlat.TotalPrice - (customDiscount)) / transFlat.Amount;
+                    trans.Price = Math.Round(trans.Price, 2);
                 }
             }
             /*
             decimal cashToSplit = 0;
-            int amountOfTransactions = _POSController.PlacerholderReceipt.Transactions.Count();
-            foreach (SaleTransaction trans in _POSController.PlacerholderReceipt.Transactions)
+            foreach(SaleTransaction trans in _POSController.PlacerholderReceipt.Transactions)
             {
-                if(trans.Price < (totalDiscount / amountOfTransactions))
-                {
-                    cashToSplit += (totalDiscount / amountOfTransactions) - trans.Price;
-                    trans.Price = 0;
-                }
-                else
-                {
-                    trans.Price = trans.TotalPrice - ((totalDiscount / _POSController.PlacerholderReceipt.Transactions.Count) / trans.Amount) + cashToSplit;
+                
 
-                }
-            }*/
+
+                trans.Price = trans.Price - (totalDiscount / _POSController.PlacerholderReceipt.Transactions.Count);
+            }
             _POSController.PlacerholderReceipt.UpdateTotalPrice();
             UpdateReceiptList();
         }
