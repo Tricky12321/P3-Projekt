@@ -48,7 +48,7 @@ namespace P3_Projekt_WPF
         }
 
         //Editing normal product
-        public CreateProduct(Product prod, StorageController storageController, MainWindow MainWin)
+        public CreateProduct(Product prod, StorageController storageController, MainWindow MainWin, bool adminEdit)
         {
             Initialize(storageController, MainWin);
             UpdateProductSec = true;
@@ -58,13 +58,15 @@ namespace P3_Projekt_WPF
             {
                 image_Product.Source = prod.Image.Source;
             }
+            HideIfNotAdmin(adminEdit);
+
             ReloadAddedStorageRooms();
 
             this.Title = "Rediger Produkt";
         }
 
         //Editing service product
-        public CreateProduct(ServiceProduct prod, StorageController storageController, MainWindow MainWin)
+        public CreateProduct(ServiceProduct prod, StorageController storageController, MainWindow MainWin, bool adminEdit)
         {
             Initialize(storageController, MainWin);
             UpdateServiceProductSec = true;
@@ -77,6 +79,7 @@ namespace P3_Projekt_WPF
             {
                 image_ServiceProduct.Source = prod.Image.Source;
             }
+            HideIfNotAdmin(adminEdit);
 
             this.Title = "Rediger Service Produkt";
         }
@@ -106,6 +109,23 @@ namespace P3_Projekt_WPF
             btn_AddStorageRoomWithAmount.Click += AddStorageWithAmount;
             btn_JustQuit.Click += delegate { this.Close(); };
             btn_ServiceJustQuit.Click += delegate { this.Close(); };
+        }
+
+        private void HideIfNotAdmin(bool isAdmin)
+        {
+            if (!isAdmin)
+            {
+                border_NotAdmin.Visibility = Visibility.Visible;
+                border_ServiceNotAdmin.Visibility = Visibility.Visible;
+
+                textbox_SalePrice.IsEnabled = false;
+                textbox_PurchasePrice.IsEnabled = false;
+                textbox_DiscountPrice.IsEnabled = false;
+
+                textbox_ServiceSalePrice.IsEnabled = false;
+                textbox_ServiceGroupLimit.IsEnabled = false;
+                textbox_ServiceGroupPrice.IsEnabled = false;
+            }
         }
 
         private void FillBoxesWithExistingProduct(Product prod)

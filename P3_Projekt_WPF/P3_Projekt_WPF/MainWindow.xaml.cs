@@ -251,11 +251,11 @@ namespace P3_Projekt_WPF
             CreateProduct EditProductForm = new CreateProduct();
             if (_productToEdit is Product)
             {
-                EditProductForm = new CreateProduct(_productToEdit as Product, _storageController, this);
+                EditProductForm = new CreateProduct(_productToEdit as Product, _storageController, this, _settingsController.isAdmin);
             }
             else if (_productToEdit is ServiceProduct)
             {
-                EditProductForm = new CreateProduct(_productToEdit as ServiceProduct, _storageController, this);
+                EditProductForm = new CreateProduct(_productToEdit as ServiceProduct, _storageController, this, _settingsController.isAdmin);
             }
             else
             {
