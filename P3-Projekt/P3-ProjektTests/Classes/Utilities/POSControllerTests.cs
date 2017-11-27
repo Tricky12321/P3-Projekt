@@ -43,7 +43,6 @@ namespace P3_Projekt_WPF.Classes.Utilities.Tests
         [Test()]
         public void AddIcecreamTransactionTest()
         {
-            //TODO: FIX DIT LORT ANTON!!!
             StorageController SC = new StorageController();
             POSController POSC = new POSController(SC);
 
