@@ -183,6 +183,7 @@ namespace P3_Projekt_WPF
                 AddTransactionToReceipt(transaction);
             }
             label_TotalPrice.Content = _POSController.PlacerholderReceipt.TotalPrice.ToString().Replace('.', ',');
+            btn_discount.IsHitTestVisible = true;
         }
 
         public void InitStorageGridProducts()
@@ -544,8 +545,6 @@ namespace P3_Projekt_WPF
             {
                 Utils.ShowErrorWarning($"Produkt med ID {inputInt} findes ikke på lageret");
             }
-
-            btn_discount.IsHitTestVisible = true;
         }
 
         private void btn_PlusToReciept_Click(object sender, RoutedEventArgs e)
