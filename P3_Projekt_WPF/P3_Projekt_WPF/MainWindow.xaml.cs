@@ -1332,6 +1332,7 @@ namespace P3_Projekt_WPF
                 foreach(SaleTransaction transPercent in _POSController.PlacerholderReceipt.Transactions)
                 {
                     transPercent.Price = (transPercent.TotalPrice)-(transPercent.TotalPrice*(percentage/100)) / transPercent.Amount;
+                    transPercent.Price = Math.Round(transPercent.Price, 2);
                 }
             }
             else
@@ -1340,20 +1341,9 @@ namespace P3_Projekt_WPF
                 foreach(SaleTransaction transFlat in _POSController.PlacerholderReceipt.Transactions)
                 {
                     transFlat.Price = (transFlat.TotalPrice - (customDiscount)) / transFlat.Amount;
-                    trans.Price = Math.Round(trans.Price, 2);
+                    transFlat.Price = Math.Round(transFlat.Price, 2);
                 }
             }
-            /*
-            decimal cashToSplit = 0;
-            foreach(SaleTransaction trans in _POSController.PlacerholderReceipt.Transactions)
-            {
-                
-
-
-                trans.Price = trans.Price - (totalDiscount / _POSController.PlacerholderReceipt.Transactions.Count);
-            }
-            _POSController.PlacerholderReceipt.UpdateTotalPrice();
-            UpdateReceiptList();
         }
     }
 }
