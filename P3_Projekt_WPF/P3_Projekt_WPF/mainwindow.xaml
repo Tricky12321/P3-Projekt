@@ -29,7 +29,7 @@
                 <Grid Background="#FFE5E5E5" MouseLeftButtonDown="SearchFieldLostFocus" Margin="0,0,0,0">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="1051*"/>
-                        <ColumnDefinition Width="810*"/>
+                        <ColumnDefinition Width="900*"/>
                     </Grid.ColumnDefinitions>
 
                     <Grid.RowDefinitions>
@@ -69,20 +69,20 @@
                     <Button x:Name="btn_MobilePay"  Content="MobilePay" Margin="0,0,10,11" Background="#FFC5C5C5" Style="{StaticResource Flat_Button}" Click="btn_MobilePay_Click" Height="50" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="260" Grid.Column="1" Grid.Row="1"/>
                     <Grid x:Name="grid_QuickButton" Margin="10,73,5,66" Grid.Row="1"/>
                     <Border BorderBrush="Black" BorderThickness="1" Background="Black" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Left" Width="1"/>
-                    <Button x:Name="btn_AddProduct"  Content="Tilføj Produkt" Margin="558,10,10,0" Background="#FFC5C5C5" Style="{StaticResource Flat_Button}" Grid.Row="1" Height="50" VerticalAlignment="Top" Click="btn_AddProduct_Click" />
-                    <Button x:Name="btn_PlusToReciept" Content="+" HorizontalAlignment="Left" Margin="360,10,0,0" Width="50" Style="{StaticResource Flat_Button}" RenderTransformOrigin="-0.486,0.333" Grid.Row="1" Height="50" VerticalAlignment="Top" Click="btn_PlusToReciept_Click"/>
-                    <Button x:Name="btn_MinusToReciept" Content="-" HorizontalAlignment="Left" Margin="420,10,0,0" Width="50" Style="{StaticResource Flat_Button}" FontSize="30" Grid.Row="1" Height="50" VerticalAlignment="Top" Click="btn_MinusToReciept_Click"/>
+                    <Button x:Name="btn_AddProduct"  Content="Tilføj Produkt" Margin="498,10,10,0" Background="#FFC5C5C5" Style="{StaticResource Flat_Button}" Grid.Row="1" Height="50" VerticalAlignment="Top" Click="btn_AddProduct_Click" />
+                    <Button x:Name="btn_PlusToReciept" Content="+" HorizontalAlignment="Left" Margin="298,10,0,0" Width="50" Style="{StaticResource Flat_Button}" RenderTransformOrigin="-0.486,0.333" Grid.Row="1" Height="50" VerticalAlignment="Top" Click="btn_PlusToReciept_Click"/>
+                    <Button x:Name="btn_MinusToReciept" Content="-" HorizontalAlignment="Left" Margin="358,10,0,0" Width="50" Style="{StaticResource Flat_Button}" FontSize="30" Grid.Row="1" Height="50" VerticalAlignment="Top" Click="btn_MinusToReciept_Click"/>
 
 
 
-                    <TextBox Padding="10,0,0,0" TabIndex="1" MouseDoubleClick="SelectAddress" GotKeyboardFocus="SelectAddress" PreviewMouseLeftButtonDown="SelectivelyIgnoreMouseButton" TextCompositionManager.PreviewTextInput="TextInputNoNumber" x:Name="textBox_AddProductID" Margin="10,10,0,0" FontSize="33" HorizontalAlignment="Left" Width="340" Grid.Row="1" Height="50" VerticalAlignment="Top">
+                    <TextBox Padding="10,0,0,0" TabIndex="1" MouseDoubleClick="SelectAddress" GotKeyboardFocus="SelectAddress" PreviewMouseLeftButtonDown="SelectivelyIgnoreMouseButton" TextCompositionManager.PreviewTextInput="TextInputNoNumber" x:Name="textBox_AddProductID" Margin="10,10,0,0" FontSize="33" HorizontalAlignment="Left" Width="288" Grid.Row="1" Height="50" VerticalAlignment="Top">
                         <TextBox.Resources>
                             <Style TargetType="{x:Type Border}">
                                 <Setter Property="CornerRadius" Value="10"/>
                             </Style>
                         </TextBox.Resources>
                     </TextBox>
-                    <TextBlock IsHitTestVisible="False" Text="Tilføj Produkt med ID" Margin="24,11,0,0" Foreground="DarkGray" FontSize="33" HorizontalAlignment="Left" Width="317" Grid.Row="1" Height="50" VerticalAlignment="Top">
+                    <TextBlock IsHitTestVisible="False" Text="Produkt ID" Margin="24,11,0,0" Foreground="DarkGray" FontSize="33" HorizontalAlignment="Left" Width="159" Grid.Row="1" Height="50" VerticalAlignment="Top">
                         <TextBlock.Style>
                             <Style TargetType="{x:Type TextBlock}">
                                 <Setter Property="Visibility" Value="Collapsed"/>
@@ -94,7 +94,7 @@
                             </Style>
                         </TextBlock.Style>
                     </TextBlock>
-                    <TextBox x:Name="textBox_ProductAmount" MouseDoubleClick="SelectAddress" GotKeyboardFocus="SelectAddress" PreviewMouseLeftButtonDown="SelectivelyIgnoreMouseButton" TabIndex="2" TextCompositionManager.PreviewTextInput="TextInputNoNumber" Padding="10,0,0,0" HorizontalAlignment="Left" Margin="480,10,0,0" TextWrapping="Wrap" Text="1" Width="70" MaxLines="1" MaxLength="2" FontSize="33" Grid.Row="1" Height="50" VerticalAlignment="Top">
+                    <TextBox x:Name="textBox_ProductAmount" MouseDoubleClick="SelectAddress" GotKeyboardFocus="SelectAddress" PreviewMouseLeftButtonDown="SelectivelyIgnoreMouseButton" TabIndex="2" TextCompositionManager.PreviewTextInput="TextInputNoNumber" Padding="10,0,0,0" HorizontalAlignment="Left" Margin="418,10,0,0" TextWrapping="Wrap" Text="1" Width="70" MaxLines="1" MaxLength="2" FontSize="33" Grid.Row="1" Height="50" VerticalAlignment="Top">
                         <TextBox.Resources>
                             <Style TargetType="{x:Type Border}">
                                 <Setter Property="CornerRadius" Value="10"/>
@@ -124,8 +124,8 @@
                         </TextBlock.Style>
                     </TextBlock>
 
-                    <Button x:Name="btn_discount" Style="{StaticResource Flat_Button}" IsHitTestVisible="False" Content="Giv Rabat" Grid.Column="1" Height="50" Background="#FFC5C5C5" Margin="0,10,10,0" Grid.Row="1" VerticalAlignment="Top" Click="btn_discount_Click" HorizontalAlignment="Right" Width="160"/>
-                    <TextBox x:Name="textBox_discount" TextCompositionManager.PreviewTextInput="TextInputNoNumber" FontSize="33" HorizontalAlignment="Right" Height="50" Margin="0,10,180,0" Grid.Row="1" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="191" Grid.Column="1">
+                    <Button x:Name="btn_discount" Style="{StaticResource Flat_Button}" IsHitTestVisible="False" Content="Giv Rabat" Grid.Column="1" Background="#FFC5C5C5" Margin="171,0,0,66" Grid.Row="1" Click="btn_discount_Click" HorizontalAlignment="Left"  Height="48" VerticalAlignment="Bottom" Width="142"/>
+                    <TextBox x:Name="textBox_discount" TextCompositionManager.PreviewTextInput="TextInputDiscountExpression" FontSize="33" Height="48" Margin="10,0,0,66" Grid.Row="1" TextWrapping="Wrap" Text="" VerticalAlignment="Bottom" Grid.Column="1" HorizontalAlignment="Left" Width="156">
                         <TextBox.Resources>
                             <Style TargetType="{x:Type Border}">
                                 <Setter Property="CornerRadius" Value="10"/>

@@ -240,7 +240,8 @@ namespace P3_Projekt_WPF
         public void AddProductDialogOpener(object sender, RoutedEventArgs e)
         {
             CreateProduct addProductWindow = new CreateProduct(_storageController, this);
-            addProductWindow.Show();
+            addProductWindow.Closed += delegate { ReloadProducts(); };
+            addProductWindow.ShowDialog();
         }
 
         private bool _firstClick = true;
@@ -250,20 +251,18 @@ namespace P3_Projekt_WPF
             CreateProduct EditProductForm = new CreateProduct();
             if (_productToEdit is Product)
             {
-                EditProductForm = new CreateProduct(_productToEdit as Product, _storageController, this);
+                EditProductForm = new CreateProduct(_productToEdit as Product, _storageController, this, _settingsController.isAdmin);
             }
             else if (_productToEdit is ServiceProduct)
             {
-                EditProductForm = new CreateProduct(_productToEdit as ServiceProduct, _storageController, this);
+                EditProductForm = new CreateProduct(_productToEdit as ServiceProduct, _storageController, this, _settingsController.isAdmin);
             }
             else
             {
                 throw new WrongProductTypeException("Fejl i forsøg på at redigere produkt");
             }
-
-
-            EditProductForm.Show();
-
+            EditProductForm.Closed += delegate { ReloadProducts(); };
+            EditProductForm.ShowDialog();
         }
 
         private void ShowSpecificInfoProductStorage(object sender, RoutedEventArgs e)
@@ -591,14 +590,7 @@ namespace P3_Projekt_WPF
 
         private bool checkIfTooManyQuickButtons(int maximumButtons)
         {
-            if (_settingsController.quickButtonList.Count < maximumButtons)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            return _settingsController.quickButtonList.Count < maximumButtons;
         }
 
         public void btn_FastButton_click(object sender, RoutedEventArgs e)
@@ -1246,11 +1238,21 @@ namespace P3_Projekt_WPF
             _orderTransactionWindow.Activate();
         }
 
+        private void TextInputDiscountExpression(object sender, TextCompositionEventArgs e)
+        {
+
+            TextBox input = (sender as TextBox);
+            var discountPercent = new System.Text.RegularExpressions.Regex(@"^((?:100|[1-9]?[0-9](,{0,1})(\d{1,2}))%|((\d+)(,{0,1})(\d{0,2}))$)$");
+            e.Handled = !discountPercent.IsMatch(input.Text.Insert(input.CaretIndex, e.Text));
+        }
+
         private void btn_discount_Click(object sender, RoutedEventArgs e)
         {
             ReceiptListItem selectedProduct = listView_Receipt.SelectedItem as ReceiptListItem;
             decimal customDiscount = Convert.ToDecimal(textBox_discount.Text);
-            _POSController.PlacerholderReceipt.Transactions.Where(x => x.GetID() == selectedProduct.TransID).First().Price = customDiscount;
+            SaleTransaction currentSaleTransaction = _POSController.PlacerholderReceipt.Transactions.Where(x => x.GetID() == selectedProduct.TransID).First();
+            currentSaleTransaction.Price = currentSaleTransaction.Price - customDiscount;
+            //.Price = customDiscount;
             _POSController.PlacerholderReceipt.UpdateTotalPrice();
             UpdateReceiptList();
             Debug.Print(selectedProduct.String_Product);
