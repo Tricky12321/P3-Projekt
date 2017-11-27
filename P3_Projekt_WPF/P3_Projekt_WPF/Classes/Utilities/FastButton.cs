@@ -12,7 +12,6 @@ namespace P3_Projekt_WPF.Classes.Utilities
         public int ProductID { get; set; }
         public string Button_Name { get; set; }
 
-
         public FastButton()
         {
 

@@ -127,7 +127,7 @@ namespace P3_Projekt_WPF
             StorageGridTimer.Start();
             InitStorageGridProducts();
             StorageGridTimer.Stop();
-            Debug.WriteLine("[InitStorageGridProducts] took " + StorageGridTimer.ElapsedMilliseconds + "ms");
+            Debug.WriteLine("[InitStorageGridProductsF] took " + StorageGridTimer.ElapsedMilliseconds + "ms");
             AddProductButton();
             Stopwatch Timer1 = new Stopwatch();
             Timer1.Start();
@@ -451,36 +451,15 @@ namespace P3_Projekt_WPF
         {
             if (transaction.Product is TempProduct)
             {
-                listView_Receipt.Items.Add(new ReceiptListItem
-                {
-                    String_Product = (transaction.Product as TempProduct).Description,
-                    Amount = transaction.Amount,
-                    Price = $"{transaction.TotalPrice}",
-                    IDTag = $"t{transaction.Product.ID}"
-                });
+                listView_Receipt.Items.Add(new ReceiptListItem(transaction.GetProductName(), transaction.TotalPrice, transaction.Amount, transaction.Product.ID));
             }
             else if (transaction.Product is Product && (transaction.Product as Product).DiscountBool)
             {
-                listView_Receipt.Items.Add(new ReceiptListItem
-                {
-                    String_Product = transaction.GetProductName(),
-                    Amount = transaction.Amount,
-                    //Price = $"{((transaction.Product as Product).DiscountPrice)*transaction.Amount}",
-                    Price = $"{transaction.TotalPrice}",
-                    IDTag = transaction.Product.ID.ToString(),
-                    TransID = transaction.GetID(),
-                });
+                listView_Receipt.Items.Add(new ReceiptListItem(transaction.GetProductName(), transaction.TotalPrice, transaction.Amount, transaction.Product.ID, transaction.GetID()));
             }
             else
             {
-                listView_Receipt.Items.Add(new ReceiptListItem
-                {
-                    String_Product = transaction.GetProductName(),
-                    Amount = transaction.Amount,
-                    Price = $"{transaction.TotalPrice}",
-                    IDTag = transaction.Product.ID.ToString(),
-                    TransID = transaction.GetID(),
-                });
+                listView_Receipt.Items.Add(new ReceiptListItem(transaction.GetProductName(), transaction.TotalPrice, transaction.Amount, transaction.Product.ID, transaction.GetID()));
             }
         }
 
@@ -610,9 +589,9 @@ namespace P3_Projekt_WPF
                 {
                     button.Style = FindResource("Flat_Button") as Style;
 
-                    grid_QuickButton.Children.Add(button);
                     button.SetValue(Grid.ColumnProperty, i % 2);
                     button.SetValue(Grid.RowProperty, i / 2);
+                    grid_QuickButton.Children.Add(button);
                     ++i;
                 }
             }
