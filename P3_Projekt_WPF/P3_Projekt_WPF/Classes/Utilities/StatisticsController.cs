@@ -14,6 +14,8 @@ namespace P3_Projekt_WPF.Classes.Utilities
         public List<SaleTransaction> TransactionsForStatistics = new List<SaleTransaction>();
         public List<Receipt> ReceiptsForStatistics = new List<Receipt>();
         public Dictionary<int, decimal> SalesPerGroup;
+        public int ReceiptTotalCount;
+        public decimal ReceiptTotalPrice;
 
         public StatisticsController(StorageController storageController)
         {
@@ -106,17 +108,33 @@ namespace P3_Projekt_WPF.Classes.Utilities
             Debug.WriteLine("[StatisticsController] took " + Timer1.ElapsedMilliseconds + "ms to fetch");
         }
 
-        /*public StatisticsListItem GetReceiptStatistics()
+        public void GetReceiptTotalPrice(DateTime From, DateTime To)
         {
-            int receiptCount = 0;
-            decimal totalReceiptPrice = 0;
-            foreach (Receipt receipt in ReceiptsForStatistics)
+            Int64 fromUnix = Utils.GetUnixTime(From);
+            Int64 toUnix = Utils.GetUnixTime(EndDate(To));
+            string sql = $"SELECT sum(`total_price`) as atotal FROM `receipt` WHERE UNIX_TIMESTAMP(`datetime`) >= '{fromUnix}' AND UNIX_TIMESTAMP(`datetime`) <= '{toUnix}'";
+            if(!decimal.TryParse(Mysql.RunQueryWithReturn(sql).RowData[0].Values[0], out ReceiptTotalPrice))
             {
-                receiptCount++;
-                totalReceiptPrice += receipt.TotalPrice;
+                ReceiptTotalPrice = 0;
             }
-            return new StatisticsListItem("", "Gennemsnitlig kvitteringspris", $"{ receiptCount}", $"{totalReceiptPrice / receiptCount}");
-        }*/
+        }
+
+        public void GetReceiptTotalCount(DateTime From, DateTime To)
+        {
+            Int64 fromUnix = Utils.GetUnixTime(From);
+            Int64 toUnix = Utils.GetUnixTime(EndDate(To));
+            string sql = $"SELECT `id` FROM `receipt` WHERE UNIX_TIMESTAMP(`datetime`) >= '{fromUnix}' AND UNIX_TIMESTAMP(`datetime`) <= '{toUnix}'";
+            ReceiptTotalCount = Mysql.RunQueryWithReturn(sql).RowCounter;
+        }
+
+        public StatisticsListItem ReceiptStatisticsString()
+        {
+            if(ReceiptTotalCount > 0)
+            {
+                return new StatisticsListItem("", "Gennemsnitlig kvitteringspris", $"{ ReceiptTotalCount}", $"{Math.Round(ReceiptTotalPrice / ReceiptTotalCount, 2)}");
+            }
+            return new StatisticsListItem("", "Gennemsnitlig kvitteringspris", "0", "0");
+        }
 
         public void GenerateGroupSales()
         {
@@ -141,7 +159,11 @@ namespace P3_Projekt_WPF.Classes.Utilities
 
         public StatisticsListItem GroupSalesStrings(int id, decimal totalPrice)
         {
-            return new StatisticsListItem("", $"{_storageController.GroupDictionary[id].Name}", $"{Math.Round((SalesPerGroup[id] / totalPrice) * 100m, 1)}%", $"{SalesPerGroup[id]}");
+            if(totalPrice > 0)
+            {
+                return new StatisticsListItem("", $"{_storageController.GroupDictionary[id].Name}", $"{Math.Round((SalesPerGroup[id] / totalPrice) * 100m, 1)}%", $"{SalesPerGroup[id]}");
+            }
+            return new StatisticsListItem("", $"{_storageController.GroupDictionary[id].Name}", "0%", $"{SalesPerGroup[id]}");
         }
     }
 }

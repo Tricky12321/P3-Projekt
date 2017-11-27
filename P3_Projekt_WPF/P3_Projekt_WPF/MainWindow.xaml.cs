@@ -240,7 +240,8 @@ namespace P3_Projekt_WPF
         public void AddProductDialogOpener(object sender, RoutedEventArgs e)
         {
             CreateProduct addProductWindow = new CreateProduct(_storageController, this);
-            addProductWindow.Show();
+            addProductWindow.Closed += delegate { ReloadProducts(); };
+            addProductWindow.ShowDialog();
         }
 
         private bool _firstClick = true;
@@ -250,20 +251,18 @@ namespace P3_Projekt_WPF
             CreateProduct EditProductForm = new CreateProduct();
             if (_productToEdit is Product)
             {
-                EditProductForm = new CreateProduct(_productToEdit as Product, _storageController, this);
+                EditProductForm = new CreateProduct(_productToEdit as Product, _storageController, this, _settingsController.isAdmin);
             }
             else if (_productToEdit is ServiceProduct)
             {
-                EditProductForm = new CreateProduct(_productToEdit as ServiceProduct, _storageController, this);
+                EditProductForm = new CreateProduct(_productToEdit as ServiceProduct, _storageController, this, _settingsController.isAdmin);
             }
             else
             {
                 throw new WrongProductTypeException("Fejl i forsøg på at redigere produkt");
             }
-
-
-            EditProductForm.Show();
-
+            EditProductForm.Closed += delegate { ReloadProducts(); };
+            EditProductForm.ShowDialog();
         }
 
         private void ShowSpecificInfoProductStorage(object sender, RoutedEventArgs e)
@@ -591,14 +590,7 @@ namespace P3_Projekt_WPF
 
         private bool checkIfTooManyQuickButtons(int maximumButtons)
         {
-            if (_settingsController.quickButtonList.Count < maximumButtons)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            return _settingsController.quickButtonList.Count < maximumButtons;
         }
 
         public void btn_FastButton_click(object sender, RoutedEventArgs e)
@@ -699,9 +691,6 @@ namespace P3_Projekt_WPF
         //Today?? Yesterday??
         private void Button_CreateStatistics_Click(object sender, RoutedEventArgs e)
         {
-            DateTime startDate = datePicker_StartDate.SelectedDate.Value;
-            DateTime endDate = datePicker_EndDate.SelectedDate.Value;
-
             if (_settingsController.isAdmin)
             {
                 ResetStatisticsView();
@@ -721,8 +710,10 @@ namespace P3_Projekt_WPF
                 bool filterBrand = checkBox_Brand.IsChecked.Value;
                 bool filterGroup = checkBox_Group.IsChecked.Value;
 
-                string queryString = _statisticsController.GetQueryString(filterProduct, productID, filterGroup, groupID, filterBrand, brand, startDate, endDate);
+                string queryString = _statisticsController.GetQueryString(filterProduct, productID, filterGroup, groupID, filterBrand, brand, datePicker_StartDate.SelectedDate.Value, datePicker_EndDate.SelectedDate.Value);
                 _statisticsController.RequestStatisticsDate(queryString);
+                _statisticsController.GetReceiptTotalCount(datePicker_StartDate.SelectedDate.Value, datePicker_EndDate.SelectedDate.Value);
+                _statisticsController.GetReceiptTotalPrice(datePicker_StartDate.SelectedDate.Value, datePicker_EndDate.SelectedDate.Value);
 
                 DisplayStatistics();
                 if (_statisticsController.TransactionsForStatistics.Count == 0)
@@ -734,6 +725,8 @@ namespace P3_Projekt_WPF
             {
                 string queryString = _statisticsController.GetQueryString(false, 0, false, 0, false, "", DateTime.Today, DateTime.Today);
                 _statisticsController.RequestStatisticsDate(queryString);
+                _statisticsController.GetReceiptTotalCount(DateTime.Today, DateTime.Today);
+                _statisticsController.GetReceiptTotalPrice(DateTime.Today, DateTime.Today);
                 ResetStatisticsView();
                 DisplayStatistics();
             }
@@ -742,6 +735,7 @@ namespace P3_Projekt_WPF
         private void ResetStatisticsView()
         {
             listView_Statistics.Items.Clear();
+            listView_GroupStatistics.Items.Clear();
             label_NoTransactions.Visibility = Visibility.Hidden;
         }
 
@@ -758,7 +752,10 @@ namespace P3_Projekt_WPF
             }
             listView_Statistics.Items.Insert(0, new StatisticsListItem("", "Total", $"{productAmount}", $"{totalTransactionPrice}"));
 
-            //listView_Statistics.Items.Insert(1, _statisticsController.GetReceiptStatistics());
+            if(!(checkBox_Brand.IsChecked.Value || checkBox_Group.IsChecked.Value || checkBox_Product.IsChecked.Value))
+            {
+                listView_Statistics.Items.Insert(1, _statisticsController.ReceiptStatisticsString());
+            }
 
             _statisticsController.GenerateGroupSales();
             foreach(int groupID in _statisticsController.SalesPerGroup.Keys)
@@ -1246,11 +1243,21 @@ namespace P3_Projekt_WPF
             _orderTransactionWindow.Activate();
         }
 
+        private void TextInputDiscountExpression(object sender, TextCompositionEventArgs e)
+        {
+
+            TextBox input = (sender as TextBox);
+            var discountPercent = new System.Text.RegularExpressions.Regex(@"^((?:100|[1-9]?[0-9](,{0,1})(\d{1,2}))%|((\d+)(,{0,1})(\d{0,2}))$)$");
+            e.Handled = !discountPercent.IsMatch(input.Text.Insert(input.CaretIndex, e.Text));
+        }
+
         private void btn_discount_Click(object sender, RoutedEventArgs e)
         {
             ReceiptListItem selectedProduct = listView_Receipt.SelectedItem as ReceiptListItem;
             decimal customDiscount = Convert.ToDecimal(textBox_discount.Text);
-            _POSController.PlacerholderReceipt.Transactions.Where(x => x.GetID() == selectedProduct.TransID).First().Price = customDiscount;
+            SaleTransaction currentSaleTransaction = _POSController.PlacerholderReceipt.Transactions.Where(x => x.GetID() == selectedProduct.TransID).First();
+            currentSaleTransaction.Price = currentSaleTransaction.Price - customDiscount;
+            //.Price = customDiscount;
             _POSController.PlacerholderReceipt.UpdateTotalPrice();
             UpdateReceiptList();
             Debug.Print(selectedProduct.String_Product);

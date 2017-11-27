@@ -294,7 +294,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
         {
             Product newProduct = new Product(id, name, brand, purchasePrice, groupID, discount, salePrice, discountPrice);
             newProduct.StorageWithAmount = storageWithAmount;
-            if (!ProductDictionary.TryAdd(newProduct.ID, newProduct))
+            if (!ProductDictionary.TryAdd(newProduct.ID, newProduct) && !AllProductsDictionary.TryAdd(newProduct.ID, newProduct))
             {
                 throw new Exception("This key already exists");
             }
@@ -317,13 +317,14 @@ namespace P3_Projekt_WPF.Classes.Utilities
             Product newProduct = new Product(id, name, brand, purchasePrice, groupID, discount, salePrice, discountPrice);
             newProduct.StorageWithAmount = new ConcurrentDictionary<int, int>(storageWithAmount.Where(x => x.Value != 0));
             ProductDictionary[newProduct.ID] = newProduct;
+            AllProductsDictionary[newProduct.ID] = newProduct;
             newProduct.UpdateInDatabase();
         }
 
         public void CreateServiceProduct(int id, decimal salePrice, decimal groupPrice, int groupLimit, string name, int serviceProductGroupID, bool UploadToDatabase = true)
         {
             ServiceProduct newServiceProduct = new ServiceProduct(id, salePrice, groupPrice, groupLimit, name, serviceProductGroupID);
-            if (!ServiceProductDictionary.TryAdd(newServiceProduct.ID, newServiceProduct))
+            if (!ServiceProductDictionary.TryAdd(newServiceProduct.ID, newServiceProduct) && !AllProductsDictionary.TryAdd(newServiceProduct.ID, newServiceProduct))
             {
                 throw new Exception("This key already exists");
             }
@@ -340,6 +341,8 @@ namespace P3_Projekt_WPF.Classes.Utilities
             {
                 newServiceProduct.UpdateInDatabase();
             }
+            ServiceProductDictionary[newServiceProduct.ID] = newServiceProduct;
+            AllProductsDictionary[newServiceProduct.ID] = newServiceProduct;
         }
 
         //edit product, calles two different methods depending if its run by an admin
