@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         KeyDown="Window_KeyDown"
         MouseDown="Window_MouseDown"
-        Title="OrderTransactionWindow" Height="453" Width="575">
+        Title="OrderTransactionWindow" Height="455" Width="575">
     <Grid>
         <TextBox Padding="10,0,0,0" KeyUp="txtBox_SearchField_KeyUp" x:Name="txtBox_SearchField" LostFocus="txtBox_SearchField_LostFocus" Margin="10,10,75,0" FontSize="33" Height="50" VerticalAlignment="Top">
             <TextBox.Resources>
@@ -36,13 +36,13 @@
                 </Style>
             </ListBox.ItemContainerStyle>
         </ListBox>
-        <Button x:Name="button_OrderTransaction" FontSize="24" Content="Udfør Modtagelse" Style="{StaticResource Flat_Button}" Background="Transparent" Margin="0,0,10,10" Height="50" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="220" Click="button_OrderTransaction_Click"/>
-        <Label x:Name="label_Produkt" FontSize="30" Padding="0" Content="Produkt" HorizontalAlignment="Left" Margin="10,70,0,0" VerticalAlignment="Top" Width="132" Height="40"/>
-        <Label x:Name="label_ID" FontSize="30" Padding="0" Content="ID" HorizontalAlignment="Left" Margin="10,115,0,0" VerticalAlignment="Top" Width="40" RenderTransformOrigin="0.675,-0.875"/>
-        <ComboBox x:Name="comboBox_StorageRooms" FontSize="20" Background="White" BorderBrush="Black" BorderThickness="1" Margin="10,0,10,124" Height="40" VerticalAlignment="Bottom"/>
-        <Label x:Name="label_StorageRoom" Padding="0" FontSize="30" Content="Lagerrum" HorizontalAlignment="Left" Margin="10,160,0,0" VerticalAlignment="Top"/>
-        <Label x:Name="label_ProduktProdukt" FontSize="30" Padding="0" Content="" HorizontalAlignment="Left" Margin="142,70,0,0" VerticalAlignment="Top"/>
-        <Label x:Name="label_ProduktID" FontSize="30" Padding="0" Content="" HorizontalAlignment="Left" Margin="142,115,0,0" VerticalAlignment="Top"/>
+        <Button x:Name="button_OrderTransaction" FontSize="24" Content="Udfør Modtagelse" Style="{StaticResource Flat_Button}" Background="#FFC5C5C5" Margin="0,0,10,10" Height="50" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="220" Click="button_OrderTransaction_Click"/>
+        <Label x:Name="label_Produkt" FontSize="30" Padding="0" Content="Produkt" HorizontalAlignment="Left" Margin="10,127,0,0" VerticalAlignment="Top" Width="132" Height="40"/>
+        <Label x:Name="label_ID" FontSize="30" Padding="0" Content="ID" HorizontalAlignment="Left" Margin="10,172,0,0" VerticalAlignment="Top" Width="40" RenderTransformOrigin="0.675,-0.875"/>
+        <ComboBox x:Name="comboBox_StorageRooms" FontSize="20" Background="White" BorderBrush="Black" BorderThickness="1" Margin="197,0,10,167" Height="40" VerticalAlignment="Bottom"/>
+        <Label x:Name="label_StorageRoom" Padding="0" FontSize="30" Content="Lagerrum" HorizontalAlignment="Left" Margin="10,217,0,0" VerticalAlignment="Top"/>
+        <Label x:Name="label_ProduktProdukt" FontSize="30" Padding="0" Content="" HorizontalAlignment="Left" Margin="197,127,0,0" VerticalAlignment="Top"/>
+        <Label x:Name="label_ProduktID" FontSize="30" Padding="0" Content="" HorizontalAlignment="Left" Margin="197,172,0,0" VerticalAlignment="Top"/>
         <Button x:Name="btn_PlusAmount" Content="+" HorizontalAlignment="Left" Margin="11,0,0,10" Width="50" Style="{StaticResource Flat_Button}" RenderTransformOrigin="-0.486,0.333" Height="50" VerticalAlignment="Bottom" Click="btn_PlusAmount_Click" FontSize="30"/>
         <Button x:Name="btn_MinusAmount" Content="-" HorizontalAlignment="Left" Margin="71,0,0,10" Width="50" Style="{StaticResource Flat_Button}" FontSize="30" Click="btn_MinusAmount_Click" Height="50" VerticalAlignment="Bottom"/>
         <TextBox x:Name="textBox_ProductAmount"  TextCompositionManager.PreviewTextInput="TextInputNoNumber" Padding="10,0,0,0" HorizontalAlignment="Left" Margin="131,0,0,10" TextWrapping="Wrap" Text="1" Width="70" MaxLines="1" MaxLength="2" FontSize="33" Height="50" VerticalAlignment="Bottom">
@@ -53,9 +53,10 @@
             </TextBox.Resources>
         </TextBox>
         <Label x:Name="label_Amount" FontSize="30" Padding="0" Content="Antal produkter modtaget" HorizontalAlignment="Left" Margin="10,0,0,73" Width="364" RenderTransformOrigin="0.484,-1.25" Height="40" VerticalAlignment="Bottom"/>
-        <Label x:Name="label_Supplier" FontSize="30" Content="Distributør" Padding="0" HorizontalAlignment="Left" Margin="10,205,0,0" VerticalAlignment="Top"/>
-        <TextBox x:Name="textBox_Supplier" FontSize="30" Height="40" GotFocus="textBox_Supplier_GotFocus" Focusable="True" LostFocus="textBox_Supplier_LostFocus" Margin="197,205,10,0" TextWrapping="Wrap"  VerticalAlignment="Top"/>
-        <Label x:Name="label_SupplierLayer" FontSize="30" Content="Distributør" Padding="0" IsHitTestVisible="False" Margin="206,205,219,0" Foreground="LightGray" VerticalAlignment="Top"/>
+        <Label x:Name="label_Supplier" FontSize="30" Content="Distributør" Padding="0" HorizontalAlignment="Left" Margin="10,262,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="textBox_Supplier" FontSize="30" Height="40" Focusable="True" KeyUp="textBox_Supplier_KeyUp" LostFocus="textBox_Supplier_LostFocus" Margin="197,262,10,0" TextWrapping="Wrap"  VerticalAlignment="Top"/>
+        <Label x:Name="label_SupplierLayer" FontSize="30" Content="Distributør" Padding="0" IsHitTestVisible="False" Margin="197,263,209,0" Foreground="LightGray" VerticalAlignment="Top"/>
+        <Button x:Name="button_CreateProduct" Content="Lav Nyt Produkt" HorizontalAlignment="Left" Click="button_CreateProduct_Click" FontSize="30" Margin="10,70,0,0" VerticalAlignment="Top" Width="250" Height="50" Background="#FFC5C5C5" Style="{StaticResource Flat_Button}"/>
 
     </Grid>
 </Window>
