@@ -21,7 +21,6 @@ using System.Threading;
 using System.Collections;
 using System.IO;
 using System.Collections.Concurrent;
-
 //using System.Drawing;
 
 namespace P3_Projekt_WPF
@@ -162,13 +161,12 @@ namespace P3_Projekt_WPF
         {
             datePicker_StartDate.SelectedDate = DateTime.Now;
             datePicker_EndDate.SelectedDate = DateTime.Now;
+            ChangeStatisticsState();
             var products = _storageController.ProductDictionary.Values.Select(x => x.Brand).Distinct();
-
             foreach (string brand in products)
             {
                 comboBox_Brand.Items.Add(brand);
             }
-
             foreach (Group group in _storageController.GroupDictionary.Values)
             {
                 comboBox_Group.Items.Add(group.Name);
@@ -679,6 +677,8 @@ namespace P3_Projekt_WPF
             LoadProductImages();
         }
 
+        #region Statistics
+
         private void OnSelectedStartDateChanged(object sender, SelectionChangedEventArgs e)
         {
             string[] dateTime = datePicker_StartDate.ToString().Split(' ');
@@ -781,6 +781,23 @@ namespace P3_Projekt_WPF
             Button_CreateStatistics_Click(sender, e);
         }
 
+        private void checkBox_Product_Checked(object sender, RoutedEventArgs e)
+        {
+            checkBox_Brand.IsEnabled = false;
+            checkBox_Group.IsEnabled = false;
+            comboBox_Brand.IsEnabled = false;
+            comboBox_Group.IsEnabled = false;
+        }
+
+        private void checkBox_Product_Unchecked(object sender, RoutedEventArgs e)
+        {
+            checkBox_Brand.IsEnabled = true;
+            checkBox_Group.IsEnabled = true;
+            comboBox_Brand.IsEnabled = true;
+            comboBox_Group.IsEnabled = true;
+        }
+
+        #endregion
 
         private void TextInputNoNumber(object sender, TextCompositionEventArgs e)
         {
@@ -1120,6 +1137,7 @@ namespace P3_Projekt_WPF
                     image_Admin.Source = locked.ImageSource;
 
                     label_NoAdmin.Visibility = Visibility.Visible;
+                    ChangeStatisticsState();
                 }
                 else
                 {
@@ -1131,12 +1149,25 @@ namespace P3_Projekt_WPF
                             _settingsController.isAdmin = true;
                             btn_AdminLogin.Content = "Log ud";
                             image_Admin.Source = unlocked.ImageSource;
-                            label_NoAdmin.Visibility = Visibility.Hidden;
+                            label_NoAdmin.Visibility = Visibility.Collapsed;
+                            ChangeStatisticsState();
                         }
                     };
                     adminValid.ShowDialog();
                 }
             };
+        }
+
+        private void ChangeStatisticsState()
+        {
+            bool state = _settingsController.isAdmin;
+            checkBox_Product.IsEnabled = state;
+            textBox_StatisticsProductID.IsEnabled = state;
+            checkBox_Brand.IsEnabled = state;
+            checkBox_Group.IsEnabled = state;
+            comboBox_Brand.IsEnabled = state;
+            comboBox_Group.IsEnabled = state;
+            Button_CreateStatistics.IsEnabled = state;
         }
 
         private void btn_Cancel_Click(object sender, RoutedEventArgs e)
