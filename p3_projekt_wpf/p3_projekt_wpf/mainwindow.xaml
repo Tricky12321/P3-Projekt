@@ -124,8 +124,8 @@
                         </TextBlock.Style>
                     </TextBlock>
 
-                    <Button x:Name="btn_discount" Style="{StaticResource Flat_Button}" IsHitTestVisible="False" Content="Giv Rabat" Grid.Column="1" Background="#FFC5C5C5" Margin="0,429,275,66" Grid.Row="1" Click="btn_discount_Click" HorizontalAlignment="Right" Width="142"/>
-                    <TextBox x:Name="textBox_discount" TextCompositionManager.PreviewTextInput="TextInputNoNumber" FontSize="33" HorizontalAlignment="Right" Height="48" Margin="0,429,422,0" Grid.Row="1" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="156" Grid.Column="1">
+                    <Button x:Name="btn_discount" Style="{StaticResource Flat_Button}" IsHitTestVisible="False" Content="Giv Rabat" Grid.Column="1" Background="#FFC5C5C5" Margin="0,0,275,66" Grid.Row="1" Click="btn_discount_Click" HorizontalAlignment="Right" Width="142" Height="48" VerticalAlignment="Bottom"/>
+                    <TextBox x:Name="textBox_discount" TextCompositionManager.PreviewTextInput="TextInputDiscountExpression" FontSize="33" Margin="10,0,422,66" Grid.Row="1" TextWrapping="Wrap" Text="" Grid.Column="1" Height="48" VerticalAlignment="Bottom">
                         <TextBox.Resources>
                             <Style TargetType="{x:Type Border}">
                                 <Setter Property="CornerRadius" Value="10"/>

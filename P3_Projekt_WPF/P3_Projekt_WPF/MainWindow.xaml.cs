@@ -1246,6 +1246,14 @@ namespace P3_Projekt_WPF
             _orderTransactionWindow.Activate();
         }
 
+        private void TextInputDiscountExpression(object sender, TextCompositionEventArgs e)
+        {
+
+            TextBox input = (sender as TextBox);
+            var discountPercent = new System.Text.RegularExpressions.Regex(@"^((?:100|[1-9]?[0-9](,{0,1})(\d{1,2}))%|((\d+)(,{0,1})(\d{0,2}))$)$");
+            e.Handled = !discountPercent.IsMatch(input.Text.Insert(input.CaretIndex, e.Text));
+        }
+
         private void btn_discount_Click(object sender, RoutedEventArgs e)
         {
             ReceiptListItem selectedProduct = listView_Receipt.SelectedItem as ReceiptListItem;
