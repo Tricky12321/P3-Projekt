@@ -22,9 +22,11 @@ namespace P3_Projekt_WPF
     /// </summary>
     public partial class OrderTransactionWindow : Window
     {
+        Product product;
         private StorageController _storageController;
         private POSController _posController;
-        private int _amount = 0;
+        private int _amount = 1;
+        private string supplier;
         public OrderTransactionWindow(StorageController storageController, POSController posController)
         {
             InitializeComponent();
@@ -100,15 +102,16 @@ namespace P3_Projekt_WPF
         private void Grid_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             listBox_SearchResultsSaleTab.Visibility = Visibility.Hidden;
+            
         }
 
 
         private void FillItemDetails(object sender)
         {
             comboBox_StorageRooms.Items.Clear();
-            var product = _posController.GetProductFromID(int.Parse((sender as ListBoxItem).Tag.ToString())) as Product;
+            product = _posController.GetProductFromID(int.Parse((sender as ListBoxItem).Tag.ToString())) as Product;
             label_ProduktID.Content = product.ID.ToString();
-            label_produktProdukt.Content = product.Name.ToString();
+            label_ProduktProdukt.Content = product.Name.ToString();
             if (product.StorageWithAmount.Count > 0)
             {
                 foreach (KeyValuePair<int, int> storagerooms in product.StorageWithAmount)
@@ -153,7 +156,30 @@ namespace P3_Projekt_WPF
 
         private void button_OrderTransaction_Click(object sender, RoutedEventArgs e)
         {
-            
+            if(label_ProduktID.Content == "")
+            {
+                textblock_Search.Text = "Vælg et Produkt";
+                textblock_Search.Foreground = Brushes.Red;
+            }
+            if(product != null && textBox_Supplier.Text != "")
+            {
+                string ok = textBox_Supplier.Text;
+                OrderTransaction orderTransaction = new OrderTransaction(product, _amount, textBox_Supplier.Text, _storageController.StorageRoomDictionary.Where(x => x.Value.Name == comboBox_StorageRooms.Text).Select(x => x.Key).First());
+                orderTransaction.UploadToDatabase();
+            }
+        }
+
+        private void textBox_Supplier_LostFocus(object sender, RoutedEventArgs e)
+        {
+            if (textBox_Supplier.Text != "")
+            {
+                label_SupplierLayer.Visibility = Visibility.Visible;
+            }
+        }
+
+        private void textBox_Supplier_GotFocus(object sender, RoutedEventArgs e)
+        {
+            label_SupplierLayer.Visibility = Visibility.Hidden;
         }
     }
 }
