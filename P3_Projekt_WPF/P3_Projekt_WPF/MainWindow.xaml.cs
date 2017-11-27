@@ -1326,15 +1326,20 @@ namespace P3_Projekt_WPF
             if (textBox_discount.Text.Contains('%'))
             {
                 decimal percentage = Convert.ToDecimal(textBox_discount.Text.Remove(textBox_discount.Text.Length - 1, 1));
-                totalDiscount = _POSController.PlacerholderReceipt.TotalPrice - (_POSController.PlacerholderReceipt.TotalPrice * (percentage / 100));
+                totalDiscount = (_POSController.PlacerholderReceipt.TotalPrice * (percentage / 100));
             }
             else
             {
                 decimal customDiscount = Convert.ToDecimal(textBox_discount.Text);
                 totalDiscount = customDiscount;
             }
+
+            decimal cashToSplit = 0;
             foreach(SaleTransaction trans in _POSController.PlacerholderReceipt.Transactions)
             {
+                
+
+
                 trans.Price = trans.Price - (totalDiscount / _POSController.PlacerholderReceipt.Transactions.Count);
             }
             _POSController.PlacerholderReceipt.UpdateTotalPrice();
