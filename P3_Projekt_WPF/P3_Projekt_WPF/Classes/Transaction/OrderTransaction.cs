@@ -65,6 +65,7 @@ namespace P3_Projekt_WPF.Classes
         {
             string sql = "INSERT INTO `order_transactions` (`id`, `product_id`, `amount`, `datetime`, `purchase_price`, `supplier`, `storageroom_id`)"+
                 $" VALUES (NULL, '{Product.ID}', '{Amount}', FROM_UNIXTIME('{Utils.GetUnixTime(Date)}'), '{_purchasePrice}', '{_supplier}', '{_storageRoomID}');";
+            Mysql.RunQuery(sql);
         }
 
         public override void UpdateInDatabase()

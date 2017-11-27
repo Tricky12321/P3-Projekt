@@ -251,11 +251,11 @@ namespace P3_Projekt_WPF
             CreateProduct EditProductForm = new CreateProduct();
             if (_productToEdit is Product)
             {
-                EditProductForm = new CreateProduct(_productToEdit as Product, _storageController, this);
+                EditProductForm = new CreateProduct(_productToEdit as Product, _storageController, this, _settingsController.isAdmin);
             }
             else if (_productToEdit is ServiceProduct)
             {
-                EditProductForm = new CreateProduct(_productToEdit as ServiceProduct, _storageController, this);
+                EditProductForm = new CreateProduct(_productToEdit as ServiceProduct, _storageController, this, _settingsController.isAdmin);
             }
             else
             {
@@ -542,6 +542,8 @@ namespace P3_Projekt_WPF
             {
                 Utils.ShowErrorWarning($"Produkt med ID {inputInt} findes ikke på lageret");
             }
+
+            btn_discount.IsHitTestVisible = true;
         }
 
         private void btn_PlusToReciept_Click(object sender, RoutedEventArgs e)
@@ -691,9 +693,6 @@ namespace P3_Projekt_WPF
         //Today?? Yesterday??
         private void Button_CreateStatistics_Click(object sender, RoutedEventArgs e)
         {
-            DateTime startDate = datePicker_StartDate.SelectedDate.Value;
-            DateTime endDate = datePicker_EndDate.SelectedDate.Value;
-
             if (_settingsController.isAdmin)
             {
                 ResetStatisticsView();
@@ -713,8 +712,10 @@ namespace P3_Projekt_WPF
                 bool filterBrand = checkBox_Brand.IsChecked.Value;
                 bool filterGroup = checkBox_Group.IsChecked.Value;
 
-                string queryString = _statisticsController.GetQueryString(filterProduct, productID, filterGroup, groupID, filterBrand, brand, startDate, endDate);
+                string queryString = _statisticsController.GetQueryString(filterProduct, productID, filterGroup, groupID, filterBrand, brand, datePicker_StartDate.SelectedDate.Value, datePicker_EndDate.SelectedDate.Value);
                 _statisticsController.RequestStatisticsDate(queryString);
+                _statisticsController.GetReceiptTotalCount(datePicker_StartDate.SelectedDate.Value, datePicker_EndDate.SelectedDate.Value);
+                _statisticsController.GetReceiptTotalPrice(datePicker_StartDate.SelectedDate.Value, datePicker_EndDate.SelectedDate.Value);
 
                 DisplayStatistics();
                 if (_statisticsController.TransactionsForStatistics.Count == 0)
@@ -726,6 +727,8 @@ namespace P3_Projekt_WPF
             {
                 string queryString = _statisticsController.GetQueryString(false, 0, false, 0, false, "", DateTime.Today, DateTime.Today);
                 _statisticsController.RequestStatisticsDate(queryString);
+                _statisticsController.GetReceiptTotalCount(DateTime.Today, DateTime.Today);
+                _statisticsController.GetReceiptTotalPrice(DateTime.Today, DateTime.Today);
                 ResetStatisticsView();
                 DisplayStatistics();
             }
@@ -734,6 +737,7 @@ namespace P3_Projekt_WPF
         private void ResetStatisticsView()
         {
             listView_Statistics.Items.Clear();
+            listView_GroupStatistics.Items.Clear();
             label_NoTransactions.Visibility = Visibility.Hidden;
         }
 
@@ -750,10 +754,13 @@ namespace P3_Projekt_WPF
             }
             listView_Statistics.Items.Insert(0, new StatisticsListItem("", "Total", $"{productAmount}", $"{totalTransactionPrice}"));
 
-            //listView_Statistics.Items.Insert(1, _statisticsController.GetReceiptStatistics());
+            if(!(checkBox_Brand.IsChecked.Value || checkBox_Group.IsChecked.Value || checkBox_Product.IsChecked.Value))
+            {
+                listView_Statistics.Items.Insert(1, _statisticsController.ReceiptStatisticsString());
+            }
 
             _statisticsController.GenerateGroupSales();
-            foreach(int groupID in _statisticsController.SalesPerGroup.Keys)
+            foreach (int groupID in _statisticsController.SalesPerGroup.Keys)
             {
                 listView_GroupStatistics.Items.Add(_statisticsController.GroupSalesStrings(groupID, totalTransactionPrice));
             }
@@ -1142,7 +1149,7 @@ namespace P3_Projekt_WPF
         private MoveProduct _productMove;
         private void btn_MoveProduct_Click(object sender, RoutedEventArgs e)
         {
-            if(_productMove == null)
+            if (_productMove == null)
             {
                 _productMove = new MoveProduct(_storageController, _POSController);
                 _productMove.Closing += delegate
@@ -1219,35 +1226,87 @@ namespace P3_Projekt_WPF
 
         private void listView_Receipt_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            btn_discount.IsHitTestVisible = true;
+            
         }
 
         private OrderTransactionWindow _orderTransactionWindow;
 
         private void button_OrderTransaction_Click(object sender, RoutedEventArgs e)
         {
-            if(_orderTransactionWindow == null)
+            if (_orderTransactionWindow == null)
             {
                 _orderTransactionWindow = new OrderTransactionWindow(_storageController, _POSController);
                 _orderTransactionWindow.Closing += delegate
                 {
                     _orderTransactionWindow = null;
                 };
+                _orderTransactionWindow.button_CreateProduct.Click += delegate
+                {
+                    AddProductDialogOpener(sender, e);
+                };
             }
             _orderTransactionWindow.Show();
             _orderTransactionWindow.Activate();
         }
 
+        private void TextInputDiscountExpression(object sender, TextCompositionEventArgs e)
+        {
+            TextBox input = (sender as TextBox);
+            var discountPercent = new System.Text.RegularExpressions.Regex(@"^((?:100|[1-9]?[0-9](,{0,1})(\d{1,2}))%|((\d+)(,{0,1})(\d{0,2}))$)$");
+            e.Handled = !discountPercent.IsMatch(input.Text.Insert(input.CaretIndex, e.Text));
+        }
+
         private void btn_discount_Click(object sender, RoutedEventArgs e)
         {
+            if (listView_Receipt.SelectedItem != null)
+            {
+                discountSingleTransaction();
+            }
+            else if (listView_Receipt.SelectedItem == null)
+            {
+                discountOnReceipt();
+            }
+        }
+
+        private void discountSingleTransaction()
+        {
             ReceiptListItem selectedProduct = listView_Receipt.SelectedItem as ReceiptListItem;
-            decimal customDiscount = Convert.ToDecimal(textBox_discount.Text);
             SaleTransaction currentSaleTransaction = _POSController.PlacerholderReceipt.Transactions.Where(x => x.GetID() == selectedProduct.TransID).First();
-            currentSaleTransaction.Price = currentSaleTransaction.Price - customDiscount;
-            //.Price = customDiscount;
+            if (textBox_discount.Text.Contains('%'))
+            {
+                decimal percentage = Convert.ToDecimal(textBox_discount.Text.Remove(textBox_discount.Text.Length - 1, 1));
+                currentSaleTransaction.Price = currentSaleTransaction.Price - (currentSaleTransaction.Price * (percentage/100));
+            }
+            else
+            {
+                decimal customDiscount = Convert.ToDecimal(textBox_discount.Text);
+                currentSaleTransaction.Price = currentSaleTransaction.Price - customDiscount;
+
+            }
             _POSController.PlacerholderReceipt.UpdateTotalPrice();
             UpdateReceiptList();
-            Debug.Print(selectedProduct.String_Product);
+
+        }
+
+        private void discountOnReceipt()
+        {
+            decimal totalDiscount = 0;
+            if (textBox_discount.Text.Contains('%'))
+            {
+                decimal percentage = Convert.ToDecimal(textBox_discount.Text.Remove(textBox_discount.Text.Length - 1, 1));
+                totalDiscount = _POSController.PlacerholderReceipt.TotalPrice - (_POSController.PlacerholderReceipt.TotalPrice * (percentage / 100));
+            }
+            else
+            {
+                decimal customDiscount = Convert.ToDecimal(textBox_discount.Text);
+                totalDiscount = customDiscount;
+            }
+            foreach(SaleTransaction trans in _POSController.PlacerholderReceipt.Transactions)
+            {
+                trans.Price = trans.Price - (totalDiscount / _POSController.PlacerholderReceipt.Transactions.Count);
+            }
+            _POSController.PlacerholderReceipt.UpdateTotalPrice();
+            UpdateReceiptList();
         }
     }
 }
