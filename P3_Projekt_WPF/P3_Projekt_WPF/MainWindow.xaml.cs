@@ -1347,5 +1347,14 @@ namespace P3_Projekt_WPF
             _POSController.PlacerholderReceipt.UpdateTotalPrice();
             UpdateReceiptList();
         }
+
+        private void btn_AddIcecream_Click(object sender, RoutedEventArgs e)
+        {
+            AddIcecream Icecream = new AddIcecream();
+            Icecream.Closed += delegate {
+                _POSController.AddIcecreamTransaction(Decimal.Parse(Icecream.textbox_Price.Text));
+                UpdateReceiptList(); };
+            Icecream.ShowDialog();
+        }
     }
 }

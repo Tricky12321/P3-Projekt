@@ -109,6 +109,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="AddIcecream.xaml.cs">
+      <DependentUpon>AddIcecream.xaml</DependentUpon>
+    </Compile>
     <Compile Include="AdminNewPassword.xaml.cs">
       <DependentUpon>AdminNewPassword.xaml</DependentUpon>
     </Compile>
@@ -187,6 +190,10 @@
     <Compile Include="SaleSearchResultItemControl.xaml.cs">
       <DependentUpon>SaleSearchResultItemControl.xaml</DependentUpon>
     </Compile>
+    <Page Include="AddIcecream.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="AdminNewPassword.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
