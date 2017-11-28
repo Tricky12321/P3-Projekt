@@ -477,6 +477,13 @@ namespace P3_Projekt_WPF
                 _POSController.PlacerholderReceipt.UpdateTotalPrice();
                 UpdateReceiptList();
             }
+            else if (Convert.ToInt32(IDTag) == Properties.Settings.Default.IcecreamProductID)
+            {
+                int productID = Convert.ToInt32(IDTag);
+                _POSController.PlacerholderReceipt.Transactions.Where(x => x.Product.ID == productID && (x.TotalPrice == (sender as ReceiptListItem).Price)).First().Amount++;
+                _POSController.PlacerholderReceipt.UpdateTotalPrice();
+                UpdateReceiptList();
+            }
             else
             {
                 int productID = Convert.ToInt32(IDTag);
@@ -495,6 +502,13 @@ namespace P3_Projekt_WPF
                 int productID = Convert.ToInt32(IDTag.Replace("t", string.Empty));
                 _POSController.PlacerholderReceipt.Transactions.Where(x => x.Product.ID == productID).First().Amount--;
                 _POSController.PlacerholderReceipt.Transactions.Where(x => x.Product.ID == productID).First().CheckIfGroupPrice();
+                _POSController.PlacerholderReceipt.UpdateTotalPrice();
+                UpdateReceiptList();
+            }
+            else if (Convert.ToInt32(IDTag) == Properties.Settings.Default.IcecreamProductID)
+            {
+                int productID = Convert.ToInt32(IDTag);
+                _POSController.PlacerholderReceipt.Transactions.Where(x => x.Product.ID == productID && (x.TotalPrice == (sender as ReceiptListItem).Price)).First().Amount--;
                 _POSController.PlacerholderReceipt.UpdateTotalPrice();
                 UpdateReceiptList();
             }
