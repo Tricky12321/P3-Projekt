@@ -63,7 +63,7 @@
         </Button>
         <Image Name="image_Delete" Width="40" Height="50" Grid.Column="5" Margin="5,5,5,5" Grid.RowSpan="1" Grid.ColumnSpan="1" IsHitTestVisible="False"/>
 
-        <Canvas Name="canvas_Discount" Grid.ColumnSpan="4" Grid.Column="1" Grid.Row="1" Height="60" Visibility="Collapsed">
+        <Canvas Name="canvas_Discount" Grid.ColumnSpan="4" Grid.Column="1" Grid.Row="1" Height="60" Visibility="Collapsed" HorizontalAlignment="Right" Width="500">
             <Grid Margin="0,0,0,0" Width="500" Height="60">
                 <Button Name="button_Delete_Discount" Style="{StaticResource Flat_Button}"
                                                 Content = ""
