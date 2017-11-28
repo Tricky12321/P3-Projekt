@@ -187,7 +187,7 @@ namespace P3_Projekt_WPF
                 AddTransactionToReceipt(transaction);
             }
             label_TotalPrice.Content = _POSController.PlacerholderReceipt.TotalPrice.ToString().Replace('.', ',');
-            btn_discount.IsHitTestVisible = true;
+            btn_discount.IsEnabled = true;
         }
 
         public void InitStorageGridProducts()
@@ -454,19 +454,28 @@ namespace P3_Projekt_WPF
 
             if (transaction.Product is TempProduct)
             {
-                item = new ReceiptListItem(transaction.GetProductName(), transaction.TotalPrice, transaction.Amount, 't' + transaction.Product.ID.ToString());
+                item = new ReceiptListItem(transaction.GetProductName(), Math.Round(transaction.TotalPrice + transaction.DiscountPrice, 2), transaction.Amount, 't' + transaction.Product.ID.ToString());
+
+                if (transaction.DiscountBool)
+                {
+                    item.canvas_Discount.Visibility = Visibility.Visible;
+                    item.textBlock_DiscountAmount.Text = '-' + Math.Round(transaction.DiscountPrice, 2).ToString() + " : Ny Pris: " + Math.Round(transaction.TotalPrice, 2).ToString();
+                }
             }
             else
             {
-                item = new ReceiptListItem(transaction.GetProductName(), transaction.TotalPrice, transaction.Amount, transaction.Product.ID.ToString(), transaction.GetID());
+                item = new ReceiptListItem(transaction.GetProductName(), transaction.TotalPrice + transaction.DiscountPrice, transaction.Amount, transaction.Product.ID.ToString(), transaction.GetID());
+                if (transaction.DiscountPrice > 0m)
+                {
+                    item.canvas_Discount.Visibility = Visibility.Visible;
+                    item.textBlock_DiscountAmount.Text = '-' + Math.Round(transaction.DiscountPrice, 2).ToString() + " : Ny Pris: " + Math.Round(transaction.TotalPrice, 2).ToString();
+                }
             }
             item.Delete_Button_Event += btn_DeleteProduct_Click;
             item.Increment_Button_Event += btn_Increment_Click;
             item.Decrement_Button_Event += btn_Decrement_Click;
             listView_Receipt.Items.Add(item);
         }
-
-
 
         private void btn_Increment_Click(object sender, EventArgs e)
         {
@@ -1282,7 +1291,6 @@ namespace P3_Projekt_WPF
         }
 
         private OrderTransactionWindow _orderTransactionWindow;
-
         private void button_OrderTransaction_Click(object sender, RoutedEventArgs e)
         {
             if (_orderTransactionWindow == null)
@@ -1325,20 +1333,28 @@ namespace P3_Projekt_WPF
         {
             ReceiptListItem selectedProduct = listView_Receipt.SelectedItem as ReceiptListItem;
             SaleTransaction currentSaleTransaction = _POSController.PlacerholderReceipt.Transactions.Where(x => x.GetID() == selectedProduct.TransID).First();
+
+            currentSaleTransaction.Price += currentSaleTransaction.DiscountPrice;
             if (textBox_discount.Text.Contains('%'))
             {
                 decimal percentage = Convert.ToDecimal(textBox_discount.Text.Remove(textBox_discount.Text.Length - 1, 1));
-                selectedProduct.canvas_Discount.Visibility = Visibility.Visible;
-                selectedProduct.text_productName.Text = "hejh2";
-                currentSaleTransaction.Price = ((currentSaleTransaction.TotalPrice) - (currentSaleTransaction.TotalPrice * (percentage / 100))) / currentSaleTransaction.Amount;
+                decimal priceInDiscountPrProduct = currentSaleTransaction.Product.SalePrice * percentage / 100m;
+                currentSaleTransaction.Price -= currentSaleTransaction.Price * (percentage / 100m);
+
+
+                currentSaleTransaction.DiscountBool = true;
+                currentSaleTransaction.DiscountPrice = priceInDiscountPrProduct * currentSaleTransaction.Amount;
+
+                currentSaleTransaction.Product.DiscountPrice -= priceInDiscountPrProduct;
             }
             else
             {
                 decimal customDiscount = Convert.ToDecimal(textBox_discount.Text);
-                currentSaleTransaction.Price = (currentSaleTransaction.TotalPrice - (customDiscount)) / currentSaleTransaction.Amount;
+                currentSaleTransaction.Price -= customDiscount;
+
+                currentSaleTransaction.DiscountBool = true;
+                currentSaleTransaction.DiscountPrice = customDiscount;
             }
-            currentSaleTransaction.Price = Math.Round(currentSaleTransaction.Price, 2);
-            _POSController.PlacerholderReceipt.TotalPrice = Math.Round(_POSController.PlacerholderReceipt.TotalPrice, 2);
 
             _POSController.PlacerholderReceipt.UpdateTotalPrice();
             UpdateReceiptList();
@@ -1354,7 +1370,6 @@ namespace P3_Projekt_WPF
                 foreach (SaleTransaction transPercent in _POSController.PlacerholderReceipt.Transactions)
                 {
                     transPercent.Price = ((transPercent.TotalPrice) - (transPercent.TotalPrice * (percentage / 100))) / transPercent.Amount;
-                    transPercent.Price = Math.Round(transPercent.Price, 2);
                 }
             }
 
@@ -1364,7 +1379,6 @@ namespace P3_Projekt_WPF
                 foreach (SaleTransaction transFlat in _POSController.PlacerholderReceipt.Transactions)
                 {
                     transFlat.Price = ((transFlat.TotalPrice - (customDiscount / amountOfTransactions)) / transFlat.Amount);
-                    transFlat.Price = Math.Round(transFlat.Price, 2);
                 }
             }
             _POSController.PlacerholderReceipt.UpdateTotalPrice();
