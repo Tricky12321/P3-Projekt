@@ -118,7 +118,7 @@ namespace P3_Projekt_WPF.Classes
             CreatedTime = Convert.ToDateTime(results.Values[9]);            // CreatedTime
         }
         // Henter storage status fra databasen om hvilke lagere der har hvilket antal af produkter
-        private void GetStorageStatus()
+        public void GetStorageStatus()
         {
             string sql = $"SELECT * FROM `storage_status` WHERE `product_id` = '{ID}'";
             try

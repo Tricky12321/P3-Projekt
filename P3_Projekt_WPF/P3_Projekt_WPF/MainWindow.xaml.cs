@@ -443,10 +443,10 @@ namespace P3_Projekt_WPF
                 }
             }
             /*
-            Thread productControlThread = new Thread(LoadProductControlDictionary);
-            productControlThread.Name = "Product Control Load Thread";
-            productControlThread.SetApartmentState(ApartmentState.STA);
-            productControlThread.Start();
+                Thread productControlThread = new Thread(LoadProductControlDictionary);
+                productControlThread.Name = "Product Control Load Thread";
+                productControlThread.SetApartmentState(ApartmentState.STA);
+                productControlThread.Start();
             */
             LoadProductControlDictionary();
         }
