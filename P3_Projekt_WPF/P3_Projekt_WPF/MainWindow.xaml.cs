@@ -54,14 +54,11 @@ namespace P3_Projekt_WPF
             OutputList.Add("[3. TIMER] took " + LoadingTimer.ElapsedMilliseconds + "ms");
             InitComponents();
             OutputList.Add("[4. TIMER] took " + LoadingTimer.ElapsedMilliseconds + "ms");
-
             this.KeyDown += new KeyEventHandler(KeyboardHook);
             this.KeyDown += new KeyEventHandler(CtrlHookDown);
             this.KeyDown += new KeyEventHandler(EnterKeyPressedSearch);
             this.KeyUp += new KeyEventHandler(CtrlHookUp);
 
-            LoadingTimer.Stop();
-            OutputList.Add("[TOTAL TIMER] took " + LoadingTimer.ElapsedMilliseconds + "ms");
             foreach (var item in OutputList)
             {
                 Debug.WriteLine(item);
@@ -71,6 +68,11 @@ namespace P3_Projekt_WPF
 
             _storageController.MakeSureIcecreamExists();
             this.WindowState = WindowState.Maximized;
+            LoadingTimer.Stop();
+            OutputList.Add("[TOTAL TIMER] took " + LoadingTimer.ElapsedMilliseconds + "ms");
+            _storageController.AddInformation("Loading timer", LoadingTimer.ElapsedMilliseconds + "ms");
+            BuildInformationTable();
+
         }
 
         public void ReloadProducts()
@@ -139,7 +141,6 @@ namespace P3_Projekt_WPF
             Timer1.Stop();
             Debug.WriteLine("[LoadProductImages] took " + Timer1.ElapsedMilliseconds + "ms");
             LoadProductGrid(_storageController.AllProductsDictionary);
-            BuildInformationTable();
             InitStatisticsTab();
             InitAdminLogin();
             Utils.LoadDatabaseSettings(this);
@@ -478,6 +479,13 @@ namespace P3_Projekt_WPF
                 _POSController.PlacerholderReceipt.UpdateTotalPrice();
                 UpdateReceiptList();
             }
+            else if (Convert.ToInt32(IDTag) == Properties.Settings.Default.IcecreamProductID)
+            {
+                int productID = Convert.ToInt32(IDTag);
+                _POSController.PlacerholderReceipt.Transactions.Where(x => x.Product.ID == productID && (x.TotalPrice == (sender as ReceiptListItem).Price)).First().Amount++;
+                _POSController.PlacerholderReceipt.UpdateTotalPrice();
+                UpdateReceiptList();
+            }
             else
             {
                 int productID = Convert.ToInt32(IDTag);
@@ -496,6 +504,13 @@ namespace P3_Projekt_WPF
                 int productID = Convert.ToInt32(IDTag.Replace("t", string.Empty));
                 _POSController.PlacerholderReceipt.Transactions.Where(x => x.Product.ID == productID).First().Amount--;
                 _POSController.PlacerholderReceipt.Transactions.Where(x => x.Product.ID == productID).First().CheckIfGroupPrice();
+                _POSController.PlacerholderReceipt.UpdateTotalPrice();
+                UpdateReceiptList();
+            }
+            else if (Convert.ToInt32(IDTag) == Properties.Settings.Default.IcecreamProductID)
+            {
+                int productID = Convert.ToInt32(IDTag);
+                _POSController.PlacerholderReceipt.Transactions.Where(x => x.Product.ID == productID && (x.TotalPrice == (sender as ReceiptListItem).Price)).First().Amount--;
                 _POSController.PlacerholderReceipt.UpdateTotalPrice();
                 UpdateReceiptList();
             }
@@ -719,9 +734,11 @@ namespace P3_Projekt_WPF
                 bool filterProduct = checkBox_Product.IsChecked.Value;
                 bool filterBrand = checkBox_Brand.IsChecked.Value;
                 bool filterGroup = checkBox_Group.IsChecked.Value;
-
-                string queryString = _statisticsController.GetQueryString(filterProduct, productID, filterGroup, groupID, filterBrand, brand, datePicker_StartDate.SelectedDate.Value, datePicker_EndDate.SelectedDate.Value);
-                _statisticsController.RequestStatisticsDate(queryString);
+                _statisticsController.TransactionsForStatistics = new List<SaleTransaction>();
+                string ProductqueryString = _statisticsController.GetProductsQueryString(filterProduct, productID, filterGroup, groupID, filterBrand, brand, datePicker_StartDate.SelectedDate.Value, datePicker_EndDate.SelectedDate.Value);
+                string ServiceProductQueryString = _statisticsController.GetServiceProductsQueryString(filterProduct, productID, filterGroup, groupID, datePicker_StartDate.SelectedDate.Value, datePicker_EndDate.SelectedDate.Value);
+                _statisticsController.RequestStatisticsDate(ProductqueryString);
+                _statisticsController.RequestStatisticsDate(ServiceProductQueryString);
                 _statisticsController.GetReceiptTotalCount(datePicker_StartDate.SelectedDate.Value, datePicker_EndDate.SelectedDate.Value);
                 _statisticsController.GetReceiptTotalPrice(datePicker_StartDate.SelectedDate.Value, datePicker_EndDate.SelectedDate.Value);
 
@@ -733,8 +750,12 @@ namespace P3_Projekt_WPF
             }
             else
             {
-                string queryString = _statisticsController.GetQueryString(false, 0, false, 0, false, "", DateTime.Today, DateTime.Today);
-                _statisticsController.RequestStatisticsDate(queryString);
+                _statisticsController.TransactionsForStatistics = new List<SaleTransaction>();
+
+                string ProductqueryString = _statisticsController.GetProductsQueryString(false, 0, false, 0, false, "", DateTime.Today, DateTime.Today);
+                string ServiceProductqueryString = _statisticsController.GetServiceProductsQueryString(false, 0, false, 0, DateTime.Today, DateTime.Today);
+                _statisticsController.RequestStatisticsDate(ProductqueryString);
+                _statisticsController.RequestStatisticsDate(ServiceProductqueryString);
                 _statisticsController.GetReceiptTotalCount(DateTime.Today, DateTime.Today);
                 _statisticsController.GetReceiptTotalPrice(DateTime.Today, DateTime.Today);
                 ResetStatisticsView();

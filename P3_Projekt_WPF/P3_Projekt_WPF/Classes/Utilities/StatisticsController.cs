@@ -60,10 +60,10 @@ namespace P3_Projekt_WPF.Classes.Utilities
             }
         }
 
-        public string GetQueryString(bool searchID, int idToSearch, bool searchGroup, int groupToSearch, bool searchBrand, string brandToSearch, DateTime from, DateTime to)
+        public string GetProductsQueryString(bool searchID, int idToSearch, bool searchGroup, int groupToSearch, bool searchBrand, string brandToSearch, DateTime from, DateTime to)
         {
             StringBuilder NewString = new StringBuilder("SELECT `sale_transactions`.* " +
-                "FROM `products`, `sale_transactions` WHERE `products`.`id` = `sale_transactions`.`product_id`" +
+                "FROM `products`, `sale_transactions` WHERE `sale_transactions`.`product_id` = `products`.`id`" +
                 $" AND UNIX_TIMESTAMP(`datetime`) >= '{Utils.GetUnixTime(from)}' AND UNIX_TIMESTAMP(`datetime`) <= '{Utils.GetUnixTime(EndDate(to))}'");
             if (searchID)
             {
@@ -79,6 +79,25 @@ namespace P3_Projekt_WPF.Classes.Utilities
                 if (searchBrand)
                 {
                     NewString.Append($" AND `products`.`brand` = '{brandToSearch}'");
+                }
+            }
+            return NewString.ToString();
+        }
+
+        public string GetServiceProductsQueryString(bool searchID, int idToSearch, bool searchGroup, int groupToSearch, DateTime from, DateTime to)
+        {
+            StringBuilder NewString = new StringBuilder("SELECT `sale_transactions`.* " +
+                "FROM `service_products`, `sale_transactions` WHERE `sale_transactions`.`product_id` = `service_products`.`id`" +
+                $" AND UNIX_TIMESTAMP(`datetime`) >= '{Utils.GetUnixTime(from)}' AND UNIX_TIMESTAMP(`datetime`) <= '{Utils.GetUnixTime(EndDate(to))}'");
+            if (searchID)
+            {
+                NewString.Append($" AND `service_products`.`id` = '{idToSearch}'");
+            }
+            else
+            {
+                if (searchGroup)
+                {
+                    NewString.Append($" AND `service_products`.`groups` = '{groupToSearch}'");
                 }
             }
             return NewString.ToString();
@@ -106,7 +125,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
             }
 
             _allStatisticsDone = true;
-            TransactionsForStatistics = new List<SaleTransaction>(_saleTransactions);
+            TransactionsForStatistics = TransactionsForStatistics.Concat(_saleTransactions).ToList<SaleTransaction>();
             Timer1.Stop();
             Debug.WriteLine("[StatisticsController] took " + Timer1.ElapsedMilliseconds + "ms to fetch");
         }
