@@ -438,63 +438,81 @@ namespace P3_Projekt_WPF
 
                 }
             }
-            /*
-            Thread productControlThread = new Thread(LoadProductControlDictionary);
-            productControlThread.Name = "Product Control Load Thread";
-            productControlThread.SetApartmentState(ApartmentState.STA);
-            productControlThread.Start();
-            */
+
             LoadProductControlDictionary();
         }
 
         public void AddTransactionToReceipt(SaleTransaction transaction)
         {
+            ReceiptListItem item;
+
             if (transaction.Product is TempProduct)
             {
-                listView_Receipt.Items.Add(new ReceiptListItem(transaction.GetProductName(), transaction.TotalPrice, transaction.Amount, transaction.Product.ID));
-            }
-            else if (transaction.Product is Product && (transaction.Product as Product).DiscountBool)
-            {
-                listView_Receipt.Items.Add(new ReceiptListItem(transaction.GetProductName(), transaction.TotalPrice, transaction.Amount, transaction.Product.ID, transaction.GetID()));
+                item = new ReceiptListItem(transaction.GetProductName(), transaction.TotalPrice, transaction.Amount, 't' + transaction.Product.ID.ToString());
             }
             else
             {
-                listView_Receipt.Items.Add(new ReceiptListItem(transaction.GetProductName(), transaction.TotalPrice, transaction.Amount, transaction.Product.ID, transaction.GetID()));
+                item = new ReceiptListItem(transaction.GetProductName(), transaction.TotalPrice, transaction.Amount, transaction.Product.ID.ToString(), transaction.GetID());
+            }
+            item.Delete_Button_Event += btn_DeleteProduct_Click;
+            item.Increment_Button_Event += btn_Increment_Click;
+            item.Decrement_Button_Event += btn_Decrement_Click;
+            listView_Receipt.Items.Add(item);
+        }
+
+
+
+        private void btn_Increment_Click(object sender, EventArgs e)
+        {
+            string IDTag = (sender as ReceiptListItem).IDTag;
+            if (IDTag.Contains("t"))
+            {
+                int productID = Convert.ToInt32(IDTag.Replace("t", string.Empty));
+                _POSController.PlacerholderReceipt.Transactions.Where(x => x.Product.ID == productID).First().Amount++;
+                _POSController.PlacerholderReceipt.UpdateTotalPrice();
+                UpdateReceiptList();
+            }
+            else
+            {
+                int productID = Convert.ToInt32(IDTag);
+                _POSController.PlacerholderReceipt.Transactions.Where(x => x.Product.ID == productID).First().Amount++;
+                _POSController.PlacerholderReceipt.UpdateTotalPrice();
+                UpdateReceiptList();
             }
         }
 
-
-
-        private void btn_Increment_Click(object sender, RoutedEventArgs e)
+        private void btn_Decrement_Click(object sender, EventArgs e)
         {
-            int productID = Convert.ToInt32((sender as Button).Tag);
-            _POSController.PlacerholderReceipt.Transactions.Where(x => x.Product.ID == productID).First().Amount++;
-            _POSController.PlacerholderReceipt.UpdateTotalPrice();
-            UpdateReceiptList();
-        }
-
-        private void btn_Decrement_Click(object sender, RoutedEventArgs e)
-        {
-            int productID = Convert.ToInt32((sender as Button).Tag);
-            _POSController.PlacerholderReceipt.Transactions.Where(x => x.Product.ID == productID).First().Amount--;
-            _POSController.PlacerholderReceipt.UpdateTotalPrice();
-            UpdateReceiptList();
-
-        }
-
-        private void btn_DeleteProduct_Click(object sender, RoutedEventArgs e)
-        {
-            if ((sender as Button).Tag.ToString().Contains("t"))
+            string IDTag = (sender as ReceiptListItem).IDTag;
+            if (IDTag.Contains("t"))
             {
-                string tempID = Convert.ToString((sender as Button).Tag);
+                int productID = Convert.ToInt32(IDTag.Replace("t", string.Empty));
+                _POSController.PlacerholderReceipt.Transactions.Where(x => x.Product.ID == productID).First().Amount--;
+                _POSController.PlacerholderReceipt.UpdateTotalPrice();
+                UpdateReceiptList();
+            }
+            else
+            {
+                int productID = Convert.ToInt32(IDTag);
+                _POSController.PlacerholderReceipt.Transactions.Where(x => x.Product.ID == productID).First().Amount--;
+                _POSController.PlacerholderReceipt.UpdateTotalPrice();
+                UpdateReceiptList();
+            }
+        }
+
+        private void btn_DeleteProduct_Click(object sender, EventArgs e)
+        {
+            if ((sender as ReceiptListItem).IDTag.Contains("t"))
+            {
+                string tempID = (sender as ReceiptListItem).IDTag;
                 _POSController.PlacerholderReceipt.RemoveTransaction(tempID);
             }
             else
             {
-                int productID = Convert.ToInt32((sender as Button).Tag);
+                int productID = Convert.ToInt32((sender as ReceiptListItem).IDTag);
                 _POSController.PlacerholderReceipt.RemoveTransaction(productID);
-                _POSController.PlacerholderReceipt.UpdateTotalPrice();
             }
+            _POSController.PlacerholderReceipt.UpdateTotalPrice();
             UpdateReceiptList();
         }
 
@@ -734,7 +752,7 @@ namespace P3_Projekt_WPF
             }
             listView_Statistics.Items.Insert(0, new StatisticsListItem("", "Total", $"{productAmount}", $"{totalTransactionPrice}"));
 
-            if(!(checkBox_Brand.IsChecked.Value || checkBox_Group.IsChecked.Value || checkBox_Product.IsChecked.Value))
+            if (!(checkBox_Brand.IsChecked.Value || checkBox_Group.IsChecked.Value || checkBox_Product.IsChecked.Value))
             {
                 listView_Statistics.Items.Insert(1, _statisticsController.ReceiptStatisticsString());
             }
@@ -1237,7 +1255,7 @@ namespace P3_Projekt_WPF
 
         private void listView_Receipt_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            
+
         }
 
         private OrderTransactionWindow _orderTransactionWindow;
@@ -1286,6 +1304,8 @@ namespace P3_Projekt_WPF
             if (textBox_discount.Text.Contains('%'))
             {
                 decimal percentage = Convert.ToDecimal(textBox_discount.Text.Remove(textBox_discount.Text.Length - 1, 1));
+                selectedProduct.canvas_Discount.Visibility = Visibility.Visible;
+                selectedProduct.text_productName.Text = "hejh2";
                 currentSaleTransaction.Price = ((currentSaleTransaction.TotalPrice) - (currentSaleTransaction.TotalPrice * (percentage / 100))) / currentSaleTransaction.Amount;
             }
             else
@@ -1307,9 +1327,9 @@ namespace P3_Projekt_WPF
             if (textBox_discount.Text.Contains('%'))
             {
                 decimal percentage = Convert.ToDecimal(textBox_discount.Text.Remove(textBox_discount.Text.Length - 1, 1));
-                foreach(SaleTransaction transPercent in _POSController.PlacerholderReceipt.Transactions)
+                foreach (SaleTransaction transPercent in _POSController.PlacerholderReceipt.Transactions)
                 {
-                    transPercent.Price = ((transPercent.TotalPrice)-(transPercent.TotalPrice*(percentage/100))) / transPercent.Amount;
+                    transPercent.Price = ((transPercent.TotalPrice) - (transPercent.TotalPrice * (percentage / 100))) / transPercent.Amount;
                     transPercent.Price = Math.Round(transPercent.Price, 2);
                 }
             }
@@ -1317,9 +1337,9 @@ namespace P3_Projekt_WPF
             else
             {
                 decimal customDiscount = Convert.ToDecimal(textBox_discount.Text);
-                foreach(SaleTransaction transFlat in _POSController.PlacerholderReceipt.Transactions)
+                foreach (SaleTransaction transFlat in _POSController.PlacerholderReceipt.Transactions)
                 {
-                    transFlat.Price = ((transFlat.TotalPrice - (customDiscount/ amountOfTransactions)) / transFlat.Amount);
+                    transFlat.Price = ((transFlat.TotalPrice - (customDiscount / amountOfTransactions)) / transFlat.Amount);
                     transFlat.Price = Math.Round(transFlat.Price, 2);
                 }
             }
