@@ -81,57 +81,102 @@ namespace P3_Projekt_WPF.Classes.Utilities
         private void UpdateStorageStatus()
         {
             string sql = "SELECT * FROM `storage_status`";
-            _storageStatusQueue = Mysql.RunQueryWithReturnQueue(sql).RowData;
+            TableDecodeQueue Result = Mysql.RunQueryWithReturnQueue(sql);
+            AddInformation("Storage Status Count", Result.RowCounter.ToString());
+            _storageStatusQueue = Result.RowData;
             _storageStatusLoaded = true;
         }
 
         public void GetAllProductsFromDatabase()
         {
             string sql = "SELECT * FROM `products` WHERE `id` > '0' AND `active` = '1'";
-            _productQueue = Mysql.RunQueryWithReturnQueue(sql).RowData;
+            TableDecodeQueue Result = Mysql.RunQueryWithReturnQueue(sql);
+            AddInformation("Active Products Count", Result.RowCounter.ToString());
+            _productQueue = Result.RowData;
             _productsLoaded = true;
         }
 
         public void GetAllDisabledProductsFromDatabase()
         {
             string sql = "SELECT * FROM `products` WHERE `id` > '0' AND `active` = '0'";
-            _disabledProductsQueue = Mysql.RunQueryWithReturnQueue(sql).RowData;
+            TableDecodeQueue Result = Mysql.RunQueryWithReturnQueue(sql);
+            AddInformation("Disabled Products Count", Result.RowCounter.ToString());
+            _disabledProductsQueue = Result.RowData;
             _disabledProductsLoaded = true;
         }
 
         public void GetAllGroupsFromDatabase()
         {
             string sql = "SELECT * FROM `groups`";
-            _groupsQueue = Mysql.RunQueryWithReturnQueue(sql).RowData;
+            TableDecodeQueue Result = Mysql.RunQueryWithReturnQueue(sql);
+            AddInformation("Group Count", Result.RowCounter.ToString());
+            _groupsQueue = Result.RowData;
             _groupsLoaded = true;
         }
 
         public void GetAllStorageRoomsFromDatabase()
         {
             string sql = "SELECT * FROM `storagerooms`";
-            _storageRoomQueue = Mysql.RunQueryWithReturnQueue(sql).RowData;
+            TableDecodeQueue Result = Mysql.RunQueryWithReturnQueue(sql);
+            AddInformation("StorageRoom Count", Result.RowCounter.ToString());
+            _storageRoomQueue = Result.RowData;
             _storageRoomLoaded = true;
         }
 
         public void GetAllTempProductsFromDatabase()
         {
             string sql = "SELECT * FROM `temp_products`";
-            _tempProductQueue = Mysql.RunQueryWithReturnQueue(sql).RowData;
+            TableDecodeQueue Result = Mysql.RunQueryWithReturnQueue(sql);
+            AddInformation("TempProduct Count", Result.RowCounter.ToString());
+            _tempProductQueue = Result.RowData;
             _tempProductLoaded = true;
         }
 
         public void GetAllServiceProductsFromDatabase()
         {
             string sql = "SELECT * FROM `service_products` WHERE `active` = '1'";
-            _serviceProductQueue = Mysql.RunQueryWithReturnQueue(sql).RowData;
+            TableDecodeQueue Result = Mysql.RunQueryWithReturnQueue(sql);
+            AddInformation("Active ServiceProduct Count", Result.RowCounter.ToString());
+            _serviceProductQueue = Result.RowData;
             _serviceProductLoaded = true;
         }
 
         public void GetAllDisabledServiceProductsFromDatabase()
         {
             string sql = "SELECT * FROM `service_products` WHERE `active` = '0'";
-            _disabledServiceProductsQueue = Mysql.RunQueryWithReturnQueue(sql).RowData;
+            TableDecodeQueue Result = Mysql.RunQueryWithReturnQueue(sql);
+            AddInformation("Disabled ServiceProduct Count", Result.RowCounter.ToString());
+            _disabledServiceProductsQueue = Result.RowData;
             _disabledServiceProductsLoaded = true;
+        }
+
+        public static List<StorageTransaction> GetAllStorageTransactions()
+        {
+            List<StorageTransaction> StorageTransactions = new List<StorageTransaction>();
+            
+            string sql = $"SELECT * FROM `storage_transaction`";
+            TableDecode asdf = Mysql.RunQueryWithReturn(sql);
+            foreach (var item in asdf.RowData)
+            {
+                StorageTransaction NewStorageTransaction = new StorageTransaction(item);
+                StorageTransactions.Add(NewStorageTransaction);
+            }
+            return StorageTransactions;
+
+        }
+
+        public static List<OrderTransaction> GetAllOrderTransactions()
+        {
+            List<OrderTransaction> OrderTransactions = new List<OrderTransaction>();
+
+            string sql = $"SELECT * FROM `order_transactions`";
+            TableDecode asdf = Mysql.RunQueryWithReturn(sql);
+            foreach (var item in asdf.RowData)
+            {
+                OrderTransaction NewOrderTransaction = new OrderTransaction(item);
+                OrderTransactions.Add(NewOrderTransaction);
+            }
+            return OrderTransactions;
         }
 
         private bool _serviceProductLoaded = false;

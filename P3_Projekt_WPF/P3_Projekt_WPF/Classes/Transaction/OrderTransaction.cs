@@ -25,6 +25,11 @@ namespace P3_Projekt_WPF.Classes
             GetFromDatabase();
         }
 
+        public OrderTransaction(Row Data) : base(null, 0)
+        {
+            CreateFromRow(Data);        
+        }
+
         public override void Execute()
         {
             if (Product is Product)
