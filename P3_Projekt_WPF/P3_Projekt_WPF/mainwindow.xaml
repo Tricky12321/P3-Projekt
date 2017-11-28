@@ -64,7 +64,7 @@
                     <Button x:Name="btn_MobilePay"  Content="MobilePay" Margin="0,0,5,5" Background="#FFC5C5C5" Style="{StaticResource Flat_Button}" Click="btn_MobilePay_Click" Height="50" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="260" Grid.Column="1" Grid.Row="1"/>
                     <Grid x:Name="grid_QuickButton" Margin="10,73,5,66" Grid.Row="1"/>
                     <Border BorderBrush="Black" BorderThickness="1" Background="Black" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Left" Width="1"/>
-                    <Button x:Name="btn_AddProduct"  Content="Tilføj Produkt" Margin="498,6,0,0" Background="#FFC5C5C5" Style="{StaticResource Flat_Button}" Grid.Row="1" Height="50" VerticalAlignment="Top" Click="btn_AddProduct_Click" HorizontalAlignment="Left" Width="225" />
+                    <Button x:Name="btn_AddProduct"  Content="Tilføj Produkt" Margin="498,6,0,0" Background="#FFC5C5C5" Style="{StaticResource Flat_Button}" Grid.Row="1" Height="50" VerticalAlignment="Top" Click="btn_AddProduct_Click" HorizontalAlignment="Left" Width="223" />
                     <Button x:Name="btn_PlusToReciept" Content="+" HorizontalAlignment="Left" Margin="313,6,0,0" Width="50" Style="{StaticResource Flat_Button}" RenderTransformOrigin="-0.486,0.333" Grid.Row="1" Height="50" VerticalAlignment="Top" Click="btn_PlusToReciept_Click"/>
                     <Button x:Name="btn_MinusToReciept" Content="-" HorizontalAlignment="Left" Margin="368,6,0,0" Width="50" Style="{StaticResource Flat_Button}" FontSize="30" Grid.Row="1" Height="50" VerticalAlignment="Top" Click="btn_MinusToReciept_Click"/>
 
@@ -106,7 +106,7 @@
                             </Style>
                         </TextBox.Resources>
                     </TextBox>
-                    <TextBlock IsHitTestVisible="False" Text="Betalt Beløb" Margin="20,0,360,112" Foreground="DarkGray" FontSize="33" Grid.Row="1" Height="50" VerticalAlignment="Bottom" Grid.Column="1">
+                    <TextBlock IsHitTestVisible="False" Text="Betalt Beløb" Margin="20,0,0,112" Foreground="DarkGray" FontSize="33" Grid.Row="1" Height="50" VerticalAlignment="Bottom" Grid.Column="1" HorizontalAlignment="Left" Width="244">
                         <TextBlock.Style>
                             <Style TargetType="{x:Type TextBlock}">
                                 <Setter Property="Visibility" Value="Collapsed"/>
@@ -120,7 +120,7 @@
                     </TextBlock>
 
                     <Button x:Name="btn_discount" Style="{StaticResource Flat_Button}" IsHitTestVisible="False" Content="Giv Rabat" Grid.Column="1" Background="#FFC5C5C5" Margin="199,0,0,5" Grid.Row="1" Click="btn_discount_Click" HorizontalAlignment="Left"  Height="48" VerticalAlignment="Bottom" Width="142"/>
-                    <TextBox x:Name="textBox_discount" TextCompositionManager.PreviewTextInput="TextInputNoNumber" FontSize="33" Height="48" Margin="6,0,0,5" Grid.Row="1" TextWrapping="Wrap" Text="" VerticalAlignment="Bottom" Grid.Column="1" HorizontalAlignment="Left" Width="188">
+                    <TextBox x:Name="textBox_discount" TextCompositionManager.PreviewTextInput="TextInputDiscountExpression" Padding="10,0,0,0" FontSize="33" Height="48" Margin="6,0,0,5" Grid.Row="1" TextWrapping="Wrap" Text="" VerticalAlignment="Bottom" Grid.Column="1" HorizontalAlignment="Left" Width="188">
                         <TextBox.Resources>
                             <Style TargetType="{x:Type Border}">
                                 <Setter Property="CornerRadius" Value="10"/>
@@ -200,6 +200,7 @@
                             </Style>
                         </ListBox.ItemContainerStyle>
                     </ListBox>
+                    <Button x:Name="btn_AddIcecream" Style="{StaticResource Flat_Button}" Background="#FFC5C5C5" Content="Tilføj Is" HorizontalAlignment="Left" Margin="19,0,0,5" Grid.Row="1" VerticalAlignment="Bottom" Width="289" Click="btn_AddIcecream_Click"/>
                 </Grid>
             </TabItem>
 
@@ -289,7 +290,7 @@
                             </TransformGroup>
                         </DatePicker.RenderTransform>
                     </DatePicker>
-                    <CheckBox x:Name="checkBox_Product" Margin="25,0,0,194" RenderTransformOrigin="0.5,0.5" HorizontalAlignment="Left" Width="16" Height="15" VerticalAlignment="Bottom">
+                    <CheckBox x:Name="checkBox_Product" Margin="25,0,0,194" RenderTransformOrigin="0.5,0.5" HorizontalAlignment="Left" Width="16" Height="15" VerticalAlignment="Bottom" Checked="checkBox_Product_Checked" Unchecked="checkBox_Product_Unchecked">
                         <CheckBox.RenderTransform>
                             <TransformGroup>
                                 <ScaleTransform ScaleX="3.75" ScaleY="3.75"/>
@@ -359,12 +360,11 @@
                     <TextBlock x:Name="label_CurrentStartDate" Grid.ColumnSpan="2" Margin="200,60,0,0" TextWrapping="Wrap" Text="dd/mm/åå" VerticalAlignment="Top" FontSize="30" HorizontalAlignment="Left" Width="166" Grid.Row="1"/>
                     <TextBlock x:Name="label_CurrentEndDate" Grid.ColumnSpan="2" Margin="200,100,0,0" TextWrapping="Wrap" Text="dd/mm/åå" VerticalAlignment="Top" FontSize="30" HorizontalAlignment="Left" Width="154" Grid.Row="1"/>
                     <TextBlock x:Name="label_NoTransactions" Grid.ColumnSpan="2" Width="auto" HorizontalAlignment="Center" Margin="56,181,39,0" TextWrapping="Wrap" Text="Ingen transaktioner fundet" VerticalAlignment="Top"  Foreground="Red" Height="64" FontSize="30"  Visibility="Hidden"/>
-                    <Button x:Name="Button_DateToday" Content="Statistik for i dag" Margin="5,5,2.5,0" Background="#FFC5C5C5" Style="{StaticResource Flat_Button}" Height="48" VerticalAlignment="Top" Click="Button_DateToday_Click"/>
-                    <Button x:Name="Button_DateYesterday" Content="Statistik for i går" Margin="2.5,5,5,0" Background="#FFC5C5C5" Style="{StaticResource Flat_Button}" Height="48" VerticalAlignment="Top" Click="Button_DateYesterday_Click" Grid.Column="1"/>
-                    <Label x:Name="label_NoAdmin" HorizontalContentAlignment="Center" Content="Ikke Admin, kan kun vise statistik for dagen" Margin="0,140,0,0" VerticalAlignment="Top" Grid.ColumnSpan="2" Height="57" FontSize="30" Foreground="Red" Width="630" HorizontalAlignment="Center"/>
+                    <Button x:Name="Button_DateToday" Content="Dagens Tal" Margin="5,5,2.5,0" Background="#FFC5C5C5" Style="{StaticResource Flat_Button}" Height="48" VerticalAlignment="Top" Click="Button_DateToday_Click"/>
+                    <Label x:Name="label_NoAdmin" HorizontalContentAlignment="Center" Content="Ikke Admin, kan kun vise dagens tal" Margin="0,140,0,0" VerticalAlignment="Top" Grid.ColumnSpan="2" Height="57" FontSize="30" Foreground="Red" Width="630" HorizontalAlignment="Center"/>
                     <Grid Grid.Column="2" Margin="0,0,0,0">
                         <TabControl Background="#FFE5E5E5" Margin="0,60,0,0" FontSize="20">
-                            <TabItem Header="Per Transaktion">
+                            <TabItem Header="Transaktioner">
                                 <ListView x:Name="listView_Statistics" Width="auto" Height="auto" HorizontalContentAlignment="Stretch" Grid.Column="2" Margin="5,5,5,5" FontSize="20">
                                     <ListView.Resources>
                                         <Style TargetType="{x:Type GridViewColumnHeader}">
@@ -405,8 +405,49 @@
                                     </ListView.View>
                                 </ListView>
                             </TabItem>
-                            <TabItem Header="Per Gruppe">
+                            <TabItem Header="Grupper">
                                 <ListView x:Name="listView_GroupStatistics" Width="auto" Height="auto" Grid.Column="2" Margin="10" FontSize="20" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Center">
+                                    <ListView.Resources>
+                                        <Style TargetType="{x:Type GridViewColumnHeader}">
+                                            <Setter Property="HorizontalContentAlignment" Value="Left" />
+                                        </Style>
+                                    </ListView.Resources>
+                                    <ListView.View>
+                                        <GridView>
+                                            <GridViewColumn Header="" Width="0">
+                                                <GridViewColumn.CellTemplate>
+                                                    <DataTemplate>
+                                                        <TextBlock Text="{Binding Date}"/>
+                                                    </DataTemplate>
+                                                </GridViewColumn.CellTemplate>
+                                            </GridViewColumn>
+                                            <GridViewColumn Header="Navn" Width="350">
+                                                <GridViewColumn.CellTemplate>
+                                                    <DataTemplate>
+                                                        <TextBlock Text="{Binding Name}"/>
+                                                    </DataTemplate>
+                                                </GridViewColumn.CellTemplate>
+                                            </GridViewColumn>
+                                            <GridViewColumn Header="Procent" Width="130">
+                                                <GridViewColumn.CellTemplate>
+                                                    <DataTemplate>
+                                                        <TextBlock Text="{Binding Amount}"/>
+                                                    </DataTemplate>
+                                                </GridViewColumn.CellTemplate>
+                                            </GridViewColumn>
+                                            <GridViewColumn Header="Kr" Width="180">
+                                                <GridViewColumn.CellTemplate>
+                                                    <DataTemplate>
+                                                        <TextBlock Text="{Binding Price}"/>
+                                                    </DataTemplate>
+                                                </GridViewColumn.CellTemplate>
+                                            </GridViewColumn>
+                                        </GridView>
+                                    </ListView.View>
+                                </ListView>
+                            </TabItem>
+                            <TabItem Header="Mærker">
+                                <ListView x:Name="listView_BrandStatistics" Width="auto" Height="auto" Grid.Column="2" Margin="10" FontSize="20" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Center">
                                     <ListView.Resources>
                                         <Style TargetType="{x:Type GridViewColumnHeader}">
                                             <Setter Property="HorizontalContentAlignment" Value="Left" />
@@ -455,14 +496,14 @@
 
             <TabItem x:Name="tab_Settings" Header="Indstillinger" Width="190" Margin="0,0,0,0">
 
-                <Grid Background="#FFE5E5E5">
-                    <TabControl x:Name="tab_WithSettings" TabStripPlacement="Left" Background="Transparent" Margin="0,71,0,0" SelectionChanged="TabControl_SelectionChanged">
-                        <TabItem Header="Salg" Height="70" Width="300" >
-                            <Grid x:Name="indstillinger_Grid" Margin="5,0">
+                <Grid Margin="0,0,0,0">
+                    <TabControl x:Name="tab_WithSettings" TabStripPlacement="Left" Background="Transparent" Margin="0,60,0,0" SelectionChanged="TabControl_SelectionChanged">
+                        <TabItem Header="Salg" Height="70" Width="300">
+                            <Grid>
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="100"/>
                                 </Grid.RowDefinitions>
-                                <Grid Height="430" Width="1024" Margin="5,10,5,-339" VerticalAlignment="Top">
+                                <Grid Height="430" Margin="5,6,5,-334" VerticalAlignment="Top">
                                     <TextBox TextCompositionManager.PreviewTextInput="TextInputNoNumber" Padding="10,0,0,0" x:Name="textBox_CreateQuickBtnID" Margin="0,0,0,0" FontSize="33" Height="50" VerticalAlignment="Top" HorizontalAlignment="Left" Width="178" MaxLength="10">
                                         <TextBox.Resources>
                                             <Style TargetType="{x:Type Border}">
@@ -482,15 +523,15 @@
                                             </Style>
                                         </TextBlock.Style>
                                     </TextBlock>
-                                    <Button x:Name="btn_SettingFastBtnAdd" Content="Tilføj Hurtigknap" Margin="0" Background="#FFC5C5C5" Style="{StaticResource Flat_Button}" Height="50" VerticalAlignment="Top" Click="btn_SettingFastBtnAdd_Click"  Width="260" HorizontalAlignment="Right"/>
-                                    <TextBox Padding="10,0,0,0" x:Name="textBox_CreateQuickBtnName" Margin="183,0,270,0" FontSize="33" Height="50" VerticalAlignment="Top" MaxLength="30">
+                                    <Button x:Name="btn_SettingFastBtnAdd" Content="Tilføj Hurtigknap" Margin="0" Background="#FFC5C5C5" Style="{StaticResource Flat_Button}" Height="50" VerticalAlignment="Top" Click="btn_SettingFastBtnAdd_Click"  Width="265" HorizontalAlignment="Right"/>
+                                    <TextBox Padding="10,0,0,0" x:Name="textBox_CreateQuickBtnName" Margin="182,0,270,0" FontSize="33" Height="50" VerticalAlignment="Top" MaxLength="30">
                                         <TextBox.Resources>
                                             <Style TargetType="{x:Type Border}">
                                                 <Setter Property="CornerRadius" Value="10"/>
                                             </Style>
                                         </TextBox.Resources>
                                     </TextBox>
-                                    <TextBlock IsHitTestVisible="False" Text="Knappens Navn" Margin="200,1,0,0" Foreground="DarkGray" FontSize="33" HorizontalAlignment="Left" Width="272" Height="50" VerticalAlignment="Top">
+                                    <TextBlock IsHitTestVisible="False" Text="Knappens Navn" Margin="196,1,0,0" Foreground="DarkGray" FontSize="33" HorizontalAlignment="Left" Width="272" Height="50" VerticalAlignment="Top">
                                         <TextBlock.Style>
                                             <Style TargetType="{x:Type TextBlock}">
                                                 <Setter Property="Visibility" Value="Collapsed"/>
@@ -503,7 +544,7 @@
                                         </TextBlock.Style>
                                     </TextBlock>
 
-                                    <ListView Panel.ZIndex="2" Margin="0,60,0,0" Height="50" VerticalAlignment="Top">
+                                    <ListView Panel.ZIndex="2" Margin="0,55,0,0" Height="50" VerticalAlignment="Top">
                                         <ListView.Template>
                                             <ControlTemplate>
                                                 <DockPanel LastChildFill="True" Background="white">
@@ -523,7 +564,7 @@
                                         </ListView.Template>
                                     </ListView>
 
-                                    <ListView x:Name="listView_QuickBtn" Height="320" Margin="0,110,0,0" HorizontalContentAlignment="Stretch" MinWidth="600">
+                                    <ListView x:Name="listView_QuickBtn" Height="325" Margin="0,105,0,0" HorizontalContentAlignment="Stretch" MinWidth="600">
                                         <ListView.ItemTemplate>
                                             <DataTemplate>
                                                 <Grid>
@@ -550,22 +591,18 @@
                                             </DataTemplate>
                                         </ListView.ItemTemplate>
                                     </ListView>
-
                                 </Grid>
-
-
-
                             </Grid>
                         </TabItem>
-
-
+                    
+                    
                         <TabItem Header="Lager" x:Name="settingsTab" Width="300" Height="70">
-                            <Grid>
-                                <Button Style="{StaticResource Flat_Button}" x:Name="btn_PictureFilePath" Content="Vælg billedmappe til produkter" HorizontalAlignment="Left" Margin="10,0,0,10" Width="466" Click="btn_PictureFilePath_Click" Height="100" VerticalAlignment="Bottom" />
+                            <Grid Margin="0,0,0,0">
+                                <Button Style="{StaticResource Flat_Button}" Background="#FFC5C5C5" x:Name="btn_PictureFilePath" Content="Vælg billedmappe til produkter" HorizontalAlignment="Left" Margin="5,0,0,5" Width="450" Click="btn_PictureFilePath_Click" Height="50" VerticalAlignment="Bottom" />
 
-                                <Grid Margin="10,10,10,0" Height="430" Width="1024" MinWidth="900" VerticalAlignment="Top">
+                                <Grid Margin="5,6,5,0" Height="430" MinWidth="900" VerticalAlignment="Top">
 
-                                    <ListView x:Name="Header_StorageRooms" Panel.ZIndex="2" Margin="0,60,0,0" Height="50" VerticalAlignment="Top">
+                                    <ListView x:Name="Header_StorageRooms" Panel.ZIndex="2" Margin="0,55,0,0" Height="50" VerticalAlignment="Top">
 
                                         <ListView.Template>
                                             <ControlTemplate>
@@ -588,7 +625,7 @@
                                         </ListView.Template>
                                     </ListView>
 
-                                    <ListView x:Name="listView_StorageRoom" Margin="0,110,0,0" ScrollViewer.HorizontalScrollBarVisibility="Disabled" MinWidth="600" Height="320" HorizontalContentAlignment="Stretch" VerticalAlignment="Top">
+                                    <ListView x:Name="listView_StorageRoom" Margin="0,105,0,0" ScrollViewer.HorizontalScrollBarVisibility="Disabled" MinWidth="600" Height="320" HorizontalContentAlignment="Stretch" VerticalAlignment="Top">
                                         <ListView.ItemTemplate>
                                             <DataTemplate>
                                                 <Grid>
@@ -786,10 +823,11 @@
                                 </DataGrid.Columns>
                             </DataGrid>
                         </TabItem>
+                        <Label Content="Label" Height="100" Width="100"/>
 
 
                     </TabControl>
-                    <Border BorderBrush="Black" BorderThickness="1" Height="1" VerticalAlignment="Top" Margin="-34,71,-79,0"/>
+                    <Border BorderBrush="Black" BorderThickness="1" Height="1" VerticalAlignment="Top" Margin="-34,60,-79,0"/>
                 </Grid>
             </TabItem>
         </TabControl>

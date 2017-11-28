@@ -14,8 +14,10 @@ namespace P3_Projekt_WPF.Classes.Utilities
         public List<SaleTransaction> TransactionsForStatistics = new List<SaleTransaction>();
         public List<Receipt> ReceiptsForStatistics = new List<Receipt>();
         public Dictionary<int, decimal> SalesPerGroup;
+        public Dictionary<string, decimal> SalesPerBrand;
         public int ReceiptTotalCount;
         public decimal ReceiptTotalPrice;
+        public Dictionary<int, KeyValuePair<int, decimal>> SalesPerProduct;
 
         public StatisticsController(StorageController storageController)
         {
@@ -136,23 +138,44 @@ namespace P3_Projekt_WPF.Classes.Utilities
             return new StatisticsListItem("", "Gennemsnitlig kvitteringspris", "0", "0");
         }
 
-        public void GenerateGroupSales()
+        public void GenerateProductSales()
+        {
+        SalesPerProduct = new Dictionary<int, KeyValuePair<int, decimal>>();
+        foreach (SaleTransaction transaction in TransactionsForStatistics)
+            {
+                if (SalesPerProduct.ContainsKey(transaction.GetProductID()))
+                {
+                }
+            }
+        
+        }
+
+        public void GenerateGroupAndBrandSales()
         {
             SalesPerGroup = new Dictionary<int, decimal>();
+            SalesPerBrand = new Dictionary<string, decimal>();
             foreach (Group group in _storageController.GroupDictionary.Values)
             {
                 SalesPerGroup.Add(group.ID, 0m);
             }
-            GetGroupSales();
+            foreach(string brand in _storageController.ProductDictionary.Values.Select(x => x.Brand).Distinct())
+            {
+                SalesPerBrand.Add(brand, 0m);
+            }
+            GetGroupAndBrandSales();
         }
 
-        private void GetGroupSales()
+        private void GetGroupAndBrandSales()
         {
             foreach (SaleTransaction transaction in TransactionsForStatistics)
             {
                 if (transaction.GetGroupID() >= 0)
                 {
                     SalesPerGroup[transaction.GetGroupID()] += transaction.TotalPrice;
+                }
+                if(transaction.GetBrand() != "")
+                {
+                    SalesPerBrand[transaction.GetBrand()] += transaction.TotalPrice;
                 }
             }
         }
@@ -164,6 +187,15 @@ namespace P3_Projekt_WPF.Classes.Utilities
                 return new StatisticsListItem("", $"{_storageController.GroupDictionary[id].Name}", $"{Math.Round((SalesPerGroup[id] / totalPrice) * 100m, 1)}%", $"{SalesPerGroup[id]}");
             }
             return new StatisticsListItem("", $"{_storageController.GroupDictionary[id].Name}", "0%", $"{SalesPerGroup[id]}");
+        }
+
+        public StatisticsListItem BrandSalesStrings(string brand, decimal totalPrice)
+        {
+            if (totalPrice > 0)
+            {
+                return new StatisticsListItem("", $"{brand}", $"{Math.Round((SalesPerBrand[brand] / totalPrice) * 100m, 1)}%", $"{SalesPerBrand[brand]}");
+            }
+            return new StatisticsListItem("", $"{brand}", "0%", $"{SalesPerBrand[brand]}");
         }
     }
 }
