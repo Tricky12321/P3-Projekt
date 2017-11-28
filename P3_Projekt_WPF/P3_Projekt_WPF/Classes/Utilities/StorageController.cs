@@ -24,6 +24,10 @@ namespace P3_Projekt_WPF.Classes.Utilities
         private object InformationGridLock = new object();
         private ConcurrentQueue<Product> _productResults = new ConcurrentQueue<Product>();
         public ConcurrentDictionary<int, BaseProduct> AllProductsDictionary = new ConcurrentDictionary<int, BaseProduct>();
+        public ConcurrentDictionary<int, Product> DisabledProducts = new ConcurrentDictionary<int, Product>();
+        public ConcurrentDictionary<int, ServiceProduct> DisabledServiceProducts = new ConcurrentDictionary<int, ServiceProduct>();
+
+
 
         public StorageController()
         {
@@ -35,14 +39,14 @@ namespace P3_Projekt_WPF.Classes.Utilities
         public void LoadAllProductsDictionary()
         {
             AllProductsDictionary.Clear();
-            foreach (KeyValuePair<int, Product> productWithID in ProductDictionary)
+            foreach (KeyValuePair<int, Product> productWithID in ProductDictionary.Where(x=>x.Value.Active == true))
             {
-                AllProductsDictionary.TryAdd(productWithID.Key, productWithID.Value as BaseProduct);
+                AllProductsDictionary.TryAdd(productWithID.Key, productWithID.Value);
             }
 
             foreach (KeyValuePair<int, ServiceProduct> serviceProductWithID in ServiceProductDictionary)
             {
-                AllProductsDictionary.TryAdd(serviceProductWithID.Key, serviceProductWithID.Value as BaseProduct);
+                AllProductsDictionary.TryAdd(serviceProductWithID.Key, serviceProductWithID.Value);
             }
         }
 
@@ -83,9 +87,16 @@ namespace P3_Projekt_WPF.Classes.Utilities
 
         public void GetAllProductsFromDatabase()
         {
-            string sql = "SELECT * FROM `products` WHERE `id` > '0'";
+            string sql = "SELECT * FROM `products` WHERE `id` > '0' AND `active` = '1'";
             _productQueue = Mysql.RunQueryWithReturnQueue(sql).RowData;
             _productsLoaded = true;
+        }
+
+        public void GetAllDisabledProductsFromDatabase()
+        {
+            string sql = "SELECT * FROM `products` WHERE `id` > '0' AND `active` = '0'";
+            _disabledProductsQueue = Mysql.RunQueryWithReturnQueue(sql).RowData;
+            _disabledProductsLoaded = true;
         }
 
         public void GetAllGroupsFromDatabase()
@@ -111,9 +122,16 @@ namespace P3_Projekt_WPF.Classes.Utilities
 
         public void GetAllServiceProductsFromDatabase()
         {
-            string sql = "SELECT * FROM `service_products`";
+            string sql = "SELECT * FROM `service_products` WHERE `active` = '1'";
             _serviceProductQueue = Mysql.RunQueryWithReturnQueue(sql).RowData;
             _serviceProductLoaded = true;
+        }
+
+        public void GetAllDisabledServiceProductsFromDatabase()
+        {
+            string sql = "SELECT * FROM `service_products` WHERE `active` = '0'";
+            _disabledServiceProductsQueue = Mysql.RunQueryWithReturnQueue(sql).RowData;
+            _disabledServiceProductsLoaded = true;
         }
 
         private bool _serviceProductLoaded = false;
@@ -122,19 +140,17 @@ namespace P3_Projekt_WPF.Classes.Utilities
         private bool _productsLoaded = false;
         private bool _storageStatusLoaded = false;
         private bool _groupsLoaded = false;
+        private bool _disabledProductsLoaded = false;
+        private bool _disabledServiceProductsLoaded = false;
 
         private ConcurrentQueue<Row> _serviceProductQueue;
-        private int _serviceProductQueueCount = -1;
         private ConcurrentQueue<Row> _tempProductQueue;
-        private int _tempProductQueueCount = -1;
         private ConcurrentQueue<Row> _storageRoomQueue;
-        private int _storageRoomQueueCount = -1;
         private ConcurrentQueue<Row> _groupsQueue;
-        private int _groupQueueCount = -1;
         private ConcurrentQueue<Row> _productQueue;
-        private int _productQueueCount = -1;
         private ConcurrentQueue<Row> _storageStatusQueue;
-        private int _storageStatusQueueCount = -1;
+        private ConcurrentQueue<Row> _disabledProductsQueue;
+        private ConcurrentQueue<Row> _disabledServiceProductsQueue;
 
         private List<Thread> _queueThreads;
         private int _queueThreadsCount = 4;
@@ -186,6 +202,18 @@ namespace P3_Projekt_WPF.Classes.Utilities
                 }
                 
             }
+            while (_disabledProductsQueue.TryDequeue(out Data))
+            {
+                Product NewProduct = new Product(Data);
+                DisabledProducts.TryAdd(NewProduct.ID, NewProduct);
+                count++;
+            }
+            while (_disabledServiceProductsQueue.TryDequeue(out Data))
+            {
+                ServiceProduct NewProduct = new ServiceProduct(Data);
+                DisabledServiceProducts.TryAdd(NewProduct.ID, NewProduct);
+                count++;
+            }
             // Hvis der var elementer der ikke er blevet oprettet efter første gennemgang, så køres loopet igen. 
             if (count > 0)
             {
@@ -200,7 +228,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
         {
             bool local = Properties.Settings.Default.local_or_remote;
             _queueThreads = new List<Thread>();
-            for (int i = 0; i < _queueThreadsCount; i++)
+            for (int i = 0; i < _queueThreadsCount-1; i++)
             {
                 _queueThreads.Add(new Thread(new ThreadStart(HandleQueue)));
             }
@@ -214,19 +242,25 @@ namespace P3_Projekt_WPF.Classes.Utilities
                 Thread GetAllStorageRoomsThread = new Thread(new ThreadStart(GetAllStorageRoomsFromDatabase));
                 Thread GetAllServiceProductsThread = new Thread(new ThreadStart(GetAllServiceProductsFromDatabase));
                 Thread GetAllStorageStatusThread = new Thread(new ThreadStart(UpdateStorageStatus));
+                Thread GetAllDisabledProductsThread = new Thread(new ThreadStart(GetAllDisabledProductsFromDatabase));
+                Thread GetAllDisabledServiceProductsThread = new Thread(new ThreadStart(GetAllDisabledServiceProductsFromDatabase));
                 GetAllProductsThread.Name = "GetAllProductsThread";
                 GetAllGroupsThread.Name = "GetAllGroupsThread";
                 GetAllTempProductsThread.Name = "GetAllTempProductsThread";
                 GetAllStorageRoomsThread.Name = "GetAllStorageRoomsThread";
                 GetAllServiceProductsThread.Name = "GetAllServiceProductsThread";
+                GetAllDisabledProductsThread.Name = "GetAllDisabledProductsThread";
                 GetAllStorageStatusThread.Name = "GetAllStorageStatusThread";
+                GetAllDisabledServiceProductsThread.Name = "GetAllDisabledServiceProductsThread";
                 GetAllProductsThread.Start();
                 GetAllGroupsThread.Start();
                 GetAllStorageRoomsThread.Start();
                 GetAllTempProductsThread.Start();
                 GetAllServiceProductsThread.Start();
                 GetAllStorageStatusThread.Start();
-                while (!_productsLoaded || !_storageRoomLoaded || !_groupsLoaded || !_tempProductLoaded || !_storageStatusLoaded || !_serviceProductLoaded)
+                GetAllDisabledProductsThread.Start();
+                GetAllDisabledServiceProductsThread.Start();
+                while (!_productsLoaded || !_storageRoomLoaded || !_groupsLoaded || !_tempProductLoaded || !_storageStatusLoaded || !_serviceProductLoaded || !_disabledProductsLoaded || !_disabledServiceProductsLoaded)
                 {
                     Thread.Sleep(1);
                 }
@@ -239,12 +273,15 @@ namespace P3_Projekt_WPF.Classes.Utilities
                 GetAllTempProductsFromDatabase();
                 GetAllStorageRoomsFromDatabase();
                 GetAllGroupsFromDatabase();
+                GetAllDisabledProductsFromDatabase();
+                GetAllDisabledServiceProductsFromDatabase();
             }
 
             foreach (var thread in _queueThreads)
             {
                 thread.Start();
             }
+            HandleQueue();
         }
 
         #endregion
@@ -332,6 +369,23 @@ namespace P3_Projekt_WPF.Classes.Utilities
             newProduct.UpdateInDatabase();
         }
 
+        public void UpdateDeactivatedProduct(int id, string name, string brand, decimal purchasePrice, int groupID, bool discount, decimal discountPrice, decimal salePrice, ConcurrentDictionary<int, int> storageWithAmount, bool UploadToDatabase = true)
+        {
+            if (discountPrice > 0)
+            {
+                discount = true;
+            }
+            else
+            {
+                discount = false;
+            }
+            Product newProduct = new Product(id, name, brand, purchasePrice, groupID, discount, salePrice, discountPrice);
+            newProduct.DeactivateProduct();
+            newProduct.StorageWithAmount = new ConcurrentDictionary<int, int>(storageWithAmount.Where(x => x.Value != 0));
+            DisabledProducts[newProduct.ID] = newProduct;
+            newProduct.UpdateInDatabase();
+        }
+
         public void CreateServiceProduct(int id, decimal salePrice, decimal groupPrice, int groupLimit, string name, int serviceProductGroupID, bool UploadToDatabase = true)
         {
             ServiceProduct newServiceProduct = new ServiceProduct(id, salePrice, groupPrice, groupLimit, name, serviceProductGroupID);
@@ -343,6 +397,20 @@ namespace P3_Projekt_WPF.Classes.Utilities
             {
                 newServiceProduct.UploadToDatabase();
             }
+        }
+
+        public void UpdateDeactivatedServiceProduct(int id, decimal salePrice, decimal groupPrice, int groupLimit, string name, int serviceProductGroupID, bool UpdateInDatabase = true)
+        {
+            ServiceProduct newServiceProduct = new ServiceProduct(id, salePrice, groupPrice, groupLimit, name, serviceProductGroupID);
+            if (UpdateInDatabase)
+            {
+                newServiceProduct.UpdateInDatabase();
+            }
+            BaseProduct noProd;
+            ServiceProduct noProd2;
+            AllProductsDictionary.TryRemove(id, out noProd);
+            ServiceProductDictionary.TryRemove(id, out noProd2);
+            DisabledServiceProducts.TryAdd(id, newServiceProduct);
         }
 
         public void UpdateServiceProduct(int id, decimal salePrice, decimal groupPrice, int groupLimit, string name, int serviceProductGroupID, bool UpdateInDatabase = true)

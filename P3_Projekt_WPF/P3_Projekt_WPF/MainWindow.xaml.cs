@@ -68,6 +68,7 @@ namespace P3_Projekt_WPF
             }
             Utils.GetIceCreameID();
             Console.WriteLine("Username: " + Environment.UserName);
+            this.WindowState = WindowState.Maximized;
         }
 
         public void ReloadProducts()
@@ -140,6 +141,7 @@ namespace P3_Projekt_WPF
             InitStatisticsTab();
             InitAdminLogin();
             Utils.LoadDatabaseSettings(this);
+            FillDeactivatedProductsIntoGrid();
         }
 
         private void InitGridQuickButtons()
@@ -756,7 +758,7 @@ namespace P3_Projekt_WPF
             }
             listView_Statistics.Items.Insert(0, new StatisticsListItem("", "Total", $"{productAmount}", $"{totalTransactionPrice}"));
 
-            if(!(checkBox_Brand.IsChecked.Value || checkBox_Group.IsChecked.Value || checkBox_Product.IsChecked.Value))
+            if (!(checkBox_Brand.IsChecked.Value || checkBox_Group.IsChecked.Value || checkBox_Product.IsChecked.Value))
             {
                 listView_Statistics.Items.Insert(1, _statisticsController.ReceiptStatisticsString());
             }
@@ -1228,7 +1230,7 @@ namespace P3_Projekt_WPF
 
         private void listView_Receipt_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            
+
         }
 
         private OrderTransactionWindow _orderTransactionWindow;
@@ -1277,7 +1279,7 @@ namespace P3_Projekt_WPF
             if (textBox_discount.Text.Contains('%'))
             {
                 decimal percentage = Convert.ToDecimal(textBox_discount.Text.Remove(textBox_discount.Text.Length - 1, 1));
-                currentSaleTransaction.Price = currentSaleTransaction.Price - (currentSaleTransaction.Price * (percentage/100));
+                currentSaleTransaction.Price = currentSaleTransaction.Price - (currentSaleTransaction.Price * (percentage / 100));
             }
             else
             {
@@ -1303,12 +1305,107 @@ namespace P3_Projekt_WPF
                 decimal customDiscount = Convert.ToDecimal(textBox_discount.Text);
                 totalDiscount = customDiscount;
             }
-            foreach(SaleTransaction trans in _POSController.PlacerholderReceipt.Transactions)
+            foreach (SaleTransaction trans in _POSController.PlacerholderReceipt.Transactions)
             {
                 trans.Price = trans.Price - (totalDiscount / _POSController.PlacerholderReceipt.Transactions.Count);
             }
             _POSController.PlacerholderReceipt.UpdateTotalPrice();
             UpdateReceiptList();
         }
+
+        private void FillDeactivatedProductsIntoGrid()
+        {
+            datagrid_deactivated_products.Items.Clear();
+            foreach (var item in _storageController.DisabledProducts)
+            {
+                datagrid_deactivated_products.Items.Add(new
+                {
+                    type = "Produkt",
+                    id = item.Value.ID.ToString(),
+                    name = item.Value.Name.ToString(),
+                    group = _storageController.GroupDictionary[item.Value.ProductGroupID].Name,
+                    brand = item.Value.Brand,
+                    price = item.Value.SalePrice.ToString(),
+                });
+            }
+            foreach (var item in _storageController.DisabledServiceProducts)
+            {
+                datagrid_deactivated_products.Items.Add(new
+                {
+                    type = "ServiceProdukt",
+                    id = item.Value.ID.ToString(),
+                    name = item.Value.Name.ToString(),
+                    group = _storageController.GroupDictionary[item.Value.ServiceProductGroupID].Name,
+                    brand = "",
+                    price = item.Value.SalePrice.ToString(),
+                });
+            }
+        }
+
+        public void ReloadDisabledProducts()
+        {
+            FillDeactivatedProductsIntoGrid();
+        }
+
+
+        private void ActivateProduct(object sender, RoutedEventArgs e)
+        {
+            if (datagrid_deactivated_products.SelectedIndex != -1)
+            {
+                char[] seperator = new char[] { ',', ' ' };
+                int ID = Convert.ToInt32(datagrid_deactivated_products.SelectedCells[0].Item.ToString().Split(seperator)[7]);
+                string ProductString = "";
+                if (_storageController.DisabledProducts.ContainsKey(ID))
+                {
+                    Product ProductToActivate;
+                    _storageController.DisabledProducts.TryRemove(ID, out ProductToActivate);
+                    ProductToActivate.ActivateProduct();
+                    _storageController.AllProductsDictionary.TryAdd(ID, ProductToActivate);
+                    _storageController.ProductDictionary.TryAdd(ID, ProductToActivate);
+                    datagrid_deactivated_products.Items.Remove(datagrid_deactivated_products.SelectedItem);
+                    ProductString = ProductToActivate.ToString();
+                }
+                else
+                {
+                    ServiceProduct ServiceProductToActivate;
+                    _storageController.DisabledServiceProducts.TryRemove(ID, out ServiceProductToActivate);
+                    ServiceProductToActivate.ActivateProduct();
+                    _storageController.AllProductsDictionary.TryAdd(ID, ServiceProductToActivate);
+                    _storageController.ServiceProductDictionary.TryAdd(ID, ServiceProductToActivate);
+                    datagrid_deactivated_products.Items.Remove(datagrid_deactivated_products.SelectedItem);
+                    ProductString = ServiceProductToActivate.ToString();
+                }
+
+                MessageBox.Show("Du har genaktiveret " + ProductString);
+                ReloadDisabledProducts();
+                ReloadProducts();
+
+            }
+        }
+        private void EditDisabledProduct(object sender, RoutedEventArgs e)
+        {
+            if (datagrid_deactivated_products.SelectedIndex != -1)
+            {
+                char[] seperator = new char[] { ',', ' ' };
+                int ID = Convert.ToInt32(datagrid_deactivated_products.SelectedCells[0].Item.ToString().Split(seperator)[7]);
+                if (_storageController.DisabledProducts.ContainsKey(ID))
+                {
+                    Product ProductToActivate = _storageController.DisabledProducts[ID];
+                    CreateProduct EditDiabledProduct = new CreateProduct(ProductToActivate, _storageController, this, _settingsController.isAdmin, true);
+                    EditDiabledProduct.Show();
+                }
+                else
+                {
+                    ServiceProduct ServiceProductToActivate = _storageController.DisabledServiceProducts[ID];
+                    CreateProduct EditDiabledServiceProduct = new CreateProduct(ServiceProductToActivate, _storageController, this, _settingsController.isAdmin, true);
+                    EditDiabledServiceProduct.Show();
+                }
+                ReloadDisabledProducts();
+                ReloadProducts();
+
+            }
+        }
+
+
     }
 }
