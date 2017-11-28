@@ -134,6 +134,35 @@ namespace P3_Projekt_WPF.Classes.Utilities
             _disabledServiceProductsLoaded = true;
         }
 
+        public static List<StorageTransaction> GetAllStorageTransactions()
+        {
+            List<StorageTransaction> StorageTransactions = new List<StorageTransaction>();
+            
+            string sql = $"SELECT * FROM `storage_transaction`";
+            TableDecode asdf = Mysql.RunQueryWithReturn(sql);
+            foreach (var item in asdf.RowData)
+            {
+                StorageTransaction NewStorageTransaction = new StorageTransaction(item);
+                StorageTransactions.Add(NewStorageTransaction);
+            }
+            return StorageTransactions;
+
+        }
+
+        public static List<OrderTransaction> GetAllOrderTransactions()
+        {
+            List<OrderTransaction> OrderTransactions = new List<OrderTransaction>();
+
+            string sql = $"SELECT * FROM `order_transactions`";
+            TableDecode asdf = Mysql.RunQueryWithReturn(sql);
+            foreach (var item in asdf.RowData)
+            {
+                OrderTransaction NewOrderTransaction = new OrderTransaction(item);
+                OrderTransactions.Add(NewOrderTransaction);
+            }
+            return OrderTransactions;
+        }
+
         private bool _serviceProductLoaded = false;
         private bool _tempProductLoaded = false;
         private bool _storageRoomLoaded = false;

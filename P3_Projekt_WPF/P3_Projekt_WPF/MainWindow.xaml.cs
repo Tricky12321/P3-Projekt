@@ -1283,6 +1283,7 @@ namespace P3_Projekt_WPF
                 _orderTransactionWindow.button_CreateProduct.Click += delegate
                 {
                     AddProductDialogOpener(sender, e);
+                    _orderTransactionWindow.Close();
                 };
             }
             _orderTransactionWindow.Show();
@@ -1465,6 +1466,20 @@ namespace P3_Projekt_WPF
             }
         }
 
+        private void StorageTransactionsHistory()
+        {
+            List<OrderTransaction> orderTransList = StorageController.GetAllOrderTransactions();
+            foreach (var ordertrans in orderTransList)
+            {
+                //listview_SettingsStorage.Items.Add(new { Recieved = ordertrans.Product.});
+            }
+            List<StorageTransaction> storageTransList = StorageController.GetAllStorageTransactions();
+     
+        }
 
+        private void settingsTab_MouseUp(object sender, MouseButtonEventArgs e)
+        {
+            StorageTransactionsHistory();
+        }
     }
 }
