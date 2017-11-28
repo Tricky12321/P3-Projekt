@@ -195,7 +195,7 @@ namespace P3_Projekt_WPF.Classes
                 Payment NewPayment = new Payment(item);
                 Payments.Add(NewPayment);
             }
-            Date = Convert.ToDateTime(Table.Values[5]);
+            Date = Convert.ToDateTime(Table.Values[3]);
         }
 
         public void UploadToDatabase()
