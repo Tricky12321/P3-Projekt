@@ -698,47 +698,34 @@ namespace P3_Projekt_WPF
             label_CurrentEndDate.Text = $"{ dateTime[0]}";
         }
 
-        //Today?? Yesterday??
         private void Button_CreateStatistics_Click(object sender, RoutedEventArgs e)
         {
-            if (_settingsController.isAdmin)
+            ResetStatisticsView();
+
+            int productID = 0;
+            if (textBox_StatisticsProductID.Text.Length > 0)
             {
-                ResetStatisticsView();
-
-                int productID = 0;
-                if (textBox_StatisticsProductID.Text.Length > 0)
-                {
-                    productID = int.Parse(textBox_StatisticsProductID.Text);
-                }
-                string brand = comboBox_Brand.Text;
-                int groupID = 0;
-                if (comboBox_Group.Text != "")
-                {
-                    groupID = _storageController.GroupDictionary.Values.First(x => x.Name == comboBox_Group.Text).ID;
-                }
-                bool filterProduct = checkBox_Product.IsChecked.Value;
-                bool filterBrand = checkBox_Brand.IsChecked.Value;
-                bool filterGroup = checkBox_Group.IsChecked.Value;
-
-                string queryString = _statisticsController.GetQueryString(filterProduct, productID, filterGroup, groupID, filterBrand, brand, datePicker_StartDate.SelectedDate.Value, datePicker_EndDate.SelectedDate.Value);
-                _statisticsController.RequestStatisticsDate(queryString);
-                _statisticsController.GetReceiptTotalCount(datePicker_StartDate.SelectedDate.Value, datePicker_EndDate.SelectedDate.Value);
-                _statisticsController.GetReceiptTotalPrice(datePicker_StartDate.SelectedDate.Value, datePicker_EndDate.SelectedDate.Value);
-
-                DisplayStatistics();
-                if (_statisticsController.TransactionsForStatistics.Count == 0)
-                {
-                    label_NoTransactions.Visibility = Visibility.Visible;
-                }
+                productID = int.Parse(textBox_StatisticsProductID.Text);
             }
-            else
+            string brand = comboBox_Brand.Text;
+            int groupID = 0;
+            if (comboBox_Group.Text != "")
             {
-                string queryString = _statisticsController.GetQueryString(false, 0, false, 0, false, "", DateTime.Today, DateTime.Today);
-                _statisticsController.RequestStatisticsDate(queryString);
-                _statisticsController.GetReceiptTotalCount(DateTime.Today, DateTime.Today);
-                _statisticsController.GetReceiptTotalPrice(DateTime.Today, DateTime.Today);
-                ResetStatisticsView();
-                DisplayStatistics();
+                groupID = _storageController.GroupDictionary.Values.First(x => x.Name == comboBox_Group.Text).ID;
+            }
+            bool filterProduct = checkBox_Product.IsChecked.Value;
+            bool filterBrand = checkBox_Brand.IsChecked.Value;
+            bool filterGroup = checkBox_Group.IsChecked.Value;
+
+            string queryString = _statisticsController.GetQueryString(filterProduct, productID, filterGroup, groupID, filterBrand, brand, datePicker_StartDate.SelectedDate.Value, datePicker_EndDate.SelectedDate.Value);
+            _statisticsController.RequestStatisticsDate(queryString);
+            _statisticsController.GetReceiptTotalCount(datePicker_StartDate.SelectedDate.Value, datePicker_EndDate.SelectedDate.Value);
+            _statisticsController.GetReceiptTotalPrice(datePicker_StartDate.SelectedDate.Value, datePicker_EndDate.SelectedDate.Value);
+
+            DisplayStatistics();
+            if (_statisticsController.TransactionsForStatistics.Count == 0)
+            {
+                label_NoTransactions.Visibility = Visibility.Visible;
             }
         }
 
@@ -779,7 +766,7 @@ namespace P3_Projekt_WPF
             }
         }
 
-        private void Button_DateToday_Click(object sender, RoutedEventArgs e)
+        private void Button_StatisticsToday_Click(object sender, RoutedEventArgs e)
         {
             ResetStatisticsView();
             _statisticsController.RequestTodayReceipts();
@@ -787,6 +774,13 @@ namespace P3_Projekt_WPF
             listView_Statistics.Items.Add(new StatisticsListItem($"{DateTime.Today.ToString("dd/MM/yy")}", "Kontant", "", $"{_statisticsController.Payments[0]}"));
             listView_Statistics.Items.Add(new StatisticsListItem($"{DateTime.Today.ToString("dd/MM/yy")}", "Kort", "", $"{_statisticsController.Payments[1]}"));
             listView_Statistics.Items.Add(new StatisticsListItem($"{DateTime.Today.ToString("dd/MM/yy")}", "MobilePay", "", $"{_statisticsController.Payments[2]}"));
+            /*string queryString = _statisticsController.GetQueryString(false, 0, false, 0, false, "", DateTime.Today, DateTime.Today);
+            _statisticsController.RequestStatisticsDate(queryString);
+            _statisticsController.GenerateGroupAndBrandSales();
+            foreach (int groupID in _statisticsController.SalesPerGroup.Keys)
+            {
+                listView_GroupStatistics.Items.Add(_statisticsController.GroupSalesStrings(groupID, totalTransactionPrice));
+            }*/
         }
 
         private void checkBox_Product_Checked(object sender, RoutedEventArgs e)
@@ -1089,13 +1083,12 @@ namespace P3_Projekt_WPF
         {
             if (listView_Receipt.HasItems)
             {
-                decimal PriceToPay = Convert.ToDecimal(label_TotalPrice.Content);
+                decimal PriceToPay = Convert.ToDecimal(label_TotalPrice.Content.ToString().Replace(',', '.'));
                 if (_POSController.PlacerholderReceipt.TotalPriceToPay == -1m)
                 {
                     _POSController.PlacerholderReceipt.TotalPriceToPay = PriceToPay;
                 }
                 decimal PaymentAmount;
-
 
                 if (PayWithAmount.Text.Length == 0)
                 {
@@ -1111,7 +1104,7 @@ namespace P3_Projekt_WPF
 
                 PayWithAmount.Text = "";
                 label_TotalPrice.Content = $"{PriceToPay - NewPayment.Amount}".Replace('.', ',');
-                if (_POSController.PlacerholderReceipt.PaidPrice >= _POSController.PlacerholderReceipt.TotalPriceToPay)
+                if (_POSController.PlacerholderReceipt.PaidPrice >= PriceToPay)
                 {
                     SaleTransaction.SetStorageController(_storageController);
                     //_POSController.PlacerholderReceipt.PaymentMethod = PaymentMethod;
@@ -1119,10 +1112,12 @@ namespace P3_Projekt_WPF
                     NewThread.Name = "ExecuteReceipt Thread";
                     NewThread.Start();
                     listView_Receipt.Items.Clear();
-                    label_TotalPrice.Content = "Retur: " + (_POSController.PlacerholderReceipt.TotalPriceToPay - _POSController.PlacerholderReceipt.PaidPrice).ToString();
+                    if (_POSController.PlacerholderReceipt.PaidPrice > PriceToPay)
+                    {
+                        label_TotalPrice.Content = "Retur: " + (PriceToPay - _POSController.PlacerholderReceipt.PaidPrice).ToString().Replace('.', ',').Replace('-', ' ');
+                    }
                 }
             }
-
         }
 
         AdminValidation adminValid;

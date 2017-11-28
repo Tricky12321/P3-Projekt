@@ -301,7 +301,7 @@
                     <TextBlock x:Name="label_CurrentStartDate" Grid.ColumnSpan="2" Margin="200,60,0,0" TextWrapping="Wrap" Text="dd/mm/åå" VerticalAlignment="Top" FontSize="30" HorizontalAlignment="Left" Width="166" Grid.Row="1"/>
                     <TextBlock x:Name="label_CurrentEndDate" Grid.ColumnSpan="2" Margin="200,100,0,0" TextWrapping="Wrap" Text="dd/mm/åå" VerticalAlignment="Top" FontSize="30" HorizontalAlignment="Left" Width="154" Grid.Row="1"/>
                     <TextBlock x:Name="label_NoTransactions" Grid.ColumnSpan="2" Width="auto" HorizontalAlignment="Center" Margin="56,181,39,0" TextWrapping="Wrap" Text="Ingen transaktioner fundet" VerticalAlignment="Top"  Foreground="Red" Height="64" FontSize="30"  Visibility="Hidden"/>
-                    <Button x:Name="Button_DateToday" Content="Dagens Tal" Margin="5,5,2.5,0" Background="#FFC5C5C5" Style="{StaticResource Flat_Button}" Height="48" VerticalAlignment="Top" Click="Button_DateToday_Click"/>
+                    <Button x:Name="Button_DateToday" Content="Dagens Tal" Margin="5,5,2.5,0" Background="#FFC5C5C5" Style="{StaticResource Flat_Button}" Height="48" VerticalAlignment="Top" Click="Button_StatisticsToday_Click"/>
                     <Label x:Name="label_NoAdmin" HorizontalContentAlignment="Center" Content="Ikke Admin, kan kun vise dagens tal" Margin="0,140,0,0" VerticalAlignment="Top" Grid.ColumnSpan="2" Height="57" FontSize="30" Foreground="Red" Width="630" HorizontalAlignment="Center"/>
                     <Grid Grid.Column="2" Margin="0,0,0,0">
                         <TabControl Background="#FFE5E5E5" Margin="0,60,0,0" FontSize="20">
