@@ -473,6 +473,7 @@ namespace P3_Projekt_WPF
             {
                 int productID = Convert.ToInt32(IDTag.Replace("t", string.Empty));
                 _POSController.PlacerholderReceipt.Transactions.Where(x => x.Product.ID == productID).First().Amount++;
+                _POSController.PlacerholderReceipt.Transactions.Where(x => x.Product.ID == productID).First().CheckIfGroupPrice();
                 _POSController.PlacerholderReceipt.UpdateTotalPrice();
                 UpdateReceiptList();
             }
@@ -480,6 +481,7 @@ namespace P3_Projekt_WPF
             {
                 int productID = Convert.ToInt32(IDTag);
                 _POSController.PlacerholderReceipt.Transactions.Where(x => x.Product.ID == productID).First().Amount++;
+                _POSController.PlacerholderReceipt.Transactions.Where(x => x.Product.ID == productID).First().CheckIfGroupPrice();
                 _POSController.PlacerholderReceipt.UpdateTotalPrice();
                 UpdateReceiptList();
             }
@@ -492,6 +494,7 @@ namespace P3_Projekt_WPF
             {
                 int productID = Convert.ToInt32(IDTag.Replace("t", string.Empty));
                 _POSController.PlacerholderReceipt.Transactions.Where(x => x.Product.ID == productID).First().Amount--;
+                _POSController.PlacerholderReceipt.Transactions.Where(x => x.Product.ID == productID).First().CheckIfGroupPrice();
                 _POSController.PlacerholderReceipt.UpdateTotalPrice();
                 UpdateReceiptList();
             }
@@ -499,6 +502,7 @@ namespace P3_Projekt_WPF
             {
                 int productID = Convert.ToInt32(IDTag);
                 _POSController.PlacerholderReceipt.Transactions.Where(x => x.Product.ID == productID).First().Amount--;
+                _POSController.PlacerholderReceipt.Transactions.Where(x => x.Product.ID == productID).First().CheckIfGroupPrice();
                 _POSController.PlacerholderReceipt.UpdateTotalPrice();
                 UpdateReceiptList();
             }
