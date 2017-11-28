@@ -7,6 +7,7 @@ using P3_Projekt_WPF.Classes.Database;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Controls;
+using P3_Projekt_WPF.Classes.Exceptions;
 
 namespace P3_Projekt_WPF.Classes
 {
@@ -17,7 +18,8 @@ namespace P3_Projekt_WPF.Classes
         public int GroupLimit;
         public int ServiceProductGroupID;
         public Image Image;
-
+        private bool _active = true;
+        public bool Active => _active; 
         public ServiceProduct(int id, decimal salePrice, decimal groupPrice, int groupLimit, string name, int serviceProductGroupID) : base(salePrice)
         {
             ID = id;
@@ -30,6 +32,11 @@ namespace P3_Projekt_WPF.Classes
         public ServiceProduct(Row Data) : base(0)
         {
             CreateFromRow(Data);
+        }
+
+        public override string ToString()
+        {
+            return ID+" - "+Name;
         }
 
         public static int GetNextID()
@@ -83,10 +90,11 @@ namespace P3_Projekt_WPF.Classes
         {
             ID = Convert.ToInt32(results.Values[0]);                         // id
             Name = results.Values[1];                                        // name
-            ServiceProductGroupID = Convert.ToInt32(results.Values[2]);
+            ServiceProductGroupID = Convert.ToInt32(results.Values[2]);         // group id
             SalePrice = Convert.ToDecimal(results.Values[3]);                  // price
-            GroupPrice = Convert.ToDecimal(results.Values[4]);                 // price
-            GroupLimit = Convert.ToInt32(results.Values[5]);                 // price
+            GroupPrice = Convert.ToDecimal(results.Values[4]);                 // group price
+            GroupLimit = Convert.ToInt32(results.Values[5]);                 // grouplimit
+            _active = Convert.ToBoolean(results.Values[6]);                 // active
         }
 
         public override void UploadToDatabase()
@@ -103,9 +111,39 @@ namespace P3_Projekt_WPF.Classes
                 $"`price` = '{SalePrice}'," +
                 $"`group_price` = '{GroupPrice}'," +
                 $"`group_limit` = '{GroupLimit}'," +
+                $"`active` = '{Convert.ToInt32(_active)}'," +
                 $"`groups` = '{ServiceProductGroupID}' "+
                 $"WHERE `id` = {ID};";
             Mysql.RunQuery(sql);
+        }
+
+        public void DeactivateProduct()
+        {
+            if (_active)
+            {
+                string sql = $"UPDATE `service_products` SET `active` = '0' WHERE `id` = '{ID}'";
+                Mysql.RunQuery(sql);
+                _active = false;
+
+            }
+            else
+            {
+                throw new ProductAlreadyDeActivated("Dette produkt er allerede deaktiveret");
+            }
+        }
+
+        public void ActivateProduct()
+        {
+            if (!_active)
+            {
+                string sql = $"UPDATE `service_products` SET `active` = '1' WHERE `id` = '{ID}'";
+                Mysql.RunQuery(sql);
+                _active = true;
+            }
+            else
+            {
+                throw new ProductAlreadyActivated("Dette produkt er allerede aktiveret");
+            }
         }
     }
 }

@@ -11,18 +11,16 @@ namespace P3_Projekt_WPF.Classes.Utilities
     {
         public int ProductID { get; set; }
         public string Button_Name { get; set; }
-        public bool ForServiceOrNormal;
 
         public FastButton()
         {
 
         }
 
-        public FastButton(int productID, string button_name, bool forServiceOrNormal)
+        public FastButton(int productID, string button_name)
         {
             ProductID = productID;
             Button_Name = button_name;
-            ForServiceOrNormal = forServiceOrNormal;
         }
 
 

@@ -67,6 +67,9 @@ namespace P3_Projekt_WPF
             }
             Utils.GetIceCreameID();
             Console.WriteLine("Username: " + Environment.UserName);
+
+            _storageController.MakeSureIcecreamExists();
+            this.WindowState = WindowState.Maximized;
         }
 
         public void ReloadProducts()
@@ -139,6 +142,7 @@ namespace P3_Projekt_WPF
             InitStatisticsTab();
             InitAdminLogin();
             Utils.LoadDatabaseSettings(this);
+            FillDeactivatedProductsIntoGrid();
         }
 
         private void InitGridQuickButtons()
@@ -162,7 +166,7 @@ namespace P3_Projekt_WPF
             datePicker_StartDate.SelectedDate = DateTime.Now;
             datePicker_EndDate.SelectedDate = DateTime.Now;
             ChangeStatisticsState();
-            var products = _storageController.ProductDictionary.Values.Select(x => x.Brand).Distinct();
+            IEnumerable products = _storageController.ProductDictionary.Values.Select(x => x.Brand).Distinct();
             foreach (string brand in products)
             {
                 comboBox_Brand.Items.Add(brand);
@@ -736,6 +740,7 @@ namespace P3_Projekt_WPF
         {
             listView_Statistics.Items.Clear();
             listView_GroupStatistics.Items.Clear();
+            listView_BrandStatistics.Items.Clear();
             label_NoTransactions.Visibility = Visibility.Hidden;
         }
 
@@ -757,10 +762,14 @@ namespace P3_Projekt_WPF
                 listView_Statistics.Items.Insert(1, _statisticsController.ReceiptStatisticsString());
             }
 
-            _statisticsController.GenerateGroupSales();
+            _statisticsController.GenerateGroupAndBrandSales();
             foreach (int groupID in _statisticsController.SalesPerGroup.Keys)
             {
                 listView_GroupStatistics.Items.Add(_statisticsController.GroupSalesStrings(groupID, totalTransactionPrice));
+            }
+            foreach (string brand in _statisticsController.SalesPerBrand.Keys)
+            {
+                listView_BrandStatistics.Items.Add(_statisticsController.BrandSalesStrings(brand, totalTransactionPrice));
             }
         }
 
@@ -768,13 +777,6 @@ namespace P3_Projekt_WPF
         {
             datePicker_StartDate.SelectedDate = DateTime.Today;
             datePicker_EndDate.SelectedDate = DateTime.Today;
-            Button_CreateStatistics_Click(sender, e);
-        }
-
-        private void Button_DateYesterday_Click(object sender, RoutedEventArgs e)
-        {
-            datePicker_StartDate.SelectedDate = DateTime.Today.AddDays(-1);
-            datePicker_EndDate.SelectedDate = DateTime.Today.AddDays(-1);
             Button_CreateStatistics_Click(sender, e);
         }
 
@@ -1346,5 +1348,114 @@ namespace P3_Projekt_WPF
             _POSController.PlacerholderReceipt.UpdateTotalPrice();
             UpdateReceiptList();
         }
+
+        private void btn_AddIcecream_Click(object sender, RoutedEventArgs e)
+        {
+            AddIcecream Icecream = new AddIcecream();
+            Icecream.Closed += delegate
+            {
+                if (Icecream.textbox_Price.Text != "")
+                {
+                    _POSController.AddIcecreamTransaction(Decimal.Parse(Icecream.textbox_Price.Text));
+                    UpdateReceiptList();
+                };
+            };
+            Icecream.ShowDialog();
+        }
+
+        private void FillDeactivatedProductsIntoGrid()
+        {
+            datagrid_deactivated_products.Items.Clear();
+            foreach (var item in _storageController.DisabledProducts)
+            {
+                datagrid_deactivated_products.Items.Add(new
+                {
+                    type = "Produkt",
+                    id = item.Value.ID.ToString(),
+                    name = item.Value.Name.ToString(),
+                    group = _storageController.GroupDictionary[item.Value.ProductGroupID].Name,
+                    brand = item.Value.Brand,
+                    price = item.Value.SalePrice.ToString(),
+                });
+            }
+            foreach (var item in _storageController.DisabledServiceProducts)
+            {
+                datagrid_deactivated_products.Items.Add(new
+                {
+                    type = "ServiceProdukt",
+                    id = item.Value.ID.ToString(),
+                    name = item.Value.Name.ToString(),
+                    group = _storageController.GroupDictionary[item.Value.ServiceProductGroupID].Name,
+                    brand = "",
+                    price = item.Value.SalePrice.ToString(),
+                });
+            }
+        }
+
+        public void ReloadDisabledProducts()
+        {
+            FillDeactivatedProductsIntoGrid();
+        }
+
+
+        private void ActivateProduct(object sender, RoutedEventArgs e)
+        {
+            if (datagrid_deactivated_products.SelectedIndex != -1)
+            {
+                char[] seperator = new char[] { ',', ' ' };
+                int ID = Convert.ToInt32(datagrid_deactivated_products.SelectedCells[0].Item.ToString().Split(seperator)[7]);
+                string ProductString = "";
+                if (_storageController.DisabledProducts.ContainsKey(ID))
+                {
+                    Product ProductToActivate;
+                    _storageController.DisabledProducts.TryRemove(ID, out ProductToActivate);
+                    ProductToActivate.ActivateProduct();
+                    _storageController.AllProductsDictionary.TryAdd(ID, ProductToActivate);
+                    _storageController.ProductDictionary.TryAdd(ID, ProductToActivate);
+                    datagrid_deactivated_products.Items.Remove(datagrid_deactivated_products.SelectedItem);
+                    ProductString = ProductToActivate.ToString();
+                }
+                else
+                {
+                    ServiceProduct ServiceProductToActivate;
+                    _storageController.DisabledServiceProducts.TryRemove(ID, out ServiceProductToActivate);
+                    ServiceProductToActivate.ActivateProduct();
+                    _storageController.AllProductsDictionary.TryAdd(ID, ServiceProductToActivate);
+                    _storageController.ServiceProductDictionary.TryAdd(ID, ServiceProductToActivate);
+                    datagrid_deactivated_products.Items.Remove(datagrid_deactivated_products.SelectedItem);
+                    ProductString = ServiceProductToActivate.ToString();
+                }
+
+                MessageBox.Show("Du har genaktiveret " + ProductString);
+                ReloadDisabledProducts();
+                ReloadProducts();
+
+            }
+        }
+        private void EditDisabledProduct(object sender, RoutedEventArgs e)
+        {
+            if (datagrid_deactivated_products.SelectedIndex != -1)
+            {
+                char[] seperator = new char[] { ',', ' ' };
+                int ID = Convert.ToInt32(datagrid_deactivated_products.SelectedCells[0].Item.ToString().Split(seperator)[7]);
+                if (_storageController.DisabledProducts.ContainsKey(ID))
+                {
+                    Product ProductToActivate = _storageController.DisabledProducts[ID];
+                    CreateProduct EditDiabledProduct = new CreateProduct(ProductToActivate, _storageController, this, _settingsController.isAdmin, true);
+                    EditDiabledProduct.Show();
+                }
+                else
+                {
+                    ServiceProduct ServiceProductToActivate = _storageController.DisabledServiceProducts[ID];
+                    CreateProduct EditDiabledServiceProduct = new CreateProduct(ServiceProductToActivate, _storageController, this, _settingsController.isAdmin, true);
+                    EditDiabledServiceProduct.Show();
+                }
+                ReloadDisabledProducts();
+                ReloadProducts();
+
+            }
+        }
+
+
     }
 }

@@ -23,7 +23,6 @@ namespace P3_Projekt_WPF.Classes
         public DateTime CreatedTime;
         public ConcurrentDictionary<int, int> StorageWithAmount = new ConcurrentDictionary<int, int>();
 
-
         public Product(int id, string name, string brand, decimal purchasePrice, int groupID, bool discount, decimal salePrice, decimal discountPrice) : base(salePrice)
         {
             ID = id;
@@ -166,6 +165,11 @@ namespace P3_Projekt_WPF.Classes
             CreatedTime = DateTime.Now;
         }
 
+        public override string ToString()
+        {
+            return ID + " - " + Name;
+        }
+
         public override void UpdateInDatabase()
         {
             string sql = $"UPDATE `products` SET " +
@@ -187,6 +191,8 @@ namespace P3_Projekt_WPF.Classes
             {
                 string sql = $"UPDATE `products` SET `active` = '0' WHERE `id` = '{ID}'";
                 Mysql.RunQuery(sql);
+                _active = false;
+
             }
             else
             {
@@ -200,11 +206,12 @@ namespace P3_Projekt_WPF.Classes
             {
                 string sql = $"UPDATE `products` SET `active` = '1' WHERE `id` = '{ID}'";
                 Mysql.RunQuery(sql);
-            } else
+                _active = true;
+            }
+            else
             {
                 throw new ProductAlreadyActivated("Dette produkt er allerede aktiveret");
             }
-            
         }
 
     }
