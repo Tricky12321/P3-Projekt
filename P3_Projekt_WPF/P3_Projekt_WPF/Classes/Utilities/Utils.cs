@@ -180,12 +180,12 @@ namespace P3_Projekt_WPF.Classes.Utilities
             bool Remote = false;
             if (sett.local_or_remote == true)
             {
-                MainWin.btn_RmtLcl.Content = "Local";
+                MainWin.btn_RmtLcl.Content = "Remote";
                 Local = true;
             }
             else
             {
-                MainWin.btn_RmtLcl.Content = "Remote";
+                MainWin.btn_RmtLcl.Content = "Local";
                 Remote = true;
             }
             UpdateDisabledFields(Local, Remote, MainWin);

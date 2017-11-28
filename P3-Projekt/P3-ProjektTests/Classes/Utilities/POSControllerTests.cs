@@ -41,19 +41,6 @@ namespace P3_Projekt_WPF.Classes.Utilities.Tests
         }
 
         [Test()]
-        public void AddIcecreamTransactionTest()
-        {
-            StorageController SC = new StorageController();
-            POSController POSC = new POSController(SC);
-
-            POSC.StartPurchase();
-
-            POSC.AddIcecreamTransaction(25m);
-
-            Assert.IsTrue((POSC.PlacerholderReceipt.Transactions.First().GetProductName() == "Is"));
-        }
-
-        [Test()]
         public void RemoveTransactionFromReceiptTestOneTransaction()
         {
             StorageController SC = new StorageController();
@@ -99,46 +86,6 @@ namespace P3_Projekt_WPF.Classes.Utilities.Tests
             bool b6 = POSC.PlacerholderReceipt.Transactions.Contains(transaction3);
 
             Assert.IsTrue(b1 && b2 && b3 && b4 && b5 && b6);
-        }
-
-        [Test()]
-        public void ExecuteReceiptTestOneTransaction()
-        {
-            StorageController SC = new StorageController();
-            POSController POSC = new POSController(SC);
-            POSC.StartPurchase();
-            SC.ProductDictionary.TryAdd(0, new Product(1,"test1", "blabla", 1.25m, 0, false, 5.0m, 3.0m));
-            SC.ProductDictionary[0].StorageWithAmount.TryAdd(0, 9);
-            POSC.PlacerholderReceipt.Transactions.Add(new SaleTransaction(SC.ProductDictionary[0], 5, 0));
-
-            POSC.ExecuteReceipt();
-
-            Assert.IsTrue(SC.ProductDictionary[0].StorageWithAmount[0] == 4);
-        }
-
-        [Test()]
-        public void ExecuteReceiptTestThreeTransactions()
-        {
-            StorageController SC = new StorageController();
-            POSController POSC = new POSController(SC);
-            POSC.StartPurchase();
-            SC.ProductDictionary.TryAdd(0, new Product(1,"test1", "blabla", 1.25m, 0, false, 5.0m, 3.0m));
-            SC.ProductDictionary.TryAdd(1, new Product(2,"test1", "blabla", 1.25m, 0, false, 5.0m, 3.0m));
-            SC.ProductDictionary.TryAdd(2, new Product(3,"test1", "blabla", 1.25m, 0, false, 5.0m, 3.0m));
-            SC.ProductDictionary[0].StorageWithAmount.TryAdd(0, 9);
-            SC.ProductDictionary[1].StorageWithAmount.TryAdd(0, 15);
-            SC.ProductDictionary[2].StorageWithAmount.TryAdd(0, 2);
-            POSC.PlacerholderReceipt.Transactions.Add(new SaleTransaction(SC.ProductDictionary[0], 6, 0));
-            POSC.PlacerholderReceipt.Transactions.Add(new SaleTransaction(SC.ProductDictionary[1], 8, 0));
-            POSC.PlacerholderReceipt.Transactions.Add(new SaleTransaction(SC.ProductDictionary[2], 1, 0));
-
-            POSC.ExecuteReceipt();
-
-            bool b1 = SC.ProductDictionary[0].StorageWithAmount[0] == 3;
-            bool b2 = SC.ProductDictionary[1].StorageWithAmount[0] == 7;
-            bool b3 = SC.ProductDictionary[2].StorageWithAmount[0] == 1;
-
-            Assert.IsTrue(b1 && b2 && b3);
         }
 
         [Test()]

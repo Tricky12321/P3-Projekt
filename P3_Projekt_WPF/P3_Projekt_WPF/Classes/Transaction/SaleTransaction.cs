@@ -52,6 +52,7 @@ namespace P3_Projekt_WPF.Classes
             if (Product is Product)
             {
                 Product prod = (Product as Product);
+                prod.GetStorageStatus();
                 if (!prod.StorageWithAmount.ContainsKey(1))
                 {
                     prod.StorageWithAmount.TryAdd(1, -Amount);
@@ -60,7 +61,6 @@ namespace P3_Projekt_WPF.Classes
                 {
                     (Product as Product).StorageWithAmount[1] -= Amount;
                 }
-
                 if (prod.StorageWithAmount.Where(x => x.Value < 0).Count() > 0)
                 {
                     // Hvis det er nogle storageroom med negativ værdi
@@ -88,7 +88,6 @@ namespace P3_Projekt_WPF.Classes
             else if (Product is TempProduct)
             {
                 Product.ID = TempProduct.GetNextID();
-
                 Product.UploadToDatabase();
             }
         }

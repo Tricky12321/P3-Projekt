@@ -21,6 +21,7 @@ using System.Threading;
 using System.Collections;
 using System.IO;
 using System.Collections.Concurrent;
+using System.ComponentModel;
 //using System.Drawing;
 
 namespace P3_Projekt_WPF
@@ -528,6 +529,7 @@ namespace P3_Projekt_WPF
             {
                 string tempID = (sender as ReceiptListItem).IDTag;
                 _POSController.PlacerholderReceipt.RemoveTransaction(tempID);
+                _tempID--;
             }
             else
             {
@@ -673,8 +675,8 @@ namespace P3_Projekt_WPF
                         price = decimal.Parse(_createTempProduct.textbox_Price.Text);
                         int amount = int.Parse(_createTempProduct.textBox_ProductAmount.Text);
                         TempProduct NewTemp = _storageController.CreateTempProduct(description, price);
-                        _POSController.AddSaleTransaction(NewTemp, amount);
                         NewTemp.ID = _tempID;
+                        _POSController.AddSaleTransaction(NewTemp, amount);
                         UpdateReceiptList();
                         _createTempProduct.Close();
                         ++_tempID;
@@ -793,9 +795,12 @@ namespace P3_Projekt_WPF
 
         private void Button_DateToday_Click(object sender, RoutedEventArgs e)
         {
-            datePicker_StartDate.SelectedDate = DateTime.Today;
-            datePicker_EndDate.SelectedDate = DateTime.Today;
-            Button_CreateStatistics_Click(sender, e);
+            ResetStatisticsView();
+            _statisticsController.RequestTodayReceipts();
+            _statisticsController.CalculatePayments();
+            listView_Statistics.Items.Add(new StatisticsListItem($"{DateTime.Today.ToString("dd/MM/yy")}", "Kontant", "", $"{_statisticsController.Payments[0]}"));
+            listView_Statistics.Items.Add(new StatisticsListItem($"{DateTime.Today.ToString("dd/MM/yy")}", "Kort", "", $"{_statisticsController.Payments[1]}"));
+            listView_Statistics.Items.Add(new StatisticsListItem($"{DateTime.Today.ToString("dd/MM/yy")}", "MobilePay", "", $"{_statisticsController.Payments[2]}"));
         }
 
         private void checkBox_Product_Checked(object sender, RoutedEventArgs e)
