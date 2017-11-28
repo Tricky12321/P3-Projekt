@@ -17,7 +17,6 @@ namespace P3_Projekt_WPF.Classes
         public decimal PurchasePrice;
         public int ProductGroupID;
         public bool DiscountBool;
-        public decimal DiscountPrice;
         public Image Image;
         private bool _active = true;
         public bool Active => _active;

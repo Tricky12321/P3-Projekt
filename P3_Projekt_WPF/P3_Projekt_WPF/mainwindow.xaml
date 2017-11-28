@@ -129,67 +129,8 @@
                     </TextBox>
 
                     <ListView x:Name="listView_Receipt" ScrollViewer.HorizontalScrollBarVisibility="Disabled" HorizontalContentAlignment="Stretch" Margin="6,61,5,219" Grid.Row="1" Grid.Column="1" SelectionChanged="listView_Receipt_SelectionChanged">
-                        <ListView.ItemTemplate>
-                            <DataTemplate>
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="auto"/>
-                                        <ColumnDefinition Width="auto"/>
-                                        <ColumnDefinition Width="auto"/>
-                                        <ColumnDefinition Width="1*"/>
-                                        <ColumnDefinition Width="auto"/>
-                                        <ColumnDefinition Width="auto"/>
-                                    </Grid.ColumnDefinitions>
-
-
-
-                                    <Button Style="{StaticResource Flat_Button}"
-                                                Content = "+"
-                                                FontSize="30"
-                                                Width="40"
-                                                Height="50"
-                                                VerticalAlignment = "Center"
-                                                Click="btn_Increment_Click"
-                                            Background="Transparent"
-                                                Tag="{Binding IDTag}"
-                                                Grid.Column="0"
-                                            />
-
-                                    <Button Style="{StaticResource Flat_Button}"
-                                                Content = "-"
-                                                Width="40"
-                                                Height="50"
-                                                FontSize="30"
-                                            Background="Transparent"
-                                                VerticalAlignment = "Center"
-                                                Click="btn_Decrement_Click"
-                                                Tag="{Binding IDTag}"
-                                                Grid.Column="1"
-                                            />
-
-                                    <TextBlock Text="{Binding Amount}" Grid.Column="2" VerticalAlignment = "Center" Padding="10" MinWidth="60"/>
-
-                                    <TextBlock Text="{Binding String_Product}" Grid.Column="3" HorizontalAlignment="Stretch" VerticalAlignment = "Center" TextWrapping="Wrap"/>
-
-                                    <TextBlock Text="{Binding Price}" Grid.Column="4" VerticalAlignment = "Center" MinWidth="100"/>
-
-                                    <Button Style="{StaticResource Flat_Button}"
-                                                Content = "x"
-                                                Width="40"
-                                                Height="50"
-                                                FontSize="30"
-                                                VerticalAlignment = "Center"
-                                                Background="Transparent"
-                                                Click="btn_DeleteProduct_Click"
-                                                Tag="{Binding IDTag}"
-                                                Foreground="red"
-                                                Grid.Column="5"
-                                            />
-                                </Grid>
-                            </DataTemplate>
-                        </ListView.ItemTemplate>
-
                     </ListView>
+                    
                     <Label x:Name="label" Content="Kvittering"  Height="67" VerticalAlignment="Top" FontSize="35" Grid.Column="1" HorizontalAlignment="Left" Width="167" Grid.Row="1" Margin="2,0,0,0"/>
                     <Label x:Name="label_TotalPrice" Content="Total" Margin="6,0,5,170" Grid.Row="1" VerticalAlignment="Bottom" Height="50" BorderThickness="1" Background="White" BorderBrush="#FF858585" Grid.Column="1"/>
                     <Button x:Name="btn_MergeTempProduct" Content="Ret et Midlertidigt Produkt" Background="#FFC5C5C5" HorizontalAlignment="Left" Margin="5,5,0,0" Grid.Row="0" Width="400" Style="{StaticResource Flat_Button}" Click="btn_MergeTempProduct_Click" Height="50                             " VerticalAlignment="Top"/>
