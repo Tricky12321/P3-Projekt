@@ -67,6 +67,8 @@ namespace P3_Projekt_WPF
             }
             Utils.GetIceCreameID();
             Console.WriteLine("Username: " + Environment.UserName);
+
+            _storageController.MakeSureIcecreamExists();
         }
 
         public void ReloadProducts()
@@ -469,6 +471,7 @@ namespace P3_Projekt_WPF
         {
             int productID = Convert.ToInt32((sender as Button).Tag);
             _POSController.PlacerholderReceipt.Transactions.Where(x => x.Product.ID == productID).First().Amount++;
+            _POSController.PlacerholderReceipt.Transactions.Where(x => x.Product.ID == productID).First().CheckIfGroupPrice();
             _POSController.PlacerholderReceipt.UpdateTotalPrice();
             UpdateReceiptList();
         }
@@ -477,6 +480,7 @@ namespace P3_Projekt_WPF
         {
             int productID = Convert.ToInt32((sender as Button).Tag);
             _POSController.PlacerholderReceipt.Transactions.Where(x => x.Product.ID == productID).First().Amount--;
+            _POSController.PlacerholderReceipt.Transactions.Where(x => x.Product.ID == productID).First().CheckIfGroupPrice();
             _POSController.PlacerholderReceipt.UpdateTotalPrice();
             UpdateReceiptList();
 
@@ -1328,9 +1332,14 @@ namespace P3_Projekt_WPF
         private void btn_AddIcecream_Click(object sender, RoutedEventArgs e)
         {
             AddIcecream Icecream = new AddIcecream();
-            Icecream.Closed += delegate {
-                _POSController.AddIcecreamTransaction(Decimal.Parse(Icecream.textbox_Price.Text));
-                UpdateReceiptList(); };
+            Icecream.Closed += delegate
+            {
+                if (Icecream.textbox_Price.Text != "")
+                {
+                    _POSController.AddIcecreamTransaction(Decimal.Parse(Icecream.textbox_Price.Text));
+                    UpdateReceiptList();
+                };
+            };
             Icecream.ShowDialog();
         }
     }

@@ -37,10 +37,7 @@ namespace P3_Projekt_WPF
 
         private void btn_AddIcecream_Click(object sender, RoutedEventArgs e)
         {
-            if (textbox_Price.Text != "")
-            {
-                this.Close();
-            }
+            this.Close();
         }
 
         private void KeyboardHook(object sender, KeyEventArgs e)

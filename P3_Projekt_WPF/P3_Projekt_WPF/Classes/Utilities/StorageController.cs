@@ -432,6 +432,29 @@ namespace P3_Projekt_WPF.Classes.Utilities
             string deleteQuery = $"DELETE FROM `storagerooms` WHERE `id` = '{id}'";
             Mysql.RunQuery(deleteQuery);
         }
+        /// <summary>
+        /// Creates Icecream as a serviceproduct, then uploads it to the database, if not already in the system.
+        /// </summary>
+        /// <returns></returns>
+        public void MakeSureIcecreamExists()
+        {
+            int IcecreamProductID;
+            if (!ServiceProductDictionary.Values.Any(x => x.Name == "Is"))
+            {
+                IcecreamProductID = ServiceProduct.GetNextID();
+                var IcecreamProduct = new ServiceProduct(IcecreamProductID, 0, 0, 1000, "Is", Properties.Settings.Default.IcecreamID);
+                ServiceProductDictionary.TryAdd(IcecreamProductID, IcecreamProduct);
+                AllProductsDictionary.TryAdd(IcecreamProductID, IcecreamProduct);
+                IcecreamProduct.UploadToDatabase();
+            }
+            else
+            {
+                IcecreamProductID = ServiceProductDictionary.Values.Where(x => x.Name == "Is").First().ID;
+            }
+
+            Properties.Settings.Default.IcecreamProductID = IcecreamProductID;
+            Properties.Settings.Default.Save();
+        }
 
 
         #region SearchAlgorithm
