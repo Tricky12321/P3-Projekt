@@ -273,6 +273,14 @@ namespace P3_Projekt_WPF.Classes
             return new StatisticsListItem(Date.ToString("dd/MM/yy"), Product.GetName(), Amount.ToString(), TotalPrice.ToString());
         }
 
+        public void CheckIfGroupPrice()
+        {
+            if(Product is ServiceProduct && Product.GetName() != "Is")
+            {
+                Price = Amount >= (Product as ServiceProduct).GroupLimit ? (Product as ServiceProduct).GroupPrice : (Product as ServiceProduct).SalePrice;
+            }
+        }
+
         public override void GetFromDatabase()
         {
             string getQuery = $"SELECT * FROM `sale_transactions` WHERE `id` = '{_id}'";

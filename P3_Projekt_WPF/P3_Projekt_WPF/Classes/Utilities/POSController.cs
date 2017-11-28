@@ -56,11 +56,9 @@ namespace P3_Projekt_WPF.Classes.Utilities
         {
             if (Properties.Settings.Default.IcecreamID != -1)
             {
-                PlacerholderReceipt.AddTransaction(
-                                new SaleTransaction(
-                                    new ServiceProduct(Properties.Settings.Default.IcecreamID, price, price, 0, "Is", Properties.Settings.Default.IcecreamID),
-                                    1,
-                                    PlacerholderReceipt.ID));
+                var Icecream = new SaleTransaction(_storageController.ServiceProductDictionary[Properties.Settings.Default.IcecreamProductID], 1, PlacerholderReceipt.ID);
+                Icecream.Price = price;
+                PlacerholderReceipt.AddTransaction(Icecream);
             } else
             {
                 Utils.GetIceCreameID();

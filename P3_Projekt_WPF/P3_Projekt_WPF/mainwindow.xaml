@@ -3,6 +3,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:Utilities="clr-namespace:P3_Projekt_WPF.Classes.Utilities"
     mc:Ignorable="d"
     
         x:Class="P3_Projekt_WPF.MainWindow"
@@ -18,12 +19,6 @@
     
         >
     <Grid>
-        <Grid.RowDefinitions>
-
-        </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-
-        </Grid.ColumnDefinitions>
         <TabControl x:Name="tabControl" FontSize="30" Grid.ColumnSpan="3" Grid.RowSpan="2">
             <TabItem x:Name="tab_Sale" GotFocus="updateGridQuickButtons" Header="Salg" Width="190" Height="46" Margin="0,0,0,0" VerticalAlignment="Top">
                 <Grid Background="#FFE5E5E5" MouseLeftButtonDown="SearchFieldLostFocus" Margin="0,0,0,0">
@@ -134,75 +129,15 @@
                     </TextBox>
 
                     <ListView x:Name="listView_Receipt" ScrollViewer.HorizontalScrollBarVisibility="Disabled" HorizontalContentAlignment="Stretch" Margin="6,61,5,219" Grid.Row="1" Grid.Column="1" SelectionChanged="listView_Receipt_SelectionChanged">
-                        <ListView.ItemTemplate>
-                            <DataTemplate>
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="auto"/>
-                                        <ColumnDefinition Width="auto"/>
-                                        <ColumnDefinition Width="auto"/>
-                                        <ColumnDefinition Width="1*"/>
-                                        <ColumnDefinition Width="auto"/>
-                                        <ColumnDefinition Width="auto"/>
-                                    </Grid.ColumnDefinitions>
-
-
-
-                                    <Button Style="{StaticResource Flat_Button}"
-                                                Content = "+"
-                                                FontSize="30"
-                                                Width="40"
-                                                Height="50"
-                                                VerticalAlignment = "Center"
-                                                Click="btn_Increment_Click"
-                                            Background="Transparent"
-                                                Tag="{Binding IDTag}"
-                                                Grid.Column="0"
-                                            />
-
-                                    <Button Style="{StaticResource Flat_Button}"
-                                                Content = "-"
-                                                Width="40"
-                                                Height="50"
-                                                FontSize="30"
-                                            Background="Transparent"
-                                                VerticalAlignment = "Center"
-                                                Click="btn_Decrement_Click"
-                                                Tag="{Binding IDTag}"
-                                                Grid.Column="1"
-                                            />
-
-                                    <TextBlock Text="{Binding Amount}" Grid.Column="2" VerticalAlignment = "Center" Padding="10" MinWidth="60"/>
-
-                                    <TextBlock Text="{Binding String_Product}" Grid.Column="3" HorizontalAlignment="Stretch" VerticalAlignment = "Center" TextWrapping="Wrap"/>
-
-                                    <TextBlock Text="{Binding Price}" Grid.Column="4" VerticalAlignment = "Center" MinWidth="100"/>
-
-                                    <Button Style="{StaticResource Flat_Button}"
-                                                Content = "x"
-                                                Width="40"
-                                                Height="50"
-                                                FontSize="30"
-                                                VerticalAlignment = "Center"
-                                                Background="Transparent"
-                                                Click="btn_DeleteProduct_Click"
-                                                Tag="{Binding IDTag}"
-                                                Foreground="red"
-                                                Grid.Column="5"
-                                            />
-                                </Grid>
-                            </DataTemplate>
-                        </ListView.ItemTemplate>
-
                     </ListView>
+                    
                     <Label x:Name="label" Content="Kvittering"  Height="67" VerticalAlignment="Top" FontSize="35" Grid.Column="1" HorizontalAlignment="Left" Width="167" Grid.Row="1" Margin="2,0,0,0"/>
                     <Label x:Name="label_TotalPrice" Content="Total" Margin="6,0,5,170" Grid.Row="1" VerticalAlignment="Bottom" Height="50" BorderThickness="1" Background="White" BorderBrush="#FF858585" Grid.Column="1"/>
-                    <Button x:Name="btn_MergeTempProduct" Content="Ret et Midlertidigt Produkt" Background="#FFC5C5C5" HorizontalAlignment="Left" Margin="5,5,0,0" Grid.Row="0" Width="400" Style="{StaticResource Flat_Button}" Click="btn_MergeTempProduct_Click" Height="50
-                            " VerticalAlignment="Top"/>
+                    <Button x:Name="btn_MergeTempProduct" Content="Ret et Midlertidigt Produkt" Background="#FFC5C5C5" HorizontalAlignment="Left" Margin="5,5,0,0" Grid.Row="0" Width="400" Style="{StaticResource Flat_Button}" Click="btn_MergeTempProduct_Click" Height="50                             " VerticalAlignment="Top"/>
                     <ListBox x:Name="listBox_SearchResultsSaleTab" HorizontalContentAlignment="Stretch" Visibility="Hidden" Panel.ZIndex="3" Grid.Column="1" Margin="0,53,60,0" HorizontalAlignment="Right" Grid.RowSpan="2" Width="503" Height="auto" KeyDown="listBox_SearchResultsSaleTab_KeyDown" MaxHeight="600" VerticalAlignment="Top">
                         <ListBox.ItemContainerStyle>
-                            <Style TargetType="ListBoxItem">
-                                <EventSetter Event="PreviewMouseLeftButtonDown" Handler="ListBoxItem_MouseDown"/>
+                            <Style TargetType="{x:Type ListBoxItem}">
+                                <EventSetter Event="UIElement.PreviewMouseLeftButtonDown" Handler="ListBoxItem_MouseDown"/>
                             </Style>
                         </ListBox.ItemContainerStyle>
                     </ListBox>
@@ -220,7 +155,7 @@
 
                     <Grid.RowDefinitions>
                         <RowDefinition Height="60"/>
-                        <RowDefinition></RowDefinition>
+                        <RowDefinition/>
                     </Grid.RowDefinitions>
                     <Button x:Name="btn_MoveProduct" Background="#FFC5C5C5" Content="Flyt Produkt" HorizontalAlignment="Left" Margin="5,5,0,0" VerticalAlignment="Top" Width="250" Height="50" Style="{StaticResource Flat_Button}" Click="btn_MoveProduct_Click"/>
                     <ScrollViewer x:Name="scroll_StorageProduct" Grid.Row="1" Margin="5,5,5,5" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" Grid.Column="0"/>
@@ -344,8 +279,7 @@
                         </TextBlock.Style>
                     </TextBlock>
                     <Button x:Name="Button_CreateStatistics" Content="Opret Statistik" Margin="0,0,5,5" Width="250" Background="#FFC5C5C5" Style="{StaticResource Flat_Button}" Height="50" VerticalAlignment="Bottom" Click="Button_CreateStatistics_Click" HorizontalAlignment="Right" Grid.Column="1"/>
-                    <TextBox Padding="10,0,0,0" MinWidth="500" TextCompositionManager.PreviewTextInput="TextInputNoNumber" x:Name="textBox_StatisticsProductID" Margin="65,0,0,176" FontSize="33" Height="50
-                             " VerticalAlignment="Bottom" Grid.ColumnSpan="2" HorizontalAlignment="Left" Width="500">
+                    <TextBox Padding="10,0,0,0" MinWidth="500" TextCompositionManager.PreviewTextInput="TextInputNoNumber" x:Name="textBox_StatisticsProductID" Margin="65,0,0,176" FontSize="33" Height="50                              " VerticalAlignment="Bottom" Grid.ColumnSpan="2" HorizontalAlignment="Left" Width="500">
                         <TextBox.Resources>
                             <Style TargetType="{x:Type Border}">
                                 <Setter Property="CornerRadius" Value="10"/>
@@ -703,7 +637,7 @@
                                                 <Grid>
                                                     <Viewbox>
                                                         <Grid>
-                                                            <Label x:Name="lbl_lcl_ip" Content="IP" Margin="9,10,529,485.286"></Label>
+                                                            <Label x:Name="lbl_lcl_ip" Content="IP" Margin="9,10,529,485.286"/>
                                                             <ComboBox x:Name="cmb_lcl_ip" HorizontalAlignment="Left" Margin="222,10,0,485.286" Width="523">
                                                                 <ComboBoxItem Content="localhost"/>
                                                                 <ComboBoxItem Content="127.0.0.1"/>
@@ -753,7 +687,7 @@
                                                 <Grid>
                                                     <Viewbox>
                                                         <Grid>
-                                                            <Label x:Name="lbl_rmt_ip" Content="IP" Margin="9,10,529,485.286"></Label>
+                                                            <Label x:Name="lbl_rmt_ip" Content="IP" Margin="9,10,529,485.286"/>
                                                             <ComboBox x:Name="cmb_rmt_ip" HorizontalAlignment="Left" Margin="222,10,0,485.286" Width="523" IsEditable="True">
                                                                 <ComboBoxItem Content="localhost"/>
                                                                 <ComboBoxItem Content="127.0.0.1"/>
@@ -804,6 +738,22 @@
                                         </Grid>
                                     </GroupBox>
                                 </Viewbox>
+                            </Grid>
+                        </TabItem>
+                        <TabItem Header="Produkter"  Width="300" Height="70">
+                            <Grid>
+                                <Button x:Name="btn_activate_product" Content="Genaktiver produkt" Background="#FFC5C5C5" Margin="0,0,12.143,17.143" Grid.Row="0" Style="{StaticResource Flat_Button}" Click="ActivateProduct" HorizontalAlignment="Right" Width="293" Height="50" VerticalAlignment="Bottom"/>
+                                <Button x:Name="btn_edit_product" Content="Rediger produkt" Background="#FFC5C5C5" Margin="0,0,350.143,17.143" Grid.Row="0" Style="{StaticResource Flat_Button}" Click="EditDisabledProduct" HorizontalAlignment="Right" Width="293" Height="50" VerticalAlignment="Bottom"/>
+                                <DataGrid IsReadOnly="True" SelectionMode="Single" Margin="0,0,0.143,80.143" Name="datagrid_deactivated_products">
+                                    <DataGrid.Columns>
+                                        <DataGridTextColumn Header="Type" x:Name="type" MinWidth="100" Width="Auto" Binding="{Binding type}" ClipboardContentBinding="{x:Null}"/>
+                                        <DataGridTextColumn Header="ID" x:Name="id" MinWidth="100" Width="Auto" Binding="{Binding id}" ClipboardContentBinding="{x:Null}"/>
+                                        <DataGridTextColumn Header="Navn" x:Name="name" MinWidth="100" Width="Auto" Binding="{Binding name}" ClipboardContentBinding="{x:Null}"/>
+                                        <DataGridTextColumn Header="Gruppe" x:Name="group" MinWidth="120" Width="Auto" Binding="{Binding group}" ClipboardContentBinding="{x:Null}"/>
+                                        <DataGridTextColumn Header="Mærke" x:Name="brand" MinWidth="120" Width="Auto" Binding="{Binding brand}" ClipboardContentBinding="{x:Null}"/>
+                                        <DataGridTextColumn Header="Pris" x:Name="price" MinWidth="100" Width="Auto" Binding="{Binding price}" ClipboardContentBinding="{x:Null}"/>
+                                    </DataGrid.Columns>
+                                </DataGrid>
                             </Grid>
                         </TabItem>
                         <TabItem Header="Information" Height="70" Width="300">

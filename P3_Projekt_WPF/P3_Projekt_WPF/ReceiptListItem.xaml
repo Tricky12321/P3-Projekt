@@ -2,11 +2,84 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:P3_Projekt_WPF"
-             mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300">
-    <Grid>
-            
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             mc:Ignorable="d" d:DesignWidth="600" Height="auto">
+    <Grid Width="auto">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="auto"/>
+            <ColumnDefinition Width="auto"/>
+            <ColumnDefinition Width="auto"/>
+            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="auto"/>
+            <ColumnDefinition Width="auto"/>
+        </Grid.ColumnDefinitions>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="auto"/>
+        </Grid.RowDefinitions>
+
+        <Button Style="{StaticResource Flat_Button}"
+                                                Content = "+"
+                                                FontSize="30"
+                                                Width="40"
+                                                Height="50"
+                                                VerticalAlignment = "Center"
+                                                Click="Increment_Button_Click"
+                                            Background="Transparent"
+                                                Tag="{Binding IDTag}"
+                                                Grid.Column="0"
+                                            />
+
+        <Button Style="{StaticResource Flat_Button}"
+                                                Content = "-"
+                                                Width="40"
+                                                Height="50"
+                                                FontSize="30"
+                                            Background="Transparent"
+                                                VerticalAlignment = "Center"
+                                                Click="Decrement_Button_Click"
+                                                Tag="{Binding IDTag}"
+                                                Grid.Column="1"
+                                            />
+
+        <TextBlock Name="text_amount" Grid.Column="2" VerticalAlignment = "Center" Padding="10" MinWidth="60"/>
+
+        <TextBlock Name="text_productName" Grid.Column="3" HorizontalAlignment="Stretch" VerticalAlignment = "Center" TextWrapping="Wrap"/>
+
+        <TextBlock Name="text_price" Grid.Column="4" VerticalAlignment = "Center" MinWidth="100"/>
+
+        <Button Name="button_Delete" Style="{StaticResource Flat_Button}"
+                                                Content = ""
+                                                Width="40"
+                                                Height="50"
+                                                Background="Transparent"
+                                                FontSize="30"
+                                                VerticalAlignment = "Center"
+                                                Click="Delete_Button_Click"
+                                                Foreground="#003D3D3F"
+                                                Grid.Column="5" RenderTransformOrigin="0.5,0.5"
+                                            >
+        </Button>
+        <Image Name="image_Delete" Width="40" Height="50" Grid.Column="5" Margin="5,5,5,5" Grid.RowSpan="1" Grid.ColumnSpan="1" IsHitTestVisible="False"/>
+
+        <Canvas Name="canvas_Discount" Grid.ColumnSpan="4" Grid.Column="1" Grid.Row="1" Height="60" Visibility="Collapsed">
+            <Grid Margin="0,0,0,0" Width="500" Height="60">
+                <Button Name="button_Delete_Discount" Style="{StaticResource Flat_Button}"
+                                                Content = ""
+                                                Width="30"
+                                                Height="40"
+                                                Background="Transparent"
+                                                FontSize="30"
+                                                HorizontalAlignment="Right"
+                                                VerticalAlignment = "Center"
+                                                Foreground="#003D3D3F"
+                                                RenderTransformOrigin="0.5,0.5"
+                                            >
+                </Button>
+                <Image Name="image_Delete_Discount" Width="30" Height="40" HorizontalAlignment="Right" Grid.Column="4" Grid.Row="1" Margin="5,5,5,5" Grid.RowSpan="1" Grid.ColumnSpan="1" IsHitTestVisible="False"/>
+                <TextBlock Name="textBlock_DiscountAmount" Margin="0,14,46,14" Text="- 10%" VerticalAlignment="Center" HorizontalAlignment="Right" Height="auto" Width="auto" FontSize="25" />
+            </Grid>
+        </Canvas>
     </Grid>
 </UserControl>
