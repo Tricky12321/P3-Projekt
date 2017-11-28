@@ -17,13 +17,11 @@ namespace P3_Projekt_WPF.Classes
         public decimal PurchasePrice;
         public int ProductGroupID;
         public bool DiscountBool;
-        public decimal DiscountPrice;
         public Image Image;
         private bool _active = true;
         public bool Active => _active;
         public DateTime CreatedTime;
         public ConcurrentDictionary<int, int> StorageWithAmount = new ConcurrentDictionary<int, int>();
-
 
         public Product(int id, string name, string brand, decimal purchasePrice, int groupID, bool discount, decimal salePrice, decimal discountPrice) : base(salePrice)
         {
@@ -119,7 +117,7 @@ namespace P3_Projekt_WPF.Classes
             CreatedTime = Convert.ToDateTime(results.Values[9]);            // CreatedTime
         }
         // Henter storage status fra databasen om hvilke lagere der har hvilket antal af produkter
-        private void GetStorageStatus()
+        public void GetStorageStatus()
         {
             string sql = $"SELECT * FROM `storage_status` WHERE `product_id` = '{ID}'";
             try
@@ -167,6 +165,11 @@ namespace P3_Projekt_WPF.Classes
             CreatedTime = DateTime.Now;
         }
 
+        public override string ToString()
+        {
+            return ID + " - " + Name;
+        }
+
         public override void UpdateInDatabase()
         {
             string sql = $"UPDATE `products` SET " +
@@ -188,6 +191,8 @@ namespace P3_Projekt_WPF.Classes
             {
                 string sql = $"UPDATE `products` SET `active` = '0' WHERE `id` = '{ID}'";
                 Mysql.RunQuery(sql);
+                _active = false;
+
             }
             else
             {
@@ -201,11 +206,12 @@ namespace P3_Projekt_WPF.Classes
             {
                 string sql = $"UPDATE `products` SET `active` = '1' WHERE `id` = '{ID}'";
                 Mysql.RunQuery(sql);
-            } else
+                _active = true;
+            }
+            else
             {
                 throw new ProductAlreadyActivated("Dette produkt er allerede aktiveret");
             }
-            
         }
 
     }

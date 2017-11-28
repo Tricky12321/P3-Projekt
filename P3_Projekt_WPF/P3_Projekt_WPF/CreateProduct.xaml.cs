@@ -34,21 +34,21 @@ namespace P3_Projekt_WPF
         private bool UpdateServiceProductSec = false;
         private int UpdateProductID = 0;
         private MainWindow MainWin = null;
-
+        private bool _isAdmin = false;
         public CreateProduct() { }
-
+        private bool _deactivatedProd = false;
         //Creating new product
         public CreateProduct(StorageController storageController, MainWindow MainWin)
         {
             Initialize(storageController, MainWin);
             output_ProductID.Text = Product.GetNextID().ToString();
             output_ServiceProductID.Text = ServiceProduct.GetNextID().ToString();
-
+            btn_disableProduct.Visibility = Visibility.Hidden;
             this.Title = "Opret Produkt";
         }
 
         //Editing normal product
-        public CreateProduct(Product prod, StorageController storageController, MainWindow MainWin, bool adminEdit)
+        public CreateProduct(Product prod, StorageController storageController, MainWindow MainWin, bool adminEdit, bool deactivated = false)
         {
             Initialize(storageController, MainWin);
             UpdateProductSec = true;
@@ -58,15 +58,23 @@ namespace P3_Projekt_WPF
             {
                 image_Product.Source = prod.Image.Source;
             }
-            HideIfNotAdmin(adminEdit);
+            _isAdmin = adminEdit;
+            HideIfNotAdmin();
 
             ReloadAddedStorageRooms();
 
             this.Title = "Rediger Produkt";
+            if (deactivated)
+            {
+                _deactivatedProd = true;
+                btn_disableProduct.Click -= btn_disableProduct_Click;
+                btn_disableProduct.Click += btn_EnableProduct_click;
+                btn_disableProduct.Content = "Aktiver produkt";
+            }
         }
 
         //Editing service product
-        public CreateProduct(ServiceProduct prod, StorageController storageController, MainWindow MainWin, bool adminEdit)
+        public CreateProduct(ServiceProduct prod, StorageController storageController, MainWindow MainWin, bool adminEdit, bool deactivated = false)
         {
             Initialize(storageController, MainWin);
             UpdateServiceProductSec = true;
@@ -79,13 +87,23 @@ namespace P3_Projekt_WPF
             {
                 image_ServiceProduct.Source = prod.Image.Source;
             }
-            HideIfNotAdmin(adminEdit);
+            _isAdmin = adminEdit;
+            HideIfNotAdmin();
 
             this.Title = "Rediger Service Produkt";
+            if (deactivated)
+            {
+                _deactivatedProd = true;
+                btn_disableServiceProduct.Click -= btn_disableServiceProduct_Click;
+                btn_disableServiceProduct.Click += btn_EnableServiceProduct_click;
+                btn_disableServiceProduct.Content = "Aktiver produkt";
+            }
         }
+
 
         private void Initialize(StorageController storageController, MainWindow MainWin)
         {
+
             this.MainWin = MainWin;
             InitializeComponent();
 
@@ -111,9 +129,9 @@ namespace P3_Projekt_WPF
             btn_ServiceJustQuit.Click += delegate { this.Close(); };
         }
 
-        private void HideIfNotAdmin(bool isAdmin)
+        private void HideIfNotAdmin()
         {
-            if (!isAdmin)
+            if (!_isAdmin)
             {
                 border_NotAdmin.Visibility = Visibility.Visible;
                 border_ServiceNotAdmin.Visibility = Visibility.Visible;
@@ -226,7 +244,7 @@ namespace P3_Projekt_WPF
             TextBox input = (sender as TextBox);
             //The input string has the format: An unlimited amount of numbers, then 0-1 commas, then 0-2 numbers
             var re = new System.Text.RegularExpressions.Regex(@"^((\d+)(,{0,1})(\d{0,2}))$");
-            
+
             e.Handled = !re.IsMatch(input.Text.Insert(input.CaretIndex, e.Text));
         }
 
@@ -275,7 +293,7 @@ namespace P3_Projekt_WPF
 
         private bool IsServiceProductInputValid()
         {
-            TextBox[] textboxes = new TextBox[] { textbox_ServiceName, textbox_ServiceSalePrice};
+            TextBox[] textboxes = new TextBox[] { textbox_ServiceName, textbox_ServiceSalePrice };
 
             if (textbox_ServiceGroupLimit.Text == "")
                 textbox_ServiceGroupLimit.Text = "0";
@@ -371,7 +389,9 @@ namespace P3_Projekt_WPF
 
         private void UpdateProduct()
         {
-            _storageController.UpdateProduct(UpdateProductID,
+            if (_deactivatedProd)
+            {
+                _storageController.UpdateDeactivatedProduct(UpdateProductID,
                                              textbox_Name.Text,
                                              comboBox_Brand.Text,
                                              Decimal.Parse(textbox_PurchasePrice.Text),
@@ -380,6 +400,20 @@ namespace P3_Projekt_WPF
                                              Decimal.Parse(textbox_DiscountPrice.Text),
                                              Decimal.Parse(textbox_SalePrice.Text),
                                              _storageWithAmount);
+            }
+            else
+            {
+                _storageController.UpdateProduct(UpdateProductID,
+                                                             textbox_Name.Text,
+                                                             comboBox_Brand.Text,
+                                                             Decimal.Parse(textbox_PurchasePrice.Text),
+                                                             _storageController.GroupDictionary.First(x => x.Value.Name == comboBox_Group.Text).Key,
+                                                             (textbox_DiscountPrice.Text != "0") ? true : false,
+                                                             Decimal.Parse(textbox_DiscountPrice.Text),
+                                                             Decimal.Parse(textbox_SalePrice.Text),
+                                                             _storageWithAmount);
+            }
+            
         }
 
         private void AddProduct()
@@ -407,12 +441,25 @@ namespace P3_Projekt_WPF
 
         private void UpdateServiceProduct()
         {
+            if (_deactivatedProd)
+            {
+                _storageController.UpdateDeactivatedServiceProduct(UpdateProductID,
+                                                                    Decimal.Parse(textbox_ServiceSalePrice.Text),
+                                                                    Decimal.Parse(textbox_ServiceGroupPrice.Text),
+                                                                    Int32.Parse(textbox_ServiceGroupLimit.Text),
+                                                                    textbox_ServiceName.Text,
+                                                                    _storageController.GroupDictionary.First(X => X.Value.Name == comboBox_ServiceGroup.Text).Key);
+
+            }
+            else
+            {
             _storageController.UpdateServiceProduct(UpdateProductID,
                                                     Decimal.Parse(textbox_ServiceSalePrice.Text),
                                                     Decimal.Parse(textbox_ServiceGroupPrice.Text),
                                                     Int32.Parse(textbox_ServiceGroupLimit.Text),
                                                     textbox_ServiceName.Text,
                                                     _storageController.GroupDictionary.First(X => X.Value.Name == comboBox_ServiceGroup.Text).Key);
+            }
         }
 
         private void btn_ServiceSaveAndQuit_Click(object sender, RoutedEventArgs e)
@@ -430,6 +477,158 @@ namespace P3_Projekt_WPF
                 }
 
                 this.Close();
+            }
+        }
+
+        private void btn_disableProduct_Click(object sender, RoutedEventArgs e)
+        {
+            
+            if (!_isAdmin)
+            {
+                MessageBox.Show("Du skal være admin for at deaktiverer produkter");
+            }
+            else
+            {
+                if (IsProductInputValid())
+                {
+                    _deactivatedProd = true;
+                    BaseProduct ProductToDisable;
+                    _storageController.AllProductsDictionary.TryRemove(UpdateProductID, out ProductToDisable);
+                    Product ProductToDisable_Product;
+                    _storageController.ProductDictionary.TryRemove(UpdateProductID, out ProductToDisable_Product);
+                    _storageController.DisabledProducts.TryAdd(ProductToDisable_Product.ID, ProductToDisable_Product);
+                    ProductToDisable_Product.DeactivateProduct();
+                    MainWin.ReloadDisabledProducts();
+                    if (UpdateProductSec)
+                    {
+                        UpdateProduct();
+                        AddProductImage(this, UpdateProductID);
+                    }
+                    else
+                    {
+                        AddProductImage(this, Product.GetNextID());
+                    }
+                    MainWin.ReloadProducts();
+                    MessageBox.Show("Du har deaktiveret produkt " + ProductToDisable_Product.ToString());
+                    this.Close();
+                }
+                else
+                {
+                    MessageBox.Show("Du kan ikke deaktivere et produkt som ikke er udfyldt korrekt!");
+                }
+            }
+        }
+
+        private void btn_disableServiceProduct_Click(object sender, RoutedEventArgs e)
+        {
+
+            if (!_isAdmin)
+            {
+                MessageBox.Show("Du skal være admin for at deaktiverer produkter");
+            }
+            else
+            {
+                if (IsServiceProductInputValid())
+                {
+                    _deactivatedProd = true;
+                    BaseProduct ProductToDisable;
+                    _storageController.AllProductsDictionary.TryRemove(UpdateProductID, out ProductToDisable);
+                    ServiceProduct ProductToDisable_Product;
+                    _storageController.ServiceProductDictionary.TryRemove(UpdateProductID, out ProductToDisable_Product);
+                    _storageController.DisabledServiceProducts.TryAdd(ProductToDisable_Product.ID, ProductToDisable_Product);
+                    ProductToDisable_Product.DeactivateProduct();
+                    MainWin.ReloadDisabledProducts();
+                    if (UpdateProductSec)
+                    {
+                        UpdateProduct();
+                        AddProductImage(this, UpdateProductID);
+                    }
+                    else
+                    {
+                        AddProductImage(this, Product.GetNextID());
+                    }
+                    MainWin.ReloadProducts();
+                    MessageBox.Show("Du har deaktiveret produkt " + ProductToDisable_Product.ToString());
+                    this.Close();
+                }
+                else
+                {
+                    MessageBox.Show("Du kan ikke deaktivere et produkt som ikke er udfyldt korrekt!");
+                }
+            }
+        }
+
+        private void btn_EnableServiceProduct_click(object sender, RoutedEventArgs e)
+        {
+            if (!_isAdmin)
+            {
+                MessageBox.Show("Du skal være admin for at aktiverer produkter");
+            }
+            else
+            {
+                if (IsServiceProductInputValid())
+                {
+                    _deactivatedProd = true;
+                    ServiceProduct Product_To_Activate;
+                    _storageController.DisabledServiceProducts.TryRemove(UpdateProductID, out Product_To_Activate);
+                    Product_To_Activate.ActivateProduct();
+                    _storageController.ServiceProductDictionary.TryAdd(Product_To_Activate.ID, Product_To_Activate);
+                    _storageController.AllProductsDictionary.TryAdd(Product_To_Activate.ID, Product_To_Activate);
+                    MainWin.ReloadDisabledProducts();
+                    if (UpdateProductSec)
+                    {
+                        UpdateProduct();
+                        AddProductImage(this, UpdateProductID);
+                    }
+                    else
+                    {
+                        AddProductImage(this, Product.GetNextID());
+                    }
+                    MainWin.ReloadProducts();
+                    MessageBox.Show("Du har aktiveret produkt " + Product_To_Activate.ToString());
+                    this.Close();
+                }
+                else
+                {
+                    MessageBox.Show("Du kan ikke aktivere et produkt som ikke er udfyldt korrekt!");
+                }
+            }
+        }
+
+        private void btn_EnableProduct_click(object sender, RoutedEventArgs e)
+        {
+            if (!_isAdmin)
+            {
+                MessageBox.Show("Du skal være admin for at aktiverer produkter");
+            }
+            else
+            {
+                if (IsProductInputValid())
+                {
+                    _deactivatedProd = true;
+                    Product Product_To_Activate;
+                    _storageController.DisabledProducts.TryRemove(UpdateProductID, out Product_To_Activate);
+                    Product_To_Activate.ActivateProduct();
+                    _storageController.ProductDictionary.TryAdd(Product_To_Activate.ID,Product_To_Activate);
+                    _storageController.AllProductsDictionary.TryAdd(Product_To_Activate.ID,Product_To_Activate);
+                    MainWin.ReloadDisabledProducts();
+                    if (UpdateProductSec)
+                    {
+                        UpdateProduct();
+                        AddProductImage(this, UpdateProductID);
+                    }
+                    else
+                    {
+                        AddProductImage(this, Product.GetNextID());
+                    }
+                    MainWin.ReloadProducts();
+                    MessageBox.Show("Du har aktiveret produkt " + Product_To_Activate.ToString());
+                    this.Close();
+                }
+                else
+                {
+                    MessageBox.Show("Du kan ikke aktivere et produkt som ikke er udfyldt korrekt!");
+                }
             }
         }
     }

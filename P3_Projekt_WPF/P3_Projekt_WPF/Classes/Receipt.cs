@@ -39,7 +39,7 @@ namespace P3_Projekt_WPF.Classes
         public void AddTransaction(SaleTransaction transaction)
         {
             //Checks if product is already in receipt//
-            if (Transactions.Any(x => x.Product == transaction.Product))
+            if (Transactions.Any(x => x.Product == transaction.Product) && transaction.Product.GetName() != "Is")
             {
                 Transaction placeholderTransaction = Transactions.First(x => x.Product == transaction.Product);
                 placeholderTransaction.Edit(placeholderTransaction.Amount += transaction.Amount);
@@ -64,7 +64,7 @@ namespace P3_Projekt_WPF.Classes
         private decimal FindTransactionPrice(SaleTransaction transaction)
         {
             decimal priceTotal = 0;
-
+            /*
             if (transaction.Product is Product)
             {
                 if ((transaction.Product as Product).DiscountBool)
@@ -95,7 +95,9 @@ namespace P3_Projekt_WPF.Classes
             {
                 throw new WrongProductTypeException("Transaktionens produkt har ikke en valid type!");
             }
+            */
 
+            priceTotal = transaction.TotalPrice;
             return priceTotal;
         }
 
@@ -195,7 +197,7 @@ namespace P3_Projekt_WPF.Classes
                 Payment NewPayment = new Payment(item);
                 Payments.Add(NewPayment);
             }
-            Date = Convert.ToDateTime(Table.Values[5]);
+            Date = Convert.ToDateTime(Table.Values[3]);
         }
 
         public void UploadToDatabase()

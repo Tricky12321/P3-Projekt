@@ -178,5 +178,17 @@ namespace P3_Projekt_WPF.Properties {
                 this["rmt_username"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int IcecreamProductID {
+            get {
+                return ((int)(this["IcecreamProductID"]));
+            }
+            set {
+                this["IcecreamProductID"] = value;
+            }
+        }
     }
 }

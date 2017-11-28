@@ -142,26 +142,24 @@ namespace P3_Projekt_WPF.Classes.Utilities
             Mysql.RunQuery(sql);
         }
 
-
         public static void GetIceCreameID()
         {
             if (Mysql.ConnectionWorking)
             {
                 string sql = "SELECT `id` FROM `groups` WHERE `name` LIKE 'is'";
-                var asdf = Mysql.RunQueryWithReturn(sql);
-                if (asdf.RowCounter == 0)
+                TableDecode Results = Mysql.RunQueryWithReturn(sql);
+                if (Results.RowCounter == 0)
                 {
                     Properties.Settings.Default.IcecreamID = -1;
                     Properties.Settings.Default.Save();
                 }
                 else
                 {
-                    int IsID = Convert.ToInt32(asdf.RowData[0].Values[0]);
+                    int IsID = Convert.ToInt32(Results.RowData[0].Values[0]);
                     Properties.Settings.Default.IcecreamID = IsID;
                     Properties.Settings.Default.Save();
                 }
             }
-
         }
 
         public static bool RegexCheckDecimal(string input)
@@ -182,12 +180,12 @@ namespace P3_Projekt_WPF.Classes.Utilities
             bool Remote = false;
             if (sett.local_or_remote == true)
             {
-                MainWin.btn_RmtLcl.Content = "Local";
+                MainWin.btn_RmtLcl.Content = "Remote";
                 Local = true;
             }
             else
             {
-                MainWin.btn_RmtLcl.Content = "Remote";
+                MainWin.btn_RmtLcl.Content = "Local";
                 Remote = true;
             }
             UpdateDisabledFields(Local, Remote, MainWin);

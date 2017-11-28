@@ -52,6 +52,7 @@ namespace P3_Projekt_WPF.Classes
             if (Product is Product)
             {
                 Product prod = (Product as Product);
+                prod.GetStorageStatus();
                 if (!prod.StorageWithAmount.ContainsKey(1))
                 {
                     prod.StorageWithAmount.TryAdd(1, -Amount);
@@ -60,7 +61,6 @@ namespace P3_Projekt_WPF.Classes
                 {
                     (Product as Product).StorageWithAmount[1] -= Amount;
                 }
-
                 if (prod.StorageWithAmount.Where(x => x.Value < 0).Count() > 0)
                 {
                     // Hvis det er nogle storageroom med negativ værdi
@@ -88,7 +88,6 @@ namespace P3_Projekt_WPF.Classes
             else if (Product is TempProduct)
             {
                 Product.ID = TempProduct.GetNextID();
-
                 Product.UploadToDatabase();
             }
         }
@@ -271,6 +270,14 @@ namespace P3_Projekt_WPF.Classes
         public StatisticsListItem StatisticsStrings()
         {
             return new StatisticsListItem(Date.ToString("dd/MM/yy"), Product.GetName(), Amount.ToString(), TotalPrice.ToString());
+        }
+
+        public void CheckIfGroupPrice()
+        {
+            if(Product is ServiceProduct && Product.GetName() != "Is")
+            {
+                Price = Amount >= (Product as ServiceProduct).GroupLimit ? (Product as ServiceProduct).GroupPrice : (Product as ServiceProduct).SalePrice;
+            }
         }
 
         public override void GetFromDatabase()
