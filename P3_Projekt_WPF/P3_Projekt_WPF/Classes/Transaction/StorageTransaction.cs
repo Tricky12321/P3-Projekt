@@ -26,6 +26,11 @@ namespace P3_Projekt_WPF.Classes
             GetFromDatabase();
         }
 
+        public StorageTransaction(Row Data) : base(null, 0)
+        {
+            CreateFromRow(Data);
+        }
+
         public override void Execute()
         {
             (Product as Product).StorageWithAmount[_source.ID] -= Amount;
@@ -37,6 +42,8 @@ namespace P3_Projekt_WPF.Classes
             string sql = $"SELECT * FROM `storage_transaction` WHERE `id` = '{_id}'";
             CreateFromRow(Mysql.RunQueryWithReturn(sql).RowData[0]);
         }
+
+
 
         public override void CreateFromRow(Row Table)
         {

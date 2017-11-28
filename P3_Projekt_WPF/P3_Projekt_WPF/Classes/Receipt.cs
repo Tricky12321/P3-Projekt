@@ -63,42 +63,7 @@ namespace P3_Projekt_WPF.Classes
 
         private decimal FindTransactionPrice(SaleTransaction transaction)
         {
-            decimal priceTotal = 0;
-            /*
-            if (transaction.Product is Product)
-            {
-                if ((transaction.Product as Product).DiscountBool)
-                {
-                    priceTotal = transaction.Amount * transaction.Price;
-                }
-                else
-                {
-                    priceTotal = transaction.Amount * transaction.Price;
-                }
-            }
-            else if (transaction.Product is TempProduct)
-            {
-                priceTotal = transaction.Amount * (transaction.Product as TempProduct).SalePrice;
-            }
-            else if (transaction.Product is ServiceProduct)
-            {
-                if ((transaction.Product as ServiceProduct).GroupLimit > transaction.Amount)
-                {
-                    priceTotal += (transaction.Product as ServiceProduct).SalePrice;
-                }
-                else
-                {
-                    priceTotal += (transaction.Product as ServiceProduct).GroupPrice;
-                }
-            }
-            else
-            {
-                throw new WrongProductTypeException("Transaktionens produkt har ikke en valid type!");
-            }
-            */
-
-            priceTotal = transaction.TotalPrice;
-            return priceTotal;
+            return transaction.TotalPrice;
         }
 
         public void RemoveTransaction(int productID)
@@ -197,7 +162,7 @@ namespace P3_Projekt_WPF.Classes
                 Payment NewPayment = new Payment(item);
                 Payments.Add(NewPayment);
             }
-            Date = Convert.ToDateTime(Table.Values[5]);
+            Date = Convert.ToDateTime(Table.Values[3]);
         }
 
         public void UploadToDatabase()

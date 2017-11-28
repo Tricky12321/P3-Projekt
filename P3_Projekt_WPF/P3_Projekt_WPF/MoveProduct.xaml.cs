@@ -136,6 +136,7 @@ namespace P3_Projekt_WPF
             StorageTransaction storageTransaction = new StorageTransaction(product, int.Parse(textBox_ProductAmount.Text), sourceRoom, destinationRoom, _storageController.StorageRoomDictionary);
             storageTransaction.Execute();
             storageTransaction.UploadToDatabase();
+            this.Close();
         }
 
 

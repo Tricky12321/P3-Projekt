@@ -12,12 +12,13 @@ namespace P3_Projekt_WPF.Classes.Utilities
     public class StatisticsController
     {
         public List<SaleTransaction> TransactionsForStatistics = new List<SaleTransaction>();
-        public List<Receipt> ReceiptsForStatistics = new List<Receipt>();
+        public List<Receipt> TodayReceipts = new List<Receipt>();
         public Dictionary<int, decimal> SalesPerGroup;
         public Dictionary<string, decimal> SalesPerBrand;
         public int ReceiptTotalCount;
         public decimal ReceiptTotalPrice;
         public Dictionary<int, KeyValuePair<int, decimal>> SalesPerProduct;
+        public decimal[] Payments = { 0, 0, 0 };
 
         public StatisticsController(StorageController storageController)
         {
@@ -59,10 +60,10 @@ namespace P3_Projekt_WPF.Classes.Utilities
             }
         }
 
-        public string GetQueryString(bool searchID, int idToSearch, bool searchGroup, int groupToSearch, bool searchBrand, string brandToSearch, DateTime from, DateTime to)
+        public string GetProductsQueryString(bool searchID, int idToSearch, bool searchGroup, int groupToSearch, bool searchBrand, string brandToSearch, DateTime from, DateTime to)
         {
             StringBuilder NewString = new StringBuilder("SELECT `sale_transactions`.* " +
-                "FROM `products`, `sale_transactions` WHERE `products`.`id` = `sale_transactions`.`product_id`" +
+                "FROM `products`, `sale_transactions` WHERE `sale_transactions`.`product_id` = `products`.`id`" +
                 $" AND UNIX_TIMESTAMP(`datetime`) >= '{Utils.GetUnixTime(from)}' AND UNIX_TIMESTAMP(`datetime`) <= '{Utils.GetUnixTime(EndDate(to))}'");
             if (searchID)
             {
@@ -78,6 +79,25 @@ namespace P3_Projekt_WPF.Classes.Utilities
                 if (searchBrand)
                 {
                     NewString.Append($" AND `products`.`brand` = '{brandToSearch}'");
+                }
+            }
+            return NewString.ToString();
+        }
+
+        public string GetServiceProductsQueryString(bool searchID, int idToSearch, bool searchGroup, int groupToSearch, DateTime from, DateTime to)
+        {
+            StringBuilder NewString = new StringBuilder("SELECT `sale_transactions`.* " +
+                "FROM `service_products`, `sale_transactions` WHERE `sale_transactions`.`product_id` = `service_products`.`id`" +
+                $" AND UNIX_TIMESTAMP(`datetime`) >= '{Utils.GetUnixTime(from)}' AND UNIX_TIMESTAMP(`datetime`) <= '{Utils.GetUnixTime(EndDate(to))}'");
+            if (searchID)
+            {
+                NewString.Append($" AND `service_products`.`id` = '{idToSearch}'");
+            }
+            else
+            {
+                if (searchGroup)
+                {
+                    NewString.Append($" AND `service_products`.`groups` = '{groupToSearch}'");
                 }
             }
             return NewString.ToString();
@@ -105,9 +125,49 @@ namespace P3_Projekt_WPF.Classes.Utilities
             }
 
             _allStatisticsDone = true;
-            TransactionsForStatistics = new List<SaleTransaction>(_saleTransactions);
+            TransactionsForStatistics = TransactionsForStatistics.Concat(_saleTransactions).ToList<SaleTransaction>();
             Timer1.Stop();
             Debug.WriteLine("[StatisticsController] took " + Timer1.ElapsedMilliseconds + "ms to fetch");
+        }
+
+        public void RequestTodayReceipts()
+        {
+            TodayReceipts = new List<Receipt>();
+            Int64 from = Utils.GetUnixTime(DateTime.Today);
+            Int64 to = Utils.GetUnixTime(EndDate(DateTime.Today));
+            string queryString = $"SELECT* FROM `receipt` WHERE UNIX_TIMESTAMP(`datetime`) >= '{from}' AND UNIX_TIMESTAMP(`datetime`) <= '{to}'";
+            _dataQueue = Mysql.RunQueryWithReturnQueue(queryString).RowData;
+            foreach(Row row in _dataQueue)
+            {
+                TodayReceipts.Add(new Receipt(row));
+            }
+        }
+
+        public void CalculatePayments()
+        {
+            Payments = new decimal[] { 0, 0, 0 };
+            foreach (Receipt receipt in TodayReceipts)
+            {
+                foreach(Payment payment in receipt.Payments)
+                {
+                    if ((int)payment.PaymentMethod == 2)
+                    {
+                        Payments[0] += payment.Amount;
+                    }
+                    else if ((int)payment.PaymentMethod == 3)
+                    {
+                        Payments[1] += payment.Amount;
+                    }
+                    else
+                    {
+                        Payments[2] += payment.Amount;
+                    }
+                }
+                if (receipt.PaidPrice > receipt.TotalPrice)
+                {
+                    Payments[0] -= (receipt.PaidPrice - receipt.TotalPrice);
+                }
+            } 
         }
 
         public void GetReceiptTotalPrice(DateTime From, DateTime To)
@@ -138,7 +198,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
             return new StatisticsListItem("", "Gennemsnitlig kvitteringspris", "0", "0");
         }
 
-        public void GenerateProductSales()
+        /*public void GenerateProductSales()
         {
         SalesPerProduct = new Dictionary<int, KeyValuePair<int, decimal>>();
         foreach (SaleTransaction transaction in TransactionsForStatistics)
@@ -148,7 +208,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
                 }
             }
         
-        }
+        }*/
 
         public void GenerateGroupAndBrandSales()
         {
