@@ -20,11 +20,14 @@ namespace P3_Projekt_WPF.Classes
         public DateTime Date;
         public decimal PaidPrice => Payments.Sum(x => x.Amount);
         public decimal TotalPriceToPay = -1m;
+        public decimal DiscountOnFullReceipt = 0m;
+
         public Receipt()
         {
             ID = _idCounter++;
             Date = DateTime.Now;
         }
+
 
         public Receipt(int ID)
         {
@@ -102,6 +105,33 @@ namespace P3_Projekt_WPF.Classes
         private SaleTransaction FindTransactionFromProductID(int productID)
         {
             return Transactions.First(x => x.Product.ID == productID);
+        }
+
+        public void DiscountOnSingleTransaction(int transID, string inputDiscount)
+        {
+            SaleTransaction currentSaleTransaction = Transactions.Where(x => x.GetID() == transID).First();
+            currentSaleTransaction.Price += currentSaleTransaction.DiscountPrice;
+
+            if (inputDiscount.Contains('%'))
+            {
+                decimal percentage = Convert.ToDecimal(inputDiscount.Remove(inputDiscount.Length - 1, 1));
+                decimal priceInDiscountPrProduct = currentSaleTransaction.Product.SalePrice * percentage / 100m;
+                currentSaleTransaction.Price -= currentSaleTransaction.Price * (percentage / 100m);
+
+                currentSaleTransaction.DiscountPrice = priceInDiscountPrProduct * currentSaleTransaction.Amount;
+
+                currentSaleTransaction.Product.DiscountPrice -= priceInDiscountPrProduct;
+            }
+            else
+            {
+                decimal customDiscount = Convert.ToDecimal(inputDiscount);
+                currentSaleTransaction.Price -= customDiscount;
+
+                currentSaleTransaction.DiscountPrice = customDiscount;
+            }
+
+            currentSaleTransaction.DiscountBool = true;
+            UpdateTotalPrice();
         }
 
         public void Execute()

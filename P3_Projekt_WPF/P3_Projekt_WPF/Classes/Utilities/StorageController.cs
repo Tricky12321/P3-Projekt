@@ -482,9 +482,10 @@ namespace P3_Projekt_WPF.Classes.Utilities
             }
         }
 
-        public TempProduct CreateTempProduct(string description, decimal salePrice)
+        public TempProduct CreateTempProduct(string description, decimal salePrice, int ID)
         {
             TempProduct newTempProduct = new TempProduct(description, salePrice);
+            newTempProduct.ID = ID;
             TempProductList.TryAdd(newTempProduct.ID, newTempProduct);
             return newTempProduct;
         }
