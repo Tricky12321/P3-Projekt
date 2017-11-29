@@ -235,7 +235,7 @@ namespace P3_Projekt_WPF
             datePicker_StartDate.SelectedDate = DateTime.Now;
             datePicker_EndDate.SelectedDate = DateTime.Now;
             ChangeStatisticsState();
-            IEnumerable products = _storageController.ProductDictionary.Values.Select(x => x.Brand).Distinct();
+            IEnumerable products = _storageController.GetProductBrands();
             foreach (string brand in products)
             {
                 comboBox_Brand.Items.Add(brand);
@@ -322,7 +322,7 @@ namespace P3_Projekt_WPF
         private BaseProduct _productToEdit;
         private void EditProductClick(object sender, RoutedEventArgs e)
         {
-            CreateProduct EditProductForm = new CreateProduct();
+            CreateProduct EditProductForm;
             if (_productToEdit is Product)
             {
                 EditProductForm = new CreateProduct(_productToEdit as Product, _storageController, this, _settingsController.isAdmin);
@@ -394,11 +394,6 @@ namespace P3_Projekt_WPF
             {
                 throw new WrongProductTypeException("Kunne ikke vise information for et produkt af denne type " + _productToEdit.GetType().ToString());
             }
-        }
-
-        public void StorageTabClick(object sender, RoutedEventArgs e)
-        {
-            //LoadProductGrid();
         }
 
         public void UpdateStorageTab(object sender, RoutedEventArgs e)
@@ -547,58 +542,14 @@ namespace P3_Projekt_WPF
 
         private void btn_Increment_Click(object sender, EventArgs e)
         {
-            string IDTag = (sender as ReceiptListItem).IDTag;
-            if (IDTag.Contains("t"))
-            {
-                int productID = Convert.ToInt32(IDTag.Replace("t", string.Empty));
-                _POSController.PlacerholderReceipt.Transactions.Where(x => x.Product.ID == productID).First().Amount++;
-                _POSController.PlacerholderReceipt.Transactions.Where(x => x.Product.ID == productID).First().CheckIfGroupPrice();
-                _POSController.PlacerholderReceipt.UpdateTotalPrice();
-                UpdateReceiptList();
-            }
-            else if (Convert.ToInt32(IDTag) == Properties.Settings.Default.IcecreamProductID)
-            {
-                int productID = Convert.ToInt32(IDTag);
-                _POSController.PlacerholderReceipt.Transactions.Where(x => x.Product.ID == productID && (x.TotalPrice == (sender as ReceiptListItem).Price)).First().Amount++;
-                _POSController.PlacerholderReceipt.UpdateTotalPrice();
-                UpdateReceiptList();
-            }
-            else
-            {
-                int productID = Convert.ToInt32(IDTag);
-                _POSController.PlacerholderReceipt.Transactions.Where(x => x.Product.ID == productID).First().Amount++;
-                _POSController.PlacerholderReceipt.Transactions.Where(x => x.Product.ID == productID).First().CheckIfGroupPrice();
-                _POSController.PlacerholderReceipt.UpdateTotalPrice();
-                UpdateReceiptList();
-            }
+            _POSController.ChangeTransactionAmount(sender, e, 1);
+            UpdateReceiptList();
         }
 
         private void btn_Decrement_Click(object sender, EventArgs e)
         {
-            string IDTag = (sender as ReceiptListItem).IDTag;
-            if (IDTag.Contains("t"))
-            {
-                int productID = Convert.ToInt32(IDTag.Replace("t", string.Empty));
-                _POSController.PlacerholderReceipt.Transactions.Where(x => x.Product.ID == productID).First().Amount--;
-                _POSController.PlacerholderReceipt.Transactions.Where(x => x.Product.ID == productID).First().CheckIfGroupPrice();
-                _POSController.PlacerholderReceipt.UpdateTotalPrice();
-                UpdateReceiptList();
-            }
-            else if (Convert.ToInt32(IDTag) == Properties.Settings.Default.IcecreamProductID)
-            {
-                int productID = Convert.ToInt32(IDTag);
-                _POSController.PlacerholderReceipt.Transactions.Where(x => x.Product.ID == productID && (x.TotalPrice == (sender as ReceiptListItem).Price)).First().Amount--;
-                _POSController.PlacerholderReceipt.UpdateTotalPrice();
-                UpdateReceiptList();
-            }
-            else
-            {
-                int productID = Convert.ToInt32(IDTag);
-                _POSController.PlacerholderReceipt.Transactions.Where(x => x.Product.ID == productID).First().Amount--;
-                _POSController.PlacerholderReceipt.Transactions.Where(x => x.Product.ID == productID).First().CheckIfGroupPrice();
-                _POSController.PlacerholderReceipt.UpdateTotalPrice();
-                UpdateReceiptList();
-            }
+            _POSController.ChangeTransactionAmount(sender, e, -1);
+            UpdateReceiptList();
         }
 
         private void btn_DeleteProduct_Click(object sender, EventArgs e)
@@ -616,12 +567,6 @@ namespace P3_Projekt_WPF
             }
             _POSController.PlacerholderReceipt.UpdateTotalPrice();
             UpdateReceiptList();
-        }
-
-
-        private void TextBlock_TargetUpdated(object sender, DataTransferEventArgs e)
-        {
-
         }
 
         private void btn_AddProduct_Click(object sender, RoutedEventArgs e)
@@ -727,12 +672,10 @@ namespace P3_Projekt_WPF
             _settingsController.quickButtonList.RemoveAll(x => x.ProductID == Convert.ToUInt32((sender as Button).Tag));
 
             listView_QuickBtn.Items.RemoveAt(removeThis);
-
             listView_QuickBtn.Items.Refresh();
             UpdateGridQuickButtons();
             SaveQuickButtons();
         }
-
 
         private CreateTemporaryProduct _createTempProduct;
         private int _tempID = -1;
@@ -771,7 +714,7 @@ namespace P3_Projekt_WPF
                 };
             }
             _createTempProduct.Activate();
-            _createTempProduct.Show();
+            _createTempProduct.ShowDialog();
         }
 
         private void btn_PictureFilePath_Click(object sender, RoutedEventArgs e)
@@ -907,7 +850,6 @@ namespace P3_Projekt_WPF
                 if (!char.IsDigit(e.Text, e.Text.Length - 1))
                     e.Handled = true;
             }
-
         }
 
         private void TextInputNoNumberWithComma(object sender, TextCompositionEventArgs e)
@@ -922,7 +864,7 @@ namespace P3_Projekt_WPF
 
         private void BuildInformationTable()
         {
-            InformationGrid.CanUserAddRows = false;
+            //Puts the analytical information, that is in settings under product tab
             foreach (var item in _storageController.InformationGridData)
             {
                 InformationGrid.Items.Add(new { title = item[0], value = item[1] });
@@ -941,7 +883,7 @@ namespace P3_Projekt_WPF
                     _resolveTempProduct = null;
                 };
             }
-            else if(_resolveTempProduct != null && _storageController.TempProductList.Count == 0)
+            else
             {
                 MessageBox.Show("Der findes ingen midlertidige produkter");
             }
@@ -1081,7 +1023,7 @@ namespace P3_Projekt_WPF
 
         private void btn_ChangePassword_Click(object sender, RoutedEventArgs e)
         {
-
+            //Allows you to reset password without having the password, if you have a text file on your desktop with the specified name, and the content says "reset"
             string desktopPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "//" + "resetpassword.txt";
 
             if (File.Exists(desktopPath) && System.IO.File.ReadAllText(desktopPath) == "reset")
@@ -1090,7 +1032,7 @@ namespace P3_Projekt_WPF
             }
             else
             {
-                var check = new AdminValidation();
+                AdminValidation check = new AdminValidation();
                 check.Closed += delegate
                 {
                     if (check.IsPasswordCorrect)
@@ -1113,7 +1055,6 @@ namespace P3_Projekt_WPF
         private void btn_Cash_Click(object sender, RoutedEventArgs e)
         {
             CompletePurchase(PaymentMethod_Enum.Cash);
-
         }
 
         private void btn_Dankort_Click(object sender, RoutedEventArgs e)
@@ -1318,8 +1259,15 @@ namespace P3_Projekt_WPF
                 };
                 _orderTransactionWindow.button_CreateProduct.Click += delegate
                 {
-                    AddProductDialogOpener(sender, e);
-                    _orderTransactionWindow.Close();
+                    int amountOfProducts = _storageController.ProductDictionary.Count;
+                    CreateProduct addProductWindow = new CreateProduct(_storageController, this);
+                    addProductWindow.Closed += delegate { ReloadProducts(); };
+                    addProductWindow.ShowDialog();
+                    if(_storageController.ProductDictionary.Count > amountOfProducts)
+                    {
+                        _orderTransactionWindow.txtBox_SearchField.Text = (Product.GetNextID() - 1).ToString();
+                        _orderTransactionWindow.ProductSearch();
+                    }
                 };
             }
             _orderTransactionWindow.Show();
