@@ -86,9 +86,14 @@ namespace P3_Projekt_WPF
             }            
             else
             {
-                MessageBox.Show(Application.Current.MainWindow, ($"Produkt med ID: {txtBox_SearchField.Text} findes ikke!"), "Produkt ikke fundet", MessageBoxButton.OK, MessageBoxImage.Warning);
+                MessageBox.Show(($"Produkt med ID: {txtBox_SearchField.Text} findes ikke!"), "Produkt ikke fundet", MessageBoxButton.OK, MessageBoxImage.Warning);
                 this.Topmost = true;
                 Keyboard.ClearFocus();
+                txtBox_SearchField.Text = "";
+                label_ProduktID.Content = "";
+                label_ProduktProdukt.Content = "";
+                textBox_Supplier.Text = "";
+                product = null;
             }
         }
 
