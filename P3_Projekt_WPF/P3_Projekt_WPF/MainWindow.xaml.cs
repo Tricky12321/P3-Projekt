@@ -73,6 +73,7 @@ namespace P3_Projekt_WPF
             _storageController.AddInformation("Loading timer", LoadingTimer.ElapsedMilliseconds + "ms");
             BuildInformationTable();
             LoadQuickButtons();
+
         }
 
         public void ReloadProducts()
