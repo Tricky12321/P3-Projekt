@@ -118,11 +118,18 @@ namespace P3_Projekt_WPF
 
             btn_AddPicture.Click += PickImage;
             btn_ServiceAddPicture.Click += PickImage;
+            string[] allowedImageExtensions = new string[] { ".jpg", ".bmp", ".png", ".jpeg", ".tiff", ".gif" };
             ImageChosenEvent += (FilePath) =>
             {
-                image_Product.Source = new BitmapImage(new Uri(FilePath));
-                image_ServiceProduct.Source = new BitmapImage(new Uri(FilePath));
-                ChosenFilePath = FilePath;
+                if (allowedImageExtensions.Any(x => FilePath.ToLower().Contains(x)))
+                {
+                    image_Product.Source = new BitmapImage(new Uri(FilePath));
+                    image_ServiceProduct.Source = new BitmapImage(new Uri(FilePath));
+                    ChosenFilePath = FilePath;
+                }
+                else
+                    MessageBox.Show("Ugyldig filformat!");
+                
             };
             btn_AddStorageRoomWithAmount.Click += AddStorageWithAmount;
             btn_JustQuit.Click += delegate { this.Close(); };

@@ -14,7 +14,8 @@ namespace P3_Projekt_WPF.Classes
 
         public int ReceiptID;
         public decimal Price;
-        public bool Discount;
+        public bool DiscountBool;
+        public decimal DiscountPrice = 0m; 
         public decimal TotalPrice => Price * Amount;
         private static StorageController _storageController = null;
         public string SoldBy = "";
@@ -276,7 +277,7 @@ namespace P3_Projekt_WPF.Classes
         {
             if(Product is ServiceProduct && Product.GetName() != "Is")
             {
-                Price = Amount >= (Product as ServiceProduct).GroupLimit ? (Product as ServiceProduct).GroupPrice : (Product as ServiceProduct).SalePrice;
+                Price = (Amount >= (Product as ServiceProduct).GroupLimit ? (Product as ServiceProduct).GroupPrice : (Product as ServiceProduct).SalePrice);
             }
         }
 
@@ -294,7 +295,7 @@ namespace P3_Projekt_WPF.Classes
             Date = Convert.ToDateTime(Table.Values[4]);
             ReceiptID = Convert.ToInt32(Table.Values[5]);
             Price = Convert.ToDecimal(Table.Values[6]);
-            Discount = Convert.ToBoolean(Table.Values[8]);
+            DiscountBool = Convert.ToBoolean(Table.Values[8]);
             SoldBy = Table.Values[9];
         }
 
@@ -302,7 +303,7 @@ namespace P3_Projekt_WPF.Classes
         {
             SoldBy = Environment.UserName;
             string sql = "INSERT INTO `sale_transactions` (`id`, `product_id`, `product_type`,`amount`, `receipt_id`, `price`, `total_price`, `discount`,`sold_by`)" +
-                $" VALUES (NULL, '{Product.ID}', '{_getProductType()}','{Amount}', '{ReceiptID}', '{Price}', '{TotalPrice}', '{Discount}','{SoldBy}');";
+                $" VALUES (NULL, '{Product.ID}', '{_getProductType()}','{Amount}', '{ReceiptID}', '{Price}', '{TotalPrice}', '{DiscountBool}','{SoldBy}');";
             Mysql.RunQuery(sql);
         }
 
@@ -316,7 +317,7 @@ namespace P3_Projekt_WPF.Classes
                 $"`receipt_id` = '{ReceiptID}'," +
                 $"`price` = '{Price}'," +
                 $"`total_price` = '{TotalPrice}'," +
-                $"`discount` = '{Convert.ToInt32(Discount)}'," +
+                $"`discount` = '{Convert.ToInt32(DiscountBool)}'," +
                 $"`sold_by` = '{SoldBy}' "+
                 $"WHERE `id` = {_id};";
             Mysql.RunQuery(sql);

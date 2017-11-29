@@ -17,7 +17,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
         public Dictionary<string, decimal> SalesPerBrand;
         public int ReceiptTotalCount;
         public decimal ReceiptTotalPrice;
-        public Dictionary<int, KeyValuePair<int, decimal>> SalesPerProduct;
+        public Dictionary<int, Tuple<int, decimal>> SalesPerProduct;
         public decimal[] Payments = { 0, 0, 0 };
 
         public StatisticsController(StorageController storageController)
@@ -150,11 +150,11 @@ namespace P3_Projekt_WPF.Classes.Utilities
             {
                 foreach(Payment payment in receipt.Payments)
                 {
-                    if ((int)payment.PaymentMethod == 2)
+                    if ((int)payment.PaymentMethod == 1)
                     {
                         Payments[0] += payment.Amount;
                     }
-                    else if ((int)payment.PaymentMethod == 3)
+                    else if ((int)payment.PaymentMethod == 2)
                     {
                         Payments[1] += payment.Amount;
                     }
@@ -200,11 +200,12 @@ namespace P3_Projekt_WPF.Classes.Utilities
 
         /*public void GenerateProductSales()
         {
-        SalesPerProduct = new Dictionary<int, KeyValuePair<int, decimal>>();
+        SalesPerProduct = new Dictionary<int, Tuple<int, decimal>>();
         foreach (SaleTransaction transaction in TransactionsForStatistics)
             {
                 if (SalesPerProduct.ContainsKey(transaction.GetProductID()))
                 {
+
                 }
             }
         
