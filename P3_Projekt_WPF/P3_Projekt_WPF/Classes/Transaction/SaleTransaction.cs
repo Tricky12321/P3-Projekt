@@ -277,7 +277,7 @@ namespace P3_Projekt_WPF.Classes
         {
             if(Product is ServiceProduct && Product.GetName() != "Is")
             {
-                Price = Amount >= (Product as ServiceProduct).GroupLimit ? (Product as ServiceProduct).GroupPrice : (Product as ServiceProduct).SalePrice;
+                Price = (Amount >= (Product as ServiceProduct).GroupLimit ? (Product as ServiceProduct).GroupPrice : (Product as ServiceProduct).SalePrice);
             }
         }
 

@@ -460,6 +460,7 @@ namespace P3_Projekt_WPF
                 {
                     item.canvas_Discount.Visibility = Visibility.Visible;
                     item.textBlock_DiscountAmount.Text = '-' + Math.Round(transaction.DiscountPrice, 2).ToString() + " : Ny Pris: " + Math.Round(transaction.TotalPrice, 2).ToString();
+                    item.textBlock_DiscountAmount.Foreground = Brushes.Red;
                 }
             }
             else
@@ -949,6 +950,10 @@ namespace P3_Projekt_WPF
             {
                 btn_AddProduct_Click(sender, e);
             }
+            else if (e.Key == Key.Enter && textBox_discount.IsFocused)
+            {
+                btn_discount_Click(sender, e);
+            }
         }
 
         private void btn_search_Storage_Click(object sender, RoutedEventArgs e)
@@ -1063,7 +1068,7 @@ namespace P3_Projekt_WPF
 
                 if (PayWithAmount.Text.Length == 0)
                 {
-                    PaymentAmount = Convert.ToDecimal(label_TotalPrice.Content);
+                    PaymentAmount = Convert.ToDecimal(label_TotalPrice.Content.ToString().Replace(',', '.'));
                 }
                 else
                 {
@@ -1075,7 +1080,7 @@ namespace P3_Projekt_WPF
 
                 PayWithAmount.Text = "";
                 label_TotalPrice.Content = $"{PriceToPay - NewPayment.Amount}".Replace('.', ',');
-                if (_POSController.PlacerholderReceipt.PaidPrice >= PriceToPay)
+                if (_POSController.PlacerholderReceipt.PaidPrice >= _POSController.PlacerholderReceipt.TotalPrice)
                 {
                     SaleTransaction.SetStorageController(_storageController);
                     //_POSController.PlacerholderReceipt.PaymentMethod = PaymentMethod;
@@ -1083,9 +1088,9 @@ namespace P3_Projekt_WPF
                     NewThread.Name = "ExecuteReceipt Thread";
                     NewThread.Start();
                     listView_Receipt.Items.Clear();
-                    if (_POSController.PlacerholderReceipt.PaidPrice > PriceToPay)
+                    if (_POSController.PlacerholderReceipt.PaidPrice > _POSController.PlacerholderReceipt.TotalPrice)
                     {
-                        label_TotalPrice.Content = "Retur: " + (PriceToPay - _POSController.PlacerholderReceipt.PaidPrice).ToString().Replace('.', ',').Replace('-', ' ');
+                        label_TotalPrice.Content = "Retur: " + (_POSController.PlacerholderReceipt.PaidPrice - _POSController.PlacerholderReceipt.TotalPrice).ToString().Replace('.', ',').Replace('-', ' ');
                     }
                 }
             }
@@ -1230,11 +1235,6 @@ namespace P3_Projekt_WPF
             }
         }
 
-        private void listView_Receipt_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-
-        }
-
         private OrderTransactionWindow _orderTransactionWindow;
         private void button_OrderTransaction_Click(object sender, RoutedEventArgs e)
         {
@@ -1266,66 +1266,33 @@ namespace P3_Projekt_WPF
         {
             if (listView_Receipt.SelectedItem != null)
             {
-                discountSingleTransaction();
+                DiscountSingleTransaction();
             }
             else if (listView_Receipt.SelectedItem == null)
             {
-                discountOnReceipt();
+                DiscountOnReceipt();
             }
         }
 
-        private void discountSingleTransaction()
+        private void DiscountSingleTransaction()
         {
-            ReceiptListItem selectedProduct = listView_Receipt.SelectedItem as ReceiptListItem;
-            SaleTransaction currentSaleTransaction = _POSController.PlacerholderReceipt.Transactions.Where(x => x.GetID() == selectedProduct.TransID).First();
-
-            currentSaleTransaction.Price += currentSaleTransaction.DiscountPrice;
-            if (textBox_discount.Text.Contains('%'))
-            {
-                decimal percentage = Convert.ToDecimal(textBox_discount.Text.Remove(textBox_discount.Text.Length - 1, 1));
-                decimal priceInDiscountPrProduct = currentSaleTransaction.Product.SalePrice * percentage / 100m;
-                currentSaleTransaction.Price -= currentSaleTransaction.Price * (percentage / 100m);
-
-
-                currentSaleTransaction.DiscountBool = true;
-                currentSaleTransaction.DiscountPrice = priceInDiscountPrProduct * currentSaleTransaction.Amount;
-
-                currentSaleTransaction.Product.DiscountPrice -= priceInDiscountPrProduct;
-            }
-            else
-            {
-                decimal customDiscount = Convert.ToDecimal(textBox_discount.Text);
-                currentSaleTransaction.Price -= customDiscount;
-
-                currentSaleTransaction.DiscountBool = true;
-                currentSaleTransaction.DiscountPrice = customDiscount;
-            }
-
-            _POSController.PlacerholderReceipt.UpdateTotalPrice();
+            _POSController.PlacerholderReceipt.DiscountOnSingleTransaction((listView_Receipt.SelectedItem as ReceiptListItem).TransID, textBox_discount.Text);            
             UpdateReceiptList();
-
         }
 
-        private void discountOnReceipt()
+        private void DiscountOnReceipt()
         {
-            int amountOfTransactions = _POSController.PlacerholderReceipt.Transactions.Count();
             if (textBox_discount.Text.Contains('%'))
             {
                 decimal percentage = Convert.ToDecimal(textBox_discount.Text.Remove(textBox_discount.Text.Length - 1, 1));
-                foreach (SaleTransaction transPercent in _POSController.PlacerholderReceipt.Transactions)
-                {
-                    transPercent.Price = ((transPercent.TotalPrice) - (transPercent.TotalPrice * (percentage / 100))) / transPercent.Amount;
-                }
+                _POSController.PlacerholderReceipt.DiscountOnFullReceipt = _POSController.PlacerholderReceipt.TotalPrice * (percentage / 100m);
             }
-
             else
             {
-                decimal customDiscount = Convert.ToDecimal(textBox_discount.Text);
-                foreach (SaleTransaction transFlat in _POSController.PlacerholderReceipt.Transactions)
-                {
-                    transFlat.Price = ((transFlat.TotalPrice - (customDiscount / amountOfTransactions)) / transFlat.Amount);
-                }
+                _POSController.PlacerholderReceipt.DiscountOnFullReceipt = Convert.ToDecimal(textBox_discount.Text);
             }
+            text_FullReceiptDiscount.Text = "Der er givet " + Math.Round(_POSController.PlacerholderReceipt.DiscountOnFullReceipt, 2).ToString() + " DKK rabat på kvitteringen";
+
             _POSController.PlacerholderReceipt.UpdateTotalPrice();
             UpdateReceiptList();
         }
