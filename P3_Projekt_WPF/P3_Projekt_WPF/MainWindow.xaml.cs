@@ -1302,8 +1302,15 @@ namespace P3_Projekt_WPF
                 };
                 _orderTransactionWindow.button_CreateProduct.Click += delegate
                 {
-                    AddProductDialogOpener(sender, e);
-                    _orderTransactionWindow.Close();
+                    int amountOfProducts = _storageController.ProductDictionary.Count;
+                    CreateProduct addProductWindow = new CreateProduct(_storageController, this);
+                    addProductWindow.Closed += delegate { ReloadProducts(); };
+                    addProductWindow.ShowDialog();
+                    if(_storageController.ProductDictionary.Count > amountOfProducts)
+                    {
+                        _orderTransactionWindow.txtBox_SearchField.Text = (Product.GetNextID() - 1).ToString();
+                        _orderTransactionWindow.ProductSearch();
+                    }
                 };
             }
             _orderTransactionWindow.Show();
