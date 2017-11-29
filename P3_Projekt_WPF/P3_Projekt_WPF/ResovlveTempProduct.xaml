@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         Title="Ret Midlertidigt Produkt" Height="700" Width="600">
     <Grid>
-        <Button x:Name="button_Merge" Content="Foren Produkter" Background="#FFC5C5C5" Margin="0,0,5,5" Style="{StaticResource Flat_Button}" HorizontalAlignment="Right" Width="176" Height="38" VerticalAlignment="Bottom" FontSize="20"/>
+        <Button x:Name="button_Merge" Content="Foren Produkter" Background="#FFC5C5C5" Margin="0,0,5,5" Style="{StaticResource Flat_Button}" HorizontalAlignment="Right" Width="176" Height="38" VerticalAlignment="Bottom" FontSize="20" Click="button_Merge_Click"/>
         <TextBlock x:Name="txt_blockTempProduct" HorizontalAlignment="Left" Margin="5,350,5,0" TextWrapping="Wrap" Text="Midlertidigt Produkt:" Width="auto" FontSize="30" Height="40" VerticalAlignment="Top" />
         <TextBlock x:Name="txt_blockMergeProduct" HorizontalAlignment="Left" Margin="5,555,0,0" TextWrapping="Wrap" Text="Sammensæt med Produkt:" Width="auto" RenderTransformOrigin="1.269,0.536" FontSize="30" Height="45" VerticalAlignment="Top"/>
 
@@ -31,7 +31,7 @@
             </ListBox.Template>
         </ListView>
 
-        <ListView x:Name="listview_ProductsToMerge" Height="300" Margin="5,40,5,0" HorizontalContentAlignment="Stretch"  VerticalAlignment="Top" SelectionChanged="listview_ProductsToMerge_SelectionChanged" >
+        <ListView x:Name="listview_ProductsToMerge" Height="300" SelectionChanged="listview_ProductsToMerge_SelectionChanged" Margin="5,40,5,0" HorizontalContentAlignment="Stretch"  VerticalAlignment="Top" >
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <Grid>
@@ -46,7 +46,7 @@
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
-        <TextBox Padding="10,0,0,0"  TextCompositionManager.PreviewTextInput="TextInputNoNumber" x:Name="textBox_IDToMerge" Margin="370,555,0,0" FontSize="33" HorizontalAlignment="Left" Width="70" Height="45" VerticalAlignment="Top">
+        <TextBox Padding="10,0,0,0"  TextCompositionManager.PreviewTextInput="TextInputNoNumber" x:Name="textBox_IDToMerge" Margin="370,555,0,0" FontSize="33" HorizontalAlignment="Left" Width="100" Height="45" VerticalAlignment="Top" KeyUp="textBox_IDToMerge_KeyUp">
             <TextBox.Resources>
                 <Style TargetType="{x:Type Border}">
                     <Setter Property="CornerRadius" Value="10"/>

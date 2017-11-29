@@ -138,6 +138,7 @@
     <Compile Include="Classes\Product\Product.cs" />
     <Compile Include="Classes\Product\SearchedProduct.cs" />
     <Compile Include="Classes\Product\ServiceProduct.cs" />
+    <Compile Include="Classes\Product\StatisticsProduct.cs" />
     <Compile Include="Classes\Product\TempProduct.cs" />
     <Compile Include="Classes\Receipt.cs" />
     <Compile Include="Classes\ReceiptPrinter.cs" />
@@ -149,6 +150,7 @@
     <Compile Include="Classes\Utilities\Admin.cs" />
     <Compile Include="Classes\Utilities\FastButton.cs" />
     <Compile Include="Classes\Utilities\PaymentMethod_Enum.cs" />
+    <Compile Include="Classes\Utilities\QuickButton.cs" />
     <Compile Include="Classes\Utilities\SettingsController.cs" />
     <Compile Include="Classes\Utilities\StatisticsListItem.cs" />
     <Compile Include="Classes\Utilities\StorageListItem.cs" />

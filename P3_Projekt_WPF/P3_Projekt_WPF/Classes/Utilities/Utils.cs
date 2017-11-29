@@ -59,6 +59,8 @@ namespace P3_Projekt_WPF.Classes.Utilities
             }
         }
 
+        
+
         private static void _FixReceiptInDatabase()
         {
             string sql = "SELECT * FROM `receipt`";

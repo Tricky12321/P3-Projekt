@@ -43,7 +43,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
             if (_storageController.AllProductsDictionary.Keys.Contains(id))
             {
                 return _storageController.AllProductsDictionary[id];
-            } 
+            }
             return null;
         }
 
@@ -59,19 +59,21 @@ namespace P3_Projekt_WPF.Classes.Utilities
                 var Icecream = new SaleTransaction(_storageController.ServiceProductDictionary[Properties.Settings.Default.IcecreamProductID], 1, PlacerholderReceipt.ID);
                 Icecream.Price = price;
                 PlacerholderReceipt.AddTransaction(Icecream);
-            } else
+            }
+            else
             {
                 Utils.GetIceCreameID();
                 if (Properties.Settings.Default.IcecreamID == -1)
                 {
                     MessageBox.Show("Du skal oprette en gruppen med navnet \"is\", for at kunne sælge is.");
 
-                } else
+                }
+                else
                 {
                     AddIcecreamTransaction(price);
                 }
             }
-            
+
         }
 
         public void AddFreeSaleTransaction(BaseProduct product, int amount)
@@ -80,6 +82,31 @@ namespace P3_Projekt_WPF.Classes.Utilities
             transaction.Price = 0;
             PlacerholderReceipt.AddTransaction(transaction);
 
+        }
+
+        public void ChangeTransactionAmount(object sender, EventArgs e, int amount)
+        {
+            string IDTag = (sender as ReceiptListItem).IDTag;
+            if (IDTag.Contains("t"))
+            {
+                int productID = Convert.ToInt32(IDTag.Replace("t", string.Empty));
+                PlacerholderReceipt.Transactions.Where(x => x.Product.ID == productID).First().Amount += amount;
+                PlacerholderReceipt.Transactions.Where(x => x.Product.ID == productID).First().CheckIfGroupPrice();
+                PlacerholderReceipt.UpdateTotalPrice();
+            }
+            else if (Convert.ToInt32(IDTag) == Properties.Settings.Default.IcecreamProductID)
+            {
+                int productID = Convert.ToInt32(IDTag);
+                PlacerholderReceipt.Transactions.Where(x => x.Product.ID == productID && (x.TotalPrice == (sender as ReceiptListItem).Price)).First().Amount += amount;
+                PlacerholderReceipt.UpdateTotalPrice();
+            }
+            else
+            {
+                int productID = Convert.ToInt32(IDTag);
+                PlacerholderReceipt.Transactions.Where(x => x.Product.ID == productID).First().Amount += amount;
+                PlacerholderReceipt.Transactions.Where(x => x.Product.ID == productID).First().CheckIfGroupPrice();
+                PlacerholderReceipt.UpdateTotalPrice();
+            }
         }
 
         public void RemoveTransactionFromReceipt(int productID)
@@ -105,6 +132,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
             {
                 if (product is Product)
                 {
+                    //Limit??
                     if ((product as Product).StorageWithAmount.Values.Sum() < 5)
                     {
                         if (LowStorageWarning != null)
@@ -113,7 +141,6 @@ namespace P3_Projekt_WPF.Classes.Utilities
                         }
                     }
                 }
-                //Limit??
             }
         }
     }

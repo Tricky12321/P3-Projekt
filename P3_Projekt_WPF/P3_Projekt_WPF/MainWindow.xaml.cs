@@ -72,7 +72,7 @@ namespace P3_Projekt_WPF
             OutputList.Add("[TOTAL TIMER] took " + LoadingTimer.ElapsedMilliseconds + "ms");
             _storageController.AddInformation("Loading timer", LoadingTimer.ElapsedMilliseconds + "ms");
             BuildInformationTable();
-
+            LoadQuickButtons();
         }
 
         public void ReloadProducts()
@@ -103,6 +103,72 @@ namespace P3_Projekt_WPF
             if (_settingsController.quickButtonKeyList.ContainsKey(btn))
             {
                 _settingsController.quickButtonKeyList[btn].RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
+            }
+        }
+
+
+
+        public void SaveQuickButtons()
+        {
+            int[] QuickButtonsValues;
+            int counter = 0;
+            List<FastButton> QuickButtons = new List<FastButton>();
+
+            foreach (var item in _settingsController.quickButtonList)
+            {
+                QuickButtons.Add(item);
+            }
+
+            var Settings = Properties.Settings.Default;
+            int QuickButtonsCount = QuickButtons.Count();
+            Settings.QuickButton1 = QuickButtonsCount >= 1 ? QuickButtons[0].ToString() : null;
+            Settings.QuickButton2 = QuickButtonsCount >= 2 ? QuickButtons[1].ToString() : null;
+            Settings.QuickButton3 = QuickButtonsCount >= 3 ? QuickButtons[2].ToString() : null;
+            Settings.QuickButton4 = QuickButtonsCount >= 4 ? QuickButtons[3].ToString() : null;
+            Settings.QuickButton5 = QuickButtonsCount >= 5 ? QuickButtons[4].ToString() : null;
+            Settings.QuickButton6 = QuickButtonsCount >= 6 ? QuickButtons[5].ToString() : null;
+            Settings.QuickButton7 = QuickButtonsCount >= 7 ? QuickButtons[6].ToString() : null;
+            Settings.QuickButton8 = QuickButtonsCount >= 8 ? QuickButtons[7].ToString() : null;
+            Settings.QuickButton9 = QuickButtonsCount >= 9 ? QuickButtons[8].ToString() : null;
+            Settings.QuickButton10 = QuickButtonsCount >= 10 ? QuickButtons[9].ToString() : null;
+            Settings.QuickButton11 = QuickButtonsCount >= 12 ? QuickButtons[10].ToString() : null;
+            Settings.QuickButton12 = QuickButtonsCount >= 13 ? QuickButtons[11].ToString() : null;
+            Settings.QuickButton13 = QuickButtonsCount >= 14 ? QuickButtons[12].ToString() : null;
+            Settings.QuickButton14 = QuickButtonsCount >= 15 ? QuickButtons[13].ToString() : null;
+            Settings.Save();
+            
+        }
+
+        public void LoadQuickButtons()
+        {
+            var Settings = Properties.Settings.Default;
+            AddQuickButton(Settings.QuickButton1);
+            AddQuickButton(Settings.QuickButton2);
+            AddQuickButton(Settings.QuickButton3);
+            AddQuickButton(Settings.QuickButton4);
+            AddQuickButton(Settings.QuickButton5);
+            AddQuickButton(Settings.QuickButton6);
+            AddQuickButton(Settings.QuickButton7);
+            AddQuickButton(Settings.QuickButton8);
+            AddQuickButton(Settings.QuickButton9);
+            AddQuickButton(Settings.QuickButton10);
+            AddQuickButton(Settings.QuickButton11);
+            AddQuickButton(Settings.QuickButton12);
+            AddQuickButton(Settings.QuickButton13);
+            AddQuickButton(Settings.QuickButton14);
+            UpdateGridQuickButtons();
+        }
+
+        private void AddQuickButton(string NewButton)
+        {
+            var Settings = Properties.Settings.Default;
+            if (NewButton != "")
+            {
+                string[] NewButtonInfo = NewButton.Split('|');
+                int prodID = Convert.ToInt32(NewButtonInfo[0]);
+                _settingsController.AddNewQuickButton(NewButtonInfo[1], prodID, grid_QuickButton.Width, grid_QuickButton.Height, btn_FastButton_click);
+                listView_QuickBtn.Items.Add(new FastButton() { Button_Name = NewButtonInfo[1], ProductID = prodID });
+                listView_QuickBtn.Items.Refresh();
             }
         }
 
@@ -168,7 +234,7 @@ namespace P3_Projekt_WPF
             datePicker_StartDate.SelectedDate = DateTime.Now;
             datePicker_EndDate.SelectedDate = DateTime.Now;
             ChangeStatisticsState();
-            IEnumerable products = _storageController.ProductDictionary.Values.Select(x => x.Brand).Distinct();
+            IEnumerable products = _storageController.GetProductBrands();
             foreach (string brand in products)
             {
                 comboBox_Brand.Items.Add(brand);
@@ -255,7 +321,7 @@ namespace P3_Projekt_WPF
         private BaseProduct _productToEdit;
         private void EditProductClick(object sender, RoutedEventArgs e)
         {
-            CreateProduct EditProductForm = new CreateProduct();
+            CreateProduct EditProductForm;
             if (_productToEdit is Product)
             {
                 EditProductForm = new CreateProduct(_productToEdit as Product, _storageController, this, _settingsController.isAdmin);
@@ -327,11 +393,6 @@ namespace P3_Projekt_WPF
             {
                 throw new WrongProductTypeException("Kunne ikke vise information for et produkt af denne type " + _productToEdit.GetType().ToString());
             }
-        }
-
-        public void StorageTabClick(object sender, RoutedEventArgs e)
-        {
-            //LoadProductGrid();
         }
 
         public void UpdateStorageTab(object sender, RoutedEventArgs e)
@@ -460,6 +521,7 @@ namespace P3_Projekt_WPF
                 {
                     item.canvas_Discount.Visibility = Visibility.Visible;
                     item.textBlock_DiscountAmount.Text = '-' + Math.Round(transaction.DiscountPrice, 2).ToString() + " : Ny Pris: " + Math.Round(transaction.TotalPrice, 2).ToString();
+                    item.textBlock_DiscountAmount.Foreground = Brushes.Red;
                 }
             }
             else
@@ -479,58 +541,14 @@ namespace P3_Projekt_WPF
 
         private void btn_Increment_Click(object sender, EventArgs e)
         {
-            string IDTag = (sender as ReceiptListItem).IDTag;
-            if (IDTag.Contains("t"))
-            {
-                int productID = Convert.ToInt32(IDTag.Replace("t", string.Empty));
-                _POSController.PlacerholderReceipt.Transactions.Where(x => x.Product.ID == productID).First().Amount++;
-                _POSController.PlacerholderReceipt.Transactions.Where(x => x.Product.ID == productID).First().CheckIfGroupPrice();
-                _POSController.PlacerholderReceipt.UpdateTotalPrice();
-                UpdateReceiptList();
-            }
-            else if (Convert.ToInt32(IDTag) == Properties.Settings.Default.IcecreamProductID)
-            {
-                int productID = Convert.ToInt32(IDTag);
-                _POSController.PlacerholderReceipt.Transactions.Where(x => x.Product.ID == productID && (x.TotalPrice == (sender as ReceiptListItem).Price)).First().Amount++;
-                _POSController.PlacerholderReceipt.UpdateTotalPrice();
-                UpdateReceiptList();
-            }
-            else
-            {
-                int productID = Convert.ToInt32(IDTag);
-                _POSController.PlacerholderReceipt.Transactions.Where(x => x.Product.ID == productID).First().Amount++;
-                _POSController.PlacerholderReceipt.Transactions.Where(x => x.Product.ID == productID).First().CheckIfGroupPrice();
-                _POSController.PlacerholderReceipt.UpdateTotalPrice();
-                UpdateReceiptList();
-            }
+            _POSController.ChangeTransactionAmount(sender, e, 1);
+            UpdateReceiptList();
         }
 
         private void btn_Decrement_Click(object sender, EventArgs e)
         {
-            string IDTag = (sender as ReceiptListItem).IDTag;
-            if (IDTag.Contains("t"))
-            {
-                int productID = Convert.ToInt32(IDTag.Replace("t", string.Empty));
-                _POSController.PlacerholderReceipt.Transactions.Where(x => x.Product.ID == productID).First().Amount--;
-                _POSController.PlacerholderReceipt.Transactions.Where(x => x.Product.ID == productID).First().CheckIfGroupPrice();
-                _POSController.PlacerholderReceipt.UpdateTotalPrice();
-                UpdateReceiptList();
-            }
-            else if (Convert.ToInt32(IDTag) == Properties.Settings.Default.IcecreamProductID)
-            {
-                int productID = Convert.ToInt32(IDTag);
-                _POSController.PlacerholderReceipt.Transactions.Where(x => x.Product.ID == productID && (x.TotalPrice == (sender as ReceiptListItem).Price)).First().Amount--;
-                _POSController.PlacerholderReceipt.UpdateTotalPrice();
-                UpdateReceiptList();
-            }
-            else
-            {
-                int productID = Convert.ToInt32(IDTag);
-                _POSController.PlacerholderReceipt.Transactions.Where(x => x.Product.ID == productID).First().Amount--;
-                _POSController.PlacerholderReceipt.Transactions.Where(x => x.Product.ID == productID).First().CheckIfGroupPrice();
-                _POSController.PlacerholderReceipt.UpdateTotalPrice();
-                UpdateReceiptList();
-            }
+            _POSController.ChangeTransactionAmount(sender, e, -1);
+            UpdateReceiptList();
         }
 
         private void btn_DeleteProduct_Click(object sender, EventArgs e)
@@ -548,12 +566,6 @@ namespace P3_Projekt_WPF
             }
             _POSController.PlacerholderReceipt.UpdateTotalPrice();
             UpdateReceiptList();
-        }
-
-
-        private void TextBlock_TargetUpdated(object sender, DataTransferEventArgs e)
-        {
-
         }
 
         private void btn_AddProduct_Click(object sender, RoutedEventArgs e)
@@ -605,6 +617,8 @@ namespace P3_Projekt_WPF
             {
                 _settingsController.AddNewQuickButton(textBox_CreateQuickBtnName.Text, inputInt, grid_QuickButton.Width, grid_QuickButton.Height, btn_FastButton_click);
                 listView_QuickBtn.Items.Add(new FastButton() { Button_Name = textBox_CreateQuickBtnName.Text, ProductID = inputInt });
+                listView_QuickBtn.Items.Refresh();
+
             }
             else if (_settingsController.quickButtonList.Any(x => x.ProductID == inputInt))
             {
@@ -618,6 +632,7 @@ namespace P3_Projekt_WPF
             {
                 Utils.ShowErrorWarning($"Produkt med ID {inputInt} findes ikke på lageret");
             }
+            SaveQuickButtons();
         }
 
         private bool checkIfTooManyQuickButtons(int maximumButtons)
@@ -656,11 +671,10 @@ namespace P3_Projekt_WPF
             _settingsController.quickButtonList.RemoveAll(x => x.ProductID == Convert.ToUInt32((sender as Button).Tag));
 
             listView_QuickBtn.Items.RemoveAt(removeThis);
-
             listView_QuickBtn.Items.Refresh();
             UpdateGridQuickButtons();
+            SaveQuickButtons();
         }
-
 
         private CreateTemporaryProduct _createTempProduct;
         private int _tempID = -1;
@@ -679,16 +693,16 @@ namespace P3_Projekt_WPF
                 _createTempProduct.Closed += delegate { _createTempProduct = null; };
                 _createTempProduct.btn_AddTempProduct.Click += delegate
                 {
-                    if (decimal.TryParse(_createTempProduct.textbox_Price.Text, out price) && _createTempProduct.textbox_Description != null)
+                    if (decimal.TryParse(_createTempProduct.textbox_Price.Text, out price) && price > 0  && _createTempProduct.textbox_Description != null)
                     {
                         string description = _createTempProduct.textbox_Description.Text;
                         price = decimal.Parse(_createTempProduct.textbox_Price.Text);
                         int amount = int.Parse(_createTempProduct.textBox_ProductAmount.Text);
-                        TempProduct NewTemp = _storageController.CreateTempProduct(description, price);
-                        NewTemp.ID = _tempID;
+                        TempProduct NewTemp = _storageController.CreateTempProduct(description, price, _tempID);
                         _POSController.AddSaleTransaction(NewTemp, amount);
                         UpdateReceiptList();
                         _createTempProduct.Close();
+                        MessageBox.Show($"Produkt med beskrivelsen: {description}\nPris: {price}\nAntal: {amount}\nEr oprettet!");
                         ++_tempID;
                     }
                     else
@@ -699,7 +713,7 @@ namespace P3_Projekt_WPF
                 };
             }
             _createTempProduct.Activate();
-            _createTempProduct.Show();
+            _createTempProduct.ShowDialog();
         }
 
         private void btn_PictureFilePath_Click(object sender, RoutedEventArgs e)
@@ -835,7 +849,6 @@ namespace P3_Projekt_WPF
                 if (!char.IsDigit(e.Text, e.Text.Length - 1))
                     e.Handled = true;
             }
-
         }
 
         private void TextInputNoNumberWithComma(object sender, TextCompositionEventArgs e)
@@ -850,7 +863,7 @@ namespace P3_Projekt_WPF
 
         private void BuildInformationTable()
         {
-            InformationGrid.CanUserAddRows = false;
+            //Puts the analytical information, that is in settings under product tab
             foreach (var item in _storageController.InformationGridData)
             {
                 InformationGrid.Items.Add(new { title = item[0], value = item[1] });
@@ -861,73 +874,18 @@ namespace P3_Projekt_WPF
         ResovleTempProduct _resolveTempProduct;
         private void btn_MergeTempProduct_Click(object sender, RoutedEventArgs e)
         {
-            if (_storageController.TempProductList.Where(x => x.Value.Resolved == false).Count() > 0)
+            if (_storageController.TempProductList.Where(x => x.Value.Resolved == false).Count() > 0 && _resolveTempProduct == null)
             {
-                InitMergeWindow();
-            }
-        }
-
-        private void InitMergeWindow()
-        {
-            int index = 0;
-            List<TempListItem> ItemList = new List<TempListItem>();
-            var tempProducts = _storageController.TempProductList.Where(x => x.Value.Resolved == false).ToList();
-
-            if (_resolveTempProduct == null)
-            {
-                _resolveTempProduct = new ResovleTempProduct();
-                _resolveTempProduct.button_Merge.IsEnabled = false;
-                _resolveTempProduct.Closed += delegate { _resolveTempProduct = null; };
-                _resolveTempProduct.MouseLeftButtonUp += delegate
-                {
-                    index = _resolveTempProduct.listview_ProductsToMerge.SelectedIndex;
-                    if (index <= tempProducts.Count() && index >= 0)
-                    {
-                        _resolveTempProduct.textBox_TempProductInfo.Text = tempProducts[index].Value.Description;
-                    }
-                };
-                _resolveTempProduct.textBox_IDToMerge.KeyUp += delegate { IDToMerge(); };
-                _resolveTempProduct.button_Merge.Click += delegate
-                {
-                    _storageController.MergeTempProduct(tempProducts[index].Value, int.Parse(_resolveTempProduct.textBox_IDToMerge.Text));
-
+                _resolveTempProduct = new ResovleTempProduct(_storageController);
+                _resolveTempProduct.Show();
+                _resolveTempProduct.Closed += delegate {
+                    _resolveTempProduct = null;
                 };
             }
-
-            foreach (var tempProductsToListView in tempProducts)
+            else if(_resolveTempProduct != null && _storageController.TempProductList.Count == 0)
             {
-                ItemList.Add(new TempListItem { Description = tempProductsToListView.Value.Description, Price = tempProductsToListView.Value.SalePrice });
+                MessageBox.Show("Der findes ingen midlertidige produkter");
             }
-            _resolveTempProduct.listview_ProductsToMerge.ItemsSource = ItemList;
-            _resolveTempProduct.Show();
-            _resolveTempProduct.Activate();
-        }
-
-        private Product IDToMerge()
-        {
-            int validInput = 0;
-            bool input = true;
-            if (int.TryParse(_resolveTempProduct.textBox_IDToMerge.Text, out validInput))
-            {
-                try
-                {
-                    var productToMerge = _storageController.ProductDictionary[int.Parse(_resolveTempProduct.textBox_IDToMerge.Text)];
-                    _resolveTempProduct.Label_MergeInfo.Content = productToMerge.Name;
-                    _resolveTempProduct.button_Merge.IsEnabled = true;
-                    return productToMerge;
-                }
-                catch (KeyNotFoundException)
-                {
-                    _resolveTempProduct.Label_MergeInfo.Content = "Ugyldigt Produkt ID";
-                    _resolveTempProduct.button_Merge.IsEnabled = false;
-                }
-            }
-            else
-            {
-                _resolveTempProduct.Label_MergeInfo.Content = "Forkert Input";
-                _resolveTempProduct.button_Merge.IsEnabled = false;
-            }
-            return null;
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
@@ -1004,6 +962,10 @@ namespace P3_Projekt_WPF
             {
                 btn_AddProduct_Click(sender, e);
             }
+            else if (e.Key == Key.Enter && textBox_discount.IsFocused)
+            {
+                btn_discount_Click(sender, e);
+            }
         }
 
         private void btn_search_Storage_Click(object sender, RoutedEventArgs e)
@@ -1060,7 +1022,7 @@ namespace P3_Projekt_WPF
 
         private void btn_ChangePassword_Click(object sender, RoutedEventArgs e)
         {
-
+            //Allows you to reset password without having the password, if you have a text file on your desktop with the specified name, and the content says "reset"
             string desktopPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "//" + "resetpassword.txt";
 
             if (File.Exists(desktopPath) && System.IO.File.ReadAllText(desktopPath) == "reset")
@@ -1069,7 +1031,7 @@ namespace P3_Projekt_WPF
             }
             else
             {
-                var check = new AdminValidation();
+                AdminValidation check = new AdminValidation();
                 check.Closed += delegate
                 {
                     if (check.IsPasswordCorrect)
@@ -1092,7 +1054,6 @@ namespace P3_Projekt_WPF
         private void btn_Cash_Click(object sender, RoutedEventArgs e)
         {
             CompletePurchase(PaymentMethod_Enum.Cash);
-
         }
 
         private void btn_Dankort_Click(object sender, RoutedEventArgs e)
@@ -1118,7 +1079,7 @@ namespace P3_Projekt_WPF
 
                 if (PayWithAmount.Text.Length == 0)
                 {
-                    PaymentAmount = Convert.ToDecimal(label_TotalPrice.Content);
+                    PaymentAmount = Convert.ToDecimal(label_TotalPrice.Content.ToString().Replace(',', '.'));
                 }
                 else
                 {
@@ -1130,7 +1091,7 @@ namespace P3_Projekt_WPF
 
                 PayWithAmount.Text = "";
                 label_TotalPrice.Content = $"{PriceToPay - NewPayment.Amount}".Replace('.', ',');
-                if (_POSController.PlacerholderReceipt.PaidPrice >= PriceToPay)
+                if (_POSController.PlacerholderReceipt.PaidPrice >= _POSController.PlacerholderReceipt.TotalPrice)
                 {
                     SaleTransaction.SetStorageController(_storageController);
                     //_POSController.PlacerholderReceipt.PaymentMethod = PaymentMethod;
@@ -1138,9 +1099,9 @@ namespace P3_Projekt_WPF
                     NewThread.Name = "ExecuteReceipt Thread";
                     NewThread.Start();
                     listView_Receipt.Items.Clear();
-                    if (_POSController.PlacerholderReceipt.PaidPrice > PriceToPay)
+                    if (_POSController.PlacerholderReceipt.PaidPrice > _POSController.PlacerholderReceipt.TotalPrice)
                     {
-                        label_TotalPrice.Content = "Retur: " + (PriceToPay - _POSController.PlacerholderReceipt.PaidPrice).ToString().Replace('.', ',').Replace('-', ' ');
+                        label_TotalPrice.Content = "Retur: " + (_POSController.PlacerholderReceipt.PaidPrice - _POSController.PlacerholderReceipt.TotalPrice).ToString().Replace('.', ',').Replace('-', ' ');
                     }
                 }
             }
@@ -1285,11 +1246,6 @@ namespace P3_Projekt_WPF
             }
         }
 
-        private void listView_Receipt_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-
-        }
-
         private OrderTransactionWindow _orderTransactionWindow;
         private void button_OrderTransaction_Click(object sender, RoutedEventArgs e)
         {
@@ -1328,66 +1284,33 @@ namespace P3_Projekt_WPF
         {
             if (listView_Receipt.SelectedItem != null)
             {
-                discountSingleTransaction();
+                DiscountSingleTransaction();
             }
             else if (listView_Receipt.SelectedItem == null)
             {
-                discountOnReceipt();
+                DiscountOnReceipt();
             }
         }
 
-        private void discountSingleTransaction()
+        private void DiscountSingleTransaction()
         {
-            ReceiptListItem selectedProduct = listView_Receipt.SelectedItem as ReceiptListItem;
-            SaleTransaction currentSaleTransaction = _POSController.PlacerholderReceipt.Transactions.Where(x => x.GetID() == selectedProduct.TransID).First();
-
-            currentSaleTransaction.Price += currentSaleTransaction.DiscountPrice;
-            if (textBox_discount.Text.Contains('%'))
-            {
-                decimal percentage = Convert.ToDecimal(textBox_discount.Text.Remove(textBox_discount.Text.Length - 1, 1));
-                decimal priceInDiscountPrProduct = currentSaleTransaction.Product.SalePrice * percentage / 100m;
-                currentSaleTransaction.Price -= currentSaleTransaction.Price * (percentage / 100m);
-
-
-                currentSaleTransaction.DiscountBool = true;
-                currentSaleTransaction.DiscountPrice = priceInDiscountPrProduct * currentSaleTransaction.Amount;
-
-                currentSaleTransaction.Product.DiscountPrice -= priceInDiscountPrProduct;
-            }
-            else
-            {
-                decimal customDiscount = Convert.ToDecimal(textBox_discount.Text);
-                currentSaleTransaction.Price -= customDiscount;
-
-                currentSaleTransaction.DiscountBool = true;
-                currentSaleTransaction.DiscountPrice = customDiscount;
-            }
-
-            _POSController.PlacerholderReceipt.UpdateTotalPrice();
+            _POSController.PlacerholderReceipt.DiscountOnSingleTransaction((listView_Receipt.SelectedItem as ReceiptListItem).TransID, textBox_discount.Text);            
             UpdateReceiptList();
-
         }
 
-        private void discountOnReceipt()
+        private void DiscountOnReceipt()
         {
-            int amountOfTransactions = _POSController.PlacerholderReceipt.Transactions.Count();
             if (textBox_discount.Text.Contains('%'))
             {
                 decimal percentage = Convert.ToDecimal(textBox_discount.Text.Remove(textBox_discount.Text.Length - 1, 1));
-                foreach (SaleTransaction transPercent in _POSController.PlacerholderReceipt.Transactions)
-                {
-                    transPercent.Price = ((transPercent.TotalPrice) - (transPercent.TotalPrice * (percentage / 100))) / transPercent.Amount;
-                }
+                _POSController.PlacerholderReceipt.DiscountOnFullReceipt = _POSController.PlacerholderReceipt.TotalPrice * (percentage / 100m);
             }
-
             else
             {
-                decimal customDiscount = Convert.ToDecimal(textBox_discount.Text);
-                foreach (SaleTransaction transFlat in _POSController.PlacerholderReceipt.Transactions)
-                {
-                    transFlat.Price = ((transFlat.TotalPrice - (customDiscount / amountOfTransactions)) / transFlat.Amount);
-                }
+                _POSController.PlacerholderReceipt.DiscountOnFullReceipt = Convert.ToDecimal(textBox_discount.Text);
             }
+            text_FullReceiptDiscount.Text = "Der er givet " + Math.Round(_POSController.PlacerholderReceipt.DiscountOnFullReceipt, 2).ToString() + " DKK rabat på kvitteringen";
+
             _POSController.PlacerholderReceipt.UpdateTotalPrice();
             UpdateReceiptList();
         }

@@ -119,7 +119,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
             int TransCount = _dataQueue.Count;
             CreateThreads();
             ThreadWork();
-            while (!_dataQueue.IsEmpty && (_saleTransactionThreads.Where(x => x.ThreadState == System.Threading.ThreadState.Running).Count() == 0))
+            while (!_dataQueue.IsEmpty && _saleTransactions.Count() == TransCount)
             {
                 Thread.Sleep(1);
             }
@@ -205,6 +205,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
             {
                 if (SalesPerProduct.ContainsKey(transaction.GetProductID()))
                 {
+
                 }
             }
         
