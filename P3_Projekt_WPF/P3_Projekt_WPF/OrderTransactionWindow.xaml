@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         KeyDown="Window_KeyDown"
         MouseDown="Window_MouseDown"
-        Title="OrderTransactionWindow" Height="395" Width="575">
+        Title="OrderTransactionWindow" Height="395" Width="575" WindowStartupLocation="CenterScreen">
     <Grid>
         <TextBox Padding="10,0,0,0" KeyUp="txtBox_SearchField_KeyUp" x:Name="txtBox_SearchField" LostFocus="txtBox_SearchField_LostFocus" Margin="10,10,75,0" FontSize="33" Height="50" VerticalAlignment="Top">
             <TextBox.Resources>
