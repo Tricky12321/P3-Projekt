@@ -27,6 +27,7 @@ namespace P3_Projekt_WPF
             passwordBox_InputPasswordAgain.PasswordChanged += new RoutedEventHandler(GreyTextAgainRemover);
             this.KeyDown += new KeyEventHandler(KeyboardHook);
             passwordBox_InputPassword.Focus();
+            this.ResizeMode = ResizeMode.NoResize;
         }
 
         private void btn_Validate_Click(object sender, RoutedEventArgs e)

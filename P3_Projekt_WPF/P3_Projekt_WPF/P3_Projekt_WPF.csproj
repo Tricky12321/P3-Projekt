@@ -105,10 +105,6 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
-    <ApplicationDefinition Include="App.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </ApplicationDefinition>
     <Compile Include="AddIcecream.xaml.cs">
       <DependentUpon>AddIcecream.xaml</DependentUpon>
     </Compile>
@@ -117,6 +113,9 @@
     </Compile>
     <Compile Include="AdminValidation.xaml.cs">
       <DependentUpon>AdminValidation.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="App.xaml.cs">
+      <DependentUpon>App.xaml</DependentUpon>
     </Compile>
     <Compile Include="Classes\Database\Mysql.cs" />
     <Compile Include="Classes\Database\MysqlObject.cs" />
@@ -168,9 +167,6 @@
     <Compile Include="CreateTemporaryProduct.xaml.cs">
       <DependentUpon>CreateTemporaryProduct.xaml</DependentUpon>
     </Compile>
-    <Compile Include="LoadingScreen.xaml.cs">
-      <DependentUpon>LoadingScreen.xaml</DependentUpon>
-    </Compile>
     <Compile Include="MoveProduct.xaml.cs">
       <DependentUpon>MoveProduct.xaml</DependentUpon>
     </Compile>
@@ -206,6 +202,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <ApplicationDefinition Include="App.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </ApplicationDefinition>
     <Page Include="ButtonStyle.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -222,18 +222,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="LoadingScreen.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Compile Include="App.xaml.cs">
-      <DependentUpon>App.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>

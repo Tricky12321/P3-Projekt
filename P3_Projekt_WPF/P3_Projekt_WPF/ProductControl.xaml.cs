@@ -74,6 +74,7 @@ namespace P3_Projekt_WPF
             ShowProductInfo(groupDict);
             this.VerticalAlignment = VerticalAlignment.Stretch;
             this.HorizontalAlignment = HorizontalAlignment.Stretch;
+
         }
 
         public void ShowProductInfo(ConcurrentDictionary<int, Group> groupDict)
