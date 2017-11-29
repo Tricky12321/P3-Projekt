@@ -37,14 +37,15 @@ namespace P3_Projekt_WPF
         private void InitWindow()
         {
             tempProducts = _storageController.TempProductList.Where(x => x.Value.Resolved == false).ToList();
+            button_Merge.IsEnabled = false;
 
             foreach (var tempProductsToListView in tempProducts)
             {
                 ItemList.Add(new TempListItem { Description = tempProductsToListView.Value.Description, Price = tempProductsToListView.Value.SalePrice });
             }
-            this.listview_ProductsToMerge.ItemsSource = ItemList;
-            this.Show();
-            this.Activate();
+            listview_ProductsToMerge.ItemsSource = ItemList;
+            Show();
+            Activate();
         }
 
         private void TextInputNoNumber(object sender, TextCompositionEventArgs e)
@@ -62,25 +63,26 @@ namespace P3_Projekt_WPF
         {
             int validInput = 0;
             bool input = true;
-            if (int.TryParse(this.textBox_IDToMerge.Text, out validInput))
+            if (int.TryParse(textBox_IDToMerge.Text, out validInput))
             {
                 try
                 {
-                    var productToMerge = _storageController.ProductDictionary[int.Parse(this.textBox_IDToMerge.Text)];
-                    this.Label_MergeInfo.Content = productToMerge.Name;
-                    this.button_Merge.IsEnabled = true;
+                    var productToMerge = _storageController.ProductDictionary[int.Parse(textBox_IDToMerge.Text)];
+                    Label_MergeInfo.Content = productToMerge.Name;
+                    button_Merge.IsEnabled = true;
                     return productToMerge;
                 }
                 catch (KeyNotFoundException)
                 {
-                    this.Label_MergeInfo.Content = "Ugyldigt Produkt ID";
-                    this.button_Merge.IsEnabled = false;
+                    Label_MergeInfo.Content = "Ugyldigt Produkt ID";
+                    button_Merge.IsEnabled = false;
+                    button_Merge.IsEnabled = false;
                 }
             }
             else
             {
-                this.Label_MergeInfo.Content = "Forkert Input";
-                this.button_Merge.IsEnabled = false;
+                Label_MergeInfo.Content = "Forkert Input";
+                button_Merge.IsEnabled = false;
             }
             return null;
         }
@@ -92,17 +94,17 @@ namespace P3_Projekt_WPF
 
         private void button_Merge_Click(object sender, RoutedEventArgs e)
         {
-            _storageController.MergeTempProduct(tempProducts[index].Value, int.Parse(this.textBox_IDToMerge.Text));
-            this.Close();
-            MessageBox.Show($"Midlertidigt produkt: {tempProducts[index].Value.Description}\nEr rettet til at være et produktet: {this.textBox_IDToMerge.Text}");
+            _storageController.MergeTempProduct(tempProducts[index].Value, int.Parse(textBox_IDToMerge.Text));
+            Close();
+            MessageBox.Show($"Midlertidigt produkt: {tempProducts[index].Value.Description}\nEr rettet til at være et produktet: {textBox_IDToMerge.Text}");
         }
         
         private void listview_ProductsToMerge_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            index = this.listview_ProductsToMerge.SelectedIndex;
+            index = listview_ProductsToMerge.SelectedIndex;
             if (index <= tempProducts.Count() && index >= 0)
             {
-                this.textBox_TempProductInfo.Text = tempProducts[index].Value.Description;
+                textBox_TempProductInfo.Text = tempProducts[index].Value.Description;
             }
         }
     }

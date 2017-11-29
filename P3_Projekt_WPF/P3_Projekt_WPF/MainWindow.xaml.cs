@@ -870,7 +870,7 @@ namespace P3_Projekt_WPF
                     _resolveTempProduct = null;
                 };
             }
-            else if(_resolveTempProduct != null && _storageController.TempProductList.Count == 0)
+            else
             {
                 MessageBox.Show("Der findes ingen midlertidige produkter");
             }
