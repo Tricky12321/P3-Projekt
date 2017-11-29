@@ -17,7 +17,8 @@ namespace P3_Projekt_WPF.Classes.Utilities
         public Dictionary<string, decimal> SalesPerBrand;
         public int ReceiptTotalCount;
         public decimal ReceiptTotalPrice;
-        public Dictionary<int, Tuple<int, decimal>> SalesPerProduct;
+        public decimal TotalRevenueToday;
+        public Dictionary<int, StatisticsProduct> SalesPerProduct;
         public decimal[] Payments = { 0, 0, 0 };
 
         public StatisticsController(StorageController storageController)
@@ -60,14 +61,26 @@ namespace P3_Projekt_WPF.Classes.Utilities
             }
         }
 
-        public string GetProductsQueryString(bool searchID, int idToSearch, bool searchGroup, int groupToSearch, bool searchBrand, string brandToSearch, DateTime from, DateTime to)
+        public void RequestStatistics(bool searchProduct, int productToSearch, bool searchGroup, int groupToSearch, bool searchBrand, string brandToSearch, DateTime from, DateTime to)
+        {
+            TransactionsForStatistics = new List<SaleTransaction>();
+            string productString = GetProductsQueryString(searchProduct, productToSearch, searchGroup, groupToSearch, searchBrand, brandToSearch, from, to);
+            RequestTransactionsDatabase(productString);
+            if (!searchBrand)
+            {
+                string serviceProductString = GetServiceProductsQueryString(searchProduct, productToSearch, searchGroup, groupToSearch, from, to);
+                RequestTransactionsDatabase(serviceProductString);
+            }
+        }
+
+        public string GetProductsQueryString(bool searchProduct, int productToSearch, bool searchGroup, int groupToSearch, bool searchBrand, string brandToSearch, DateTime from, DateTime to)
         {
             StringBuilder NewString = new StringBuilder("SELECT `sale_transactions`.* " +
                 "FROM `products`, `sale_transactions` WHERE `sale_transactions`.`product_id` = `products`.`id`" +
                 $" AND UNIX_TIMESTAMP(`datetime`) >= '{Utils.GetUnixTime(from)}' AND UNIX_TIMESTAMP(`datetime`) <= '{Utils.GetUnixTime(EndDate(to))}'");
-            if (searchID)
+            if (searchProduct)
             {
-                NewString.Append($" AND `products`.`id` = '{idToSearch}'");
+                NewString.Append($" AND `products`.`id` = '{productToSearch}'");
             }
             else
             {
@@ -109,7 +122,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
             return date + dayEnd;
         }
 
-        public void RequestStatisticsDate(string queryString)
+        public void RequestTransactionsDatabase(string queryString)
         {
             Stopwatch Timer1 = new Stopwatch();
             Timer1.Start();
@@ -119,7 +132,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
             int TransCount = _dataQueue.Count;
             CreateThreads();
             ThreadWork();
-            while (!_dataQueue.IsEmpty && (_saleTransactionThreads.Where(x => x.ThreadState == System.Threading.ThreadState.Running).Count() == 0))
+            while (!_dataQueue.IsEmpty && _saleTransactions.Count() == TransCount)
             {
                 Thread.Sleep(1);
             }
@@ -137,7 +150,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
             Int64 to = Utils.GetUnixTime(EndDate(DateTime.Today));
             string queryString = $"SELECT* FROM `receipt` WHERE UNIX_TIMESTAMP(`datetime`) >= '{from}' AND UNIX_TIMESTAMP(`datetime`) <= '{to}'";
             _dataQueue = Mysql.RunQueryWithReturnQueue(queryString).RowData;
-            foreach(Row row in _dataQueue)
+            foreach (Row row in _dataQueue)
             {
                 TodayReceipts.Add(new Receipt(row));
             }
@@ -148,7 +161,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
             Payments = new decimal[] { 0, 0, 0 };
             foreach (Receipt receipt in TodayReceipts)
             {
-                foreach(Payment payment in receipt.Payments)
+                foreach (Payment payment in receipt.Payments)
                 {
                     if ((int)payment.PaymentMethod == 1)
                     {
@@ -167,7 +180,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
                 {
                     Payments[0] -= (receipt.PaidPrice - receipt.TotalPrice);
                 }
-            } 
+            }
         }
 
         public void GetReceiptTotalPrice(DateTime From, DateTime To)
@@ -175,7 +188,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
             Int64 fromUnix = Utils.GetUnixTime(From);
             Int64 toUnix = Utils.GetUnixTime(EndDate(To));
             string sql = $"SELECT sum(`total_price`) as atotal FROM `receipt` WHERE UNIX_TIMESTAMP(`datetime`) >= '{fromUnix}' AND UNIX_TIMESTAMP(`datetime`) <= '{toUnix}'";
-            if(!decimal.TryParse(Mysql.RunQueryWithReturn(sql).RowData[0].Values[0], out ReceiptTotalPrice))
+            if (!decimal.TryParse(Mysql.RunQueryWithReturn(sql).RowData[0].Values[0], out ReceiptTotalPrice))
             {
                 ReceiptTotalPrice = 0;
             }
@@ -191,25 +204,33 @@ namespace P3_Projekt_WPF.Classes.Utilities
 
         public StatisticsListItem ReceiptStatisticsString()
         {
-            if(ReceiptTotalCount > 0)
+            if (ReceiptTotalCount > 0)
             {
                 return new StatisticsListItem("", "Gennemsnitlig kvitteringspris", $"{ ReceiptTotalCount}", $"{Math.Round(ReceiptTotalPrice / ReceiptTotalCount, 2)}");
             }
             return new StatisticsListItem("", "Gennemsnitlig kvitteringspris", "0", "0");
         }
 
-        /*public void GenerateProductSales()
+        public void GenerateProductSalesAndTotalRevenue()
         {
-        SalesPerProduct = new Dictionary<int, Tuple<int, decimal>>();
-        foreach (SaleTransaction transaction in TransactionsForStatistics)
+            SalesPerProduct = new Dictionary<int, StatisticsProduct>();
+            TotalRevenueToday = 0;
+            foreach (SaleTransaction transaction in TransactionsForStatistics)
             {
                 if (SalesPerProduct.ContainsKey(transaction.GetProductID()))
                 {
-
+                    SalesPerProduct[transaction.GetProductID()].Amount += transaction.Amount;
+                    SalesPerProduct[transaction.GetProductID()].Revenue += transaction.TotalPrice;
                 }
+                else
+                {
+                    SalesPerProduct.Add(transaction.GetProductID(), new StatisticsProduct());
+                    SalesPerProduct[transaction.GetProductID()].Amount += transaction.Amount;
+                    SalesPerProduct[transaction.GetProductID()].Revenue += transaction.TotalPrice;
+                }
+                TotalRevenueToday += transaction.TotalPrice;
             }
-        
-        }*/
+        }
 
         public void GenerateGroupAndBrandSales()
         {
@@ -219,7 +240,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
             {
                 SalesPerGroup.Add(group.ID, 0m);
             }
-            foreach(string brand in _storageController.ProductDictionary.Values.Select(x => x.Brand).Distinct())
+            foreach (string brand in _storageController.ProductDictionary.Values.Select(x => x.Brand).Distinct())
             {
                 SalesPerBrand.Add(brand, 0m);
             }
@@ -234,7 +255,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
                 {
                     SalesPerGroup[transaction.GetGroupID()] += transaction.TotalPrice;
                 }
-                if(transaction.GetBrand() != "")
+                if (transaction.GetBrand() != "")
                 {
                     SalesPerBrand[transaction.GetBrand()] += transaction.TotalPrice;
                 }
@@ -243,7 +264,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
 
         public StatisticsListItem GroupSalesStrings(int id, decimal totalPrice)
         {
-            if(totalPrice > 0)
+            if (totalPrice > 0)
             {
                 return new StatisticsListItem("", $"{_storageController.GroupDictionary[id].Name}", $"{Math.Round((SalesPerGroup[id] / totalPrice) * 100m, 1)}%", $"{SalesPerGroup[id]}");
             }
@@ -258,5 +279,11 @@ namespace P3_Projekt_WPF.Classes.Utilities
             }
             return new StatisticsListItem("", $"{brand}", "0%", $"{SalesPerBrand[brand]}");
         }
+
+        public StatisticsListItem ProductSalesStrings(int id, StatisticsProduct productInfo)
+        {
+            return new StatisticsListItem("", $"{_storageController.AllProductsDictionary[id].GetName()}", $"{productInfo.Amount}", $"{productInfo.Revenue}");
+        }
+
     }
 }

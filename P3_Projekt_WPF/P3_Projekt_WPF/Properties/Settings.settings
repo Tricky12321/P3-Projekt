@@ -6,43 +6,85 @@
       <Value Profile="(Default)" />
     </Setting>
     <Setting Name="IcecreamID" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">0</Value>
+      <Value Profile="(Default)" />
     </Setting>
     <Setting Name="local_or_remote" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
     <Setting Name="lcl_ip" Type="System.String" Scope="User">
-      <Value Profile="(Default)">localhost</Value>
+      <Value Profile="(Default)" />
     </Setting>
     <Setting Name="rmt_ip" Type="System.String" Scope="User">
-      <Value Profile="(Default)">v-world.dk</Value>
+      <Value Profile="(Default)" />
     </Setting>
     <Setting Name="lcl_port" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">3306</Value>
+      <Value Profile="(Default)" />
     </Setting>
     <Setting Name="rmt_port" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">3306</Value>
+      <Value Profile="(Default)" />
     </Setting>
     <Setting Name="lcl_username" Type="System.String" Scope="User">
-      <Value Profile="(Default)">P3</Value>
+      <Value Profile="(Default)" />
     </Setting>
     <Setting Name="lcl_password" Type="System.String" Scope="User">
-      <Value Profile="(Default)">frankythefish</Value>
+      <Value Profile="(Default)" />
     </Setting>
     <Setting Name="rmt_password" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
     <Setting Name="lcl_db" Type="System.String" Scope="User">
-      <Value Profile="(Default)">P3</Value>
+      <Value Profile="(Default)" />
     </Setting>
     <Setting Name="rmt_db" Type="System.String" Scope="User">
-      <Value Profile="(Default)">P3</Value>
+      <Value Profile="(Default)" />
     </Setting>
     <Setting Name="rmt_username" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
     <Setting Name="IcecreamProductID" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">0</Value>
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="QuickButton1" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="QuickButton2" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="QuickButton3" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="QuickButton4" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="QuickButton5" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="QuickButton6" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="QuickButton7" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="QuickButton8" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="QuickButton9" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="QuickButton10" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="QuickButton11" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="QuickButton12" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="QuickButton13" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="QuickButton14" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
     </Setting>
   </Settings>
 </SettingsFile>

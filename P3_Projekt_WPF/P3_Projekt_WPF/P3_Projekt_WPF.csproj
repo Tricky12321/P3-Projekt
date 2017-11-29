@@ -105,10 +105,6 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
-    <ApplicationDefinition Include="App.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </ApplicationDefinition>
     <Compile Include="AddIcecream.xaml.cs">
       <DependentUpon>AddIcecream.xaml</DependentUpon>
     </Compile>
@@ -117,6 +113,9 @@
     </Compile>
     <Compile Include="AdminValidation.xaml.cs">
       <DependentUpon>AdminValidation.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="App.xaml.cs">
+      <DependentUpon>App.xaml</DependentUpon>
     </Compile>
     <Compile Include="Classes\Database\Mysql.cs" />
     <Compile Include="Classes\Database\MysqlObject.cs" />
@@ -138,6 +137,7 @@
     <Compile Include="Classes\Product\Product.cs" />
     <Compile Include="Classes\Product\SearchedProduct.cs" />
     <Compile Include="Classes\Product\ServiceProduct.cs" />
+    <Compile Include="Classes\Product\StatisticsProduct.cs" />
     <Compile Include="Classes\Product\TempProduct.cs" />
     <Compile Include="Classes\Receipt.cs" />
     <Compile Include="Classes\ReceiptPrinter.cs" />
@@ -149,6 +149,7 @@
     <Compile Include="Classes\Utilities\Admin.cs" />
     <Compile Include="Classes\Utilities\FastButton.cs" />
     <Compile Include="Classes\Utilities\PaymentMethod_Enum.cs" />
+    <Compile Include="Classes\Utilities\QuickButton.cs" />
     <Compile Include="Classes\Utilities\SettingsController.cs" />
     <Compile Include="Classes\Utilities\StatisticsListItem.cs" />
     <Compile Include="Classes\Utilities\StorageListItem.cs" />
@@ -165,9 +166,6 @@
     </Compile>
     <Compile Include="CreateTemporaryProduct.xaml.cs">
       <DependentUpon>CreateTemporaryProduct.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="LoadingScreen.xaml.cs">
-      <DependentUpon>LoadingScreen.xaml</DependentUpon>
     </Compile>
     <Compile Include="MoveProduct.xaml.cs">
       <DependentUpon>MoveProduct.xaml</DependentUpon>
@@ -204,6 +202,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <ApplicationDefinition Include="App.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </ApplicationDefinition>
     <Page Include="ButtonStyle.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -220,18 +222,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="LoadingScreen.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Compile Include="App.xaml.cs">
-      <DependentUpon>App.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
