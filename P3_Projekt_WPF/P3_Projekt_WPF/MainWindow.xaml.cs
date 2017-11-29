@@ -1118,7 +1118,7 @@ namespace P3_Projekt_WPF
 
                 if (PayWithAmount.Text.Length == 0)
                 {
-                    PaymentAmount = Convert.ToDecimal(label_TotalPrice.Content);
+                    PaymentAmount = Convert.ToDecimal(label_TotalPrice.Content.ToString().Replace(',', '.'));
                 }
                 else
                 {
@@ -1140,7 +1140,7 @@ namespace P3_Projekt_WPF
                     listView_Receipt.Items.Clear();
                     if (_POSController.PlacerholderReceipt.PaidPrice > _POSController.PlacerholderReceipt.TotalPrice)
                     {
-                        label_TotalPrice.Content = "Retur: " + (PriceToPay - _POSController.PlacerholderReceipt.PaidPrice).ToString().Replace('.', ',').Replace('-', ' ');
+                        label_TotalPrice.Content = "Retur: " + (_POSController.PlacerholderReceipt.PaidPrice - _POSController.PlacerholderReceipt.TotalPrice).ToString().Replace('.', ',').Replace('-', ' ');
                     }
                 }
             }

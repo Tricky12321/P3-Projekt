@@ -48,7 +48,7 @@ namespace P3_Projekt_WPF.Classes
             {
                 Transactions.Add(transaction);
             }
-            TotalPrice += FindTransactionPrice(transaction);
+            TotalPrice += transaction.TotalPrice;
             UpdateNumberOfProducts();
         }
 
@@ -57,13 +57,8 @@ namespace P3_Projekt_WPF.Classes
             TotalPrice = 0;
             foreach (SaleTransaction transaction in Transactions)
             {
-                TotalPrice += FindTransactionPrice(transaction);
+                TotalPrice += transaction.TotalPrice;
             }
-        }
-
-        private decimal FindTransactionPrice(SaleTransaction transaction)
-        {
-            return transaction.TotalPrice;
         }
 
         public void RemoveTransaction(int productID)
