@@ -40,8 +40,8 @@ namespace P3_Projekt_WPF.Classes
         public void CreateFromRow(Row Table)
         {
             ID = Convert.ToInt32(Table.Values[0]);
-            Amount = Convert.ToDecimal(Table.Values[1]);
-            PaymentMethod = (PaymentMethod_Enum)Convert.ToInt32(Convert.ToDecimal(Table.Values[2]));
+            PaymentMethod = (PaymentMethod_Enum)Convert.ToInt32(Convert.ToDecimal(Table.Values[1]));
+            Amount = Convert.ToDecimal(Table.Values[2]);
             ReceiptID = Convert.ToInt32(Table.Values[3]);
         }
 
