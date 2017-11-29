@@ -175,7 +175,7 @@ namespace P3_Projekt_WPF.Classes.Utilities.Tests
             Assert.IsTrue(storageController.ProductDictionary[0].GetFullID == "010000");
         }*/
 
-       
+
         /*
         [TestCase("shir with banas", 3, ExpectedResult = true)]
         [TestCase("bok", 1, ExpectedResult = true)]
@@ -302,5 +302,75 @@ namespace P3_Projekt_WPF.Classes.Utilities.Tests
             //Assert.IsTrue(strContr.TempProductList.Exists(x => x.Description == "A blue shirt with yellow bananas"));
         }
         */
+        [Test()]
+        public void ContainsSearchTest()
+        {
+            StorageController SC = new StorageController();
+            BaseProduct TestProduct = new Product(1, "TestProductMedSlagI", "Aner det ikke", 10m, 1, false, 0m, 0m);
+            if (SC.ContainsSearch("sLaG", TestProduct))
+            {
+                Assert.Pass();
+            } else
+            {
+                Assert.Fail();
+            }
+        }
+        [Test()]
+        public void ContainsSearchTest5()
+        {
+            StorageController SC = new StorageController();
+            BaseProduct TestProduct = new Product(1, "TestProductMedSlagI", "Aner det ikke", 10m, 1, false, 0m, 0m);
+            if (SC.ContainsSearch("asdf", TestProduct))
+            {
+                Assert.Fail();
+            }
+            else
+            {
+                Assert.Pass();
+            }
+        }
+        [Test()]
+        public void ContainsSearchTest2()
+        {
+            StorageController SC = new StorageController();
+            BaseProduct TestProduct = new Product(1, "TestProductMedSlagI", "Aner det ikke", 10m, 1, false, 0m, 0m);
+            if (SC.ContainsSearch("Product", TestProduct))
+            {
+                Assert.Pass();
+            }
+            else
+            {
+                Assert.Fail();
+            }
+        }
+        [Test()]
+        public void ContainsSearchTest3()
+        {
+            StorageController SC = new StorageController();
+            BaseProduct TestProduct = new Product(1, "asdf", "Aner det ikke", 10m, 1, false, 0m, 0m);
+            if (SC.ContainsSearch("Product", TestProduct))
+            {
+                Assert.Fail();
+            }
+            else
+            {
+                Assert.Pass();
+            }
+        }
+        [Test()]
+        public void ContainsSearchTest4()
+        {
+            StorageController SC = new StorageController();
+            BaseProduct TestProduct = new Product(1, "TestProductTing", "Aner det ikke", 10m, 1, false, 0m, 0m);
+            if (SC.ContainsSearch("", TestProduct))
+            {
+                Assert.Fail();
+            }
+            else
+            {
+                Assert.Pass();
+            }
+        }
+
     }
 }

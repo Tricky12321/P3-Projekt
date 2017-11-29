@@ -36,6 +36,8 @@ namespace P3_Projekt_WPF
             _posController = posController;
             InitializeComponent();
             InitWindow();
+            this.ResizeMode = ResizeMode.NoResize;
+
         }
 
         public void InitWindow()

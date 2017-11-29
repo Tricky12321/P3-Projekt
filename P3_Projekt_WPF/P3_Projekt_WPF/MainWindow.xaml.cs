@@ -84,12 +84,6 @@ namespace P3_Projekt_WPF
             LoadProductGrid(_storageController.AllProductsDictionary);
         }
 
-        private void showloadform()
-        {
-            LoadingScreen load = new LoadingScreen();
-            load.ShowDialog();
-        }
-
         private void KeyboardHook(object sender, KeyEventArgs e)
         {
             if (_ctrlDown && (e.Key != Key.LeftCtrl && e.Key != Key.RightCtrl))

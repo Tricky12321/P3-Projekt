@@ -36,6 +36,8 @@ namespace P3_Projekt_WPF
 
         private void InitWindow()
         {
+            this.ResizeMode = ResizeMode.NoResize;
+
             tempProducts = _storageController.TempProductList.Where(x => x.Value.Resolved == false).ToList();
             button_Merge.IsEnabled = false;
 
