@@ -72,7 +72,7 @@ namespace P3_Projekt_WPF
             OutputList.Add("[TOTAL TIMER] took " + LoadingTimer.ElapsedMilliseconds + "ms");
             _storageController.AddInformation("Loading timer", LoadingTimer.ElapsedMilliseconds + "ms");
             BuildInformationTable();
-
+            LoadQuickButtons();
         }
 
         public void ReloadProducts()
@@ -103,6 +103,72 @@ namespace P3_Projekt_WPF
             if (_settingsController.quickButtonKeyList.ContainsKey(btn))
             {
                 _settingsController.quickButtonKeyList[btn].RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
+            }
+        }
+
+
+
+        public void SaveQuickButtons()
+        {
+            int[] QuickButtonsValues;
+            int counter = 0;
+            List<FastButton> QuickButtons = new List<FastButton>();
+
+            foreach (var item in _settingsController.quickButtonList)
+            {
+                QuickButtons.Add(item);
+            }
+
+            var Settings = Properties.Settings.Default;
+            int QuickButtonsCount = QuickButtons.Count();
+            Settings.QuickButton1 = QuickButtonsCount >= 1 ? QuickButtons[0].ToString() : null;
+            Settings.QuickButton2 = QuickButtonsCount >= 2 ? QuickButtons[1].ToString() : null;
+            Settings.QuickButton3 = QuickButtonsCount >= 3 ? QuickButtons[2].ToString() : null;
+            Settings.QuickButton4 = QuickButtonsCount >= 4 ? QuickButtons[3].ToString() : null;
+            Settings.QuickButton5 = QuickButtonsCount >= 5 ? QuickButtons[4].ToString() : null;
+            Settings.QuickButton6 = QuickButtonsCount >= 6 ? QuickButtons[5].ToString() : null;
+            Settings.QuickButton7 = QuickButtonsCount >= 7 ? QuickButtons[6].ToString() : null;
+            Settings.QuickButton8 = QuickButtonsCount >= 8 ? QuickButtons[7].ToString() : null;
+            Settings.QuickButton9 = QuickButtonsCount >= 9 ? QuickButtons[8].ToString() : null;
+            Settings.QuickButton10 = QuickButtonsCount >= 10 ? QuickButtons[9].ToString() : null;
+            Settings.QuickButton11 = QuickButtonsCount >= 12 ? QuickButtons[10].ToString() : null;
+            Settings.QuickButton12 = QuickButtonsCount >= 13 ? QuickButtons[11].ToString() : null;
+            Settings.QuickButton13 = QuickButtonsCount >= 14 ? QuickButtons[12].ToString() : null;
+            Settings.QuickButton14 = QuickButtonsCount >= 15 ? QuickButtons[13].ToString() : null;
+            Settings.Save();
+            
+        }
+
+        public void LoadQuickButtons()
+        {
+            var Settings = Properties.Settings.Default;
+            AddQuickButton(Settings.QuickButton1);
+            AddQuickButton(Settings.QuickButton2);
+            AddQuickButton(Settings.QuickButton3);
+            AddQuickButton(Settings.QuickButton4);
+            AddQuickButton(Settings.QuickButton5);
+            AddQuickButton(Settings.QuickButton6);
+            AddQuickButton(Settings.QuickButton7);
+            AddQuickButton(Settings.QuickButton8);
+            AddQuickButton(Settings.QuickButton9);
+            AddQuickButton(Settings.QuickButton10);
+            AddQuickButton(Settings.QuickButton11);
+            AddQuickButton(Settings.QuickButton12);
+            AddQuickButton(Settings.QuickButton13);
+            AddQuickButton(Settings.QuickButton14);
+            UpdateGridQuickButtons();
+        }
+
+        private void AddQuickButton(string NewButton)
+        {
+            var Settings = Properties.Settings.Default;
+            if (NewButton != "")
+            {
+                string[] NewButtonInfo = NewButton.Split('|');
+                int prodID = Convert.ToInt32(NewButtonInfo[0]);
+                _settingsController.AddNewQuickButton(NewButtonInfo[1], prodID, grid_QuickButton.Width, grid_QuickButton.Height, btn_FastButton_click);
+                listView_QuickBtn.Items.Add(new FastButton() { Button_Name = NewButtonInfo[1], ProductID = prodID });
+                listView_QuickBtn.Items.Refresh();
             }
         }
 
@@ -596,6 +662,8 @@ namespace P3_Projekt_WPF
             {
                 _settingsController.AddNewQuickButton(textBox_CreateQuickBtnName.Text, inputInt, grid_QuickButton.Width, grid_QuickButton.Height, btn_FastButton_click);
                 listView_QuickBtn.Items.Add(new FastButton() { Button_Name = textBox_CreateQuickBtnName.Text, ProductID = inputInt });
+                listView_QuickBtn.Items.Refresh();
+
             }
             else if (_settingsController.quickButtonList.Any(x => x.ProductID == inputInt))
             {
@@ -609,6 +677,7 @@ namespace P3_Projekt_WPF
             {
                 Utils.ShowErrorWarning($"Produkt med ID {inputInt} findes ikke på lageret");
             }
+            SaveQuickButtons();
         }
 
         private bool checkIfTooManyQuickButtons(int maximumButtons)
@@ -650,6 +719,7 @@ namespace P3_Projekt_WPF
 
             listView_QuickBtn.Items.Refresh();
             UpdateGridQuickButtons();
+            SaveQuickButtons();
         }
 
 
