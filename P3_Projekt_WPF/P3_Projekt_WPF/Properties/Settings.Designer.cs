@@ -190,5 +190,185 @@ namespace P3_Projekt_WPF.Properties {
                 this["IcecreamProductID"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("12|Test")]
+        public string QuickButton1 {
+            get {
+                return ((string)(this["QuickButton1"]));
+            }
+            set {
+                this["QuickButton1"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string QuickButton2 {
+            get {
+                return ((string)(this["QuickButton2"]));
+            }
+            set {
+                this["QuickButton2"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string QuickButton3 {
+            get {
+                return ((string)(this["QuickButton3"]));
+            }
+            set {
+                this["QuickButton3"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string QuickButton4 {
+            get {
+                return ((string)(this["QuickButton4"]));
+            }
+            set {
+                this["QuickButton4"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string QuickButton5 {
+            get {
+                return ((string)(this["QuickButton5"]));
+            }
+            set {
+                this["QuickButton5"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string QuickButton6 {
+            get {
+                return ((string)(this["QuickButton6"]));
+            }
+            set {
+                this["QuickButton6"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string QuickButton7 {
+            get {
+                return ((string)(this["QuickButton7"]));
+            }
+            set {
+                this["QuickButton7"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string QuickButton8 {
+            get {
+                return ((string)(this["QuickButton8"]));
+            }
+            set {
+                this["QuickButton8"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string QuickButton9 {
+            get {
+                return ((string)(this["QuickButton9"]));
+            }
+            set {
+                this["QuickButton9"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string QuickButton10 {
+            get {
+                return ((string)(this["QuickButton10"]));
+            }
+            set {
+                this["QuickButton10"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string QuickButton11 {
+            get {
+                return ((string)(this["QuickButton11"]));
+            }
+            set {
+                this["QuickButton11"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string QuickButton12 {
+            get {
+                return ((string)(this["QuickButton12"]));
+            }
+            set {
+                this["QuickButton12"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string QuickButton13 {
+            get {
+                return ((string)(this["QuickButton13"]));
+            }
+            set {
+                this["QuickButton13"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string QuickButton14 {
+            get {
+                return ((string)(this["QuickButton14"]));
+            }
+            set {
+                this["QuickButton14"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string QuickButton15 {
+            get {
+                return ((string)(this["QuickButton15"]));
+            }
+            set {
+                this["QuickButton15"] = value;
+            }
+        }
     }
 }

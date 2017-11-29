@@ -43,7 +43,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
             if (_storageController.AllProductsDictionary.Keys.Contains(id))
             {
                 return _storageController.AllProductsDictionary[id];
-            } 
+            }
             return null;
         }
 
@@ -59,19 +59,21 @@ namespace P3_Projekt_WPF.Classes.Utilities
                 var Icecream = new SaleTransaction(_storageController.ServiceProductDictionary[Properties.Settings.Default.IcecreamProductID], 1, PlacerholderReceipt.ID);
                 Icecream.Price = price;
                 PlacerholderReceipt.AddTransaction(Icecream);
-            } else
+            }
+            else
             {
                 Utils.GetIceCreameID();
                 if (Properties.Settings.Default.IcecreamID == -1)
                 {
                     MessageBox.Show("Du skal oprette en gruppen med navnet \"is\", for at kunne sælge is.");
 
-                } else
+                }
+                else
                 {
                     AddIcecreamTransaction(price);
                 }
             }
-            
+
         }
 
         public void AddFreeSaleTransaction(BaseProduct product, int amount)
@@ -130,6 +132,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
             {
                 if (product is Product)
                 {
+                    //Limit??
                     if ((product as Product).StorageWithAmount.Values.Sum() < 5)
                     {
                         if (LowStorageWarning != null)
@@ -138,7 +141,6 @@ namespace P3_Projekt_WPF.Classes.Utilities
                         }
                     }
                 }
-                //Limit??
             }
         }
     }
