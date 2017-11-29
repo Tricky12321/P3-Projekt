@@ -26,7 +26,7 @@ namespace P3_Projekt_WPF
         int amount = 1;
         public CreateTemporaryProduct()
         {
-            InitializeComponent();
+            InitializeComponent();   
         }
 
         private void btn_PlusToReciept_Click(object sender, RoutedEventArgs e)
@@ -54,11 +54,6 @@ namespace P3_Projekt_WPF
                 if (!char.IsDigit(e.Text, e.Text.Length - 1))
                     e.Handled = true;
             }
-
-        }
-
-        private void textBox_ProductAmount_PreviewTextInput(object sender, TextCompositionEventArgs e)
-        {
 
         }
     }

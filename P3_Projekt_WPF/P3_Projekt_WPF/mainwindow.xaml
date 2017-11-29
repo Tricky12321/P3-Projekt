@@ -141,7 +141,7 @@
                             </Style>
                         </ListBox.ItemContainerStyle>
                     </ListBox>
-                    <Button x:Name="btn_AddIcecream" Style="{StaticResource Flat_Button}" Background="#FFC5C5C5" Content="Tilføj Is" HorizontalAlignment="Left" Margin="19,0,0,5" Grid.Row="1" VerticalAlignment="Bottom" Width="289" Click="btn_AddIcecream_Click"/>
+                    <Button x:Name="btn_AddIcecream" Height="50" Style="{StaticResource Flat_Button}" Background="#FFC5C5C5" Content="Tilføj Is" HorizontalAlignment="Left" Margin="19,0,0,5" Grid.Row="1" VerticalAlignment="Bottom" Width="289" Click="btn_AddIcecream_Click"/>
                 </Grid>
             </TabItem>
 

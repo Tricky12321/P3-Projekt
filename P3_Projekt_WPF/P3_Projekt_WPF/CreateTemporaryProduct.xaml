@@ -5,9 +5,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:P3_Projekt_WPF"
         mc:Ignorable="d"
-        Title="CreateTemporaryProduct" MinHeight="455" MaxHeight="600" MinWidth="350" MaxWidth="800" Background="White" Height="425.5">
+        Title="CreateTemporaryProduct" MinHeight="420" MaxHeight="600" MinWidth="350" MaxWidth="800" Background="White" Height="408" Width="600">
     <Grid Background="#FFE5E5E5">
-        <TextBox Padding="4,0,0,0" x:Name="textbox_Description" FontSize="30" Grid.ColumnSpan="1" MinHeight="40" VerticalAlignment="Top" Margin="10,10,10,0" Height="225" TextWrapping="Wrap">
+        <TextBox Padding="4,0,0,0" x:Name="textbox_Description" FontSize="30" Grid.ColumnSpan="1" MinHeight="40" Margin="5,5,5,159" TextWrapping="Wrap">
             <TextBox.Resources>
                 <Style TargetType="{x:Type Border}">
                     <Setter Property="CornerRadius" Value="10"/>
@@ -26,14 +26,14 @@
                 </Style>
             </TextBlock.Style>
         </TextBlock>
-        <TextBox Padding="4,0,0,0" x:Name="textbox_Price" TextCompositionManager.PreviewTextInput="TextInputNoNumber" FontSize="30" Grid.ColumnSpan="1" MinHeight="40" VerticalAlignment="Top" Margin="10,245,10,0" Height="14">
+        <TextBox Padding="4,0,0,0" x:Name="textbox_Price" TextCompositionManager.PreviewTextInput="TextInputNoNumber" FontSize="30" Grid.ColumnSpan="1" MinHeight="40" Margin="5,0,5,114" Height="15" VerticalAlignment="Bottom">
             <TextBox.Resources>
                 <Style TargetType="{x:Type Border}">
                     <Setter Property="CornerRadius" Value="10"/>
                 </Style>
             </TextBox.Resources>
         </TextBox>
-        <TextBlock IsHitTestVisible="False" Text="Pris" Margin="16,250,0,0" Foreground="DarkGray" FontSize="30" Height="40" VerticalAlignment="Top" HorizontalAlignment="Left" Width="92">
+        <TextBlock IsHitTestVisible="False" Text="Pris" Margin="15,0,0,114" Foreground="DarkGray" FontSize="30" HorizontalAlignment="Left" Width="92" Height="40" VerticalAlignment="Bottom">
             <TextBlock.Style>
                 <Style TargetType="{x:Type TextBlock}">
                     <Setter Property="Visibility" Value="Collapsed"/>
@@ -45,10 +45,10 @@
                 </Style>
             </TextBlock.Style>
         </TextBlock>
-        <Button x:Name="btn_AddTempProduct" Content="Tilføj til kvittering" Background="Transparent" Margin="10,0,10,10" FontSize="30" Height="58" VerticalAlignment="Bottom" Style="{StaticResource Flat_Button}" />
-        <Button x:Name="btn_PlusToReciept" Content="+" Background="Transparent" HorizontalAlignment="Left" Margin="175,296,0,0" Width="35" Style="{StaticResource Flat_Button}" RenderTransformOrigin="-0.486,0.333" Height="50" VerticalAlignment="Top" Click="btn_PlusToReciept_Click"/>
-        <Button x:Name="btn_MinusToReciept" Content="-" Background="Transparent" HorizontalAlignment="Left" Margin="220,296,0,0" Width="35" Style="{StaticResource Flat_Button}" FontSize="30" Height="50" VerticalAlignment="Top" Click="btn_MinusToReciept_Click"/>
-        <TextBox x:Name="textBox_ProductAmount" TextCompositionManager.PreviewTextInput="TextInputNoNumber" Padding="10,0,0,0" HorizontalAlignment="Left" Margin="100,295,0,0" TextWrapping="Wrap" Text="1" Width="68" MaxLines="1" MaxLength="2" FontSize="33" Height="50" VerticalAlignment="Top">
+        <Button x:Name="btn_AddTempProduct" Content="Tilføj til kvittering" Background="Transparent" Margin="5,5,5,5" FontSize="30" Style="{StaticResource Flat_Button}" Height="50" VerticalAlignment="Bottom" />
+        <Button x:Name="btn_PlusToReciept" Content="+" Background="Transparent" HorizontalAlignment="Left" Margin="175,0,0,59" Width="35" Style="{StaticResource Flat_Button}" RenderTransformOrigin="-0.486,0.333" Height="50" VerticalAlignment="Bottom" Click="btn_PlusToReciept_Click"/>
+        <Button x:Name="btn_MinusToReciept" Content="-" Background="Transparent" HorizontalAlignment="Left" Margin="220,0,0,59" Width="35" Style="{StaticResource Flat_Button}" FontSize="30" Height="50" VerticalAlignment="Bottom" Click="btn_MinusToReciept_Click"/>
+        <TextBox x:Name="textBox_ProductAmount" TextCompositionManager.PreviewTextInput="TextInputNoNumber" Padding="10,0,0,0" HorizontalAlignment="Left" Margin="100,0,0,59" TextWrapping="Wrap" Text="1" Width="68" MaxLines="1" MaxLength="2" FontSize="33" Height="50" VerticalAlignment="Bottom">
             <TextBox.Resources>
                 <Style TargetType="{x:Type Border}">
                     <Setter Property="CornerRadius" Value="10"/>
@@ -56,6 +56,6 @@
             </TextBox.Resources>
         </TextBox>
         <Label x:Name="label" HorizontalAlignment="Left" Margin="29,336,0,0" VerticalAlignment="Top"/>
-        <Label x:Name="label1" Content="Antal:" FontSize="30" Margin="10,295,0,0" HorizontalAlignment="Left" Width="92" Height="50" VerticalAlignment="Top"/>
+        <Label x:Name="label1" Content="Antal:"  FontSize="30" Margin="10,0,0,59" HorizontalAlignment="Left" Width="92" Height="50" VerticalAlignment="Bottom"/>
     </Grid>
 </Window>

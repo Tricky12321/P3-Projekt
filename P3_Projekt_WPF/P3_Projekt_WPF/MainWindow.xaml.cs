@@ -679,16 +679,16 @@ namespace P3_Projekt_WPF
                 _createTempProduct.Closed += delegate { _createTempProduct = null; };
                 _createTempProduct.btn_AddTempProduct.Click += delegate
                 {
-                    if (decimal.TryParse(_createTempProduct.textbox_Price.Text, out price) && _createTempProduct.textbox_Description != null)
+                    if (decimal.TryParse(_createTempProduct.textbox_Price.Text, out price) && price > 0  && _createTempProduct.textbox_Description != null)
                     {
                         string description = _createTempProduct.textbox_Description.Text;
                         price = decimal.Parse(_createTempProduct.textbox_Price.Text);
                         int amount = int.Parse(_createTempProduct.textBox_ProductAmount.Text);
-                        TempProduct NewTemp = _storageController.CreateTempProduct(description, price);
-                        NewTemp.ID = _tempID;
+                        TempProduct NewTemp = _storageController.CreateTempProduct(description, price, _tempID);
                         _POSController.AddSaleTransaction(NewTemp, amount);
                         UpdateReceiptList();
                         _createTempProduct.Close();
+                        MessageBox.Show($"Produkt med beskrivelsen: {description}\nPris: {price}\nAntal: {amount}\nEr oprettet!");
                         ++_tempID;
                     }
                     else
@@ -861,73 +861,18 @@ namespace P3_Projekt_WPF
         ResovleTempProduct _resolveTempProduct;
         private void btn_MergeTempProduct_Click(object sender, RoutedEventArgs e)
         {
-            if (_storageController.TempProductList.Where(x => x.Value.Resolved == false).Count() > 0)
+            if (_storageController.TempProductList.Where(x => x.Value.Resolved == false).Count() > 0 && _resolveTempProduct == null)
             {
-                InitMergeWindow();
-            }
-        }
-
-        private void InitMergeWindow()
-        {
-            int index = 0;
-            List<TempListItem> ItemList = new List<TempListItem>();
-            var tempProducts = _storageController.TempProductList.Where(x => x.Value.Resolved == false).ToList();
-
-            if (_resolveTempProduct == null)
-            {
-                _resolveTempProduct = new ResovleTempProduct();
-                _resolveTempProduct.button_Merge.IsEnabled = false;
-                _resolveTempProduct.Closed += delegate { _resolveTempProduct = null; };
-                _resolveTempProduct.MouseLeftButtonUp += delegate
-                {
-                    index = _resolveTempProduct.listview_ProductsToMerge.SelectedIndex;
-                    if (index <= tempProducts.Count() && index >= 0)
-                    {
-                        _resolveTempProduct.textBox_TempProductInfo.Text = tempProducts[index].Value.Description;
-                    }
-                };
-                _resolveTempProduct.textBox_IDToMerge.KeyUp += delegate { IDToMerge(); };
-                _resolveTempProduct.button_Merge.Click += delegate
-                {
-                    _storageController.MergeTempProduct(tempProducts[index].Value, int.Parse(_resolveTempProduct.textBox_IDToMerge.Text));
-
+                _resolveTempProduct = new ResovleTempProduct(_storageController);
+                _resolveTempProduct.Show();
+                _resolveTempProduct.Closed += delegate {
+                    _resolveTempProduct = null;
                 };
             }
-
-            foreach (var tempProductsToListView in tempProducts)
+            else if(_resolveTempProduct != null && _storageController.TempProductList.Count == 0)
             {
-                ItemList.Add(new TempListItem { Description = tempProductsToListView.Value.Description, Price = tempProductsToListView.Value.SalePrice });
+                MessageBox.Show("Der findes ingen midlertidige produkter");
             }
-            _resolveTempProduct.listview_ProductsToMerge.ItemsSource = ItemList;
-            _resolveTempProduct.Show();
-            _resolveTempProduct.Activate();
-        }
-
-        private Product IDToMerge()
-        {
-            int validInput = 0;
-            bool input = true;
-            if (int.TryParse(_resolveTempProduct.textBox_IDToMerge.Text, out validInput))
-            {
-                try
-                {
-                    var productToMerge = _storageController.ProductDictionary[int.Parse(_resolveTempProduct.textBox_IDToMerge.Text)];
-                    _resolveTempProduct.Label_MergeInfo.Content = productToMerge.Name;
-                    _resolveTempProduct.button_Merge.IsEnabled = true;
-                    return productToMerge;
-                }
-                catch (KeyNotFoundException)
-                {
-                    _resolveTempProduct.Label_MergeInfo.Content = "Ugyldigt Produkt ID";
-                    _resolveTempProduct.button_Merge.IsEnabled = false;
-                }
-            }
-            else
-            {
-                _resolveTempProduct.Label_MergeInfo.Content = "Forkert Input";
-                _resolveTempProduct.button_Merge.IsEnabled = false;
-            }
-            return null;
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
