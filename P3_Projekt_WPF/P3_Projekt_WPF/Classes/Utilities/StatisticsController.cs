@@ -205,6 +205,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
             {
                 if (SalesPerProduct.ContainsKey(transaction.GetProductID()))
                 {
+
                 }
             }
         

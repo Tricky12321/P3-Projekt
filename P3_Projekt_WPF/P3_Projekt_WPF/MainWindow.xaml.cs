@@ -1130,7 +1130,7 @@ namespace P3_Projekt_WPF
 
                 PayWithAmount.Text = "";
                 label_TotalPrice.Content = $"{PriceToPay - NewPayment.Amount}".Replace('.', ',');
-                if (_POSController.PlacerholderReceipt.PaidPrice >= PriceToPay)
+                if (_POSController.PlacerholderReceipt.PaidPrice >= _POSController.PlacerholderReceipt.TotalPrice)
                 {
                     SaleTransaction.SetStorageController(_storageController);
                     //_POSController.PlacerholderReceipt.PaymentMethod = PaymentMethod;
@@ -1138,7 +1138,7 @@ namespace P3_Projekt_WPF
                     NewThread.Name = "ExecuteReceipt Thread";
                     NewThread.Start();
                     listView_Receipt.Items.Clear();
-                    if (_POSController.PlacerholderReceipt.PaidPrice > PriceToPay)
+                    if (_POSController.PlacerholderReceipt.PaidPrice > _POSController.PlacerholderReceipt.TotalPrice)
                     {
                         label_TotalPrice.Content = "Retur: " + (PriceToPay - _POSController.PlacerholderReceipt.PaidPrice).ToString().Replace('.', ',').Replace('-', ' ');
                     }
