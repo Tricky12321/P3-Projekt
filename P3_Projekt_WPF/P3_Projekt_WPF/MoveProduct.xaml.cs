@@ -71,26 +71,33 @@ namespace P3_Projekt_WPF
             ConcurrentDictionary<int, SearchProduct> productSearchResults = _storageController.SearchForProduct(txtBox_SearchField.Text);
             listBox_SearchMoveProduct.Items.Clear();
             var searchResults = productSearchResults.Values.OrderByDescending(x => x.BrandMatch + x.GroupMatch + x.NameMatch);
-            foreach (SearchProduct product in searchResults)
+            if (searchResults.Count() == 0)
             {
-                if (product.CurrentProduct is Product)
+                foreach (SearchProduct product in searchResults)
                 {
-                    var item = new ListBoxItem();
-                    item.Tag = product.CurrentProduct.ID;
-                    item.Content = new SaleSearchResultItemControl((product.CurrentProduct as Product).Image, $"{(product.CurrentProduct as Product).Name}\n{product.CurrentProduct.ID}");
-                    listBox_SearchMoveProduct.Items.Add(item);
-                    if (searchResults.Count() == 1)
+                    if (product.CurrentProduct is Product)
                     {
-                        FillItemDetails(item);
+                        var item = new ListBoxItem();
+                        item.Tag = product.CurrentProduct.ID;
+                        item.Content = new SaleSearchResultItemControl((product.CurrentProduct as Product).Image, $"{(product.CurrentProduct as Product).Name}\n{product.CurrentProduct.ID}");
+                        listBox_SearchMoveProduct.Items.Add(item);
+                        if (searchResults.Count() == 1)
+                        {
+                            FillItemDetails(item);
+                        }
                     }
                 }
+            }
+            else
+            {
+                MessageBox.Show("I ");
             }
         }
 
         private void FillItemDetails(object sender)
         {
             comboBox_StorageRooms.Items.Clear();
-            var product =  _posController.GetProductFromID(int.Parse((sender as ListBoxItem).Tag.ToString())) as Product;
+            var product = _posController.GetProductFromID(int.Parse((sender as ListBoxItem).Tag.ToString())) as Product;
             productID = product.ID;
             label_ProduktID.Content = product.ID.ToString();
             label_produktProdukt.Content = product.Name.ToString();
@@ -104,8 +111,10 @@ namespace P3_Projekt_WPF
                 }
                 comboBox_StorageRooms.IsEnabled = true;
                 comboBox_Destination.IsEnabled = true;
+                button_MoveProduct.IsEnabled = true;
                 comboBox_StorageRooms.SelectedIndex = 0;
-                label_ActualAmountInStorage.Content = product.StorageWithAmount.Where(x => x.Key == _storageController.StorageRoomDictionary.Where(z => z.Value.Name == comboBox_StorageRooms.Text).Select(y => y.Value.ID).First()).Select(x => x.Value).First();
+                //label_ActualAmountInStorage.Content = product.StorageWithAmount.Where(x => x.Key == _storageController.StorageRoomDictionary.Where(z => z.Value.Name == comboBox_StorageRooms.Text).Select(y => y.Value.ID).First()).Select(x => x.Value).First();
+                DisplayNumberInStorage();
             }
             else
             {
@@ -113,6 +122,7 @@ namespace P3_Projekt_WPF
                 comboBox_StorageRooms.SelectedIndex = 0;
                 comboBox_StorageRooms.IsEnabled = false;
                 comboBox_Destination.IsEnabled = false;
+                button_MoveProduct.IsEnabled = false;
             }
             listBox_SearchMoveProduct.Visibility = Visibility.Collapsed;
             firstSearch = true;
@@ -126,7 +136,7 @@ namespace P3_Projekt_WPF
 
         private void btn_MinusAmount_Click(object sender, RoutedEventArgs e)
         {
-            if (_amount >= 0)
+            if (_amount > 1)
             {
                 --_amount;
                 textBox_ProductAmount.Text = _amount.ToString();
@@ -181,7 +191,7 @@ namespace P3_Projekt_WPF
 
         private void DisplayNumberInStorage()
         {
-            if (firstSearch)
+            if(comboBox_Destination.Text != "")
             {
                 sourceRoom = _storageController.StorageRoomDictionary.Where(x => x.Value.Name == comboBox_StorageRooms.Text).Select(x => x.Key).First();
                 label_ActualAmountInStorage.Content = _storageController.ProductDictionary[productID].StorageWithAmount[sourceRoom].ToString();

@@ -741,7 +741,7 @@ namespace P3_Projekt_WPF
                 productID = int.Parse(textBox_StatisticsProductID.Text);
             }
             string brand = comboBox_Brand.Text;
-            int groupID = 0;
+            int groupID = -1;
             if (comboBox_Group.Text != "")
             {
                 groupID = _storageController.GroupDictionary.Values.First(x => x.Name == comboBox_Group.Text).ID;
@@ -749,11 +749,7 @@ namespace P3_Projekt_WPF
             bool filterProduct = checkBox_Product.IsChecked.Value;
             bool filterBrand = checkBox_Brand.IsChecked.Value;
             bool filterGroup = checkBox_Group.IsChecked.Value;
-            _statisticsController.TransactionsForStatistics = new List<SaleTransaction>();
-            string ProductqueryString = _statisticsController.GetProductsQueryString(filterProduct, productID, filterGroup, groupID, filterBrand, brand, datePicker_StartDate.SelectedDate.Value, datePicker_EndDate.SelectedDate.Value);
-            string ServiceProductQueryString = _statisticsController.GetServiceProductsQueryString(filterProduct, productID, filterGroup, groupID, datePicker_StartDate.SelectedDate.Value, datePicker_EndDate.SelectedDate.Value);
-            _statisticsController.RequestStatisticsDate(ProductqueryString);
-            _statisticsController.RequestStatisticsDate(ServiceProductQueryString);
+            _statisticsController.RequestStatistics(filterProduct, productID, filterGroup, groupID, filterBrand, brand, datePicker_StartDate.SelectedDate.Value, datePicker_EndDate.SelectedDate.Value);
             _statisticsController.GetReceiptTotalCount(datePicker_StartDate.SelectedDate.Value, datePicker_EndDate.SelectedDate.Value);
             _statisticsController.GetReceiptTotalPrice(datePicker_StartDate.SelectedDate.Value, datePicker_EndDate.SelectedDate.Value);
 
@@ -803,19 +799,34 @@ namespace P3_Projekt_WPF
 
         private void Button_StatisticsToday_Click(object sender, RoutedEventArgs e)
         {
+            int totalProductAmount = 0;
             ResetStatisticsView();
             _statisticsController.RequestTodayReceipts();
             _statisticsController.CalculatePayments();
-            listView_Statistics.Items.Add(new StatisticsListItem($"{DateTime.Today.ToString("dd/MM/yy")}", "Kontant", "", $"{_statisticsController.Payments[0]}"));
-            listView_Statistics.Items.Add(new StatisticsListItem($"{DateTime.Today.ToString("dd/MM/yy")}", "Kort", "", $"{_statisticsController.Payments[1]}"));
-            listView_Statistics.Items.Add(new StatisticsListItem($"{DateTime.Today.ToString("dd/MM/yy")}", "MobilePay", "", $"{_statisticsController.Payments[2]}"));
-            /*string queryString = _statisticsController.GetQueryString(false, 0, false, 0, false, "", DateTime.Today, DateTime.Today);
-            _statisticsController.RequestStatisticsDate(queryString);
+            listView_Statistics.Items.Add(new StatisticsListItem("", "Kontant", "", $"{_statisticsController.Payments[0]}"));
+            listView_Statistics.Items.Add(new StatisticsListItem("", "Kort", "", $"{_statisticsController.Payments[1]}"));
+            listView_Statistics.Items.Add(new StatisticsListItem("", "MobilePay", "", $"{_statisticsController.Payments[2]}"));
+            listView_Statistics.Items.Insert(0, new StatisticsListItem("", "Kroner per betalingsmetode:", "", ""));
+            _statisticsController.RequestStatistics(false, 0, false, 0, false, "", DateTime.Today, DateTime.Today);
+            _statisticsController.GenerateProductSalesAndTotalRevenue();
+            foreach (int id in _statisticsController.SalesPerProduct.Keys)
+            {
+                listView_Statistics.Items.Add(_statisticsController.ProductSalesStrings(id, _statisticsController.SalesPerProduct[id]));
+                totalProductAmount += _statisticsController.SalesPerProduct[id].Amount;
+            }
             _statisticsController.GenerateGroupAndBrandSales();
             foreach (int groupID in _statisticsController.SalesPerGroup.Keys)
             {
-                listView_GroupStatistics.Items.Add(_statisticsController.GroupSalesStrings(groupID, totalTransactionPrice));
-            }*/
+                listView_GroupStatistics.Items.Add(_statisticsController.GroupSalesStrings(groupID, _statisticsController.TotalRevenueToday));
+            }
+            foreach (string brand in _statisticsController.SalesPerBrand.Keys)
+            {
+                listView_BrandStatistics.Items.Add(_statisticsController.BrandSalesStrings(brand, _statisticsController.TotalRevenueToday));
+            }
+
+            listView_Statistics.Items.Insert(4, new StatisticsListItem("", "Total", $"{totalProductAmount}", $"{_statisticsController.TotalRevenueToday}"));
+            listView_Statistics.Items.Insert(4, new StatisticsListItem("", "Produkter solgt i dag:", "", ""));
+            listView_Statistics.Items.Insert(4, new StatisticsListItem("", "", "", ""));
         }
 
         private void checkBox_Product_Checked(object sender, RoutedEventArgs e)
