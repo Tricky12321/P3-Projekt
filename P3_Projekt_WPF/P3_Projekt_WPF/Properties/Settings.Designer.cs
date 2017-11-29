@@ -37,7 +37,6 @@ namespace P3_Projekt_WPF.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("0")]
         public int IcecreamID {
             get {
                 return ((int)(this["IcecreamID"]));
@@ -61,7 +60,7 @@ namespace P3_Projekt_WPF.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("localhost")]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
         public string lcl_ip {
             get {
                 return ((string)(this["lcl_ip"]));
@@ -73,7 +72,7 @@ namespace P3_Projekt_WPF.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("v-world.dk")]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
         public string rmt_ip {
             get {
                 return ((string)(this["rmt_ip"]));
@@ -85,7 +84,6 @@ namespace P3_Projekt_WPF.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("3306")]
         public int lcl_port {
             get {
                 return ((int)(this["lcl_port"]));
@@ -97,7 +95,6 @@ namespace P3_Projekt_WPF.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("3306")]
         public int rmt_port {
             get {
                 return ((int)(this["rmt_port"]));
@@ -109,7 +106,7 @@ namespace P3_Projekt_WPF.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("P3")]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
         public string lcl_username {
             get {
                 return ((string)(this["lcl_username"]));
@@ -121,7 +118,7 @@ namespace P3_Projekt_WPF.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("frankythefish")]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
         public string lcl_password {
             get {
                 return ((string)(this["lcl_password"]));
@@ -145,7 +142,7 @@ namespace P3_Projekt_WPF.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("P3")]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
         public string lcl_db {
             get {
                 return ((string)(this["lcl_db"]));
@@ -157,7 +154,7 @@ namespace P3_Projekt_WPF.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("P3")]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
         public string rmt_db {
             get {
                 return ((string)(this["rmt_db"]));
@@ -181,7 +178,6 @@ namespace P3_Projekt_WPF.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("0")]
         public int IcecreamProductID {
             get {
                 return ((int)(this["IcecreamProductID"]));
@@ -193,7 +189,7 @@ namespace P3_Projekt_WPF.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("12|Test")]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
         public string QuickButton1 {
             get {
                 return ((string)(this["QuickButton1"]));
@@ -356,18 +352,6 @@ namespace P3_Projekt_WPF.Properties {
             }
             set {
                 this["QuickButton14"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string QuickButton15 {
-            get {
-                return ((string)(this["QuickButton15"]));
-            }
-            set {
-                this["QuickButton15"] = value;
             }
         }
     }

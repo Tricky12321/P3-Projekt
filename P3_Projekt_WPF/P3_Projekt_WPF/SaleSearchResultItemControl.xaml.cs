@@ -22,6 +22,7 @@ namespace P3_Projekt_WPF
     {
         public SaleSearchResultItemControl(Image image, string text)
         {
+
             InitializeComponent();
             label_SaleProductSearchItemText.Content = text;
             Image imagePlaceholder = new Image();

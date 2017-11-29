@@ -12,7 +12,7 @@ namespace P3_Projekt_WPF.Classes
         public int NameMatch = 0;
         public int GroupMatch = 0;
         public int BrandMatch = 0;
-
+        public bool ContainsMatch = false;
 
         public SearchProduct(BaseProduct product)
         {

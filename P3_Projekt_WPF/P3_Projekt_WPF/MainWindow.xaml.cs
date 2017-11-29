@@ -73,6 +73,7 @@ namespace P3_Projekt_WPF
             _storageController.AddInformation("Loading timer", LoadingTimer.ElapsedMilliseconds + "ms");
             BuildInformationTable();
             LoadQuickButtons();
+
         }
 
         public void ReloadProducts()
@@ -81,12 +82,6 @@ namespace P3_Projekt_WPF
             LoadProductImages();
             LoadProductControlDictionary();
             LoadProductGrid(_storageController.AllProductsDictionary);
-        }
-
-        private void showloadform()
-        {
-            LoadingScreen load = new LoadingScreen();
-            load.ShowDialog();
         }
 
         private void KeyboardHook(object sender, KeyEventArgs e)
@@ -882,7 +877,7 @@ namespace P3_Projekt_WPF
                     _resolveTempProduct = null;
                 };
             }
-            else if(_resolveTempProduct != null && _storageController.TempProductList.Count == 0)
+            else
             {
                 MessageBox.Show("Der findes ingen midlertidige produkter");
             }

@@ -32,6 +32,8 @@ namespace P3_Projekt_WPF
             InitializeComponent();
             _storageController = storageController;
             _posController = posController;
+            this.ResizeMode = ResizeMode.NoResize;
+
         }
 
 
