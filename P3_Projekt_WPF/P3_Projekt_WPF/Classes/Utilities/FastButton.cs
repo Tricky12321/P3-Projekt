@@ -7,7 +7,7 @@ using System.Windows.Controls;
 
 namespace P3_Projekt_WPF.Classes.Utilities
 {
-    class FastButton : Button
+    public class FastButton : Button
     {
         public int ProductID { get; set; }
         public string Button_Name { get; set; }
@@ -15,6 +15,14 @@ namespace P3_Projekt_WPF.Classes.Utilities
         public FastButton()
         {
 
+        }
+
+        public FastButton(string CreateFromString)
+        {
+            string[] CreateStringSplit = CreateFromString.Split('|');
+            ProductID = Convert.ToInt32(CreateStringSplit[0]);
+            Button_Name = CreateStringSplit[1];
+            this.Content = Button_Name;
         }
 
         public FastButton(int productID, string button_name)
@@ -33,6 +41,11 @@ namespace P3_Projekt_WPF.Classes.Utilities
         static public void DeserializeFastButton(string buttonString)
         {
 
+        }
+
+        public string ToString()
+        {
+            return ProductID + "|" + Button_Name;
         }
     }
 }

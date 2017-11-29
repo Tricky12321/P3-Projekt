@@ -59,7 +59,7 @@ namespace P3_Projekt_WPF
         }
 
 
-        private void ProductSearch()
+        public void ProductSearch()
         {
             listBox_SearchResultsSaleTab.Visibility = Visibility.Visible;
             ConcurrentDictionary<int, SearchProduct> productSearchResults = _storageController.SearchForProduct(txtBox_SearchField.Text);
@@ -136,16 +136,19 @@ namespace P3_Projekt_WPF
 
         private void btn_PlusAmount_Click(object sender, RoutedEventArgs e)
         {
-            ++_amount;
-            textBox_ProductAmount.Text = _amount.ToString();
+            _amount = Int32.Parse(textBox_ProductAmount.Text);
+            if (_amount < 10000)
+            {
+                textBox_ProductAmount.Text = (++_amount).ToString();
+            }
         }
 
         private void btn_MinusAmount_Click(object sender, RoutedEventArgs e)
         {
-            if (_amount >= 0)
+            _amount = Int32.Parse(textBox_ProductAmount.Text);
+            if (_amount > 0)
             {
-                --_amount;
-                textBox_ProductAmount.Text = _amount.ToString();
+                textBox_ProductAmount.Text = (--_amount).ToString();
             }
         }
 
@@ -160,22 +163,27 @@ namespace P3_Projekt_WPF
             {
                 textblock_Search.Text = "Vælg et Produkt";
                 textblock_Search.Foreground = Brushes.Red;
+                txtBox_SearchField.BorderBrush = Brushes.Red;
             }
             else if(textBox_Supplier.Text != "")
             {
-                string ok = textBox_Supplier.Text;
-                OrderTransaction orderTransaction = new OrderTransaction(product, _amount, textBox_Supplier.Text, _storageController.StorageRoomDictionary.Where(x => x.Value.Name == comboBox_StorageRooms.Text).Select(x => x.Key).First());
+                OrderTransaction orderTransaction = new OrderTransaction(product, Int32.Parse(textBox_ProductAmount.Text), textBox_Supplier.Text, _storageController.StorageRoomDictionary.Where(x => x.Value.Name == comboBox_StorageRooms.Text).Select(x => x.Key).First());
+                orderTransaction.Execute();
                 orderTransaction.UploadToDatabase();
+                this.Close();
             }
             else
             {
+                txtBox_SearchField.BorderBrush = Brushes.DarkGray;
+                label_SupplierLayer.Text = "Vælg en distributør";
                 label_SupplierLayer.Foreground = Brushes.Red;
+                textBox_Supplier.BorderBrush = Brushes.Red;
             }
         }
 
         private void textBox_Supplier_LostFocus(object sender, RoutedEventArgs e)
         {
-            if (textBox_Supplier.Text != "")
+            if (textBox_Supplier.Text == "")
             {
                 label_SupplierLayer.Visibility = Visibility.Visible;
             }
@@ -192,11 +200,6 @@ namespace P3_Projekt_WPF
             {
                 label_SupplierLayer.Visibility = Visibility.Hidden;
             }
-        }
-
-        private void button_CreateProduct_Click(object sender, RoutedEventArgs e)
-        {
-            
         }
     }
 }

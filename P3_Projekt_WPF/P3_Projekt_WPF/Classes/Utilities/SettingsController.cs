@@ -23,6 +23,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
             FastButton button = new FastButton();
             button.ProductID = productID;
             button.Content = buttonText; ;
+            button.Button_Name = buttonText;
             button.Height = gridHeight / 7;
             button.Width = gridWidth / 2;
 

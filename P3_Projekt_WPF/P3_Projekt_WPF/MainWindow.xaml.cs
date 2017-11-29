@@ -72,7 +72,7 @@ namespace P3_Projekt_WPF
             OutputList.Add("[TOTAL TIMER] took " + LoadingTimer.ElapsedMilliseconds + "ms");
             _storageController.AddInformation("Loading timer", LoadingTimer.ElapsedMilliseconds + "ms");
             BuildInformationTable();
-
+            LoadQuickButtons();
         }
 
         public void ReloadProducts()
@@ -103,6 +103,72 @@ namespace P3_Projekt_WPF
             if (_settingsController.quickButtonKeyList.ContainsKey(btn))
             {
                 _settingsController.quickButtonKeyList[btn].RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
+            }
+        }
+
+
+
+        public void SaveQuickButtons()
+        {
+            int[] QuickButtonsValues;
+            int counter = 0;
+            List<FastButton> QuickButtons = new List<FastButton>();
+
+            foreach (var item in _settingsController.quickButtonList)
+            {
+                QuickButtons.Add(item);
+            }
+
+            var Settings = Properties.Settings.Default;
+            int QuickButtonsCount = QuickButtons.Count();
+            Settings.QuickButton1 = QuickButtonsCount >= 1 ? QuickButtons[0].ToString() : null;
+            Settings.QuickButton2 = QuickButtonsCount >= 2 ? QuickButtons[1].ToString() : null;
+            Settings.QuickButton3 = QuickButtonsCount >= 3 ? QuickButtons[2].ToString() : null;
+            Settings.QuickButton4 = QuickButtonsCount >= 4 ? QuickButtons[3].ToString() : null;
+            Settings.QuickButton5 = QuickButtonsCount >= 5 ? QuickButtons[4].ToString() : null;
+            Settings.QuickButton6 = QuickButtonsCount >= 6 ? QuickButtons[5].ToString() : null;
+            Settings.QuickButton7 = QuickButtonsCount >= 7 ? QuickButtons[6].ToString() : null;
+            Settings.QuickButton8 = QuickButtonsCount >= 8 ? QuickButtons[7].ToString() : null;
+            Settings.QuickButton9 = QuickButtonsCount >= 9 ? QuickButtons[8].ToString() : null;
+            Settings.QuickButton10 = QuickButtonsCount >= 10 ? QuickButtons[9].ToString() : null;
+            Settings.QuickButton11 = QuickButtonsCount >= 12 ? QuickButtons[10].ToString() : null;
+            Settings.QuickButton12 = QuickButtonsCount >= 13 ? QuickButtons[11].ToString() : null;
+            Settings.QuickButton13 = QuickButtonsCount >= 14 ? QuickButtons[12].ToString() : null;
+            Settings.QuickButton14 = QuickButtonsCount >= 15 ? QuickButtons[13].ToString() : null;
+            Settings.Save();
+            
+        }
+
+        public void LoadQuickButtons()
+        {
+            var Settings = Properties.Settings.Default;
+            AddQuickButton(Settings.QuickButton1);
+            AddQuickButton(Settings.QuickButton2);
+            AddQuickButton(Settings.QuickButton3);
+            AddQuickButton(Settings.QuickButton4);
+            AddQuickButton(Settings.QuickButton5);
+            AddQuickButton(Settings.QuickButton6);
+            AddQuickButton(Settings.QuickButton7);
+            AddQuickButton(Settings.QuickButton8);
+            AddQuickButton(Settings.QuickButton9);
+            AddQuickButton(Settings.QuickButton10);
+            AddQuickButton(Settings.QuickButton11);
+            AddQuickButton(Settings.QuickButton12);
+            AddQuickButton(Settings.QuickButton13);
+            AddQuickButton(Settings.QuickButton14);
+            UpdateGridQuickButtons();
+        }
+
+        private void AddQuickButton(string NewButton)
+        {
+            var Settings = Properties.Settings.Default;
+            if (NewButton != "")
+            {
+                string[] NewButtonInfo = NewButton.Split('|');
+                int prodID = Convert.ToInt32(NewButtonInfo[0]);
+                _settingsController.AddNewQuickButton(NewButtonInfo[1], prodID, grid_QuickButton.Width, grid_QuickButton.Height, btn_FastButton_click);
+                listView_QuickBtn.Items.Add(new FastButton() { Button_Name = NewButtonInfo[1], ProductID = prodID });
+                listView_QuickBtn.Items.Refresh();
             }
         }
 
@@ -168,7 +234,7 @@ namespace P3_Projekt_WPF
             datePicker_StartDate.SelectedDate = DateTime.Now;
             datePicker_EndDate.SelectedDate = DateTime.Now;
             ChangeStatisticsState();
-            IEnumerable products = _storageController.ProductDictionary.Values.Select(x => x.Brand).Distinct();
+            IEnumerable products = _storageController.GetProductBrands();
             foreach (string brand in products)
             {
                 comboBox_Brand.Items.Add(brand);
@@ -255,7 +321,7 @@ namespace P3_Projekt_WPF
         private BaseProduct _productToEdit;
         private void EditProductClick(object sender, RoutedEventArgs e)
         {
-            CreateProduct EditProductForm = new CreateProduct();
+            CreateProduct EditProductForm;
             if (_productToEdit is Product)
             {
                 EditProductForm = new CreateProduct(_productToEdit as Product, _storageController, this, _settingsController.isAdmin);
@@ -327,11 +393,6 @@ namespace P3_Projekt_WPF
             {
                 throw new WrongProductTypeException("Kunne ikke vise information for et produkt af denne type " + _productToEdit.GetType().ToString());
             }
-        }
-
-        public void StorageTabClick(object sender, RoutedEventArgs e)
-        {
-            //LoadProductGrid();
         }
 
         public void UpdateStorageTab(object sender, RoutedEventArgs e)
@@ -480,58 +541,14 @@ namespace P3_Projekt_WPF
 
         private void btn_Increment_Click(object sender, EventArgs e)
         {
-            string IDTag = (sender as ReceiptListItem).IDTag;
-            if (IDTag.Contains("t"))
-            {
-                int productID = Convert.ToInt32(IDTag.Replace("t", string.Empty));
-                _POSController.PlacerholderReceipt.Transactions.Where(x => x.Product.ID == productID).First().Amount++;
-                _POSController.PlacerholderReceipt.Transactions.Where(x => x.Product.ID == productID).First().CheckIfGroupPrice();
-                _POSController.PlacerholderReceipt.UpdateTotalPrice();
-                UpdateReceiptList();
-            }
-            else if (Convert.ToInt32(IDTag) == Properties.Settings.Default.IcecreamProductID)
-            {
-                int productID = Convert.ToInt32(IDTag);
-                _POSController.PlacerholderReceipt.Transactions.Where(x => x.Product.ID == productID && (x.TotalPrice == (sender as ReceiptListItem).Price)).First().Amount++;
-                _POSController.PlacerholderReceipt.UpdateTotalPrice();
-                UpdateReceiptList();
-            }
-            else
-            {
-                int productID = Convert.ToInt32(IDTag);
-                _POSController.PlacerholderReceipt.Transactions.Where(x => x.Product.ID == productID).First().Amount++;
-                _POSController.PlacerholderReceipt.Transactions.Where(x => x.Product.ID == productID).First().CheckIfGroupPrice();
-                _POSController.PlacerholderReceipt.UpdateTotalPrice();
-                UpdateReceiptList();
-            }
+            _POSController.ChangeTransactionAmount(sender, e, 1);
+            UpdateReceiptList();
         }
 
         private void btn_Decrement_Click(object sender, EventArgs e)
         {
-            string IDTag = (sender as ReceiptListItem).IDTag;
-            if (IDTag.Contains("t"))
-            {
-                int productID = Convert.ToInt32(IDTag.Replace("t", string.Empty));
-                _POSController.PlacerholderReceipt.Transactions.Where(x => x.Product.ID == productID).First().Amount--;
-                _POSController.PlacerholderReceipt.Transactions.Where(x => x.Product.ID == productID).First().CheckIfGroupPrice();
-                _POSController.PlacerholderReceipt.UpdateTotalPrice();
-                UpdateReceiptList();
-            }
-            else if (Convert.ToInt32(IDTag) == Properties.Settings.Default.IcecreamProductID)
-            {
-                int productID = Convert.ToInt32(IDTag);
-                _POSController.PlacerholderReceipt.Transactions.Where(x => x.Product.ID == productID && (x.TotalPrice == (sender as ReceiptListItem).Price)).First().Amount--;
-                _POSController.PlacerholderReceipt.UpdateTotalPrice();
-                UpdateReceiptList();
-            }
-            else
-            {
-                int productID = Convert.ToInt32(IDTag);
-                _POSController.PlacerholderReceipt.Transactions.Where(x => x.Product.ID == productID).First().Amount--;
-                _POSController.PlacerholderReceipt.Transactions.Where(x => x.Product.ID == productID).First().CheckIfGroupPrice();
-                _POSController.PlacerholderReceipt.UpdateTotalPrice();
-                UpdateReceiptList();
-            }
+            _POSController.ChangeTransactionAmount(sender, e, -1);
+            UpdateReceiptList();
         }
 
         private void btn_DeleteProduct_Click(object sender, EventArgs e)
@@ -549,12 +566,6 @@ namespace P3_Projekt_WPF
             }
             _POSController.PlacerholderReceipt.UpdateTotalPrice();
             UpdateReceiptList();
-        }
-
-
-        private void TextBlock_TargetUpdated(object sender, DataTransferEventArgs e)
-        {
-
         }
 
         private void btn_AddProduct_Click(object sender, RoutedEventArgs e)
@@ -606,6 +617,8 @@ namespace P3_Projekt_WPF
             {
                 _settingsController.AddNewQuickButton(textBox_CreateQuickBtnName.Text, inputInt, grid_QuickButton.Width, grid_QuickButton.Height, btn_FastButton_click);
                 listView_QuickBtn.Items.Add(new FastButton() { Button_Name = textBox_CreateQuickBtnName.Text, ProductID = inputInt });
+                listView_QuickBtn.Items.Refresh();
+
             }
             else if (_settingsController.quickButtonList.Any(x => x.ProductID == inputInt))
             {
@@ -619,6 +632,7 @@ namespace P3_Projekt_WPF
             {
                 Utils.ShowErrorWarning($"Produkt med ID {inputInt} findes ikke på lageret");
             }
+            SaveQuickButtons();
         }
 
         private bool checkIfTooManyQuickButtons(int maximumButtons)
@@ -657,11 +671,10 @@ namespace P3_Projekt_WPF
             _settingsController.quickButtonList.RemoveAll(x => x.ProductID == Convert.ToUInt32((sender as Button).Tag));
 
             listView_QuickBtn.Items.RemoveAt(removeThis);
-
             listView_QuickBtn.Items.Refresh();
             UpdateGridQuickButtons();
+            SaveQuickButtons();
         }
-
 
         private CreateTemporaryProduct _createTempProduct;
         private int _tempID = -1;
@@ -700,7 +713,7 @@ namespace P3_Projekt_WPF
                 };
             }
             _createTempProduct.Activate();
-            _createTempProduct.Show();
+            _createTempProduct.ShowDialog();
         }
 
         private void btn_PictureFilePath_Click(object sender, RoutedEventArgs e)
@@ -836,7 +849,6 @@ namespace P3_Projekt_WPF
                 if (!char.IsDigit(e.Text, e.Text.Length - 1))
                     e.Handled = true;
             }
-
         }
 
         private void TextInputNoNumberWithComma(object sender, TextCompositionEventArgs e)
@@ -851,7 +863,7 @@ namespace P3_Projekt_WPF
 
         private void BuildInformationTable()
         {
-            InformationGrid.CanUserAddRows = false;
+            //Puts the analytical information, that is in settings under product tab
             foreach (var item in _storageController.InformationGridData)
             {
                 InformationGrid.Items.Add(new { title = item[0], value = item[1] });
@@ -1010,7 +1022,7 @@ namespace P3_Projekt_WPF
 
         private void btn_ChangePassword_Click(object sender, RoutedEventArgs e)
         {
-
+            //Allows you to reset password without having the password, if you have a text file on your desktop with the specified name, and the content says "reset"
             string desktopPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "//" + "resetpassword.txt";
 
             if (File.Exists(desktopPath) && System.IO.File.ReadAllText(desktopPath) == "reset")
@@ -1019,7 +1031,7 @@ namespace P3_Projekt_WPF
             }
             else
             {
-                var check = new AdminValidation();
+                AdminValidation check = new AdminValidation();
                 check.Closed += delegate
                 {
                     if (check.IsPasswordCorrect)
@@ -1042,7 +1054,6 @@ namespace P3_Projekt_WPF
         private void btn_Cash_Click(object sender, RoutedEventArgs e)
         {
             CompletePurchase(PaymentMethod_Enum.Cash);
-
         }
 
         private void btn_Dankort_Click(object sender, RoutedEventArgs e)
@@ -1247,8 +1258,15 @@ namespace P3_Projekt_WPF
                 };
                 _orderTransactionWindow.button_CreateProduct.Click += delegate
                 {
-                    AddProductDialogOpener(sender, e);
-                    _orderTransactionWindow.Close();
+                    int amountOfProducts = _storageController.ProductDictionary.Count;
+                    CreateProduct addProductWindow = new CreateProduct(_storageController, this);
+                    addProductWindow.Closed += delegate { ReloadProducts(); };
+                    addProductWindow.ShowDialog();
+                    if(_storageController.ProductDictionary.Count > amountOfProducts)
+                    {
+                        _orderTransactionWindow.txtBox_SearchField.Text = (Product.GetNextID() - 1).ToString();
+                        _orderTransactionWindow.ProductSearch();
+                    }
                 };
             }
             _orderTransactionWindow.Show();
