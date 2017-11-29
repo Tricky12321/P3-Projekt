@@ -101,8 +101,6 @@ namespace P3_Projekt_WPF
             }
         }
 
-
-
         public void SaveQuickButtons()
         {
             int[] QuickButtonsValues;
@@ -362,6 +360,7 @@ namespace P3_Projekt_WPF
                                                 $"Gruppe: {_storageController.GroupDictionary[(_productToEdit as Product).ProductGroupID].Name}\n" +
                                                 $"Mærke: {(_productToEdit as Product).Brand}\n" +
                                                 $"Pris: {_productToEdit.SalePrice}\n" +
+                                                $"Oprettet d. {(_productToEdit as Product).CreatedTime.ToShortDateString()}\n" +
                                                 $"Tilbudspris: {(_productToEdit as Product).DiscountPrice}\n" +
                                                 $"Indkøbspris: {(_productToEdit as Product).PurchasePrice}\n" +
                                                 $"{((_productToEdit as Product).StorageWithAmount.Count == 0 ? "Produktet er ikke på lager" : "Lagerstatus:")}";
@@ -382,6 +381,7 @@ namespace P3_Projekt_WPF
                 textBlock_ChosenProduct.Text = $"ID: {product.ID}\n" +
                                                 $"Navn: {product.Name}\n" +
                                                 $"Gruppe: {_storageController.GroupDictionary[product.ServiceProductGroupID].Name}\n" +
+                                                $"Oprettet d. {(_productToEdit as ServiceProduct).CreatedDate.ToShortDateString()}\n" +
                                                 $"{((product.SalePrice == product.GroupPrice) ? $"Pris: {product.SalePrice}\n" : $"Pris: {product.SalePrice}\nGruppepris: {product.GroupPrice}\nGruppe grænse: {product.GroupLimit}")}";
             }
             else
