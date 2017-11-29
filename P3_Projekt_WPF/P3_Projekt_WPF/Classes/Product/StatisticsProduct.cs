@@ -8,7 +8,7 @@ namespace P3_Projekt_WPF.Classes.Product
 {
     public class StatisticsProduct
     {
-        int Amount = 0;
-        decimal Revenue = 0;
+        public int Amount;
+        public decimal Revenue;
     }
 }
