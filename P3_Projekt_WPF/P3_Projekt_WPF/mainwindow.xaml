@@ -803,7 +803,7 @@
                                 <Label x:Name="label_SettingsProducts" FontSize="40" Content="Oversigt over tidligere slettede produkter" Padding="0" Margin="0,-5,0,5"></Label>
                                 <Button x:Name="btn_activate_product" Content="Genaktiver produkt" Background="#FFC5C5C5" Margin="0,0,12.143,17.143" Grid.Row="0" Style="{StaticResource Flat_Button}" Click="ActivateProduct" HorizontalAlignment="Right" Width="293" Height="50" VerticalAlignment="Bottom"/>
                                 <Button x:Name="btn_edit_product" Content="Rediger produkt" Background="#FFC5C5C5" Margin="0,0,350.143,17.143" Grid.Row="0" Style="{StaticResource Flat_Button}" Click="EditDisabledProduct" HorizontalAlignment="Right" Width="293" Height="50" VerticalAlignment="Bottom"/>
-                                <DataGrid IsReadOnly="True" SelectionMode="Single" Margin="0,50,0,80" Name="datagrid_deactivated_products">
+                                <DataGrid IsReadOnly="True" SelectionMode="Single" Margin="0,50,0,80" Name="datagrid_deactivated_products" CanUserAddRows="False">
                                     <DataGrid.Columns>
                                         <DataGridTextColumn Header="Type" x:Name="type" MinWidth="100" Width="Auto" Binding="{Binding type}" ClipboardContentBinding="{x:Null}"/>
                                         <DataGridTextColumn Header="ID" x:Name="id" MinWidth="100" Width="Auto" Binding="{Binding id}" ClipboardContentBinding="{x:Null}"/>
