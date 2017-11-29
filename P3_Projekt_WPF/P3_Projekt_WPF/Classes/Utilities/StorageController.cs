@@ -574,7 +574,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
 
         #region SearchAlgorithm
 
-        static List<SearchProduct> weigthedSearchList;
+        public List<SearchProduct> weigthedSearchList;
         public ConcurrentDictionary<int, SearchProduct> SearchForProduct(string searchString)
         {
             weigthedSearchList = new List<SearchProduct>();
@@ -775,7 +775,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
         public bool ContainsSearch(string searchString, BaseProduct product)
         {
             string StringToSearch = product.GetName().ToLower();
-            if (searchString.Length <= 4)
+            if (searchString.Length < 4)
             {
                 return false;
             }

@@ -84,12 +84,6 @@ namespace P3_Projekt_WPF
             LoadProductGrid(_storageController.AllProductsDictionary);
         }
 
-        private void showloadform()
-        {
-            LoadingScreen load = new LoadingScreen();
-            load.ShowDialog();
-        }
-
         private void KeyboardHook(object sender, KeyEventArgs e)
         {
             if (_ctrlDown && (e.Key != Key.LeftCtrl && e.Key != Key.RightCtrl))
@@ -1256,18 +1250,6 @@ namespace P3_Projekt_WPF
                 _orderTransactionWindow.Closing += delegate
                 {
                     _orderTransactionWindow = null;
-                };
-                _orderTransactionWindow.button_CreateProduct.Click += delegate
-                {
-                    int amountOfProducts = _storageController.ProductDictionary.Count;
-                    CreateProduct addProductWindow = new CreateProduct(_storageController, this);
-                    addProductWindow.Closed += delegate { ReloadProducts(); };
-                    addProductWindow.ShowDialog();
-                    if(_storageController.ProductDictionary.Count > amountOfProducts)
-                    {
-                        _orderTransactionWindow.txtBox_SearchField.Text = (Product.GetNextID() - 1).ToString();
-                        _orderTransactionWindow.ProductSearch();
-                    }
                 };
             }
             _orderTransactionWindow.Show();

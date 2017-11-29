@@ -26,7 +26,9 @@ namespace P3_Projekt_WPF
         int amount = 1;
         public CreateTemporaryProduct()
         {
-            InitializeComponent();   
+            InitializeComponent();
+            this.ResizeMode = ResizeMode.NoResize;
+
         }
 
         private void btn_PlusToReciept_Click(object sender, RoutedEventArgs e)

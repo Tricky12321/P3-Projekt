@@ -37,6 +37,7 @@ namespace P3_Projekt_WPF.Classes
                 /* Finder først storage room ved ID.
                  * Derefter bruger den StorageRoom delen som index,
                  * så man kan ændre Amount */
+
                 var StoreStorage = (Product as Product).StorageWithAmount.Where(x => x.Key == _storageRoomID).First();
                 (Product as Product).StorageWithAmount[StoreStorage.Key] += Amount;
                 (Product as Product).UpdateInDatabase();

@@ -21,6 +21,7 @@ namespace P3_Projekt_WPF
     {
         public AddIcecream()
         {
+            this.ResizeMode = ResizeMode.NoResize;
             InitializeComponent();
             this.KeyDown += new KeyEventHandler(KeyboardHook);
             textbox_Price.Focus();
