@@ -17,7 +17,7 @@
         <Button x:Name="button_MoveProduct" FontSize="24" Content="Flyt Produkt" Style="{StaticResource Flat_Button}" Background="Transparent" Margin="0,0,10,10" Height="50" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="176" Click="button_MoveProduct_Click"/>
         <Label x:Name="label_Produkt" FontSize="30" Padding="0" Content="Produkt" HorizontalAlignment="Left" Margin="10,70,0,0" VerticalAlignment="Top" Width="274" Height="40"/>
         <Label x:Name="label_ID" FontSize="30" Padding="0" Content="ID" HorizontalAlignment="Left" Margin="10,115,0,0" VerticalAlignment="Top" Width="40" RenderTransformOrigin="0.675,-0.875"/>
-        <ComboBox x:Name="comboBox_StorageRooms" SelectionChanged="comboBox_StorageRooms_SelectionChanged" FontSize="20" Background="White" BorderBrush="Black" BorderThickness="1" Margin="10,205,140,0" VerticalAlignment="Top" Height="40"/>
+        <ComboBox x:Name="comboBox_StorageRooms" DropDownClosed="comboBox_StorageRooms_DropDownClosed"  FontSize="20" Background="White" BorderBrush="Black" BorderThickness="1" Margin="10,205,140,0" VerticalAlignment="Top" Height="40"/>
         <Label x:Name="label_lagerrum" Padding="0" FontSize="30" Content="Fra Lagerrum" HorizontalAlignment="Left" Margin="10,160,0,0" VerticalAlignment="Top"/>
         <ComboBox x:Name="comboBox_Destination" FontSize="20" Margin="10,295,10,0" VerticalAlignment="Top" Height="40"/>
         <Label x:Name="label_LagerrumDestination" FontSize="30" Padding="0" Content="Lagerrums Destination" HorizontalAlignment="Left" Margin="10,250,0,0" VerticalAlignment="Top" Width="312" RenderTransformOrigin="0.484,-1.25"/>
@@ -64,6 +64,6 @@
         </TextBox>
         <Label x:Name="label_Amount" FontSize="30" Padding="0" Content="Antal produkter flyttet" HorizontalAlignment="Left" Margin="10,340,0,0" VerticalAlignment="Top" Width="312" RenderTransformOrigin="0.484,-1.25"/>
         <Label x:Name="label_AmountInStorage" Content="Antal:" Padding="0" FontSize="30" Margin="397,205,59,0" VerticalAlignment="Top"/>
-        <Label x:Name="label_ActualAmountInStorage" Content="0" Padding="0" FontSize="30" Margin="479,207,9,0" VerticalAlignment="Top"/>
+        <Label x:Name="label_ActualAmountInStorage" Content="0" Padding="0" FontSize="30" Margin="478,205,10,0" VerticalAlignment="Top"/>
     </Grid>
 </Window>

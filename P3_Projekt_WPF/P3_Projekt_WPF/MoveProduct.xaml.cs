@@ -174,13 +174,23 @@ namespace P3_Projekt_WPF
             listBox_SearchMoveProduct.Visibility = Visibility.Hidden;
         }
 
-        private void comboBox_StorageRooms_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        /*private void comboBox_StorageRooms_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            DisplayNumberInStorage();
+        }*/
+
+        private void DisplayNumberInStorage()
         {
             if (firstSearch)
             {
-                 sourceRoom = _storageController.StorageRoomDictionary.Where(x => x.Value.Name == comboBox_StorageRooms.Text).Select(x => x.Key).First();
+                sourceRoom = _storageController.StorageRoomDictionary.Where(x => x.Value.Name == comboBox_StorageRooms.Text).Select(x => x.Key).First();
                 label_ActualAmountInStorage.Content = _storageController.ProductDictionary[productID].StorageWithAmount[sourceRoom].ToString();
             }
+        }
+
+        private void comboBox_StorageRooms_DropDownClosed(object sender, EventArgs e)
+        {
+            DisplayNumberInStorage();
         }
     }
 }
