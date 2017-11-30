@@ -195,47 +195,34 @@ namespace P3_Projekt_WPF.Classes.Utilities
         private List<Thread> _queueThreads;
         private int _queueThreadsCount = 4;
 
-        private void HandleQueue()
-        {
-            HandleFirstQueue();
-
-        }
-
         private void HandleSecondQueue()
         {
             Row Data;
             int count = 0;
-            try
+            while (_storageStatusQueue.TryDequeue(out Data))
             {
-                while (_storageStatusQueue.TryDequeue(out Data))
-                {
 
-                    ProductDictionary[Convert.ToInt32(Data.Values[1])].StorageWithAmount.TryAdd(Convert.ToInt32(Data.Values[2]), Convert.ToInt32(Data.Values[3]));
-                    count++;
+                ProductDictionary[Convert.ToInt32(Data.Values[1])].StorageWithAmount.TryAdd(Convert.ToInt32(Data.Values[2]), Convert.ToInt32(Data.Values[3]));
+                count++;
 
-                }
-                while (_storageTransactionsQueue.TryDequeue(out Data))
-                {
-                    StorageTransaction StorageTrans = new StorageTransaction(Data, true);
-                    int ProductID = Convert.ToInt32(Data.Values[1]);
-                    int SourceID = Convert.ToInt32(Data.Values[4]);
-                    int DestinationID = Convert.ToInt32(Data.Values[5]);
-                    StorageTrans.SetInformation(StorageRoomDictionary[SourceID], StorageRoomDictionary[DestinationID], AllProductsDictionary[ProductID]);
-                    StorageTransactionDictionary.TryAdd(StorageTrans.ID, StorageTrans);
-                    count++;
-                }
-                while (_orderTransactionsQueue.TryDequeue(out Data))
-                {
-                    OrderTransaction OrderTrans = new OrderTransaction(Data, true);
-                    int ProductID = Convert.ToInt32(Data.Values[1]);
-                    OrderTrans.SetInformation(AllProductsDictionary[ProductID]);
-                    OrderTransactionDictionary.TryAdd(OrderTrans.ID, OrderTrans);
-                    count++;
-                }
             }
-            catch (Exception)
+            while (_storageTransactionsQueue.TryDequeue(out Data))
             {
-                HandleSecondQueue();
+                StorageTransaction StorageTrans = new StorageTransaction(Data, true);
+                int ProductID = Convert.ToInt32(Data.Values[1]);
+                int SourceID = Convert.ToInt32(Data.Values[4]);
+                int DestinationID = Convert.ToInt32(Data.Values[5]);
+                StorageTrans.SetInformation(StorageRoomDictionary[SourceID], StorageRoomDictionary[DestinationID], AllProductsDictionary[ProductID]);
+                StorageTransactionDictionary.TryAdd(StorageTrans.ID, StorageTrans);
+                count++;
+            }
+            while (_orderTransactionsQueue.TryDequeue(out Data))
+            {
+                OrderTransaction OrderTrans = new OrderTransaction(Data, true);
+                int ProductID = Convert.ToInt32(Data.Values[1]);
+                OrderTrans.SetInformation(AllProductsDictionary[ProductID]);
+                OrderTransactionDictionary.TryAdd(OrderTrans.ID, OrderTrans);
+                count++;
             }
             // Hvis der var elementer der ikke er blevet oprettet efter første gennemgang, så køres loopet igen. 
             if (count > 0)
@@ -244,7 +231,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
             }
             else
             {
-                return;
+                HandleSecondQueue();
             }
         }
 
@@ -313,7 +300,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
             _queueThreads = new List<Thread>();
             for (int i = 0; i < _queueThreadsCount - 1; i++)
             {
-                _queueThreads.Add(new Thread(new ThreadStart(HandleQueue)));
+                _queueThreads.Add(new Thread(new ThreadStart(HandleFirstQueue)));
             }
 
             if (!local)
@@ -370,7 +357,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
             {
                 thread.Start();
             }
-            HandleQueue();
+            HandleFirstQueue();
 
         }
 
