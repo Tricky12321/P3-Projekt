@@ -172,8 +172,9 @@ namespace P3_Projekt_WPF
 
         private void btn_PlusAmount_Click(object sender, RoutedEventArgs e)
         {
-            _amount = Int32.Parse(textBox_ProductAmount.Text);
-            if (_amount < 10000)
+            Int32.TryParse(textBox_ProductAmount.Text, out _amount);
+
+            if (_amount < 9999)
             {
                 textBox_ProductAmount.Text = (++_amount).ToString();
             }
@@ -181,7 +182,8 @@ namespace P3_Projekt_WPF
 
         private void btn_MinusAmount_Click(object sender, RoutedEventArgs e)
         {
-            _amount = Int32.Parse(textBox_ProductAmount.Text);
+            Int32.TryParse(textBox_ProductAmount.Text, out _amount);
+
             if (_amount > 1)
             {
                 textBox_ProductAmount.Text = (--_amount).ToString();
@@ -203,14 +205,16 @@ namespace P3_Projekt_WPF
             }
             else if(textBox_Supplier.Text != "")
             {
-                if(Int32.Parse(textBox_ProductAmount.Text) > 0)
+                int parsevalue = 0;
+                Int32.TryParse(textBox_ProductAmount.Text, out parsevalue);
+                if(parsevalue > 0)
                 {
                     if (!(product as Product).StorageWithAmount.Keys.Contains(_storageController.StorageRoomDictionary.Where(x => x.Value.Name == comboBox_StorageRooms.Text).Select(x => x.Key).First()))
                     {
                         product.StorageWithAmount.TryAdd(_storageController.StorageRoomDictionary.Where(x => x.Value.Name == comboBox_StorageRooms.Text).Select(x => x.Key).First(), 0);
                         product.UploadToDatabase();
                     }
-                    OrderTransaction orderTransaction = new OrderTransaction(product, Int32.Parse(textBox_ProductAmount.Text), textBox_Supplier.Text, _storageController.StorageRoomDictionary.Where(x => x.Value.Name == comboBox_StorageRooms.Text).Select(x => x.Key).First());
+                    OrderTransaction orderTransaction = new OrderTransaction(product, parsevalue, textBox_Supplier.Text, _storageController.StorageRoomDictionary.Where(x => x.Value.Name == comboBox_StorageRooms.Text).Select(x => x.Key).First());
                     orderTransaction.Execute();
                     orderTransaction.UploadToDatabase();
                     this.Close();

@@ -38,7 +38,7 @@ namespace P3_Projekt_WPF
         {
             this.ResizeMode = ResizeMode.NoResize;
 
-            tempProducts = _storageController.TempProductList.Where(x => x.Value.Resolved == false).ToList();
+            tempProducts = _storageController.TempProductDictionary.Where(x => x.Value.Resolved == false).ToList();
             button_Merge.IsEnabled = false;
             listview_ProductsToMerge.SelectionMode = SelectionMode.Single;
             foreach (var tempProductsToListView in tempProducts)
