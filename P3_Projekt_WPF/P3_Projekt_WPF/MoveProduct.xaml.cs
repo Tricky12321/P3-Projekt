@@ -155,16 +155,21 @@ namespace P3_Projekt_WPF
 
         private void btn_PlusAmount_Click(object sender, RoutedEventArgs e)
         {
-            ++_amount;
-            textBox_ProductAmount.Text = _amount.ToString();
+            Int32.TryParse(textBox_ProductAmount.Text, out _amount);
+
+            if (_amount < 9999)
+            {
+                textBox_ProductAmount.Text = (++_amount).ToString();
+            }
         }
 
         private void btn_MinusAmount_Click(object sender, RoutedEventArgs e)
         {
+            Int32.TryParse(textBox_ProductAmount.Text, out _amount);
+
             if (_amount > 1)
             {
-                --_amount;
-                textBox_ProductAmount.Text = _amount.ToString();
+                textBox_ProductAmount.Text = (--_amount).ToString();
             }
         }
 
@@ -178,10 +183,20 @@ namespace P3_Projekt_WPF
                 product.StorageWithAmount.TryAdd(_storageController.StorageRoomDictionary.Where(x => x.Value.Name == comboBox_Destination.Text).Select(x => x.Key).First(), 0);
                 product.UpdateInDatabase();
             }
-            StorageTransaction storageTransaction = new StorageTransaction(product, int.Parse(textBox_ProductAmount.Text), sourceRoom, destinationRoom, _storageController.StorageRoomDictionary);
-            storageTransaction.Execute();
-            storageTransaction.UploadToDatabase();
-            this.Close();
+            int parsevalue;
+            Int32.TryParse(textBox_ProductAmount.Text, out parsevalue);
+            if(textBox_ProductAmount.Text != "")
+            {
+                StorageTransaction storageTransaction = new StorageTransaction(product, parsevalue, sourceRoom, destinationRoom, _storageController.StorageRoomDictionary);
+                storageTransaction.Execute();
+                storageTransaction.UploadToDatabase();
+                this.Close();
+            }
+            else
+            {
+                textBox_ProductAmount.BorderBrush = Brushes.Red;
+            }
+            
         }
 
 

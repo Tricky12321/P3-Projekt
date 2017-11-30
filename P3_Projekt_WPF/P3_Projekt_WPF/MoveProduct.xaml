@@ -55,7 +55,7 @@
         <Label x:Name="label_ProduktID" FontSize="30" Padding="0" Content="" HorizontalAlignment="Left" Margin="142,115,0,0" VerticalAlignment="Top"/>
         <Button x:Name="btn_PlusAmount" Content="+" HorizontalAlignment="Left" Margin="11,0,0,10" Width="50" Style="{StaticResource Flat_Button}" RenderTransformOrigin="-0.486,0.333" Height="50" VerticalAlignment="Bottom" Click="btn_PlusAmount_Click" FontSize="30"/>
         <Button x:Name="btn_MinusAmount" Content="-" HorizontalAlignment="Left" Margin="71,0,0,10" Width="50" Style="{StaticResource Flat_Button}" FontSize="30" Click="btn_MinusAmount_Click" Height="50" VerticalAlignment="Bottom"/>
-        <TextBox x:Name="textBox_ProductAmount"  TextCompositionManager.PreviewTextInput="TextInputNoNumber" Padding="10,0,0,0" HorizontalAlignment="Left" Margin="131,0,0,10" TextWrapping="Wrap" Text="1" Width="70" MaxLines="1" MaxLength="2" FontSize="33" Height="50" VerticalAlignment="Bottom">
+        <TextBox x:Name="textBox_ProductAmount"  TextCompositionManager.PreviewTextInput="TextInputNoNumber" Padding="10,0,0,0" HorizontalAlignment="Left" Margin="131,0,0,10" TextWrapping="Wrap" Text="1" Width="102" MaxLines="1" MaxLength="4" FontSize="33" Height="50" VerticalAlignment="Bottom">
             <TextBox.Resources>
                 <Style TargetType="{x:Type Border}">
                     <Setter Property="CornerRadius" Value="10"/>
