@@ -83,7 +83,22 @@ namespace P3_Projekt_WPF
                         }
                     }
                 }
-            }            
+            }
+            else if (_storageController.DisabledProducts.TryGetValue(Int32.Parse(txtBox_SearchField.Text), out product))
+            {
+                if (_storageController.DisabledProducts[Int32.Parse(txtBox_SearchField.Text)].ID.ToString() == txtBox_SearchField.Text)
+                {
+                    MessageBox.Show(($"Produkt med ID: {txtBox_SearchField.Text} er ikke aktiveret!\nGå til indstillger -> produkter for at genaktivere dette produkt"), "Produkt ikke fundet", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    this.Topmost = true;
+                    Keyboard.ClearFocus();
+                    txtBox_SearchField.Text = "";
+                    label_ProduktID.Content = "";
+                    label_ProduktProdukt.Content = "";
+                    textBox_Supplier.Text = "";
+                    product = null;
+                }
+            }
+
             else
             {
                 MessageBox.Show(($"Produkt med ID: {txtBox_SearchField.Text} findes ikke!"), "Produkt ikke fundet", MessageBoxButton.OK, MessageBoxImage.Warning);

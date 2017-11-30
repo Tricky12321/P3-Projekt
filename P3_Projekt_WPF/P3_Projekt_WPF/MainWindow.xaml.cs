@@ -1106,7 +1106,7 @@ namespace P3_Projekt_WPF
 
                 if (PayWithAmount.Text.Length == 0)
                 {
-                    PaymentAmount = _POSController.PlacerholderReceipt.TotalPrice;
+                    PaymentAmount = _POSController.PlacerholderReceipt.TotalPrice - _POSController.PlacerholderReceipt.PaidPrice;
                 }
                 else
                 {
@@ -1135,6 +1135,7 @@ namespace P3_Projekt_WPF
                     {
                         label_TotalPrice.Content = "Retur: " + (_POSController.PlacerholderReceipt.PaidPrice - _POSController.PlacerholderReceipt.TotalPrice).ToString().Replace('.', ',').Replace('-', ' ');
                     }
+                    TotalPriceToPay = -1m;
                 }
             }
         }
