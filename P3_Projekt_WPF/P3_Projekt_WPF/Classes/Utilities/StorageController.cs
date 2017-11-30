@@ -719,7 +719,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
         {
             foreach (TempProduct tempproduct in TempTempProductList)
             {
-                TempProductList.TryAdd(tempproduct.ID, tempproduct);
+                TempProductDictionary.TryAdd(tempproduct.ID, tempproduct);
             }
             TempTempProductList.Clear();
         }
