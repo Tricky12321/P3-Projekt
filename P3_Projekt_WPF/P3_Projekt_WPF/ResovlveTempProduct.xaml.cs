@@ -105,8 +105,9 @@ namespace P3_Projekt_WPF
             }
             else
             {
+                Label_MergeInfo.Background = Brushes.Red;
                 Label_MergeInfo.Content = "Produktet ikke på lager,\nkan ikke rette midlertidigt produkt!";
-
+                Label_MergeInfo.Background = Brushes.Black;
             }
         }
 

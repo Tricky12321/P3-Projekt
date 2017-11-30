@@ -85,7 +85,7 @@
                     </Style>
                 </TextBlock.Style>
             </TextBlock>
-            <Label x:Name="Label_MergeInfo" Padding="0" HorizontalAlignment="Left" Margin="10,605,0,0" VerticalAlignment="Top" Height="55" Width="389" FontSize="20"/>
+            <Label x:Name="Label_MergeInfo" Padding="0" Margin="10,0,193,7" FontSize="20" Height="55" VerticalAlignment="Bottom"/>
 
         </Grid>
 
