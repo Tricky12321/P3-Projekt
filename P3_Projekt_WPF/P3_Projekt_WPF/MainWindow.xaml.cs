@@ -1094,9 +1094,6 @@ namespace P3_Projekt_WPF
             text_FullReceiptDiscount.Text = string.Empty;
         }
 
-
-        
-
         AdminValidation adminValid;
         private void InitAdminLogin()
         {
