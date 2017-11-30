@@ -1391,9 +1391,10 @@ namespace P3_Projekt_WPF
 
         private void StorageTransactionsHistory()
         {
+            listview_SettingsStorage.Height = 500;
             foreach (var ordertrans in orderTransList)
             {
-                //listview_SettingsStorage.Items.Add(new { Recieved = ordertrans.Product.});
+               listview_SettingsStorage.Items.Add(new { Recieved = ordertrans.Product});
             }
         }
 
@@ -1415,6 +1416,10 @@ namespace P3_Projekt_WPF
             }
             _storageController.TempTempProductList.Clear();
         }
-        
+
+        private void settingsTab_GotFocus(object sender, RoutedEventArgs e)
+        {
+            StorageTransactionsHistory();
+        }
     }
 }

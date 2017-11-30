@@ -555,7 +555,7 @@
                         </TabItem>
 
 
-                        <TabItem Header="Lager" x:Name="settingsTab" Width="300" Height="70" Margin="0">
+                        <TabItem Header="Lager" x:Name="settingsTab" Width="300" Height="70" Margin="0" GotFocus="settingsTab_GotFocus">
                             <Grid Margin="0,0,0,0">
 
 
