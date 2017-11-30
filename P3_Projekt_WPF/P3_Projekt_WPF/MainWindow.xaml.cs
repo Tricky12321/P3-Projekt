@@ -33,7 +33,8 @@ namespace P3_Projekt_WPF
         private POSController _POSController;
         private StatisticsController _statisticsController;
         private Grid productGrid = new Grid();
-
+        List<OrderTransaction> orderTransList = new List<OrderTransaction>(); 
+        List<StorageTransaction> storageTransList = new List<StorageTransaction>(); 
         private Dictionary<int, ProductControl> _productControlDictionary = new Dictionary<int, ProductControl>();
         private bool _ctrlDown = false;
         public static bool runLoading = true;
@@ -54,6 +55,8 @@ namespace P3_Projekt_WPF
             OutputList.Add("[3. TIMER] took " + LoadingTimer.ElapsedMilliseconds + "ms");
             InitComponents();
             OutputList.Add("[4. TIMER] took " + LoadingTimer.ElapsedMilliseconds + "ms");
+            orderTransList = StorageController.GetAllOrderTransactions();
+            storageTransList = StorageController.GetAllStorageTransactions();
             this.KeyDown += new KeyEventHandler(KeyboardHook);
             this.KeyDown += new KeyEventHandler(CtrlHookDown);
             this.KeyDown += new KeyEventHandler(EnterKeyPressedSearch);
@@ -1444,18 +1447,10 @@ namespace P3_Projekt_WPF
 
         private void StorageTransactionsHistory()
         {
-            List<OrderTransaction> orderTransList = StorageController.GetAllOrderTransactions();
             foreach (var ordertrans in orderTransList)
             {
                 //listview_SettingsStorage.Items.Add(new { Recieved = ordertrans.Product.});
             }
-            List<StorageTransaction> storageTransList = StorageController.GetAllStorageTransactions();
-
-        }
-
-        private void settingsTab_MouseUp(object sender, MouseButtonEventArgs e)
-        {
-            StorageTransactionsHistory();
         }
 
         private void button_DeleteFulReceiptDiscount_Click(object sender, EventArgs e)
