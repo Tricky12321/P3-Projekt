@@ -87,14 +87,14 @@ namespace P3_Projekt_WPF.Classes
         public override void UploadToDatabase()
         {
             string sql = "INSERT INTO `temp_products` (`id`, `sale_price`, `description`, `resolved`, `resolved_product_id`)"+
-                $"VALUES (NULL, '{SalePrice}', '{GetName()}', '{Convert.ToInt32(Resolved)}', '{ResolvedProductID}');";
+                $"VALUES (NULL, '{SalePrice.ToString().Replace(',', '.')}', '{GetName()}', '{Convert.ToInt32(Resolved)}', '{ResolvedProductID}');";
             Mysql.RunQuery(sql);
         }
 
         public override void UpdateInDatabase()
         {
             string sql = $"UPDATE `temp_products` SET " +
-                $"`sale_price` = '{SalePrice}'," +
+                $"`sale_price` = '{SalePrice.ToString().Replace(',', '.')}'," +
                 $"`description` = '{GetName()}'," +
                 $"`resolved` = '{Convert.ToInt32(Resolved)}'," +
                 $"`resolved_product_id` = '{ResolvedProductID}' " +
