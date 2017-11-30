@@ -33,8 +33,6 @@ namespace P3_Projekt_WPF
         private POSController _POSController;
         private StatisticsController _statisticsController;
         private Grid productGrid = new Grid();
-        List<OrderTransaction> orderTransList = new List<OrderTransaction>(); 
-        List<StorageTransaction> storageTransList = new List<StorageTransaction>(); 
         private Dictionary<int, ProductControl> _productControlDictionary = new Dictionary<int, ProductControl>();
         private bool _ctrlDown = false;
         public static bool runLoading = true;
@@ -131,7 +129,7 @@ namespace P3_Projekt_WPF
             Settings.QuickButton13 = QuickButtonsCount >= 14 ? QuickButtons[12].ToString() : null;
             Settings.QuickButton14 = QuickButtonsCount >= 15 ? QuickButtons[13].ToString() : null;
             Settings.Save();
-            
+
         }
 
         public void LoadQuickButtons()
@@ -248,7 +246,7 @@ namespace P3_Projekt_WPF
             {
                 AddTransactionToReceipt(transaction);
             }
-            label_TotalPrice.Content = _POSController.PlacerholderReceipt.TotalPrice.ToString().Replace('.', ',');
+            label_TotalPrice.Content = Math.Round(_POSController.PlacerholderReceipt.TotalPrice, 2).ToString().Replace('.', ',');
             btn_discount.IsEnabled = true;
         }
 
@@ -533,6 +531,7 @@ namespace P3_Projekt_WPF
                 {
                     item.canvas_Discount.Visibility = Visibility.Visible;
                     item.textBlock_DiscountAmount.Text = '-' + Math.Round((transaction.Price - transaction.DiscountPrice) * transaction.Amount, 2).ToString() + " : Ny Pris: " + Math.Round(transaction.DiscountPrice * transaction.Amount, 2).ToString();
+                    item.textBlock_DiscountAmount.Foreground = Brushes.Red;
                 }
                 else
                 {
@@ -886,7 +885,8 @@ namespace P3_Projekt_WPF
             {
                 _resolveTempProduct = new ResovleTempProduct(_storageController);
                 _resolveTempProduct.Show();
-                _resolveTempProduct.Closed += delegate {
+                _resolveTempProduct.Closed += delegate
+                {
                     _resolveTempProduct = null;
                 };
             }
@@ -1072,6 +1072,68 @@ namespace P3_Projekt_WPF
         private void btn_MobilePay_Click(object sender, RoutedEventArgs e)
         {
             label_TotalPrice.Content = _POSController.CompletePurchase(PaymentMethod_Enum.MobilePay, PayWithAmount, listView_Receipt);
+        }
+            CompletePurchase(PaymentMethod_Enum.MobilePay);
+        }
+
+        private int _receiptID = 0;
+        private decimal TotalPriceToPay = -1m;
+        public void CompletePurchase(PaymentMethod_Enum PaymentMethod)
+        {
+            if (listView_Receipt.HasItems)
+            {
+                if (TotalPriceToPay == -1m)
+                {
+                    TotalPriceToPay = _POSController.PlacerholderReceipt.GetTotalDiscountPrice();
+                }
+
+                if (_POSController.PlacerholderReceipt.TotalPriceToPay == -1m)
+                {
+                    _POSController.PlacerholderReceipt.TotalPriceToPay = TotalPriceToPay;
+                }
+                decimal PaymentAmount;
+
+                if (PayWithAmount.Text.Length == 0)
+                {
+                    PaymentAmount = TotalPriceToPay;
+                }
+                else
+                {
+                    PaymentAmount = Convert.ToDecimal(PayWithAmount.Text);
+                }
+
+                if (_receiptID == 0)
+                {
+                    _receiptID = Receipt.GetNextID();
+                }
+
+                Payment NewPayment = new Payment(_receiptID, PaymentAmount, PaymentMethod);
+                _POSController.PlacerholderReceipt.Payments.Add(NewPayment);
+
+                PayWithAmount.Text = string.Empty;
+                TotalPriceToPay -= NewPayment.Amount;
+                label_TotalPrice.Content = $"{TotalPriceToPay}";
+                
+                if (_POSController.PlacerholderReceipt.PaidPrice >= _POSController.PlacerholderReceipt.GetTotalDiscountPrice())
+                {
+                    SaleTransaction.SetStorageController(_storageController);
+
+                    //_POSController.PlacerholderReceipt.PaymentMethod = PaymentMethod;
+                    Thread NewThread = new Thread(new ThreadStart(_POSController.ExecuteReceipt));
+                    NewThread.Name = "ExecuteReceipt Thread";
+                    NewThread.Start();
+                    listView_Receipt.Items.Clear();
+                    button_DeleteFulReceiptDiscount.Visibility = Visibility.Hidden;
+                    image_DeleteFullReceiptDiscount.Visibility = Visibility.Hidden;
+                    text_FullReceiptDiscount.Text = string.Empty;
+
+                    if (_POSController.PlacerholderReceipt.PaidPrice > _POSController.PlacerholderReceipt.TotalPrice)
+                    {
+                        label_TotalPrice.Content = "Retur: " + (_POSController.PlacerholderReceipt.PaidPrice - _POSController.PlacerholderReceipt.GetTotalDiscountPrice()).ToString().Replace('.', ',');
+                    }
+                    TotalPriceToPay = -1m;
+                }
+            }
         }
 
         AdminValidation adminValid;
@@ -1267,7 +1329,7 @@ namespace P3_Projekt_WPF
             _POSController.PlacerholderReceipt.DiscountOnFullReceipt = 0m;
             if (textBox_discount.Text.Contains('%'))
             {
-                decimal percentage = Convert.ToDecimal(textBox_discount.Text.Remove(textBox_discount.Text.Length - 1, 1));
+                decimal percentage = Convert.ToDecimal(textBox_discount.Text.Replace("%", string.Empty));
                 _POSController.PlacerholderReceipt.DiscountOnFullReceipt = _POSController.PlacerholderReceipt.TotalPrice * (percentage / 100m);
             }
             else
@@ -1392,9 +1454,10 @@ namespace P3_Projekt_WPF
         private void StorageTransactionsHistory()
         {
             listview_SettingsStorage.Height = 500;
-            foreach (var ordertrans in orderTransList)
+            foreach (var ordertrans in _storageController.OrderTransactionDictionary)
             {
-               listview_SettingsStorage.Items.Add(new { Recieved = ordertrans.Product});
+                var product = _storageController.ProductDictionary[ordertrans.Value.Product.ID];
+               listview_SettingsStorage.Items.Add(new { Recieved = product.Name});
             }
         }
 

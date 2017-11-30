@@ -54,16 +54,17 @@ namespace P3_Projekt_WPF.Classes
             UpdateNumberOfProducts();
         }
 
+        public decimal GetTotalDiscountPrice()
+        {
+            return TotalPrice - DiscountOnFullReceipt;
+        }
+
         public void UpdateTotalPrice()
         {
             TotalPrice = 0;
             foreach (SaleTransaction transaction in Transactions)
             {
-                if (transaction.DiscountBool)
-                {
-
-                }
-                TotalPrice += transaction.TotalPrice;
+                TotalPrice += transaction.DiscountBool ? transaction.DiscountPrice * transaction.Amount : transaction.TotalPrice;
             }
             TotalPrice -= DiscountOnFullReceipt;
         }
@@ -117,10 +118,10 @@ namespace P3_Projekt_WPF.Classes
 
             if (inputDiscount.Contains('%'))
             {
-                decimal percentage = Convert.ToDecimal(inputDiscount.Remove(inputDiscount.Length - 1, 1));
-                decimal priceInDiscountPrProduct = currentSaleTransaction.Product.SalePrice * (percentage / 100m);
-                currentSaleTransaction.DiscountPrice = currentSaleTransaction.Price - currentSaleTransaction.Price * (percentage / 100m);
-                
+                decimal percentage = Convert.ToDecimal(inputDiscount.Replace("%", string.Empty));
+                decimal priceInDiscountPrProduct = currentSaleTransaction.Price * (percentage / 100m);
+                currentSaleTransaction.DiscountPrice = currentSaleTransaction.Price - priceInDiscountPrProduct;
+
                 //currentSaleTransaction.Product.DiscountPrice = currentSaleTransaction.Product.SalePrice - priceInDiscountPrProduct;
             }
             else
@@ -135,23 +136,28 @@ namespace P3_Projekt_WPF.Classes
 
         public void Execute()
         {
-            UploadToDatabase();
             UpdateNumberOfProducts();
 
             if (DiscountOnFullReceipt > 0m)
             {
+                decimal productDiscountPart = DiscountOnFullReceipt / NumberOfProducts;
                 foreach (SaleTransaction transaction in Transactions)
                 {
+                    transaction.DiscountPrice = transaction.DiscountBool ? transaction.DiscountPrice - productDiscountPart : transaction.Price - productDiscountPart;
                     transaction.DiscountBool = true;
-                    transaction.DiscountPrice = transaction.Product.DiscountPrice * transaction.Amount;
-                    transaction.Product.DiscountBool = true;
-                    transaction.Product.DiscountPrice = DiscountOnFullReceipt / NumberOfProducts;
                 }
             }
             foreach (SaleTransaction transaction in Transactions)
             {
+                if (transaction.DiscountBool)
+                {
+                    transaction.Price = transaction.DiscountPrice;
+                }
+
                 transaction.Execute();
             }
+
+            UploadToDatabase();
             //ReceiptPrinter printReceipt = new ReceiptPrinter(this);
         }
 

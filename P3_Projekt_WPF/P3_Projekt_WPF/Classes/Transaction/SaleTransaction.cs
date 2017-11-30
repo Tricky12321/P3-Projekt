@@ -18,6 +18,9 @@ namespace P3_Projekt_WPF.Classes
         public decimal TotalPrice => Price * Amount;
         private static StorageController _storageController = null;
         public string SoldBy = "";
+
+        const int shopID = 1;
+
         public SaleTransaction(BaseProduct product, int amount, int receiptID) : base(product, amount)
         {
             ReceiptID = receiptID;
@@ -53,30 +56,31 @@ namespace P3_Projekt_WPF.Classes
             {
                 Product prod = (Product as Product);
                 prod.GetStorageStatus();
-                if (!prod.StorageWithAmount.ContainsKey(1))
+                if (!prod.StorageWithAmount.ContainsKey(shopID))
                 {
-                    prod.StorageWithAmount.TryAdd(1, -Amount);
+                    prod.StorageWithAmount.TryAdd(shopID, -Amount);
                 }
                 else
                 {
-                    (Product as Product).StorageWithAmount[1] -= Amount;
+                    (Product as Product).StorageWithAmount[shopID] -= Amount;
                 }
                 if (prod.StorageWithAmount.Where(x => x.Value < 0).Count() > 0)
                 {
                     // Hvis det er nogle storageroom med negativ værdi
                     StringBuilder Text = new StringBuilder();
 
-                    Text.Append("Produktet: " + prod.Name + "'s lager status er korrupt.\n");
-                    foreach (var item in prod.StorageWithAmount)
+                    Text.Append("Produktet: " + prod.Name + "'s lagerstatus har fejl!\n");
+
+                    foreach (KeyValuePair<int,int> strorageWithAmount in prod.StorageWithAmount)
                     {
                         string AppendString = "";
-                        if (item.Value < 0)
+                        if (strorageWithAmount.Value < 0)
                         {
-                            AppendString = " **** - "+ _storageController.StorageRoomDictionary[item.Key].Name + " har " + item.Value.ToString() + " stk\n";
+                            AppendString = " **** - "+ _storageController.StorageRoomDictionary[strorageWithAmount.Key].Name + " har " + strorageWithAmount.Value.ToString() + " stk\n";
                         }
                         else
                         {
-                            AppendString = " - " + _storageController.StorageRoomDictionary[item.Key].Name + " har " + item.Value.ToString() + " stk\n";
+                            AppendString = " - " + _storageController.StorageRoomDictionary[strorageWithAmount.Key].Name + " har " + strorageWithAmount.Value.ToString() + " stk\n";
                         }
                         Text.Append(AppendString);
                     }
