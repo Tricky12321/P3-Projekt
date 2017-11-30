@@ -206,7 +206,7 @@ namespace P3_Projekt_WPF.Classes
             int ID = GetNextID();
             this.ID = ID;
             string sql = "INSERT INTO `receipt` (`id`, `number_of_products`, `total_price`)" +
-                $" VALUES (NULL, '{NumberOfProducts}', '{TotalPrice}')";
+                $" VALUES (NULL, '{NumberOfProducts}', '{TotalPrice.ToString().Replace(',','.')}')";
             Mysql.RunQuery(sql);
             foreach (var item in Transactions)
             {
@@ -223,7 +223,7 @@ namespace P3_Projekt_WPF.Classes
         {
             string sql = $"UPDATE `receipt` SET " +
                 $"`number_of_products` = '{NumberOfProducts}'," +
-                $"`total_price` = '{TotalPrice}'," +
+                $"`total_price` = '{TotalPrice.ToString().Replace(',', '.')}'," +
                 $"`datetime` = FROM_UNIXTIME('{Utils.GetUnixTime(Date)}') " +
                 $"WHERE `id` = {ID};";
             Mysql.RunQuery(sql);
