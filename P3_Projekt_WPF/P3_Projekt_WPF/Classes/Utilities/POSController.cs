@@ -163,12 +163,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
                     TotalPriceToPay = PlacerholderReceipt.GetTotalDiscountPrice();
                 }
 
-                if (PlacerholderReceipt.TotalPriceToPay == -1m)
-                {
-                    PlacerholderReceipt.TotalPriceToPay = TotalPriceToPay;
-                }
                 decimal PaymentAmount;
-
                 if (PayWithAmount.Text.Length == 0)
                 {
                     PaymentAmount = TotalPriceToPay;
@@ -198,6 +193,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
                     Thread NewThread = new Thread(new ThreadStart(ExecuteReceipt));
                     NewThread.Name = "ExecuteReceipt Thread";
                     NewThread.Start();
+                    _storageController.TempProductToDictionary();
                     ReceiptListView.Items.Clear();
 
                     TotalPriceToPay = -1m;
@@ -209,11 +205,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
                 }
                 return TotalPriceToPay.ToString();
             }
-            else
-            {
-                return string.Empty;
-            }
+            return string.Empty;
         } 
-
     }
 }
