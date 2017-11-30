@@ -71,7 +71,7 @@ namespace P3_Projekt_WPF
             ConcurrentDictionary<int, SearchProduct> productSearchResults = _storageController.SearchForProduct(txtBox_SearchField.Text);
             listBox_SearchMoveProduct.Items.Clear();
             var searchResults = productSearchResults.Values.OrderByDescending(x => x.BrandMatch + x.GroupMatch + x.NameMatch);
-            if (searchResults.Count() == 0)
+            if (searchResults.Count() > 0)
             {
                 foreach (SearchProduct product in searchResults)
                 {
@@ -90,7 +90,14 @@ namespace P3_Projekt_WPF
             }
             else
             {
-                MessageBox.Show("I ");
+                listBox_SearchMoveProduct.Visibility = Visibility.Hidden;
+                MessageBox.Show(Application.Current.MainWindow, ($"Produkt med ID: {txtBox_SearchField.Text} findes ikke!"), "Produkt ikke fundet", MessageBoxButton.OK, MessageBoxImage.Warning);
+                this.Topmost = true;
+                Keyboard.ClearFocus();
+                comboBox_StorageRooms.Items.Clear();
+                label_ProduktID.Content = "";
+                label_ActualAmountInStorage.Content = "";
+                label_produktProdukt.Content = "";
             }
         }
 
