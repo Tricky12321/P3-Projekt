@@ -30,6 +30,7 @@ namespace P3_Projekt_WPF
         private bool firstSearch = false;
         private int sourceRoom = 0;
         private Product disabledproduct;
+        private int parsevalue;
 
         public MoveProduct(StorageController storageController, POSController posController)
         {
@@ -90,9 +91,9 @@ namespace P3_Projekt_WPF
                 }
             }
             
-            else if (_storageController.DisabledProducts.TryGetValue(Int32.Parse(txtBox_SearchField.Text), out disabledproduct))
+            else if (_storageController.DisabledProducts.TryGetValue(parsevalue, out disabledproduct))
             {
-                if (_storageController.DisabledProducts[Int32.Parse(txtBox_SearchField.Text)].ID.ToString() == txtBox_SearchField.Text)
+                if (_storageController.DisabledProducts[parsevalue].ID.ToString() == txtBox_SearchField.Text)
                 {
                     MessageBox.Show(($"Produkt med ID: {txtBox_SearchField.Text} er ikke aktiveret!\nGå til indstillger -> produkter for at genaktivere dette produkt"), "Produkt ikke fundet", MessageBoxButton.OK, MessageBoxImage.Warning);
                     this.Topmost = true;

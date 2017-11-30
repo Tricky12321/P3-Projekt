@@ -14,6 +14,8 @@ namespace P3_Projekt_WPF.Classes
         private StorageRoom _source;
         private StorageRoom _destination;
 
+        public int ID => _id;
+
         public StorageTransaction(Product product, int amount, int sourceInt, int destinationInt, ConcurrentDictionary<int, StorageRoom> storageWithAmountDictionary) : base(product, amount)
         {
             _source = storageWithAmountDictionary[sourceInt];
