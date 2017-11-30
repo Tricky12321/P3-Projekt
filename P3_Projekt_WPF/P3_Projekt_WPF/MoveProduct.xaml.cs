@@ -120,7 +120,6 @@ namespace P3_Projekt_WPF
                 comboBox_Destination.IsEnabled = true;
                 button_MoveProduct.IsEnabled = true;
                 comboBox_StorageRooms.SelectedIndex = 0;
-                //label_ActualAmountInStorage.Content = product.StorageWithAmount.Where(x => x.Key == _storageController.StorageRoomDictionary.Where(z => z.Value.Name == comboBox_StorageRooms.Text).Select(y => y.Value.ID).First()).Select(x => x.Value).First();
                 DisplayNumberInStorage();
             }
             else
@@ -193,11 +192,8 @@ namespace P3_Projekt_WPF
 
         private void DisplayNumberInStorage()
         {
-            if(comboBox_Destination.Text == "")
-            {
                 sourceRoom = _storageController.StorageRoomDictionary.Where(x => x.Value.Name == comboBox_StorageRooms.Text).Select(x => x.Key).First();
                 label_ActualAmountInStorage.Content = _storageController.ProductDictionary[productID].StorageWithAmount[sourceRoom].ToString();
-            }
         }
 
         private void comboBox_StorageRooms_DropDownClosed(object sender, EventArgs e)

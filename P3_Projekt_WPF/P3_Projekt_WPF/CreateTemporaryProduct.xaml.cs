@@ -23,12 +23,20 @@ namespace P3_Projekt_WPF
     /// </summary>
     public partial class CreateTemporaryProduct : Window
     {
-        int amount = 1;
-        public CreateTemporaryProduct()
+        private int amount = 1;
+        private StorageController _storageController;
+        private POSController _posController;
+        private decimal price;
+        private int _tempID;
+        public EventHandler UpdateReceiptEventHandler;
+
+        public CreateTemporaryProduct(StorageController storageController, POSController posController, int tempID)
         {
             InitializeComponent();
             this.ResizeMode = ResizeMode.NoResize;
-
+            _storageController = storageController;
+            _posController = posController;
+            _tempID = tempID;
         }
 
         private void btn_PlusToReciept_Click(object sender, RoutedEventArgs e)
@@ -57,6 +65,29 @@ namespace P3_Projekt_WPF
                     e.Handled = true;
             }
 
+        }
+
+        private void btn_AddTempProduct_Click(object sender, RoutedEventArgs e)
+        {
+
+            if (decimal.TryParse(textbox_Price.Text, out price) && price > 0 && textbox_Description != null)
+            {
+                string description = textbox_Description.Text;
+                price = decimal.Parse(textbox_Price.Text);
+                int amount = int.Parse(textBox_ProductAmount.Text);
+                TempProduct NewTemp = _storageController.CreateTempProduct(description, price, _tempID);
+                _storageController.TempTempProductList.Add(NewTemp);
+                _posController.AddSaleTransaction(NewTemp, amount);
+
+                UpdateReceiptEventHandler?.Invoke(this, null);
+                this.Close();
+                ++_tempID;
+            }
+            else
+            {
+                textbox_Description.BorderBrush = Brushes.Red;
+                textbox_Price.BorderBrush = Brushes.Red;
+            }
         }
     }
 }

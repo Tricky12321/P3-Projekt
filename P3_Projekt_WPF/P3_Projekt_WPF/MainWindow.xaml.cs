@@ -239,7 +239,7 @@ namespace P3_Projekt_WPF
             }
         }
 
-        private void UpdateReceiptList()
+        public void UpdateReceiptList()
         {
             listView_Receipt.Items.Clear();
             foreach (SaleTransaction transaction in _POSController.PlacerholderReceipt.Transactions)
@@ -695,31 +695,17 @@ namespace P3_Projekt_WPF
 
             if (_createTempProduct == null)
             {
-                _createTempProduct = new CreateTemporaryProduct();
+                _createTempProduct = new CreateTemporaryProduct(_storageController, _POSController, _tempID);
+                _createTempProduct.UpdateReceiptEventHandler += updateReceiptList;
                 _createTempProduct.Closed += delegate { _createTempProduct = null; };
-                _createTempProduct.btn_AddTempProduct.Click += delegate
-                {
-                    if (decimal.TryParse(_createTempProduct.textbox_Price.Text, out price) && price > 0  && _createTempProduct.textbox_Description != null)
-                    {
-                        string description = _createTempProduct.textbox_Description.Text;
-                        price = decimal.Parse(_createTempProduct.textbox_Price.Text);
-                        int amount = int.Parse(_createTempProduct.textBox_ProductAmount.Text);
-                        TempProduct NewTemp = _storageController.CreateTempProduct(description, price, _tempID);
-                        _POSController.AddSaleTransaction(NewTemp, amount);
-                        UpdateReceiptList();
-                        _createTempProduct.Close();
-                        MessageBox.Show($"Produkt med beskrivelsen: {description}\nPris: {price}\nAntal: {amount}\nEr oprettet!");
-                        ++_tempID;
-                    }
-                    else
-                    {
-                        _createTempProduct.textbox_Description.BorderBrush = Brushes.Red;
-                        _createTempProduct.textbox_Price.BorderBrush = Brushes.Red;
-                    }
-                };
             }
             _createTempProduct.Activate();
             _createTempProduct.ShowDialog();
+        }
+
+        private void updateReceiptList(object sender, EventArgs e)
+        {
+            UpdateReceiptList();
         }
 
         private void btn_PictureFilePath_Click(object sender, RoutedEventArgs e)
@@ -1115,6 +1101,7 @@ namespace P3_Projekt_WPF
                     Thread NewThread = new Thread(new ThreadStart(_POSController.ExecuteReceipt));
                     NewThread.Name = "ExecuteReceipt Thread";
                     NewThread.Start();
+                    tempProductToDictionary();
                     listView_Receipt.Items.Clear();
                     if (_POSController.PlacerholderReceipt.PaidPrice > _POSController.PlacerholderReceipt.TotalPrice)
                     {
@@ -1465,5 +1452,15 @@ namespace P3_Projekt_WPF
             button_DeleteFulReceiptDiscount.Visibility = Visibility.Hidden;
             UpdateReceiptList();
         }
+
+        private void tempProductToDictionary()
+        {
+            foreach(TempProduct tempproduct in _storageController.TempTempProductList)
+            {
+                _storageController.TempProductList.TryAdd(tempproduct.ID, tempproduct);
+            }
+            _storageController.TempTempProductList.Clear();
+        }
+        
     }
 }

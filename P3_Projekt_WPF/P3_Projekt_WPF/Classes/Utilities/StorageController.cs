@@ -26,6 +26,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
         public ConcurrentDictionary<int, BaseProduct> AllProductsDictionary = new ConcurrentDictionary<int, BaseProduct>();
         public ConcurrentDictionary<int, Product> DisabledProducts = new ConcurrentDictionary<int, Product>();
         public ConcurrentDictionary<int, ServiceProduct> DisabledServiceProducts = new ConcurrentDictionary<int, ServiceProduct>();
+        public List<TempProduct> TempTempProductList = new List<TempProduct>();
 
 
 
@@ -487,7 +488,8 @@ namespace P3_Projekt_WPF.Classes.Utilities
         {
             TempProduct newTempProduct = new TempProduct(description, salePrice);
             newTempProduct.ID = ID;
-            TempProductList.TryAdd(newTempProduct.ID, newTempProduct);
+            //TempProductList.TryAdd(newTempProduct.ID, newTempProduct);
+            TempTempProductList.Add(newTempProduct);
             return newTempProduct;
         }
 
