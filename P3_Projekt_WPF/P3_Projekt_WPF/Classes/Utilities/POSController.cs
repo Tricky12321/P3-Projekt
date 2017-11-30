@@ -158,22 +158,20 @@ namespace P3_Projekt_WPF.Classes.Utilities
         {
             if (ReceiptListView.HasItems)
             {
-
                 if (TotalPriceToPay == -1m)
                 {
-                    TotalPriceToPay = PlacerholderReceipt.TotalPrice;
+                    TotalPriceToPay = PlacerholderReceipt.GetTotalDiscountPrice();
                 }
-                decimal PriceToPay = TotalPriceToPay;
 
                 if (PlacerholderReceipt.TotalPriceToPay == -1m)
                 {
-                    PlacerholderReceipt.TotalPriceToPay = PriceToPay;
+                    PlacerholderReceipt.TotalPriceToPay = TotalPriceToPay;
                 }
                 decimal PaymentAmount;
 
                 if (PayWithAmount.Text.Length == 0)
                 {
-                    PaymentAmount = PlacerholderReceipt.TotalPrice - PlacerholderReceipt.PaidPrice;
+                    PaymentAmount = TotalPriceToPay;
                 }
                 else
                 {
@@ -184,28 +182,33 @@ namespace P3_Projekt_WPF.Classes.Utilities
                 {
                     ReceiptID = Receipt.GetNextID();
                 }
+
                 Payment NewPayment = new Payment(ReceiptID, PaymentAmount, PaymentMethod);
                 PlacerholderReceipt.Payments.Add(NewPayment);
 
-                PayWithAmount.Text = "";
-                TotalPriceToPay = PriceToPay - NewPayment.Amount;
-                if (PlacerholderReceipt.PaidPrice >= PlacerholderReceipt.TotalPrice)
+                PayWithAmount.Text = string.Empty;
+                TotalPriceToPay -= NewPayment.Amount;
+
+                
+                if (PlacerholderReceipt.PaidPrice >= PlacerholderReceipt.GetTotalDiscountPrice())
                 {
                     SaleTransaction.SetStorageController(_storageController);
+
                     //_POSController.PlacerholderReceipt.PaymentMethod = PaymentMethod;
                     Thread NewThread = new Thread(new ThreadStart(ExecuteReceipt));
                     NewThread.Name = "ExecuteReceipt Thread";
                     NewThread.Start();
                     ReceiptListView.Items.Clear();
+
+                    TotalPriceToPay = -1m;
                     if (PlacerholderReceipt.PaidPrice > PlacerholderReceipt.TotalPrice)
                     {
-                        return "Retur: " + (PlacerholderReceipt.PaidPrice - PlacerholderReceipt.TotalPrice).ToString().Replace('.', ',').Replace('-', ' ');
+                        return "Retur: " + (PlacerholderReceipt.PaidPrice - PlacerholderReceipt.GetTotalDiscountPrice()).ToString().Replace('.', ',');
                     }
-                    TotalPriceToPay = -1m;
+                    
                 }
-                return $"{PriceToPay - NewPayment.Amount}";
+                return TotalPriceToPay.ToString();
             }
-            return PayWithAmount.Text;
         }
     }
 }

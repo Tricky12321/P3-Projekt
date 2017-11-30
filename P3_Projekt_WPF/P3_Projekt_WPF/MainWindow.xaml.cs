@@ -1062,79 +1062,29 @@ namespace P3_Projekt_WPF
         private void btn_Cash_Click(object sender, RoutedEventArgs e)
         {
             label_TotalPrice.Content = _POSController.CompletePurchase(PaymentMethod_Enum.Cash, PayWithAmount, listView_Receipt);
+            button_DeleteFulReceiptDiscount.Visibility = Visibility.Hidden;
+            image_DeleteFullReceiptDiscount.Visibility = Visibility.Hidden;
+            text_FullReceiptDiscount.Text = string.Empty;
         }
 
         private void btn_Dankort_Click(object sender, RoutedEventArgs e)
         {
             label_TotalPrice.Content = _POSController.CompletePurchase(PaymentMethod_Enum.Card, PayWithAmount, listView_Receipt);
+            button_DeleteFulReceiptDiscount.Visibility = Visibility.Hidden;
+            image_DeleteFullReceiptDiscount.Visibility = Visibility.Hidden;
+            text_FullReceiptDiscount.Text = string.Empty;
         }
 
         private void btn_MobilePay_Click(object sender, RoutedEventArgs e)
         {
             label_TotalPrice.Content = _POSController.CompletePurchase(PaymentMethod_Enum.MobilePay, PayWithAmount, listView_Receipt);
+            button_DeleteFulReceiptDiscount.Visibility = Visibility.Hidden;
+            image_DeleteFullReceiptDiscount.Visibility = Visibility.Hidden;
+            text_FullReceiptDiscount.Text = string.Empty;
         }
-            CompletePurchase(PaymentMethod_Enum.MobilePay);
-        }
 
-        private int _receiptID = 0;
-        private decimal TotalPriceToPay = -1m;
-        public void CompletePurchase(PaymentMethod_Enum PaymentMethod)
-        {
-            if (listView_Receipt.HasItems)
-            {
-                if (TotalPriceToPay == -1m)
-                {
-                    TotalPriceToPay = _POSController.PlacerholderReceipt.GetTotalDiscountPrice();
-                }
 
-                if (_POSController.PlacerholderReceipt.TotalPriceToPay == -1m)
-                {
-                    _POSController.PlacerholderReceipt.TotalPriceToPay = TotalPriceToPay;
-                }
-                decimal PaymentAmount;
-
-                if (PayWithAmount.Text.Length == 0)
-                {
-                    PaymentAmount = TotalPriceToPay;
-                }
-                else
-                {
-                    PaymentAmount = Convert.ToDecimal(PayWithAmount.Text);
-                }
-
-                if (_receiptID == 0)
-                {
-                    _receiptID = Receipt.GetNextID();
-                }
-
-                Payment NewPayment = new Payment(_receiptID, PaymentAmount, PaymentMethod);
-                _POSController.PlacerholderReceipt.Payments.Add(NewPayment);
-
-                PayWithAmount.Text = string.Empty;
-                TotalPriceToPay -= NewPayment.Amount;
-                label_TotalPrice.Content = $"{TotalPriceToPay}";
-                
-                if (_POSController.PlacerholderReceipt.PaidPrice >= _POSController.PlacerholderReceipt.GetTotalDiscountPrice())
-                {
-                    SaleTransaction.SetStorageController(_storageController);
-
-                    //_POSController.PlacerholderReceipt.PaymentMethod = PaymentMethod;
-                    Thread NewThread = new Thread(new ThreadStart(_POSController.ExecuteReceipt));
-                    NewThread.Name = "ExecuteReceipt Thread";
-                    NewThread.Start();
-                    listView_Receipt.Items.Clear();
-                    button_DeleteFulReceiptDiscount.Visibility = Visibility.Hidden;
-                    image_DeleteFullReceiptDiscount.Visibility = Visibility.Hidden;
-                    text_FullReceiptDiscount.Text = string.Empty;
-
-                    if (_POSController.PlacerholderReceipt.PaidPrice > _POSController.PlacerholderReceipt.TotalPrice)
-                    {
-                        label_TotalPrice.Content = "Retur: " + (_POSController.PlacerholderReceipt.PaidPrice - _POSController.PlacerholderReceipt.GetTotalDiscountPrice()).ToString().Replace('.', ',');
-                    }
-                    TotalPriceToPay = -1m;
-                }
-            }
-        }
+        
 
         AdminValidation adminValid;
         private void InitAdminLogin()
