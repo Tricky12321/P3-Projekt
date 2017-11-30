@@ -52,11 +52,27 @@ namespace P3_Projekt_WPF
             btn_JustQuit.Click += delegate { this.Close(); };
             btn_SaveAndQuit.Click += delegate
             {
-                string storageRoomName = textBox_Name.Text;
-                string storageRoomDescr = textBox_descr.Text;
-                ControllerSto.CreateStorageRoom(storageRoomName, storageRoomDescr);
-                _mainWindow.LoadStorageRooms();
-                this.Close();
+                if (textBox_Name.Text == "" || textBox_descr.Text == "")
+                {
+                    textBox_Name.BorderBrush = Brushes.DarkGray;
+                    textBox_descr.BorderBrush = Brushes.DarkGray;
+                    if (textBox_Name.Text == "")
+                    {
+                        textBox_Name.BorderBrush = Brushes.Red;
+                    }
+                    if (textBox_descr.Text == "")
+                    {
+                        textBox_descr.BorderBrush = Brushes.Red;
+                    }
+                }
+                else
+                {
+                    string storageRoomName = textBox_Name.Text;
+                    string storageRoomDescr = textBox_descr.Text;
+                    ControllerSto.CreateStorageRoom(storageRoomName, storageRoomDescr);
+                    _mainWindow.LoadStorageRooms();
+                    this.Close();
+                }
             };
         }
 
@@ -69,11 +85,28 @@ namespace P3_Projekt_WPF
             btn_JustQuit.Click += delegate { this.Close(); };
             btn_SaveAndQuit.Click += delegate
             {
-                string storageRoomName = textBox_Name.Text;
-                string storageRoomDescr = textBox_descr.Text;
-                ControllerSto.EditStorageRoom(storageRoomToEdit.ID, storageRoomName, storageRoomDescr);
-                _mainWindow.LoadStorageRooms();
-                this.Close();
+                if(textBox_Name.Text == "" || textBox_descr.Text == "")
+                {
+                    textBox_Name.BorderBrush = Brushes.DarkGray;
+                    textBox_descr.BorderBrush = Brushes.DarkGray;
+                    if (textBox_Name.Text == "")
+                    {
+                        textBox_Name.BorderBrush = Brushes.Red;
+                    }
+                    if (textBox_descr.Text == "")
+                    {
+                        textBox_descr.BorderBrush = Brushes.Red;
+                    }
+                }
+                else
+                {
+                    string storageRoomName = textBox_Name.Text;
+                    string storageRoomDescr = textBox_descr.Text;
+                    ControllerSto.EditStorageRoom(storageRoomToEdit.ID, storageRoomName, storageRoomDescr);
+                    _mainWindow.LoadStorageRooms();
+                    this.Close();
+                }
+
             };
             btn_deleteStorageRoom.Click += delegate
             {
