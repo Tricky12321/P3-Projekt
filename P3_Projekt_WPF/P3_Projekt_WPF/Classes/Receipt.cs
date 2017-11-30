@@ -50,6 +50,7 @@ namespace P3_Projekt_WPF.Classes
             {
                 Transactions.Add(transaction);
             }
+
             TotalPrice += transaction.TotalPrice;
             UpdateNumberOfProducts();
         }
