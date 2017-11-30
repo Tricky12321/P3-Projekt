@@ -219,7 +219,7 @@ namespace P3_Projekt_WPF.Classes
                 TempProduct ResultsProduct;
                 if (_storageController != null)
                 {
-                    ResultsProduct = _storageController.TempProductList[id];
+                    ResultsProduct = _storageController.TempProductDictionary[id];
                 }
                 else
                 {

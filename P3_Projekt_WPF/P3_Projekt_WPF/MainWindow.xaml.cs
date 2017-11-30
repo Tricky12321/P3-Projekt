@@ -278,7 +278,7 @@ namespace P3_Projekt_WPF
                 GetAllThread.Start();
                 while (!_storageController.ThreadsDone)
                 {
-                    Thread.Sleep(1);
+                    Thread.Sleep(100);
                 }
                 runLoading = false;
                 TimeTester.Stop();
@@ -881,7 +881,7 @@ namespace P3_Projekt_WPF
         ResovleTempProduct _resolveTempProduct;
         private void btn_MergeTempProduct_Click(object sender, RoutedEventArgs e)
         {
-            if (_storageController.TempProductList.Where(x => x.Value.Resolved == false).Count() > 0 && _resolveTempProduct == null)
+            if (_storageController.TempProductDictionary.Where(x => x.Value.Resolved == false).Count() > 0 && _resolveTempProduct == null)
             {
                 _resolveTempProduct = new ResovleTempProduct(_storageController);
                 _resolveTempProduct.Show();
@@ -1425,7 +1425,7 @@ namespace P3_Projekt_WPF
         {
             foreach(TempProduct tempproduct in _storageController.TempTempProductList)
             {
-                _storageController.TempProductList.TryAdd(tempproduct.ID, tempproduct);
+                _storageController.TempProductDictionary.TryAdd(tempproduct.ID, tempproduct);
             }
             _storageController.TempTempProductList.Clear();
         }
