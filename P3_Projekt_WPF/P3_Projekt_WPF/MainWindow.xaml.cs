@@ -55,8 +55,7 @@ namespace P3_Projekt_WPF
             OutputList.Add("[3. TIMER] took " + LoadingTimer.ElapsedMilliseconds + "ms");
             InitComponents();
             OutputList.Add("[4. TIMER] took " + LoadingTimer.ElapsedMilliseconds + "ms");
-            orderTransList = StorageController.GetAllOrderTransactions();
-            storageTransList = StorageController.GetAllStorageTransactions();
+            //TODO: Thek om OrderTrans og StorageTrans er blevet fjernet
             this.KeyDown += new KeyEventHandler(KeyboardHook);
             this.KeyDown += new KeyEventHandler(CtrlHookDown);
             this.KeyDown += new KeyEventHandler(EnterKeyPressedSearch);
