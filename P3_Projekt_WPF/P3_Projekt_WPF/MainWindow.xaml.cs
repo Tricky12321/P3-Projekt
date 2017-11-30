@@ -101,8 +101,6 @@ namespace P3_Projekt_WPF
             }
         }
 
-
-
         public void SaveQuickButtons()
         {
             int[] QuickButtonsValues;
@@ -206,6 +204,7 @@ namespace P3_Projekt_WPF
             InitAdminLogin();
             Utils.LoadDatabaseSettings(this);
             FillDeactivatedProductsIntoGrid();
+            image_DeleteFullReceiptDiscount.Source = Utils.ImageSourceForBitmap(Properties.Resources.DeleteIcon);
         }
 
         private void InitGridQuickButtons()
@@ -362,6 +361,7 @@ namespace P3_Projekt_WPF
                                                 $"Gruppe: {_storageController.GroupDictionary[(_productToEdit as Product).ProductGroupID].Name}\n" +
                                                 $"Mærke: {(_productToEdit as Product).Brand}\n" +
                                                 $"Pris: {_productToEdit.SalePrice}\n" +
+                                                $"Oprettet d. {(_productToEdit as Product).CreatedTime.ToShortDateString()}\n" +
                                                 $"Tilbudspris: {(_productToEdit as Product).DiscountPrice}\n" +
                                                 $"Indkøbspris: {(_productToEdit as Product).PurchasePrice}\n" +
                                                 $"{((_productToEdit as Product).StorageWithAmount.Count == 0 ? "Produktet er ikke på lager" : "Lagerstatus:")}";
@@ -382,6 +382,7 @@ namespace P3_Projekt_WPF
                 textBlock_ChosenProduct.Text = $"ID: {product.ID}\n" +
                                                 $"Navn: {product.Name}\n" +
                                                 $"Gruppe: {_storageController.GroupDictionary[product.ServiceProductGroupID].Name}\n" +
+                                                $"Oprettet d. {(_productToEdit as ServiceProduct).CreatedDate.ToShortDateString()}\n" +
                                                 $"{((product.SalePrice == product.GroupPrice) ? $"Pris: {product.SalePrice}\n" : $"Pris: {product.SalePrice}\nGruppepris: {product.GroupPrice}\nGruppe grænse: {product.GroupLimit}")}";
             }
             else
@@ -507,32 +508,42 @@ namespace P3_Projekt_WPF
         public void AddTransactionToReceipt(SaleTransaction transaction)
         {
             ReceiptListItem item;
-
             if (transaction.Product is TempProduct)
             {
-                item = new ReceiptListItem(transaction.GetProductName(), Math.Round(transaction.TotalPrice + transaction.DiscountPrice, 2), transaction.Amount, 't' + transaction.Product.ID.ToString());
+                item = new ReceiptListItem(transaction.GetProductName(), Math.Round(transaction.Price * transaction.Amount, 2), transaction.Amount, 't' + transaction.Product.ID.ToString());
 
                 if (transaction.DiscountBool)
                 {
                     item.canvas_Discount.Visibility = Visibility.Visible;
-                    item.textBlock_DiscountAmount.Text = '-' + Math.Round(transaction.DiscountPrice, 2).ToString() + " : Ny Pris: " + Math.Round(transaction.TotalPrice, 2).ToString();
+                    item.textBlock_DiscountAmount.Text = '-' + Math.Round((transaction.Price - transaction.DiscountPrice) * transaction.Amount, 2).ToString() + " : Ny Pris: " + Math.Round(transaction.DiscountPrice * transaction.Amount, 2).ToString();
                     item.textBlock_DiscountAmount.Foreground = Brushes.Red;
+                }
+                else
+                {
+                    item.canvas_Discount.Visibility = Visibility.Collapsed;
                 }
             }
             else
             {
-                item = new ReceiptListItem(transaction.GetProductName(), transaction.TotalPrice + transaction.DiscountPrice, transaction.Amount, transaction.Product.ID.ToString(), transaction.GetID());
-                if (transaction.DiscountPrice > 0m)
+                item = new ReceiptListItem(transaction.GetProductName(), Math.Round(transaction.Price * transaction.Amount, 2), transaction.Amount, transaction.Product.ID.ToString(), transaction.GetID());
+                if (transaction.DiscountBool)
                 {
                     item.canvas_Discount.Visibility = Visibility.Visible;
-                    item.textBlock_DiscountAmount.Text = '-' + Math.Round(transaction.DiscountPrice, 2).ToString() + " : Ny Pris: " + Math.Round(transaction.TotalPrice, 2).ToString();
+                    item.textBlock_DiscountAmount.Text = '-' + Math.Round((transaction.Price - transaction.DiscountPrice) * transaction.Amount, 2).ToString() + " : Ny Pris: " + Math.Round(transaction.DiscountPrice * transaction.Amount, 2).ToString();
+                }
+                else
+                {
+                    item.canvas_Discount.Visibility = Visibility.Collapsed;
                 }
             }
             item.Delete_Button_Event += btn_DeleteProduct_Click;
             item.Increment_Button_Event += btn_Increment_Click;
             item.Decrement_Button_Event += btn_Decrement_Click;
+            item.Delete_Receipt_Event += btn_DeleteReceiptDiscount_Click;
+
             listView_Receipt.Items.Add(item);
         }
+
 
         private void btn_Increment_Click(object sender, EventArgs e)
         {
@@ -741,7 +752,7 @@ namespace P3_Projekt_WPF
                 productID = int.Parse(textBox_StatisticsProductID.Text);
             }
             string brand = comboBox_Brand.Text;
-            int groupID = 0;
+            int groupID = -1;
             if (comboBox_Group.Text != "")
             {
                 groupID = _storageController.GroupDictionary.Values.First(x => x.Name == comboBox_Group.Text).ID;
@@ -749,11 +760,7 @@ namespace P3_Projekt_WPF
             bool filterProduct = checkBox_Product.IsChecked.Value;
             bool filterBrand = checkBox_Brand.IsChecked.Value;
             bool filterGroup = checkBox_Group.IsChecked.Value;
-            _statisticsController.TransactionsForStatistics = new List<SaleTransaction>();
-            string ProductqueryString = _statisticsController.GetProductsQueryString(filterProduct, productID, filterGroup, groupID, filterBrand, brand, datePicker_StartDate.SelectedDate.Value, datePicker_EndDate.SelectedDate.Value);
-            string ServiceProductQueryString = _statisticsController.GetServiceProductsQueryString(filterProduct, productID, filterGroup, groupID, datePicker_StartDate.SelectedDate.Value, datePicker_EndDate.SelectedDate.Value);
-            _statisticsController.RequestStatisticsDate(ProductqueryString);
-            _statisticsController.RequestStatisticsDate(ServiceProductQueryString);
+            _statisticsController.RequestStatistics(filterProduct, productID, filterGroup, groupID, filterBrand, brand, datePicker_StartDate.SelectedDate.Value, datePicker_EndDate.SelectedDate.Value);
             _statisticsController.GetReceiptTotalCount(datePicker_StartDate.SelectedDate.Value, datePicker_EndDate.SelectedDate.Value);
             _statisticsController.GetReceiptTotalPrice(datePicker_StartDate.SelectedDate.Value, datePicker_EndDate.SelectedDate.Value);
 
@@ -803,19 +810,34 @@ namespace P3_Projekt_WPF
 
         private void Button_StatisticsToday_Click(object sender, RoutedEventArgs e)
         {
+            int totalProductAmount = 0;
             ResetStatisticsView();
             _statisticsController.RequestTodayReceipts();
             _statisticsController.CalculatePayments();
-            listView_Statistics.Items.Add(new StatisticsListItem($"{DateTime.Today.ToString("dd/MM/yy")}", "Kontant", "", $"{_statisticsController.Payments[0]}"));
-            listView_Statistics.Items.Add(new StatisticsListItem($"{DateTime.Today.ToString("dd/MM/yy")}", "Kort", "", $"{_statisticsController.Payments[1]}"));
-            listView_Statistics.Items.Add(new StatisticsListItem($"{DateTime.Today.ToString("dd/MM/yy")}", "MobilePay", "", $"{_statisticsController.Payments[2]}"));
-            /*string queryString = _statisticsController.GetQueryString(false, 0, false, 0, false, "", DateTime.Today, DateTime.Today);
-            _statisticsController.RequestStatisticsDate(queryString);
+            listView_Statistics.Items.Add(new StatisticsListItem("", "Kontant", "", $"{_statisticsController.Payments[0]}"));
+            listView_Statistics.Items.Add(new StatisticsListItem("", "Kort", "", $"{_statisticsController.Payments[1]}"));
+            listView_Statistics.Items.Add(new StatisticsListItem("", "MobilePay", "", $"{_statisticsController.Payments[2]}"));
+            listView_Statistics.Items.Insert(0, new StatisticsListItem("", "Kroner per betalingsmetode:", "", ""));
+            _statisticsController.RequestStatistics(false, 0, false, 0, false, "", DateTime.Today, DateTime.Today);
+            _statisticsController.GenerateProductSalesAndTotalRevenue();
+            foreach (int id in _statisticsController.SalesPerProduct.Keys)
+            {
+                listView_Statistics.Items.Add(_statisticsController.ProductSalesStrings(id, _statisticsController.SalesPerProduct[id]));
+                totalProductAmount += _statisticsController.SalesPerProduct[id].Amount;
+            }
             _statisticsController.GenerateGroupAndBrandSales();
             foreach (int groupID in _statisticsController.SalesPerGroup.Keys)
             {
-                listView_GroupStatistics.Items.Add(_statisticsController.GroupSalesStrings(groupID, totalTransactionPrice));
-            }*/
+                listView_GroupStatistics.Items.Add(_statisticsController.GroupSalesStrings(groupID, _statisticsController.TotalRevenueToday));
+            }
+            foreach (string brand in _statisticsController.SalesPerBrand.Keys)
+            {
+                listView_BrandStatistics.Items.Add(_statisticsController.BrandSalesStrings(brand, _statisticsController.TotalRevenueToday));
+            }
+
+            listView_Statistics.Items.Insert(4, new StatisticsListItem("", "Total", $"{totalProductAmount}", $"{_statisticsController.TotalRevenueToday}"));
+            listView_Statistics.Items.Insert(4, new StatisticsListItem("", "Produkter solgt i dag:", "", ""));
+            listView_Statistics.Items.Insert(4, new StatisticsListItem("", "", "", ""));
         }
 
         private void checkBox_Product_Checked(object sender, RoutedEventArgs e)
@@ -1277,12 +1299,22 @@ namespace P3_Projekt_WPF
 
         private void DiscountSingleTransaction()
         {
-            _POSController.PlacerholderReceipt.DiscountOnSingleTransaction((listView_Receipt.SelectedItem as ReceiptListItem).TransID, textBox_discount.Text);            
+            _POSController.PlacerholderReceipt.DiscountOnSingleTransaction((listView_Receipt.SelectedItem as ReceiptListItem).TransID, textBox_discount.Text);
+            UpdateReceiptList();
+        }
+
+        private void btn_DeleteReceiptDiscount_Click(object sender, EventArgs e)
+        {
+            SaleTransaction currentSaleTransaction = _POSController.PlacerholderReceipt.Transactions.Where(x => x.GetID() == (sender as ReceiptListItem).TransID).First();
+            currentSaleTransaction.DiscountBool = false;
+            _POSController.PlacerholderReceipt.UpdateTotalPrice();
+
             UpdateReceiptList();
         }
 
         private void DiscountOnReceipt()
         {
+            _POSController.PlacerholderReceipt.DiscountOnFullReceipt = 0m;
             if (textBox_discount.Text.Contains('%'))
             {
                 decimal percentage = Convert.ToDecimal(textBox_discount.Text.Remove(textBox_discount.Text.Length - 1, 1));
@@ -1292,7 +1324,10 @@ namespace P3_Projekt_WPF
             {
                 _POSController.PlacerholderReceipt.DiscountOnFullReceipt = Convert.ToDecimal(textBox_discount.Text);
             }
-            text_FullReceiptDiscount.Text = "Der er givet " + Math.Round(_POSController.PlacerholderReceipt.DiscountOnFullReceipt, 2).ToString() + " DKK rabat på kvitteringen";
+            text_FullReceiptDiscount.Text = Math.Round(_POSController.PlacerholderReceipt.DiscountOnFullReceipt, 2).ToString() + " DKK rabat på kvittering";
+
+            image_DeleteFullReceiptDiscount.Visibility = Visibility.Visible;
+            button_DeleteFulReceiptDiscount.Visibility = Visibility.Visible;
 
             _POSController.PlacerholderReceipt.UpdateTotalPrice();
             UpdateReceiptList();
@@ -1419,6 +1454,16 @@ namespace P3_Projekt_WPF
         private void settingsTab_MouseUp(object sender, MouseButtonEventArgs e)
         {
             StorageTransactionsHistory();
+        }
+
+        private void button_DeleteFulReceiptDiscount_Click(object sender, EventArgs e)
+        {
+            _POSController.PlacerholderReceipt.DiscountOnFullReceipt = 0m;
+            _POSController.PlacerholderReceipt.UpdateTotalPrice();
+            text_FullReceiptDiscount.Text = string.Empty;
+            image_DeleteFullReceiptDiscount.Visibility = Visibility.Hidden;
+            button_DeleteFulReceiptDiscount.Visibility = Visibility.Hidden;
+            UpdateReceiptList();
         }
     }
 }

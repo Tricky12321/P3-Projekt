@@ -60,8 +60,13 @@ namespace P3_Projekt_WPF.Classes
             TotalPrice = 0;
             foreach (SaleTransaction transaction in Transactions)
             {
+                if (transaction.DiscountBool)
+                {
+
+                }
                 TotalPrice += transaction.TotalPrice;
             }
+            TotalPrice -= DiscountOnFullReceipt;
         }
 
         public void RemoveTransaction(int productID)
@@ -93,7 +98,7 @@ namespace P3_Projekt_WPF.Classes
         //Returns a list of the products present in the receipt
         public List<BaseProduct> GetProducts()
         {
-            var products = new List<BaseProduct>();
+            List<BaseProduct> products = new List<BaseProduct>();
 
             foreach (SaleTransaction transaction in Transactions)
             {
@@ -110,24 +115,19 @@ namespace P3_Projekt_WPF.Classes
         public void DiscountOnSingleTransaction(int transID, string inputDiscount)
         {
             SaleTransaction currentSaleTransaction = Transactions.Where(x => x.GetID() == transID).First();
-            currentSaleTransaction.Price += currentSaleTransaction.DiscountPrice;
 
             if (inputDiscount.Contains('%'))
             {
                 decimal percentage = Convert.ToDecimal(inputDiscount.Remove(inputDiscount.Length - 1, 1));
-                decimal priceInDiscountPrProduct = currentSaleTransaction.Product.SalePrice * percentage / 100m;
-                currentSaleTransaction.Price -= currentSaleTransaction.Price * (percentage / 100m);
+                decimal priceInDiscountPrProduct = currentSaleTransaction.Product.SalePrice * (percentage / 100m);
+                currentSaleTransaction.DiscountPrice = currentSaleTransaction.Price - currentSaleTransaction.Price * (percentage / 100m);
 
-                currentSaleTransaction.DiscountPrice = priceInDiscountPrProduct * currentSaleTransaction.Amount;
-
-                currentSaleTransaction.Product.DiscountPrice -= priceInDiscountPrProduct;
+                //currentSaleTransaction.Product.DiscountPrice = currentSaleTransaction.Product.SalePrice - priceInDiscountPrProduct;
             }
             else
             {
                 decimal customDiscount = Convert.ToDecimal(inputDiscount);
-                currentSaleTransaction.Price -= customDiscount;
-
-                currentSaleTransaction.DiscountPrice = customDiscount;
+                currentSaleTransaction.DiscountPrice = currentSaleTransaction.Price - (customDiscount / currentSaleTransaction.Amount);
             }
 
             currentSaleTransaction.DiscountBool = true;
@@ -137,6 +137,17 @@ namespace P3_Projekt_WPF.Classes
         public void Execute()
         {
             UploadToDatabase();
+            UpdateNumberOfProducts();
+
+            if (DiscountOnFullReceipt > 0m)
+            {
+                foreach (SaleTransaction transaction in Transactions)
+                {
+                    transaction.DiscountBool = true;
+                    transaction.Product.DiscountBool = true;
+                    transaction.Product.DiscountPrice = DiscountOnFullReceipt / NumberOfProducts;
+                }
+            }
             foreach (SaleTransaction transaction in Transactions)
             {
                 transaction.Execute();

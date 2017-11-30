@@ -71,6 +71,7 @@
                                                 Height="40"
                                                 Background="Transparent"
                                                 FontSize="30"
+                                                Click="button_Delete_Discount_Click"
                                                 HorizontalAlignment="Right"
                                                 VerticalAlignment = "Center"
                                                 Foreground="#003D3D3F"

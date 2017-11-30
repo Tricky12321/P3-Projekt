@@ -30,6 +30,8 @@ namespace P3_Projekt_WPF
         public event EventHandler Delete_Button_Event;
         public event EventHandler Increment_Button_Event;
         public event EventHandler Decrement_Button_Event;
+        public event EventHandler Delete_Receipt_Event;
+
 
         public ReceiptListItem(string product, decimal price, int amount, string idTag)
         {
@@ -40,11 +42,10 @@ namespace P3_Projekt_WPF
             IDTag = idTag;
 
             text_productName.Text = String_Product;
-            text_price.Text = Price.ToString().Replace('.', ',');
+            text_price.Text = Math.Round(Price, 2).ToString().Replace('.', ',');
             text_amount.Text = Amount.ToString();
 
-            image_Delete.Source = Utils.ImageSourceForBitmap(Properties.Resources.DeleteIcon);
-            image_Delete_Discount.Source = Utils.ImageSourceForBitmap(Properties.Resources.DeleteIcon);
+            image_Delete_Discount.Source = image_Delete.Source = Utils.ImageSourceForBitmap(Properties.Resources.DeleteIcon);
         }
 
 
@@ -66,6 +67,11 @@ namespace P3_Projekt_WPF
         private void Decrement_Button_Click(object sender, RoutedEventArgs e)
         {
             Decrement_Button_Event?.Invoke(this, null);
+        }
+
+        private void button_Delete_Discount_Click(object sender, RoutedEventArgs e)
+        {
+            Delete_Receipt_Event?.Invoke(this, null);
         }
     }
 }

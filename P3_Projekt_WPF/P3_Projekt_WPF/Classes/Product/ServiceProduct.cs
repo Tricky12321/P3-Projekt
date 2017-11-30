@@ -19,7 +19,8 @@ namespace P3_Projekt_WPF.Classes
         public int ServiceProductGroupID;
         public Image Image;
         private bool _active = true;
-        public bool Active => _active; 
+        public bool Active => _active;
+        public DateTime CreatedDate;
         public ServiceProduct(int id, decimal salePrice, decimal groupPrice, int groupLimit, string name, int serviceProductGroupID) : base(salePrice)
         {
             ID = id;
@@ -95,6 +96,7 @@ namespace P3_Projekt_WPF.Classes
             GroupPrice = Convert.ToDecimal(results.Values[4]);                 // group price
             GroupLimit = Convert.ToInt32(results.Values[5]);                 // grouplimit
             _active = Convert.ToBoolean(results.Values[6]);                 // active
+            CreatedDate = Convert.ToDateTime(results.Values[7]);
         }
 
         public override void UploadToDatabase()
