@@ -1085,11 +1085,12 @@ namespace P3_Projekt_WPF
             CompletePurchase(PaymentMethod_Enum.MobilePay);
         }
 
+        private int _receiptID = 0;
         public void CompletePurchase(PaymentMethod_Enum PaymentMethod)
         {
             if (listView_Receipt.HasItems)
             {
-                decimal PriceToPay = Convert.ToDecimal(label_TotalPrice.Content.ToString().Replace(',', '.'));
+                decimal PriceToPay = Convert.ToDecimal(label_TotalPrice.Content.ToString());
                 if (_POSController.PlacerholderReceipt.TotalPriceToPay == -1m)
                 {
                     _POSController.PlacerholderReceipt.TotalPriceToPay = PriceToPay;
@@ -1098,14 +1099,17 @@ namespace P3_Projekt_WPF
 
                 if (PayWithAmount.Text.Length == 0)
                 {
-                    PaymentAmount = Convert.ToDecimal(label_TotalPrice.Content.ToString().Replace(',', '.'));
+                    PaymentAmount = Convert.ToDecimal(label_TotalPrice.Content.ToString());
                 }
                 else
                 {
                     PaymentAmount = Convert.ToDecimal(PayWithAmount.Text);
                 }
-
-                Payment NewPayment = new Payment(Receipt.GetNextID(), PaymentAmount, PaymentMethod);
+                if (_receiptID == 0)
+                {
+                    _receiptID = Receipt.GetNextID();
+                }
+                Payment NewPayment = new Payment(_receiptID, PaymentAmount, PaymentMethod);
                 _POSController.PlacerholderReceipt.Payments.Add(NewPayment);
 
                 PayWithAmount.Text = "";
@@ -1438,7 +1442,6 @@ namespace P3_Projekt_WPF
                 }
                 ReloadDisabledProducts();
                 ReloadProducts();
-
             }
         }
 
