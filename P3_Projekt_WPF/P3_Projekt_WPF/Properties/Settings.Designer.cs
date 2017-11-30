@@ -84,6 +84,7 @@ namespace P3_Projekt_WPF.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
         public int lcl_port {
             get {
                 return ((int)(this["lcl_port"]));
@@ -95,6 +96,7 @@ namespace P3_Projekt_WPF.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
         public int rmt_port {
             get {
                 return ((int)(this["rmt_port"]));
@@ -178,6 +180,7 @@ namespace P3_Projekt_WPF.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
         public int IcecreamProductID {
             get {
                 return ((int)(this["IcecreamProductID"]));
