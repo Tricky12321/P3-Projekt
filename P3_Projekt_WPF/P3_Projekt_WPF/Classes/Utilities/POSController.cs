@@ -203,7 +203,10 @@ namespace P3_Projekt_WPF.Classes.Utilities
                     }
 
                 }
-                return TotalPriceToPay.ToString().Replace('.', ',');
+                if (TotalPriceToPay != -1m)
+                {
+                    return TotalPriceToPay.ToString().Replace('.', ',');
+                }
             }
             return string.Empty;
         }
