@@ -129,7 +129,7 @@ namespace P3_Projekt_WPF
             Settings.QuickButton13 = QuickButtonsCount >= 14 ? QuickButtons[12].ToString() : null;
             Settings.QuickButton14 = QuickButtonsCount >= 15 ? QuickButtons[13].ToString() : null;
             Settings.Save();
-            
+
         }
 
         public void LoadQuickButtons()
@@ -246,7 +246,7 @@ namespace P3_Projekt_WPF
             {
                 AddTransactionToReceipt(transaction);
             }
-            label_TotalPrice.Content = _POSController.PlacerholderReceipt.TotalPrice.ToString().Replace('.', ',');
+            label_TotalPrice.Content = Math.Round(_POSController.PlacerholderReceipt.TotalPrice, 2).ToString().Replace('.', ',');
             btn_discount.IsEnabled = true;
         }
 
@@ -530,6 +530,7 @@ namespace P3_Projekt_WPF
                 {
                     item.canvas_Discount.Visibility = Visibility.Visible;
                     item.textBlock_DiscountAmount.Text = '-' + Math.Round((transaction.Price - transaction.DiscountPrice) * transaction.Amount, 2).ToString() + " : Ny Pris: " + Math.Round(transaction.DiscountPrice * transaction.Amount, 2).ToString();
+                    item.textBlock_DiscountAmount.Foreground = Brushes.Red;
                 }
                 else
                 {
@@ -699,7 +700,7 @@ namespace P3_Projekt_WPF
                 _createTempProduct.Closed += delegate { _createTempProduct = null; };
                 _createTempProduct.btn_AddTempProduct.Click += delegate
                 {
-                    if (decimal.TryParse(_createTempProduct.textbox_Price.Text, out price) && price > 0  && _createTempProduct.textbox_Description != null)
+                    if (decimal.TryParse(_createTempProduct.textbox_Price.Text, out price) && price > 0 && _createTempProduct.textbox_Description != null)
                     {
                         string description = _createTempProduct.textbox_Description.Text;
                         price = decimal.Parse(_createTempProduct.textbox_Price.Text);
@@ -897,7 +898,8 @@ namespace P3_Projekt_WPF
             {
                 _resolveTempProduct = new ResovleTempProduct(_storageController);
                 _resolveTempProduct.Show();
-                _resolveTempProduct.Closed += delegate {
+                _resolveTempProduct.Closed += delegate
+                {
                     _resolveTempProduct = null;
                 };
             }
@@ -1091,22 +1093,20 @@ namespace P3_Projekt_WPF
         {
             if (listView_Receipt.HasItems)
             {
-
                 if (TotalPriceToPay == -1m)
                 {
-                    TotalPriceToPay = _POSController.PlacerholderReceipt.TotalPrice;
+                    TotalPriceToPay = _POSController.PlacerholderReceipt.GetTotalDiscountPrice();
                 }
-                decimal PriceToPay = TotalPriceToPay;
 
                 if (_POSController.PlacerholderReceipt.TotalPriceToPay == -1m)
                 {
-                    _POSController.PlacerholderReceipt.TotalPriceToPay = PriceToPay;
+                    _POSController.PlacerholderReceipt.TotalPriceToPay = TotalPriceToPay;
                 }
                 decimal PaymentAmount;
 
                 if (PayWithAmount.Text.Length == 0)
                 {
-                    PaymentAmount = _POSController.PlacerholderReceipt.TotalPrice - _POSController.PlacerholderReceipt.PaidPrice;
+                    PaymentAmount = TotalPriceToPay;
                 }
                 else
                 {
@@ -1117,23 +1117,30 @@ namespace P3_Projekt_WPF
                 {
                     _receiptID = Receipt.GetNextID();
                 }
+
                 Payment NewPayment = new Payment(_receiptID, PaymentAmount, PaymentMethod);
                 _POSController.PlacerholderReceipt.Payments.Add(NewPayment);
 
-                PayWithAmount.Text = "";
-                label_TotalPrice.Content = $"{PriceToPay - NewPayment.Amount}";
-                TotalPriceToPay = PriceToPay - NewPayment.Amount;
-                if (_POSController.PlacerholderReceipt.PaidPrice >= _POSController.PlacerholderReceipt.TotalPrice)
+                PayWithAmount.Text = string.Empty;
+                TotalPriceToPay -= NewPayment.Amount;
+                label_TotalPrice.Content = $"{TotalPriceToPay}";
+                
+                if (_POSController.PlacerholderReceipt.PaidPrice >= _POSController.PlacerholderReceipt.GetTotalDiscountPrice())
                 {
                     SaleTransaction.SetStorageController(_storageController);
+
                     //_POSController.PlacerholderReceipt.PaymentMethod = PaymentMethod;
                     Thread NewThread = new Thread(new ThreadStart(_POSController.ExecuteReceipt));
                     NewThread.Name = "ExecuteReceipt Thread";
                     NewThread.Start();
                     listView_Receipt.Items.Clear();
+                    button_DeleteFulReceiptDiscount.Visibility = Visibility.Hidden;
+                    image_DeleteFullReceiptDiscount.Visibility = Visibility.Hidden;
+                    text_FullReceiptDiscount.Text = string.Empty;
+
                     if (_POSController.PlacerholderReceipt.PaidPrice > _POSController.PlacerholderReceipt.TotalPrice)
                     {
-                        label_TotalPrice.Content = "Retur: " + (_POSController.PlacerholderReceipt.PaidPrice - _POSController.PlacerholderReceipt.TotalPrice).ToString().Replace('.', ',').Replace('-', ' ');
+                        label_TotalPrice.Content = "Retur: " + (_POSController.PlacerholderReceipt.PaidPrice - _POSController.PlacerholderReceipt.GetTotalDiscountPrice()).ToString().Replace('.', ',');
                     }
                     TotalPriceToPay = -1m;
                 }
@@ -1333,7 +1340,7 @@ namespace P3_Projekt_WPF
             _POSController.PlacerholderReceipt.DiscountOnFullReceipt = 0m;
             if (textBox_discount.Text.Contains('%'))
             {
-                decimal percentage = Convert.ToDecimal(textBox_discount.Text.Remove(textBox_discount.Text.Length - 1, 1));
+                decimal percentage = Convert.ToDecimal(textBox_discount.Text.Replace("%", string.Empty));
                 _POSController.PlacerholderReceipt.DiscountOnFullReceipt = _POSController.PlacerholderReceipt.TotalPrice * (percentage / 100m);
             }
             else
