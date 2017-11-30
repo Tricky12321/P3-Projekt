@@ -33,8 +33,6 @@ namespace P3_Projekt_WPF
         private POSController _POSController;
         private StatisticsController _statisticsController;
         private Grid productGrid = new Grid();
-        List<OrderTransaction> orderTransList = new List<OrderTransaction>(); 
-        List<StorageTransaction> storageTransList = new List<StorageTransaction>(); 
         private Dictionary<int, ProductControl> _productControlDictionary = new Dictionary<int, ProductControl>();
         private bool _ctrlDown = false;
         public static bool runLoading = true;
@@ -1392,9 +1390,10 @@ namespace P3_Projekt_WPF
         private void StorageTransactionsHistory()
         {
             listview_SettingsStorage.Height = 500;
-            foreach (var ordertrans in orderTransList)
+            foreach (var ordertrans in _storageController.OrderTransactionDictionary)
             {
-               listview_SettingsStorage.Items.Add(new { Recieved = ordertrans.Product});
+                var product = _storageController.ProductDictionary[ordertrans.Value.Product.ID];
+               listview_SettingsStorage.Items.Add(new { Recieved = product.Name});
             }
         }
 
