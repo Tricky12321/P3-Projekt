@@ -29,6 +29,7 @@ namespace P3_Projekt_WPF
         private ConcurrentDictionary<int, SearchProduct> productSearchResults = new ConcurrentDictionary<int, SearchProduct>();
         private bool firstSearch = false;
         private int sourceRoom = 0;
+        private Product disabledproduct;
 
         public MoveProduct(StorageController storageController, POSController posController)
         {
@@ -88,12 +89,29 @@ namespace P3_Projekt_WPF
                     }
                 }
             }
+            
+            else if (_storageController.DisabledProducts.TryGetValue(Int32.Parse(txtBox_SearchField.Text), out disabledproduct))
+            {
+                if (_storageController.DisabledProducts[Int32.Parse(txtBox_SearchField.Text)].ID.ToString() == txtBox_SearchField.Text)
+                {
+                    MessageBox.Show(($"Produkt med ID: {txtBox_SearchField.Text} er ikke aktiveret!\nGå til indstillger -> produkter for at genaktivere dette produkt"), "Produkt ikke fundet", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    this.Topmost = true;
+                    Keyboard.ClearFocus();
+                    txtBox_SearchField.Text = "";
+                    comboBox_StorageRooms.Items.Clear();
+                    label_ProduktID.Content = "";
+                    label_ActualAmountInStorage.Content = "";
+                    label_produktProdukt.Content = "";
+                }
+            }
+
             else
             {
                 listBox_SearchMoveProduct.Visibility = Visibility.Hidden;
-                MessageBox.Show(Application.Current.MainWindow, ($"Produkt med ID: {txtBox_SearchField.Text} findes ikke!"), "Produkt ikke fundet", MessageBoxButton.OK, MessageBoxImage.Warning);
+                MessageBox.Show(($"Produkt med ID: {txtBox_SearchField.Text} findes ikke!"), "Produkt ikke fundet", MessageBoxButton.OK, MessageBoxImage.Warning);
                 this.Topmost = true;
                 Keyboard.ClearFocus();
+                txtBox_SearchField.Text = "";
                 comboBox_StorageRooms.Items.Clear();
                 label_ProduktID.Content = "";
                 label_ActualAmountInStorage.Content = "";
