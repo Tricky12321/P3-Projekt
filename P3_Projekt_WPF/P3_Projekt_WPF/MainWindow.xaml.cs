@@ -274,6 +274,7 @@ namespace P3_Projekt_WPF
                 Stopwatch TimeTester = new Stopwatch();
                 TimeTester.Start();
                 Thread GetAllThread = new Thread(new ThreadStart(_storageController.GetAll));
+                GetAllThread.Name = "GetAllThread";
                 GetAllThread.Start();
                 while (!_storageController.ThreadsDone)
                 {
@@ -1072,72 +1073,17 @@ namespace P3_Projekt_WPF
 
         private void btn_Cash_Click(object sender, RoutedEventArgs e)
         {
-            CompletePurchase(PaymentMethod_Enum.Cash);
+            label_TotalPrice.Content = _POSController.CompletePurchase(PaymentMethod_Enum.Cash, PayWithAmount, listView_Receipt);
         }
 
         private void btn_Dankort_Click(object sender, RoutedEventArgs e)
         {
-            CompletePurchase(PaymentMethod_Enum.Card);
+            label_TotalPrice.Content = _POSController.CompletePurchase(PaymentMethod_Enum.Card, PayWithAmount, listView_Receipt);
         }
 
         private void btn_MobilePay_Click(object sender, RoutedEventArgs e)
         {
-            CompletePurchase(PaymentMethod_Enum.MobilePay);
-        }
-
-        private int _receiptID = 0;
-        private decimal TotalPriceToPay = -1m;
-        public void CompletePurchase(PaymentMethod_Enum PaymentMethod)
-        {
-            if (listView_Receipt.HasItems)
-            {
-
-                if (TotalPriceToPay == -1m)
-                {
-                    TotalPriceToPay = _POSController.PlacerholderReceipt.TotalPrice;
-                }
-                decimal PriceToPay = TotalPriceToPay;
-
-                if (_POSController.PlacerholderReceipt.TotalPriceToPay == -1m)
-                {
-                    _POSController.PlacerholderReceipt.TotalPriceToPay = PriceToPay;
-                }
-                decimal PaymentAmount;
-
-                if (PayWithAmount.Text.Length == 0)
-                {
-                    PaymentAmount = _POSController.PlacerholderReceipt.TotalPrice - _POSController.PlacerholderReceipt.PaidPrice;
-                }
-                else
-                {
-                    PaymentAmount = Convert.ToDecimal(PayWithAmount.Text);
-                }
-
-                if (_receiptID == 0)
-                {
-                    _receiptID = Receipt.GetNextID();
-                }
-                Payment NewPayment = new Payment(_receiptID, PaymentAmount, PaymentMethod);
-                _POSController.PlacerholderReceipt.Payments.Add(NewPayment);
-
-                PayWithAmount.Text = "";
-                label_TotalPrice.Content = $"{PriceToPay - NewPayment.Amount}";
-                TotalPriceToPay = PriceToPay - NewPayment.Amount;
-                if (_POSController.PlacerholderReceipt.PaidPrice >= _POSController.PlacerholderReceipt.TotalPrice)
-                {
-                    SaleTransaction.SetStorageController(_storageController);
-                    //_POSController.PlacerholderReceipt.PaymentMethod = PaymentMethod;
-                    Thread NewThread = new Thread(new ThreadStart(_POSController.ExecuteReceipt));
-                    NewThread.Name = "ExecuteReceipt Thread";
-                    NewThread.Start();
-                    listView_Receipt.Items.Clear();
-                    if (_POSController.PlacerholderReceipt.PaidPrice > _POSController.PlacerholderReceipt.TotalPrice)
-                    {
-                        label_TotalPrice.Content = "Retur: " + (_POSController.PlacerholderReceipt.PaidPrice - _POSController.PlacerholderReceipt.TotalPrice).ToString().Replace('.', ',').Replace('-', ' ');
-                    }
-                    TotalPriceToPay = -1m;
-                }
-            }
+            label_TotalPrice.Content = _POSController.CompletePurchase(PaymentMethod_Enum.MobilePay, PayWithAmount, listView_Receipt);
         }
 
         AdminValidation adminValid;

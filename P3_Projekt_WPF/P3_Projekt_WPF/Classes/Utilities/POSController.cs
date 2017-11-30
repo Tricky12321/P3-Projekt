@@ -6,7 +6,16 @@ using System.Threading.Tasks;
 using System.Diagnostics;
 using P3_Projekt_WPF.Classes.Database;
 using P3_Projekt_WPF;
+using System.Threading;
 using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Documents;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
+using System.Windows.Shapes;
 namespace P3_Projekt_WPF.Classes.Utilities
 {
     public delegate void LowStorageNotification(Product product);
@@ -20,7 +29,8 @@ namespace P3_Projekt_WPF.Classes.Utilities
         private StorageController _storageController;
 
         public List<Receipt> ReceiptList = new List<Receipt>();
-
+        public int ReceiptID = 0;
+        public decimal TotalPriceToPay = -1m;
         public POSController(StorageController storageController)
         {
             _storageController = storageController;
@@ -142,6 +152,60 @@ namespace P3_Projekt_WPF.Classes.Utilities
                     }
                 }
             }
+        }
+
+        public string CompletePurchase(PaymentMethod_Enum PaymentMethod, TextBox PayWithAmount, ListView ReceiptListView)
+        {
+            if (ReceiptListView.HasItems)
+            {
+
+                if (TotalPriceToPay == -1m)
+                {
+                    TotalPriceToPay = PlacerholderReceipt.TotalPrice;
+                }
+                decimal PriceToPay = TotalPriceToPay;
+
+                if (PlacerholderReceipt.TotalPriceToPay == -1m)
+                {
+                    PlacerholderReceipt.TotalPriceToPay = PriceToPay;
+                }
+                decimal PaymentAmount;
+
+                if (PayWithAmount.Text.Length == 0)
+                {
+                    PaymentAmount = PlacerholderReceipt.TotalPrice - PlacerholderReceipt.PaidPrice;
+                }
+                else
+                {
+                    PaymentAmount = Convert.ToDecimal(PayWithAmount.Text);
+                }
+
+                if (ReceiptID == 0)
+                {
+                    ReceiptID = Receipt.GetNextID();
+                }
+                Payment NewPayment = new Payment(ReceiptID, PaymentAmount, PaymentMethod);
+                PlacerholderReceipt.Payments.Add(NewPayment);
+
+                PayWithAmount.Text = "";
+                TotalPriceToPay = PriceToPay - NewPayment.Amount;
+                if (PlacerholderReceipt.PaidPrice >= PlacerholderReceipt.TotalPrice)
+                {
+                    SaleTransaction.SetStorageController(_storageController);
+                    //_POSController.PlacerholderReceipt.PaymentMethod = PaymentMethod;
+                    Thread NewThread = new Thread(new ThreadStart(ExecuteReceipt));
+                    NewThread.Name = "ExecuteReceipt Thread";
+                    NewThread.Start();
+                    ReceiptListView.Items.Clear();
+                    if (PlacerholderReceipt.PaidPrice > PlacerholderReceipt.TotalPrice)
+                    {
+                        return "Retur: " + (PlacerholderReceipt.PaidPrice - PlacerholderReceipt.TotalPrice).ToString().Replace('.', ',').Replace('-', ' ');
+                    }
+                    TotalPriceToPay = -1m;
+                }
+                return $"{PriceToPay - NewPayment.Amount}";
+            }
+            return PayWithAmount.Text;
         }
     }
 }

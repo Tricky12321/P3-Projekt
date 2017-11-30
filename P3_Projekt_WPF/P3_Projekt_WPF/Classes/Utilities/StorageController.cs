@@ -125,7 +125,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
 
         public void GetAllTempProductsFromDatabase()
         {
-            string sql = "SELECT * FROM `temp_products` WHERE `resolved` = '0'";
+            string sql = "SELECT * FROM `temp_products`";
             TableDecodeQueue Result = Mysql.RunQueryWithReturnQueue(sql);
             AddInformation("TempProduct Count", Result.RowCounter.ToString());
             _tempProductQueue = Result.RowData;
