@@ -510,7 +510,7 @@ namespace P3_Projekt_WPF
             ReceiptListItem item;
             if (transaction.Product is TempProduct)
             {
-                item = new ReceiptListItem(transaction.GetProductName(), Math.Round(transaction.Price * transaction.Amount, 2), transaction.Amount, 't' + transaction.Product.ID.ToString());
+                item = new ReceiptListItem(transaction.GetProductName(), Math.Round(transaction.TotalPrice, 2), transaction.Amount, 't' + transaction.Product.ID.ToString());
 
                 if (transaction.DiscountBool)
                 {
@@ -525,7 +525,7 @@ namespace P3_Projekt_WPF
             }
             else
             {
-                item = new ReceiptListItem(transaction.GetProductName(), Math.Round(transaction.Price * transaction.Amount, 2), transaction.Amount, transaction.Product.ID.ToString(), transaction.GetID());
+                item = new ReceiptListItem(transaction.GetProductName(), Math.Round(transaction.TotalPrice, 2), transaction.Amount, transaction.Product.ID.ToString(), transaction.GetID());
                 if (transaction.DiscountBool)
                 {
                     item.canvas_Discount.Visibility = Visibility.Visible;
