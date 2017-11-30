@@ -33,8 +33,6 @@ namespace P3_Projekt_WPF
         private POSController _POSController;
         private StatisticsController _statisticsController;
         private Grid productGrid = new Grid();
-        List<OrderTransaction> orderTransList = new List<OrderTransaction>(); 
-        List<StorageTransaction> storageTransList = new List<StorageTransaction>(); 
         private Dictionary<int, ProductControl> _productControlDictionary = new Dictionary<int, ProductControl>();
         private bool _ctrlDown = false;
         public static bool runLoading = true;
@@ -55,8 +53,7 @@ namespace P3_Projekt_WPF
             OutputList.Add("[3. TIMER] took " + LoadingTimer.ElapsedMilliseconds + "ms");
             InitComponents();
             OutputList.Add("[4. TIMER] took " + LoadingTimer.ElapsedMilliseconds + "ms");
-            orderTransList = StorageController.GetAllOrderTransactions();
-            storageTransList = StorageController.GetAllStorageTransactions();
+            //TODO: Thek om OrderTrans og StorageTrans er blevet fjernet
             this.KeyDown += new KeyEventHandler(KeyboardHook);
             this.KeyDown += new KeyEventHandler(CtrlHookDown);
             this.KeyDown += new KeyEventHandler(EnterKeyPressedSearch);
@@ -132,7 +129,7 @@ namespace P3_Projekt_WPF
             Settings.QuickButton13 = QuickButtonsCount >= 14 ? QuickButtons[12].ToString() : null;
             Settings.QuickButton14 = QuickButtonsCount >= 15 ? QuickButtons[13].ToString() : null;
             Settings.Save();
-            
+
         }
 
         public void LoadQuickButtons()
@@ -249,7 +246,7 @@ namespace P3_Projekt_WPF
             {
                 AddTransactionToReceipt(transaction);
             }
-            label_TotalPrice.Content = _POSController.PlacerholderReceipt.TotalPrice.ToString().Replace('.', ',');
+            label_TotalPrice.Content = Math.Round(_POSController.PlacerholderReceipt.TotalPrice, 2).ToString().Replace('.', ',');
             btn_discount.IsEnabled = true;
         }
 
@@ -281,7 +278,7 @@ namespace P3_Projekt_WPF
                 GetAllThread.Start();
                 while (!_storageController.ThreadsDone)
                 {
-                    Thread.Sleep(1);
+                    Thread.Sleep(100);
                 }
                 runLoading = false;
                 TimeTester.Stop();
@@ -534,6 +531,7 @@ namespace P3_Projekt_WPF
                 {
                     item.canvas_Discount.Visibility = Visibility.Visible;
                     item.textBlock_DiscountAmount.Text = '-' + Math.Round((transaction.Price - transaction.DiscountPrice) * transaction.Amount, 2).ToString() + " : Ny Pris: " + Math.Round(transaction.DiscountPrice * transaction.Amount, 2).ToString();
+                    item.textBlock_DiscountAmount.Foreground = Brushes.Red;
                 }
                 else
                 {
@@ -883,11 +881,12 @@ namespace P3_Projekt_WPF
         ResovleTempProduct _resolveTempProduct;
         private void btn_MergeTempProduct_Click(object sender, RoutedEventArgs e)
         {
-            if (_storageController.TempProductList.Where(x => x.Value.Resolved == false).Count() > 0 && _resolveTempProduct == null)
+            if (_storageController.TempProductDictionary.Where(x => x.Value.Resolved == false).Count() > 0 && _resolveTempProduct == null)
             {
                 _resolveTempProduct = new ResovleTempProduct(_storageController);
                 _resolveTempProduct.Show();
-                _resolveTempProduct.Closed += delegate {
+                _resolveTempProduct.Closed += delegate
+                {
                     _resolveTempProduct = null;
                 };
             }
@@ -1063,17 +1062,29 @@ namespace P3_Projekt_WPF
         private void btn_Cash_Click(object sender, RoutedEventArgs e)
         {
             label_TotalPrice.Content = _POSController.CompletePurchase(PaymentMethod_Enum.Cash, PayWithAmount, listView_Receipt);
+            button_DeleteFulReceiptDiscount.Visibility = Visibility.Hidden;
+            image_DeleteFullReceiptDiscount.Visibility = Visibility.Hidden;
+            text_FullReceiptDiscount.Text = string.Empty;
         }
 
         private void btn_Dankort_Click(object sender, RoutedEventArgs e)
         {
             label_TotalPrice.Content = _POSController.CompletePurchase(PaymentMethod_Enum.Card, PayWithAmount, listView_Receipt);
+            button_DeleteFulReceiptDiscount.Visibility = Visibility.Hidden;
+            image_DeleteFullReceiptDiscount.Visibility = Visibility.Hidden;
+            text_FullReceiptDiscount.Text = string.Empty;
         }
 
         private void btn_MobilePay_Click(object sender, RoutedEventArgs e)
         {
             label_TotalPrice.Content = _POSController.CompletePurchase(PaymentMethod_Enum.MobilePay, PayWithAmount, listView_Receipt);
+            button_DeleteFulReceiptDiscount.Visibility = Visibility.Hidden;
+            image_DeleteFullReceiptDiscount.Visibility = Visibility.Hidden;
+            text_FullReceiptDiscount.Text = string.Empty;
         }
+
+
+        
 
         AdminValidation adminValid;
         private void InitAdminLogin()
@@ -1268,7 +1279,7 @@ namespace P3_Projekt_WPF
             _POSController.PlacerholderReceipt.DiscountOnFullReceipt = 0m;
             if (textBox_discount.Text.Contains('%'))
             {
-                decimal percentage = Convert.ToDecimal(textBox_discount.Text.Remove(textBox_discount.Text.Length - 1, 1));
+                decimal percentage = Convert.ToDecimal(textBox_discount.Text.Replace("%", string.Empty));
                 _POSController.PlacerholderReceipt.DiscountOnFullReceipt = _POSController.PlacerholderReceipt.TotalPrice * (percentage / 100m);
             }
             else
@@ -1392,9 +1403,11 @@ namespace P3_Projekt_WPF
 
         private void StorageTransactionsHistory()
         {
-            foreach (var ordertrans in orderTransList)
+            listview_SettingsStorage.Height = 500;
+            foreach (var ordertrans in _storageController.OrderTransactionDictionary)
             {
-                //listview_SettingsStorage.Items.Add(new { Recieved = ordertrans.Product.});
+                var product = _storageController.ProductDictionary[ordertrans.Value.Product.ID];
+               listview_SettingsStorage.Items.Add(new { Recieved = product.Name});
             }
         }
 
@@ -1412,10 +1425,14 @@ namespace P3_Projekt_WPF
         {
             foreach(TempProduct tempproduct in _storageController.TempTempProductList)
             {
-                _storageController.TempProductList.TryAdd(tempproduct.ID, tempproduct);
+                _storageController.TempProductDictionary.TryAdd(tempproduct.ID, tempproduct);
             }
             _storageController.TempTempProductList.Clear();
         }
-        
+
+        private void settingsTab_GotFocus(object sender, RoutedEventArgs e)
+        {
+            StorageTransactionsHistory();
+        }
     }
 }

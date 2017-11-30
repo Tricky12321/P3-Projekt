@@ -14,6 +14,8 @@ namespace P3_Projekt_WPF.Classes
         private StorageRoom _source;
         private StorageRoom _destination;
 
+        public int ID => _id;
+
         public StorageTransaction(Product product, int amount, int sourceInt, int destinationInt, ConcurrentDictionary<int, StorageRoom> storageWithAmountDictionary) : base(product, amount)
         {
             _source = storageWithAmountDictionary[sourceInt];
@@ -26,9 +28,15 @@ namespace P3_Projekt_WPF.Classes
             GetFromDatabase();
         }
 
-        public StorageTransaction(Row Data) : base(null, 0)
+        public StorageTransaction(Row Data, bool reference = false) : base(null, 0)
         {
-            CreateFromRow(Data);
+            if (!reference)
+            {
+                CreateFromRow(Data);
+            } else
+            {
+                CreateFromRowReference(Data);
+            }
         }
 
         public override void Execute()
@@ -43,7 +51,22 @@ namespace P3_Projekt_WPF.Classes
             CreateFromRow(Mysql.RunQueryWithReturn(sql).RowData[0]);
         }
 
+        public void SetInformation(StorageRoom Source, StorageRoom Destination, BaseProduct Prod)
+        {
+            Product = Prod;
+            _source = Source;
+            _destination = Destination;
+        }
 
+        public void CreateFromRowReference(Row Table)
+        {
+            _id = Convert.ToInt32(Table.Values[0]);
+            //Product = new Product(Convert.ToInt32(Table.Values[1]));
+            Amount = Convert.ToInt32(Table.Values[2]);
+            Date = Convert.ToDateTime(Table.Values[3]);
+            //_source = new StorageRoom(Convert.ToInt32(Table.Values[4]));
+            //_destination = new StorageRoom(Convert.ToInt32(Table.Values[5]));
+        }
 
         public override void CreateFromRow(Row Table)
         {
