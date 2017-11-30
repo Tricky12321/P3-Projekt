@@ -19,7 +19,7 @@
         <Label x:Name="label_ID" FontSize="30" Padding="0" Content="ID" HorizontalAlignment="Left" Margin="10,115,0,0" VerticalAlignment="Top" Width="40" RenderTransformOrigin="0.675,-0.875"/>
         <ComboBox x:Name="comboBox_StorageRooms" DropDownClosed="comboBox_StorageRooms_DropDownClosed"  FontSize="20" Background="White" BorderBrush="Black" BorderThickness="1" Margin="10,205,140,0" VerticalAlignment="Top" Height="40"/>
         <Label x:Name="label_lagerrum" Padding="0" FontSize="30" Content="Fra Lagerrum" HorizontalAlignment="Left" Margin="10,160,0,0" VerticalAlignment="Top"/>
-        <ComboBox x:Name="comboBox_Destination" FontSize="20" Margin="10,295,10,0" VerticalAlignment="Top" Height="40"/>
+        <ComboBox x:Name="comboBox_Destination"  FontSize="20" Margin="10,295,10,0" VerticalAlignment="Top" Height="40"/>
         <Label x:Name="label_LagerrumDestination" FontSize="30" Padding="0" Content="Lagerrums Destination" HorizontalAlignment="Left" Margin="10,250,0,0" VerticalAlignment="Top" Width="312" RenderTransformOrigin="0.484,-1.25"/>
         <TextBox Padding="10,0,0,0" KeyUp="txtBox_SearchField_KeyUp" x:Name="txtBox_SearchField" Margin="10,10,75,0" FontSize="33" Height="50" VerticalAlignment="Top">
             <TextBox.Resources>
