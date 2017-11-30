@@ -96,11 +96,20 @@ namespace P3_Projekt_WPF
 
         private void button_Merge_Click(object sender, RoutedEventArgs e)
         {
-            _storageController.MergeTempProduct(tempProducts[index].Value, int.Parse(textBox_IDToMerge.Text));
-            Close();
-            MessageBox.Show($"Midlertidigt produkt: {tempProducts[index].Value.Description}\nEr rettet til at være et produktet: {textBox_IDToMerge.Text}");
+
+            if (!(IDToMerge().StorageWithAmount.Where(x => x.Value == 0).Count() == IDToMerge().StorageWithAmount.Count))
+            {
+                _storageController.MergeTempProduct(tempProducts[index].Value, IDToMerge().ID);
+                Close();
+                MessageBox.Show($"Midlertidigt produkt: {tempProducts[index].Value.Description}\nEr rettet til at være et produktet: {IDToMerge().Name}");
+            }
+            else
+            {
+                Label_MergeInfo.Content = "Produktet ikke på lager,\nkan ikke rette midlertidigt produkt!";
+
+            }
         }
-        
+
         private void listview_ProductsToMerge_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             index = listview_ProductsToMerge.SelectedIndex;
