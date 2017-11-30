@@ -158,7 +158,7 @@ namespace P3_Projekt_WPF.Classes
         public override void UploadToDatabase()
         {
             string sql = $"INSERT INTO `products` (`id`, `name`, `brand`, `groups`, `price`, `purchase_price` ,`discount`, `discount_price`)" +
-            $" VALUES (NULL, '{Name}', '{Brand}', '{ProductGroupID}', '{SalePrice}','{PurchasePrice}', '{Convert.ToInt32(DiscountBool)}', '{DiscountPrice}');";
+            $" VALUES (NULL, '{Name}', '{Brand}', '{ProductGroupID}', '{SalePrice.ToString().Replace(',', '.')}','{PurchasePrice.ToString().Replace(',', '.')}', '{Convert.ToInt32(DiscountBool)}', '{DiscountPrice.ToString().Replace(',', '.')}');";
             Mysql.RunQuery(sql);
             UpdateStorageStatus();
             CreatedTime = DateTime.Now;
@@ -175,10 +175,10 @@ namespace P3_Projekt_WPF.Classes
                 $"`name` = '{GetName()}'," +
                 $"`brand` = '{Brand}'," +
                 $"`groups` = '{ProductGroupID}'," +
-                $"`price` = '{SalePrice}'," +
+                $"`price` = '{SalePrice.ToString().Replace(',', '.')}'," +
                 $"`discount` = '{Convert.ToInt32(DiscountBool)}'," +
-                $"`discount_price` = '{DiscountPrice}'," +
-                $"`purchase_price` = '{PurchasePrice}' " +
+                $"`discount_price` = '{DiscountPrice.ToString().Replace(',', '.')}'," +
+                $"`purchase_price` = '{PurchasePrice.ToString().Replace(',', '.')}' " +
                 $"WHERE `id` = {ID};";
             Mysql.RunQuery(sql);
             UpdateStorageStatus();

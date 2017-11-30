@@ -70,7 +70,7 @@ namespace P3_Projekt_WPF.Classes
         public override void UploadToDatabase()
         {
             string sql = "INSERT INTO `order_transactions` (`id`, `product_id`, `amount`, `datetime`, `purchase_price`, `supplier`, `storageroom_id`)"+
-                $" VALUES (NULL, '{Product.ID}', '{Amount}', FROM_UNIXTIME('{Utils.GetUnixTime(Date)}'), '{_purchasePrice}', '{_supplier}', '{_storageRoomID}');";
+                $" VALUES (NULL, '{Product.ID}', '{Amount}', FROM_UNIXTIME('{Utils.GetUnixTime(Date)}'), '{_purchasePrice.ToString().Replace(',', '.')}', '{_supplier}', '{_storageRoomID}');";
             Mysql.RunQuery(sql);
         }
 
@@ -80,7 +80,7 @@ namespace P3_Projekt_WPF.Classes
                $"`product_id` = '{Product.ID}'," +
                $"`amount` = '{Amount}'," +
                $"`datetime` = FROM_UNIXTIME('{Utils.GetUnixTime(Date)}')," +
-               $"`purchase_price` = '{_purchasePrice}'," +
+               $"`purchase_price` = '{_purchasePrice.ToString().Replace(',', '.')}'," +
                $"`supplier` = '{_supplier}'," +
                $"`storageroom_id` = '{_storageRoomID}' " +
                $"WHERE `id` = {_id};";

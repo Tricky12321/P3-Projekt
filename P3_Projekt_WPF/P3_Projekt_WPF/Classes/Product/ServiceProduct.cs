@@ -102,7 +102,7 @@ namespace P3_Projekt_WPF.Classes
         public override void UploadToDatabase()
         {
             string sql = $"INSERT INTO `service_products` (`id`, `name`, `price`, `group_price`, `group_limit`, `groups`)" +
-            $"VALUES (NULL, '{Name}', '{SalePrice}','{GroupPrice}','{GroupLimit}','{ServiceProductGroupID}');";
+            $"VALUES (NULL, '{Name}', '{SalePrice.ToString().Replace(',', '.')}','{GroupPrice.ToString().Replace(',', '.')}','{GroupLimit}','{ServiceProductGroupID}');";
             Mysql.RunQuery(sql);
         }
 
@@ -110,8 +110,8 @@ namespace P3_Projekt_WPF.Classes
         {
             string sql = $"UPDATE `service_products` SET " +
                 $"`name` = '{Name}'," +
-                $"`price` = '{SalePrice}'," +
-                $"`group_price` = '{GroupPrice}'," +
+                $"`price` = '{SalePrice.ToString().Replace(',', '.')}'," +
+                $"`group_price` = '{GroupPrice.ToString().Replace(',', '.')}'," +
                 $"`group_limit` = '{GroupLimit}'," +
                 $"`active` = '{Convert.ToInt32(_active)}'," +
                 $"`groups` = '{ServiceProductGroupID}' "+

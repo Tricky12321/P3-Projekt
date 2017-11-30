@@ -302,7 +302,7 @@ namespace P3_Projekt_WPF.Classes
         {
             SoldBy = Environment.UserName;
             string sql = "INSERT INTO `sale_transactions` (`id`, `product_id`, `product_type`,`amount`, `receipt_id`, `price`, `total_price`, `discount`,`sold_by`)" +
-                $" VALUES (NULL, '{Product.ID}', '{_getProductType()}','{Amount}', '{ReceiptID}', '{Price}', '{TotalPrice}', '{DiscountBool}','{SoldBy}');";
+                $" VALUES (NULL, '{Product.ID}', '{_getProductType()}','{Amount.ToString().Replace(',', '.')}', '{ReceiptID}', '{Price.ToString().Replace(',', '.')}', '{TotalPrice.ToString().Replace(',', '.')}', '{DiscountBool}','{SoldBy}');";
             Mysql.RunQuery(sql);
         }
 
@@ -314,8 +314,8 @@ namespace P3_Projekt_WPF.Classes
                 $"`amount` = '{Amount}'," +
                 $"`datetime` = FROM_UNIXTIME('{Utils.GetUnixTime(Date)}')," +
                 $"`receipt_id` = '{ReceiptID}'," +
-                $"`price` = '{Price}'," +
-                $"`total_price` = '{TotalPrice}'," +
+                $"`price` = '{Price.ToString().Replace(',', '.')}'," +
+                $"`total_price` = '{TotalPrice.ToString().Replace(',', '.')}'," +
                 $"`discount` = '{Convert.ToInt32(DiscountBool)}'," +
                 $"`sold_by` = '{SoldBy}' "+
                 $"WHERE `id` = {_id};";
