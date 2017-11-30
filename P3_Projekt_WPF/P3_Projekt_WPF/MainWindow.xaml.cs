@@ -745,6 +745,7 @@ namespace P3_Projekt_WPF
         private void Button_CreateStatistics_Click(object sender, RoutedEventArgs e)
         {
             ResetStatisticsView();
+            ((GridView)listView_Statistics.View).Columns[0].Width = 110;
 
             int productID = 0;
             if (textBox_StatisticsProductID.Text.Length > 0)
@@ -812,6 +813,7 @@ namespace P3_Projekt_WPF
         {
             int totalProductAmount = 0;
             ResetStatisticsView();
+            ((GridView)listView_Statistics.View).Columns[0].Width = 0;
             _statisticsController.RequestTodayReceipts();
             _statisticsController.CalculatePayments();
             listView_Statistics.Items.Add(new StatisticsListItem("", "Kontant", "", $"{_statisticsController.Payments[0]}"));
