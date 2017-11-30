@@ -209,6 +209,11 @@ namespace P3_Projekt_WPF.Classes.Utilities
                 }
                 return TotalPriceToPay.ToString();
             }
-        }
+            else
+            {
+                return string.Empty;
+            }
+        } 
+
     }
 }
