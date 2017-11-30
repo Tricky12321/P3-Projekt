@@ -163,12 +163,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
                     TotalPriceToPay = PlacerholderReceipt.GetTotalDiscountPrice();
                 }
 
-                if (PlacerholderReceipt.TotalPriceToPay == -1m)
-                {
-                    PlacerholderReceipt.TotalPriceToPay = TotalPriceToPay;
-                }
                 decimal PaymentAmount;
-
                 if (PayWithAmount.Text.Length == 0)
                 {
                     PaymentAmount = TotalPriceToPay;
@@ -189,7 +184,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
                 PayWithAmount.Text = string.Empty;
                 TotalPriceToPay -= NewPayment.Amount;
 
-                
+
                 if (PlacerholderReceipt.PaidPrice >= PlacerholderReceipt.GetTotalDiscountPrice())
                 {
                     SaleTransaction.SetStorageController(_storageController);
@@ -206,15 +201,14 @@ namespace P3_Projekt_WPF.Classes.Utilities
                     {
                         return "Retur: " + (PlacerholderReceipt.PaidPrice - PlacerholderReceipt.GetTotalDiscountPrice()).ToString().Replace('.', ',');
                     }
-                    
-                }
-                return TotalPriceToPay.ToString();
-            }
-            else
-            {
-                return string.Empty;
-            }
-        } 
 
+                }
+                if (TotalPriceToPay != -1m)
+                {
+                    return TotalPriceToPay.ToString().Replace('.', ',');
+                }
+            }
+            return string.Empty;
+        }
     }
 }
