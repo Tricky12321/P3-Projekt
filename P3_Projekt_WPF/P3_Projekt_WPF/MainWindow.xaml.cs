@@ -1407,15 +1407,6 @@ namespace P3_Projekt_WPF
             UpdateReceiptList();
         }
 
-        private void tempProductToDictionary()
-        {
-            foreach(TempProduct tempproduct in _storageController.TempTempProductList)
-            {
-                _storageController.TempProductList.TryAdd(tempproduct.ID, tempproduct);
-            }
-            _storageController.TempTempProductList.Clear();
-        }
-
         private void settingsTab_GotFocus(object sender, RoutedEventArgs e)
         {
             StorageTransactionsHistory();

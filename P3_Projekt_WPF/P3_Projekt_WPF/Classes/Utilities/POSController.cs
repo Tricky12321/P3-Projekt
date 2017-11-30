@@ -196,6 +196,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
                     Thread NewThread = new Thread(new ThreadStart(ExecuteReceipt));
                     NewThread.Name = "ExecuteReceipt Thread";
                     NewThread.Start();
+                    _storageController.TempProductToDictionary();
                     ReceiptListView.Items.Clear();
                     if (PlacerholderReceipt.PaidPrice > PlacerholderReceipt.TotalPrice)
                     {

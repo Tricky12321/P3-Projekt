@@ -603,6 +603,14 @@ namespace P3_Projekt_WPF.Classes.Utilities
             Properties.Settings.Default.Save();
         }
 
+        public void TempProductToDictionary()
+        {
+            foreach (TempProduct tempproduct in TempTempProductList)
+            {
+                TempProductList.TryAdd(tempproduct.ID, tempproduct);
+            }
+            TempTempProductList.Clear();
+        }
 
         #region SearchAlgorithm
 
