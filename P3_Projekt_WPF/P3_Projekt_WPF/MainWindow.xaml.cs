@@ -510,7 +510,7 @@ namespace P3_Projekt_WPF
             ReceiptListItem item;
             if (transaction.Product is TempProduct)
             {
-                item = new ReceiptListItem(transaction.GetProductName(), Math.Round(transaction.Price * transaction.Amount, 2), transaction.Amount, 't' + transaction.Product.ID.ToString());
+                item = new ReceiptListItem(transaction.GetProductName(), Math.Round(transaction.TotalPrice, 2), transaction.Amount, 't' + transaction.Product.ID.ToString());
 
                 if (transaction.DiscountBool)
                 {
@@ -525,7 +525,7 @@ namespace P3_Projekt_WPF
             }
             else
             {
-                item = new ReceiptListItem(transaction.GetProductName(), Math.Round(transaction.Price * transaction.Amount, 2), transaction.Amount, transaction.Product.ID.ToString(), transaction.GetID());
+                item = new ReceiptListItem(transaction.GetProductName(), Math.Round(transaction.TotalPrice, 2), transaction.Amount, transaction.Product.ID.ToString(), transaction.GetID());
                 if (transaction.DiscountBool)
                 {
                     item.canvas_Discount.Visibility = Visibility.Visible;
@@ -731,6 +731,7 @@ namespace P3_Projekt_WPF
         private void Button_CreateStatistics_Click(object sender, RoutedEventArgs e)
         {
             ResetStatisticsView();
+            ((GridView)listView_Statistics.View).Columns[0].Width = 110;
 
             int productID = 0;
             if (textBox_StatisticsProductID.Text.Length > 0)
@@ -798,6 +799,7 @@ namespace P3_Projekt_WPF
         {
             int totalProductAmount = 0;
             ResetStatisticsView();
+            ((GridView)listView_Statistics.View).Columns[0].Width = 0;
             _statisticsController.RequestTodayReceipts();
             _statisticsController.CalculatePayments();
             listView_Statistics.Items.Add(new StatisticsListItem("", "Kontant", "", $"{_statisticsController.Payments[0]}"));
@@ -1069,11 +1071,19 @@ namespace P3_Projekt_WPF
             CompletePurchase(PaymentMethod_Enum.MobilePay);
         }
 
+        private int _receiptID = 0;
+        private decimal TotalPriceToPay = -1m;
         public void CompletePurchase(PaymentMethod_Enum PaymentMethod)
         {
             if (listView_Receipt.HasItems)
             {
-                decimal PriceToPay = Convert.ToDecimal(label_TotalPrice.Content.ToString().Replace(',', '.'));
+
+                if (TotalPriceToPay == -1m)
+                {
+                    TotalPriceToPay = _POSController.PlacerholderReceipt.TotalPrice;
+                }
+                decimal PriceToPay = TotalPriceToPay;
+
                 if (_POSController.PlacerholderReceipt.TotalPriceToPay == -1m)
                 {
                     _POSController.PlacerholderReceipt.TotalPriceToPay = PriceToPay;
@@ -1082,18 +1092,23 @@ namespace P3_Projekt_WPF
 
                 if (PayWithAmount.Text.Length == 0)
                 {
-                    PaymentAmount = Convert.ToDecimal(label_TotalPrice.Content.ToString().Replace(',', '.'));
+                    PaymentAmount = _POSController.PlacerholderReceipt.TotalPrice - _POSController.PlacerholderReceipt.PaidPrice;
                 }
                 else
                 {
                     PaymentAmount = Convert.ToDecimal(PayWithAmount.Text);
                 }
 
-                Payment NewPayment = new Payment(Receipt.GetNextID(), PaymentAmount, PaymentMethod);
+                if (_receiptID == 0)
+                {
+                    _receiptID = Receipt.GetNextID();
+                }
+                Payment NewPayment = new Payment(_receiptID, PaymentAmount, PaymentMethod);
                 _POSController.PlacerholderReceipt.Payments.Add(NewPayment);
 
                 PayWithAmount.Text = "";
-                label_TotalPrice.Content = $"{PriceToPay - NewPayment.Amount}".Replace('.', ',');
+                label_TotalPrice.Content = $"{PriceToPay - NewPayment.Amount}";
+                TotalPriceToPay = PriceToPay - NewPayment.Amount;
                 if (_POSController.PlacerholderReceipt.PaidPrice >= _POSController.PlacerholderReceipt.TotalPrice)
                 {
                     SaleTransaction.SetStorageController(_storageController);
@@ -1107,6 +1122,7 @@ namespace P3_Projekt_WPF
                     {
                         label_TotalPrice.Content = "Retur: " + (_POSController.PlacerholderReceipt.PaidPrice - _POSController.PlacerholderReceipt.TotalPrice).ToString().Replace('.', ',').Replace('-', ' ');
                     }
+                    TotalPriceToPay = -1m;
                 }
             }
         }
@@ -1423,7 +1439,6 @@ namespace P3_Projekt_WPF
                 }
                 ReloadDisabledProducts();
                 ReloadProducts();
-
             }
         }
 
