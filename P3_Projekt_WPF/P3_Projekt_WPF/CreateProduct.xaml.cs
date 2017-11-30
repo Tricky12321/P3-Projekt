@@ -44,6 +44,7 @@ namespace P3_Projekt_WPF
             output_ProductID.Text = Product.GetNextID().ToString();
             output_ServiceProductID.Text = ServiceProduct.GetNextID().ToString();
             btn_disableProduct.Visibility = Visibility.Hidden;
+            btn_disableServiceProduct.Visibility = Visibility.Hidden;
             this.Title = "Opret Produkt";
         }
 
@@ -59,6 +60,7 @@ namespace P3_Projekt_WPF
                 image_Product.Source = prod.Image.Source;
             }
             _isAdmin = adminEdit;
+            tabControl.Items.RemoveAt(1);
             HideIfNotAdmin();
 
             ReloadAddedStorageRooms();
@@ -71,6 +73,7 @@ namespace P3_Projekt_WPF
                 btn_disableProduct.Click += btn_EnableProduct_click;
                 btn_disableProduct.Content = "Aktiver produkt";
             }
+
         }
 
         //Editing service product
@@ -83,6 +86,8 @@ namespace P3_Projekt_WPF
             UpdateProductID = prod.ID;
             FillBoxesWithExistingServiceProduct(prod);
             tabControl.SelectedIndex = 1;
+            tabControl.Items.RemoveAt(0);
+
             if (prod.Image != null)
             {
                 image_ServiceProduct.Source = prod.Image.Source;
