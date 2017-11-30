@@ -306,7 +306,7 @@ namespace P3_Projekt_WPF.Classes
         {
             SoldBy = Environment.UserName;
             string sql = "INSERT INTO `sale_transactions` (`id`, `product_id`, `product_type`,`amount`, `receipt_id`, `price`, `total_price`, `discount`,`sold_by`)" +
-                $" VALUES (NULL, '{Product.ID}', '{_getProductType()}','{Amount.ToString().Replace(',', '.')}', '{ReceiptID}', '{Price.ToString().Replace(',', '.')}', '{TotalPrice.ToString().Replace(',', '.')}', '{DiscountBool}','{SoldBy}');";
+                $" VALUES (NULL, '{Product.ID}', '{_getProductType()}','{Amount.ToString().Replace(',', '.')}', '{ReceiptID}', '{Price.ToString().Replace(',', '.')}', '{TotalPrice.ToString().Replace(',', '.')}', '{Convert.ToInt32(DiscountBool)}','{SoldBy}');";
             Mysql.RunQuery(sql);
         }
 
