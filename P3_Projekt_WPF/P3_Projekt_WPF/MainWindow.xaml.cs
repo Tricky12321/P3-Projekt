@@ -1084,11 +1084,18 @@ namespace P3_Projekt_WPF
         }
 
         private int _receiptID = 0;
+        private decimal TotalPriceToPay = -1m;
         public void CompletePurchase(PaymentMethod_Enum PaymentMethod)
         {
             if (listView_Receipt.HasItems)
             {
-                decimal PriceToPay = Convert.ToDecimal(label_TotalPrice.Content.ToString());
+
+                if (TotalPriceToPay == -1m)
+                {
+                    TotalPriceToPay = _POSController.PlacerholderReceipt.TotalPrice;
+                }
+                decimal PriceToPay = TotalPriceToPay;
+
                 if (_POSController.PlacerholderReceipt.TotalPriceToPay == -1m)
                 {
                     _POSController.PlacerholderReceipt.TotalPriceToPay = PriceToPay;
@@ -1097,12 +1104,13 @@ namespace P3_Projekt_WPF
 
                 if (PayWithAmount.Text.Length == 0)
                 {
-                    PaymentAmount = Convert.ToDecimal(label_TotalPrice.Content.ToString());
+                    PaymentAmount = _POSController.PlacerholderReceipt.TotalPrice;
                 }
                 else
                 {
                     PaymentAmount = Convert.ToDecimal(PayWithAmount.Text);
                 }
+
                 if (_receiptID == 0)
                 {
                     _receiptID = Receipt.GetNextID();
@@ -1111,7 +1119,8 @@ namespace P3_Projekt_WPF
                 _POSController.PlacerholderReceipt.Payments.Add(NewPayment);
 
                 PayWithAmount.Text = "";
-                label_TotalPrice.Content = $"{PriceToPay - NewPayment.Amount}".Replace('.', ',');
+                label_TotalPrice.Content = $"{PriceToPay - NewPayment.Amount}";
+                TotalPriceToPay = PriceToPay - NewPayment.Amount;
                 if (_POSController.PlacerholderReceipt.PaidPrice >= _POSController.PlacerholderReceipt.TotalPrice)
                 {
                     SaleTransaction.SetStorageController(_storageController);
