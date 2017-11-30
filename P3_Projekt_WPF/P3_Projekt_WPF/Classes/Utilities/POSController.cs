@@ -198,6 +198,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
                     Thread NewThread = new Thread(new ThreadStart(ExecuteReceipt));
                     NewThread.Name = "ExecuteReceipt Thread";
                     NewThread.Start();
+                    _storageController.TempProductToDictionary();
                     ReceiptListView.Items.Clear();
 
                     TotalPriceToPay = -1m;
@@ -209,6 +210,11 @@ namespace P3_Projekt_WPF.Classes.Utilities
                 }
                 return TotalPriceToPay.ToString();
             }
-        }
+            else
+            {
+                return string.Empty;
+            }
+        } 
+
     }
 }
