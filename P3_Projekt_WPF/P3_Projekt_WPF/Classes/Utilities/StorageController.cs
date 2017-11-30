@@ -197,6 +197,59 @@ namespace P3_Projekt_WPF.Classes.Utilities
 
         private void HandleQueue()
         {
+            HandleFirstQueue();
+
+        }
+
+        private void HandleSecondQueue()
+        {
+            Row Data;
+            int count = 0;
+            try
+            {
+                while (_storageStatusQueue.TryDequeue(out Data))
+                {
+
+                    ProductDictionary[Convert.ToInt32(Data.Values[1])].StorageWithAmount.TryAdd(Convert.ToInt32(Data.Values[2]), Convert.ToInt32(Data.Values[3]));
+                    count++;
+
+                }
+                while (_storageTransactionsQueue.TryDequeue(out Data))
+                {
+                    StorageTransaction StorageTrans = new StorageTransaction(Data, true);
+                    int ProductID = Convert.ToInt32(Data.Values[1]);
+                    int SourceID = Convert.ToInt32(Data.Values[4]);
+                    int DestinationID = Convert.ToInt32(Data.Values[5]);
+                    StorageTrans.SetInformation(StorageRoomDictionary[SourceID], StorageRoomDictionary[DestinationID], AllProductsDictionary[ProductID]);
+                    StorageTransactionDictionary.TryAdd(StorageTrans.ID, StorageTrans);
+                    count++;
+                }
+                while (_orderTransactionsQueue.TryDequeue(out Data))
+                {
+                    OrderTransaction OrderTrans = new OrderTransaction(Data, true);
+                    int ProductID = Convert.ToInt32(Data.Values[1]);
+                    OrderTrans.SetInformation(AllProductsDictionary[ProductID]);
+                    OrderTransactionDictionary.TryAdd(OrderTrans.ID, OrderTrans);
+                    count++;
+                }
+            }
+            catch (Exception)
+            {
+                HandleSecondQueue();
+            }
+            // Hvis der var elementer der ikke er blevet oprettet efter første gennemgang, så køres loopet igen. 
+            if (count > 0)
+            {
+                HandleSecondQueue();
+            }
+            else
+            {
+                return;
+            }
+        }
+
+        private void HandleFirstQueue()
+        {
             Row Data;
             int count = 0;
             while (_serviceProductQueue.TryDequeue(out Data))
@@ -229,18 +282,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
                 ProductDictionary.TryAdd(NewProduct.ID, NewProduct);
                 count++;
             }
-            while (_storageStatusQueue.TryDequeue(out Data))
-            {
-                try
-                {
-                    ProductDictionary[Convert.ToInt32(Data.Values[1])].StorageWithAmount.TryAdd(Convert.ToInt32(Data.Values[2]), Convert.ToInt32(Data.Values[3]));
-                    count++;
-                }
-                catch (Exception)
-                {
-                    HandleQueue();
-                }
-            }
+
             while (_disabledProductsQueue.TryDequeue(out Data))
             {
                 Product NewProduct = new Product(Data);
@@ -254,22 +296,10 @@ namespace P3_Projekt_WPF.Classes.Utilities
                 count++;
             }
 
-            while (_storageTransactionsQueue.TryDequeue(out Data))
-            {
-                StorageTransaction StorageTransaction = new StorageTransaction(Data);
-                StorageTransactionDictionary.TryAdd(StorageTransaction.ID, StorageTransaction);
-                count++;
-            }
-            while (_orderTransactionsQueue.TryDequeue(out Data))
-            {
-                OrderTransaction OrderTransaction = new OrderTransaction(Data);
-                OrderTransactionDictionary.TryAdd(OrderTransaction.ID, OrderTransaction);
-                count++;
-            }
             // Hvis der var elementer der ikke er blevet oprettet efter første gennemgang, så køres loopet igen. 
             if (count > 0)
             {
-                HandleQueue();
+                HandleFirstQueue();
             }
             else
             {
@@ -298,6 +328,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
                 Thread GetAllDisabledProductsThread = new Thread(new ThreadStart(GetAllDisabledProductsFromDatabase));
                 Thread GetAllDisabledServiceProductsThread = new Thread(new ThreadStart(GetAllDisabledServiceProductsFromDatabase));
                 Thread GetAllStorageTransactionsThread = new Thread(new ThreadStart(GetAllStorageTransactions));
+                Thread GetAllOrderTransactionsThread = new Thread(new ThreadStart(GetAllOrderTransactions));
                 GetAllProductsThread.Name = "GetAllProductsThread";
                 GetAllGroupsThread.Name = "GetAllGroupsThread";
                 GetAllTempProductsThread.Name = "GetAllTempProductsThread";
@@ -311,9 +342,11 @@ namespace P3_Projekt_WPF.Classes.Utilities
                 GetAllStorageRoomsThread.Start();
                 GetAllTempProductsThread.Start();
                 GetAllServiceProductsThread.Start();
-                GetAllStorageStatusThread.Start();
                 GetAllDisabledProductsThread.Start();
                 GetAllDisabledServiceProductsThread.Start();
+                GetAllStorageStatusThread.Start();
+                GetAllStorageTransactionsThread.Start();
+                GetAllOrderTransactionsThread.Start();
                 while (!_productsLoaded || !_storageRoomLoaded || !_groupsLoaded || !_tempProductLoaded || !_storageStatusLoaded || !_serviceProductLoaded || !_disabledProductsLoaded || !_disabledServiceProductsLoaded || !_orderTransactionsLoaded || !_storageTransactionsLoaded)
                 {
                     Thread.Sleep(1);
@@ -338,6 +371,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
                 thread.Start();
             }
             HandleQueue();
+
         }
 
         #endregion
@@ -643,12 +677,12 @@ namespace P3_Projekt_WPF.Classes.Utilities
                         if (s == t)
                         {
                             productToAdd.NameMatch += 100;
-                        } 
+                        }
                         else if (LevenstheinProductSearch(s, t))
                         {
                             productToAdd.NameMatch += 1;
                         }
-                        
+
                     }
                 }
             }
@@ -792,7 +826,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
             }
             if (StringToSearch.Contains(searchString.ToLower()))
             {
-                return true;   
+                return true;
             }
             return false;
         }
