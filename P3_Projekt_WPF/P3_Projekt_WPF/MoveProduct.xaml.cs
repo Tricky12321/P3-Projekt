@@ -56,7 +56,9 @@ namespace P3_Projekt_WPF
 
         private void ListBoxItem_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            FillItemDetails(sender);
+            var ok = (sender as ListBoxItem);
+            productID = int.Parse(ok.Tag.ToString());
+            FillItemDetails();
         }
 
         private void txtBox_SearchField_KeyUp(object sender, KeyEventArgs e)
@@ -80,17 +82,19 @@ namespace P3_Projekt_WPF
                     if (product.CurrentProduct is Product)
                     {
                         var item = new ListBoxItem();
-                        item.Tag = product.CurrentProduct.ID;
+                        productID = product.CurrentProduct.ID;
+                        item.Tag = productID;
                         item.Content = new SaleSearchResultItemControl((product.CurrentProduct as Product).Image, $"{(product.CurrentProduct as Product).Name}\n{product.CurrentProduct.ID}");
                         listBox_SearchMoveProduct.Items.Add(item);
                         if (searchResults.Count() == 1)
                         {
-                            FillItemDetails(item);
+
+                            FillItemDetails();
                         }
                     }
                 }
             }
-            
+
             else if (_storageController.DisabledProducts.TryGetValue(parsevalue, out disabledproduct))
             {
                 if (_storageController.DisabledProducts[parsevalue].ID.ToString() == txtBox_SearchField.Text)
@@ -120,20 +124,23 @@ namespace P3_Projekt_WPF
             }
         }
 
-        private void FillItemDetails(object sender)
+        private void FillItemDetails()
         {
             comboBox_StorageRooms.Items.Clear();
-            var product = _posController.GetProductFromID(int.Parse((sender as ListBoxItem).Tag.ToString())) as Product;
+            var product = _storageController.ProductDictionary[productID];
             productID = product.ID;
             label_ProduktID.Content = product.ID.ToString();
-            label_produktProdukt.Content = product.Name.ToString();
+            label_produktProdukt.Content = product.Name;
             string storageroomName = "room";
             if (product.StorageWithAmount.Count > 0)
             {
                 foreach (KeyValuePair<int, int> storagerooms in product.StorageWithAmount)
                 {
                     storageroomName = _storageController.StorageRoomDictionary[storagerooms.Key].Name;
-                    comboBox_StorageRooms.Items.Add($"{storageroomName}");
+                    ComboBoxItem storageRoom = new ComboBoxItem();
+                    storageRoom.Tag = _storageController.StorageRoomDictionary[storagerooms.Key].ID;
+                    storageRoom.Content = storageroomName;
+                    comboBox_StorageRooms.Items.Add(storageroomName);
                 }
                 comboBox_StorageRooms.IsEnabled = true;
                 comboBox_Destination.IsEnabled = true;
@@ -175,8 +182,10 @@ namespace P3_Projekt_WPF
 
         private void button_MoveProduct_Click(object sender, RoutedEventArgs e)
         {
-            Product product = _posController.GetProductFromID(int.Parse(label_ProduktID.Content.ToString())) as Product;
+            Product product = _storageController.ProductDictionary[productID];
+
             int destinationRoom = _storageController.StorageRoomDictionary.Where(x => x.Value.Name == comboBox_Destination.Text).Select(x => x.Key).First();
+
 
             if (!product.StorageWithAmount.Keys.Contains(_storageController.StorageRoomDictionary.Where(x => x.Value.Name == comboBox_Destination.Text).Select(x => x.Key).First()))
             {
@@ -185,7 +194,7 @@ namespace P3_Projekt_WPF
             }
             int parsevalue;
             Int32.TryParse(textBox_ProductAmount.Text, out parsevalue);
-            if(textBox_ProductAmount.Text != "")
+            if (textBox_ProductAmount.Text != "")
             {
                 StorageTransaction storageTransaction = new StorageTransaction(product, parsevalue, sourceRoom, destinationRoom, _storageController.StorageRoomDictionary);
                 storageTransaction.Execute();
@@ -196,7 +205,7 @@ namespace P3_Projekt_WPF
             {
                 textBox_ProductAmount.BorderBrush = Brushes.Red;
             }
-            
+
         }
 
 
@@ -226,8 +235,8 @@ namespace P3_Projekt_WPF
 
         private void DisplayNumberInStorage()
         {
-                sourceRoom = _storageController.StorageRoomDictionary.Where(x => x.Value.Name == comboBox_StorageRooms.Text).Select(x => x.Key).First();
-                label_ActualAmountInStorage.Content = _storageController.ProductDictionary[productID].StorageWithAmount[sourceRoom].ToString();
+            sourceRoom = _storageController.StorageRoomDictionary.Where(x => x.Value.Name == comboBox_StorageRooms.Text).Select(x => x.Key).First();
+            label_ActualAmountInStorage.Content = _storageController.ProductDictionary[productID].StorageWithAmount[sourceRoom].ToString();
         }
 
         private void comboBox_StorageRooms_DropDownClosed(object sender, EventArgs e)

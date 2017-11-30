@@ -202,7 +202,10 @@ namespace P3_Projekt_WPF.Classes.Utilities
                         return "Retur: " + (PlacerholderReceipt.PaidPrice - PlacerholderReceipt.TotalPrice).ToString().Replace('.', ',');
                     }
                 }
-                return TotalPriceToPay.ToString().Replace('.', ',');
+                if (TotalPriceToPay != -1m)
+                {
+                    return TotalPriceToPay.ToString().Replace('.', ',');
+                }
             }
             return string.Empty;
         }
