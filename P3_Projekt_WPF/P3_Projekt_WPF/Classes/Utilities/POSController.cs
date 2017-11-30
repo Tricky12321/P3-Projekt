@@ -119,6 +119,11 @@ namespace P3_Projekt_WPF.Classes.Utilities
             }
         }
 
+        private void _resetDiscount()
+        {
+
+        }
+
         public void RemoveTransactionFromReceipt(int productID)
         {
             PlacerholderReceipt.RemoveTransaction(productID);
