@@ -82,41 +82,43 @@ namespace P3_Projekt_WPF.Classes.Database
 
         public static MySqlConnection Connect(int fails = 0)
         {
-            //CheckInternet();
-            Stopwatch ConnectionTimer = new Stopwatch();
-            ConnectionTimer.Start();
-            MySqlConnection connection = null;
-            connection = new MySqlConnection(_connectionString);
-            connection.Open();
-            ////ConnectionTimer.Stop();
-            Debug.WriteLine("[DATABASE] Database ConnectionTimer = " + ConnectionTimer.ElapsedMilliseconds + "ms");
-            if (connection == null)
-            {
-                if (fails < 5)
+                //CheckInternet();
+                Stopwatch ConnectionTimer = new Stopwatch();
+                ConnectionTimer.Start();
+                MySqlConnection connection = null;
+                connection = new MySqlConnection(_connectionString);
+                connection.Open();
+                ////ConnectionTimer.Stop();
+                Debug.WriteLine("[DATABASE] Database ConnectionTimer = " + ConnectionTimer.ElapsedMilliseconds + "ms");
+                if (connection == null)
                 {
-                    return Connect(fails + 1);
+                    if (fails < 5)
+                    {
+                        return Connect(fails + 1);
+                    }
+                    else
+                    {
+                        throw new NotConnectedException("Der er ingen forbindelse til databasen");
+                    }
                 }
-                else
-                {
-                    throw new NotConnectedException("Der er ingen forbindelse til databasen");
-                }
-            }
-
-            return connection;
+                return connection;
         }
 
         public static void RunQuery(string Query)
         {
-            using (MySqlConnection connection = Connect())
+            if (ConnectionWorking)
             {
-                using (MySqlCommand cmd = connection.CreateCommand())
+                using (MySqlConnection connection = Connect())
                 {
-                    if (_debug)
+                    using (MySqlCommand cmd = connection.CreateCommand())
                     {
-                        Debug.WriteLine("SQL: " + Query);
+                        if (_debug)
+                        {
+                            Debug.WriteLine("SQL: " + Query);
+                        }
+                        cmd.CommandText = Query;
+                        cmd.ExecuteScalarAsync();
                     }
-                    cmd.CommandText = Query;
-                    cmd.ExecuteScalarAsync();
                 }
             }
         }

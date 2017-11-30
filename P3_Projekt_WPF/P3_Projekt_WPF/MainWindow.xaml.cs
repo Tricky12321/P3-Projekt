@@ -134,6 +134,12 @@ namespace P3_Projekt_WPF
 
         public void LoadQuickButtons()
         {
+            foreach (FastButton button in _settingsController.quickButtonList)
+            {
+                button.Visibility = Visibility.Hidden;
+            }
+            _settingsController.quickButtonList.Clear();
+            listView_QuickBtn.Items.Clear();
             var Settings = Properties.Settings.Default;
             AddQuickButton(Settings.QuickButton1);
             AddQuickButton(Settings.QuickButton2);
@@ -155,13 +161,17 @@ namespace P3_Projekt_WPF
         private void AddQuickButton(string NewButton)
         {
             var Settings = Properties.Settings.Default;
-            if (NewButton != "")
+            if (NewButton != "" && NewButton != null)
             {
                 string[] NewButtonInfo = NewButton.Split('|');
                 int prodID = Convert.ToInt32(NewButtonInfo[0]);
-                _settingsController.AddNewQuickButton(NewButtonInfo[1], prodID, grid_QuickButton.Width, grid_QuickButton.Height, btn_FastButton_click);
-                listView_QuickBtn.Items.Add(new FastButton() { Button_Name = NewButtonInfo[1], ProductID = prodID });
-                listView_QuickBtn.Items.Refresh();
+                if (_storageController.AllProductsDictionary.ContainsKey(prodID))
+                {
+                    _settingsController.AddNewQuickButton(NewButtonInfo[1], prodID, grid_QuickButton.Width, grid_QuickButton.Height, btn_FastButton_click);
+                    listView_QuickBtn.Items.Add(new FastButton() { Button_Name = NewButtonInfo[1], ProductID = prodID });
+                    listView_QuickBtn.Items.Refresh();
+                }
+                
             }
         }
 
@@ -330,6 +340,7 @@ namespace P3_Projekt_WPF
                 throw new WrongProductTypeException("Fejl i forsøg på at redigere produkt");
             }
             EditProductForm.Closed += delegate { ReloadProducts(); };
+            EditProductForm.Closed += delegate { LoadQuickButtons(); };
             EditProductForm.ShowDialog();
         }
 
@@ -1404,8 +1415,9 @@ namespace P3_Projekt_WPF
             foreach (var ordertrans in _storageController.OrderTransactionDictionary)
             {
                 var product = _storageController.ProductDictionary[ordertrans.Value.Product.ID];
-               listview_SettingsStorage.Items.Add(new { Recieved = product.Name});
+               listview_SettingsStorage.Items.Add(new { Received = product.Name.ToString(), Amount = ordertrans.Value.Amount, StorageRoom = _storageController.StorageRoomDictionary[ordertrans.Value.StorageRoomID].Name});
             }
+
         }
 
         private void button_DeleteFulReceiptDiscount_Click(object sender, EventArgs e)

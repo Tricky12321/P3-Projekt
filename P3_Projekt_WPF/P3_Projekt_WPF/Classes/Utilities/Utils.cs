@@ -161,6 +161,10 @@ namespace P3_Projekt_WPF.Classes.Utilities
                     Properties.Settings.Default.IcecreamID = IsID;
                     Properties.Settings.Default.Save();
                 }
+            } else
+            {
+                Properties.Settings.Default.IcecreamID = -1;
+                Properties.Settings.Default.Save();
             }
         }
 

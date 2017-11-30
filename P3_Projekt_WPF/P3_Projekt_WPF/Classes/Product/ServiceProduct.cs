@@ -42,6 +42,10 @@ namespace P3_Projekt_WPF.Classes
 
         public static int GetNextID()
         {
+            if (Mysql.ConnectionWorking == false)
+            {
+                return 0;
+            }
             string sql = "SHOW TABLE STATUS LIKE 'products'";
             TableDecode Results = Mysql.RunQueryWithReturn(sql);
             int product_AC = Convert.ToInt32(Results.RowData[0].Values[10]);

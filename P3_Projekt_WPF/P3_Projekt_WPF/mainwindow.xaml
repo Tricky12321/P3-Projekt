@@ -663,13 +663,13 @@
                                                             <ColumnDefinition MinWidth="200"/>
                                                         </Grid.ColumnDefinitions>
 
-                                                        <TextBlock VerticalAlignment = "Center" Text="{Binding Received}" Width="300"/>
+                                                        <TextBlock VerticalAlignment = "Center" Name="Received" Text="{Binding Received}" Width="300"/>
 
-                                                        <TextBlock VerticalAlignment = "Center" Text="{Binding Amount}" Width="220" Grid.Column="1" TextWrapping="WrapWithOverflow" />
+                                                        <TextBlock VerticalAlignment = "Center" Name="Amount" Text="{Binding Amount}" Width="220" Grid.Column="1" TextWrapping="WrapWithOverflow" />
 
-                                                        <TextBlock VerticalAlignment = "Center" Text="{Binding StorageRoom}" Width="310" Grid.Column="2" Padding="0,0,10,0" TextWrapping="WrapWithOverflow"/>
+                                                        <TextBlock VerticalAlignment = "Center" Name="StorageRoom" Text="{Binding StorageRoom}" Width="310" Grid.Column="2" Padding="0,0,10,0" TextWrapping="WrapWithOverflow"/>
 
-                                                        <TextBlock VerticalAlignment = "Center" Text="{Binding Distributor}" Width="200" Grid.Column="2" Padding="0,0,10,0" TextWrapping="WrapWithOverflow"/>
+                                                        <TextBlock VerticalAlignment = "Center" Name="Distributor" Text="{Binding Distributor}" Width="200" Grid.Column="2" Padding="0,0,10,0" TextWrapping="WrapWithOverflow"/>
 
 
                                                     </Grid>
