@@ -163,12 +163,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
                     TotalPriceToPay = PlacerholderReceipt.GetTotalDiscountPrice();
                 }
 
-                if (PlacerholderReceipt.TotalPriceToPay == -1m)
-                {
-                    PlacerholderReceipt.TotalPriceToPay = TotalPriceToPay;
-                }
                 decimal PaymentAmount;
-
                 if (PayWithAmount.Text.Length == 0)
                 {
                     PaymentAmount = TotalPriceToPay;
@@ -210,11 +205,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
                 }
                 return TotalPriceToPay.ToString();
             }
-            else
-            {
-                return string.Empty;
-            }
+            return string.Empty;
         } 
-
     }
 }

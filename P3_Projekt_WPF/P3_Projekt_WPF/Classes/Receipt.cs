@@ -19,7 +19,6 @@ namespace P3_Projekt_WPF.Classes
         public decimal TotalPrice;
         public DateTime Date;
         public decimal PaidPrice => Payments.Sum(x => x.Amount);
-        public decimal TotalPriceToPay = -1m;
         public decimal DiscountOnFullReceipt = 0m;
         public Receipt()
         {
