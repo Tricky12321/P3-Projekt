@@ -40,7 +40,7 @@ namespace P3_Projekt_WPF
 
             tempProducts = _storageController.TempProductList.Where(x => x.Value.Resolved == false).ToList();
             button_Merge.IsEnabled = false;
-
+            listview_ProductsToMerge.SelectionMode = SelectionMode.Single;
             foreach (var tempProductsToListView in tempProducts)
             {
                 ItemList.Add(new TempListItem { Description = tempProductsToListView.Value.Description, Price = tempProductsToListView.Value.SalePrice });

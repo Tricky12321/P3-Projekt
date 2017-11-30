@@ -129,7 +129,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
             PlacerholderReceipt.Execute();
             CheckStorageLevel();
             ReceiptList.Add(PlacerholderReceipt);
-            PlacerholderReceipt = new Receipt();
+            StartPurchase();
         }
 
         //Event for when the amount of a product in storage drops below a certain limit

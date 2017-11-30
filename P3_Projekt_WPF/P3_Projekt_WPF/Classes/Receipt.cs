@@ -120,7 +120,7 @@ namespace P3_Projekt_WPF.Classes
                 decimal percentage = Convert.ToDecimal(inputDiscount.Remove(inputDiscount.Length - 1, 1));
                 decimal priceInDiscountPrProduct = currentSaleTransaction.Product.SalePrice * (percentage / 100m);
                 currentSaleTransaction.DiscountPrice = currentSaleTransaction.Price - currentSaleTransaction.Price * (percentage / 100m);
-
+                
                 //currentSaleTransaction.Product.DiscountPrice = currentSaleTransaction.Product.SalePrice - priceInDiscountPrProduct;
             }
             else
@@ -143,6 +143,7 @@ namespace P3_Projekt_WPF.Classes
                 foreach (SaleTransaction transaction in Transactions)
                 {
                     transaction.DiscountBool = true;
+                    transaction.DiscountPrice = transaction.Product.DiscountPrice * transaction.Amount;
                     transaction.Product.DiscountBool = true;
                     transaction.Product.DiscountPrice = DiscountOnFullReceipt / NumberOfProducts;
                 }
