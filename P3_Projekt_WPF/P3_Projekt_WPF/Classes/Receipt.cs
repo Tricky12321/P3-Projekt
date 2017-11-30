@@ -54,11 +54,6 @@ namespace P3_Projekt_WPF.Classes
             UpdateNumberOfProducts();
         }
 
-        public decimal GetTotalDiscountPrice()
-        {
-            return TotalPrice - DiscountOnFullReceipt;
-        }
-
         public void UpdateTotalPrice()
         {
             TotalPrice = 0;
