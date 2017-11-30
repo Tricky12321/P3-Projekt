@@ -1135,6 +1135,7 @@ namespace P3_Projekt_WPF
                     {
                         label_TotalPrice.Content = "Retur: " + (_POSController.PlacerholderReceipt.PaidPrice - _POSController.PlacerholderReceipt.TotalPrice).ToString().Replace('.', ',').Replace('-', ' ');
                     }
+                    TotalPriceToPay = -1m;
                 }
             }
         }
