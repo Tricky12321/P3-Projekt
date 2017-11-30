@@ -1106,7 +1106,7 @@ namespace P3_Projekt_WPF
 
                 if (PayWithAmount.Text.Length == 0)
                 {
-                    PaymentAmount = _POSController.PlacerholderReceipt.TotalPrice;
+                    PaymentAmount = _POSController.PlacerholderReceipt.TotalPrice - _POSController.PlacerholderReceipt.PaidPrice;
                 }
                 else
                 {
