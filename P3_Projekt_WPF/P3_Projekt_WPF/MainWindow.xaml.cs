@@ -33,7 +33,6 @@ namespace P3_Projekt_WPF
         private POSController _POSController;
         private StatisticsController _statisticsController;
         private Grid productGrid = new Grid();
-
         private Dictionary<int, ProductControl> _productControlDictionary = new Dictionary<int, ProductControl>();
         private bool _ctrlDown = false;
         public static bool runLoading = true;
@@ -54,6 +53,7 @@ namespace P3_Projekt_WPF
             OutputList.Add("[3. TIMER] took " + LoadingTimer.ElapsedMilliseconds + "ms");
             InitComponents();
             OutputList.Add("[4. TIMER] took " + LoadingTimer.ElapsedMilliseconds + "ms");
+            //TODO: Thek om OrderTrans og StorageTrans er blevet fjernet
             this.KeyDown += new KeyEventHandler(KeyboardHook);
             this.KeyDown += new KeyEventHandler(CtrlHookDown);
             this.KeyDown += new KeyEventHandler(EnterKeyPressedSearch);
@@ -239,7 +239,7 @@ namespace P3_Projekt_WPF
             }
         }
 
-        private void UpdateReceiptList()
+        public void UpdateReceiptList()
         {
             listView_Receipt.Items.Clear();
             foreach (SaleTransaction transaction in _POSController.PlacerholderReceipt.Transactions)
@@ -274,6 +274,7 @@ namespace P3_Projekt_WPF
                 Stopwatch TimeTester = new Stopwatch();
                 TimeTester.Start();
                 Thread GetAllThread = new Thread(new ThreadStart(_storageController.GetAll));
+                GetAllThread.Name = "GetAllThread";
                 GetAllThread.Start();
                 while (!_storageController.ThreadsDone)
                 {
@@ -696,31 +697,17 @@ namespace P3_Projekt_WPF
 
             if (_createTempProduct == null)
             {
-                _createTempProduct = new CreateTemporaryProduct();
+                _createTempProduct = new CreateTemporaryProduct(_storageController, _POSController, _tempID);
+                _createTempProduct.UpdateReceiptEventHandler += updateReceiptList;
                 _createTempProduct.Closed += delegate { _createTempProduct = null; };
-                _createTempProduct.btn_AddTempProduct.Click += delegate
-                {
-                    if (decimal.TryParse(_createTempProduct.textbox_Price.Text, out price) && price > 0 && _createTempProduct.textbox_Description != null)
-                    {
-                        string description = _createTempProduct.textbox_Description.Text;
-                        price = decimal.Parse(_createTempProduct.textbox_Price.Text);
-                        int amount = int.Parse(_createTempProduct.textBox_ProductAmount.Text);
-                        TempProduct NewTemp = _storageController.CreateTempProduct(description, price, _tempID);
-                        _POSController.AddSaleTransaction(NewTemp, amount);
-                        UpdateReceiptList();
-                        _createTempProduct.Close();
-                        MessageBox.Show($"Produkt med beskrivelsen: {description}\nPris: {price}\nAntal: {amount}\nEr oprettet!");
-                        ++_tempID;
-                    }
-                    else
-                    {
-                        _createTempProduct.textbox_Description.BorderBrush = Brushes.Red;
-                        _createTempProduct.textbox_Price.BorderBrush = Brushes.Red;
-                    }
-                };
             }
             _createTempProduct.Activate();
             _createTempProduct.ShowDialog();
+        }
+
+        private void updateReceiptList(object sender, EventArgs e)
+        {
+            UpdateReceiptList();
         }
 
         private void btn_PictureFilePath_Click(object sender, RoutedEventArgs e)
@@ -1074,16 +1061,18 @@ namespace P3_Projekt_WPF
 
         private void btn_Cash_Click(object sender, RoutedEventArgs e)
         {
-            CompletePurchase(PaymentMethod_Enum.Cash);
+            label_TotalPrice.Content = _POSController.CompletePurchase(PaymentMethod_Enum.Cash, PayWithAmount, listView_Receipt);
         }
 
         private void btn_Dankort_Click(object sender, RoutedEventArgs e)
         {
-            CompletePurchase(PaymentMethod_Enum.Card);
+            label_TotalPrice.Content = _POSController.CompletePurchase(PaymentMethod_Enum.Card, PayWithAmount, listView_Receipt);
         }
 
         private void btn_MobilePay_Click(object sender, RoutedEventArgs e)
         {
+            label_TotalPrice.Content = _POSController.CompletePurchase(PaymentMethod_Enum.MobilePay, PayWithAmount, listView_Receipt);
+        }
             CompletePurchase(PaymentMethod_Enum.MobilePay);
         }
 
@@ -1464,18 +1453,12 @@ namespace P3_Projekt_WPF
 
         private void StorageTransactionsHistory()
         {
-            List<OrderTransaction> orderTransList = StorageController.GetAllOrderTransactions();
-            foreach (var ordertrans in orderTransList)
+            listview_SettingsStorage.Height = 500;
+            foreach (var ordertrans in _storageController.OrderTransactionDictionary)
             {
-                //listview_SettingsStorage.Items.Add(new { Recieved = ordertrans.Product.});
+                var product = _storageController.ProductDictionary[ordertrans.Value.Product.ID];
+               listview_SettingsStorage.Items.Add(new { Recieved = product.Name});
             }
-            List<StorageTransaction> storageTransList = StorageController.GetAllStorageTransactions();
-
-        }
-
-        private void settingsTab_MouseUp(object sender, MouseButtonEventArgs e)
-        {
-            StorageTransactionsHistory();
         }
 
         private void button_DeleteFulReceiptDiscount_Click(object sender, EventArgs e)
@@ -1486,6 +1469,20 @@ namespace P3_Projekt_WPF
             image_DeleteFullReceiptDiscount.Visibility = Visibility.Hidden;
             button_DeleteFulReceiptDiscount.Visibility = Visibility.Hidden;
             UpdateReceiptList();
+        }
+
+        private void tempProductToDictionary()
+        {
+            foreach(TempProduct tempproduct in _storageController.TempTempProductList)
+            {
+                _storageController.TempProductList.TryAdd(tempproduct.ID, tempproduct);
+            }
+            _storageController.TempTempProductList.Clear();
+        }
+
+        private void settingsTab_GotFocus(object sender, RoutedEventArgs e)
+        {
+            StorageTransactionsHistory();
         }
     }
 }

@@ -45,7 +45,7 @@
                 </Style>
             </TextBlock.Style>
         </TextBlock>
-        <Button x:Name="btn_AddTempProduct" Content="Tilføj til kvittering" Background="Transparent" Margin="5,5,5,5" FontSize="30" Style="{StaticResource Flat_Button}" Height="50" VerticalAlignment="Bottom" />
+        <Button x:Name="btn_AddTempProduct" Content="Tilføj til kvittering" Background="Transparent" Margin="5,5,5,5" FontSize="30" Style="{StaticResource Flat_Button}" Height="50" VerticalAlignment="Bottom" Click="btn_AddTempProduct_Click"/>
         <Button x:Name="btn_PlusToReciept" Content="+" Background="Transparent" HorizontalAlignment="Left" Margin="175,0,0,59" Width="35" Style="{StaticResource Flat_Button}" RenderTransformOrigin="-0.486,0.333" Height="50" VerticalAlignment="Bottom" Click="btn_PlusToReciept_Click"/>
         <Button x:Name="btn_MinusToReciept" Content="-" Background="Transparent" HorizontalAlignment="Left" Margin="220,0,0,59" Width="35" Style="{StaticResource Flat_Button}" FontSize="30" Height="50" VerticalAlignment="Bottom" Click="btn_MinusToReciept_Click"/>
         <TextBox x:Name="textBox_ProductAmount" TextCompositionManager.PreviewTextInput="TextInputNoNumber" Padding="10,0,0,0" HorizontalAlignment="Left" Margin="100,0,0,59" TextWrapping="Wrap" Text="1" Width="68" MaxLines="1" MaxLength="2" FontSize="33" Height="50" VerticalAlignment="Bottom">

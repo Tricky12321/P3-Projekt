@@ -20,12 +20,15 @@ namespace P3_Projekt_WPF.Classes.Utilities
         public ConcurrentDictionary<int, SaleTransaction> SaleTransactionsDictionary = new ConcurrentDictionary<int, SaleTransaction>();
         public ConcurrentDictionary<int, Receipt> ReceiptDictionary = new ConcurrentDictionary<int, Receipt>();
         public ConcurrentDictionary<int, TempProduct> TempProductList = new ConcurrentDictionary<int, TempProduct>();
+        public ConcurrentDictionary<int, StorageTransaction> StorageTransactionDictionary = new ConcurrentDictionary<int, StorageTransaction>();
+        public ConcurrentDictionary<int, OrderTransaction> OrderTransactionDictionary = new ConcurrentDictionary<int, OrderTransaction>();
         public List<string[]> InformationGridData = new List<string[]>();
         private object InformationGridLock = new object();
         private ConcurrentQueue<Product> _productResults = new ConcurrentQueue<Product>();
         public ConcurrentDictionary<int, BaseProduct> AllProductsDictionary = new ConcurrentDictionary<int, BaseProduct>();
         public ConcurrentDictionary<int, Product> DisabledProducts = new ConcurrentDictionary<int, Product>();
         public ConcurrentDictionary<int, ServiceProduct> DisabledServiceProducts = new ConcurrentDictionary<int, ServiceProduct>();
+        public List<TempProduct> TempTempProductList = new List<TempProduct>();
 
 
 
@@ -125,7 +128,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
 
         public void GetAllTempProductsFromDatabase()
         {
-            string sql = "SELECT * FROM `temp_products` WHERE `resolved` = '0'";
+            string sql = "SELECT * FROM `temp_products`";
             TableDecodeQueue Result = Mysql.RunQueryWithReturnQueue(sql);
             AddInformation("TempProduct Count", Result.RowCounter.ToString());
             _tempProductQueue = Result.RowData;
@@ -150,33 +153,22 @@ namespace P3_Projekt_WPF.Classes.Utilities
             _disabledServiceProductsLoaded = true;
         }
 
-        public static List<StorageTransaction> GetAllStorageTransactions()
+        public void GetAllStorageTransactions()
         {
-            List<StorageTransaction> StorageTransactions = new List<StorageTransaction>();
-
             string sql = $"SELECT * FROM `storage_transaction`";
-            TableDecode asdf = Mysql.RunQueryWithReturn(sql);
-            foreach (var item in asdf.RowData)
-            {
-                StorageTransaction NewStorageTransaction = new StorageTransaction(item);
-                StorageTransactions.Add(NewStorageTransaction);
-            }
-            return StorageTransactions;
-
+            TableDecodeQueue Result = Mysql.RunQueryWithReturnQueue(sql);
+            AddInformation("Storage TransactionCount", Result.RowCounter.ToString());
+            _storageTransactionsQueue = Result.RowData;
+            _storageTransactionsLoaded = true;
         }
 
-        public static List<OrderTransaction> GetAllOrderTransactions()
+        public void GetAllOrderTransactions()
         {
-            List<OrderTransaction> OrderTransactions = new List<OrderTransaction>();
-
             string sql = $"SELECT * FROM `order_transactions`";
-            TableDecode asdf = Mysql.RunQueryWithReturn(sql);
-            foreach (var item in asdf.RowData)
-            {
-                OrderTransaction NewOrderTransaction = new OrderTransaction(item);
-                OrderTransactions.Add(NewOrderTransaction);
-            }
-            return OrderTransactions;
+            TableDecodeQueue Result = Mysql.RunQueryWithReturnQueue(sql);
+            AddInformation("Storage TransactionCount", Result.RowCounter.ToString());
+            _orderTransactionsQueue = Result.RowData;
+            _orderTransactionsLoaded = true;
         }
 
         private bool _serviceProductLoaded = false;
@@ -187,7 +179,8 @@ namespace P3_Projekt_WPF.Classes.Utilities
         private bool _groupsLoaded = false;
         private bool _disabledProductsLoaded = false;
         private bool _disabledServiceProductsLoaded = false;
-
+        private bool _storageTransactionsLoaded = false;
+        private bool _orderTransactionsLoaded = false;
         private ConcurrentQueue<Row> _serviceProductQueue;
         private ConcurrentQueue<Row> _tempProductQueue;
         private ConcurrentQueue<Row> _storageRoomQueue;
@@ -196,11 +189,53 @@ namespace P3_Projekt_WPF.Classes.Utilities
         private ConcurrentQueue<Row> _storageStatusQueue;
         private ConcurrentQueue<Row> _disabledProductsQueue;
         private ConcurrentQueue<Row> _disabledServiceProductsQueue;
+        private ConcurrentQueue<Row> _storageTransactionsQueue;
+        private ConcurrentQueue<Row> _orderTransactionsQueue;
 
         private List<Thread> _queueThreads;
         private int _queueThreadsCount = 4;
 
-        private void HandleQueue()
+        private void HandleSecondQueue()
+        {
+            Row Data;
+            int count = 0;
+            while (_storageStatusQueue.TryDequeue(out Data))
+            {
+
+                ProductDictionary[Convert.ToInt32(Data.Values[1])].StorageWithAmount.TryAdd(Convert.ToInt32(Data.Values[2]), Convert.ToInt32(Data.Values[3]));
+                count++;
+
+            }
+            while (_storageTransactionsQueue.TryDequeue(out Data))
+            {
+                StorageTransaction StorageTrans = new StorageTransaction(Data, true);
+                int ProductID = Convert.ToInt32(Data.Values[1]);
+                int SourceID = Convert.ToInt32(Data.Values[4]);
+                int DestinationID = Convert.ToInt32(Data.Values[5]);
+                StorageTrans.SetInformation(StorageRoomDictionary[SourceID], StorageRoomDictionary[DestinationID], AllProductsDictionary[ProductID]);
+                StorageTransactionDictionary.TryAdd(StorageTrans.ID, StorageTrans);
+                count++;
+            }
+            while (_orderTransactionsQueue.TryDequeue(out Data))
+            {
+                OrderTransaction OrderTrans = new OrderTransaction(Data, true);
+                int ProductID = Convert.ToInt32(Data.Values[1]);
+                OrderTrans.SetInformation(AllProductsDictionary[ProductID]);
+                OrderTransactionDictionary.TryAdd(OrderTrans.ID, OrderTrans);
+                count++;
+            }
+            // Hvis der var elementer der ikke er blevet oprettet efter første gennemgang, så køres loopet igen. 
+            if (count > 0)
+            {
+                HandleSecondQueue();
+            }
+            else
+            {
+                HandleSecondQueue();
+            }
+        }
+
+        private void HandleFirstQueue()
         {
             Row Data;
             int count = 0;
@@ -234,19 +269,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
                 ProductDictionary.TryAdd(NewProduct.ID, NewProduct);
                 count++;
             }
-            while (_storageStatusQueue.TryDequeue(out Data))
-            {
-                try
-                {
-                    ProductDictionary[Convert.ToInt32(Data.Values[1])].StorageWithAmount.TryAdd(Convert.ToInt32(Data.Values[2]), Convert.ToInt32(Data.Values[3]));
-                    count++;
-                }
-                catch (Exception)
-                {
-                    HandleQueue();
-                }
 
-            }
             while (_disabledProductsQueue.TryDequeue(out Data))
             {
                 Product NewProduct = new Product(Data);
@@ -259,10 +282,11 @@ namespace P3_Projekt_WPF.Classes.Utilities
                 DisabledServiceProducts.TryAdd(NewProduct.ID, NewProduct);
                 count++;
             }
+
             // Hvis der var elementer der ikke er blevet oprettet efter første gennemgang, så køres loopet igen. 
             if (count > 0)
             {
-                HandleQueue();
+                HandleFirstQueue();
             }
             else
             {
@@ -276,7 +300,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
             _queueThreads = new List<Thread>();
             for (int i = 0; i < _queueThreadsCount - 1; i++)
             {
-                _queueThreads.Add(new Thread(new ThreadStart(HandleQueue)));
+                _queueThreads.Add(new Thread(new ThreadStart(HandleFirstQueue)));
             }
 
             if (!local)
@@ -290,6 +314,8 @@ namespace P3_Projekt_WPF.Classes.Utilities
                 Thread GetAllStorageStatusThread = new Thread(new ThreadStart(UpdateStorageStatus));
                 Thread GetAllDisabledProductsThread = new Thread(new ThreadStart(GetAllDisabledProductsFromDatabase));
                 Thread GetAllDisabledServiceProductsThread = new Thread(new ThreadStart(GetAllDisabledServiceProductsFromDatabase));
+                Thread GetAllStorageTransactionsThread = new Thread(new ThreadStart(GetAllStorageTransactions));
+                Thread GetAllOrderTransactionsThread = new Thread(new ThreadStart(GetAllOrderTransactions));
                 GetAllProductsThread.Name = "GetAllProductsThread";
                 GetAllGroupsThread.Name = "GetAllGroupsThread";
                 GetAllTempProductsThread.Name = "GetAllTempProductsThread";
@@ -303,10 +329,12 @@ namespace P3_Projekt_WPF.Classes.Utilities
                 GetAllStorageRoomsThread.Start();
                 GetAllTempProductsThread.Start();
                 GetAllServiceProductsThread.Start();
-                GetAllStorageStatusThread.Start();
                 GetAllDisabledProductsThread.Start();
                 GetAllDisabledServiceProductsThread.Start();
-                while (!_productsLoaded || !_storageRoomLoaded || !_groupsLoaded || !_tempProductLoaded || !_storageStatusLoaded || !_serviceProductLoaded || !_disabledProductsLoaded || !_disabledServiceProductsLoaded)
+                GetAllStorageStatusThread.Start();
+                GetAllStorageTransactionsThread.Start();
+                GetAllOrderTransactionsThread.Start();
+                while (!_productsLoaded || !_storageRoomLoaded || !_groupsLoaded || !_tempProductLoaded || !_storageStatusLoaded || !_serviceProductLoaded || !_disabledProductsLoaded || !_disabledServiceProductsLoaded || !_orderTransactionsLoaded || !_storageTransactionsLoaded)
                 {
                     Thread.Sleep(1);
                 }
@@ -321,13 +349,16 @@ namespace P3_Projekt_WPF.Classes.Utilities
                 GetAllGroupsFromDatabase();
                 GetAllDisabledProductsFromDatabase();
                 GetAllDisabledServiceProductsFromDatabase();
+                GetAllStorageTransactions();
+                GetAllOrderTransactions();
             }
 
             foreach (var thread in _queueThreads)
             {
                 thread.Start();
             }
-            HandleQueue();
+            HandleFirstQueue();
+
         }
 
         #endregion
@@ -487,7 +518,8 @@ namespace P3_Projekt_WPF.Classes.Utilities
         {
             TempProduct newTempProduct = new TempProduct(description, salePrice);
             newTempProduct.ID = ID;
-            TempProductList.TryAdd(newTempProduct.ID, newTempProduct);
+            //TempProductList.TryAdd(newTempProduct.ID, newTempProduct);
+            TempTempProductList.Add(newTempProduct);
             return newTempProduct;
         }
 
@@ -632,12 +664,12 @@ namespace P3_Projekt_WPF.Classes.Utilities
                         if (s == t)
                         {
                             productToAdd.NameMatch += 100;
-                        } 
+                        }
                         else if (LevenstheinProductSearch(s, t))
                         {
                             productToAdd.NameMatch += 1;
                         }
-                        
+
                     }
                 }
             }
@@ -781,7 +813,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
             }
             if (StringToSearch.Contains(searchString.ToLower()))
             {
-                return true;   
+                return true;
             }
             return false;
         }

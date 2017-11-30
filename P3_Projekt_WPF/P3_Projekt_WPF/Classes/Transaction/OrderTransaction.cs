@@ -12,6 +12,7 @@ namespace P3_Projekt_WPF.Classes
         private decimal _purchasePrice;
         private string _supplier;
         private int _storageRoomID;
+        public int ID => _id;
 
         public OrderTransaction(Product product, int amount, string supplier, int storageRoomID) : base(product, amount)
         {
@@ -25,9 +26,16 @@ namespace P3_Projekt_WPF.Classes
             GetFromDatabase();
         }
 
-        public OrderTransaction(Row Data) : base(null, 0)
+        public OrderTransaction(Row Data, bool reference = false) : base(null, 0)
         {
-            CreateFromRow(Data);        
+            if (!reference)
+            {
+                CreateFromRow(Data);
+            }
+            else
+            {
+                CreateFromRowReference(Data);
+            }
         }
 
         public override void Execute()
@@ -55,6 +63,23 @@ namespace P3_Projekt_WPF.Classes
             CreateFromRow(Mysql.RunQueryWithReturn(sql).RowData[0]);
         }
 
+        public void SetInformation(BaseProduct Prod)
+        {
+            Product = Prod;
+        }
+
+        public void CreateFromRowReference(Row Table)
+        {
+            _id = Convert.ToInt32(Table.Values[0]);
+            //Product = new Product(Convert.ToInt32(Table.Values[1]));
+            Amount = Convert.ToInt32(Table.Values[2]);
+            Date = Convert.ToDateTime(Table.Values[3]);
+            _purchasePrice = Convert.ToDecimal(Table.Values[4]);
+            _supplier = Table.Values[5];
+            _storageRoomID = Convert.ToInt32(Table.Values[6]);
+
+        }
+
         public override void CreateFromRow(Row Table)
         {
             _id = Convert.ToInt32(Table.Values[0]);
@@ -70,7 +95,7 @@ namespace P3_Projekt_WPF.Classes
         public override void UploadToDatabase()
         {
             string sql = "INSERT INTO `order_transactions` (`id`, `product_id`, `amount`, `datetime`, `purchase_price`, `supplier`, `storageroom_id`)"+
-                $" VALUES (NULL, '{Product.ID}', '{Amount}', FROM_UNIXTIME('{Utils.GetUnixTime(Date)}'), '{_purchasePrice}', '{_supplier}', '{_storageRoomID}');";
+                $" VALUES (NULL, '{Product.ID}', '{Amount}', FROM_UNIXTIME('{Utils.GetUnixTime(Date)}'), '{_purchasePrice.ToString().Replace(',', '.')}', '{_supplier}', '{_storageRoomID}');";
             Mysql.RunQuery(sql);
         }
 
@@ -80,7 +105,7 @@ namespace P3_Projekt_WPF.Classes
                $"`product_id` = '{Product.ID}'," +
                $"`amount` = '{Amount}'," +
                $"`datetime` = FROM_UNIXTIME('{Utils.GetUnixTime(Date)}')," +
-               $"`purchase_price` = '{_purchasePrice}'," +
+               $"`purchase_price` = '{_purchasePrice.ToString().Replace(',', '.')}'," +
                $"`supplier` = '{_supplier}'," +
                $"`storageroom_id` = '{_storageRoomID}' " +
                $"WHERE `id` = {_id};";
