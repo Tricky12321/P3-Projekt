@@ -565,10 +565,10 @@
 
 
                                     <Grid x:Name="grid_StorageSettings" MinWidth="900" Height="1724">
-                                        <Button Style="{StaticResource Flat_Button}" Background="#FFC5C5C5" x:Name="btn_PictureFilePath" Content="Vælg billedmappe til produkter" HorizontalAlignment="Left" Margin="315,0,0,0" Width="450" Click="btn_PictureFilePath_Click" Height="50" VerticalAlignment="Top" />
+                                        <Button Style="{StaticResource Flat_Button}" Background="#FFC5C5C5" x:Name="btn_PictureFilePath" Content="Vælg billedmappe til produkter" HorizontalAlignment="Left" Margin="320,5,0,0" Width="450" Click="btn_PictureFilePath_Click" Height="50" VerticalAlignment="Top" />
 
 
-                                        <ListView x:Name="Header_StorageRooms" Panel.ZIndex="2" Margin="0,105,0,0" Height="50" VerticalAlignment="Top">
+                                        <ListView x:Name="Header_StorageRooms" Panel.ZIndex="2" Margin="0,115,0,0" Height="50" VerticalAlignment="Top">
 
                                             <ListView.Template>
                                                 <ControlTemplate>
@@ -591,7 +591,7 @@
                                             </ListView.Template>
                                         </ListView>
 
-                                        <ListView x:Name="listView_StorageRoom" Margin="0,155,0,0" ScrollViewer.HorizontalScrollBarVisibility="Disabled" MinWidth="600" Height="500" HorizontalContentAlignment="Stretch" VerticalAlignment="Top">
+                                        <ListView x:Name="listView_StorageRoom" Margin="0,165,0,0" ScrollViewer.HorizontalScrollBarVisibility="Disabled" MinWidth="600" Height="500" HorizontalContentAlignment="Stretch" VerticalAlignment="Top">
                                             <ListView.ItemTemplate>
                                                 <DataTemplate>
                                                     <Grid>
@@ -627,10 +627,10 @@
                                             </ListView.ItemTemplate>
                                         </ListView>
 
-                                        <Button Style="{StaticResource Flat_Button}" Background="#FFC5C5C5" x:Name="btn_newStorageRoom" Content="Opret nyt lagerrum" FontSize="30" Margin="0" VerticalAlignment="Top" Height="50" Click="btn_newStorageRoom_Click" HorizontalAlignment="Left" Width="306" />
+                                        <Button Style="{StaticResource Flat_Button}" Background="#FFC5C5C5" x:Name="btn_newStorageRoom" Content="Opret nyt lagerrum" FontSize="30"  Margin="5,5,0,0" VerticalAlignment="Top" Height="50" Click="btn_newStorageRoom_Click" HorizontalAlignment="Left" Width="306" />
 
 
-                                        <ListView x:Name="Header_SettingsStorage" Panel.ZIndex="2" Margin="0,710,0,0" Height="50" VerticalAlignment="Top">
+                                        <ListView x:Name="Header_SettingsStorage" Panel.ZIndex="2" Margin="0,720,0,0" Height="50" VerticalAlignment="Top">
 
                                             <ListView.Template>
                                                 <ControlTemplate>
@@ -642,7 +642,7 @@
                                                                 <ColumnDefinition Width="400"/>
                                                                 <ColumnDefinition MinWidth="240"/>
                                                             </Grid.ColumnDefinitions>
-                                                            <Label Background="LightGray" Grid.Column="0" FontStyle="Italic" FontSize="30" Content="Modtaget Produkt"/>
+                                                            <Label Background="LightGray" Grid.Column="0" FontStyle="Italic" FontSize="30" Content="Produkt"/>
                                                             <Label Background="LightGray" Grid.Column="1" FontStyle="Italic" FontSize="30" Content="Antal"/>
                                                             <Label Background="Lightgray" Grid.Column="2" FontStyle="Italic" FontSize="30" Content="Lagerrum"/>
                                                             <Label Background="Lightgray" Grid.Column="3" FontStyle="Italic" FontSize="30" Content="Leverandør"/>
@@ -652,7 +652,7 @@
                                                 </ControlTemplate>
                                             </ListView.Template>
                                         </ListView>
-                                        <ListView x:Name="listview_SettingsStorage" Margin="0,760,0,0" Height="31" VerticalAlignment="Top">
+                                        <ListView x:Name="listview_SettingsStorage" Margin="0,770,0,0" Height="31" VerticalAlignment="Top">
                                             <ListView.ItemTemplate>
                                                 <DataTemplate>
                                                     <Grid>
@@ -692,17 +692,17 @@
                                                                 <ColumnDefinition Width="400"/>
                                                                 <ColumnDefinition MinWidth="240"/>
                                                             </Grid.ColumnDefinitions>
-                                                            <Label Background="LightGray" Grid.Column="0" FontStyle="Italic" FontSize="30" Content="Modtaget Produkt"/>
+                                                            <Label Background="LightGray" Grid.Column="0" FontStyle="Italic" FontSize="30" Content="Produkt"/>
                                                             <Label Background="LightGray" Grid.Column="1" FontStyle="Italic" FontSize="30" Content="Antal"/>
-                                                            <Label Background="Lightgray" Grid.Column="2" FontStyle="Italic" FontSize="30" Content="Lagerrum"/>
-                                                            <Label Background="Lightgray" Grid.Column="3" FontStyle="Italic" FontSize="30" Content="Leverandør"/>
+                                                            <Label Background="Lightgray" Grid.Column="2" FontStyle="Italic" FontSize="30" Content="Fra Lagerrum"/>
+                                                            <Label Background="Lightgray" Grid.Column="3" FontStyle="Italic" FontSize="30" Content="Til Lagerrum"/>
                                                         </Grid>
                                                         <ItemsPresenter/>
                                                     </DockPanel>
                                                 </ControlTemplate>
                                             </ListView.Template>
                                         </ListView>
-                                        <ListView x:Name="listview_SettingsStorageStorage" Margin="0,1380,0,0" Height="31" VerticalAlignment="Top">
+                                        <ListView x:Name="listview_SettingsStorageStorageTransaction" Margin="0,1380,0,0" Height="31" VerticalAlignment="Top">
                                             <ListView.ItemTemplate>
                                                 <DataTemplate>
                                                     <Grid>
@@ -717,9 +717,9 @@
 
                                                         <TextBlock VerticalAlignment = "Center" Name="Amount" Text="{Binding Amount}" Width="220" Grid.Column="1" TextWrapping="WrapWithOverflow" />
 
-                                                        <TextBlock VerticalAlignment = "Center" Name="StorageRoom" Text="{Binding StorageRoom}" Width="400" Grid.Column="2" Padding="0,0,10,0" TextWrapping="WrapWithOverflow"/>
+                                                        <TextBlock VerticalAlignment = "Center" Name="StorageRoomSource" Text="{Binding StorageRoomSource}" Width="400" Grid.Column="2" Padding="0,0,10,0" TextWrapping="WrapWithOverflow"/>
 
-                                                        <TextBlock VerticalAlignment = "Center" Name="Distributor" Text="{Binding Distributor}" Width="200" Grid.Column="3" Padding="0,0,10,0" TextWrapping="WrapWithOverflow"/>
+                                                        <TextBlock VerticalAlignment = "Center" Name="StorageRoomDest" Text="{Binding StorageRoomDest}" Width="200" Grid.Column="3" Padding="0,0,10,0" TextWrapping="WrapWithOverflow"/>
 
 
                                                     </Grid>
@@ -728,8 +728,9 @@
 
                                         </ListView>
 
-                                        <TextBlock HorizontalAlignment="Left" Margin="0,60,0,0" TextWrapping="Wrap" VerticalAlignment="Top"><Run Text="Oprettede Lagerrum"/></TextBlock>
-                                        <TextBlock HorizontalAlignment="Left" Margin="0,665,0,0" TextWrapping="Wrap" VerticalAlignment="Top"><Run Text="Modtaget Produkter"/></TextBlock>
+                                        <TextBlock HorizontalAlignment="Left" Margin="0,70,0,0" TextWrapping="Wrap" VerticalAlignment="Top"><Run Text="Oprettede Lagerrum"/></TextBlock>
+                                        <TextBlock HorizontalAlignment="Left" Margin="0,1285,0,0" TextWrapping="Wrap" VerticalAlignment="Top"><Run Text="Flyttede Produkter"/></TextBlock>
+                                        <TextBlock HorizontalAlignment="Left" Margin="0,675,0,0" TextWrapping="Wrap" VerticalAlignment="Top"><Run Text="Modtaget Produkter"/></TextBlock>
 
                                     </Grid>
                                 </ScrollViewer>

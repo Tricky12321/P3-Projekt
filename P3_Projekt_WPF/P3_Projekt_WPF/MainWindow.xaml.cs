@@ -1471,18 +1471,37 @@ namespace P3_Projekt_WPF
         {
             listview_SettingsStorage.Height = 500;
             listView_StorageRoom.Height = 500;
-            grid_StorageSettings.Height = 2000;
-            foreach (var ordertrans in _storageController.OrderTransactionDictionary)
+            listview_SettingsStorageStorageTransaction.Height = 500;
+            grid_StorageSettings.Height = 1865;
+            Product product;
+            int checkIfNewOrderTrans = 0;
+            int checkIfNewStorageTrans = 0;
+            checkIfNewOrderTrans = _storageController.OrderTransactionDictionary.Count;
+            foreach (KeyValuePair<int, OrderTransaction> orderTrans in _storageController.OrderTransactionDictionary)
             {
-                Product product;
-                if (_storageController.ProductDictionary.ContainsKey(ordertrans.Value.Product.ID))
+                if (_storageController.ProductDictionary.ContainsKey(orderTrans.Value.Product.ID))
                 {
-                    product = _storageController.ProductDictionary[ordertrans.Value.Product.ID];
-                } else
-                {
-                    product = _storageController.DisabledProducts[ordertrans.Value.Product.ID];
+                    product = _storageController.ProductDictionary[orderTrans.Value.Product.ID];
                 }
-                listview_SettingsStorage.Items.Add(new { Received = product.Name.ToString(), Amount = ordertrans.Value.Amount, StorageRoom = _storageController.StorageRoomDictionary[ordertrans.Value.StorageRoomID].Name, Distributor = ordertrans.Value._supplier });            }
+                else
+                {
+                    product = _storageController.DisabledProducts[orderTrans.Value.Product.ID];
+                }
+                listview_SettingsStorage.Items.Add(new { Received = product.Name, Amount = orderTrans.Value.Amount, StorageRoom = _storageController.StorageRoomDictionary[orderTrans.Value.StorageRoomID].Name, Distributor = orderTrans.Value._supplier });
+            }
+
+            foreach (KeyValuePair<int, StorageTransaction> storageTrans in _storageController.StorageTransactionDictionary)
+            {
+                if (_storageController.ProductDictionary.ContainsKey(storageTrans.Value.Product.ID))
+                {
+                    product = _storageController.ProductDictionary[storageTrans.Value.Product.ID];
+                }
+                else
+                {
+                    product = _storageController.DisabledProducts[storageTrans.Value.Product.ID];
+                }
+                listview_SettingsStorageStorageTransaction.Items.Add(new { Received = product.Name, Amount = storageTrans.Value.Amount, StorageRoomSource = storageTrans.Value._source.Name, StorageRoomDest = storageTrans.Value._source.Name });
+            }
 
         }
 
@@ -1498,16 +1517,25 @@ namespace P3_Projekt_WPF
 
         private void tempProductToDictionary()
         {
-            foreach(TempProduct tempproduct in _storageController.TempTempProductList)
+            foreach (TempProduct tempproduct in _storageController.TempTempProductList)
             {
                 _storageController.TempProductDictionary.TryAdd(tempproduct.ID, tempproduct);
             }
             _storageController.TempTempProductList.Clear();
         }
 
+
+        private int checkIfNewOrderTrans = 0;
+        private int checkIfNewStorageTrans = 0;
         private void settingsTab_GotFocus(object sender, RoutedEventArgs e)
         {
-            StorageTransactionsHistory();
+            if (_storageController.StorageTransactionDictionary.Count > checkIfNewStorageTrans || _storageController.OrderTransactionDictionary.Count > checkIfNewOrderTrans)
+            {
+                checkIfNewStorageTrans = _storageController.StorageTransactionDictionary.Count;
+                checkIfNewOrderTrans = _storageController.OrderTransactionDictionary.Count;
+
+                StorageTransactionsHistory();
+            }
         }
 
         private void btn_ReloadDatabase_Click(object sender, RoutedEventArgs e)
@@ -1516,6 +1544,5 @@ namespace P3_Projekt_WPF
             _storageController.ReloadAllDictionarys(this);
         }
 
-        
     }
 }
