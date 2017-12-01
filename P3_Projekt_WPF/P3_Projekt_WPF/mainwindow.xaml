@@ -637,10 +637,10 @@
                                                     <DockPanel LastChildFill="True" Background="white">
                                                         <Grid DockPanel.Dock="Top" Height="auto">
                                                             <Grid.ColumnDefinitions>
-                                                                <ColumnDefinition Width="450"/>
-                                                                <ColumnDefinition Width="170"/>
-                                                                <ColumnDefinition Width="400"/>
-                                                                <ColumnDefinition MinWidth="240"/>
+                                                                <ColumnDefinition Width="350"/>
+                                                                <ColumnDefinition Width="150"/>
+                                                                <ColumnDefinition Width="300"/>
+                                                                <ColumnDefinition MinWidth="100"/>
                                                             </Grid.ColumnDefinitions>
                                                             <Label Background="LightGray" Grid.Column="0" FontStyle="Italic" FontSize="30" Content="Produkt"/>
                                                             <Label Background="LightGray" Grid.Column="1" FontStyle="Italic" FontSize="30" Content="Antal"/>
@@ -657,19 +657,19 @@
                                                 <DataTemplate>
                                                     <Grid>
                                                         <Grid.ColumnDefinitions>
-                                                            <ColumnDefinition Width="450"/>
+                                                            <ColumnDefinition Width="350"/>
                                                             <ColumnDefinition Width="150"/>
-                                                            <ColumnDefinition Width="400"/>
-                                                            <ColumnDefinition MinWidth="240"/>
+                                                            <ColumnDefinition Width="300"/>
+                                                            <ColumnDefinition MinWidth="100"/>
                                                         </Grid.ColumnDefinitions>
 
-                                                        <TextBlock VerticalAlignment = "Center" Name="Received" Text="{Binding Received}" Width="450" TextWrapping="Wrap"/>
+                                                        <TextBlock VerticalAlignment = "Center" Name="Received" Text="{Binding Received}" Width="350" TextWrapping="Wrap"/>
 
-                                                        <TextBlock VerticalAlignment = "Center" Name="Amount" Text="{Binding Amount}" Width="220" Grid.Column="1" TextWrapping="WrapWithOverflow" />
+                                                        <TextBlock VerticalAlignment = "Center" Name="Amount" Text="{Binding Amount}" Width="150" Grid.Column="1" TextWrapping="WrapWithOverflow" />
 
-                                                        <TextBlock VerticalAlignment = "Center" Name="StorageRoom" Text="{Binding StorageRoom}" Width="400" Grid.Column="2" Padding="0,0,10,0" TextWrapping="WrapWithOverflow"/>
+                                                        <TextBlock VerticalAlignment = "Center" Name="StorageRoom" Text="{Binding StorageRoom}" Width="300" Grid.Column="2" Padding="0,0,10,0" TextWrapping="WrapWithOverflow"/>
 
-                                                        <TextBlock VerticalAlignment = "Center" Name="Distributor" Text="{Binding Distributor}" Width="200" Grid.Column="3" Padding="0,0,10,0" TextWrapping="WrapWithOverflow"/>
+                                                        <TextBlock VerticalAlignment = "Center" Name="Distributor" Text="{Binding Distributor}" Width="100" Grid.Column="3" Padding="0,0,10,0" TextWrapping="WrapWithOverflow"/>
 
 
                                                     </Grid>
@@ -687,10 +687,10 @@
                                                     <DockPanel LastChildFill="True" Background="white">
                                                         <Grid DockPanel.Dock="Top" Height="auto">
                                                             <Grid.ColumnDefinitions>
-                                                                <ColumnDefinition Width="450"/>
-                                                                <ColumnDefinition Width="170"/>
-                                                                <ColumnDefinition Width="400"/>
-                                                                <ColumnDefinition MinWidth="240"/>
+                                                                <ColumnDefinition Width="350"/>
+                                                                <ColumnDefinition Width="150"/>
+                                                                <ColumnDefinition Width="300"/>
+                                                                <ColumnDefinition MinWidth="100"/>
                                                             </Grid.ColumnDefinitions>
                                                             <Label Background="LightGray" Grid.Column="0" FontStyle="Italic" FontSize="30" Content="Produkt"/>
                                                             <Label Background="LightGray" Grid.Column="1" FontStyle="Italic" FontSize="30" Content="Antal"/>
@@ -707,19 +707,19 @@
                                                 <DataTemplate>
                                                     <Grid>
                                                         <Grid.ColumnDefinitions>
-                                                            <ColumnDefinition Width="450"/>
+                                                            <ColumnDefinition Width="350"/>
                                                             <ColumnDefinition Width="150"/>
-                                                            <ColumnDefinition Width="400"/>
-                                                            <ColumnDefinition MinWidth="240"/>
+                                                            <ColumnDefinition Width="300"/>
+                                                            <ColumnDefinition MinWidth="100"/>
                                                         </Grid.ColumnDefinitions>
 
-                                                        <TextBlock VerticalAlignment = "Center" Name="Received" Text="{Binding Received}" Width="450" TextWrapping="Wrap"/>
+                                                        <TextBlock VerticalAlignment = "Center" Name="Received" Text="{Binding Received}" Width="350" TextWrapping="Wrap"/>
 
-                                                        <TextBlock VerticalAlignment = "Center" Name="Amount" Text="{Binding Amount}" Width="220" Grid.Column="1" TextWrapping="WrapWithOverflow" />
+                                                        <TextBlock VerticalAlignment = "Center" Name="Amount" Text="{Binding Amount}" Width="150" Grid.Column="1" TextWrapping="WrapWithOverflow" />
 
-                                                        <TextBlock VerticalAlignment = "Center" Name="StorageRoomSource" Text="{Binding StorageRoomSource}" Width="400" Grid.Column="2" Padding="0,0,10,0" TextWrapping="WrapWithOverflow"/>
+                                                        <TextBlock VerticalAlignment = "Center" Name="StorageRoomSource" Text="{Binding StorageRoomSource}" Width="300" Grid.Column="2" Padding="0,0,10,0" TextWrapping="WrapWithOverflow"/>
 
-                                                        <TextBlock VerticalAlignment = "Center" Name="StorageRoomDest" Text="{Binding StorageRoomDest}" Width="200" Grid.Column="3" Padding="0,0,10,0" TextWrapping="WrapWithOverflow"/>
+                                                        <TextBlock VerticalAlignment = "Center" Name="StorageRoomDest" Text="{Binding StorageRoomDest}" Width="100" Grid.Column="3" Padding="0,0,10,0" TextWrapping="WrapWithOverflow"/>
 
 
                                                     </Grid>
