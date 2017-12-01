@@ -164,6 +164,9 @@
     <Compile Include="CreateProduct.xaml.cs">
       <DependentUpon>CreateProduct.xaml</DependentUpon>
     </Compile>
+    <Compile Include="CreateGroup.xaml.cs">
+      <DependentUpon>CreateGroup.xaml</DependentUpon>
+    </Compile>
     <Compile Include="CreateStorageRoom.xaml.cs">
       <DependentUpon>CreateStorageRoom.xaml</DependentUpon>
     </Compile>
@@ -216,6 +219,10 @@
     <Page Include="CreateProduct.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="CreateGroup.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="CreateStorageRoom.xaml">
       <SubType>Designer</SubType>

@@ -73,7 +73,7 @@ namespace P3_ProjektTests.Classes.Utilities
         [TestCase("A/S", ExpectedResult = 2)]
         [TestCase("græs", ExpectedResult = 1)]
 
-        public int SearchForProductsName(string SearchString)
+        public int SearchAlgorithm(string SearchString)
         {
             ConcurrentDictionary<int, BaseProduct> ProductList = new ConcurrentDictionary<int, BaseProduct>();
             ConcurrentDictionary<int, Group> GroupList = new ConcurrentDictionary<int, Group>();

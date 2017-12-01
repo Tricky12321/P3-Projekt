@@ -11,8 +11,8 @@ namespace P3_Projekt_WPF.Classes
 {
     public class StorageTransaction : Transaction
     {
-        private StorageRoom _source;
-        private StorageRoom _destination;
+        public StorageRoom _source;
+        public StorageRoom _destination;
 
         public int ID => _id;
 

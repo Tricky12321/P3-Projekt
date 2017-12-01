@@ -8,87 +8,182 @@
         Title="Ret Midlertidigt Produkt" Height="700" Width="600"
         WindowStartupLocation="CenterScreen">
     <Grid>
-        <Button x:Name="button_Merge" Content="Foren Produkter" Background="#FFC5C5C5" Margin="0,0,5,5" Style="{StaticResource Flat_Button}" HorizontalAlignment="Right" Width="176" Height="38" VerticalAlignment="Bottom" FontSize="20" Click="button_Merge_Click"/>
-        <TextBlock x:Name="txt_blockTempProduct" HorizontalAlignment="Left" Margin="5,350,5,0" TextWrapping="Wrap" Text="Midlertidigt Produkt:" Width="auto" FontSize="30" Height="40" VerticalAlignment="Top" />
-        <TextBlock x:Name="txt_blockMergeProduct" HorizontalAlignment="Left" Margin="5,555,0,0" TextWrapping="Wrap" Text="Sammensæt med Produkt:" Width="auto" RenderTransformOrigin="1.269,0.536" FontSize="30" Height="45" VerticalAlignment="Top"/>
+
+        <TabControl x:Name="tabs" HorizontalAlignment="Left" Height="669" FontSize="25" VerticalAlignment="Top" Width="592">
+            <TabItem Header="Uforenede Produkter">
+                <Grid Background="#FFE5E5E5">
+                    <Button x:Name="button_Merge" Content="Foren Produkter" Background="#FFC5C5C5" Margin="0,0,5,5" Style="{StaticResource Flat_Button}" HorizontalAlignment="Right" Width="176" Height="38" VerticalAlignment="Bottom" FontSize="20" Click="button_Merge_Click"/>
+                    <TextBlock x:Name="txt_blockTempProduct" HorizontalAlignment="Left" Margin="5,352,0,0" TextWrapping="Wrap" Text="Midlertidigt Produkt:" Width="auto" FontSize="30" Height="40" VerticalAlignment="Top" />
+                    <TextBlock x:Name="txt_blockMergeProduct" HorizontalAlignment="Left" Margin="5,526,0,0" TextWrapping="Wrap" Text="Sammensæt med Produkt:" Width="auto" RenderTransformOrigin="1.269,0.536" FontSize="30" Height="45" VerticalAlignment="Top"/>
 
 
 
-        <ListView Margin="5,5,5,0" Height="37" VerticalAlignment="Top">
-            <ListBox.Template>
-                <ControlTemplate>
-                    <DockPanel LastChildFill="True" Background="white">
-                        <Grid DockPanel.Dock="Top" Height="38">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="1*"/>
-                                <ColumnDefinition Width="100"/>
-                            </Grid.ColumnDefinitions>
-                            <Label Background="LightGray" Grid.Column="0" FontStyle="Italic" FontSize="20" >Beskrivelse</Label>
-                            <Label Background="LightGray" Grid.Column="1" FontSize="20" FontStyle="Italic">Pris</Label>
-                        </Grid>
-                        <ItemsPresenter></ItemsPresenter>
-                    </DockPanel>
-                </ControlTemplate>
-            </ListBox.Template>
-        </ListView>
+                    <ListView Margin="5,10,5,0" Height="37" VerticalAlignment="Top">
+                        <ListBox.Template>
+                            <ControlTemplate>
+                                <DockPanel LastChildFill="True" Background="white">
+                                    <Grid DockPanel.Dock="Top" Height="38">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="1*"/>
+                                            <ColumnDefinition Width="100"/>
+                                        </Grid.ColumnDefinitions>
+                                        <Label Background="LightGray" Grid.Column="0" FontStyle="Italic" FontSize="20" >Beskrivelse</Label>
+                                        <Label Background="LightGray" Grid.Column="1" FontSize="20" FontStyle="Italic">Pris</Label>
+                                    </Grid>
+                                    <ItemsPresenter></ItemsPresenter>
+                                </DockPanel>
+                            </ControlTemplate>
+                        </ListBox.Template>
+                    </ListView>
 
-        <ListView x:Name="listview_ProductsToMerge" Height="300" SelectionChanged="listview_ProductsToMerge_SelectionChanged" Margin="5,40,5,0" HorizontalContentAlignment="Stretch"  VerticalAlignment="Top" >
-            <ListView.ItemTemplate>
-                <DataTemplate>
+                    <ListView x:Name="listview_ProductsToMerge" SelectionMode="Single" Height="300" SelectionChanged="listview_ProductsToMerge_SelectionChanged" Margin="5,47,5,0" HorizontalContentAlignment="Stretch"  VerticalAlignment="Top" >
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="1*"/>
+                                        <ColumnDefinition Width="150"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <TextBlock Text="{Binding Description}" FontSize="30" TextWrapping="Wrap" VerticalAlignment="Center"/>
+                                    <TextBlock Text="{Binding Price}" FontSize="30" Width="auto" Padding="10" Grid.Column="1" VerticalAlignment="Center" TextWrapping="Wrap"/>
+                                </Grid>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                    <TextBox Padding="10,0,0,0"  TextCompositionManager.PreviewTextInput="TextInputNoNumber" x:Name="textBox_IDToMerge" Margin="372,526,0,0" FontSize="33" HorizontalAlignment="Left" Width="100" Height="45" VerticalAlignment="Top" KeyUp="textBox_IDToMerge_KeyUp">
+                        <TextBox.Resources>
+                            <Style TargetType="{x:Type Border}">
+                                <Setter Property="CornerRadius" Value="10"/>
+                            </Style>
+                        </TextBox.Resources>
+                    </TextBox>
+                    <TextBlock IsHitTestVisible="False" Text="ID" Margin="383,526,0,0" Foreground="DarkGray" FontSize="33" HorizontalAlignment="Left" Width="32" Height="45" VerticalAlignment="Top">
+                        <TextBlock.Style>
+                            <Style TargetType="{x:Type TextBlock}">
+                                <Setter Property="Visibility" Value="Collapsed"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Text, ElementName=textBox_IDToMerge}" Value="">
+                                        <Setter Property="Visibility" Value="Visible"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </TextBlock.Style>
+                    </TextBlock>
                     <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="1*"/>
-                            <ColumnDefinition Width="150"/>
-                        </Grid.ColumnDefinitions>
-
-                        <TextBlock Text="{Binding Description}" FontSize="30" TextWrapping="Wrap" VerticalAlignment="Center"/>
-                        <TextBlock Text="{Binding Price}" FontSize="30" Width="auto" Padding="10" Grid.Column="1" VerticalAlignment="Center" TextWrapping="Wrap"/>
+                        <TextBox Padding="5,0,5,0" Margin="0,390,10,0" TextCompositionManager.PreviewTextInput="TextInputNoNumber" x:Name="textBox_TempProductInfo" FontSize="20" TextWrapping="Wrap" IsReadOnly="True" Height="120" VerticalAlignment="Top" Width="auto">
+                            <TextBox.Resources>
+                                <Style TargetType="{x:Type Border}">
+                                    <Setter Property="CornerRadius" Value="10"/>
+                                </Style>
+                            </TextBox.Resources>
+                        </TextBox>
+                        <TextBlock IsHitTestVisible="False" Text="Beskrivelse af Produkt" Margin="10,390,0,0" Foreground="DarkGray" FontSize="20" Height="70" VerticalAlignment="Top">
+                            <TextBlock.Style>
+                                <Style TargetType="{x:Type TextBlock}">
+                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding Text, ElementName=textBox_TempProductInfo}" Value="">
+                                            <Setter Property="Visibility" Value="Visible"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBlock.Style>
+                        </TextBlock>
+                        <TextBlock x:Name="Label_MergeInfo" Padding="0" Margin="10,0,193,0" FontSize="20" Height="55" VerticalAlignment="Bottom"/>
                     </Grid>
-                </DataTemplate>
-            </ListView.ItemTemplate>
-        </ListView>
-        <TextBox Padding="10,0,0,0"  TextCompositionManager.PreviewTextInput="TextInputNoNumber" x:Name="textBox_IDToMerge" Margin="370,555,0,0" FontSize="33" HorizontalAlignment="Left" Width="100" Height="45" VerticalAlignment="Top" KeyUp="textBox_IDToMerge_KeyUp">
-            <TextBox.Resources>
-                <Style TargetType="{x:Type Border}">
-                    <Setter Property="CornerRadius" Value="10"/>
-                </Style>
-            </TextBox.Resources>
-        </TextBox>
-        <TextBlock IsHitTestVisible="False" Text="ID" Margin="381,555,0,0" Foreground="DarkGray" FontSize="33" HorizontalAlignment="Left" Width="32" Height="45" VerticalAlignment="Top">
-            <TextBlock.Style>
-                <Style TargetType="{x:Type TextBlock}">
-                    <Setter Property="Visibility" Value="Collapsed"/>
-                    <Style.Triggers>
-                        <DataTrigger Binding="{Binding Text, ElementName=textBox_IDToMerge}" Value="">
-                            <Setter Property="Visibility" Value="Visible"/>
-                        </DataTrigger>
-                    </Style.Triggers>
-                </Style>
-            </TextBlock.Style>
-        </TextBlock>
-        <Grid>
-            <TextBox Padding="5,0,5,0" Margin="5,400,5,0" TextCompositionManager.PreviewTextInput="TextInputNoNumber" x:Name="textBox_TempProductInfo" FontSize="20" TextWrapping="Wrap" IsReadOnly="True" Height="150" VerticalAlignment="Top" Width="auto">
-                <TextBox.Resources>
-                    <Style TargetType="{x:Type Border}">
-                        <Setter Property="CornerRadius" Value="10"/>
-                    </Style>
-                </TextBox.Resources>
-            </TextBox>
-            <TextBlock IsHitTestVisible="False" Text="Besrivelse af Produkt" Margin="7,397,3,0" Foreground="DarkGray" FontSize="20" Height="70" VerticalAlignment="Top">
-                <TextBlock.Style>
-                    <Style TargetType="{x:Type TextBlock}">
-                        <Setter Property="Visibility" Value="Collapsed"/>
-                        <Style.Triggers>
-                            <DataTrigger Binding="{Binding Text, ElementName=textBox_TempProductInfo}" Value="">
-                                <Setter Property="Visibility" Value="Visible"/>
-                            </DataTrigger>
-                        </Style.Triggers>
-                    </Style>
-                </TextBlock.Style>
-            </TextBlock>
-            <TextBlock x:Name="Label_MergeInfo" Padding="0" Margin="10,0,193,7" FontSize="20" Height="55" VerticalAlignment="Bottom"/>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Forenede Produkter">
+                <Grid Background="#FFE5E5E5">
+                    <Button x:Name="button_resolvedMerge" Content="Foren Produkter" Background="#FFC5C5C5" Margin="0,0,5,5" Style="{StaticResource Flat_Button}" HorizontalAlignment="Right" Width="176" Height="38" VerticalAlignment="Bottom" FontSize="20" Click="button_resolvedMerge_Click"/>
+                    <TextBlock x:Name="txt_resolvedblockTempProduct" HorizontalAlignment="Left" Margin="5,324,0,0" TextWrapping="Wrap" Text="Midlertidigt Produkt:" Width="auto" FontSize="30" Height="40" VerticalAlignment="Top" />
+                    <TextBlock x:Name="txt_resolvedPreviouslyResolvedProduct" HorizontalAlignment="Left" Margin="5,436,0,0" TextWrapping="Wrap" Text="Forenet med:" Width="auto" RenderTransformOrigin="1.269,0.536" FontSize="30" Height="45" VerticalAlignment="Top"/>
+                    <TextBlock x:Name="Label_resolvedPreviouslyResolvedproduct" Padding="0" Margin="5,476,0,0" FontSize="20" Height="55" VerticalAlignment="Top"/>
 
-        </Grid>
+                    <TextBlock x:Name="txt_resolvedblockMergeProduct" HorizontalAlignment="Left" Margin="5,526,0,0" TextWrapping="Wrap" Text="Sammensæt med Produkt:" Width="auto" RenderTransformOrigin="1.269,0.536" FontSize="30" Height="45" VerticalAlignment="Top"/>
+
+
+
+                    <ListView Margin="5,10,5,0" Height="37" VerticalAlignment="Top">
+                        <ListBox.Template>
+                            <ControlTemplate>
+                                <DockPanel LastChildFill="True" Background="white">
+                                    <Grid DockPanel.Dock="Top" Height="38">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="1*"/>
+                                            <ColumnDefinition Width="100"/>
+                                        </Grid.ColumnDefinitions>
+                                        <Label Background="LightGray" Grid.Column="0" FontStyle="Italic" FontSize="20" >Beskrivelse</Label>
+                                        <Label Background="LightGray" Grid.Column="1" FontSize="20" FontStyle="Italic">Pris</Label>
+                                    </Grid>
+                                    <ItemsPresenter></ItemsPresenter>
+                                </DockPanel>
+                            </ControlTemplate>
+                        </ListBox.Template>
+                    </ListView>
+
+                    <ListView x:Name="listview_resolvedProductsToMerge" SelectionMode="Single" Height="272" SelectionChanged="listview_resolvedProductsToMerge_SelectionChanged" Margin="5,47,5,0" HorizontalContentAlignment="Stretch"  VerticalAlignment="Top" >
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="1*"/>
+                                        <ColumnDefinition Width="150"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <TextBlock Text="{Binding Description}" FontSize="30" TextWrapping="Wrap" VerticalAlignment="Center"/>
+                                    <TextBlock Text="{Binding Price}" FontSize="30" Width="auto" Padding="10" Grid.Column="1" VerticalAlignment="Center" TextWrapping="Wrap"/>
+                                </Grid>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                    <TextBox Padding="10,0,0,0"  TextCompositionManager.PreviewTextInput="TextInputNoNumber" x:Name="textBox_resolvedIDToMerge" Margin="372,526,0,0" FontSize="33" HorizontalAlignment="Left" Width="100" Height="45" VerticalAlignment="Top" KeyUp="textBox_resolvedIDToMerge_KeyUp">
+                        <TextBox.Resources>
+                            <Style TargetType="{x:Type Border}">
+                                <Setter Property="CornerRadius" Value="10"/>
+                            </Style>
+                        </TextBox.Resources>
+                    </TextBox>
+                    <TextBlock IsHitTestVisible="False" Text="ID" Margin="383,526,0,0" Foreground="DarkGray" FontSize="33" HorizontalAlignment="Left" Width="32" Height="45" VerticalAlignment="Top">
+                        <TextBlock.Style>
+                            <Style TargetType="{x:Type TextBlock}">
+                                <Setter Property="Visibility" Value="Collapsed"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Text, ElementName=textBox_resolvedIDToMerge}" Value="">
+                                        <Setter Property="Visibility" Value="Visible"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </TextBlock.Style>
+                    </TextBlock>
+                    <Grid>
+                        <TextBox Padding="5,0,5,0" Margin="0,366,10,0" TextCompositionManager.PreviewTextInput="TextInputNoNumber" x:Name="textBox_resolvedTempProductInfo" FontSize="20" TextWrapping="Wrap" IsReadOnly="True" Height="70" VerticalAlignment="Top" Width="auto">
+                            <TextBox.Resources>
+                                <Style TargetType="{x:Type Border}">
+                                    <Setter Property="CornerRadius" Value="10"/>
+                                </Style>
+                            </TextBox.Resources>
+                        </TextBox>
+                        <TextBlock IsHitTestVisible="False" Text="Beskrivelse af Produkt" Margin="10,366,0,0" Foreground="DarkGray" FontSize="20" Height="70" VerticalAlignment="Top">
+                            <TextBlock.Style>
+                                <Style TargetType="{x:Type TextBlock}">
+                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding Text, ElementName=textBox_resolvedTempProductInfo}" Value="">
+                                            <Setter Property="Visibility" Value="Visible"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBlock.Style>
+                        </TextBlock>
+                        <TextBlock x:Name="Label_resolvedMergeInfo" Padding="0" Margin="10,0,193,0" FontSize="20" Height="55" VerticalAlignment="Bottom"/>
+                    </Grid>
+                </Grid>
+            </TabItem>
+        </TabControl>
+
+
 
     </Grid>
 </Window>
