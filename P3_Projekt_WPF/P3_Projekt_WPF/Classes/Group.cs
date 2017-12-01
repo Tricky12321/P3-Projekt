@@ -34,6 +34,17 @@ namespace P3_Projekt_WPF.Classes
             GetFromDatabase();
         }
 
+        public static int GetNextID()
+        {
+            if (Mysql.ConnectionWorking == false)
+            {
+                return 0;
+            }
+            string sql = "SHOW TABLE STATUS LIKE 'groups'";
+            TableDecode Results = Mysql.RunQueryWithReturn(sql);
+            return Convert.ToInt32(Results.RowData[0].Values[10]);
+        }
+
         public void GetFromDatabase()
         {
             string sql = $"SELECT * FROM `groups` WHERE `id` = '{ID}'";
@@ -57,7 +68,7 @@ namespace P3_Projekt_WPF.Classes
         {
             string sql = $"UPDATE `groups` SET" +
                 $"`name` = '{Name}'," +
-                $"`description` = '{Description}'," +
+                $"`description` = '{Description}' " +
                 $"WHERE `id` = {ID};";
             Mysql.RunQuery(sql);
         }

@@ -39,7 +39,10 @@ namespace P3_Projekt_WPF.Classes.Utilities
 
         public void ClearDictionarys()
         {
-            _queueThreads.Clear();
+            if (_queueThreads != null)
+            {
+                _queueThreads.Clear();
+            }
             AllProductsDictionary.Clear();
             TempProductDictionary.Clear();
             ServiceProductDictionary.Clear();
@@ -119,7 +122,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
             string sql = "SELECT * FROM `storage_status`";
             TableDecodeQueue Result = Mysql.RunQueryWithReturnQueue(sql);
             _storageStatusCount = Result.RowCounter;
-            AddInformation("Storage Status Count", Result.RowCounter.ToString());
+            AddInformation("Storage Status Antal", Result.RowCounter.ToString());
             _storageStatusQueue = Result.RowData;
             _storageStatusLoaded = true;
         }
@@ -129,7 +132,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
             string sql = "SELECT * FROM `products` WHERE `id` > '0' AND `active` = '1'";
             TableDecodeQueue Result = Mysql.RunQueryWithReturnQueue(sql);
             _productsCount = Result.RowCounter;
-            AddInformation("Active Products Count", Result.RowCounter.ToString());
+            AddInformation("Active Products Antal", Result.RowCounter.ToString());
             _productQueue = Result.RowData;
             _productsLoaded = true;
         }
@@ -139,7 +142,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
             string sql = "SELECT * FROM `products` WHERE `id` > '0' AND `active` = '0'";
             TableDecodeQueue Result = Mysql.RunQueryWithReturnQueue(sql);
             _disabledProductsCount = Result.RowCounter;
-            AddInformation("Disabled Products Count", Result.RowCounter.ToString());
+            AddInformation("Disabled Products Antal", Result.RowCounter.ToString());
             _disabledProductsQueue = Result.RowData;
             _disabledProductsLoaded = true;
         }
@@ -149,7 +152,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
             string sql = "SELECT * FROM `groups`";
             TableDecodeQueue Result = Mysql.RunQueryWithReturnQueue(sql);
             _groupsCount = Result.RowCounter;
-            AddInformation("Group Count", Result.RowCounter.ToString());
+            AddInformation("Group Antal", Result.RowCounter.ToString());
             _groupsQueue = Result.RowData;
             _groupsLoaded = true;
         }
@@ -159,7 +162,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
             string sql = "SELECT * FROM `storagerooms`";
             TableDecodeQueue Result = Mysql.RunQueryWithReturnQueue(sql);
             _storageRoomsCount = Result.RowCounter;
-            AddInformation("StorageRoom Count", Result.RowCounter.ToString());
+            AddInformation("StorageRoom Antal", Result.RowCounter.ToString());
             _storageRoomQueue = Result.RowData;
             _storageRoomLoaded = true;
         }
@@ -169,7 +172,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
             string sql = "SELECT * FROM `temp_products`";
             TableDecodeQueue Result = Mysql.RunQueryWithReturnQueue(sql);
             _tempProductCount = Result.RowCounter;
-            AddInformation("TempProduct Count", Result.RowCounter.ToString());
+            AddInformation("TempProduct Antal", Result.RowCounter.ToString());
             _tempProductQueue = Result.RowData;
             _tempProductLoaded = true;
         }
@@ -179,7 +182,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
             string sql = "SELECT * FROM `service_products` WHERE `active` = '1'";
             TableDecodeQueue Result = Mysql.RunQueryWithReturnQueue(sql);
             _serviceProductCount = Result.RowCounter;
-            AddInformation("Active ServiceProduct Count", Result.RowCounter.ToString());
+            AddInformation("Active ServiceProduct Antal", Result.RowCounter.ToString());
             _serviceProductQueue = Result.RowData;
             _serviceProductLoaded = true;
         }
@@ -189,7 +192,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
             string sql = "SELECT * FROM `service_products` WHERE `active` = '0'";
             TableDecodeQueue Result = Mysql.RunQueryWithReturnQueue(sql);
             _disabledServiceProductsCount = Result.RowCounter;
-            AddInformation("Disabled ServiceProduct Count", Result.RowCounter.ToString());
+            AddInformation("Disabled ServiceProduct Antal", Result.RowCounter.ToString());
             _disabledServiceProductsQueue = Result.RowData;
             _disabledServiceProductsLoaded = true;
         }
@@ -199,7 +202,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
             string sql = $"SELECT * FROM `storage_transaction`";
             TableDecodeQueue Result = Mysql.RunQueryWithReturnQueue(sql);
             _storageTransactionCount = Result.RowCounter;
-            AddInformation("Storage Transaction Count", Result.RowCounter.ToString());
+            AddInformation("Storage Transaction Antal", Result.RowCounter.ToString());
             _storageTransactionsQueue = Result.RowData;
             _storageTransactionsLoaded = true;
         }
@@ -209,7 +212,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
             string sql = $"SELECT * FROM `order_transactions`";
             TableDecodeQueue Result = Mysql.RunQueryWithReturnQueue(sql);
             _orderTransactionCount = Result.RowCounter;
-            AddInformation("Order Transaction Count", Result.RowCounter.ToString());
+            AddInformation("Order Transaction Antal", Result.RowCounter.ToString());
             _orderTransactionsQueue = Result.RowData;
             _orderTransactionsLoaded = true;
         }
@@ -541,10 +544,11 @@ namespace P3_Projekt_WPF.Classes.Utilities
             ProductDictionary.TryRemove(ProductID, out outVal);
         }
 
-        public void CreateGroup(int id, string name, string description)
+        public void CreateGroup(string name, string description)
         {
             Group newGroup = new Group(name, description);
-            newGroup.ID = id;
+            newGroup.ID = Group.GetNextID();
+            newGroup.UploadToDatabase();
             GroupDictionary.TryAdd(newGroup.ID, newGroup);
         }
 
@@ -552,6 +556,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
         {
             GroupDictionary[id].Name = name;
             GroupDictionary[id].Description = description;
+            GroupDictionary[id].UpdateInDatabase();
         }
 
         //Assign group 0 to products left with no group
@@ -559,27 +564,24 @@ namespace P3_Projekt_WPF.Classes.Utilities
         public void DeleteGroup(int GroupID)
         {
             //Mulighed for at flytte alle produkter til en bestem gruppe???
-            var groups = ProductDictionary.Values.Where(x => x.ProductGroupID == GroupID);
-            foreach (Product product in groups)
+            var Products = ProductDictionary.Values.Where(x => x.ProductGroupID == GroupID);
+            foreach (Product product in Products)
             {
                 product.ProductGroupID = GroupDictionary[0].ID;
+                string updateProductsSQL = $"UPDATE `products` SET `groups` = '{GroupDictionary[0].ID}' WHERE `groups` = '{GroupID}'";
+                Mysql.RunQuery(updateProductsSQL);
+                string updateServiceProductsSQL = $"UPDATE `service_products` SET `groups` = '{GroupDictionary[0].ID}' WHERE `groups` = '{GroupID}'";
+                Mysql.RunQuery(updateServiceProductsSQL);
+
             }
             Group outVal = null;
+            string sql = $"DELETE FROM `groups` WHERE `id` = '{GroupID}' ";
+            Mysql.RunQuery(sql);
             GroupDictionary.TryRemove(GroupID, out outVal);
         }
 
         //Assign new group to products left with no group
         //Removes group from dictionary
-        public void DeleteGroupAndMove(int removeID, int moveID)
-        {
-            var groups = ProductDictionary.Values.Where(x => x.ProductGroupID == removeID);
-            foreach (Product product in groups)
-            {
-                product.ProductGroupID = GroupDictionary[moveID].ID;
-            }
-            Group outVal = null;
-            GroupDictionary.TryRemove(removeID, out outVal);
-        }
 
         public IEnumerable<string> GetProductBrands()
         {
@@ -697,17 +699,28 @@ namespace P3_Projekt_WPF.Classes.Utilities
 
         /* User has already found the matching product ID.
          * First line findes the store storage
-         * Second line subtracts the amound sold from storage*/
+         * Second line subtracts the amount sold from Shop storage*/
         public void MergeTempProduct(TempProduct tempProductToMerge, int matchedProductID)
         {
             Product MergedProduct = ProductDictionary[matchedProductID];
             tempProductToMerge.Resolve(MergedProduct);
             SaleTransaction tempProductsTransaction = tempProductToMerge.GetTempProductsSaleTransaction();
-            var StorageRoomStatus = ProductDictionary[matchedProductID].StorageWithAmount.Where(x => x.Value >= tempProductsTransaction.Amount).OrderBy(x => x.Key).First();
-            int StorageRoomKey = StorageRoomStatus.Key;
-            int StorageRoomAmount = StorageRoomStatus.Value;
-            MergedProduct.StorageWithAmount[StorageRoomKey] = StorageRoomAmount - tempProductsTransaction.Amount;
+            //Gets the Shop storage room, which has = 1, but if it doesn't exist, gets the next one
+            KeyValuePair<int,int> StorageRoomStatus = MergedProduct.StorageWithAmount.Where(x => x.Key != 0).First();
+
+            MergedProduct.StorageWithAmount[StorageRoomStatus.Key] = StorageRoomStatus.Value - tempProductsTransaction.Amount;
             MergedProduct.UpdateInDatabase();
+        }
+
+        public void RemergeTempProduct(TempProduct tempProductToMerge, int matchedProductID)
+        {
+            Product PreviouslyMergedProduct = ProductDictionary[tempProductToMerge.ResolvedProductID];
+            KeyValuePair<int, int> StorageRoomStatus = PreviouslyMergedProduct.StorageWithAmount.Where(x => x.Key != 0).First();
+
+            PreviouslyMergedProduct.StorageWithAmount[StorageRoomStatus.Key] = StorageRoomStatus.Value + tempProductToMerge.GetTempProductsSaleTransaction().Amount;
+            PreviouslyMergedProduct.UpdateInDatabase();
+
+            MergeTempProduct(tempProductToMerge, matchedProductID);
         }
 
         public void EditTempProduct(TempProduct tempProductToEdit, string description, decimal salePrice)
