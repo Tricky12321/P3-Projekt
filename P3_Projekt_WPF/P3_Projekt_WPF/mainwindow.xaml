@@ -24,8 +24,7 @@
                 <Grid Background="#FFE5E5E5" MouseLeftButtonDown="SearchFieldLostFocus" Margin="0,0,0,0">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="729*"/>
-                        <ColumnDefinition Width="386*"/>
-                        <ColumnDefinition Width="238*"/>
+                        <ColumnDefinition Width="624*"/>
                     </Grid.ColumnDefinitions>
 
                     <Grid.RowDefinitions>
