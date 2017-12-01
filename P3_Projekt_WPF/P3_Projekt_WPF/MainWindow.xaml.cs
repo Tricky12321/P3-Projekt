@@ -1092,6 +1092,8 @@ namespace P3_Projekt_WPF
         {
             bool CompletedPurchase = false;
             label_TotalPrice.Content = _POSController.CompletePurchase(PaymentMethod_Enum.Cash, PayWithAmount, listView_Receipt, out CompletedPurchase);
+            ResetStuff(CompletedPurchase);
+            label_TotalPrice.Content = _POSController.CompletePurchase(PaymentMethod_Enum.Cash, PayWithAmount, listView_Receipt);
             DisableDiscountOnReceipt();
             StartsToPay();
             ResetPOSController(CompletedPurchase);
