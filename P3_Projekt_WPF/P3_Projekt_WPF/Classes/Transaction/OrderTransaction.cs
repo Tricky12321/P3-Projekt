@@ -12,6 +12,7 @@ namespace P3_Projekt_WPF.Classes
         private decimal _purchasePrice;
         public string _supplier;
         private int _storageRoomID;
+        public int StorageRoomID => _storageRoomID;
         public int ID => _id;
 
         public OrderTransaction(Product product, int amount, string supplier, int storageRoomID) : base(product, amount)

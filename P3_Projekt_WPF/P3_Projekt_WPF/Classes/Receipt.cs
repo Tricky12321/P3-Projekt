@@ -54,11 +54,6 @@ namespace P3_Projekt_WPF.Classes
             UpdateNumberOfProducts();
         }
 
-        public decimal GetTotalDiscountPrice()
-        {
-            return TotalPrice - DiscountOnFullReceipt;
-        }
-
         public void UpdateTotalPrice()
         {
             TotalPrice = 0;
@@ -163,6 +158,10 @@ namespace P3_Projekt_WPF.Classes
 
         public static int GetNextID()
         {
+            if (Mysql.ConnectionWorking == false)
+            {
+                return 0;
+            }
             string sql = "SHOW TABLE STATUS LIKE 'receipt'";
             TableDecode Results = Mysql.RunQueryWithReturn(sql);
             return Convert.ToInt32(Results.RowData[0].Values[10]);

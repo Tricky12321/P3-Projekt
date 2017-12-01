@@ -164,7 +164,7 @@ namespace P3_Projekt_WPF
         {
             Int32.TryParse(textBox_ProductAmount.Text, out _amount);
 
-            if (_amount < 9999)
+            if (_amount < Int32.Parse(label_ActualAmountInStorage.Content.ToString()))
             {
                 textBox_ProductAmount.Text = (++_amount).ToString();
             }

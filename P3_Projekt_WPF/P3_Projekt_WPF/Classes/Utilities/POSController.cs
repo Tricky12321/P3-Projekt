@@ -119,6 +119,11 @@ namespace P3_Projekt_WPF.Classes.Utilities
             }
         }
 
+        private void _resetDiscount()
+        {
+
+        }
+
         public void RemoveTransactionFromReceipt(int productID)
         {
             PlacerholderReceipt.RemoveTransaction(productID);
@@ -160,7 +165,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
             {
                 if (TotalPriceToPay == -1m)
                 {
-                    TotalPriceToPay = PlacerholderReceipt.GetTotalDiscountPrice();
+                    TotalPriceToPay = PlacerholderReceipt.TotalPrice;
                 }
 
                 decimal PaymentAmount;
@@ -184,8 +189,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
                 PayWithAmount.Text = string.Empty;
                 TotalPriceToPay -= NewPayment.Amount;
 
-
-                if (PlacerholderReceipt.PaidPrice >= PlacerholderReceipt.GetTotalDiscountPrice())
+                if (PlacerholderReceipt.PaidPrice >= PlacerholderReceipt.TotalPrice)
                 {
                     SaleTransaction.SetStorageController(_storageController);
 
@@ -197,11 +201,11 @@ namespace P3_Projekt_WPF.Classes.Utilities
                     ReceiptListView.Items.Clear();
 
                     TotalPriceToPay = -1m;
+                    ReceiptID = 0;
                     if (PlacerholderReceipt.PaidPrice > PlacerholderReceipt.TotalPrice)
                     {
-                        return "Retur: " + (PlacerholderReceipt.PaidPrice - PlacerholderReceipt.GetTotalDiscountPrice()).ToString().Replace('.', ',');
+                        return "Retur: " + (PlacerholderReceipt.PaidPrice - PlacerholderReceipt.TotalPrice).ToString().Replace('.', ',');
                     }
-
                 }
                 if (TotalPriceToPay != -1m)
                 {
