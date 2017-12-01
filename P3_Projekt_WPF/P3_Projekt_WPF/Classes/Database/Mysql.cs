@@ -15,11 +15,12 @@ namespace P3_Projekt_WPF.Classes.Database
     {
         private static Properties.Settings sett = Properties.Settings.Default;
         private const bool _debug = true;
-        private static string _username = sett.local_or_remote ? sett.lcl_username : sett.rmt_username;
-        private static string _password = sett.local_or_remote ? sett.lcl_password : sett.rmt_password;
-        private static string _ip = sett.local_or_remote ? sett.lcl_ip : sett.rmt_ip;
-        private static int _port = sett.local_or_remote ? sett.lcl_port : sett.rmt_port;
-        private static string _database = sett.local_or_remote ? sett.lcl_db : sett.rmt_db;
+        private static string _username = sett.lcl_username;
+        private static string _password = sett.lcl_password;
+        private static string _ip = sett.lcl_ip;
+        private static int _port = sett.lcl_port;
+        private static string _database = sett.lcl_db;
+
         public static List<MySqlConnection> Connection = new List<MySqlConnection>();
         private static string _connectionString = $"Server={_ip};Port={_port};Database={_database};Uid={_username};Pwd={_password};";
         private static bool _internetConnection = false;

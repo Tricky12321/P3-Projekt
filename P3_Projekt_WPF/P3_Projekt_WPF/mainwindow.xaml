@@ -62,7 +62,7 @@
                     <Border BorderBrush="Black" BorderThickness="1" Margin="-34,0,-79,0" Grid.ColumnSpan="2" Grid.Row="1" Height="1" VerticalAlignment="Top"/>
                     <Button x:Name="btn_Card"  Content="Dankort" Margin="0,0,5,60" Background="#FFC5C5C5" Style="{StaticResource Flat_Button}" Height="50" Width="260" VerticalAlignment="Bottom" HorizontalAlignment="Right" Grid.Column="1" Grid.Row="1" RenderTransformOrigin="0.502,0.5" Click="btn_Dankort_Click"/>
                     <Button x:Name="btn_MobilePay"  Content="MobilePay" Margin="0,0,5,5" Background="#FFC5C5C5" Style="{StaticResource Flat_Button}" Click="btn_MobilePay_Click" Height="50" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="260" Grid.Column="1" Grid.Row="1"/>
-                    <Grid x:Name="grid_QuickButton" Margin="10,73,5,66" Grid.Row="1"/>
+                    <Grid x:Name="grid_QuickButton" Margin="5,62,4.6,65.8" Grid.Row="1"/>
                     <Border BorderBrush="Black" BorderThickness="1" Background="Black" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Left" Width="1"/>
                     <Button x:Name="btn_AddProduct"  Content="Tilføj Produkt" Margin="498,6,0,0" Background="#FFC5C5C5" Style="{StaticResource Flat_Button}" Grid.Row="1" Height="50" VerticalAlignment="Top" Click="btn_AddProduct_Click" HorizontalAlignment="Left" Width="223" />
                     <Button x:Name="btn_PlusToReciept" Content="+" HorizontalAlignment="Left" Margin="313,6,0,0" Width="50" Style="{StaticResource Flat_Button}" RenderTransformOrigin="-0.486,0.333" Grid.Row="1" Height="50" VerticalAlignment="Top" Click="btn_PlusToReciept_Click"/>
@@ -564,11 +564,11 @@
 
 
 
-                                    <Grid x:Name="grid_StorageSettings" Margin="5,5,5,5" MinWidth="900">
+                                    <Grid x:Name="grid_StorageSettings" MinWidth="900" Height="1724">
                                         <Button Style="{StaticResource Flat_Button}" Background="#FFC5C5C5" x:Name="btn_PictureFilePath" Content="Vælg billedmappe til produkter" HorizontalAlignment="Left" Margin="315,0,0,0" Width="450" Click="btn_PictureFilePath_Click" Height="50" VerticalAlignment="Top" />
 
 
-                                        <ListView x:Name="Header_StorageRooms" Panel.ZIndex="2" Margin="0,55,0,0" Height="50" VerticalAlignment="Top">
+                                        <ListView x:Name="Header_StorageRooms" Panel.ZIndex="2" Margin="0,105,0,0" Height="50" VerticalAlignment="Top">
 
                                             <ListView.Template>
                                                 <ControlTemplate>
@@ -591,7 +591,7 @@
                                             </ListView.Template>
                                         </ListView>
 
-                                        <ListView x:Name="listView_StorageRoom" Margin="0,105,0,0" ScrollViewer.HorizontalScrollBarVisibility="Disabled" MinWidth="600" Height="320" HorizontalContentAlignment="Stretch" VerticalAlignment="Top">
+                                        <ListView x:Name="listView_StorageRoom" Margin="0,155,0,0" ScrollViewer.HorizontalScrollBarVisibility="Disabled" MinWidth="600" Height="500" HorizontalContentAlignment="Stretch" VerticalAlignment="Top">
                                             <ListView.ItemTemplate>
                                                 <DataTemplate>
                                                     <Grid>
@@ -627,49 +627,49 @@
                                             </ListView.ItemTemplate>
                                         </ListView>
 
-                                        <Button Style="{StaticResource Flat_Button}" Background="#FFC5C5C5" x:Name="btn_newStorageRoom" Content="Opret nyt lagerrum" FontSize="30"  Margin="0" VerticalAlignment="Top" Height="50" Click="btn_newStorageRoom_Click" HorizontalAlignment="Left" Width="306" />
+                                        <Button Style="{StaticResource Flat_Button}" Background="#FFC5C5C5" x:Name="btn_newStorageRoom" Content="Opret nyt lagerrum" FontSize="30" Margin="0" VerticalAlignment="Top" Height="50" Click="btn_newStorageRoom_Click" HorizontalAlignment="Left" Width="306" />
 
 
-                                        <ListView x:Name="Header_SettingsStorage" Panel.ZIndex="2" Margin="0,430,0,0" Height="50" VerticalAlignment="Top">
+                                        <ListView x:Name="Header_SettingsStorage" Panel.ZIndex="2" Margin="0,710,0,0" Height="50" VerticalAlignment="Top">
 
                                             <ListView.Template>
                                                 <ControlTemplate>
                                                     <DockPanel LastChildFill="True" Background="white">
                                                         <Grid DockPanel.Dock="Top" Height="auto">
                                                             <Grid.ColumnDefinitions>
-                                                                <ColumnDefinition Width="300"/>
-                                                                <ColumnDefinition Width="220"/>
-                                                                <ColumnDefinition Width="310"/>
-                                                                <ColumnDefinition MinWidth="200"/>
+                                                                <ColumnDefinition Width="450"/>
+                                                                <ColumnDefinition Width="170"/>
+                                                                <ColumnDefinition Width="400"/>
+                                                                <ColumnDefinition MinWidth="240"/>
                                                             </Grid.ColumnDefinitions>
                                                             <Label Background="LightGray" Grid.Column="0" FontStyle="Italic" FontSize="30" Content="Modtaget Produkt"/>
                                                             <Label Background="LightGray" Grid.Column="1" FontStyle="Italic" FontSize="30" Content="Antal"/>
                                                             <Label Background="Lightgray" Grid.Column="2" FontStyle="Italic" FontSize="30" Content="Lagerrum"/>
-                                                            <Label Background="Lightgray" Grid.Column="3" FontStyle="Italic" FontSize="30" Content="Leverandør" Margin="0,0,13,0"/>
+                                                            <Label Background="Lightgray" Grid.Column="3" FontStyle="Italic" FontSize="30" Content="Leverandør"/>
                                                         </Grid>
                                                         <ItemsPresenter/>
                                                     </DockPanel>
                                                 </ControlTemplate>
                                             </ListView.Template>
                                         </ListView>
-                                        <ListView x:Name="listview_SettingsStorage" Margin="0,480,0,0" Height="31" VerticalAlignment="Top">
+                                        <ListView x:Name="listview_SettingsStorage" Margin="0,760,0,0" Height="31" VerticalAlignment="Top">
                                             <ListView.ItemTemplate>
                                                 <DataTemplate>
                                                     <Grid>
                                                         <Grid.ColumnDefinitions>
-                                                            <ColumnDefinition Width="300"/>
-                                                            <ColumnDefinition Width="220"/>
-                                                            <ColumnDefinition Width="310"/>
-                                                            <ColumnDefinition MinWidth="200"/>
+                                                            <ColumnDefinition Width="450"/>
+                                                            <ColumnDefinition Width="150"/>
+                                                            <ColumnDefinition Width="400"/>
+                                                            <ColumnDefinition MinWidth="240"/>
                                                         </Grid.ColumnDefinitions>
 
-                                                        <TextBlock VerticalAlignment = "Center" Name="Received" Text="{Binding Received}" Width="300"/>
+                                                        <TextBlock VerticalAlignment = "Center" Name="Received" Text="{Binding Received}" Width="450" TextWrapping="Wrap"/>
 
                                                         <TextBlock VerticalAlignment = "Center" Name="Amount" Text="{Binding Amount}" Width="220" Grid.Column="1" TextWrapping="WrapWithOverflow" />
 
-                                                        <TextBlock VerticalAlignment = "Center" Name="StorageRoom" Text="{Binding StorageRoom}" Width="310" Grid.Column="2" Padding="0,0,10,0" TextWrapping="WrapWithOverflow"/>
+                                                        <TextBlock VerticalAlignment = "Center" Name="StorageRoom" Text="{Binding StorageRoom}" Width="400" Grid.Column="2" Padding="0,0,10,0" TextWrapping="WrapWithOverflow"/>
 
-                                                        <TextBlock VerticalAlignment = "Center" Name="Distributor" Text="{Binding Distributor}" Width="200" Grid.Column="2" Padding="0,0,10,0" TextWrapping="WrapWithOverflow"/>
+                                                        <TextBlock VerticalAlignment = "Center" Name="Distributor" Text="{Binding Distributor}" Width="200" Grid.Column="3" Padding="0,0,10,0" TextWrapping="WrapWithOverflow"/>
 
 
                                                     </Grid>
@@ -677,6 +677,59 @@
                                             </ListView.ItemTemplate>
 
                                         </ListView>
+
+
+
+                                        <ListView x:Name="Header_SettingsStorageStorage" Panel.ZIndex="2" Margin="0,1330,0,0" Height="50" VerticalAlignment="Top">
+
+                                            <ListView.Template>
+                                                <ControlTemplate>
+                                                    <DockPanel LastChildFill="True" Background="white">
+                                                        <Grid DockPanel.Dock="Top" Height="auto">
+                                                            <Grid.ColumnDefinitions>
+                                                                <ColumnDefinition Width="450"/>
+                                                                <ColumnDefinition Width="170"/>
+                                                                <ColumnDefinition Width="400"/>
+                                                                <ColumnDefinition MinWidth="240"/>
+                                                            </Grid.ColumnDefinitions>
+                                                            <Label Background="LightGray" Grid.Column="0" FontStyle="Italic" FontSize="30" Content="Modtaget Produkt"/>
+                                                            <Label Background="LightGray" Grid.Column="1" FontStyle="Italic" FontSize="30" Content="Antal"/>
+                                                            <Label Background="Lightgray" Grid.Column="2" FontStyle="Italic" FontSize="30" Content="Lagerrum"/>
+                                                            <Label Background="Lightgray" Grid.Column="3" FontStyle="Italic" FontSize="30" Content="Leverandør"/>
+                                                        </Grid>
+                                                        <ItemsPresenter/>
+                                                    </DockPanel>
+                                                </ControlTemplate>
+                                            </ListView.Template>
+                                        </ListView>
+                                        <ListView x:Name="listview_SettingsStorageStorage" Margin="0,1380,0,0" Height="31" VerticalAlignment="Top">
+                                            <ListView.ItemTemplate>
+                                                <DataTemplate>
+                                                    <Grid>
+                                                        <Grid.ColumnDefinitions>
+                                                            <ColumnDefinition Width="450"/>
+                                                            <ColumnDefinition Width="150"/>
+                                                            <ColumnDefinition Width="400"/>
+                                                            <ColumnDefinition MinWidth="240"/>
+                                                        </Grid.ColumnDefinitions>
+
+                                                        <TextBlock VerticalAlignment = "Center" Name="Received" Text="{Binding Received}" Width="450" TextWrapping="Wrap"/>
+
+                                                        <TextBlock VerticalAlignment = "Center" Name="Amount" Text="{Binding Amount}" Width="220" Grid.Column="1" TextWrapping="WrapWithOverflow" />
+
+                                                        <TextBlock VerticalAlignment = "Center" Name="StorageRoom" Text="{Binding StorageRoom}" Width="400" Grid.Column="2" Padding="0,0,10,0" TextWrapping="WrapWithOverflow"/>
+
+                                                        <TextBlock VerticalAlignment = "Center" Name="Distributor" Text="{Binding Distributor}" Width="200" Grid.Column="3" Padding="0,0,10,0" TextWrapping="WrapWithOverflow"/>
+
+
+                                                    </Grid>
+                                                </DataTemplate>
+                                            </ListView.ItemTemplate>
+
+                                        </ListView>
+
+                                        <TextBlock HorizontalAlignment="Left" Margin="0,60,0,0" TextWrapping="Wrap" VerticalAlignment="Top"><Run Text="Oprettede Lagerrum"/></TextBlock>
+                                        <TextBlock HorizontalAlignment="Left" Margin="0,665,0,0" TextWrapping="Wrap" VerticalAlignment="Top"><Run Text="Modtaget Produkter"/></TextBlock>
 
                                     </Grid>
                                 </ScrollViewer>
@@ -697,123 +750,44 @@
                         </TabItem>
 
                         <TabItem Header="Admin" Height="70" Width="300">
-                            <Grid>
-                                <Viewbox>
-                                    <GroupBox x:Name="groupBox" Header="Admin Indstillinger" Margin="10,10,-3.571,717.571" Width="1568" Height="159">
-                                        <Viewbox HorizontalAlignment="Left" Height="100" Margin="10,0,0,0" VerticalAlignment="Top" Width="335">
-                                            <Button Style="{StaticResource Flat_Button}" x:Name="btn_ChangePassword" Content="Skift adgangskode" Height="53" Width="177" Margin="0" Click="btn_ChangePassword_Click" FontSize="20"/>
-                                        </Viewbox>
-                                    </GroupBox>
-                                </Viewbox>
-                                <Viewbox x:Name="groupBox1">
-                                    <GroupBox x:Name="groupBox2" Header="Database Indstillinger" Margin="10,197,10.429,10.143" Height="700" Width="1585">
-                                        <Grid>
-                                            <Button Style="{StaticResource Flat_Button}" x:Name="btn_RmtLcl" Content="Remote" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="150" Click="btn_RmtLcl_Click"/>
-                                            <GroupBox x:Name="GroupLocal" Header="Local" Margin="10,60,794,9.857">
-                                                <Grid>
-                                                    <Viewbox>
-                                                        <Grid>
-                                                            <Label x:Name="lbl_lcl_ip" Content="IP" Margin="9,10,529,485.286"/>
-                                                            <ComboBox x:Name="cmb_lcl_ip" HorizontalAlignment="Left" Margin="222,10,0,485.286" Width="523">
-                                                                <ComboBoxItem Content="localhost"/>
-                                                                <ComboBoxItem Content="127.0.0.1"/>
-                                                            </ComboBox>
-                                                        </Grid>
-                                                    </Viewbox>
-                                                    <Viewbox>
-                                                        <Grid>
-                                                            <Label x:Name="lbl_lcl_port" Content="Port" Margin="9,85,530,410.286"/>
-                                                            <ComboBox x:Name="cmb_lcl_port" HorizontalAlignment="Left" Margin="222,85,0,410.286" Width="523" IsEditable="True" PreviewTextInput="PortNumberControl">
-                                                                <ComboBoxItem Content="3306"/>
-                                                            </ComboBox>
-                                                        </Grid>
-                                                    </Viewbox>
-                                                    <Viewbox>
-                                                        <Grid>
-                                                            <Label x:Name="lbl_lcl_db" Content="DB" Margin="9,158,529,337.286"/>
-                                                            <ComboBox x:Name="cmb_lcl_db" HorizontalAlignment="Left" Margin="222,158,0,337.286" Width="523" IsEditable="True">
-                                                                <ComboBoxItem Content="P3"/>
-                                                                <ComboBoxItem Content="abbey"/>
-                                                                <ComboBoxItem Content="boeglum_abbey"/>
-                                                                <ComboBoxItem Content="boeglum"/>
-                                                            </ComboBox>
-                                                        </Grid>
-                                                    </Viewbox>
-                                                    <Viewbox>
-                                                        <Grid>
-                                                            <Label x:Name="lbl_lcl_username" Content="Brugernavn" Margin="9,230,529,265.286"/>
-                                                            <TextBox x:Name="txt_lcl_username" HorizontalAlignment="Left" Height="54" Margin="222,230,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="523"/>
-                                                        </Grid>
-                                                    </Viewbox>
-                                                    <Viewbox>
-                                                        <Grid>
-                                                            <Label x:Name="lbl_lcl_password" Content="Adgangskode" Margin="9,301,530,194.286"/>
-                                                            <PasswordBox x:Name="txt_lcl_password" HorizontalAlignment="Left" Margin="222,301,0,0" VerticalAlignment="Top" Width="523" Height="55"/>
-                                                        </Grid>
-                                                    </Viewbox>
-                                                    <Viewbox>
-                                                        <Grid>
-                                                            <Button Style="{StaticResource Flat_Button}" x:Name="btn_lcl_saveDBSettings" Content="Gem indstillinger" Margin="188,165,2.714,-91.714" Click="SaveDBSettings"/>
-                                                        </Grid>
-                                                    </Viewbox>
-                                                </Grid>
-                                            </GroupBox>
+                            <Grid Margin="0,10,-0.4,0.2">
+                                <Button FontSize="30" Style="{StaticResource Flat_Button}" Background="#FFC5C5C5" x:Name="btn_ChangePassword" Content="Skift adgangskode" Height="50" Width="350" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="355,0,0,0" Click="btn_ChangePassword_Click"/>
+                                <Button FontSize="30" Style="{StaticResource Flat_Button}" Background="#FFC5C5C5" x:Name="btn_ReloadData" Content="Genindlæs databasen" Height="50" Width="350" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="0,0,0,1" Click="btn_ReloadDatabase_Click"/>
 
-                                            <GroupBox x:Name="GroupRemote" Header="Remote" Margin="779,60,10,9.857">
-                                                <Grid>
-                                                    <Viewbox>
-                                                        <Grid>
-                                                            <Label x:Name="lbl_rmt_ip" Content="IP" Margin="9,10,529,485.286"/>
-                                                            <ComboBox x:Name="cmb_rmt_ip" HorizontalAlignment="Left" Margin="222,10,0,485.286" Width="523" IsEditable="True">
-                                                                <ComboBoxItem Content="localhost"/>
-                                                                <ComboBoxItem Content="127.0.0.1"/>
-                                                            </ComboBox>
-                                                        </Grid>
-                                                    </Viewbox>
+                                <Grid Margin="-1,10,0,56">
+                                    <Grid Margin="0,-24,-0.6,94.8">
+                                        <Label x:Name="label2" Content="Denne PC er" Height="50" Margin="5,10,0,0" HorizontalAlignment="Left" Width="205" VerticalAlignment="Top"/>
+                                        <Button Style="{StaticResource Flat_Button}" x:Name="btn_RmtLcl" Background="#FFC5C5C5" Content="Butikkens PC" HorizontalAlignment="Left" Margin="210,10,0,0" VerticalAlignment="Top" Height="50" Width="200" Click="btn_RmtLcl_Click" FontSize="30"/>
 
+                                        <Label x:Name="lbl_lcl_ip" Content="IP" Height="50" Margin="5,70,0,0" HorizontalAlignment="Left" Width="54" VerticalAlignment="Top"/>
+                                        <ComboBox x:Name="cmb_lcl_ip" Height="50" HorizontalAlignment="Left" Margin="210,70,0,0" Width="500" VerticalAlignment="Top" IsEditable="True">
+                                            <ComboBoxItem Content="localhost"/>
+                                            <ComboBoxItem Content="127.0.0.1"/>
+                                        </ComboBox>
 
-                                                    <Viewbox>
-                                                        <Grid>
-                                                            <Label x:Name="lbl_rmt_port" Content="Port" Margin="9,85,530,410.286"/>
-                                                            <ComboBox x:Name="cmb_rmt_port" HorizontalAlignment="Left" Margin="222,85,0,410.286" Width="523" IsEditable="True" PreviewTextInput="PortNumberControl">
-                                                                <ComboBoxItem Content="3306"/>
-                                                            </ComboBox>
-                                                        </Grid>
-                                                    </Viewbox>
-                                                    <Viewbox>
-                                                        <Grid>
-                                                            <Label x:Name="lbl_rmt_db" Content="DB" Margin="9,158,529,337.286"/>
-                                                            <ComboBox x:Name="cmb_rmt_db" HorizontalAlignment="Left" Margin="222,158,0,337.286" Width="523" IsEditable="True">
-                                                                <ComboBoxItem Content="P3"/>
-                                                                <ComboBoxItem Content="abbey"/>
-                                                                <ComboBoxItem Content="boeglum_abbey"/>
-                                                                <ComboBoxItem Content="boeglum"/>
-                                                            </ComboBox>
-                                                        </Grid>
-                                                    </Viewbox>
-                                                    <Viewbox>
-                                                        <Grid>
-                                                            <Label x:Name="lbl_rmt_username" Content="Brugernavn" Margin="9,230,529,265.286"/>
-                                                            <TextBox x:Name="txt_rmt_username" HorizontalAlignment="Left" Height="54" Margin="222,230,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="523"/>
-                                                        </Grid>
-                                                    </Viewbox>
-                                                    <Viewbox>
-                                                        <Grid>
-                                                            <Label x:Name="lbl_rmt_password" Content="Adgangskode" Margin="9,301,530,194.286"/>
-                                                            <PasswordBox x:Name="txt_rmt_password" HorizontalAlignment="Left" Margin="222,301,0,0" VerticalAlignment="Top" Width="523" Height="55"/>
-                                                        </Grid>
-                                                    </Viewbox>
-                                                    <Viewbox>
-                                                        <Grid>
-                                                            <Button Style="{StaticResource Flat_Button}" x:Name="btn_rmt_saveDBSettings" Content="Gem indstillinger" Margin="188,165,2.714,-91.714" Click="SaveDBSettings"/>
-                                                        </Grid>
-                                                    </Viewbox>
-                                                </Grid>
-                                            </GroupBox>
+                                        <Label x:Name="lbl_lcl_port" Height="50" Content="Port" Margin="5,125,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="69"/>
+                                        <ComboBox x:Name="cmb_lcl_port" HorizontalAlignment="Left" Height="50" Margin="210,125,0,0" Width="500" IsEditable="True" PreviewTextInput="PortNumberControl" VerticalAlignment="Top">
+                                            <ComboBoxItem Content="3306"/>
+                                        </ComboBox>
 
-                                        </Grid>
-                                    </GroupBox>
-                                </Viewbox>
+                                        <Label x:Name="lbl_lcl_db" Height="50" Content="DB" Margin="5,180,0,0" HorizontalAlignment="Left" Width="54" VerticalAlignment="Top"/>
+                                        <ComboBox x:Name="cmb_lcl_db" HorizontalAlignment="Left" Height="50" Margin="210,180,0,0" Width="500" IsEditable="True" VerticalAlignment="Top">
+                                            <ComboBoxItem Content="P3"/>
+                                            <ComboBoxItem Content="abbey"/>
+                                            <ComboBoxItem Content="boeglum_abbey"/>
+                                            <ComboBoxItem Content="boeglum"/>
+                                        </ComboBox>
+
+                                        <Label x:Name="lbl_lcl_username" Content="Brugernavn" Height="50" Margin="5,235,0,0" HorizontalAlignment="Left" Width="168" VerticalAlignment="Top"/>
+                                        <TextBox x:Name="txt_lcl_username" HorizontalAlignment="Left" Height="50" Margin="210,235,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="500"/>
+
+                                        <Label x:Name="lbl_lcl_password" Height="50" Content="Adgangskode" Margin="5,290,0,0" HorizontalAlignment="Left" Width="192" VerticalAlignment="Top"/>
+                                        <PasswordBox x:Name="txt_lcl_password" HorizontalAlignment="Left" Margin="210,290,0,0" VerticalAlignment="Top" Width="500" Height="50"/>
+
+                                        <Button Background="#FFC5C5C5" Style="{StaticResource Flat_Button}" x:Name="btn_lcl_saveDBSettings" Content="Gem indstillinger" FontSize="30" Margin="460,344,0,0" Click="SaveDBSettings" HorizontalAlignment="Left" Width="250" Height="50" VerticalAlignment="Top"/>
+
+                                    </Grid>
+                                </Grid>
                             </Grid>
                         </TabItem>
                         <TabItem Header="Produkter"  Width="300" Height="70">

@@ -97,29 +97,32 @@ namespace P3_Projekt_WPF.Classes.Utilities
         public void ChangeTransactionAmount(object sender, EventArgs e, int amount)
         {
             string IDTag = (sender as ReceiptListItem).IDTag;
+            SaleTransaction placeholderTransaction;
             if (IDTag.Contains("t"))
             {
                 int productID = Convert.ToInt32(IDTag.Replace("t", string.Empty));
-                PlacerholderReceipt.Transactions.Where(x => x.Product.ID == productID).First().Amount += amount;
-                PlacerholderReceipt.Transactions.Where(x => x.Product.ID == productID).First().CheckIfGroupPrice();
+                placeholderTransaction = PlacerholderReceipt.Transactions.Where(x => x.Product.ID == productID).First();
+                placeholderTransaction.Amount += amount;
+                placeholderTransaction.CheckIfGroupPrice();
+                PlacerholderReceipt.UpdateTotalPrice();
             }
             else if (Convert.ToInt32(IDTag) == Properties.Settings.Default.IcecreamProductID)
             {
                 int productID = Convert.ToInt32(IDTag);
-                PlacerholderReceipt.Transactions.Where(x => x.Product.ID == productID && (x.TotalPrice == (sender as ReceiptListItem).Price)).First().Amount += amount;
+                placeholderTransaction = PlacerholderReceipt.Transactions.Where(x => x.Product.ID == productID && (x.TotalPrice == (sender as ReceiptListItem).Price)).First();
+                placeholderTransaction.Amount += amount;
+                PlacerholderReceipt.UpdateTotalPrice();
             }
             else
             {
                 int productID = Convert.ToInt32(IDTag);
-                PlacerholderReceipt.Transactions.Where(x => x.Product.ID == productID).First().Amount += amount;
-                PlacerholderReceipt.Transactions.Where(x => x.Product.ID == productID).First().CheckIfGroupPrice();
+                placeholderTransaction = PlacerholderReceipt.Transactions.Where(x => x.Product.ID == productID).First();
+                placeholderTransaction.Amount += amount;
+                placeholderTransaction.CheckIfGroupPrice();
+                PlacerholderReceipt.UpdateTotalPrice();
             }
+            PlacerholderReceipt.RemoveDiscountFromDiscount(placeholderTransaction);
             PlacerholderReceipt.UpdateTotalPrice();
-        }
-
-        private void _resetDiscount()
-        {
-
         }
 
         public void RemoveTransactionFromReceipt(int productID)
@@ -157,7 +160,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
             }
         }
 
-        public string CompletePurchase(PaymentMethod_Enum PaymentMethod, TextBox PayWithAmount, ListView ReceiptListView)
+        public string CompletePurchase(PaymentMethod_Enum PaymentMethod, TextBox PayWithAmount, ListView ReceiptListView, out bool CompletedPurchase)
         {
             if (ReceiptListView.HasItems)
             {
@@ -189,6 +192,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
 
                 if (PlacerholderReceipt.PaidPrice >= PlacerholderReceipt.TotalPrice)
                 {
+                    CompletedPurchase = true;
                     SaleTransaction.SetStorageController(_storageController);
 
                     //_POSController.PlacerholderReceipt.PaymentMethod = PaymentMethod;
@@ -204,12 +208,15 @@ namespace P3_Projekt_WPF.Classes.Utilities
                     {
                         return "Retur: " + (PlacerholderReceipt.PaidPrice - PlacerholderReceipt.TotalPrice).ToString().Replace('.', ',');
                     }
+                    
                 }
                 if (TotalPriceToPay != -1m)
                 {
+                    CompletedPurchase = false;
                     return TotalPriceToPay.ToString().Replace('.', ',');
                 }
             }
+            CompletedPurchase = false;
             return string.Empty;
         }
     }
