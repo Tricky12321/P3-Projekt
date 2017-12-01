@@ -102,7 +102,7 @@ namespace P3_Projekt_WPF
                 }
             }
 
-            
+
             else
             {
                 MessageBox.Show(($"Produkt med ID: {txtBox_SearchField.Text} findes ikke!"), "Produkt ikke fundet", MessageBoxButton.OK, MessageBoxImage.Warning);
@@ -118,10 +118,7 @@ namespace P3_Projekt_WPF
 
         private void Window_KeyDown(object sender, KeyEventArgs e)
         {
-            if(e.Key == Key.Escape)
-            {
-                this.Close();
-            }
+ 
         }
 
         private void TextInputNoNumber(object sender, TextCompositionEventArgs e)
@@ -137,7 +134,7 @@ namespace P3_Projekt_WPF
         private void Grid_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             listBox_SearchResultsSaleTab.Visibility = Visibility.Hidden;
-            
+
         }
 
 
@@ -197,17 +194,17 @@ namespace P3_Projekt_WPF
 
         private void button_OrderTransaction_Click(object sender, RoutedEventArgs e)
         {
-            if(product == null)
+            if (product == null)
             {
                 textblock_Search.Text = "Vælg et Produkt";
                 textblock_Search.Foreground = Brushes.Red;
                 txtBox_SearchField.BorderBrush = Brushes.Red;
             }
-            else if(combobox_Supplier.Text != "")
+            else if (combobox_Supplier.Text != "")
             {
                 int parsevalue = 0;
                 Int32.TryParse(textBox_ProductAmount.Text, out parsevalue);
-                if(parsevalue > 0)
+                if (parsevalue > 0)
                 {
                     if (!(product as Product).StorageWithAmount.Keys.Contains(_storageController.StorageRoomDictionary.Where(x => x.Value.Name == comboBox_StorageRooms.Text).Select(x => x.Key).First()))
                     {
@@ -253,6 +250,14 @@ namespace P3_Projekt_WPF
             else if (length >= 1)
             {
                 label_SupplierLayer.Visibility = Visibility.Hidden;
+            }
+        }
+
+        private void Window_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                button_OrderTransaction_Click(sender, e);
             }
         }
     }
