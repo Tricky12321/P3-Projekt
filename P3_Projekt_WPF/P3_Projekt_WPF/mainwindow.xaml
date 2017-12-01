@@ -642,7 +642,7 @@
                                                                 <ColumnDefinition Width="400"/>
                                                                 <ColumnDefinition MinWidth="240"/>
                                                             </Grid.ColumnDefinitions>
-                                                            <Label Background="LightGray" Grid.Column="0" FontStyle="Italic" FontSize="30" Content="Modtaget Produkt"/>
+                                                            <Label Background="LightGray" Grid.Column="0" FontStyle="Italic" FontSize="30" Content="Produkt"/>
                                                             <Label Background="LightGray" Grid.Column="1" FontStyle="Italic" FontSize="30" Content="Antal"/>
                                                             <Label Background="Lightgray" Grid.Column="2" FontStyle="Italic" FontSize="30" Content="Lagerrum"/>
                                                             <Label Background="Lightgray" Grid.Column="3" FontStyle="Italic" FontSize="30" Content="Leverandør"/>
@@ -680,7 +680,7 @@
 
 
 
-                                        <ListView x:Name="Header_SettingsStorageStorage" Panel.ZIndex="2" Margin="0,1330,0,0" Height="50" VerticalAlignment="Top">
+                                        <ListView x:Name="Header_SettingsStorageStorage" Panel.ZIndex="2" Margin="0,1310,0,0" Height="50" VerticalAlignment="Top">
 
                                             <ListView.Template>
                                                 <ControlTemplate>
@@ -692,17 +692,17 @@
                                                                 <ColumnDefinition Width="400"/>
                                                                 <ColumnDefinition MinWidth="240"/>
                                                             </Grid.ColumnDefinitions>
-                                                            <Label Background="LightGray" Grid.Column="0" FontStyle="Italic" FontSize="30" Content="Modtaget Produkt"/>
+                                                            <Label Background="LightGray" Grid.Column="0" FontStyle="Italic" FontSize="30" Content="Produkt"/>
                                                             <Label Background="LightGray" Grid.Column="1" FontStyle="Italic" FontSize="30" Content="Antal"/>
-                                                            <Label Background="Lightgray" Grid.Column="2" FontStyle="Italic" FontSize="30" Content="Lagerrum"/>
-                                                            <Label Background="Lightgray" Grid.Column="3" FontStyle="Italic" FontSize="30" Content="Leverandør"/>
+                                                            <Label Background="Lightgray" Grid.Column="2" FontStyle="Italic" FontSize="30" Content="Fra Lagerrum"/>
+                                                            <Label Background="Lightgray" Grid.Column="3" FontStyle="Italic" FontSize="30" Content="Til Lagerrum"/>
                                                         </Grid>
                                                         <ItemsPresenter/>
                                                     </DockPanel>
                                                 </ControlTemplate>
                                             </ListView.Template>
                                         </ListView>
-                                        <ListView x:Name="listview_SettingsStorageStorage" Margin="0,1380,0,0" Height="31" VerticalAlignment="Top">
+                                        <ListView x:Name="listview_SettingsStorageStorageTransaction" Margin="0,1360,0,0" Height="31" VerticalAlignment="Top">
                                             <ListView.ItemTemplate>
                                                 <DataTemplate>
                                                     <Grid>
@@ -717,9 +717,9 @@
 
                                                         <TextBlock VerticalAlignment = "Center" Name="Amount" Text="{Binding Amount}" Width="220" Grid.Column="1" TextWrapping="WrapWithOverflow" />
 
-                                                        <TextBlock VerticalAlignment = "Center" Name="StorageRoom" Text="{Binding StorageRoom}" Width="400" Grid.Column="2" Padding="0,0,10,0" TextWrapping="WrapWithOverflow"/>
+                                                        <TextBlock VerticalAlignment = "Center" Name="StorageRoomSource" Text="{Binding StorageRoomSource}" Width="400" Grid.Column="2" Padding="0,0,10,0" TextWrapping="WrapWithOverflow"/>
 
-                                                        <TextBlock VerticalAlignment = "Center" Name="Distributor" Text="{Binding Distributor}" Width="200" Grid.Column="3" Padding="0,0,10,0" TextWrapping="WrapWithOverflow"/>
+                                                        <TextBlock VerticalAlignment = "Center" Name="StorageRoomDest" Text="{Binding StorageRoomDest}" Width="200" Grid.Column="3" Padding="0,0,10,0" TextWrapping="WrapWithOverflow"/>
 
 
                                                     </Grid>
@@ -729,6 +729,7 @@
                                         </ListView>
 
                                         <TextBlock HorizontalAlignment="Left" Margin="0,60,0,0" TextWrapping="Wrap" VerticalAlignment="Top"><Run Text="Oprettede Lagerrum"/></TextBlock>
+                                        <TextBlock HorizontalAlignment="Left" Margin="0,1265,0,0" TextWrapping="Wrap" VerticalAlignment="Top"><Run Text="Flyttede Produkter"/></TextBlock>
                                         <TextBlock HorizontalAlignment="Left" Margin="0,665,0,0" TextWrapping="Wrap" VerticalAlignment="Top"><Run Text="Modtaget Produkter"/></TextBlock>
 
                                     </Grid>
