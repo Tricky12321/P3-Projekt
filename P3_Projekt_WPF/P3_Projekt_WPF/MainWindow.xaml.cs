@@ -1422,6 +1422,8 @@ namespace P3_Projekt_WPF
         private void StorageTransactionsHistory()
         {
             listview_SettingsStorage.Height = 500;
+            listView_StorageRoom.Height = 500;
+            grid_StorageSettings.Height = 2000;
             foreach (var ordertrans in _storageController.OrderTransactionDictionary)
             {
                 var product = _storageController.ProductDictionary[ordertrans.Value.Product.ID];
