@@ -901,7 +901,7 @@ namespace P3_Projekt_WPF
         ResovleTempProduct _resolveTempProduct;
         private void btn_MergeTempProduct_Click(object sender, RoutedEventArgs e)
         {
-            if (_storageController.TempProductDictionary.Where(x => x.Value.Resolved == false).Count() > 0 && _resolveTempProduct == null)
+            if (_resolveTempProduct == null)
             {
                 _resolveTempProduct = new ResovleTempProduct(_storageController);
                 _resolveTempProduct.Show();
@@ -1470,6 +1470,8 @@ namespace P3_Projekt_WPF
         private void StorageTransactionsHistory()
         {
             listview_SettingsStorage.Height = 500;
+            listView_StorageRoom.Height = 500;
+            grid_StorageSettings.Height = 2000;
             foreach (var ordertrans in _storageController.OrderTransactionDictionary)
             {
                 Product product;
