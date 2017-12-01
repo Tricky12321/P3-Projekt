@@ -564,7 +564,7 @@
 
 
 
-                                    <Grid x:Name="grid_StorageSettings" Margin="5,5,5,5" MinWidth="900" Height="800">
+                                    <Grid x:Name="grid_StorageSettings" MinWidth="900" Height="1724">
                                         <Button Style="{StaticResource Flat_Button}" Background="#FFC5C5C5" x:Name="btn_PictureFilePath" Content="Vælg billedmappe til produkter" HorizontalAlignment="Left" Margin="315,0,0,0" Width="450" Click="btn_PictureFilePath_Click" Height="50" VerticalAlignment="Top" />
 
 
@@ -591,7 +591,7 @@
                                             </ListView.Template>
                                         </ListView>
 
-                                        <ListView x:Name="listView_StorageRoom" Margin="0,155,0,0" ScrollViewer.HorizontalScrollBarVisibility="Disabled" MinWidth="600" Height="320" HorizontalContentAlignment="Stretch" VerticalAlignment="Top">
+                                        <ListView x:Name="listView_StorageRoom" Margin="0,155,0,0" ScrollViewer.HorizontalScrollBarVisibility="Disabled" MinWidth="600" Height="500" HorizontalContentAlignment="Stretch" VerticalAlignment="Top">
                                             <ListView.ItemTemplate>
                                                 <DataTemplate>
                                                     <Grid>
@@ -630,7 +630,7 @@
                                         <Button Style="{StaticResource Flat_Button}" Background="#FFC5C5C5" x:Name="btn_newStorageRoom" Content="Opret nyt lagerrum" FontSize="30" Margin="0" VerticalAlignment="Top" Height="50" Click="btn_newStorageRoom_Click" HorizontalAlignment="Left" Width="306" />
 
 
-                                        <ListView x:Name="Header_SettingsStorage" Panel.ZIndex="2" Margin="0,530,0,0" Height="50" VerticalAlignment="Top">
+                                        <ListView x:Name="Header_SettingsStorage" Panel.ZIndex="2" Margin="0,710,0,0" Height="50" VerticalAlignment="Top">
 
                                             <ListView.Template>
                                                 <ControlTemplate>
@@ -652,7 +652,7 @@
                                                 </ControlTemplate>
                                             </ListView.Template>
                                         </ListView>
-                                        <ListView x:Name="listview_SettingsStorage" Margin="0,580,0,0" Height="31" VerticalAlignment="Top">
+                                        <ListView x:Name="listview_SettingsStorage" Margin="0,760,0,0" Height="31" VerticalAlignment="Top">
                                             <ListView.ItemTemplate>
                                                 <DataTemplate>
                                                     <Grid>
@@ -677,8 +677,59 @@
                                             </ListView.ItemTemplate>
 
                                         </ListView>
+
+
+
+                                        <ListView x:Name="Header_SettingsStorageStorage" Panel.ZIndex="2" Margin="0,1330,0,0" Height="50" VerticalAlignment="Top">
+
+                                            <ListView.Template>
+                                                <ControlTemplate>
+                                                    <DockPanel LastChildFill="True" Background="white">
+                                                        <Grid DockPanel.Dock="Top" Height="auto">
+                                                            <Grid.ColumnDefinitions>
+                                                                <ColumnDefinition Width="450"/>
+                                                                <ColumnDefinition Width="170"/>
+                                                                <ColumnDefinition Width="400"/>
+                                                                <ColumnDefinition MinWidth="240"/>
+                                                            </Grid.ColumnDefinitions>
+                                                            <Label Background="LightGray" Grid.Column="0" FontStyle="Italic" FontSize="30" Content="Modtaget Produkt"/>
+                                                            <Label Background="LightGray" Grid.Column="1" FontStyle="Italic" FontSize="30" Content="Antal"/>
+                                                            <Label Background="Lightgray" Grid.Column="2" FontStyle="Italic" FontSize="30" Content="Lagerrum"/>
+                                                            <Label Background="Lightgray" Grid.Column="3" FontStyle="Italic" FontSize="30" Content="Leverandør"/>
+                                                        </Grid>
+                                                        <ItemsPresenter/>
+                                                    </DockPanel>
+                                                </ControlTemplate>
+                                            </ListView.Template>
+                                        </ListView>
+                                        <ListView x:Name="listview_SettingsStorageStorage" Margin="0,1380,0,0" Height="31" VerticalAlignment="Top">
+                                            <ListView.ItemTemplate>
+                                                <DataTemplate>
+                                                    <Grid>
+                                                        <Grid.ColumnDefinitions>
+                                                            <ColumnDefinition Width="450"/>
+                                                            <ColumnDefinition Width="150"/>
+                                                            <ColumnDefinition Width="400"/>
+                                                            <ColumnDefinition MinWidth="240"/>
+                                                        </Grid.ColumnDefinitions>
+
+                                                        <TextBlock VerticalAlignment = "Center" Name="Received" Text="{Binding Received}" Width="450" TextWrapping="Wrap"/>
+
+                                                        <TextBlock VerticalAlignment = "Center" Name="Amount" Text="{Binding Amount}" Width="220" Grid.Column="1" TextWrapping="WrapWithOverflow" />
+
+                                                        <TextBlock VerticalAlignment = "Center" Name="StorageRoom" Text="{Binding StorageRoom}" Width="400" Grid.Column="2" Padding="0,0,10,0" TextWrapping="WrapWithOverflow"/>
+
+                                                        <TextBlock VerticalAlignment = "Center" Name="Distributor" Text="{Binding Distributor}" Width="200" Grid.Column="3" Padding="0,0,10,0" TextWrapping="WrapWithOverflow"/>
+
+
+                                                    </Grid>
+                                                </DataTemplate>
+                                            </ListView.ItemTemplate>
+
+                                        </ListView>
+
                                         <TextBlock HorizontalAlignment="Left" Margin="0,60,0,0" TextWrapping="Wrap" VerticalAlignment="Top"><Run Text="Oprettede Lagerrum"/></TextBlock>
-                                        <TextBlock HorizontalAlignment="Left" Margin="0,485,0,0" TextWrapping="Wrap" VerticalAlignment="Top"><Run Text="Modtaget Produkter"/></TextBlock>
+                                        <TextBlock HorizontalAlignment="Left" Margin="0,665,0,0" TextWrapping="Wrap" VerticalAlignment="Top"><Run Text="Modtaget Produkter"/></TextBlock>
 
                                     </Grid>
                                 </ScrollViewer>
