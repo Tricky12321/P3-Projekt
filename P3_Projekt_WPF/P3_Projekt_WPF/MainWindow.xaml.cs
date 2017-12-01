@@ -1070,7 +1070,7 @@ namespace P3_Projekt_WPF
             }
         }
 
-        public void ResetStuff(bool completedPurchase)
+        public void ResetPOSController(bool completedPurchase)
         {
             if (completedPurchase)
             {
@@ -1086,21 +1086,21 @@ namespace P3_Projekt_WPF
         {
             bool CompletedPurchase = false;
             label_TotalPrice.Content = _POSController.CompletePurchase(PaymentMethod_Enum.Cash, PayWithAmount, listView_Receipt, out CompletedPurchase);
-            ResetStuff(CompletedPurchase);
+            ResetPOSController(CompletedPurchase);
         }
 
         private void btn_Dankort_Click(object sender, RoutedEventArgs e)
         {
             bool CompletedPurchase = false;
             label_TotalPrice.Content = _POSController.CompletePurchase(PaymentMethod_Enum.Card, PayWithAmount, listView_Receipt, out CompletedPurchase);
-            ResetStuff(CompletedPurchase);
+            ResetPOSController(CompletedPurchase);
         }
 
         private void btn_MobilePay_Click(object sender, RoutedEventArgs e)
         {
             bool CompletedPurchase = false;
             label_TotalPrice.Content = _POSController.CompletePurchase(PaymentMethod_Enum.MobilePay, PayWithAmount, listView_Receipt, out CompletedPurchase);
-            ResetStuff(CompletedPurchase);
+            ResetPOSController(CompletedPurchase);
         }
 
         AdminValidation adminValid;
@@ -1423,8 +1423,16 @@ namespace P3_Projekt_WPF
             listview_SettingsStorage.Height = 500;
             foreach (var ordertrans in _storageController.OrderTransactionDictionary)
             {
-                var product = _storageController.ProductDictionary[ordertrans.Value.Product.ID];
-               listview_SettingsStorage.Items.Add(new { Received = product.Name.ToString(), Amount = ordertrans.Value.Amount, StorageRoom = _storageController.StorageRoomDictionary[ordertrans.Value.StorageRoomID].Name});
+                Product product;
+                if (_storageController.ProductDictionary.ContainsKey(ordertrans.Value.Product.ID))
+                {
+                    product = _storageController.ProductDictionary[ordertrans.Value.Product.ID];
+                } else
+                {
+                    product = _storageController.DisabledProducts[ordertrans.Value.Product.ID];
+                }
+                listview_SettingsStorage.Items.Add(new { Received = product.Name.ToString(), Amount = ordertrans.Value.Amount, StorageRoom = _storageController.StorageRoomDictionary[ordertrans.Value.StorageRoomID].Name });
+
             }
 
         }
