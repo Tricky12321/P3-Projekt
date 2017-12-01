@@ -78,10 +78,8 @@ namespace P3_Projekt_WPF
                 TempProduct NewTemp = _storageController.CreateTempProduct(description, price, _tempID);
                 _storageController.TempTempProductList.Add(NewTemp);
                 _posController.AddSaleTransaction(NewTemp, amount);
-
                 UpdateReceiptEventHandler?.Invoke(this, null);
                 this.Close();
-                ++_tempID;
             }
             else
             {
