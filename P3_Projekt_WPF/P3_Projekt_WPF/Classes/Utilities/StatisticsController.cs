@@ -282,8 +282,11 @@ namespace P3_Projekt_WPF.Classes.Utilities
 
         public StatisticsListItem ProductSalesStrings(int id, StatisticsProduct productInfo)
         {
+            if(id == -1)
+            {
+                return new StatisticsListItem("", $"Midlertidigt produkt", $"{productInfo.Amount}", $"{productInfo.Revenue}");
+            }
             return new StatisticsListItem("", $"{_storageController.AllProductsDictionary[id].GetName()}", $"{productInfo.Amount}", $"{productInfo.Revenue}");
         }
-
     }
 }
