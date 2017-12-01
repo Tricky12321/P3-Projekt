@@ -11,35 +11,11 @@
     <Setting Name="local_or_remote" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
-    <Setting Name="lcl_ip" Type="System.String" Scope="User">
-      <Value Profile="(Default)"> </Value>
-    </Setting>
-    <Setting Name="rmt_ip" Type="System.String" Scope="User">
-      <Value Profile="(Default)"> </Value>
-    </Setting>
     <Setting Name="lcl_port" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">0</Value>
     </Setting>
     <Setting Name="rmt_port" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">0</Value>
-    </Setting>
-    <Setting Name="lcl_username" Type="System.String" Scope="User">
-      <Value Profile="(Default)"> </Value>
-    </Setting>
-    <Setting Name="lcl_password" Type="System.String" Scope="User">
-      <Value Profile="(Default)"> </Value>
-    </Setting>
-    <Setting Name="rmt_password" Type="System.String" Scope="User">
-      <Value Profile="(Default)"> </Value>
-    </Setting>
-    <Setting Name="lcl_db" Type="System.String" Scope="User">
-      <Value Profile="(Default)"> </Value>
-    </Setting>
-    <Setting Name="rmt_db" Type="System.String" Scope="User">
-      <Value Profile="(Default)"> </Value>
-    </Setting>
-    <Setting Name="rmt_username" Type="System.String" Scope="User">
-      <Value Profile="(Default)"> </Value>
     </Setting>
     <Setting Name="IcecreamProductID" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">0</Value>
@@ -84,6 +60,30 @@
       <Value Profile="(Default)" />
     </Setting>
     <Setting Name="QuickButton14" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="lcl_ip" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="rmt_ip" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="lcl_username" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="lcl_password" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="rmt_password" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="lcl_db" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="rmt_db" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="rmt_username" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
   </Settings>

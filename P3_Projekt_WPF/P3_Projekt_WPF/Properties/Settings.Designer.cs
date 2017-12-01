@@ -60,30 +60,6 @@ namespace P3_Projekt_WPF.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string lcl_ip {
-            get {
-                return ((string)(this["lcl_ip"]));
-            }
-            set {
-                this["lcl_ip"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string rmt_ip {
-            get {
-                return ((string)(this["rmt_ip"]));
-            }
-            set {
-                this["rmt_ip"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("0")]
         public int lcl_port {
             get {
@@ -103,78 +79,6 @@ namespace P3_Projekt_WPF.Properties {
             }
             set {
                 this["rmt_port"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string lcl_username {
-            get {
-                return ((string)(this["lcl_username"]));
-            }
-            set {
-                this["lcl_username"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string lcl_password {
-            get {
-                return ((string)(this["lcl_password"]));
-            }
-            set {
-                this["lcl_password"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string rmt_password {
-            get {
-                return ((string)(this["rmt_password"]));
-            }
-            set {
-                this["rmt_password"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string lcl_db {
-            get {
-                return ((string)(this["lcl_db"]));
-            }
-            set {
-                this["lcl_db"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string rmt_db {
-            get {
-                return ((string)(this["rmt_db"]));
-            }
-            set {
-                this["rmt_db"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string rmt_username {
-            get {
-                return ((string)(this["rmt_username"]));
-            }
-            set {
-                this["rmt_username"] = value;
             }
         }
         
@@ -355,6 +259,102 @@ namespace P3_Projekt_WPF.Properties {
             }
             set {
                 this["QuickButton14"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string lcl_ip {
+            get {
+                return ((string)(this["lcl_ip"]));
+            }
+            set {
+                this["lcl_ip"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string rmt_ip {
+            get {
+                return ((string)(this["rmt_ip"]));
+            }
+            set {
+                this["rmt_ip"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string lcl_username {
+            get {
+                return ((string)(this["lcl_username"]));
+            }
+            set {
+                this["lcl_username"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string lcl_password {
+            get {
+                return ((string)(this["lcl_password"]));
+            }
+            set {
+                this["lcl_password"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string rmt_password {
+            get {
+                return ((string)(this["rmt_password"]));
+            }
+            set {
+                this["rmt_password"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string lcl_db {
+            get {
+                return ((string)(this["lcl_db"]));
+            }
+            set {
+                this["lcl_db"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string rmt_db {
+            get {
+                return ((string)(this["rmt_db"]));
+            }
+            set {
+                this["rmt_db"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string rmt_username {
+            get {
+                return ((string)(this["rmt_username"]));
+            }
+            set {
+                this["rmt_username"] = value;
             }
         }
     }

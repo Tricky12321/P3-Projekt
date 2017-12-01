@@ -700,9 +700,14 @@
                             <Grid>
                                 <Viewbox>
                                     <GroupBox x:Name="groupBox" Header="Admin Indstillinger" Margin="10,10,-3.571,717.571" Width="1568" Height="159">
+                                        <Grid>
                                         <Viewbox HorizontalAlignment="Left" Height="100" Margin="10,0,0,0" VerticalAlignment="Top" Width="335">
                                             <Button Style="{StaticResource Flat_Button}" x:Name="btn_ChangePassword" Content="Skift adgangskode" Height="53" Width="177" Margin="0" Click="btn_ChangePassword_Click" FontSize="20"/>
                                         </Viewbox>
+                                            <Viewbox HorizontalAlignment="Left" Height="100" Margin="400,0,0,0" VerticalAlignment="Top" Width="358">
+                                                <Button Style="{StaticResource Flat_Button}" x:Name="btn_ReloadData" Content="Genindlæs databasen" Height="53" Width="200" Margin="0" Click="btn_ReloadDatabase_Click" FontSize="20"/>
+                                        </Viewbox>
+                                            </Grid>
                                     </GroupBox>
                                 </Viewbox>
                                 <Viewbox x:Name="groupBox1">
