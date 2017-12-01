@@ -171,7 +171,7 @@ namespace P3_Projekt_WPF
                     listView_QuickBtn.Items.Add(new FastButton() { Button_Name = NewButtonInfo[1], ProductID = prodID });
                     listView_QuickBtn.Items.Refresh();
                 }
-                
+
             }
         }
 
@@ -258,6 +258,11 @@ namespace P3_Projekt_WPF
             }
             label_TotalPrice.Content = Math.Round(_POSController.PlacerholderReceipt.TotalPrice, 2).ToString().Replace('.', ',');
             btn_discount.IsEnabled = true;
+
+            if (_POSController.PlacerholderReceipt.DiscountOnFullReceipt == 0)
+            {
+                DisableDiscountOnReceipt();
+            }
         }
 
         public void InitStorageGridProducts()
@@ -522,13 +527,13 @@ namespace P3_Projekt_WPF
             ReceiptListItem item;
             if (transaction.Product is TempProduct)
             {
-                item = new ReceiptListItem(transaction.GetProductName(), Math.Round(transaction.TotalPrice, 2), transaction.Amount, 't' + transaction.Product.ID.ToString());
+                item = new ReceiptListItem(transaction.GetProductName(), Math.Round(transaction.TotalPrice, 2), transaction.Amount, 't' + transaction.Product.ID.ToString(), transaction.GetID());
 
                 if (transaction.DiscountBool)
                 {
                     item.canvas_Discount.Visibility = Visibility.Visible;
                     item.textBlock_DiscountAmount.Text = '-' + Math.Round((transaction.Price - transaction.DiscountPrice) * transaction.Amount, 2).ToString() + " : Ny Pris: " + Math.Round(transaction.DiscountPrice * transaction.Amount, 2).ToString();
-                    item.textBlock_DiscountAmount.Foreground = Brushes.Red;
+                    item.textBlock_DiscountAmount.Foreground = Brushes.Green;
                 }
                 else
                 {
@@ -542,7 +547,7 @@ namespace P3_Projekt_WPF
                 {
                     item.canvas_Discount.Visibility = Visibility.Visible;
                     item.textBlock_DiscountAmount.Text = '-' + Math.Round((transaction.Price - transaction.DiscountPrice) * transaction.Amount, 2).ToString() + " : Ny Pris: " + Math.Round(transaction.DiscountPrice * transaction.Amount, 2).ToString();
-                    item.textBlock_DiscountAmount.Foreground = Brushes.Red;
+                    item.textBlock_DiscountAmount.Foreground = Brushes.Green;
                 }
                 else
                 {
@@ -1087,6 +1092,8 @@ namespace P3_Projekt_WPF
         {
             bool CompletedPurchase = false;
             label_TotalPrice.Content = _POSController.CompletePurchase(PaymentMethod_Enum.Cash, PayWithAmount, listView_Receipt, out CompletedPurchase);
+            DisableDiscountOnReceipt();
+            StartsToPay();
             ResetPOSController(CompletedPurchase);
         }
 
@@ -1094,14 +1101,32 @@ namespace P3_Projekt_WPF
         {
             bool CompletedPurchase = false;
             label_TotalPrice.Content = _POSController.CompletePurchase(PaymentMethod_Enum.Card, PayWithAmount, listView_Receipt, out CompletedPurchase);
+            DisableDiscountOnReceipt();
+            StartsToPay();
             ResetPOSController(CompletedPurchase);
         }
 
         private void btn_MobilePay_Click(object sender, RoutedEventArgs e)
         {
             bool CompletedPurchase = false;
+            DisableDiscountOnReceipt();
+            StartsToPay();
+
             label_TotalPrice.Content = _POSController.CompletePurchase(PaymentMethod_Enum.MobilePay, PayWithAmount, listView_Receipt, out CompletedPurchase);
             ResetPOSController(CompletedPurchase);
+        }
+
+        private void StartsToPay()
+        {
+
+        }
+
+        private void DisableDiscountOnReceipt()
+        {
+            button_DeleteFulReceiptDiscount.Visibility = Visibility.Hidden;
+            image_DeleteFullReceiptDiscount.Visibility = Visibility.Hidden;
+            text_FullReceiptDiscount.Text = string.Empty;
+
         }
 
         AdminValidation adminValid;
@@ -1269,17 +1294,13 @@ namespace P3_Projekt_WPF
         {
             if (listView_Receipt.SelectedItem != null)
             {
-                DiscountSingleTransaction();
+                _POSController.PlacerholderReceipt.DiscountOnSingleTransaction((listView_Receipt.SelectedItem as ReceiptListItem).TransID, textBox_discount.Text);
             }
             else if (listView_Receipt.SelectedItem == null)
             {
                 DiscountOnReceipt();
             }
-        }
-
-        private void DiscountSingleTransaction()
-        {
-            _POSController.PlacerholderReceipt.DiscountOnSingleTransaction((listView_Receipt.SelectedItem as ReceiptListItem).TransID, textBox_discount.Text);
+            textBox_discount.Text = string.Empty;
             UpdateReceiptList();
         }
 
@@ -1288,13 +1309,13 @@ namespace P3_Projekt_WPF
             SaleTransaction currentSaleTransaction = _POSController.PlacerholderReceipt.Transactions.Where(x => x.GetID() == (sender as ReceiptListItem).TransID).First();
             currentSaleTransaction.DiscountBool = false;
             _POSController.PlacerholderReceipt.UpdateTotalPrice();
-
             UpdateReceiptList();
         }
 
         private void DiscountOnReceipt()
         {
             _POSController.PlacerholderReceipt.DiscountOnFullReceipt = 0m;
+            _POSController.PlacerholderReceipt.UpdateTotalPrice();
             if (textBox_discount.Text.Contains('%'))
             {
                 decimal percentage = Convert.ToDecimal(textBox_discount.Text.Replace("%", string.Empty));
@@ -1310,8 +1331,8 @@ namespace P3_Projekt_WPF
             button_DeleteFulReceiptDiscount.Visibility = Visibility.Visible;
 
             _POSController.PlacerholderReceipt.UpdateTotalPrice();
-            UpdateReceiptList();
         }
+
 
         private void btn_AddIcecream_Click(object sender, RoutedEventArgs e)
         {
