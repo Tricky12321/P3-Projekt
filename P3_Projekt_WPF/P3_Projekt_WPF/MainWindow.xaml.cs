@@ -1075,8 +1075,23 @@ namespace P3_Projekt_WPF
             }
         }
 
+        public void ResetStuff(bool completedPurchase)
+        {
+            if (completedPurchase)
+            {
+                Mysql.CheckDatabaseConnection();
+                button_DeleteFulReceiptDiscount.Visibility = Visibility.Hidden;
+                image_DeleteFullReceiptDiscount.Visibility = Visibility.Hidden;
+                text_FullReceiptDiscount.Text = string.Empty;
+                _storageController.ReloadAllDictionarys(this, false);
+            }
+        }
+
         private void btn_Cash_Click(object sender, RoutedEventArgs e)
         {
+            bool CompletedPurchase = false;
+            label_TotalPrice.Content = _POSController.CompletePurchase(PaymentMethod_Enum.Cash, PayWithAmount, listView_Receipt, out CompletedPurchase);
+            ResetStuff(CompletedPurchase);
             label_TotalPrice.Content = _POSController.CompletePurchase(PaymentMethod_Enum.Cash, PayWithAmount, listView_Receipt);
             DisableDiscountOnReceipt();
             StartsToPay();
@@ -1084,16 +1099,21 @@ namespace P3_Projekt_WPF
 
         private void btn_Dankort_Click(object sender, RoutedEventArgs e)
         {
-            label_TotalPrice.Content = _POSController.CompletePurchase(PaymentMethod_Enum.Card, PayWithAmount, listView_Receipt);
+            bool CompletedPurchase = false;
+            label_TotalPrice.Content = _POSController.CompletePurchase(PaymentMethod_Enum.Card, PayWithAmount, listView_Receipt, out CompletedPurchase);
+            ResetStuff(CompletedPurchase);
             DisableDiscountOnReceipt();
             StartsToPay();
         }
 
         private void btn_MobilePay_Click(object sender, RoutedEventArgs e)
         {
-            label_TotalPrice.Content = _POSController.CompletePurchase(PaymentMethod_Enum.MobilePay, PayWithAmount, listView_Receipt);
+            bool CompletedPurchase = false;
             DisableDiscountOnReceipt();
             StartsToPay();
+
+            label_TotalPrice.Content = _POSController.CompletePurchase(PaymentMethod_Enum.MobilePay, PayWithAmount, listView_Receipt, out CompletedPurchase);
+            ResetStuff(CompletedPurchase);
         }
 
         private void StartsToPay()
@@ -1106,6 +1126,7 @@ namespace P3_Projekt_WPF
             button_DeleteFulReceiptDiscount.Visibility = Visibility.Hidden;
             image_DeleteFullReceiptDiscount.Visibility = Visibility.Hidden;
             text_FullReceiptDiscount.Text = string.Empty;
+
         }
 
         AdminValidation adminValid;
@@ -1453,5 +1474,12 @@ namespace P3_Projekt_WPF
         {
             StorageTransactionsHistory();
         }
+
+        private void btn_ReloadDatabase_Click(object sender, RoutedEventArgs e)
+        {
+            _storageController.ClearDictionarys();
+            _storageController.ReloadAllDictionarys(this);
+        }
+        
     }
 }

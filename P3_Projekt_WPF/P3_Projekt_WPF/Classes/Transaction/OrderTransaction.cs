@@ -10,7 +10,7 @@ namespace P3_Projekt_WPF.Classes
     public class OrderTransaction : Transaction
     {
         private decimal _purchasePrice;
-        private string _supplier;
+        public string _supplier;
         private int _storageRoomID;
         public int StorageRoomID => _storageRoomID;
         public int ID => _id;
