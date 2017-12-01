@@ -736,12 +736,17 @@ namespace P3_Projekt_WPF.Classes.Utilities
 
             if (int.TryParse(searchStringLower, out isNumber))
             {
-                if (ProductDictionary.Keys.Contains(isNumber))
+                if (AllProductsDictionary.Keys.Contains(isNumber))
                 {
                     SearchProduct matchedProduct = new SearchProduct(AllProductsDictionary[isNumber]);
                     matchedProduct.NameMatch = 1000;
                     productsToReturn.TryAdd(isNumber, matchedProduct);
                 }
+            }
+
+            while (searchStringLower.Contains("  "))
+            {
+                searchStringLower = searchStringLower.Replace("  ", " ");
             }
 
             foreach (BaseProduct product in AllProductsDictionary.Values)
@@ -768,15 +773,18 @@ namespace P3_Projekt_WPF.Classes.Utilities
         {
             SearchProduct productToAdd = new SearchProduct(productToConvert);
 
-            string[] searchSplit = searchStringElement.Split(' ');
+            List<string> searchSplit = searchStringElement.Split(' ').ToList();
+            SpaceCounter(ref searchSplit);
             if (ContainsSearch(searchStringElement, productToConvert))
             {
                 productToAdd.NameMatch += searchStringElement.Length * 2;
             }
+            
+
             if (productToConvert is Product)
             {
-                string[] productSplit = (productToConvert as Product).Name.ToLower().Split(' ');
-
+                List<string> productSplit = (productToConvert as Product).Name.ToLower().Split(' ').ToList();
+                SpaceCounter(ref productSplit);
                 foreach (string s in searchSplit)
                 {
                     foreach (string t in productSplit)
@@ -795,8 +803,8 @@ namespace P3_Projekt_WPF.Classes.Utilities
             }
             else if (productToConvert is ServiceProduct)
             {
-                string[] productSplit = (productToConvert as ServiceProduct).Name.ToLower().Split(' ');
-
+                List<string> productSplit = (productToConvert as ServiceProduct).Name.ToLower().Split(' ').ToList();
+                SpaceCounter(ref productSplit);
                 foreach (string s in searchSplit)
                 {
                     foreach (string t in productSplit)
@@ -818,6 +826,30 @@ namespace P3_Projekt_WPF.Classes.Utilities
             }
 
             weigthedSearchList.Add(productToAdd);
+        }
+        /*
+        private void SpecialCharsCounter(ref List<string> ListOfWords)
+        {
+            foreach (string item in ListOfWords)
+            {
+                if (item.Contains('ø') || item.Contains('æ') || item.Contains('å'))
+                {
+                    ListOfWords.Add(item.Replace("ø", "oe").Replace("æ", "ae").Replace("å", "aa"));
+                }
+            }
+        }
+        */
+        private void SpaceCounter(ref List<string> ListOfWords)
+        {
+            int searchAmount = ListOfWords.Count();
+            if (searchAmount > 1)
+            {
+                for (int i = 1; i <= searchAmount - 1; i++)
+                {
+                    ListOfWords.Add(ListOfWords[i - 1] + ListOfWords[i]);
+                    ListOfWords.Add(ListOfWords[i] + ListOfWords[i - 1]);
+                }
+            }
         }
 
         private bool LevenshteinsGroupAndProductSearch(string[] searchedString, string stringToCompare, out int charDifference)
