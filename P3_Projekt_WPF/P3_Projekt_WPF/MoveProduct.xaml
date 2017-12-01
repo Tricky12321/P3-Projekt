@@ -10,6 +10,7 @@
         Focusable="True"
         KeyDown="Window_KeyDown"
         MouseDown="Window_MouseDown"
+        WindowStartupLocation="CenterScreen"
         >
     <Grid x:Name="grid_MoveProduct" Margin="0,0,0,0">
 

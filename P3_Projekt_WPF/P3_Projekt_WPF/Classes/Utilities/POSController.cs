@@ -102,21 +102,24 @@ namespace P3_Projekt_WPF.Classes.Utilities
                 int productID = Convert.ToInt32(IDTag.Replace("t", string.Empty));
                 PlacerholderReceipt.Transactions.Where(x => x.Product.ID == productID).First().Amount += amount;
                 PlacerholderReceipt.Transactions.Where(x => x.Product.ID == productID).First().CheckIfGroupPrice();
-                PlacerholderReceipt.UpdateTotalPrice();
             }
             else if (Convert.ToInt32(IDTag) == Properties.Settings.Default.IcecreamProductID)
             {
                 int productID = Convert.ToInt32(IDTag);
                 PlacerholderReceipt.Transactions.Where(x => x.Product.ID == productID && (x.TotalPrice == (sender as ReceiptListItem).Price)).First().Amount += amount;
-                PlacerholderReceipt.UpdateTotalPrice();
             }
             else
             {
                 int productID = Convert.ToInt32(IDTag);
                 PlacerholderReceipt.Transactions.Where(x => x.Product.ID == productID).First().Amount += amount;
                 PlacerholderReceipt.Transactions.Where(x => x.Product.ID == productID).First().CheckIfGroupPrice();
-                PlacerholderReceipt.UpdateTotalPrice();
             }
+            PlacerholderReceipt.UpdateTotalPrice();
+        }
+
+        private void _resetDiscount()
+        {
+
         }
 
         public void RemoveTransactionFromReceipt(int productID)

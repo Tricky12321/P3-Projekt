@@ -724,6 +724,11 @@ namespace P3_Projekt_WPF.Classes.Utilities
             TempTempProductList.Clear();
         }
 
+        public List<string> GetSuppliers()
+        {
+            return OrderTransactionDictionary.Values.Select(x => x._supplier).ToList();
+        }
+
         #region SearchAlgorithm
 
         public List<SearchProduct> weigthedSearchList;
