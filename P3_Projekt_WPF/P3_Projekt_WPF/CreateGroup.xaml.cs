@@ -22,34 +22,34 @@ namespace P3_Projekt_WPF
     /// <summary>
     /// Interaction logic for CreateStorageRoom.xaml
     /// </summary>
-    public partial class CreateStorageRoom : Window
+    public partial class CreateGroup : Window
     {
         public StorageController ControllerSto;
-        private ConcurrentDictionary<int, StorageRoom> _storageRooms;
+        private ConcurrentDictionary<int, Group> _groups;
         private MainWindow _mainWindow = null;
-        private StorageRoom storageRoomToEdit;
+        private Group groupToEdit;
 
-        public CreateStorageRoom(StorageController stoController, MainWindow mainWin)
+        public CreateGroup(StorageController stoController, MainWindow mainWin)
         {
             this._mainWindow = mainWin;
             ControllerSto = stoController;
             InitializeComponent();
             SetupCreate();
-            btn_deleteStorageRoom.Visibility = Visibility.Hidden;
+            btn_deleteGroup.Visibility = Visibility.Hidden;
         }
 
-        public CreateStorageRoom(StorageController stoController, MainWindow mainWin, StorageRoom stoRoom)
+        public CreateGroup(StorageController stoController, MainWindow mainWin, Group groupToEdit)
         {
             this._mainWindow = mainWin;
             ControllerSto = stoController;
-            storageRoomToEdit = stoRoom;
+            this.groupToEdit = groupToEdit;
             InitializeComponent();
             SetupEdit();
         }
 
         public void SetupCreate()
         {
-            output_StorageID.Text = StorageRoom.GetNextID().ToString();
+            output_GroupID.Text = Group.GetNextID().ToString();
             btn_JustQuit.Click += delegate { this.Close(); };
             btn_SaveAndQuit.Click += delegate
             {
@@ -68,10 +68,10 @@ namespace P3_Projekt_WPF
                 }
                 else
                 {
-                    string storageRoomName = textBox_Name.Text;
-                    string storageRoomDescr = textBox_descr.Text;
-                    ControllerSto.CreateStorageRoom(storageRoomName, storageRoomDescr);
-                    _mainWindow.LoadStorageRooms();
+                    string groupName = textBox_Name.Text;
+                    string groupDescr = textBox_descr.Text;
+                    ControllerSto.CreateGroup(groupName, groupDescr);
+                    _mainWindow.LoadGroups();
                     this.Close();
                 }
             };
@@ -79,10 +79,10 @@ namespace P3_Projekt_WPF
 
         public void SetupEdit()
         {
-            btn_deleteStorageRoom.Visibility = Visibility.Visible;
-            output_StorageID.Text = storageRoomToEdit.ID.ToString();
-            textBox_Name.Text = storageRoomToEdit.Name;
-            textBox_descr.Text = storageRoomToEdit.Description;
+            btn_deleteGroup.Visibility = Visibility.Visible;
+            output_GroupID.Text = groupToEdit.ID.ToString();
+            textBox_Name.Text = groupToEdit.Name;
+            textBox_descr.Text = groupToEdit.Description;
             btn_JustQuit.Click += delegate { this.Close(); };
             btn_SaveAndQuit.Click += delegate
             {
@@ -101,21 +101,21 @@ namespace P3_Projekt_WPF
                 }
                 else
                 {
-                    string storageRoomName = textBox_Name.Text;
-                    string storageRoomDescr = textBox_descr.Text;
-                    ControllerSto.EditStorageRoom(storageRoomToEdit.ID, storageRoomName, storageRoomDescr);
-                    _mainWindow.LoadStorageRooms();
+                    string GroupName = textBox_Name.Text;
+                    string GroupDesc = textBox_descr.Text;
+                    ControllerSto.EditGroup(groupToEdit.ID, GroupName, GroupDesc);
+                    _mainWindow.LoadGroups();
                     this.Close();
                 }
 
             };
-            btn_deleteStorageRoom.Click += delegate
+            btn_deleteGroup.Click += delegate
             {
-                MessageBoxResult results = MessageBox.Show($"Er du sikker på at du vil slette dette lagerrum: {storageRoomToEdit.Name} ?", "Slet lagerrum:", MessageBoxButton.YesNo, MessageBoxImage.Question);
+                MessageBoxResult results = MessageBox.Show($"Er du sikker på at du vil slette denne gruppe: {groupToEdit.Name} ?", "Slet gruppe:", MessageBoxButton.YesNo, MessageBoxImage.Question);
                 if (results == MessageBoxResult.Yes)
                 {
-                    ControllerSto.DeleteStorageRoom(storageRoomToEdit.ID);
-                    _mainWindow.LoadStorageRooms();
+                    ControllerSto.DeleteGroup(groupToEdit.ID);
+                    _mainWindow.LoadGroups();
                     this.Close();
                 }
             };

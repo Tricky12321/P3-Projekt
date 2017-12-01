@@ -71,8 +71,7 @@ namespace P3_Projekt_WPF
             LoadingTimer.Stop();
             OutputList.Add("[TOTAL TIMER] took " + LoadingTimer.ElapsedMilliseconds + "ms");
             _storageController.AddInformation("Loading timer", LoadingTimer.ElapsedMilliseconds + "ms");
-            BuildInformationTable();
-            LoadQuickButtons();
+
 
         }
 
@@ -215,6 +214,10 @@ namespace P3_Projekt_WPF
             Utils.LoadDatabaseSettings(this);
             FillDeactivatedProductsIntoGrid();
             image_DeleteFullReceiptDiscount.Source = Utils.ImageSourceForBitmap(Properties.Resources.DeleteIcon);
+            BuildInformationTable();
+            LoadGroups();
+
+            LoadQuickButtons();
         }
 
         private void InitGridQuickButtons()
@@ -1019,6 +1022,33 @@ namespace P3_Projekt_WPF
             _createStorageRoom.Activate();
             _createStorageRoom.Show();
         }
+        CreateGroup _createGroup;
+
+        private void btn_editGroup_Click(object sender, RoutedEventArgs e)
+        {
+            //int storageID = Convert.ToInt32(comboBox_storageRoomSelect.Text.Split(' ').First());
+            int groupID = Convert.ToInt32((sender as Button).Tag);
+            Group chosenGroup = _storageController.GroupDictionary[groupID];
+            _createGroup = new CreateGroup(_storageController, this, chosenGroup);
+            _createGroup.Activate();
+            _createGroup.Show();
+        }
+
+        private void btn_AddGroup_Click(object sender, RoutedEventArgs e)
+        {
+            _createGroup = new CreateGroup(_storageController, this);
+            _createGroup.Activate();
+            _createGroup.Show();
+        }
+
+        public void LoadGroups()
+        {
+            listView_Groups.Items.Clear();
+            foreach (KeyValuePair<int, Group> SingleGroup in _storageController.GroupDictionary.Where(x => x.Value.ID != 0))
+            {
+                listView_Groups.Items.Add(new { groupID = SingleGroup.Key, groupName = SingleGroup.Value.Name, groupDescription = SingleGroup.Value.Description, groupEditWithID = SingleGroup.Key });
+            }
+        }
 
         public void LoadStorageRooms()
         {
@@ -1085,8 +1115,11 @@ namespace P3_Projekt_WPF
                 image_DeleteFullReceiptDiscount.Visibility = Visibility.Hidden;
                 text_FullReceiptDiscount.Text = string.Empty;
                 _storageController.ReloadAllDictionarys(this, false);
+                BuildInformationTable();
+                LoadGroups();
                 DisableDiscountOnReceipt();
                 StartsToPay();
+                
             }
         }
 
@@ -1121,7 +1154,6 @@ namespace P3_Projekt_WPF
             button_DeleteFulReceiptDiscount.Visibility = Visibility.Hidden;
             image_DeleteFullReceiptDiscount.Visibility = Visibility.Hidden;
             text_FullReceiptDiscount.Text = string.Empty;
-
         }
 
         AdminValidation adminValid;
@@ -1481,6 +1513,7 @@ namespace P3_Projekt_WPF
             _storageController.ClearDictionarys();
             _storageController.ReloadAllDictionarys(this);
         }
+
         
     }
 }
