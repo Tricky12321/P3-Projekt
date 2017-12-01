@@ -637,17 +637,28 @@ namespace P3_Projekt_WPF.Classes.Utilities
 
         /* User has already found the matching product ID.
          * First line findes the store storage
-         * Second line subtracts the amound sold from storage*/
+         * Second line subtracts the amount sold from Shop storage*/
         public void MergeTempProduct(TempProduct tempProductToMerge, int matchedProductID)
         {
             Product MergedProduct = ProductDictionary[matchedProductID];
             tempProductToMerge.Resolve(MergedProduct);
             SaleTransaction tempProductsTransaction = tempProductToMerge.GetTempProductsSaleTransaction();
-            var StorageRoomStatus = ProductDictionary[matchedProductID].StorageWithAmount.Where(x => x.Value >= tempProductsTransaction.Amount).OrderBy(x => x.Key).First();
-            int StorageRoomKey = StorageRoomStatus.Key;
-            int StorageRoomAmount = StorageRoomStatus.Value;
-            MergedProduct.StorageWithAmount[StorageRoomKey] = StorageRoomAmount - tempProductsTransaction.Amount;
+            //Gets the Shop storage room, which has = 1, but if it doesn't exist, gets the next one
+            KeyValuePair<int,int> StorageRoomStatus = MergedProduct.StorageWithAmount.Where(x => x.Key != 0).First();
+
+            MergedProduct.StorageWithAmount[StorageRoomStatus.Key] = StorageRoomStatus.Value - tempProductsTransaction.Amount;
             MergedProduct.UpdateInDatabase();
+        }
+
+        public void RemergeTempProduct(TempProduct tempProductToMerge, int matchedProductID)
+        {
+            Product PreviouslyMergedProduct = ProductDictionary[tempProductToMerge.ResolvedProductID];
+            KeyValuePair<int, int> StorageRoomStatus = PreviouslyMergedProduct.StorageWithAmount.Where(x => x.Key != 0).First();
+
+            PreviouslyMergedProduct.StorageWithAmount[StorageRoomStatus.Key] = StorageRoomStatus.Value + tempProductToMerge.GetTempProductsSaleTransaction().Amount;
+            PreviouslyMergedProduct.UpdateInDatabase();
+
+            MergeTempProduct(tempProductToMerge, matchedProductID);
         }
 
         public void EditTempProduct(TempProduct tempProductToEdit, string description, decimal salePrice)

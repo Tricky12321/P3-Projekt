@@ -892,7 +892,7 @@ namespace P3_Projekt_WPF
         ResovleTempProduct _resolveTempProduct;
         private void btn_MergeTempProduct_Click(object sender, RoutedEventArgs e)
         {
-            if (_storageController.TempProductDictionary.Where(x => x.Value.Resolved == false).Count() > 0 && _resolveTempProduct == null)
+            if (_resolveTempProduct == null)
             {
                 _resolveTempProduct = new ResovleTempProduct(_storageController);
                 _resolveTempProduct.Show();
