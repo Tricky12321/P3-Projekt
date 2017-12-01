@@ -187,19 +187,19 @@ namespace P3_Projekt_WPF.Classes.Utilities
             bool Remote = false;
             if (sett.local_or_remote == true)
             {
-                MainWin.btn_RmtLcl.Content = "Remote";
+                MainWin.btn_RmtLcl.Content = "Butikkens PC";
                 Local = true;
             }
             else
             {
-                MainWin.btn_RmtLcl.Content = "Local";
+                MainWin.btn_RmtLcl.Content = "Anden PC";
                 Remote = true;
             }
-            UpdateDisabledFields(Local, Remote, MainWin);
+            //UpdateDisabledFields(true, true, MainWin);
             LoadDBSettingsData(MainWin);
         }
 
-        public static void UpdateDisabledFields(bool Local, bool Remote, MainWindow MainWin)
+        /*public static void UpdateDisabledFields(bool Local, bool Remote, MainWindow MainWin)
         {
             SolidColorBrush BaseColor = new SolidColorBrush(System.Windows.Media.Color.FromRgb(Convert.ToByte(229), Convert.ToByte(229), Convert.ToByte(229)));
             SolidColorBrush DiabledColor = new SolidColorBrush(System.Windows.Media.Color.FromRgb(Convert.ToByte(119), Convert.ToByte(119), Convert.ToByte(119)));
@@ -225,7 +225,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
             MainWin.cmb_rmt_port.IsEnabled = Remote;
             MainWin.txt_rmt_password.IsEnabled = Remote;
             MainWin.txt_rmt_username.IsEnabled = Remote;
-            MainWin.btn_rmt_saveDBSettings.IsEnabled = Remote;
+            //MainWin.btn_rmt_saveDBSettings.IsEnabled = Remote;
             if (Remote)
             {
                 MainWin.GroupRemote.Background = BaseColor;
@@ -234,7 +234,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
             {
                 MainWin.GroupRemote.Background = DiabledColor;
             }
-        }
+        }*/
 
         public static void FlipRemoteLocal(MainWindow MainWin)
         {
@@ -253,11 +253,13 @@ namespace P3_Projekt_WPF.Classes.Utilities
             sett.lcl_port = Convert.ToInt32(MainWin.cmb_lcl_port.Text);
             sett.lcl_password = MainWin.txt_lcl_password.Password;
             sett.lcl_username = MainWin.txt_lcl_username.Text;
+            /*
             sett.rmt_db = MainWin.cmb_rmt_db.Text;
             sett.rmt_ip = MainWin.cmb_rmt_ip.Text;
             sett.rmt_port = Convert.ToInt32(MainWin.cmb_rmt_port.Text);
             sett.rmt_password = MainWin.txt_rmt_password.Password;
             sett.rmt_username = MainWin.txt_rmt_username.Text;
+            */
             sett.Save();
         }
 
@@ -265,11 +267,11 @@ namespace P3_Projekt_WPF.Classes.Utilities
         {
             var sett = Properties.Settings.Default;
 
-            MainWin.cmb_rmt_db.Text = sett.rmt_db;
+            /*MainWin.cmb_rmt_db.Text = sett.rmt_db;
             MainWin.cmb_rmt_ip.Text = sett.rmt_ip;
             MainWin.cmb_rmt_port.Text = sett.rmt_port.ToString();
             MainWin.txt_rmt_password.Password = sett.rmt_password;
-            MainWin.txt_rmt_username.Text = sett.rmt_username;
+            MainWin.txt_rmt_username.Text = sett.rmt_username;*/
             MainWin.cmb_lcl_db.Text = sett.lcl_db;
             MainWin.cmb_lcl_ip.Text = sett.lcl_ip;
             MainWin.cmb_lcl_port.Text = sett.lcl_port.ToString();
