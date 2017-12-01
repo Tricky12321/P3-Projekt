@@ -34,7 +34,7 @@ namespace P3_Projekt_WPF
             _storageController = storageController;
             _posController = posController;
             this.ResizeMode = ResizeMode.NoResize;
-
+            combobox_Supplier.ItemsSource = _storageController.GetSuppliers();
         }
 
 
@@ -97,7 +97,7 @@ namespace P3_Projekt_WPF
                     txtBox_SearchField.Text = "";
                     label_ProduktID.Content = "";
                     label_ProduktProdukt.Content = "";
-                    textBox_Supplier.Text = "";
+                    combobox_Supplier.Text = "";
                     product = null;
                 }
             }
@@ -111,7 +111,7 @@ namespace P3_Projekt_WPF
                 txtBox_SearchField.Text = "";
                 label_ProduktID.Content = "";
                 label_ProduktProdukt.Content = "";
-                textBox_Supplier.Text = "";
+                combobox_Supplier.Text = "";
                 product = null;
             }
         }
@@ -203,7 +203,7 @@ namespace P3_Projekt_WPF
                 textblock_Search.Foreground = Brushes.Red;
                 txtBox_SearchField.BorderBrush = Brushes.Red;
             }
-            else if(textBox_Supplier.Text != "")
+            else if(combobox_Supplier.Text != "")
             {
                 int parsevalue = 0;
                 Int32.TryParse(textBox_ProductAmount.Text, out parsevalue);
@@ -214,14 +214,14 @@ namespace P3_Projekt_WPF
                         product.StorageWithAmount.TryAdd(_storageController.StorageRoomDictionary.Where(x => x.Value.Name == comboBox_StorageRooms.Text).Select(x => x.Key).First(), 0);
                         product.UploadToDatabase();
                     }
-                    OrderTransaction orderTransaction = new OrderTransaction(product, parsevalue, textBox_Supplier.Text, _storageController.StorageRoomDictionary.Where(x => x.Value.Name == comboBox_StorageRooms.Text).Select(x => x.Key).First());
+                    OrderTransaction orderTransaction = new OrderTransaction(product, parsevalue, combobox_Supplier.Text, _storageController.StorageRoomDictionary.Where(x => x.Value.Name == comboBox_StorageRooms.Text).Select(x => x.Key).First());
                     orderTransaction.Execute();
                     orderTransaction.UploadToDatabase();
                     this.Close();
                 }
                 else
                 {
-                    textBox_Supplier.BorderBrush = Brushes.DarkGray;
+                    combobox_Supplier.BorderBrush = Brushes.DarkGray;
                     textBox_ProductAmount.BorderBrush = Brushes.Red;
                 }
 
@@ -231,21 +231,21 @@ namespace P3_Projekt_WPF
                 txtBox_SearchField.BorderBrush = Brushes.DarkGray;
                 label_SupplierLayer.Text = "Vælg en distributør";
                 label_SupplierLayer.Foreground = Brushes.Red;
-                textBox_Supplier.BorderBrush = Brushes.Red;
+                combobox_Supplier.BorderBrush = Brushes.Red;
             }
         }
 
-        private void textBox_Supplier_LostFocus(object sender, RoutedEventArgs e)
+        private void combobox_Supplier_LostFocus(object sender, RoutedEventArgs e)
         {
-            if (textBox_Supplier.Text == "")
+            if (combobox_Supplier.Text == "")
             {
                 label_SupplierLayer.Visibility = Visibility.Visible;
             }
         }
 
-        private void textBox_Supplier_KeyUp(object sender, KeyEventArgs e)
+        private void combobox_Supplier_KeyUp(object sender, KeyEventArgs e)
         {
-            int length = textBox_Supplier.Text.Count();
+            int length = combobox_Supplier.Text.Count();
             if (length == 0)
             {
                 label_SupplierLayer.Visibility = Visibility.Visible;
