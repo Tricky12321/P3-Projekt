@@ -716,6 +716,7 @@ namespace P3_Projekt_WPF
                 _createTempProduct = new CreateTemporaryProduct(_storageController, _POSController, _tempID);
                 _createTempProduct.UpdateReceiptEventHandler += updateReceiptList;
                 _createTempProduct.Closed += delegate { _createTempProduct = null; };
+                _tempID++;
             }
             _createTempProduct.Activate();
             _createTempProduct.ShowDialog();
@@ -1446,7 +1447,7 @@ namespace P3_Projekt_WPF
             foreach (var ordertrans in _storageController.OrderTransactionDictionary)
             {
                 var product = _storageController.ProductDictionary[ordertrans.Value.Product.ID];
-               listview_SettingsStorage.Items.Add(new { Received = product.Name.ToString(), Amount = ordertrans.Value.Amount, StorageRoom = _storageController.StorageRoomDictionary[ordertrans.Value.StorageRoomID].Name});
+               listview_SettingsStorage.Items.Add(new { Received = product.Name.ToString(), Amount = ordertrans.Value.Amount, StorageRoom = _storageController.StorageRoomDictionary[ordertrans.Value.StorageRoomID].Name, Distributor = ordertrans.Value._supplier});
             }
 
         }

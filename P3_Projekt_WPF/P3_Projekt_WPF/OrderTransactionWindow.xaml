@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:P3_Projekt_WPF"
         mc:Ignorable="d"
-        KeyDown="Window_KeyDown"
+        KeyUp="Window_KeyUp"
         MouseDown="Window_MouseDown"
         Title="OrderTransactionWindow" Height="395" Width="575" WindowStartupLocation="CenterScreen">
     <Grid>
@@ -39,7 +39,7 @@
         <Button x:Name="button_OrderTransaction" FontSize="24" Content="Udfør Modtagelse" Style="{StaticResource Flat_Button}" Background="#FFC5C5C5" Margin="0,0,10,10" Height="50" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="220" Click="button_OrderTransaction_Click"/>
         <Label x:Name="label_Produkt" FontSize="30" Padding="0" Content="Produkt" HorizontalAlignment="Left" Margin="10,0,0,257" Width="132" Height="40" VerticalAlignment="Bottom"/>
         <Label x:Name="label_ID" FontSize="30" Padding="0" Content="ID" HorizontalAlignment="Left" Margin="10,0,0,212" Width="40" RenderTransformOrigin="0.675,-0.875" Height="40" VerticalAlignment="Bottom"/>
-        <ComboBox x:Name="comboBox_StorageRooms" FontSize="20" Background="White" BorderBrush="Black" BorderThickness="1" Margin="197,0,10,167" Height="40" VerticalAlignment="Bottom"/>
+        <ComboBox x:Name="comboBox_StorageRooms" FontSize="26" Background="White" BorderBrush="Black" BorderThickness="1" Margin="197,0,10,167" Height="40" VerticalAlignment="Bottom" />
         <Label x:Name="label_StorageRoom" Padding="0" FontSize="30" Content="Lagerrum" HorizontalAlignment="Left" Margin="10,0,0,167" Height="40" VerticalAlignment="Bottom"/>
         <Label x:Name="label_ProduktProdukt" FontSize="30" Padding="0" Content="" HorizontalAlignment="Left" Margin="197,0,0,257" Height="40" VerticalAlignment="Bottom"/>
         <Label x:Name="label_ProduktID" FontSize="30" Padding="0" Content="" HorizontalAlignment="Left" Margin="197,0,0,212" VerticalAlignment="Bottom"/>
@@ -54,7 +54,7 @@
         </TextBox>
         <Label x:Name="label_Amount" FontSize="30" Padding="0" Content="Antal produkter modtaget" HorizontalAlignment="Left" Margin="10,0,0,73" Width="364" RenderTransformOrigin="0.484,-1.25" Height="40" VerticalAlignment="Bottom"/>
         <Label x:Name="label_Supplier" FontSize="30" Content="Distributør" Padding="0" HorizontalAlignment="Left" Margin="10,0,0,122" Height="40" VerticalAlignment="Bottom"/>
-        <ComboBox x:Name="combobox_Supplier" IsEditable="True" FontSize="30" Focusable="True" KeyUp="combobox_Supplier_KeyUp" LostFocus="combobox_Supplier_LostFocus" Margin="197,0,10,122" Height="40" VerticalAlignment="Bottom"/>
+        <ComboBox x:Name="combobox_Supplier" IsEditable="True" FontSize="26" Focusable="True" KeyUp="combobox_Supplier_KeyUp" LostFocus="combobox_Supplier_LostFocus" Margin="197,0,10,122" Height="40" VerticalAlignment="Bottom"/>
         <TextBlock x:Name="label_SupplierLayer" FontSize="30" Text="Distributør" Padding="0" IsHitTestVisible="False" Margin="199,0,27,121" Foreground="DarkGray" Height="40" VerticalAlignment="Bottom">
             <TextBlock.Style>
                 <Style TargetType="{x:Type TextBlock}">

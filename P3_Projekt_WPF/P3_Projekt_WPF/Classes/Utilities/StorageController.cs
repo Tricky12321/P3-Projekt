@@ -350,7 +350,8 @@ namespace P3_Projekt_WPF.Classes.Utilities
                     if (ProductDictionary.ContainsKey(id))
                     {
                         ProductDictionary[id].StorageWithAmount.TryAdd(Convert.ToInt32(Data.Values[2]), Convert.ToInt32(Data.Values[3]));
-                    } else
+                    }
+                    else
                     {
                         DisabledProducts[id].StorageWithAmount.TryAdd(Convert.ToInt32(Data.Values[2]), Convert.ToInt32(Data.Values[3]));
                     }
@@ -369,7 +370,8 @@ namespace P3_Projekt_WPF.Classes.Utilities
                     if (ProductDictionary.ContainsKey(ProductID))
                     {
                         prod = ProductDictionary[ProductID];
-                    } else
+                    }
+                    else
                     {
                         prod = DisabledProducts[ProductID];
                     }
@@ -385,7 +387,8 @@ namespace P3_Projekt_WPF.Classes.Utilities
                     if (ProductDictionary.ContainsKey(ProductID))
                     {
                         OrderTrans.SetInformation(ProductDictionary[ProductID]);
-                    } else
+                    }
+                    else
                     {
                         OrderTrans.SetInformation(DisabledProducts[ProductID]);
                     }
@@ -783,7 +786,12 @@ namespace P3_Projekt_WPF.Classes.Utilities
 
         public List<string> GetSuppliers()
         {
-            return OrderTransactionDictionary.Values.Select(x => x._supplier).ToList();
+            List<string> suppliersList = OrderTransactionDictionary.Values.Select(x => x._supplier.ToLower()).ToList();
+            if (suppliersList.Count != suppliersList.Distinct().Count())
+            {
+                return suppliersList.Distinct().ToList();
+            }
+            return suppliersList;
         }
 
         #region SearchAlgorithm
