@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using P3_Projekt_WPF.Classes.Exceptions;
 using P3_Projekt_WPF.Classes.Database;
 using P3_Projekt_WPF.Classes.Utilities;
+using System.Diagnostics;
+
 namespace P3_Projekt_WPF.Classes
 {
     public class Receipt : MysqlObject
@@ -52,6 +54,16 @@ namespace P3_Projekt_WPF.Classes
 
             TotalPrice += transaction.TotalPrice;
             UpdateNumberOfProducts();
+
+            RemoveDiscountFromDiscount(transaction);
+
+            UpdateTotalPrice();
+        }
+
+        public void RemoveDiscountFromDiscount(SaleTransaction transaction)
+        {
+            DiscountOnFullReceipt = 0m;
+            Transactions.Where(x => x.Product == transaction.Product).First().DiscountBool = false;
         }
 
         public void UpdateTotalPrice()
@@ -211,7 +223,7 @@ namespace P3_Projekt_WPF.Classes
             int ID = GetNextID();
             this.ID = ID;
             string sql = "INSERT INTO `receipt` (`id`, `number_of_products`, `total_price`)" +
-                $" VALUES (NULL, '{NumberOfProducts}', '{TotalPrice.ToString().Replace(',','.')}')";
+                $" VALUES (NULL, '{NumberOfProducts}', '{TotalPrice.ToString().Replace(',', '.')}')";
             Mysql.RunQuery(sql);
             foreach (var item in Transactions)
             {
