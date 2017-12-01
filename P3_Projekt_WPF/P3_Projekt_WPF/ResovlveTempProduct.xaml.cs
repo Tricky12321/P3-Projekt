@@ -70,20 +70,20 @@ namespace P3_Projekt_WPF
                 try
                 {
                     var productToMerge = _storageController.ProductDictionary[int.Parse(textBox_IDToMerge.Text)];
-                    Label_MergeInfo.Content = productToMerge.Name;
+                    Label_MergeInfo.Text = productToMerge.Name;
                     button_Merge.IsEnabled = true;
                     return productToMerge;
                 }
                 catch (KeyNotFoundException)
                 {
-                    Label_MergeInfo.Content = "Ugyldigt Produkt ID";
+                    Label_MergeInfo.Text = "Ugyldigt Produkt ID";
                     button_Merge.IsEnabled = false;
                     button_Merge.IsEnabled = false;
                 }
             }
             else
             {
-                Label_MergeInfo.Content = "Forkert Input";
+                Label_MergeInfo.Text = "Forkert Input";
                 button_Merge.IsEnabled = false;
             }
             return null;
@@ -91,12 +91,12 @@ namespace P3_Projekt_WPF
 
         private void textBox_IDToMerge_KeyUp(object sender, KeyEventArgs e)
         {
+            Label_MergeInfo.Foreground = Brushes.Black;
             IDToMerge();
         }
 
         private void button_Merge_Click(object sender, RoutedEventArgs e)
         {
-
             if (!(IDToMerge().StorageWithAmount.Where(x => x.Value == 0).Count() == IDToMerge().StorageWithAmount.Count))
             {
                 _storageController.MergeTempProduct(tempProducts[index].Value, IDToMerge().ID);
@@ -105,9 +105,8 @@ namespace P3_Projekt_WPF
             }
             else
             {
-                Label_MergeInfo.Background = Brushes.Red;
-                Label_MergeInfo.Content = "Produktet ikke på lager,\nkan ikke rette midlertidigt produkt!";
-                Label_MergeInfo.Background = Brushes.Black;
+                Label_MergeInfo.Foreground = Brushes.Red;
+                Label_MergeInfo.Text = "Produktet ikke på lager,\nkan ikke rette midlertidigt produkt!";
             }
         }
 

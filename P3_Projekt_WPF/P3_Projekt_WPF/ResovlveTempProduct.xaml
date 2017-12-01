@@ -5,7 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:P3_Projekt_WPF"
         mc:Ignorable="d"
-        Title="Ret Midlertidigt Produkt" Height="700" Width="600">
+        Title="Ret Midlertidigt Produkt" Height="700" Width="600"
+        WindowStartupLocation="CenterScreen">
     <Grid>
         <Button x:Name="button_Merge" Content="Foren Produkter" Background="#FFC5C5C5" Margin="0,0,5,5" Style="{StaticResource Flat_Button}" HorizontalAlignment="Right" Width="176" Height="38" VerticalAlignment="Bottom" FontSize="20" Click="button_Merge_Click"/>
         <TextBlock x:Name="txt_blockTempProduct" HorizontalAlignment="Left" Margin="5,350,5,0" TextWrapping="Wrap" Text="Midlertidigt Produkt:" Width="auto" FontSize="30" Height="40" VerticalAlignment="Top" />
@@ -85,7 +86,7 @@
                     </Style>
                 </TextBlock.Style>
             </TextBlock>
-            <Label x:Name="Label_MergeInfo" Padding="0" Margin="10,0,193,7" FontSize="20" Height="55" VerticalAlignment="Bottom"/>
+            <TextBlock x:Name="Label_MergeInfo" Padding="0" Margin="10,0,193,7" FontSize="20" Height="55" VerticalAlignment="Bottom"/>
 
         </Grid>
 

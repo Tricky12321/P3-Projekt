@@ -57,11 +57,12 @@ namespace P3_Projekt_WPF.Classes.Utilities
             {
                 byte[] hashedInputBytes = hash.ComputeHash(pwdWithSaltBytes);
 
-                //Converts bytes to text
-                //Capacity is 128, because 512 bits / 8 bits per byte * 2 symbols
+                //Converts hashed bytes to text
+                //Size is 128, because 512 bits / 8 bits per byte * 2 symbols
                 var hashedInputStringBuilder = new System.Text.StringBuilder(128);
-                foreach (var b in hashedInputBytes)
+                foreach (byte b in hashedInputBytes)
                 {
+                    //X2 means, that it formats the bytes into hexidecimal
                     hashedInputStringBuilder.Append(b.ToString("X2"));
                 }
                 pwdSaltedAndHashed = hashedInputStringBuilder.ToString();

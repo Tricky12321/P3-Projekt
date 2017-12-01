@@ -9,6 +9,7 @@ using System.Threading;
 using System.Collections.Concurrent;
 using System.Diagnostics;
 using P3_Projekt_WPF.Classes.Exceptions;
+using System.Windows;
 namespace P3_Projekt_WPF.Classes.Utilities
 {
     public class StorageController
@@ -17,8 +18,6 @@ namespace P3_Projekt_WPF.Classes.Utilities
         public ConcurrentDictionary<int, ServiceProduct> ServiceProductDictionary = new ConcurrentDictionary<int, ServiceProduct>();
         public ConcurrentDictionary<int, Group> GroupDictionary = new ConcurrentDictionary<int, Group>();
         public ConcurrentDictionary<int, StorageRoom> StorageRoomDictionary = new ConcurrentDictionary<int, StorageRoom>();
-        public ConcurrentDictionary<int, SaleTransaction> SaleTransactionsDictionary = new ConcurrentDictionary<int, SaleTransaction>();
-        public ConcurrentDictionary<int, Receipt> ReceiptDictionary = new ConcurrentDictionary<int, Receipt>();
         public ConcurrentDictionary<int, TempProduct> TempProductDictionary = new ConcurrentDictionary<int, TempProduct>();
         public ConcurrentDictionary<int, StorageTransaction> StorageTransactionDictionary = new ConcurrentDictionary<int, StorageTransaction>();
         public ConcurrentDictionary<int, OrderTransaction> OrderTransactionDictionary = new ConcurrentDictionary<int, OrderTransaction>();
@@ -38,6 +37,40 @@ namespace P3_Projekt_WPF.Classes.Utilities
             //GetAllReceiptsFromDatabase();
         }
 
+        public void ClearDictionarys()
+        {
+            _queueThreads.Clear();
+            AllProductsDictionary.Clear();
+            TempProductDictionary.Clear();
+            ServiceProductDictionary.Clear();
+            DisabledProducts.Clear();
+            DisabledServiceProducts.Clear();
+            GroupDictionary.Clear();
+            StorageRoomDictionary.Clear();
+            StorageTransactionDictionary.Clear();
+            ProductDictionary.Clear();
+            StorageTransactionDictionary.Clear();
+            OrderTransactionDictionary.Clear();
+            ResetCounters();
+        }
+
+        public void ReloadAllDictionarys(MainWindow MainWin, bool ShowMessageBox = true)
+        {
+            if (ShowMessageBox)
+            {
+                MessageBox.Show("Alt data vil nu blive hentet fra databasen igen, og kan godt tage lidt tid");
+            }
+            ClearDictionarys();
+            GetAll();
+            while(!ThreadsDone)
+            {
+                Thread.Sleep(10);
+            }
+            MainWin.ReloadProducts();
+            MainWin.ReloadDisabledProducts();
+            MainWin.LoadQuickButtons();
+            MainWin.SaveQuickButtons();
+        }
 
         public void LoadAllProductsDictionary()
         {
@@ -179,6 +212,30 @@ namespace P3_Projekt_WPF.Classes.Utilities
             AddInformation("Order Transaction Count", Result.RowCounter.ToString());
             _orderTransactionsQueue = Result.RowData;
             _orderTransactionsLoaded = true;
+        }
+
+        private void ResetCounters()
+        {
+            _doneProductsCount = 0;
+            _doneServiceProductCount = 0;
+            _doneGroupsCount = 0;
+            _doneStorageRoomsCount = 0;
+            _doneTempProductCount = 0;
+            _doneDisabledProductsCount = 0;
+            _doneDisabledServiceProductsCount = 0;
+            _doneOrderTransactionCount = 0;
+            _doneStorageTransactionCount = 0;
+            _doneStorageStatusCount = 0;
+            _serviceProductLoaded = false;
+            _tempProductLoaded = false;
+            _storageRoomLoaded = false;
+            _productsLoaded = false;
+            _storageStatusLoaded = false;
+            _groupsLoaded = false;
+            _disabledProductsLoaded = false;
+            _disabledServiceProductsLoaded = false;
+            _storageTransactionsLoaded = false;
+            _orderTransactionsLoaded = false;
         }
         private int _productsCount;
         private int _serviceProductCount;
@@ -749,12 +806,17 @@ namespace P3_Projekt_WPF.Classes.Utilities
 
             if (int.TryParse(searchStringLower, out isNumber))
             {
-                if (ProductDictionary.Keys.Contains(isNumber))
+                if (AllProductsDictionary.Keys.Contains(isNumber))
                 {
                     SearchProduct matchedProduct = new SearchProduct(AllProductsDictionary[isNumber]);
                     matchedProduct.NameMatch = 1000;
                     productsToReturn.TryAdd(isNumber, matchedProduct);
                 }
+            }
+
+            while (searchStringLower.Contains("  "))
+            {
+                searchStringLower = searchStringLower.Replace("  ", " ");
             }
 
             foreach (BaseProduct product in AllProductsDictionary.Values)
@@ -777,19 +839,24 @@ namespace P3_Projekt_WPF.Classes.Utilities
             }
         }
 
+
+
         private void ProductSearch(string searchStringElement, BaseProduct productToConvert)
         {
             SearchProduct productToAdd = new SearchProduct(productToConvert);
 
-            string[] searchSplit = searchStringElement.Split(' ');
+            List<string> searchSplit = searchStringElement.Split(' ').ToList();
+            SpaceCounter(ref searchSplit);
             if (ContainsSearch(searchStringElement, productToConvert))
             {
                 productToAdd.NameMatch += searchStringElement.Length * 2;
             }
+            
+
             if (productToConvert is Product)
             {
-                string[] productSplit = (productToConvert as Product).Name.ToLower().Split(' ');
-
+                List<string> productSplit = (productToConvert as Product).Name.ToLower().Split(' ').ToList();
+                SpaceCounter(ref productSplit);
                 foreach (string s in searchSplit)
                 {
                     foreach (string t in productSplit)
@@ -808,8 +875,8 @@ namespace P3_Projekt_WPF.Classes.Utilities
             }
             else if (productToConvert is ServiceProduct)
             {
-                string[] productSplit = (productToConvert as ServiceProduct).Name.ToLower().Split(' ');
-
+                List<string> productSplit = (productToConvert as ServiceProduct).Name.ToLower().Split(' ').ToList();
+                SpaceCounter(ref productSplit);
                 foreach (string s in searchSplit)
                 {
                     foreach (string t in productSplit)
@@ -831,6 +898,30 @@ namespace P3_Projekt_WPF.Classes.Utilities
             }
 
             weigthedSearchList.Add(productToAdd);
+        }
+        /*
+        private void SpecialCharsCounter(ref List<string> ListOfWords)
+        {
+            foreach (string item in ListOfWords)
+            {
+                if (item.Contains('ø') || item.Contains('æ') || item.Contains('å'))
+                {
+                    ListOfWords.Add(item.Replace("ø", "oe").Replace("æ", "ae").Replace("å", "aa"));
+                }
+            }
+        }
+        */
+        private void SpaceCounter(ref List<string> ListOfWords)
+        {
+            int searchAmount = ListOfWords.Count();
+            if (searchAmount > 1)
+            {
+                for (int i = 1; i <= searchAmount - 1; i++)
+                {
+                    ListOfWords.Add(ListOfWords[i - 1] + ListOfWords[i]);
+                    ListOfWords.Add(ListOfWords[i] + ListOfWords[i - 1]);
+                }
+            }
         }
 
         private bool LevenshteinsGroupAndProductSearch(string[] searchedString, string stringToCompare, out int charDifference)
