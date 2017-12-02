@@ -1118,7 +1118,6 @@ namespace P3_Projekt_WPF
                 BuildInformationTable();
                 LoadGroups();
                 DisableDiscountOnReceipt();
-                StartsToPay();
                 
             }
         }
@@ -1127,6 +1126,7 @@ namespace P3_Projekt_WPF
         {
             bool CompletedPurchase = false;
             label_TotalPrice.Content = _POSController.CompletePurchase(PaymentMethod_Enum.Cash, PayWithAmount, listView_Receipt, out CompletedPurchase);
+            StartsToPay(CompletedPurchase);
             ResetPOSController(CompletedPurchase);
         }
 
@@ -1134,6 +1134,7 @@ namespace P3_Projekt_WPF
         {
             bool CompletedPurchase = false;
             label_TotalPrice.Content = _POSController.CompletePurchase(PaymentMethod_Enum.Card, PayWithAmount, listView_Receipt, out CompletedPurchase);
+            StartsToPay(CompletedPurchase);
             ResetPOSController(CompletedPurchase);
         }
 
@@ -1141,12 +1142,20 @@ namespace P3_Projekt_WPF
         {
             bool CompletedPurchase = false;
             label_TotalPrice.Content = _POSController.CompletePurchase(PaymentMethod_Enum.MobilePay, PayWithAmount, listView_Receipt, out CompletedPurchase);
+            StartsToPay(CompletedPurchase);
             ResetPOSController(CompletedPurchase);
         }
 
-        private void StartsToPay()
+        private void StartsToPay(bool HasPartlyPaid)
         {
-
+            txtBox_SearchField.IsEnabled = HasPartlyPaid;
+            btn_search.IsEnabled = HasPartlyPaid;
+            textBox_discount.IsEnabled = HasPartlyPaid;
+            btn_discount.IsEnabled = HasPartlyPaid;
+            btn_AddProduct.IsEnabled = HasPartlyPaid;
+            btn_Temporary.IsEnabled = HasPartlyPaid;
+            btn_AddIcecream.IsEnabled = HasPartlyPaid;
+            textBox_AddProductID.IsEnabled = HasPartlyPaid;
         }
 
         private void DisableDiscountOnReceipt()
@@ -1215,6 +1224,7 @@ namespace P3_Projekt_WPF
             listView_Receipt.Items.Clear();
             label_TotalPrice.Content = "Total";
             PayWithAmount.Clear();
+            StartsToPay(true);
         }
 
         private MoveProduct _productMove;

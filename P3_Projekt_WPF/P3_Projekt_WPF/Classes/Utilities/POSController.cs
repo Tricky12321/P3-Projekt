@@ -189,7 +189,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
 
                 PayWithAmount.Text = string.Empty;
                 TotalPriceToPay -= NewPayment.Amount;
-
+                CompletedPurchase = false;
                 if (PlacerholderReceipt.PaidPrice >= PlacerholderReceipt.TotalPrice)
                 {
                     CompletedPurchase = true;
@@ -212,7 +212,6 @@ namespace P3_Projekt_WPF.Classes.Utilities
                 }
                 if (TotalPriceToPay != -1m)
                 {
-                    CompletedPurchase = false;
                     return Math.Round(TotalPriceToPay, 2).ToString().Replace('.', ',');
                 }
             }
