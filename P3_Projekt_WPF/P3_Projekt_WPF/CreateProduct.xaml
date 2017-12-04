@@ -17,14 +17,14 @@
 
 
                 <TextBlock x:Name="label_Name" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Navn" FontSize="30" Margin="10,0,0,526" MinHeight="40" VerticalAlignment="Bottom" Height="40" Width="76"/>
-                <TextBox Padding="0,0,0,0" x:Name="textbox_Name" FontSize="30" HorizontalAlignment="Left" Width="280" MinHeight="40" VerticalAlignment="Bottom" Margin="180,0,0,524" Height="42">
+                <TextBox Padding="10,0,0,0" x:Name="textbox_Name" FontSize="30" HorizontalAlignment="Left" Width="280" MinHeight="40" VerticalAlignment="Bottom" Margin="180,0,0,526" Height="42">
                     <TextBox.Resources>
                         <Style TargetType="{x:Type Border}">
                             <Setter Property="CornerRadius" Value="10"/>
                         </Style>
                     </TextBox.Resources>
                 </TextBox>
-                <TextBlock IsHitTestVisible="False" Text="Navn" Margin="195,0,0,525.571" Foreground="DarkGray" FontSize="30" HorizontalAlignment="Left" Width="264" Height="40" VerticalAlignment="Bottom">
+                <TextBlock IsHitTestVisible="False" Text="Navn" Margin="195,0,0,526" Foreground="DarkGray" FontSize="30" HorizontalAlignment="Left" Width="264" Height="40" VerticalAlignment="Bottom">
                     <TextBlock.Style>
                         <Style TargetType="{x:Type TextBlock}">
                             <Setter Property="Visibility" Value="Collapsed"/>
@@ -37,9 +37,9 @@
                     </TextBlock.Style>
                 </TextBlock>
                 <TextBlock x:Name="label_Brand" HorizontalAlignment="Left" Margin="10,0,0,476" TextWrapping="Wrap" Text="Mærke" FontSize="30" MinHeight="24" VerticalAlignment="Bottom" Height="40" Width="93"/>
-                <ComboBox x:Name="comboBox_Brand" Width="280" VerticalAlignment="Bottom" Margin="180,0,0,475.571" IsEditable="True" Height="40" HorizontalAlignment="Left" FontSize="24"/>
+                <ComboBox x:Name="comboBox_Brand" Width="280" VerticalAlignment="Bottom" Margin="180,0,0,476" IsEditable="True" Height="40" HorizontalAlignment="Left" FontSize="24"/>
                 <TextBlock x:Name="label_Group" HorizontalAlignment="Left" Margin="10,0,0,426" TextWrapping="Wrap" Text="Varegruppe" FontSize="30" MinHeight="24" VerticalAlignment="Bottom" Height="40" Width="154"/>
-                <ComboBox x:Name="comboBox_Group" Width="280" VerticalAlignment="Bottom" Margin="180,0,0,425.571" Height="40" HorizontalAlignment="Left" FontSize="24"/>
+                <ComboBox x:Name="comboBox_Group" Width="280" VerticalAlignment="Bottom" Margin="180,0,0,426" Height="40" HorizontalAlignment="Left" FontSize="24"/>
                 <TextBlock x:Name="label_PurchasePrice" HorizontalAlignment="Left" Margin="10,0,0,376" TextWrapping="Wrap" Text="Indkøbspris" FontSize="30" MinHeight="24" VerticalAlignment="Bottom" Height="40" Width="154"/>
                 <TextBox Padding="10,0,0,0" x:Name="textbox_PurchasePrice" TextCompositionManager.PreviewTextInput="AmountInputOnlyNumbersButAllowOneComma" Margin="180,0,0,376" FontSize="30" Height="40" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="280">
                     <TextBox.Resources>
@@ -48,7 +48,7 @@
                         </Style>
                     </TextBox.Resources>
                 </TextBox>
-                <TextBlock IsHitTestVisible="False" Text="Indkøbspris" Margin="195,0,0,375.571" Foreground="DarkGray" FontSize="30" HorizontalAlignment="Left" Width="264" Height="40" VerticalAlignment="Bottom">
+                <TextBlock IsHitTestVisible="False" Text="Indkøbspris" Margin="195,0,0,376" Foreground="DarkGray" FontSize="30" HorizontalAlignment="Left" Width="264" Height="40" VerticalAlignment="Bottom">
                     <TextBlock.Style>
                         <Style TargetType="{x:Type TextBlock}">
                             <Setter Property="Visibility" Value="Collapsed"/>
@@ -60,7 +60,7 @@
                         </Style>
                     </TextBlock.Style>
                 </TextBlock>
-                <TextBlock x:Name="label_SalePrice" HorizontalAlignment="Left" Margin="10,0,0,325.8" TextWrapping="Wrap" Text="Salgspris" FontSize="30" MinHeight="24" VerticalAlignment="Bottom" Height="40" Width="130"/>
+                <TextBlock x:Name="label_SalePrice" HorizontalAlignment="Left" Margin="10,0,0,326" TextWrapping="Wrap" Text="Salgspris" FontSize="30" MinHeight="24" VerticalAlignment="Bottom" Height="40" Width="130"/>
                 <TextBox Padding="10,0,0,0" x:Name="textbox_SalePrice" TextCompositionManager.PreviewTextInput="AmountInputOnlyNumbersButAllowOneComma" Margin="180,0,0,326" FontSize="30" HorizontalAlignment="Left" Width="280" Height="40" VerticalAlignment="Bottom">
                     <TextBox.Resources>
                         <Style TargetType="{x:Type Border}">
@@ -68,7 +68,7 @@
                         </Style>
                     </TextBox.Resources>
                 </TextBox>
-                <TextBlock IsHitTestVisible="False" Text="Salgspris" Margin="195,0,0,325.571" Foreground="DarkGray" FontSize="30" HorizontalAlignment="Left" Width="264" Height="40" VerticalAlignment="Bottom">
+                <TextBlock IsHitTestVisible="False" Text="Salgspris" Margin="195,0,0,326" Foreground="DarkGray" FontSize="30" HorizontalAlignment="Left" Width="264" Height="40" VerticalAlignment="Bottom">
                     <TextBlock.Style>
                         <Style TargetType="{x:Type TextBlock}">
                             <Setter Property="Visibility" Value="Collapsed"/>
@@ -88,7 +88,7 @@
                         </Style>
                     </TextBox.Resources>
                 </TextBox>
-                <TextBlock IsHitTestVisible="False" Text="Tilbudspris" Margin="195,0,0,275.571" Foreground="DarkGray" FontSize="30" HorizontalAlignment="Left" Width="264" Height="40" VerticalAlignment="Bottom">
+                <TextBlock IsHitTestVisible="False" Text="Tilbudspris" Margin="195,0,0,276" Foreground="DarkGray" FontSize="30" HorizontalAlignment="Left" Width="264" Height="40" VerticalAlignment="Bottom">
                     <TextBlock.Style>
                         <Style TargetType="{x:Type TextBlock}">
                             <Setter Property="Visibility" Value="Collapsed"/>
@@ -197,7 +197,7 @@
 
 
                 <TextBlock x:Name="label_ServiceName" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Navn" FontSize="30" Margin="10,0,0,526" MinHeight="40" VerticalAlignment="Bottom" Height="40" Width="76"/>
-                <TextBox Padding="0,0,0,0" x:Name="textbox_ServiceName" FontSize="30" HorizontalAlignment="Left" Width="280" MinHeight="40" VerticalAlignment="Bottom" Margin="180,0,0,524" Height="42">
+                <TextBox Padding="10,0,0,0" x:Name="textbox_ServiceName" FontSize="30" HorizontalAlignment="Left" Width="280" MinHeight="40" VerticalAlignment="Bottom" Margin="180,0,0,526" Height="42">
                     <TextBox.Resources>
                         <Style TargetType="{x:Type Border}">
                             <Setter Property="CornerRadius" Value="10"/>
@@ -216,19 +216,19 @@
                         </Style>
                     </TextBlock.Style>
                 </TextBlock>
-                <TextBlock x:Name="label_ServiceGroup" HorizontalAlignment="Left" Margin="10,0,0,474.571" TextWrapping="Wrap" Text="Varegruppe" FontSize="30" MinHeight="24" VerticalAlignment="Bottom" Height="40" Width="165"/>
-                <ComboBox x:Name="comboBox_ServiceGroup"  Padding="10,0,0,0" HorizontalAlignment="Left" Margin="180,0,0,473.571" VerticalAlignment="Bottom" Width="280" Height="40" FontSize="24">
+                <TextBlock x:Name="label_ServiceGroup" HorizontalAlignment="Left" Margin="10,0,0,476" TextWrapping="Wrap" Text="Varegruppe" FontSize="30" MinHeight="24" VerticalAlignment="Bottom" Height="40" Width="165"/>
+                <ComboBox x:Name="comboBox_ServiceGroup"  Padding="10,0,0,0" HorizontalAlignment="Left" Margin="180,0,0,476" VerticalAlignment="Bottom" Width="280" Height="40" FontSize="24">
 
                 </ComboBox>
-                <TextBlock x:Name="label_ServiceSalePrice" HorizontalAlignment="Left" Margin="10,0,0,423.571" TextWrapping="Wrap" Text="Salgspris" FontSize="30" MinHeight="24" VerticalAlignment="Bottom" Height="40" Width="117"/>
-                <TextBox Padding="10,0,0,0" x:Name="textbox_ServiceSalePrice" TextCompositionManager.PreviewTextInput="AmountInputOnlyNumbersButAllowOneComma" Margin="180,0,0,423.571" FontSize="30" HorizontalAlignment="Left" Width="280" Height="40" VerticalAlignment="Bottom">
+                <TextBlock x:Name="label_ServiceSalePrice" HorizontalAlignment="Left" Margin="10,0,0,426" TextWrapping="Wrap" Text="Salgspris" FontSize="30" MinHeight="24" VerticalAlignment="Bottom" Height="40" Width="117"/>
+                <TextBox Padding="10,0,0,0" x:Name="textbox_ServiceSalePrice" TextCompositionManager.PreviewTextInput="AmountInputOnlyNumbersButAllowOneComma" Margin="180,0,0,426" FontSize="30" HorizontalAlignment="Left" Width="280" Height="40" VerticalAlignment="Bottom">
                     <TextBox.Resources>
                         <Style TargetType="{x:Type Border}">
                             <Setter Property="CornerRadius" Value="10"/>
                         </Style>
                     </TextBox.Resources>
                 </TextBox>
-                <TextBlock IsHitTestVisible="False" Text="Salgspris" Margin="195,0,0,423.571" Foreground="DarkGray" FontSize="30" HorizontalAlignment="Left" Width="255" Height="40" VerticalAlignment="Bottom">
+                <TextBlock IsHitTestVisible="False" Text="Salgspris" Margin="195,0,0,426" Foreground="DarkGray" FontSize="30" HorizontalAlignment="Left" Width="255" Height="40" VerticalAlignment="Bottom">
                     <TextBlock.Style>
                         <Style TargetType="{x:Type TextBlock}">
                             <Setter Property="Visibility" Value="Collapsed"/>
@@ -240,15 +240,15 @@
                         </Style>
                     </TextBlock.Style>
                 </TextBlock>
-                <TextBlock x:Name="label_ServiceGroupLimit" HorizontalAlignment="Left" Margin="10,0,0,374.571" TextWrapping="Wrap" Text="Grp. Grænse" FontSize="30" MinHeight="24" VerticalAlignment="Bottom" Height="40" Width="200"/>
-                <TextBox Padding="10,0,0,0" x:Name="textbox_ServiceGroupLimit" TextCompositionManager.PreviewTextInput="AmountInputOnlyNumbers" Margin="180,0,0,373.571" FontSize="30" HorizontalAlignment="Left" Width="280" Height="40" VerticalAlignment="Bottom">
+                <TextBlock x:Name="label_ServiceGroupLimit" HorizontalAlignment="Left" Margin="10,0,0,376" TextWrapping="Wrap" Text="Grp. Grænse" FontSize="30" MinHeight="24" VerticalAlignment="Bottom" Height="40" Width="200"/>
+                <TextBox Padding="10,0,0,0" x:Name="textbox_ServiceGroupLimit" TextCompositionManager.PreviewTextInput="AmountInputOnlyNumbers" Margin="180,0,0,376" FontSize="30" HorizontalAlignment="Left" Width="280" Height="40" VerticalAlignment="Bottom">
                     <TextBox.Resources>
                         <Style TargetType="{x:Type Border}">
                             <Setter Property="CornerRadius" Value="10"/>
                         </Style>
                     </TextBox.Resources>
                 </TextBox>
-                <TextBlock IsHitTestVisible="False" Text="Antal" Margin="195,0,0,373.571" Foreground="DarkGray" FontSize="30" HorizontalAlignment="Left" Width="255" Height="40" VerticalAlignment="Bottom">
+                <TextBlock IsHitTestVisible="False" Text="Antal" Margin="195,0,0,376" Foreground="DarkGray" FontSize="30" HorizontalAlignment="Left" Width="255" Height="40" VerticalAlignment="Bottom">
                     <TextBlock.Style>
                         <Style TargetType="{x:Type TextBlock}">
                             <Setter Property="Visibility" Value="Collapsed"/>
@@ -261,15 +261,15 @@
                     </TextBlock.Style>
                 </TextBlock>
 
-                <TextBlock x:Name="label_ServiceGroupPrice" HorizontalAlignment="Left" Margin="10,0,0,323.571" TextWrapping="Wrap" Text="Grp. Pris" FontSize="30" MinHeight="24" VerticalAlignment="Bottom" Height="40" Width="154"/>
-                <TextBox Padding="10,0,0,0" x:Name="textbox_ServiceGroupPrice" TextCompositionManager.PreviewTextInput="AmountInputOnlyNumbersButAllowOneComma" Margin="180,0,0,323.571" FontSize="30" HorizontalAlignment="Left" Width="280" Height="40" VerticalAlignment="Bottom">
+                <TextBlock x:Name="label_ServiceGroupPrice" HorizontalAlignment="Left" Margin="10,0,0,326" TextWrapping="Wrap" Text="Grp. Pris" FontSize="30" MinHeight="24" VerticalAlignment="Bottom" Height="40" Width="154"/>
+                <TextBox Padding="10,0,0,0" x:Name="textbox_ServiceGroupPrice" TextCompositionManager.PreviewTextInput="AmountInputOnlyNumbersButAllowOneComma" Margin="180,0,0,326" FontSize="30" HorizontalAlignment="Left" Width="280" Height="40" VerticalAlignment="Bottom">
                     <TextBox.Resources>
                         <Style TargetType="{x:Type Border}">
                             <Setter Property="CornerRadius" Value="10"/>
                         </Style>
                     </TextBox.Resources>
                 </TextBox>
-                <TextBlock IsHitTestVisible="False" Text="Gruppepris" Margin="195,0,0,323.571" Foreground="DarkGray" FontSize="30" HorizontalAlignment="Left" Width="255" Height="40" VerticalAlignment="Bottom">
+                <TextBlock IsHitTestVisible="False" Text="Gruppepris" Margin="195,0,0,326" Foreground="DarkGray" FontSize="30" HorizontalAlignment="Left" Width="255" Height="40" VerticalAlignment="Bottom">
                     <TextBlock.Style>
                         <Style TargetType="{x:Type TextBlock}">
                             <Setter Property="Visibility" Value="Collapsed"/>
