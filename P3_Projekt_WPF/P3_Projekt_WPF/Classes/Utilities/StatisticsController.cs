@@ -286,27 +286,27 @@ namespace P3_Projekt_WPF.Classes.Utilities
         {
             if (totalPrice > 0)
             {
-                return new StatisticsListItem("", $"{_storageController.GroupDictionary[id].Name}", $"{Math.Round((SalesPerGroup[id] / totalPrice) * 100m, 1)}%", $"{SalesPerGroup[id]}");
+                return new StatisticsListItem("", $"{_storageController.GroupDictionary[id].Name}", $"{Math.Round((SalesPerGroup[id] / totalPrice) * 100m, 1)}%", $"{Math.Round(SalesPerGroup[id], 2)}");
             }
-            return new StatisticsListItem("", $"{_storageController.GroupDictionary[id].Name}", "0%", $"{SalesPerGroup[id]}");
+            return new StatisticsListItem("", $"{_storageController.GroupDictionary[id].Name}", "0%", $"{Math.Round(SalesPerGroup[id], 2)}");
         }
 
         public StatisticsListItem BrandSalesStrings(string brand, decimal totalPrice)
         {
             if (totalPrice > 0)
             {
-                return new StatisticsListItem("", $"{brand}", $"{Math.Round((SalesPerBrand[brand] / totalPrice) * 100m, 1)}%", $"{SalesPerBrand[brand]}");
+                return new StatisticsListItem("", $"{brand}", $"{Math.Round((SalesPerBrand[brand] / totalPrice) * 100m, 1)}%", $"{Math.Round(SalesPerBrand[brand], 2)}");
             }
-            return new StatisticsListItem("", $"{brand}", "0%", $"{SalesPerBrand[brand]}");
+            return new StatisticsListItem("", $"{brand}", "0%", $"{Math.Round(SalesPerBrand[brand], 2)}");
         }
 
         public StatisticsListItem ProductSalesStrings(int id, StatisticsProduct productInfo)
         {
             if(id == -1)
             {
-                return new StatisticsListItem("", $"Midlertidigt produkt", $"{productInfo.Amount}", $"{productInfo.Revenue}");
+                return new StatisticsListItem("", $"Midlertidigt produkt", $"{productInfo.Amount}", $"{Math.Round(productInfo.Revenue, 2)}");
             }
-            return new StatisticsListItem("", $"{_storageController.AllProductsDictionary[id].GetName()}", $"{productInfo.Amount}", $"{productInfo.Revenue}");
+            return new StatisticsListItem("", $"{_storageController.AllProductsDictionary[id].GetName()}", $"{productInfo.Amount}", $"{Math.Round(productInfo.Revenue, 2)}");
         }
     }
 }
