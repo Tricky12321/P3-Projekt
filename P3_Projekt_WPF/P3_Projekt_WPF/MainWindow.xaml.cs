@@ -1124,28 +1124,37 @@ namespace P3_Projekt_WPF
 
         private void btn_Cash_Click(object sender, RoutedEventArgs e)
         {
-            bool CompletedPurchase = false;
-            label_TotalPrice.Content = _POSController.CompletePurchase(PaymentMethod_Enum.Cash, PayWithAmount, listView_Receipt, out CompletedPurchase);
-            StartsToPay(CompletedPurchase);
-            ResetPOSController(CompletedPurchase);
+            if (listView_Receipt.HasItems)
+            {
+                bool CompletedPurchase = false;
+                label_TotalPrice.Content = _POSController.CompletePurchase(PaymentMethod_Enum.Cash, PayWithAmount, listView_Receipt, out CompletedPurchase);
+                StartsToPay(CompletedPurchase);
+                ResetPOSController(CompletedPurchase);
+            }
         }
 
         private void btn_Dankort_Click(object sender, RoutedEventArgs e)
         {
-            bool CompletedPurchase = false;
-            label_TotalPrice.Content = _POSController.CompletePurchase(PaymentMethod_Enum.Card, PayWithAmount, listView_Receipt, out CompletedPurchase);
-            StartsToPay(CompletedPurchase);
-            ResetPOSController(CompletedPurchase);
+            if (listView_Receipt.HasItems)
+            {
+                bool CompletedPurchase = false;
+                label_TotalPrice.Content = _POSController.CompletePurchase(PaymentMethod_Enum.Card, PayWithAmount, listView_Receipt, out CompletedPurchase);
+                StartsToPay(CompletedPurchase);
+                ResetPOSController(CompletedPurchase);
+            }
         }
 
         private void btn_MobilePay_Click(object sender, RoutedEventArgs e)
         {
-            bool CompletedPurchase = false;
-            label_TotalPrice.Content = _POSController.CompletePurchase(PaymentMethod_Enum.MobilePay, PayWithAmount, listView_Receipt, out CompletedPurchase);
-            StartsToPay(CompletedPurchase);
-            ResetPOSController(CompletedPurchase);
+            if (listView_Receipt.HasItems)
+            {
+                bool CompletedPurchase = false;
+                label_TotalPrice.Content = _POSController.CompletePurchase(PaymentMethod_Enum.MobilePay, PayWithAmount, listView_Receipt, out CompletedPurchase);
+                StartsToPay(CompletedPurchase);
+                ResetPOSController(CompletedPurchase);
+            }
         }
-
+        
         private void StartsToPay(bool HasPartlyPaid)
         {
             txtBox_SearchField.IsEnabled = HasPartlyPaid;
