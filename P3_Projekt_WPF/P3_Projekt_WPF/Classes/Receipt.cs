@@ -22,12 +22,12 @@ namespace P3_Projekt_WPF.Classes
         public DateTime Date;
         public decimal PaidPrice => Payments.Sum(x => x.Amount);
         public decimal DiscountOnFullReceipt = 0m;
+
         public Receipt()
         {
             ID = _idCounter++;
             Date = DateTime.Now;
         }
-
 
         public Receipt(int ID)
         {
@@ -191,7 +191,7 @@ namespace P3_Projekt_WPF.Classes
         {
             ID = Convert.ToInt32(Table.Values[0]);
             NumberOfProducts = Convert.ToInt32(Table.Values[1]);
-            TotalPrice = Convert.ToDecimal(Table.Values[2]);
+            TotalPrice = Math.Round(Convert.ToDecimal(Table.Values[2]), 2);
             Date = Convert.ToDateTime(Table.Values[5]);
         }
 
@@ -199,7 +199,7 @@ namespace P3_Projekt_WPF.Classes
         {
             ID = Convert.ToInt32(Table.Values[0]);
             NumberOfProducts = Convert.ToInt32(Table.Values[1]);
-            TotalPrice = Convert.ToDecimal(Table.Values[2]);
+            TotalPrice = Math.Round(Convert.ToDecimal(Table.Values[2]), 2);
             //PaidPrice = Convert.ToDecimal(Table.Values[3]);
             string sql = $"SELECT * FROM `sale_transactions` WHERE `receipt_id` = '{ID}' AND `amount` != 0";
             TableDecode Results = Mysql.RunQueryWithReturn(sql);

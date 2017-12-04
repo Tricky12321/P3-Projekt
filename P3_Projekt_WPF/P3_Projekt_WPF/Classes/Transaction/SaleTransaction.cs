@@ -300,7 +300,7 @@ namespace P3_Projekt_WPF.Classes
             Amount = Convert.ToInt32(Table.Values[3]);
             Date = Convert.ToDateTime(Table.Values[4]);
             ReceiptID = Convert.ToInt32(Table.Values[5]);
-            Price = Convert.ToDecimal(Table.Values[6]);
+            Price = Math.Round(Convert.ToDecimal(Table.Values[6]),2);
             DiscountBool = Convert.ToBoolean(Table.Values[8]);
             SoldBy = Table.Values[9];
         }
