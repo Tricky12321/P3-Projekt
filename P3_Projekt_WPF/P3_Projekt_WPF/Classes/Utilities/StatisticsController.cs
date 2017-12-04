@@ -123,12 +123,15 @@ namespace P3_Projekt_WPF.Classes.Utilities
         public string GetTempProductsQueryString(bool searchProduct, int productToSearch, DateTime from, DateTime to)
         {
             StringBuilder NewString = new StringBuilder("SELECT `sale_transactions`.* " +
-                "FROM `temp_products`, `sale_transactions` WHERE `sale_transactions`.`product_id` = `temp_products`.`resolved_product_id`"+
-                " AND `sale_transactions`.`product_type` = 'temp_product'" +
+                "FROM `temp_products`, `sale_transactions` WHERE"+
+                " `sale_transactions`.`product_type` = 'temp_product'" +
                 $" AND UNIX_TIMESTAMP(`datetime`) >= '{Utils.GetUnixTime(from)}' AND UNIX_TIMESTAMP(`datetime`) <= '{Utils.GetUnixTime(EndDate(to))}'");
             if (searchProduct)
             {
-                NewString.Append($" AND `products`.`id` = '{productToSearch}'");
+                NewString.Append($" AND `temp_products`.`resolved_product_id` = '{productToSearch}'");
+            } else
+            {
+                NewString.Append($" AND `sale_transactions`.`product_id` = `temp_products`.`id`");
             }
             return NewString.ToString();
         }
