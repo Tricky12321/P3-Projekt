@@ -276,7 +276,7 @@ namespace P3_Projekt_WPF.Classes
 
         public StatisticsListItem StatisticsStrings()
         {
-            return new StatisticsListItem(Date.ToString("dd/MM/yy"), Product.GetName(), Amount.ToString(), TotalPrice.ToString());
+            return new StatisticsListItem(Date.ToString("dd/MM/yy"), Product.GetName(), Amount.ToString(), Math.Round(TotalPrice, 2).ToString());
         }
 
         public void CheckIfGroupPrice()

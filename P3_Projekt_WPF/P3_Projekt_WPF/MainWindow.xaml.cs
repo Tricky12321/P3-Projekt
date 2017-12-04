@@ -810,7 +810,7 @@ namespace P3_Projekt_WPF
                 productAmount += transaction.Amount;
                 totalTransactionPrice += transaction.TotalPrice;
             }
-            listView_Statistics.Items.Insert(0, new StatisticsListItem("", "Total", $"{productAmount}", $"{totalTransactionPrice}"));
+            listView_Statistics.Items.Insert(0, new StatisticsListItem("", "Total", $"{productAmount}", $"{Math.Round(totalTransactionPrice, 2)}"));
 
             if (!(checkBox_Brand.IsChecked.Value || checkBox_Group.IsChecked.Value || checkBox_Product.IsChecked.Value))
             {
@@ -835,9 +835,9 @@ namespace P3_Projekt_WPF
             ((GridView)listView_Statistics.View).Columns[0].Width = 0;
             _statisticsController.RequestTodayReceipts();
             _statisticsController.CalculatePayments();
-            listView_Statistics.Items.Add(new StatisticsListItem("", "Kontant", "", $"{_statisticsController.Payments[0]}"));
-            listView_Statistics.Items.Add(new StatisticsListItem("", "Kort", "", $"{_statisticsController.Payments[1]}"));
-            listView_Statistics.Items.Add(new StatisticsListItem("", "MobilePay", "", $"{_statisticsController.Payments[2]}"));
+            listView_Statistics.Items.Add(new StatisticsListItem("", "Kontant", "", $"{Math.Round(_statisticsController.Payments[0], 2)}"));
+            listView_Statistics.Items.Add(new StatisticsListItem("", "Kort", "", $"{Math.Round(_statisticsController.Payments[1], 2)}"));
+            listView_Statistics.Items.Add(new StatisticsListItem("", "MobilePay", "", $"{Math.Round(_statisticsController.Payments[2], 2)}"));
             listView_Statistics.Items.Insert(0, new StatisticsListItem("", "Kroner per betalingsmetode:", "", ""));
             _statisticsController.RequestStatistics(false, 0, false, 0, false, "", DateTime.Today, DateTime.Today);
             _statisticsController.GenerateProductSalesAndTotalRevenue();
@@ -856,7 +856,7 @@ namespace P3_Projekt_WPF
                 listView_BrandStatistics.Items.Add(_statisticsController.BrandSalesStrings(brand, _statisticsController.TotalRevenueToday));
             }
 
-            listView_Statistics.Items.Insert(4, new StatisticsListItem("", "Total", $"{totalProductAmount}", $"{_statisticsController.TotalRevenueToday}"));
+            listView_Statistics.Items.Insert(4, new StatisticsListItem("", "Total", $"{totalProductAmount}", $"{Math.Round(_statisticsController.TotalRevenueToday, 2)}"));
             listView_Statistics.Items.Insert(4, new StatisticsListItem("", "Produkter solgt i dag:", "", ""));
             listView_Statistics.Items.Insert(4, new StatisticsListItem("", "", "", ""));
         }

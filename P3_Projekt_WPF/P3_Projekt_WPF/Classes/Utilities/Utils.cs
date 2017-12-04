@@ -55,11 +55,16 @@ namespace P3_Projekt_WPF.Classes.Utilities
             }
             else
             {
+                pingStatus = ping.Send(IPAddress.Parse(Properties.Settings.Default.lcl_ip));
+                if (pingStatus.Status == IPStatus.Success)
+                {
+                    return true;
+                }
                 return false;
             }
         }
 
-        
+
 
         private static void _FixReceiptInDatabase()
         {
@@ -161,7 +166,8 @@ namespace P3_Projekt_WPF.Classes.Utilities
                     Properties.Settings.Default.IcecreamID = IsID;
                     Properties.Settings.Default.Save();
                 }
-            } else
+            }
+            else
             {
                 Properties.Settings.Default.IcecreamID = -1;
                 Properties.Settings.Default.Save();
