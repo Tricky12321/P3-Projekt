@@ -36,6 +36,8 @@ namespace P3_Projekt_WPF
         private Dictionary<int, ProductControl> _productControlDictionary = new Dictionary<int, ProductControl>();
         private bool _ctrlDown = false;
         public static bool runLoading = true;
+        private bool _partlypaid = true;
+
         public MainWindow()
         {
             Mysql.CheckDatabaseConnection();
@@ -568,31 +570,40 @@ namespace P3_Projekt_WPF
 
         private void btn_Increment_Click(object sender, EventArgs e)
         {
-            _POSController.ChangeTransactionAmount(sender, e, 1);
-            UpdateReceiptList();
+            if (!_partlypaid)
+            {
+                _POSController.ChangeTransactionAmount(sender, e, 1);
+                UpdateReceiptList();
+            }
         }
 
         private void btn_Decrement_Click(object sender, EventArgs e)
         {
-            _POSController.ChangeTransactionAmount(sender, e, -1);
-            UpdateReceiptList();
+            if (!_partlypaid)
+            {
+                _POSController.ChangeTransactionAmount(sender, e, -1);
+                UpdateReceiptList();
+            }
         }
 
         private void btn_DeleteProduct_Click(object sender, EventArgs e)
         {
-            if ((sender as ReceiptListItem).IDTag.Contains("t"))
+            if (!_partlypaid)
             {
-                string tempID = (sender as ReceiptListItem).IDTag;
-                _POSController.PlacerholderReceipt.RemoveTransaction(tempID);
-                _tempID--;
+                if ((sender as ReceiptListItem).IDTag.Contains("t"))
+                {
+                    string tempID = (sender as ReceiptListItem).IDTag;
+                    _POSController.PlacerholderReceipt.RemoveTransaction(tempID);
+                    _tempID--;
+                }
+                else
+                {
+                    int productID = Convert.ToInt32((sender as ReceiptListItem).IDTag);
+                    _POSController.PlacerholderReceipt.RemoveTransaction(productID);
+                }
+                _POSController.PlacerholderReceipt.UpdateTotalPrice();
+                UpdateReceiptList();
             }
-            else
-            {
-                int productID = Convert.ToInt32((sender as ReceiptListItem).IDTag);
-                _POSController.PlacerholderReceipt.RemoveTransaction(productID);
-            }
-            _POSController.PlacerholderReceipt.UpdateTotalPrice();
-            UpdateReceiptList();
         }
 
         private void btn_AddProduct_Click(object sender, RoutedEventArgs e)
@@ -1124,28 +1135,39 @@ namespace P3_Projekt_WPF
 
         private void btn_Cash_Click(object sender, RoutedEventArgs e)
         {
-            bool CompletedPurchase = false;
-            label_TotalPrice.Content = _POSController.CompletePurchase(PaymentMethod_Enum.Cash, PayWithAmount, listView_Receipt, out CompletedPurchase);
-            StartsToPay(CompletedPurchase);
-            ResetPOSController(CompletedPurchase);
+            if (listView_Receipt.HasItems)
+            {
+                bool CompletedPurchase = false;
+                label_TotalPrice.Content = _POSController.CompletePurchase(PaymentMethod_Enum.Cash, PayWithAmount, listView_Receipt, out CompletedPurchase);
+                StartsToPay(CompletedPurchase);
+                ResetPOSController(CompletedPurchase);
+            }
         }
 
         private void btn_Dankort_Click(object sender, RoutedEventArgs e)
         {
-            bool CompletedPurchase = false;
-            label_TotalPrice.Content = _POSController.CompletePurchase(PaymentMethod_Enum.Card, PayWithAmount, listView_Receipt, out CompletedPurchase);
-            StartsToPay(CompletedPurchase);
-            ResetPOSController(CompletedPurchase);
+            if (listView_Receipt.HasItems)
+            {
+                bool CompletedPurchase = false;
+                label_TotalPrice.Content = _POSController.CompletePurchase(PaymentMethod_Enum.Card, PayWithAmount, listView_Receipt, out CompletedPurchase);
+                StartsToPay(CompletedPurchase);
+                _partlypaid = CompletedPurchase;
+                ResetPOSController(CompletedPurchase);
+            }
         }
+
 
         private void btn_MobilePay_Click(object sender, RoutedEventArgs e)
         {
-            bool CompletedPurchase = false;
-            label_TotalPrice.Content = _POSController.CompletePurchase(PaymentMethod_Enum.MobilePay, PayWithAmount, listView_Receipt, out CompletedPurchase);
-            StartsToPay(CompletedPurchase);
-            ResetPOSController(CompletedPurchase);
+            if (listView_Receipt.HasItems)
+            {
+                bool CompletedPurchase = false;
+                label_TotalPrice.Content = _POSController.CompletePurchase(PaymentMethod_Enum.MobilePay, PayWithAmount, listView_Receipt, out CompletedPurchase);
+                StartsToPay(CompletedPurchase);
+                ResetPOSController(CompletedPurchase);
+            }
         }
-
+        
         private void StartsToPay(bool HasPartlyPaid)
         {
             txtBox_SearchField.IsEnabled = HasPartlyPaid;

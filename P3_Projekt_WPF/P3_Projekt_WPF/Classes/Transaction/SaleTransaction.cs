@@ -74,13 +74,16 @@ namespace P3_Projekt_WPF.Classes
                     foreach (KeyValuePair<int,int> strorageWithAmount in prod.StorageWithAmount)
                     {
                         string AppendString = "";
-                        if (strorageWithAmount.Value < 0)
+                        if (strorageWithAmount.Value < 0 && _storageController.StorageRoomDictionary.ContainsKey(strorageWithAmount.Key))
                         {
                             AppendString = " **** - "+ _storageController.StorageRoomDictionary[strorageWithAmount.Key].Name + " har " + strorageWithAmount.Value.ToString() + " stk\n";
                         }
                         else
                         {
-                            AppendString = " - " + _storageController.StorageRoomDictionary[strorageWithAmount.Key].Name + " har " + strorageWithAmount.Value.ToString() + " stk\n";
+                            if (_storageController.StorageRoomDictionary.ContainsKey(strorageWithAmount.Key))
+                            {
+                                AppendString = " - " + _storageController.StorageRoomDictionary[strorageWithAmount.Key].Name + " har " + strorageWithAmount.Value.ToString() + " stk\n";
+                            }
                         }
                         Text.Append(AppendString);
                     }

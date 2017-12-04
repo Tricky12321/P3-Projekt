@@ -75,6 +75,8 @@ namespace P3_Projekt_WPF
             ConcurrentDictionary<int, SearchProduct> productSearchResults = _storageController.SearchForProduct(txtBox_SearchField.Text);
             listBox_SearchMoveProduct.Items.Clear();
             var searchResults = productSearchResults.Values.OrderByDescending(x => x.BrandMatch + x.GroupMatch + x.NameMatch);
+            label_ActualAmountInStorage.Content = "0";
+
             if (searchResults.Count() > 0)
             {
                 foreach (SearchProduct product in searchResults)
@@ -235,8 +237,12 @@ namespace P3_Projekt_WPF
 
         private void DisplayNumberInStorage()
         {
-            sourceRoom = _storageController.StorageRoomDictionary.Where(x => x.Value.Name == comboBox_StorageRooms.Text).Select(x => x.Key).First();
-            label_ActualAmountInStorage.Content = _storageController.ProductDictionary[productID].StorageWithAmount[sourceRoom].ToString();
+            if(comboBox_StorageRooms.Text != "")
+            {
+                sourceRoom = _storageController.StorageRoomDictionary.Where(x => x.Value.Name == comboBox_StorageRooms.Text).Select(x => x.Key).First();
+                label_ActualAmountInStorage.Content = _storageController.ProductDictionary[productID].StorageWithAmount[sourceRoom].ToString();
+            }
+
         }
 
         private void comboBox_StorageRooms_DropDownClosed(object sender, EventArgs e)
