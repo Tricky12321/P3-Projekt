@@ -71,18 +71,8 @@ namespace P3_Projekt_WPF.Classes.Utilities
                 string serviceProductString = GetServiceProductsQueryString(searchProduct, productToSearch, searchGroup, groupToSearch, from, to);
                 RequestTransactionsDatabase(serviceProductString);
             }
-        }
-
-        public string GetTempProductsQueryString(bool searchProduct, int productToSearch, DateTime from, DateTime to)
-        {
-            StringBuilder NewString = new StringBuilder("SELECT `sale_transactions`.* " +
-                "FROM `temp_products`, `sale_transactions` WHERE `sale_transactions`.`product_id` = `temp_products`.`id`" +
-                $" AND UNIX_TIMESTAMP(`datetime`) >= '{Utils.GetUnixTime(from)}' AND UNIX_TIMESTAMP(`datetime`) <= '{Utils.GetUnixTime(EndDate(to))}'");
-            if (searchProduct)
-            {
-                NewString.Append($" AND `products`.`id` = '{productToSearch}'");
-            }
-            return NewString.ToString();
+            string tempProductString = GetTempProductsQueryString(searchProduct, productToSearch, from, to);
+            RequestTransactionsDatabase(tempProductString);
         }
 
         public string GetProductsQueryString(bool searchProduct, int productToSearch, bool searchGroup, int groupToSearch, bool searchBrand, string brandToSearch, DateTime from, DateTime to)
@@ -124,6 +114,18 @@ namespace P3_Projekt_WPF.Classes.Utilities
                 {
                     NewString.Append($" AND `service_products`.`groups` = '{groupToSearch}'");
                 }
+            }
+            return NewString.ToString();
+        }
+
+        public string GetTempProductsQueryString(bool searchProduct, int productToSearch, DateTime from, DateTime to)
+        {
+            StringBuilder NewString = new StringBuilder("SELECT `sale_transactions`.* " +
+                "FROM `temp_products`, `sale_transactions` WHERE `sale_transactions`.`product_id` = `temp_products`.`id`" +
+                $" AND UNIX_TIMESTAMP(`datetime`) >= '{Utils.GetUnixTime(from)}' AND UNIX_TIMESTAMP(`datetime`) <= '{Utils.GetUnixTime(EndDate(to))}'");
+            if (searchProduct)
+            {
+                NewString.Append($" AND `products`.`id` = '{productToSearch}'");
             }
             return NewString.ToString();
         }
