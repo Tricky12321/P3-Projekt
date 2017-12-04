@@ -147,10 +147,12 @@ namespace P3_Projekt_WPF.Classes
 
             if (DiscountOnFullReceipt > 0m)
             {
-                decimal productDiscountPart = DiscountOnFullReceipt / NumberOfProducts;
+                UpdateTotalPrice();
+                decimal discountPercentage = 100 / (TotalPrice + DiscountOnFullReceipt) * DiscountOnFullReceipt;
+                //decimal productDiscountPart = DiscountOnFullReceipt / NumberOfProducts;
                 foreach (SaleTransaction transaction in Transactions)
                 {
-                    transaction.DiscountPrice = transaction.DiscountBool ? transaction.DiscountPrice - productDiscountPart : transaction.Price - productDiscountPart;
+                    transaction.DiscountPrice = transaction.DiscountBool ? transaction.DiscountPrice - (transaction.DiscountPrice * discountPercentage / 100) : transaction.Price - (transaction.Price * discountPercentage / 100);
                     transaction.DiscountBool = true;
                 }
             }
