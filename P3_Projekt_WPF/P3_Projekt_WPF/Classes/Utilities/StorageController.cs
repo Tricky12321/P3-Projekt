@@ -1131,7 +1131,6 @@ namespace P3_Projekt_WPF.Classes.Utilities
                     //will convert a boolean to int, depending if a char is different different between the two strings.
                     cost = Convert.ToInt32(!(searchedString[i - 1] == productToCompare[j - 1]));
 
-
                     minimum1 = d[i - 1, j] + 1;          //takes the element in the previous row i
                     minimum2 = d[i, j - 1] + 1;          //takes the element in the previous column j
                     minimum3 = d[i - 1, j - 1] + cost;   //takes the element in the previous column j and previos row i, and adds the cost of changing a char, +1 og or +0
