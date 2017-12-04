@@ -75,7 +75,7 @@ namespace P3_Projekt_WPF.Classes
             //Product = new Product(Convert.ToInt32(Table.Values[1]));
             Amount = Convert.ToInt32(Table.Values[2]);
             Date = Convert.ToDateTime(Table.Values[3]);
-            _purchasePrice = Convert.ToDecimal(Table.Values[4]);
+            _purchasePrice = Math.Round(Convert.ToDecimal(Table.Values[4]),2);
             _supplier = Table.Values[5];
             _storageRoomID = Convert.ToInt32(Table.Values[6]);
 

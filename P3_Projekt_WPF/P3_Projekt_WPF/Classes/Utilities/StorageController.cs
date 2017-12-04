@@ -85,7 +85,10 @@ namespace P3_Projekt_WPF.Classes.Utilities
 
             foreach (KeyValuePair<int, ServiceProduct> serviceProductWithID in ServiceProductDictionary)
             {
-                AllProductsDictionary.TryAdd(serviceProductWithID.Key, serviceProductWithID.Value);
+                if (serviceProductWithID.Value.GetName() != "Is")
+                {
+                    AllProductsDictionary.TryAdd(serviceProductWithID.Key, serviceProductWithID.Value);
+                }
             }
         }
 
