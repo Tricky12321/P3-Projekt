@@ -865,6 +865,8 @@ namespace P3_Projekt_WPF
         {
             checkBox_Brand.IsEnabled = false;
             checkBox_Group.IsEnabled = false;
+            checkBox_Brand.IsChecked = false;
+            checkBox_Group.IsChecked = false;
             comboBox_Brand.IsEnabled = false;
             comboBox_Group.IsEnabled = false;
         }
