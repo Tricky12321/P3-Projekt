@@ -73,6 +73,18 @@ namespace P3_Projekt_WPF.Classes.Utilities
             }
         }
 
+        public string GetTempProductsQueryString(bool searchProduct, int productToSearch, DateTime from, DateTime to)
+        {
+            StringBuilder NewString = new StringBuilder("SELECT `sale_transactions`.* " +
+                "FROM `temp_products`, `sale_transactions` WHERE `sale_transactions`.`product_id` = `temp_products`.`id`" +
+                $" AND UNIX_TIMESTAMP(`datetime`) >= '{Utils.GetUnixTime(from)}' AND UNIX_TIMESTAMP(`datetime`) <= '{Utils.GetUnixTime(EndDate(to))}'");
+            if (searchProduct)
+            {
+                NewString.Append($" AND `products`.`id` = '{productToSearch}'");
+            }
+            return NewString.ToString();
+        }
+
         public string GetProductsQueryString(bool searchProduct, int productToSearch, bool searchGroup, int groupToSearch, bool searchBrand, string brandToSearch, DateTime from, DateTime to)
         {
             StringBuilder NewString = new StringBuilder("SELECT `sale_transactions`.* " +

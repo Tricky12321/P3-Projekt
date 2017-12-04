@@ -206,7 +206,12 @@ namespace P3_Projekt_WPF.Classes.Utilities
                     ReceiptID = 0;
                     if (PlacerholderReceipt.PaidPrice > PlacerholderReceipt.TotalPrice)
                     {
+                        CompletedPurchase = true;
                         return "Retur: " + Math.Round((PlacerholderReceipt.PaidPrice - PlacerholderReceipt.TotalPrice), 2).ToString().Replace('.', ',');
+                    } else
+                    {
+                        CompletedPurchase = true;
+                        return "";
                     }
 
                 }
