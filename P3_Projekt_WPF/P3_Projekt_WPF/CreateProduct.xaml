@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:P3_Projekt_WPF"
         x:Class="P3_Projekt_WPF.CreateProduct"
         mc:Ignorable="d"
-        Title="CreateProduct" Height="650" Width="950" Background="#FFE5E5E5" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
+        Title="Opret Produkt" Height="650" Width="950" Background="#FFE5E5E5" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
     <TabControl x:Name="tabControl" HorizontalAlignment="Left" Height="621" VerticalAlignment="Top" Width="944" Grid.ColumnSpan="2" FontSize="30">
         <TabItem Header="Produkt">
             <Grid x:Name="grid_input">
@@ -60,7 +60,7 @@
                         </Style>
                     </TextBlock.Style>
                 </TextBlock>
-                <TextBlock x:Name="label_SalePrice" HorizontalAlignment="Left" Margin="10,0,0,326" TextWrapping="Wrap" Text="Salgspris" FontSize="30" MinHeight="24" VerticalAlignment="Bottom" Height="40" Width="117"/>
+                <TextBlock x:Name="label_SalePrice" HorizontalAlignment="Left" Margin="10,0,0,325.8" TextWrapping="Wrap" Text="Salgspris" FontSize="30" MinHeight="24" VerticalAlignment="Bottom" Height="40" Width="130"/>
                 <TextBox Padding="10,0,0,0" x:Name="textbox_SalePrice" TextCompositionManager.PreviewTextInput="AmountInputOnlyNumbersButAllowOneComma" Margin="180,0,0,326" FontSize="30" HorizontalAlignment="Left" Width="280" Height="40" VerticalAlignment="Bottom">
                     <TextBox.Resources>
                         <Style TargetType="{x:Type Border}">

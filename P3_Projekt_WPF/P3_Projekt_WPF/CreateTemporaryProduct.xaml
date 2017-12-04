@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:P3_Projekt_WPF"
         mc:Ignorable="d"
         WindowStartupLocation="CenterScreen"
-        Title="CreateTemporaryProduct" MinHeight="420" MaxHeight="600" MinWidth="350" MaxWidth="800" Background="White" Height="408" Width="600">
+        Title="Opret Midlertidigt Produkt" MinHeight="420" MaxHeight="600" MinWidth="350" MaxWidth="800" Background="White" Height="408" Width="600">
     <Grid Background="#FFE5E5E5">
         <TextBox Padding="4,0,0,0" x:Name="textbox_Description" FontSize="30" Grid.ColumnSpan="1" MinHeight="40" Margin="5,5,5,159" TextWrapping="Wrap">
             <TextBox.Resources>

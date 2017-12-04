@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:P3_Projekt_WPF"
         mc:Ignorable="d"
         Background="#FFE5E5E5"
-        Title="MoveProduct" Height="480" Width="540"
+        Title="Flyt Produkt" Height="480" Width="540"
         Focusable="True"
         KeyDown="Window_KeyDown"
         MouseDown="Window_MouseDown"
