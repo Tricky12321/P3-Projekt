@@ -48,14 +48,14 @@ namespace P3_Projekt_WPF.Classes
         public void UploadToDatabase()
         {
             string sql = "INSERT INTO `payments` (`id`, `amount`, `payment_method`, `receipt_id`)" +
-                $" VALUES (NULL, '{Amount}', '{Convert.ToInt32(PaymentMethod)}','{ReceiptID}')";
+                $" VALUES (NULL, '{Amount.ToString().Replace(',', '.')}', '{Convert.ToInt32(PaymentMethod)}','{ReceiptID}')";
             Mysql.RunQuery(sql);
         }
 
         public void UpdateInDatabase()
         {
             string sql = $"UPDATE `payments` SET " +
-                $"`amount` = '{Amount}'," +
+                $"`amount` = '{Amount.ToString().Replace(',', '.')}'," +
                 $"`payment_method` = '{Convert.ToInt32(PaymentMethod)}'," +
                 $"`receipt_id` = '{ReceiptID}' " +
                 $"WHERE `id` = {ID};";
