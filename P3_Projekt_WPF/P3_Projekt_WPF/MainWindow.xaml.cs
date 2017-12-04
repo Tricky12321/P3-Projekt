@@ -36,7 +36,7 @@ namespace P3_Projekt_WPF
         private Dictionary<int, ProductControl> _productControlDictionary = new Dictionary<int, ProductControl>();
         private bool _ctrlDown = false;
         public static bool runLoading = true;
-        private bool _partlypaid = true;
+        private bool _partlypaid = false;
 
         public MainWindow()
         {
@@ -1140,6 +1140,7 @@ namespace P3_Projekt_WPF
                 bool CompletedPurchase = false;
                 label_TotalPrice.Content = _POSController.CompletePurchase(PaymentMethod_Enum.Cash, PayWithAmount, listView_Receipt, out CompletedPurchase);
                 StartsToPay(CompletedPurchase);
+                _partlypaid = !CompletedPurchase;
                 ResetPOSController(CompletedPurchase);
             }
         }
@@ -1151,7 +1152,7 @@ namespace P3_Projekt_WPF
                 bool CompletedPurchase = false;
                 label_TotalPrice.Content = _POSController.CompletePurchase(PaymentMethod_Enum.Card, PayWithAmount, listView_Receipt, out CompletedPurchase);
                 StartsToPay(CompletedPurchase);
-                _partlypaid = CompletedPurchase;
+                _partlypaid = !CompletedPurchase;
                 ResetPOSController(CompletedPurchase);
             }
         }
@@ -1164,6 +1165,7 @@ namespace P3_Projekt_WPF
                 bool CompletedPurchase = false;
                 label_TotalPrice.Content = _POSController.CompletePurchase(PaymentMethod_Enum.MobilePay, PayWithAmount, listView_Receipt, out CompletedPurchase);
                 StartsToPay(CompletedPurchase);
+                _partlypaid = !CompletedPurchase;
                 ResetPOSController(CompletedPurchase);
             }
         }
