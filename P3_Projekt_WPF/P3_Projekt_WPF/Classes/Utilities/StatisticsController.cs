@@ -78,7 +78,8 @@ namespace P3_Projekt_WPF.Classes.Utilities
         public string GetProductsQueryString(bool searchProduct, int productToSearch, bool searchGroup, int groupToSearch, bool searchBrand, string brandToSearch, DateTime from, DateTime to)
         {
             StringBuilder NewString = new StringBuilder("SELECT `sale_transactions`.* " +
-                "FROM `products`, `sale_transactions` WHERE `sale_transactions`.`product_id` = `products`.`id`" +
+                "FROM `products`, `sale_transactions` WHERE `sale_transactions`.`product_id` = `products`.`id`"+
+                " AND `sale_transactions`.`product_type` = 'product'" +
                 $" AND UNIX_TIMESTAMP(`datetime`) >= '{Utils.GetUnixTime(from)}' AND UNIX_TIMESTAMP(`datetime`) <= '{Utils.GetUnixTime(EndDate(to))}'");
             if (searchProduct)
             {
@@ -102,7 +103,8 @@ namespace P3_Projekt_WPF.Classes.Utilities
         public string GetServiceProductsQueryString(bool searchID, int idToSearch, bool searchGroup, int groupToSearch, DateTime from, DateTime to)
         {
             StringBuilder NewString = new StringBuilder("SELECT `sale_transactions`.* " +
-                "FROM `service_products`, `sale_transactions` WHERE `sale_transactions`.`product_id` = `service_products`.`id`" +
+                "FROM `service_products`, `sale_transactions` WHERE `sale_transactions`.`product_id` = `service_products`.`id`"+
+                " AND `sale_transactions`.`product_type` = 'service_product'" +
                 $" AND UNIX_TIMESTAMP(`datetime`) >= '{Utils.GetUnixTime(from)}' AND UNIX_TIMESTAMP(`datetime`) <= '{Utils.GetUnixTime(EndDate(to))}'");
             if (searchID)
             {
@@ -121,7 +123,8 @@ namespace P3_Projekt_WPF.Classes.Utilities
         public string GetTempProductsQueryString(bool searchProduct, int productToSearch, DateTime from, DateTime to)
         {
             StringBuilder NewString = new StringBuilder("SELECT `sale_transactions`.* " +
-                "FROM `temp_products`, `sale_transactions` WHERE `sale_transactions`.`product_id` = `temp_products`.`id`" +
+                "FROM `temp_products`, `sale_transactions` WHERE `sale_transactions`.`product_id` = `temp_products`.`resolved_product_id`"+
+                " AND `sale_transactions`.`product_type` = 'temp_product'" +
                 $" AND UNIX_TIMESTAMP(`datetime`) >= '{Utils.GetUnixTime(from)}' AND UNIX_TIMESTAMP(`datetime`) <= '{Utils.GetUnixTime(EndDate(to))}'");
             if (searchProduct)
             {
