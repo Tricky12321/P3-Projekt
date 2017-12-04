@@ -144,6 +144,7 @@ namespace P3_Projekt_WPF.Classes
         public void Execute()
         {
             UpdateNumberOfProducts();
+            ReceiptPrinter.PrintReceipt(this);
 
             if (DiscountOnFullReceipt > 0m)
             {
@@ -156,6 +157,7 @@ namespace P3_Projekt_WPF.Classes
                     transaction.DiscountBool = true;
                 }
             }
+
             foreach (SaleTransaction transaction in Transactions)
             {
                 if (transaction.DiscountBool)
@@ -167,7 +169,6 @@ namespace P3_Projekt_WPF.Classes
             }
 
             UploadToDatabase();
-            //ReceiptPrinter printReceipt = new ReceiptPrinter(this);
         }
 
         public static int GetNextID()
