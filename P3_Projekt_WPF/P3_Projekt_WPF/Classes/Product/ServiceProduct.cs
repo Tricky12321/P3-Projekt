@@ -96,8 +96,8 @@ namespace P3_Projekt_WPF.Classes
             ID = Convert.ToInt32(results.Values[0]);                         // id
             Name = results.Values[1];                                        // name
             ServiceProductGroupID = Convert.ToInt32(results.Values[2]);         // group id
-            SalePrice = Convert.ToDecimal(results.Values[3]);                  // price
-            GroupPrice = Convert.ToDecimal(results.Values[4]);                 // group price
+            SalePrice = Math.Round(Convert.ToDecimal(results.Values[3]),2);                  // price
+            GroupPrice = Math.Round(Convert.ToDecimal(results.Values[4]),2);                 // group price
             GroupLimit = Convert.ToInt32(results.Values[5]);                 // grouplimit
             _active = Convert.ToBoolean(results.Values[6]);                 // active
             CreatedDate = Convert.ToDateTime(results.Values[7]);

@@ -82,7 +82,7 @@ namespace P3_Projekt_WPF.Classes
         public override void CreateFromRow(Row Table)
         {
             ID = Convert.ToInt32(Table.Values[0]);
-            SalePrice = Convert.ToDecimal(Table.Values[1]);
+            SalePrice = Math.Round(Convert.ToDecimal(Table.Values[1]),2);
             Description = Table.Values[2];
             Resolved = Convert.ToBoolean(Table.Values[3]);
             ResolvedProductID = Convert.ToInt32(Table.Values[4]);

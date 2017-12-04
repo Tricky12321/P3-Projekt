@@ -71,24 +71,15 @@ namespace P3_Projekt_WPF.Classes.Utilities
                 string serviceProductString = GetServiceProductsQueryString(searchProduct, productToSearch, searchGroup, groupToSearch, from, to);
                 RequestTransactionsDatabase(serviceProductString);
             }
-        }
-
-        public string GetTempProductsQueryString(bool searchProduct, int productToSearch, DateTime from, DateTime to)
-        {
-            StringBuilder NewString = new StringBuilder("SELECT `sale_transactions`.* " +
-                "FROM `temp_products`, `sale_transactions` WHERE `sale_transactions`.`product_id` = `temp_products`.`id`" +
-                $" AND UNIX_TIMESTAMP(`datetime`) >= '{Utils.GetUnixTime(from)}' AND UNIX_TIMESTAMP(`datetime`) <= '{Utils.GetUnixTime(EndDate(to))}'");
-            if (searchProduct)
-            {
-                NewString.Append($" AND `products`.`id` = '{productToSearch}'");
-            }
-            return NewString.ToString();
+            string tempProductString = GetTempProductsQueryString(searchProduct, productToSearch, from, to);
+            RequestTransactionsDatabase(tempProductString);
         }
 
         public string GetProductsQueryString(bool searchProduct, int productToSearch, bool searchGroup, int groupToSearch, bool searchBrand, string brandToSearch, DateTime from, DateTime to)
         {
             StringBuilder NewString = new StringBuilder("SELECT `sale_transactions`.* " +
                 "FROM `products`, `sale_transactions` WHERE `sale_transactions`.`product_id` = `products`.`id`" +
+                " AND `sale_transactions`.`product_type` = 'product'" +
                 $" AND UNIX_TIMESTAMP(`datetime`) >= '{Utils.GetUnixTime(from)}' AND UNIX_TIMESTAMP(`datetime`) <= '{Utils.GetUnixTime(EndDate(to))}'");
             if (searchProduct)
             {
@@ -113,6 +104,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
         {
             StringBuilder NewString = new StringBuilder("SELECT `sale_transactions`.* " +
                 "FROM `service_products`, `sale_transactions` WHERE `sale_transactions`.`product_id` = `service_products`.`id`" +
+                " AND `sale_transactions`.`product_type` = 'service_product'" +
                 $" AND UNIX_TIMESTAMP(`datetime`) >= '{Utils.GetUnixTime(from)}' AND UNIX_TIMESTAMP(`datetime`) <= '{Utils.GetUnixTime(EndDate(to))}'");
             if (searchID)
             {
@@ -124,6 +116,49 @@ namespace P3_Projekt_WPF.Classes.Utilities
                 {
                     NewString.Append($" AND `service_products`.`groups` = '{groupToSearch}'");
                 }
+            }
+            return NewString.ToString();
+        }
+
+        public string GetTempProductsQueryString(bool searchProduct, int productToSearch, bool searchGroup, int groupToSearch, bool searchBrand, string brandToSearch, DateTime from, DateTime to)
+        {
+            StringBuilder NewString = new StringBuilder();
+            if (searchGroup || searchBrand)
+            {
+                NewString.Append("SELECT `sale_transactions`.*, `products`.`id` as 'PRODID',`products`.`groups`, `products`.`brand`, `temp_products`.`id` as 'TEMPID' "+
+                    "FROM `sale_transactions`, `temp_products`, `products` "+
+                    " WHERE "+
+                    "(`sale_transactions`.`product_type` = 'temp_product') AND "+
+                    "(`temp_products`.`resolved_product_id` = `products`.`id`) AND "+
+                    "(`products`.`id` = `temp_products`.`resolved_product_id`)" +
+                    $" AND UNIX_TIMESTAMP(`datetime`) >= '{Utils.GetUnixTime(from)}'" +
+                    $" AND UNIX_TIMESTAMP(`datetime`) <= '{Utils.GetUnixTime(EndDate(to))}'");
+                if (searchGroup)
+                {
+                    NewString.Append($" AND `products`.`groups` = '{groupToSearch}'");
+                }
+
+                if (searchBrand)
+                {
+                    NewString.Append($" AND `products`.`brand` = '{brandToSearch}'");
+                }
+            }
+            return NewString.ToString();
+        }
+
+        public string GetTempProductsQueryString(bool searchProduct, int productToSearch, DateTime from, DateTime to)
+        {
+            StringBuilder NewString = new StringBuilder("SELECT `sale_transactions`.* " +
+                "FROM `temp_products`, `sale_transactions` WHERE" +
+                " `sale_transactions`.`product_type` = 'temp_product'" +
+                $" AND UNIX_TIMESTAMP(`datetime`) >= '{Utils.GetUnixTime(from)}' AND UNIX_TIMESTAMP(`datetime`) <= '{Utils.GetUnixTime(EndDate(to))}'");
+            if (searchProduct)
+            {
+                NewString.Append($" AND `temp_products`.`resolved_product_id` = '{productToSearch}'");
+            }
+            else
+            {
+                NewString.Append($" AND `sale_transactions`.`product_id` = `temp_products`.`id`");
             }
             return NewString.ToString();
         }
@@ -278,27 +313,27 @@ namespace P3_Projekt_WPF.Classes.Utilities
         {
             if (totalPrice > 0)
             {
-                return new StatisticsListItem("", $"{_storageController.GroupDictionary[id].Name}", $"{Math.Round((SalesPerGroup[id] / totalPrice) * 100m, 1)}%", $"{SalesPerGroup[id]}");
+                return new StatisticsListItem("", $"{_storageController.GroupDictionary[id].Name}", $"{Math.Round((SalesPerGroup[id] / totalPrice) * 100m, 1)}%", $"{Math.Round(SalesPerGroup[id], 2)}");
             }
-            return new StatisticsListItem("", $"{_storageController.GroupDictionary[id].Name}", "0%", $"{SalesPerGroup[id]}");
+            return new StatisticsListItem("", $"{_storageController.GroupDictionary[id].Name}", "0%", $"{Math.Round(SalesPerGroup[id], 2)}");
         }
 
         public StatisticsListItem BrandSalesStrings(string brand, decimal totalPrice)
         {
             if (totalPrice > 0)
             {
-                return new StatisticsListItem("", $"{brand}", $"{Math.Round((SalesPerBrand[brand] / totalPrice) * 100m, 1)}%", $"{SalesPerBrand[brand]}");
+                return new StatisticsListItem("", $"{brand}", $"{Math.Round((SalesPerBrand[brand] / totalPrice) * 100m, 1)}%", $"{Math.Round(SalesPerBrand[brand], 2)}");
             }
-            return new StatisticsListItem("", $"{brand}", "0%", $"{SalesPerBrand[brand]}");
+            return new StatisticsListItem("", $"{brand}", "0%", $"{Math.Round(SalesPerBrand[brand], 2)}");
         }
 
         public StatisticsListItem ProductSalesStrings(int id, StatisticsProduct productInfo)
         {
-            if(id == -1)
+            if (id == -1)
             {
-                return new StatisticsListItem("", $"Midlertidigt produkt", $"{productInfo.Amount}", $"{productInfo.Revenue}");
+                return new StatisticsListItem("", $"Midlertidigt produkt", $"{productInfo.Amount}", $"{Math.Round(productInfo.Revenue, 2)}");
             }
-            return new StatisticsListItem("", $"{_storageController.AllProductsDictionary[id].GetName()}", $"{productInfo.Amount}", $"{productInfo.Revenue}");
+            return new StatisticsListItem("", $"{_storageController.AllProductsDictionary[id].GetName()}", $"{productInfo.Amount}", $"{Math.Round(productInfo.Revenue, 2)}");
         }
     }
 }

@@ -108,10 +108,10 @@ namespace P3_Projekt_WPF.Classes
             Name = results.Values[1];                                       // name
             Brand = results.Values[2];                                      // brand
             ProductGroupID = Convert.ToInt32(results.Values[3]);            // groups
-            SalePrice = Convert.ToDecimal(results.Values[4]);               // price
-            PurchasePrice = Convert.ToDecimal(results.Values[5]);
+            SalePrice = Math.Round(Convert.ToDecimal(results.Values[4]),2);               // price
+            PurchasePrice = Math.Round(Convert.ToDecimal(results.Values[5]),2);
             DiscountBool = Convert.ToBoolean(results.Values[6]);            // discount
-            DiscountPrice = Convert.ToDecimal(results.Values[7]);           // discount_price
+            DiscountPrice = Math.Round(Convert.ToDecimal(results.Values[7]),2);           // discount_price
             _active = Convert.ToBoolean(results.Values[8]);                 // active
             CreatedTime = Convert.ToDateTime(results.Values[9]);            // CreatedTime
         }

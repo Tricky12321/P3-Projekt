@@ -185,7 +185,7 @@ namespace P3_Projekt_WPF
 
         private void LoadStorageRooms(ConcurrentDictionary<int, StorageRoom> storageRooms)
         {
-            foreach (KeyValuePair<int, StorageRoom> StorageRoom in storageRooms)
+            foreach (KeyValuePair<int, StorageRoom> StorageRoom in storageRooms.Where(x => x.Value.ID != 0))
             {
                 comboBox_StorageRoom.Items.Add($"{StorageRoom.Key.ToString()} {StorageRoom.Value.Name}");
                 _storageWithAmount.TryAdd(StorageRoom.Key, 0);
