@@ -146,7 +146,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
             return NewString.ToString();
         }
 
-        public string GetTempProductsQueryString(bool searchProduct, int productToSearch, bool searchGroup, int groupToSearch, DateTime from, DateTime to)
+        public string GetTempProductsQueryString(bool searchProduct, int productToSearch, DateTime from, DateTime to)
         {
             StringBuilder NewString = new StringBuilder("SELECT `sale_transactions`.* " +
                 "FROM `temp_products`, `sale_transactions` WHERE" +
