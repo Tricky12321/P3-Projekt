@@ -81,12 +81,12 @@ namespace P3_Projekt_WPF
         {
             if (_displayProduct is Product)
             {
-                txtbox_Product.Text = $"ID: {_displayProduct.ID.ToString()}\nNavn: { (_displayProduct as Product).Name}\nGruppe: {groupDict[(_displayProduct as Product).ProductGroupID].Name}\nPris { _displayProduct.SalePrice.ToString()}DKK";
+                txtbox_Product.Text = $"ID: {_displayProduct.ID.ToString()}\nNavn: { (_displayProduct as Product).Name}\nGruppe: {groupDict[(_displayProduct as Product).ProductGroupID].Name}\nPris { Math.Round(_displayProduct.SalePrice,2).ToString()}DKK";
 
             }
             else if (_displayProduct is ServiceProduct)
             {
-                txtbox_Product.Text = $"ID: {_displayProduct.ID.ToString()}\nNavn: { (_displayProduct as ServiceProduct).Name}\nGruppe: {groupDict[(_displayProduct as ServiceProduct).ServiceProductGroupID].Name}\nPris { _displayProduct.SalePrice.ToString()}DKK";
+                txtbox_Product.Text = $"ID: {_displayProduct.ID.ToString()}\nNavn: { (_displayProduct as ServiceProduct).Name}\nGruppe: {groupDict[(_displayProduct as ServiceProduct).ServiceProductGroupID].Name}\nPris { Math.Round(_displayProduct.SalePrice,2).ToString()}DKK";
             }
             else
             {

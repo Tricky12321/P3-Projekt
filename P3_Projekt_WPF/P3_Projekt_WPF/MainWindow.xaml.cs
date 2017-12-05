@@ -611,7 +611,7 @@ namespace P3_Projekt_WPF
             int inputInt;
             int.TryParse(textBox_AddProductID.Text, out inputInt);
             BaseProduct ProductToAdd = _POSController.GetProductFromID(inputInt);
-            if (ProductToAdd != null)
+            if (ProductToAdd != null && ProductToAdd.GetName() != "Is")
             {
                 _POSController.AddSaleTransaction(ProductToAdd, int.Parse(textBox_ProductAmount.Text));
                 UpdateReceiptList();
@@ -865,6 +865,8 @@ namespace P3_Projekt_WPF
         {
             checkBox_Brand.IsEnabled = false;
             checkBox_Group.IsEnabled = false;
+            checkBox_Brand.IsChecked = false;
+            checkBox_Group.IsChecked = false;
             comboBox_Brand.IsEnabled = false;
             comboBox_Group.IsEnabled = false;
         }

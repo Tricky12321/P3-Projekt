@@ -71,14 +71,22 @@ namespace P3_Projekt_WPF.Classes.Utilities
                 string serviceProductString = GetServiceProductsQueryString(searchProduct, productToSearch, searchGroup, groupToSearch, from, to);
                 RequestTransactionsDatabase(serviceProductString);
             }
-            string tempProductString = GetTempProductsQueryString(searchProduct, productToSearch, from, to);
+            string tempProductString;
+            if (searchGroup || searchBrand)
+            {
+                tempProductString = GetTempProductsQueryString(searchGroup, groupToSearch, searchBrand, brandToSearch, from, to);
+            }
+            else
+            {
+                tempProductString = GetTempProductsQueryString(searchProduct, productToSearch, from, to);
+            }
             RequestTransactionsDatabase(tempProductString);
         }
 
         public string GetProductsQueryString(bool searchProduct, int productToSearch, bool searchGroup, int groupToSearch, bool searchBrand, string brandToSearch, DateTime from, DateTime to)
         {
             StringBuilder NewString = new StringBuilder("SELECT `sale_transactions`.* " +
-                "FROM `products`, `sale_transactions` WHERE `sale_transactions`.`product_id` = `products`.`id`"+
+                "FROM `products`, `sale_transactions` WHERE `sale_transactions`.`product_id` = `products`.`id`" +
                 " AND `sale_transactions`.`product_type` = 'product'" +
                 $" AND UNIX_TIMESTAMP(`datetime`) >= '{Utils.GetUnixTime(from)}' AND UNIX_TIMESTAMP(`datetime`) <= '{Utils.GetUnixTime(EndDate(to))}'");
             if (searchProduct)
@@ -103,7 +111,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
         public string GetServiceProductsQueryString(bool searchID, int idToSearch, bool searchGroup, int groupToSearch, DateTime from, DateTime to)
         {
             StringBuilder NewString = new StringBuilder("SELECT `sale_transactions`.* " +
-                "FROM `service_products`, `sale_transactions` WHERE `sale_transactions`.`product_id` = `service_products`.`id`"+
+                "FROM `service_products`, `sale_transactions` WHERE `sale_transactions`.`product_id` = `service_products`.`id`" +
                 " AND `sale_transactions`.`product_type` = 'service_product'" +
                 $" AND UNIX_TIMESTAMP(`datetime`) >= '{Utils.GetUnixTime(from)}' AND UNIX_TIMESTAMP(`datetime`) <= '{Utils.GetUnixTime(EndDate(to))}'");
             if (searchID)
@@ -120,16 +128,39 @@ namespace P3_Projekt_WPF.Classes.Utilities
             return NewString.ToString();
         }
 
+        public string GetTempProductsQueryString(bool searchGroup, int groupToSearch, bool searchBrand, string brandToSearch, DateTime from, DateTime to)
+        {
+            StringBuilder NewString = new StringBuilder();
+            NewString.Append("SELECT `sale_transactions`.*, `products`.`id` as 'PRODID',`products`.`groups`, `products`.`brand`, `temp_products`.`id` as 'TEMPID' " +
+                "FROM `sale_transactions`, `temp_products`, `products` " +
+                " WHERE " +
+                "(`sale_transactions`.`product_type` = 'temp_product') AND " +
+                "(`products`.`id` = `temp_products`.`resolved_product_id`)" +
+                $" AND UNIX_TIMESTAMP(`datetime`) >= '{Utils.GetUnixTime(from)}'" +
+                $" AND UNIX_TIMESTAMP(`datetime`) <= '{Utils.GetUnixTime(EndDate(to))}'");
+            if (searchGroup)
+            {
+                NewString.Append($" AND `products`.`groups` = '{groupToSearch}'");
+            }
+
+            if (searchBrand)
+            {
+                NewString.Append($" AND `products`.`brand` = '{brandToSearch}'");
+            }
+            return NewString.ToString();
+        }
+
         public string GetTempProductsQueryString(bool searchProduct, int productToSearch, DateTime from, DateTime to)
         {
             StringBuilder NewString = new StringBuilder("SELECT `sale_transactions`.* " +
-                "FROM `temp_products`, `sale_transactions` WHERE"+
+                "FROM `temp_products`, `sale_transactions` WHERE" +
                 " `sale_transactions`.`product_type` = 'temp_product'" +
                 $" AND UNIX_TIMESTAMP(`datetime`) >= '{Utils.GetUnixTime(from)}' AND UNIX_TIMESTAMP(`datetime`) <= '{Utils.GetUnixTime(EndDate(to))}'");
             if (searchProduct)
             {
                 NewString.Append($" AND `temp_products`.`resolved_product_id` = '{productToSearch}'");
-            } else
+            }
+            else
             {
                 NewString.Append($" AND `sale_transactions`.`product_id` = `temp_products`.`id`");
             }
@@ -302,7 +333,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
 
         public StatisticsListItem ProductSalesStrings(int id, StatisticsProduct productInfo)
         {
-            if(id == -1)
+            if (id == -1)
             {
                 return new StatisticsListItem("", $"Midlertidigt produkt", $"{productInfo.Amount}", $"{Math.Round(productInfo.Revenue, 2)}");
             }
