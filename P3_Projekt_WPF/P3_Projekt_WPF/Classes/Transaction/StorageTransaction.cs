@@ -33,7 +33,8 @@ namespace P3_Projekt_WPF.Classes
             if (!reference)
             {
                 CreateFromRow(Data);
-            } else
+            }
+            else
             {
                 CreateFromRowReference(Data);
             }
@@ -80,7 +81,7 @@ namespace P3_Projekt_WPF.Classes
 
         public override void UploadToDatabase()
         {
-            string sql = "INSERT INTO `storage_transaction` (`id`, `product_id`, `amount`, `source_storageroom_id`, `destination_storageroom_id`)"+
+            string sql = "INSERT INTO `storage_transaction` (`id`, `product_id`, `amount`, `source_storageroom_id`, `destination_storageroom_id`)" +
                 $" VALUES (NULL, '{Product.ID}', '{Amount}', '{_source.ID}', '{_destination.ID}');";
             Mysql.RunQuery(sql);
             Product.UpdateInDatabase();

@@ -65,7 +65,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
             }
             ClearDictionarys();
             GetAll();
-            while(!ThreadsDone)
+            while (!ThreadsDone)
             {
                 Thread.Sleep(10);
             }
@@ -709,7 +709,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
             tempProductToMerge.Resolve(MergedProduct);
             SaleTransaction tempProductsTransaction = tempProductToMerge.GetTempProductsSaleTransaction();
             //Gets the Shop storage room, which has = 1, but if it doesn't exist, gets the next one
-            KeyValuePair<int,int> StorageRoomStatus = MergedProduct.StorageWithAmount.Where(x => x.Key != 0).First();
+            KeyValuePair<int, int> StorageRoomStatus = MergedProduct.StorageWithAmount.Where(x => x.Key != 0).First();
 
             MergedProduct.StorageWithAmount[StorageRoomStatus.Key] = StorageRoomStatus.Value - tempProductsTransaction.Amount;
             MergedProduct.UpdateInDatabase();
@@ -867,7 +867,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
             {
                 productToAdd.NameMatch += searchStringElement.Length * 2;
             }
-            
+
 
             if (productToConvert is Product)
             {

@@ -37,7 +37,7 @@ namespace P3_Projekt_WPF.Classes
 
         public override string ToString()
         {
-            return ID+" - "+Name;
+            return ID + " - " + Name;
         }
 
         public static int GetNextID()
@@ -96,8 +96,8 @@ namespace P3_Projekt_WPF.Classes
             ID = Convert.ToInt32(results.Values[0]);                         // id
             Name = results.Values[1];                                        // name
             ServiceProductGroupID = Convert.ToInt32(results.Values[2]);         // group id
-            SalePrice = Math.Round(Convert.ToDecimal(results.Values[3]),2);                  // price
-            GroupPrice = Math.Round(Convert.ToDecimal(results.Values[4]),2);                 // group price
+            SalePrice = Math.Round(Convert.ToDecimal(results.Values[3]), 2);                  // price
+            GroupPrice = Math.Round(Convert.ToDecimal(results.Values[4]), 2);                 // group price
             GroupLimit = Convert.ToInt32(results.Values[5]);                 // grouplimit
             _active = Convert.ToBoolean(results.Values[6]);                 // active
             CreatedDate = Convert.ToDateTime(results.Values[7]);
@@ -118,7 +118,7 @@ namespace P3_Projekt_WPF.Classes
                 $"`group_price` = '{GroupPrice.ToString().Replace(',', '.')}'," +
                 $"`group_limit` = '{GroupLimit}'," +
                 $"`active` = '{Convert.ToInt32(_active)}'," +
-                $"`groups` = '{ServiceProductGroupID}' "+
+                $"`groups` = '{ServiceProductGroupID}' " +
                 $"WHERE `id` = {ID};";
             Mysql.RunQuery(sql);
         }

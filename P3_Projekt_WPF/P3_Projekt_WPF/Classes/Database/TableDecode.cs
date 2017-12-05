@@ -20,7 +20,7 @@ namespace P3_Projekt_WPF.Classes.Database
             }
             if (Reader.Result != null)
             {
-                
+
                 while (Reader.Result.Read())
                 {
                     RowData.Add(new Row());

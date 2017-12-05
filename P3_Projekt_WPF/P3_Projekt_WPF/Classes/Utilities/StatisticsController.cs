@@ -30,8 +30,6 @@ namespace P3_Projekt_WPF.Classes.Utilities
          * Hver dato-metode nulstiller TransactionsForStatistics ved at hente transaktioner ned fra databasen alt efter datoen
          * Derefter skal formen kalde RequestStatisticsWithParameters */
 
-
-
         private bool _allStatisticsDone = false;
         private ConcurrentQueue<SaleTransaction> _saleTransactions;
         private List<Thread> _saleTransactionThreads = new List<Thread>();
@@ -125,11 +123,11 @@ namespace P3_Projekt_WPF.Classes.Utilities
             StringBuilder NewString = new StringBuilder();
             if (searchGroup || searchBrand)
             {
-                NewString.Append("SELECT `sale_transactions`.*, `products`.`id` as 'PRODID',`products`.`groups`, `products`.`brand`, `temp_products`.`id` as 'TEMPID' "+
-                    "FROM `sale_transactions`, `temp_products`, `products` "+
-                    " WHERE "+
-                    "(`sale_transactions`.`product_type` = 'temp_product') AND "+
-                    "(`temp_products`.`resolved_product_id` = `products`.`id`) AND "+
+                NewString.Append("SELECT `sale_transactions`.*, `products`.`id` as 'PRODID',`products`.`groups`, `products`.`brand`, `temp_products`.`id` as 'TEMPID' " +
+                    "FROM `sale_transactions`, `temp_products`, `products` " +
+                    " WHERE " +
+                    "(`sale_transactions`.`product_type` = 'temp_product') AND " +
+                    "(`temp_products`.`resolved_product_id` = `products`.`id`) AND " +
                     "(`products`.`id` = `temp_products`.`resolved_product_id`)" +
                     $" AND UNIX_TIMESTAMP(`datetime`) >= '{Utils.GetUnixTime(from)}'" +
                     $" AND UNIX_TIMESTAMP(`datetime`) <= '{Utils.GetUnixTime(EndDate(to))}'");
