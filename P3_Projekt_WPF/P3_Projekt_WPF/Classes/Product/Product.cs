@@ -58,7 +58,7 @@ namespace P3_Projekt_WPF.Classes
             Brand = brand;
             ProductGroupID = groupID;
         }
-        
+
         //Admin edit with admin command toggled
         public void AdminEdit(string name, string brand, decimal purchasePrice, decimal salePrice, int groupID, bool discount, decimal discountPrice)
         {
@@ -108,10 +108,10 @@ namespace P3_Projekt_WPF.Classes
             Name = results.Values[1];                                       // name
             Brand = results.Values[2];                                      // brand
             ProductGroupID = Convert.ToInt32(results.Values[3]);            // groups
-            SalePrice = Math.Round(Convert.ToDecimal(results.Values[4]),2);               // price
-            PurchasePrice = Math.Round(Convert.ToDecimal(results.Values[5]),2);
+            SalePrice = Math.Round(Convert.ToDecimal(results.Values[4]), 2);               // price
+            PurchasePrice = Math.Round(Convert.ToDecimal(results.Values[5]), 2);
             DiscountBool = Convert.ToBoolean(results.Values[6]);            // discount
-            DiscountPrice = Math.Round(Convert.ToDecimal(results.Values[7]),2);           // discount_price
+            DiscountPrice = Math.Round(Convert.ToDecimal(results.Values[7]), 2);           // discount_price
             _active = Convert.ToBoolean(results.Values[8]);                 // active
             CreatedTime = Convert.ToDateTime(results.Values[9]);            // CreatedTime
         }

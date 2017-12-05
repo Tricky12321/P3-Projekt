@@ -14,7 +14,7 @@ namespace P3_Projekt_WPF.Classes
         public bool Resolved;
         public int ResolvedProductID = 0;
 
-        public TempProduct (string description, decimal salePrice) : base(salePrice)
+        public TempProduct(string description, decimal salePrice) : base(salePrice)
         {
             Description = description;
             Resolved = false;
@@ -82,7 +82,7 @@ namespace P3_Projekt_WPF.Classes
         public override void CreateFromRow(Row Table)
         {
             ID = Convert.ToInt32(Table.Values[0]);
-            SalePrice = Math.Round(Convert.ToDecimal(Table.Values[1]),2);
+            SalePrice = Math.Round(Convert.ToDecimal(Table.Values[1]), 2);
             Description = Table.Values[2];
             Resolved = Convert.ToBoolean(Table.Values[3]);
             ResolvedProductID = Convert.ToInt32(Table.Values[4]);
@@ -90,7 +90,7 @@ namespace P3_Projekt_WPF.Classes
 
         public override void UploadToDatabase()
         {
-            string sql = "INSERT INTO `temp_products` (`id`, `sale_price`, `description`, `resolved`, `resolved_product_id`)"+
+            string sql = "INSERT INTO `temp_products` (`id`, `sale_price`, `description`, `resolved`, `resolved_product_id`)" +
                 $"VALUES (NULL, '{SalePrice.ToString().Replace(',', '.')}', '{GetName()}', '{Convert.ToInt32(Resolved)}', '{ResolvedProductID}');";
             Mysql.RunQuery(sql);
         }

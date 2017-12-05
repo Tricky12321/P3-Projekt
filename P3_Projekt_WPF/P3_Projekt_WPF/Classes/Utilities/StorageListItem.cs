@@ -8,7 +8,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
 {
     class StorageListItem
     {
-        public StorageListItem (string name, int numberStored, int id)
+        public StorageListItem(string name, int numberStored, int id)
         {
             Name = name;
             NumberStored = numberStored;

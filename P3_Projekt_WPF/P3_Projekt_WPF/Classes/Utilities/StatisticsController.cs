@@ -30,8 +30,6 @@ namespace P3_Projekt_WPF.Classes.Utilities
          * Hver dato-metode nulstiller TransactionsForStatistics ved at hente transaktioner ned fra databasen alt efter datoen
          * Derefter skal formen kalde RequestStatisticsWithParameters */
 
-
-
         private bool _allStatisticsDone = false;
         private ConcurrentQueue<SaleTransaction> _saleTransactions;
         private List<Thread> _saleTransactionThreads = new List<Thread>();

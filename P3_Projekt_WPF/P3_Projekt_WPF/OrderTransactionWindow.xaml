@@ -54,7 +54,7 @@
         </TextBox>
         <Label x:Name="label_Amount" FontSize="30" Padding="0" Content="Antal produkter modtaget" HorizontalAlignment="Left" Margin="10,0,0,73" Width="364" RenderTransformOrigin="0.484,-1.25" Height="40" VerticalAlignment="Bottom"/>
         <Label x:Name="label_Supplier" FontSize="30" Content="Distributør" Padding="0" HorizontalAlignment="Left" Margin="10,0,0,122" Height="40" VerticalAlignment="Bottom"/>
-        <ComboBox x:Name="combobox_Supplier" IsEditable="True" FontSize="26" Focusable="True" KeyUp="combobox_Supplier_KeyUp" LostFocus="combobox_Supplier_LostFocus" Margin="197,0,10,122" Height="40" VerticalAlignment="Bottom"/>
+        <ComboBox x:Name="combobox_Supplier" IsEditable="True" FontSize="26" Focusable="True" SelectionChanged="combobox_Supplier_SelectionChanged" KeyUp="combobox_Supplier_KeyUp" LostFocus="combobox_Supplier_LostFocus" Margin="197,0,10,122" Height="40" VerticalAlignment="Bottom"/>
         <TextBlock x:Name="label_SupplierLayer" FontSize="30" Text="Distributør" Padding="0" IsHitTestVisible="False" Margin="199,0,27,121" Foreground="DarkGray" Height="40" VerticalAlignment="Bottom">
             <TextBlock.Style>
                 <Style TargetType="{x:Type TextBlock}">

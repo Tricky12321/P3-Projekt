@@ -225,6 +225,7 @@ namespace P3_Projekt_WPF
             }
             else
             {
+                label_SupplierLayer.Visibility = Visibility.Visible;
                 txtBox_SearchField.BorderBrush = Brushes.DarkGray;
                 label_SupplierLayer.Text = "Vælg en distributør";
                 label_SupplierLayer.Foreground = Brushes.Red;
@@ -259,6 +260,11 @@ namespace P3_Projekt_WPF
             {
                 button_OrderTransaction_Click(sender, e);
             }
+        }
+
+        private void combobox_Supplier_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            label_SupplierLayer.Text = "";
         }
     }
 }
