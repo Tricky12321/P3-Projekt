@@ -730,8 +730,8 @@
                                         </ListView>
 
                                         <TextBlock HorizontalAlignment="Left" Margin="0,70,0,0" TextWrapping="Wrap" VerticalAlignment="Top"><Run Text="Oprettede Lagerrum"/></TextBlock>
-                                        <TextBlock HorizontalAlignment="Left" Margin="0,1285,0,0" TextWrapping="Wrap" VerticalAlignment="Top"><Run Text="Flyttede Produkter"/></TextBlock>
-                                        <TextBlock HorizontalAlignment="Left" Margin="0,675,0,0" TextWrapping="Wrap" VerticalAlignment="Top"><Run Text="Modtaget Produkter"/></TextBlock>
+                                        <TextBlock HorizontalAlignment="Left" Margin="0,1285,0,0" TextWrapping="Wrap" VerticalAlignment="Top"><Run Text="Flytninger af produkter"/></TextBlock>
+                                        <TextBlock HorizontalAlignment="Left" Margin="0,675,0,0" TextWrapping="Wrap" VerticalAlignment="Top"><Run Text="Indleveringer af produkter"/></TextBlock>
 
                                     </Grid>
                                 </ScrollViewer>
