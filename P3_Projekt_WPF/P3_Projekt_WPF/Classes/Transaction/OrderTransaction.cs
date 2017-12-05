@@ -75,7 +75,7 @@ namespace P3_Projekt_WPF.Classes
             //Product = new Product(Convert.ToInt32(Table.Values[1]));
             Amount = Convert.ToInt32(Table.Values[2]);
             Date = Convert.ToDateTime(Table.Values[3]);
-            _purchasePrice = Math.Round(Convert.ToDecimal(Table.Values[4]),2);
+            _purchasePrice = Math.Round(Convert.ToDecimal(Table.Values[4]), 2);
             _supplier = Table.Values[5];
             _storageRoomID = Convert.ToInt32(Table.Values[6]);
 
@@ -95,7 +95,7 @@ namespace P3_Projekt_WPF.Classes
 
         public override void UploadToDatabase()
         {
-            string sql = "INSERT INTO `order_transactions` (`id`, `product_id`, `amount`, `datetime`, `purchase_price`, `supplier`, `storageroom_id`)"+
+            string sql = "INSERT INTO `order_transactions` (`id`, `product_id`, `amount`, `datetime`, `purchase_price`, `supplier`, `storageroom_id`)" +
                 $" VALUES (NULL, '{Product.ID}', '{Amount}', FROM_UNIXTIME('{Utils.GetUnixTime(Date)}'), '{_purchasePrice.ToString().Replace(',', '.')}', '{_supplier}', '{_storageRoomID}');";
             Mysql.RunQuery(sql);
         }
