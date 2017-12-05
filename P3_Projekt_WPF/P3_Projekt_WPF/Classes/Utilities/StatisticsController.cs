@@ -69,7 +69,15 @@ namespace P3_Projekt_WPF.Classes.Utilities
                 string serviceProductString = GetServiceProductsQueryString(searchProduct, productToSearch, searchGroup, groupToSearch, from, to);
                 RequestTransactionsDatabase(serviceProductString);
             }
-            string tempProductString = GetTempProductsQueryString(searchProduct, productToSearch, from, to);
+            string tempProductString;
+            if (searchGroup || searchBrand)
+            {
+                tempProductString = GetTempProductsQueryString(searchGroup, groupToSearch, searchBrand, brandToSearch, from, to);
+            }
+            else
+            {
+                tempProductString = GetTempProductsQueryString(searchProduct, productToSearch, from, to);
+            }
             RequestTransactionsDatabase(tempProductString);
         }
 
@@ -118,28 +126,24 @@ namespace P3_Projekt_WPF.Classes.Utilities
             return NewString.ToString();
         }
 
-        public string GetTempProductsQueryString(bool searchProduct, int productToSearch, bool searchGroup, int groupToSearch, bool searchBrand, string brandToSearch, DateTime from, DateTime to)
+        public string GetTempProductsQueryString(bool searchGroup, int groupToSearch, bool searchBrand, string brandToSearch, DateTime from, DateTime to)
         {
             StringBuilder NewString = new StringBuilder();
-            if (searchGroup || searchBrand)
+            NewString.Append("SELECT `sale_transactions`.*, `products`.`id` as 'PRODID',`products`.`groups`, `products`.`brand`, `temp_products`.`id` as 'TEMPID' " +
+                "FROM `sale_transactions`, `temp_products`, `products` " +
+                " WHERE " +
+                "(`sale_transactions`.`product_type` = 'temp_product') AND " +
+                "(`products`.`id` = `temp_products`.`resolved_product_id`)" +
+                $" AND UNIX_TIMESTAMP(`datetime`) >= '{Utils.GetUnixTime(from)}'" +
+                $" AND UNIX_TIMESTAMP(`datetime`) <= '{Utils.GetUnixTime(EndDate(to))}'");
+            if (searchGroup)
             {
-                NewString.Append("SELECT `sale_transactions`.*, `products`.`id` as 'PRODID',`products`.`groups`, `products`.`brand`, `temp_products`.`id` as 'TEMPID' " +
-                    "FROM `sale_transactions`, `temp_products`, `products` " +
-                    " WHERE " +
-                    "(`sale_transactions`.`product_type` = 'temp_product') AND " +
-                    "(`temp_products`.`resolved_product_id` = `products`.`id`) AND " +
-                    "(`products`.`id` = `temp_products`.`resolved_product_id`)" +
-                    $" AND UNIX_TIMESTAMP(`datetime`) >= '{Utils.GetUnixTime(from)}'" +
-                    $" AND UNIX_TIMESTAMP(`datetime`) <= '{Utils.GetUnixTime(EndDate(to))}'");
-                if (searchGroup)
-                {
-                    NewString.Append($" AND `products`.`groups` = '{groupToSearch}'");
-                }
+                NewString.Append($" AND `products`.`groups` = '{groupToSearch}'");
+            }
 
-                if (searchBrand)
-                {
-                    NewString.Append($" AND `products`.`brand` = '{brandToSearch}'");
-                }
+            if (searchBrand)
+            {
+                NewString.Append($" AND `products`.`brand` = '{brandToSearch}'");
             }
             return NewString.ToString();
         }
