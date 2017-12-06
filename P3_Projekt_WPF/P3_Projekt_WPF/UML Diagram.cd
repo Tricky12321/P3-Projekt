@@ -144,7 +144,7 @@
     </TypeIdentifier>
   </Class>
   <Class Name="P3_Projekt_WPF.Classes.Database.TableDecode">
-    <Position X="10.75" Y="21" Width="1.5" />
+    <Position X="12.5" Y="15.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAgAAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Classes\Database\TableDecode.cs</FileName>
@@ -229,7 +229,7 @@
     <Lollipop Position="0.2" Collapsed="true" />
   </Class>
   <Class Name="P3_Projekt_WPF.Classes.Payment" BaseTypeListCollapsed="true">
-    <Position X="9" Y="21.5" Width="1.5" />
+    <Position X="12.5" Y="17.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>QAABAAAAAAAAgAAAASAAAACAQAAAAAAAAAABAAAAAAA=</HashCode>
       <FileName>Classes\Payment.cs</FileName>

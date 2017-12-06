@@ -30,7 +30,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
         public List<TempProduct> TempTempProductList = new List<TempProduct>();
 
 
-
+        
         public StorageController()
         {
             //GetAllProductsFromDatabase();
@@ -819,6 +819,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
             ConcurrentDictionary<int, SearchProduct> productsToReturn = new ConcurrentDictionary<int, SearchProduct>();
             int isNumber;
             string searchStringLower = searchString.ToLower();
+            // skal alle produkter igennem = n (WorstCase) | n/2 (AverageCase)
 
             if (int.TryParse(searchStringLower, out isNumber))
             {
@@ -829,12 +830,13 @@ namespace P3_Projekt_WPF.Classes.Utilities
                     productsToReturn.TryAdd(isNumber, matchedProduct);
                 }
             }
-
+            // skal alle ord igennem, indtil der ikke er flere mellemrum, men kun i "søge strengen" 
+            // n = antallet af mellemrum
             while (searchStringLower.Contains("  "))
             {
                 searchStringLower = searchStringLower.Replace("  ", " ");
             }
-
+            // Levensteins Søge Algoritme 
             foreach (BaseProduct product in AllProductsDictionary.Values)
             {
                 ProductSearch(searchStringLower, product);
@@ -927,6 +929,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
             }
         }
         */
+        // Complexity = (n*s)/2
         private void SpaceCounter(ref List<string> ListOfWords)
         {
             int searchAmount = ListOfWords.Count();
@@ -934,8 +937,8 @@ namespace P3_Projekt_WPF.Classes.Utilities
             {
                 for (int i = 1; i <= searchAmount - 1; i++)
                 {
-                    ListOfWords.Add(ListOfWords[i - 1] + ListOfWords[i]);
-                    ListOfWords.Add(ListOfWords[i] + ListOfWords[i - 1]);
+                    ListOfWords.Add(ListOfWords[i - 1] +" " + ListOfWords[i]);
+                    ListOfWords.Add(ListOfWords[i] +" " + ListOfWords[i - 1]);
                 }
             }
         }
