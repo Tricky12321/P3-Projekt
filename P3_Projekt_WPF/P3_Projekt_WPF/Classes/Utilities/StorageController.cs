@@ -936,8 +936,6 @@ namespace P3_Projekt_WPF.Classes.Utilities
             {
                 for (int i = 1; i <= searchAmount - 1; i++)
                 {
-                    ListOfWords.Add(ListOfWords[i] + " " + ListOfWords[i - 1]);
-                    ListOfWords.Add(ListOfWords[i - 1] + " " + ListOfWords[i]);
                     ListOfWords.Add(ListOfWords[i] + ListOfWords[i - 1]);
                     ListOfWords.Add(ListOfWords[i - 1] + ListOfWords[i]);
                 }
