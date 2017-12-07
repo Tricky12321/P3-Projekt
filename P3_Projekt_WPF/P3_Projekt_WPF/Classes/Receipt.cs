@@ -12,21 +12,17 @@ namespace P3_Projekt_WPF.Classes
 {
     public class Receipt : MysqlObject
     {
-        private static int _idCounter = 0;
-        public static int IDCounter { get { return _idCounter; } set { _idCounter = value; } }
         public int ID;
         public List<SaleTransaction> Transactions = new List<SaleTransaction>();
         public List<Payment> Payments = new List<Payment>();
         public int NumberOfProducts;
         public decimal TotalPrice;
-        public DateTime Date;
+        public DateTime Date = DateTime.Now;
         public decimal PaidPrice => Payments.Sum(x => x.Amount);
         public decimal DiscountOnFullReceipt = 0m;
 
         public Receipt()
         {
-            ID = _idCounter++;
-            Date = DateTime.Now;
         }
 
         public Receipt(int ID)

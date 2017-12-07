@@ -8,11 +8,7 @@ namespace P3_Projekt_WPF.Classes
 {
     public class Group : MysqlObject
     {
-        private static int _idCounter = 0;
-        public static int IDCounter { get { return _idCounter; } set { _idCounter = value; } }
-
         public int ID;
-        public int IDProductCounter = 0;
         public string Name;
         public string Description;
 
@@ -20,7 +16,6 @@ namespace P3_Projekt_WPF.Classes
         {
             Name = name;
             Description = description;
-            ID = _idCounter++;
         }
 
         public Group(Row row)

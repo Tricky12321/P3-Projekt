@@ -30,7 +30,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
         public List<TempProduct> TempTempProductList = new List<TempProduct>();
 
 
-        
+
         public StorageController()
         {
             //GetAllProductsFromDatabase();
@@ -844,7 +844,6 @@ namespace P3_Projekt_WPF.Classes.Utilities
                 BrandSearch(searchStringLower, product);
             }
             TakeProductsToReturnFromWeightedList(ref productsToReturn);
-
             return productsToReturn;
         }
 
@@ -937,8 +936,10 @@ namespace P3_Projekt_WPF.Classes.Utilities
             {
                 for (int i = 1; i <= searchAmount - 1; i++)
                 {
-                    ListOfWords.Add(ListOfWords[i - 1] +" " + ListOfWords[i]);
-                    ListOfWords.Add(ListOfWords[i] +" " + ListOfWords[i - 1]);
+                    ListOfWords.Add(ListOfWords[i] + " " + ListOfWords[i - 1]);
+                    ListOfWords.Add(ListOfWords[i - 1] + " " + ListOfWords[i]);
+                    ListOfWords.Add(ListOfWords[i] + ListOfWords[i - 1]);
+                    ListOfWords.Add(ListOfWords[i - 1] + ListOfWords[i]);
                 }
             }
         }

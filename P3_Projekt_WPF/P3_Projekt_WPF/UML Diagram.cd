@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ClassDiagram MajorVersion="1" MinorVersion="1">
   <Class Name="P3_Projekt_WPF.AddIcecream" BaseTypeListCollapsed="true">
-    <Position X="0.5" Y="15.75" Width="2.25" />
+    <Position X="7.75" Y="52.75" Width="2" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAACAAAAAIAAAAAAAAAAAAAAIAAAAAAAAAA=</HashCode>
       <FileName>AddIcecream.xaml.cs</FileName>
@@ -9,7 +9,7 @@
     <Lollipop Position="0.2" Collapsed="true" />
   </Class>
   <Class Name="P3_Projekt_WPF.AdminNewPassword" BaseTypeListCollapsed="true">
-    <Position X="3" Y="15.75" Width="2" />
+    <Position X="10" Y="47" Width="2" />
     <TypeIdentifier>
       <HashCode>AAAAACAAAACAAAAAAAAAAAAAIAACAAAAIAAAAAAAAAA=</HashCode>
       <FileName>AdminNewPassword.xaml.cs</FileName>
@@ -17,7 +17,7 @@
     <Lollipop Position="0.2" Collapsed="true" />
   </Class>
   <Class Name="P3_Projekt_WPF.AdminValidation" BaseTypeListCollapsed="true">
-    <Position X="3" Y="18.25" Width="2" />
+    <Position X="7.75" Y="47" Width="2" />
     <TypeIdentifier>
       <HashCode>AAAAACAAAASAAAAAAAAAAAAAIAAAAAAAIAAAAAAAAAA=</HashCode>
       <FileName>AdminValidation.xaml.cs</FileName>
@@ -25,7 +25,7 @@
     <Lollipop Position="0.2" Collapsed="true" />
   </Class>
   <Class Name="P3_Projekt_WPF.CreateGroup" BaseTypeListCollapsed="true">
-    <Position X="5.25" Y="20" Width="1.5" />
+    <Position X="7.75" Y="49.75" Width="2" />
     <TypeIdentifier>
       <HashCode>AAAAAEAAAAAAACAAAAABAIAAAAAAAAAAAgAAABAAAAA=</HashCode>
       <FileName>CreateGroup.xaml.cs</FileName>
@@ -33,7 +33,7 @@
     <Lollipop Position="0.2" Collapsed="true" />
   </Class>
   <Class Name="P3_Projekt_WPF.CreateProduct" BaseTypeListCollapsed="true">
-    <Position X="3" Y="20.75" Width="2" />
+    <Position X="5.5" Y="47" Width="2" />
     <TypeIdentifier>
       <HashCode>AFAIEAAAAACOyQECFAAQQqKAgECAQABBAAAAgAICADg=</HashCode>
       <FileName>CreateProduct.xaml.cs</FileName>
@@ -41,7 +41,7 @@
     <Lollipop Position="0.2" Collapsed="true" />
   </Class>
   <Class Name="P3_Projekt_WPF.CreateStorageRoom" BaseTypeListCollapsed="true">
-    <Position X="0.5" Y="17.75" Width="2.25" />
+    <Position X="3" Y="50.75" Width="2.25" />
     <TypeIdentifier>
       <HashCode>ABAAAEAAAAAAACAAAAABAAAAAAAEAAAAAAAAABAAAAA=</HashCode>
       <FileName>CreateStorageRoom.xaml.cs</FileName>
@@ -49,7 +49,7 @@
     <Lollipop Position="0.2" Collapsed="true" />
   </Class>
   <Class Name="P3_Projekt_WPF.CreateTemporaryProduct" BaseTypeListCollapsed="true">
-    <Position X="0.5" Y="20.5" Width="2.25" />
+    <Position X="3" Y="47" Width="2.25" />
     <TypeIdentifier>
       <HashCode>gAABAAgAAAEAAAAAAAAAAAAAAAIAgQgCAAAAAAEAABA=</HashCode>
       <FileName>CreateTemporaryProduct.xaml.cs</FileName>
@@ -57,7 +57,7 @@
     <Lollipop Position="0.877" Collapsed="true" />
   </Class>
   <Class Name="P3_Projekt_WPF.MainWindow" BaseTypeListCollapsed="true">
-    <Position X="7" Y="15.75" Width="1.5" />
+    <Position X="16.5" Y="43" Width="1.5" />
     <Members>
       <Field Name="_createGroup" Hidden="true" />
       <Field Name="_createStorageRoom" Hidden="true" />
@@ -90,7 +90,7 @@
     <Lollipop Position="0.2" Collapsed="true" />
   </Class>
   <Class Name="P3_Projekt_WPF.MoveProduct" BaseTypeListCollapsed="true">
-    <Position X="5.25" Y="27.5" Width="1.5" />
+    <Position X="12.25" Y="47" Width="1.5" />
     <TypeIdentifier>
       <HashCode>gAACgBAABAIAAEACAQgAIAAQAAJJAAAIAADRQAAAABA=</HashCode>
       <FileName>MoveProduct.xaml.cs</FileName>
@@ -98,7 +98,7 @@
     <Lollipop Position="0.2" Collapsed="true" />
   </Class>
   <Class Name="P3_Projekt_WPF.OrderTransactionWindow" BaseTypeListCollapsed="true">
-    <Position X="0.5" Y="24.25" Width="2.25" />
+    <Position X="0.5" Y="47" Width="2.25" />
     <TypeIdentifier>
       <HashCode>gAACggAAAgAAAEAEAACAAAQQAANICAAIAADRAAAAIJA=</HashCode>
       <FileName>OrderTransactionWindow.xaml.cs</FileName>
@@ -114,7 +114,7 @@
     <Lollipop Position="0.2" Collapsed="true" />
   </Class>
   <Class Name="P3_Projekt_WPF.ResovleTempProduct" BaseTypeListCollapsed="true">
-    <Position X="5.25" Y="22.75" Width="1.5" />
+    <Position X="10" Y="49.5" Width="2" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAACIAAACgAAAigQgAAAoEAAAAAAACAAgAABI=</HashCode>
       <FileName>ResovlveTempProduct.xaml.cs</FileName>
@@ -223,13 +223,13 @@
   <Class Name="P3_Projekt_WPF.Classes.Group" BaseTypeListCollapsed="true">
     <Position X="15" Y="9.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAQAAAAAgkBAABSAAAAQAQAAAAAAAAAABAAAAAAA=</HashCode>
+      <HashCode>AAAAAAAAAAAggBAAASAAAAQAQAAAAAAAAAABAAAAAAA=</HashCode>
       <FileName>Classes\Group.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" Collapsed="true" />
   </Class>
   <Class Name="P3_Projekt_WPF.Classes.Payment" BaseTypeListCollapsed="true">
-    <Position X="12.5" Y="17.75" Width="1.5" />
+    <Position X="18.25" Y="25.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>QAABAAAAAAAAgAAAASAAAACAQAAAAAAAAAABAAAAAAA=</HashCode>
       <FileName>Classes\Payment.cs</FileName>
@@ -237,7 +237,7 @@
     <Lollipop Position="0.2" Collapsed="true" />
   </Class>
   <Class Name="P3_Projekt_WPF.Classes.BaseProduct">
-    <Position X="3" Y="0.5" Width="1.5" />
+    <Position X="3" Y="1.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAACAAggAAAASAAAAAAQgAAAAAAAAABAAAABAA=</HashCode>
       <FileName>Classes\Product\BaseProduct.cs</FileName>
@@ -281,15 +281,15 @@
     </TypeIdentifier>
   </Class>
   <Class Name="P3_Projekt_WPF.Classes.Receipt" BaseTypeListCollapsed="true">
-    <Position X="16.75" Y="9.5" Width="2" />
+    <Position X="20" Y="26" Width="2" />
     <TypeIdentifier>
-      <HashCode>AAmgAQAAAABAsBwAASAAAAAAQEAAQAABwAQDAAACAAA=</HashCode>
+      <HashCode>AAmgAAAAAABAsBwAASAAAAAAQEAAQAABwAQDAAACAAA=</HashCode>
       <FileName>Classes\Receipt.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" Collapsed="true" />
   </Class>
   <Class Name="P3_Projekt_WPF.Classes.ReceiptPrinter">
-    <Position X="15" Y="13.5" Width="1.5" />
+    <Position X="15" Y="12.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAACAAAAAAAAAAAAAAAIAAAAAAgAAAAAAAAAAAAgA=</HashCode>
       <FileName>Classes\ReceiptPrinter.cs</FileName>
@@ -304,13 +304,13 @@
     <Lollipop Position="0.2" Collapsed="true" />
   </Class>
   <Class Name="P3_Projekt_WPF.Classes.OrderTransaction">
-    <Position X="7.5" Y="6.25" Width="1.5" />
+    <Position X="7.5" Y="6" Width="1.5" />
     <InheritanceLine Type="P3_Projekt_WPF.Classes.Transaction" FixedToPoint="true">
       <Path>
-        <Point X="10" Y="4.622" />
-        <Point X="10" Y="5.875" />
-        <Point X="8.188" Y="5.875" />
-        <Point X="8.188" Y="6.25" />
+        <Point X="10" Y="5.122" />
+        <Point X="10" Y="5.625" />
+        <Point X="8.188" Y="5.625" />
+        <Point X="8.188" Y="6" />
       </Path>
     </InheritanceLine>
     <TypeIdentifier>
@@ -319,21 +319,21 @@
     </TypeIdentifier>
   </Class>
   <Class Name="P3_Projekt_WPF.Classes.SaleTransaction">
-    <Position X="11" Y="6.25" Width="1.5" />
+    <Position X="11" Y="6" Width="1.5" />
     <TypeIdentifier>
       <HashCode>QIAAAAAAAQQgACQAATAAgAQAQgAQSABAEAABAUBAABE=</HashCode>
       <FileName>Classes\Transaction\SaleTransaction.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="P3_Projekt_WPF.Classes.StorageTransaction">
-    <Position X="9.25" Y="6.25" Width="1.5" />
+    <Position X="9.25" Y="6" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAEAAgCQAASAAEAAAQAACAAAAAAABAAAAAAA=</HashCode>
       <FileName>Classes\Transaction\StorageTransaction.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="P3_Projekt_WPF.Classes.Transaction">
-    <Position X="9.25" Y="0.5" Width="1.5" />
+    <Position X="9.25" Y="1" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAACAQAAAAAAEAQAASBAAACAQAAAAAADAAABAAAAAAA=</HashCode>
       <FileName>Classes\Transaction\Transaction.cs</FileName>
@@ -441,8 +441,8 @@
       <FileName>Classes\Utilities\Utils.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="P3_Projekt_WPF.Properties.Resources">
-    <Position X="5.25" Y="15.75" Width="1.5" />
+  <Class Name="P3_Projekt_WPF.Properties.Resources" Collapsed="true">
+    <Position X="12.75" Y="42.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>gAAAEAAAAAQAAAAAgAABEACEAQAAAIAAAEAIAAAAAIA=</HashCode>
     </TypeIdentifier>
