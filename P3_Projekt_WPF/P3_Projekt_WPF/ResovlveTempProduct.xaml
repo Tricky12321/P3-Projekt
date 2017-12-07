@@ -6,15 +6,17 @@
         xmlns:local="clr-namespace:P3_Projekt_WPF"
         mc:Ignorable="d"
         Title="Ret Midlertidigt Produkt" Height="700" Width="600"
-        WindowStartupLocation="CenterScreen">
+        WindowStartupLocation="CenterScreen"
+        ResizeMode="NoResize"
+        >
     <Grid>
 
-        <TabControl x:Name="tabs" HorizontalAlignment="Left" Height="669" FontSize="25" VerticalAlignment="Top" Width="592">
+        <TabControl x:Name="tabs" Height="669" FontSize="25" VerticalAlignment="Top">
             <TabItem Header="Uforenede Produkter">
-                <Grid Background="#FFE5E5E5">
-                    <Button x:Name="button_Merge" Content="Foren Produkter" Background="#FFC5C5C5" Margin="0,0,5,5" Style="{StaticResource Flat_Button}" HorizontalAlignment="Right" Width="176" Height="38" VerticalAlignment="Bottom" FontSize="20" Click="button_Merge_Click"/>
-                    <TextBlock x:Name="txt_blockTempProduct" HorizontalAlignment="Left" Margin="5,352,0,0" TextWrapping="Wrap" Text="Midlertidigt Produkt:" Width="auto" FontSize="30" Height="40" VerticalAlignment="Top" />
-                    <TextBlock x:Name="txt_blockMergeProduct" HorizontalAlignment="Left" Margin="5,526,0,0" TextWrapping="Wrap" Text="Sammensæt med Produkt:" Width="auto" RenderTransformOrigin="1.269,0.536" FontSize="30" Height="45" VerticalAlignment="Top"/>
+                <Grid Background="#FFE5E5E5" Margin="0,0,0,0">
+                    <Button x:Name="button_Merge" Content="Foren Produkter" Background="#FFC5C5C5" Margin="0,0,5,10" Style="{StaticResource Flat_Button}" Click="button_Merge_Click" HorizontalAlignment="Right" Width="230" Height="38" VerticalAlignment="Bottom"/>
+                    <TextBlock x:Name="txt_blockTempProduct" HorizontalAlignment="Left" Margin="5,352,0,0" TextWrapping="Wrap" Text="Midlertidigt Produkt:" Width="auto" FontSize="25" Height="40" VerticalAlignment="Top" />
+                    <TextBlock x:Name="txt_blockMergeProduct" HorizontalAlignment="Left" Margin="5,515,0,0" TextWrapping="Wrap" Text="Sammensæt med Produkt:" Width="auto" RenderTransformOrigin="1.269,0.536" FontSize="25" Height="45" VerticalAlignment="Top"/>
 
 
 
@@ -51,14 +53,14 @@
                             </DataTemplate>
                         </ListView.ItemTemplate>
                     </ListView>
-                    <TextBox Padding="10,0,0,0"  TextCompositionManager.PreviewTextInput="TextInputNoNumber" x:Name="textBox_IDToMerge" Margin="372,526,0,0" FontSize="33" HorizontalAlignment="Left" Width="100" Height="45" VerticalAlignment="Top" KeyUp="textBox_IDToMerge_KeyUp">
+                    <TextBox Padding="10,0,0,0"  TextCompositionManager.PreviewTextInput="TextInputNoNumber" x:Name="textBox_IDToMerge" Margin="305,515,0,0" FontSize="25" HorizontalAlignment="Left" Width="100" Height="39" VerticalAlignment="Top" KeyUp="textBox_IDToMerge_KeyUp">
                         <TextBox.Resources>
                             <Style TargetType="{x:Type Border}">
                                 <Setter Property="CornerRadius" Value="10"/>
                             </Style>
                         </TextBox.Resources>
                     </TextBox>
-                    <TextBlock IsHitTestVisible="False" Text="ID" Margin="383,526,0,0" Foreground="DarkGray" FontSize="33" HorizontalAlignment="Left" Width="32" Height="45" VerticalAlignment="Top">
+                    <TextBlock IsHitTestVisible="False" Text="ID" Margin="315,516,0,0" Foreground="DarkGray" FontSize="25" HorizontalAlignment="Left" Width="32" Height="39" VerticalAlignment="Top">
                         <TextBlock.Style>
                             <Style TargetType="{x:Type TextBlock}">
                                 <Setter Property="Visibility" Value="Collapsed"/>
@@ -70,7 +72,7 @@
                             </Style>
                         </TextBlock.Style>
                     </TextBlock>
-                    <Grid>
+                    <Grid Margin="0,0,0,0">
                         <TextBox Padding="5,0,5,0" Margin="0,390,10,0" TextCompositionManager.PreviewTextInput="TextInputNoNumber" x:Name="textBox_TempProductInfo" FontSize="20" TextWrapping="Wrap" IsReadOnly="True" Height="120" VerticalAlignment="Top" Width="auto">
                             <TextBox.Resources>
                                 <Style TargetType="{x:Type Border}">
@@ -90,18 +92,18 @@
                                 </Style>
                             </TextBlock.Style>
                         </TextBlock>
-                        <TextBlock x:Name="Label_MergeInfo" Padding="0" Margin="10,0,193,0" FontSize="20" Height="55" VerticalAlignment="Bottom"/>
+                        <TextBlock x:Name="Label_MergeInfo" Padding="0" Margin="5,0,198,5" FontSize="20" Height="55" VerticalAlignment="Bottom"/>
                     </Grid>
                 </Grid>
             </TabItem>
             <TabItem Header="Forenede Produkter">
-                <Grid Background="#FFE5E5E5">
-                    <Button x:Name="button_resolvedMerge" Content="Foren Produkter" Background="#FFC5C5C5" Margin="0,0,5,5" Style="{StaticResource Flat_Button}" HorizontalAlignment="Right" Width="176" Height="38" VerticalAlignment="Bottom" FontSize="20" Click="button_resolvedMerge_Click"/>
-                    <TextBlock x:Name="txt_resolvedblockTempProduct" HorizontalAlignment="Left" Margin="5,324,0,0" TextWrapping="Wrap" Text="Midlertidigt Produkt:" Width="auto" FontSize="30" Height="40" VerticalAlignment="Top" />
-                    <TextBlock x:Name="txt_resolvedPreviouslyResolvedProduct" HorizontalAlignment="Left" Margin="5,436,0,0" TextWrapping="Wrap" Text="Forenet med:" Width="auto" RenderTransformOrigin="1.269,0.536" FontSize="30" Height="45" VerticalAlignment="Top"/>
+                <Grid Background="#FFE5E5E5" Margin="0,0,0,0">
+                    <Button x:Name="button_resolvedMerge" Content="Foren Produkter" Background="#FFC5C5C5" Margin="0,0,5,10" Style="{StaticResource Flat_Button}" HorizontalAlignment="Right" Width="220" Height="38" VerticalAlignment="Bottom" FontSize="25" Click="button_resolvedMerge_Click"/>
+                    <TextBlock x:Name="txt_resolvedblockTempProduct" HorizontalAlignment="Left" Margin="5,324,0,0" TextWrapping="Wrap" Text="Midlertidigt Produkt:" Width="auto" FontSize="25" Height="40" VerticalAlignment="Top" />
+                    <TextBlock x:Name="txt_resolvedPreviouslyResolvedProduct" HorizontalAlignment="Left" Margin="5,436,0,0" TextWrapping="Wrap" Text="Forenet med:" Width="auto" RenderTransformOrigin="1.269,0.536" FontSize="25" Height="45" VerticalAlignment="Top"/>
                     <TextBlock x:Name="Label_resolvedPreviouslyResolvedproduct" Padding="0" Margin="5,476,0,0" FontSize="20" Height="55" VerticalAlignment="Top"/>
 
-                    <TextBlock x:Name="txt_resolvedblockMergeProduct" HorizontalAlignment="Left" Margin="5,526,0,0" TextWrapping="Wrap" Text="Sammensæt med Produkt:" Width="auto" RenderTransformOrigin="1.269,0.536" FontSize="30" Height="45" VerticalAlignment="Top"/>
+                    <TextBlock x:Name="txt_resolvedblockMergeProduct" HorizontalAlignment="Left" Margin="5,526,0,0" TextWrapping="Wrap" Text="Sammensæt med Produkt:" Width="auto" RenderTransformOrigin="1.269,0.536" FontSize="25" Height="45" VerticalAlignment="Top"/>
 
 
 
@@ -138,14 +140,14 @@
                             </DataTemplate>
                         </ListView.ItemTemplate>
                     </ListView>
-                    <TextBox Padding="10,0,0,0"  TextCompositionManager.PreviewTextInput="TextInputNoNumber" x:Name="textBox_resolvedIDToMerge" Margin="372,526,0,0" FontSize="33" HorizontalAlignment="Left" Width="100" Height="45" VerticalAlignment="Top" KeyUp="textBox_resolvedIDToMerge_KeyUp">
+                    <TextBox Padding="10,0,0,0"  TextCompositionManager.PreviewTextInput="TextInputNoNumber" x:Name="textBox_resolvedIDToMerge" Margin="305,526,0,0" FontSize="25" HorizontalAlignment="Left" Width="100" Height="37" VerticalAlignment="Top" KeyUp="textBox_resolvedIDToMerge_KeyUp">
                         <TextBox.Resources>
                             <Style TargetType="{x:Type Border}">
                                 <Setter Property="CornerRadius" Value="10"/>
                             </Style>
                         </TextBox.Resources>
                     </TextBox>
-                    <TextBlock IsHitTestVisible="False" Text="ID" Margin="383,526,0,0" Foreground="DarkGray" FontSize="33" HorizontalAlignment="Left" Width="32" Height="45" VerticalAlignment="Top">
+                    <TextBlock IsHitTestVisible="False" Text="ID" Margin="315,526,0,0" Foreground="DarkGray" FontSize="25" HorizontalAlignment="Left" Width="32" Height="45" VerticalAlignment="Top">
                         <TextBlock.Style>
                             <Style TargetType="{x:Type TextBlock}">
                                 <Setter Property="Visibility" Value="Collapsed"/>
@@ -177,7 +179,7 @@
                                 </Style>
                             </TextBlock.Style>
                         </TextBlock>
-                        <TextBlock x:Name="Label_resolvedMergeInfo" Padding="0" Margin="10,0,193,0" FontSize="20" Height="55" VerticalAlignment="Bottom"/>
+                        <TextBlock x:Name="Label_resolvedMergeInfo" Padding="0" Margin="5,0,253,5" FontSize="20" Height="55" VerticalAlignment="Bottom"/>
                     </Grid>
                 </Grid>
             </TabItem>
