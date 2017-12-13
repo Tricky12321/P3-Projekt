@@ -862,7 +862,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
             SearchProduct productToAdd = new SearchProduct(productToConvert);
 
             List<string> searchSplit = searchStringElement.Split(' ').ToList();
-            SpaceCounter(ref searchSplit);
+            SearchTermCombiner(ref searchSplit);
             if (ContainsSearch(searchStringElement, productToConvert))
             {
                 productToAdd.NameMatch += searchStringElement.Length * 2;
@@ -872,7 +872,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
             if (productToConvert is Product)
             {
                 List<string> productSplit = (productToConvert as Product).Name.ToLower().Split(' ').ToList();
-                SpaceCounter(ref productSplit);
+                SearchTermCombiner(ref productSplit);
                 foreach (string s in searchSplit)
                 {
                     foreach (string t in productSplit)
@@ -892,7 +892,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
             else if (productToConvert is ServiceProduct)
             {
                 List<string> productSplit = (productToConvert as ServiceProduct).Name.ToLower().Split(' ').ToList();
-                SpaceCounter(ref productSplit);
+                SearchTermCombiner(ref productSplit);
                 foreach (string s in searchSplit)
                 {
                     foreach (string t in productSplit)
@@ -927,7 +927,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
             }
         }
         */
-        private void SpaceCounter(ref List<string> ListOfWords)
+        private void SearchTermCombiner(ref List<string> ListOfWords)
         {
             int searchAmount = ListOfWords.Count();
             if (searchAmount > 1)
@@ -940,7 +940,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
             }
         }
 
-        private bool LevenshteinsGroupAndProductSearch(string[] searchedString, string stringToCompare, out int charDifference)
+        private bool LevenshteinsGroupAndBrandSearch(string[] searchedString, string stringToCompare, out int charDifference)
         {//setup for levenshteins
             string[] compareSplit = stringToCompare.ToLower().Split(' ');
 
@@ -982,7 +982,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
                         SearchList.First().GroupMatch += 100;
                     }
                 }
-                if (LevenshteinsGroupAndProductSearch(dividedString, GroupDictionary[(product as Product).ProductGroupID].Name, out MatchedValue))
+                if (LevenshteinsGroupAndBrandSearch(dividedString, GroupDictionary[(product as Product).ProductGroupID].Name, out MatchedValue))
                 {
                     if (SearchList.Count() > 0)
                     {
@@ -1002,7 +1002,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
                         SearchList.First().GroupMatch += 100;
                     }
                 }
-                if (LevenshteinsGroupAndProductSearch(dividedString, GroupDictionary[(product as ServiceProduct).ServiceProductGroupID].Name, out MatchedValue))
+                if (LevenshteinsGroupAndBrandSearch(dividedString, GroupDictionary[(product as ServiceProduct).ServiceProductGroupID].Name, out MatchedValue))
                 {
                     if (SearchList.Count() > 0)
                     {
@@ -1034,7 +1034,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
                         SearchList.First().BrandMatch += 100;
                     }
                 }
-                if (LevenshteinsGroupAndProductSearch(dividedString, (product as Product).Brand, out MatchedValues))
+                if (LevenshteinsGroupAndBrandSearch(dividedString, (product as Product).Brand, out MatchedValues))
                 {
                     if (SearchList.Count() > 0)
                     {
