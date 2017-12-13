@@ -298,7 +298,7 @@ namespace P3_Projekt_WPF
                 GetAllThread.Start();
                 while (!_storageController.ThreadsDone)
                 {
-                    Thread.Sleep(100);
+                    Thread.Sleep(10);
                 }
                 runLoading = false;
                 TimeTester.Stop();
@@ -1075,11 +1075,7 @@ namespace P3_Projekt_WPF
         private bool firstLoad = true;
         private void TabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (settingsTab.IsSelected && firstLoad)
-            {
-                LoadStorageRooms();
-                firstLoad = false;
-            }
+
         }
         #endregion
 
@@ -1131,7 +1127,7 @@ namespace P3_Projekt_WPF
                 BuildInformationTable();
                 LoadGroups();
                 DisableDiscountOnReceipt();
-                
+
             }
         }
 
@@ -1171,7 +1167,7 @@ namespace P3_Projekt_WPF
                 ResetPOSController(CompletedPurchase);
             }
         }
-        
+
         private void StartsToPay(bool HasPartlyPaid)
         {
             txtBox_SearchField.IsEnabled = HasPartlyPaid;
@@ -1377,23 +1373,26 @@ namespace P3_Projekt_WPF
 
         private void DiscountOnReceipt()
         {
-            _POSController.PlacerholderReceipt.DiscountOnFullReceipt = 0m;
-            _POSController.PlacerholderReceipt.UpdateTotalPrice();
-            if (textBox_discount.Text.Contains('%'))
+            if (textBox_discount.Text.Length > 0)
             {
-                decimal percentage = Convert.ToDecimal(textBox_discount.Text.Replace("%", string.Empty));
-                _POSController.PlacerholderReceipt.DiscountOnFullReceipt = _POSController.PlacerholderReceipt.TotalPrice * (percentage / 100m);
-            }
-            else
-            {
-                _POSController.PlacerholderReceipt.DiscountOnFullReceipt = Convert.ToDecimal(textBox_discount.Text);
-            }
-            text_FullReceiptDiscount.Text = Math.Round(_POSController.PlacerholderReceipt.DiscountOnFullReceipt, 2).ToString() + " DKK rabat på kvittering";
+                _POSController.PlacerholderReceipt.DiscountOnFullReceipt = 0m;
+                _POSController.PlacerholderReceipt.UpdateTotalPrice();
+                if (textBox_discount.Text.Contains('%'))
+                {
+                    decimal percentage = Convert.ToDecimal(textBox_discount.Text.Replace("%", string.Empty));
+                    _POSController.PlacerholderReceipt.DiscountOnFullReceipt = _POSController.PlacerholderReceipt.TotalPrice * (percentage / 100m);
+                }
+                else
+                {
+                    _POSController.PlacerholderReceipt.DiscountOnFullReceipt = Convert.ToDecimal(textBox_discount.Text);
+                }
+                text_FullReceiptDiscount.Text = Math.Round(_POSController.PlacerholderReceipt.DiscountOnFullReceipt, 2).ToString() + " DKK rabat på kvittering";
 
-            image_DeleteFullReceiptDiscount.Visibility = Visibility.Visible;
-            button_DeleteFulReceiptDiscount.Visibility = Visibility.Visible;
+                image_DeleteFullReceiptDiscount.Visibility = Visibility.Visible;
+                button_DeleteFulReceiptDiscount.Visibility = Visibility.Visible;
 
-            _POSController.PlacerholderReceipt.UpdateTotalPrice();
+                _POSController.PlacerholderReceipt.UpdateTotalPrice();
+            }
         }
 
 
@@ -1523,7 +1522,10 @@ namespace P3_Projekt_WPF
                 {
                     product = _storageController.DisabledProducts[orderTrans.Value.Product.ID];
                 }
-                listview_SettingsStorage.Items.Add(new { Received = product.Name, Amount = orderTrans.Value.Amount, StorageRoom = _storageController.StorageRoomDictionary[orderTrans.Value.StorageRoomID].Name, Distributor = orderTrans.Value._supplier });
+                if (_storageController.StorageRoomDictionary.ContainsKey(orderTrans.Value.StorageRoomID))
+                {
+                    listview_SettingsStorage.Items.Add(new { Received = product.Name, Amount = orderTrans.Value.Amount, StorageRoom = _storageController.StorageRoomDictionary[orderTrans.Value.StorageRoomID].Name, Distributor = orderTrans.Value._supplier });
+                }
             }
 
             foreach (KeyValuePair<int, StorageTransaction> storageTrans in _storageController.StorageTransactionDictionary)
@@ -1580,5 +1582,23 @@ namespace P3_Projekt_WPF
             _storageController.ReloadAllDictionarys(this);
         }
 
+        private void tab_Settings_GotFocus(object sender, RoutedEventArgs e)
+        {
+            if (_settingsController.isAdmin)
+            {
+                if (settingsTab.IsSelected && firstLoad)
+                {
+                    LoadStorageRooms();
+                    firstLoad = false;
+                }
+            }
+            else
+            {
+                tab_Sale.Focus();
+                tab_Sale.IsSelected = true;
+                MessageBox.Show("Du skal være admin for at gå ind i indstillinger");
+            }
+
+        }
     }
 }

@@ -70,5 +70,11 @@ namespace P3_Projekt_WPF.Classes
                $"WHERE `id` = {ID};";
             Mysql.RunQuery(sql);
         }
+
+        public void DeactivateStorageRoom()
+        {
+            string sql = $"UPDATE `storagerooms` SET `deactivated` = '1' WHERE `id` = '{ID}';";
+            Mysql.RunQuery(sql);
+        }
     }
 }

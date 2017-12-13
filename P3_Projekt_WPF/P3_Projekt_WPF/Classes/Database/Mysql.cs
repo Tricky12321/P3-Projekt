@@ -39,6 +39,16 @@ namespace P3_Projekt_WPF.Classes.Database
             }
         }
 
+        public static void UseMockDatabase()
+        {
+            _database = "P3_mock";
+            _username = "P3";
+            _password = "frankythefish";
+            _port = 40001;
+            _ip = "nobelnet.dk";
+            _connectionString = $"Server={_ip};Port={_port};Database={_database};Uid={_username};Pwd={_password};";
+        }
+
         private static void CheckInternet()
         {
             if (!_internetConnection)

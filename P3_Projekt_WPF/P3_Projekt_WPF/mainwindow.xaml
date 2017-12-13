@@ -451,10 +451,7 @@
                     <Border BorderBrush="Black" BorderThickness="1" Margin="-34,60,-79,0" Grid.ColumnSpan="3" Height="1" VerticalAlignment="Top"/>
                 </Grid>
             </TabItem>
-
-
-            <TabItem x:Name="tab_Settings" Header="Indstillinger" Width="190" Margin="0,0,0,0" >
-
+            <TabItem x:Name="tab_Settings" GotFocus="tab_Settings_GotFocus" Header="Indstillinger" Width="190" Margin="0,0,0,0" >
                 <Grid Margin="0,0,0,0">
                     <TabControl x:Name="tab_WithSettings" TabStripPlacement="Left" Background="Transparent" Margin="0,60,0,0" SelectionChanged="TabControl_SelectionChanged">
                         <TabItem Header="Salg" Height="70" Margin="0" Width="300">
@@ -482,7 +479,6 @@
                                             </Style>
                                         </TextBlock.Style>
                                     </TextBlock>
-                                    <Button x:Name="btn_SettingFastBtnAdd" Content="Tilføj Hurtigknap" Margin="0,45,0,0" Background="#FFC5C5C5" Style="{StaticResource Flat_Button}" Height="50" VerticalAlignment="Top" Click="btn_SettingFastBtnAdd_Click"  Width="265" HorizontalAlignment="Right"/>
                                     <TextBox Padding="10,0,0,0" x:Name="textBox_CreateQuickBtnName" Margin="182,45,270,0" FontSize="33" Height="50" VerticalAlignment="Top" MaxLength="30">
                                         <TextBox.Resources>
                                             <Style TargetType="{x:Type Border}">
@@ -490,6 +486,7 @@
                                             </Style>
                                         </TextBox.Resources>
                                     </TextBox>
+                                    <Button x:Name="btn_SettingFastBtnAdd" Content="Tilføj Hurtigknap" Margin="0,45,0,0" Background="#FFC5C5C5" Style="{StaticResource Flat_Button}" Height="50" VerticalAlignment="Top" Click="btn_SettingFastBtnAdd_Click"  Width="265" HorizontalAlignment="Right"/>
                                     <TextBlock IsHitTestVisible="False" Text="Knappens Navn" Margin="196,46,0,0" Foreground="DarkGray" FontSize="33" HorizontalAlignment="Left" Width="272" Height="50" VerticalAlignment="Top">
                                         <TextBlock.Style>
                                             <Style TargetType="{x:Type TextBlock}">

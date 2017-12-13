@@ -39,6 +39,17 @@ namespace P3_Projekt_WPF.Classes
             }
         }
 
+        public static int GetNextID()
+        {
+            if (Mysql.ConnectionWorking == false)
+            {
+                return 0;
+            }
+            string sql = "SHOW TABLE STATUS LIKE 'order_transactions'";
+            TableDecode Results = Mysql.RunQueryWithReturn(sql);
+            return Convert.ToInt32(Results.RowData[0].Values[10]);
+        }
+
         public override void Execute()
         {
             if (Product is Product)
@@ -47,8 +58,7 @@ namespace P3_Projekt_WPF.Classes
                  * Derefter bruger den StorageRoom delen som index,
                  * så man kan ændre Amount */
 
-                var StoreStorage = (Product as Product).StorageWithAmount.Where(x => x.Key == _storageRoomID).First();
-                (Product as Product).StorageWithAmount[StoreStorage.Key] += Amount;
+                (Product as Product).StorageWithAmount[_storageRoomID] += Amount;
                 (Product as Product).UpdateInDatabase();
             }
             else

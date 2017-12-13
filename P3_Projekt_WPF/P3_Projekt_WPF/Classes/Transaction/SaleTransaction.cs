@@ -18,7 +18,6 @@ namespace P3_Projekt_WPF.Classes
         public decimal TotalPrice => Price * Amount;
         private static StorageController _storageController = null;
         public string SoldBy = "";
-
         const int shopID = 1;
 
         public SaleTransaction(BaseProduct product, int amount, int receiptID) : base(product, amount)

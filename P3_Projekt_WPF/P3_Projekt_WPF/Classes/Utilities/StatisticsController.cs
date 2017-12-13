@@ -54,8 +54,13 @@ namespace P3_Projekt_WPF.Classes.Utilities
             Row data;
             while (_dataQueue.TryDequeue(out data))
             {
-                SaleTransaction NewTransaction = new SaleTransaction(data, _storageController);
-                _saleTransactions.Enqueue(NewTransaction);
+                int productID = Convert.ToInt32(data.Values[1]);
+                if (_storageController.AllProductsDictionary.ContainsKey(productID))
+                {
+                    SaleTransaction NewTransaction = new SaleTransaction(data, _storageController);
+                    _saleTransactions.Enqueue(NewTransaction);
+                }
+                Interlocked.Increment(ref _saleTransactionsCreated);
             }
         }
 
@@ -171,6 +176,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
             return date + dayEnd;
         }
 
+
         public void RequestTransactionsDatabase(string queryString)
         {
             Stopwatch Timer1 = new Stopwatch();
@@ -181,8 +187,9 @@ namespace P3_Projekt_WPF.Classes.Utilities
             int TransCount = _dataQueue.Count;
             CreateThreads();
             ThreadWork();
-            while (!_dataQueue.IsEmpty && _saleTransactions.Count() == TransCount)
+            while (!_dataQueue.IsEmpty && _saleTransactionsCreated == TransCount)
             {
+                ThreadWork();
                 Thread.Sleep(1);
             }
 

@@ -132,7 +132,7 @@
   <Class Name="P3_Projekt_WPF.Classes.Database.Mysql">
     <Position X="9" Y="15.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAyAAAAAAAAAAClAAABIkIAAAAAAAARYAAIAAgEABAA=</HashCode>
+      <HashCode>AAyAAAAAAAAAAClAAEBIkIAAAAAAAARYAAIAAgEABAA=</HashCode>
       <FileName>Classes\Database\Mysql.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -298,7 +298,7 @@
   <Class Name="P3_Projekt_WPF.Classes.StorageRoom" BaseTypeListCollapsed="true">
     <Position X="13.25" Y="11.25" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAggBAAASAAAAQAQAAAAAAAAAABAAAAAAA=</HashCode>
+      <HashCode>AAAAAAAAAAAggBAAASAAAAQQQAAAAAAAAAABAAAAAAA=</HashCode>
       <FileName>Classes\StorageRoom.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" Collapsed="true" />
@@ -307,7 +307,7 @@
     <Position X="7.5" Y="6" Width="1.5" />
     <InheritanceLine Type="P3_Projekt_WPF.Classes.Transaction" FixedToPoint="true">
       <Path>
-        <Point X="10" Y="5.122" />
+        <Point X="10" Y="4.478" />
         <Point X="10" Y="5.625" />
         <Point X="8.188" Y="5.625" />
         <Point X="8.188" Y="6" />
@@ -328,14 +328,14 @@
   <Class Name="P3_Projekt_WPF.Classes.StorageTransaction">
     <Position X="9.25" Y="6" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAEAAgCQAASAAEAAAQAACAAAAAAABAAAAAAA=</HashCode>
+      <HashCode>AAAAAAAAAEAAgDQAASAAEAAAQAACAAAAAAABAAAAAAA=</HashCode>
       <FileName>Classes\Transaction\StorageTransaction.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="P3_Projekt_WPF.Classes.Transaction">
     <Position X="9.25" Y="1" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAACAQAAAAAAEAQAASBAAACAQAAAAAADAAABAAAAAAA=</HashCode>
+      <HashCode>AAACAAAAAAAAAAQAASBAAACAQAAAAAADAAABAAAAAAA=</HashCode>
       <FileName>Classes\Transaction\Transaction.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
@@ -416,7 +416,7 @@
       <Field Name="_tempProductQueue" Hidden="true" />
     </Members>
     <TypeIdentifier>
-      <HashCode>4cACBSLrLhAKFkMYJKAGS2ikgszjVOpaZwQ4GaYmAlQ=</HashCode>
+      <HashCode>4cACBSLrLhAKFkMYJKAGS2ikgszjVupaZwQ4GaYmglQ=</HashCode>
       <FileName>Classes\Utilities\StorageController.cs</FileName>
     </TypeIdentifier>
   </Class>

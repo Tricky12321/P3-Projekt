@@ -162,7 +162,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
 
         public void GetAllStorageRoomsFromDatabase()
         {
-            string sql = "SELECT * FROM `storagerooms`";
+            string sql = "SELECT * FROM `storagerooms` WHERE `deactivated` = '0'";
             TableDecodeQueue Result = Mysql.RunQueryWithReturnQueue(sql);
             _storageRoomsCount = Result.RowCounter;
             AddInformation("StorageRoom Antal", Result.RowCounter.ToString());
@@ -366,24 +366,28 @@ namespace P3_Projekt_WPF.Classes.Utilities
                 }
                 while (_storageTransactionsQueue.TryDequeue(out Data))
                 {
-                    StorageTransaction StorageTrans = new StorageTransaction(Data, true);
                     int ProductID = Convert.ToInt32(Data.Values[1]);
                     int SourceID = Convert.ToInt32(Data.Values[4]);
                     int DestinationID = Convert.ToInt32(Data.Values[5]);
-                    StorageRoom Source = StorageRoomDictionary[SourceID];
-                    StorageRoom Destination = StorageRoomDictionary[DestinationID];
-                    BaseProduct prod;
-                    if (ProductDictionary.ContainsKey(ProductID))
+                    if (StorageRoomDictionary.ContainsKey(SourceID) && StorageRoomDictionary.ContainsKey(DestinationID))
                     {
-                        prod = ProductDictionary[ProductID];
+                        StorageTransaction StorageTrans = new StorageTransaction(Data, true);
+                        StorageRoom Source = StorageRoomDictionary[SourceID];
+                        StorageRoom Destination = StorageRoomDictionary[DestinationID];
+                        BaseProduct prod;
+                        if (ProductDictionary.ContainsKey(ProductID))
+                        {
+                            prod = ProductDictionary[ProductID];
+                        }
+                        else
+                        {
+                            prod = DisabledProducts[ProductID];
+                        }
+                        StorageTrans.SetInformation(Source, Destination, prod);
+                        StorageTransactionDictionary.TryAdd(StorageTrans.ID, StorageTrans);
                     }
-                    else
-                    {
-                        prod = DisabledProducts[ProductID];
-                    }
-                    StorageTrans.SetInformation(Source, Destination, prod);
-                    StorageTransactionDictionary.TryAdd(StorageTrans.ID, StorageTrans);
                     Interlocked.Increment(ref _doneStorageTransactionCount);
+
 
                 }
                 while (_orderTransactionsQueue.TryDequeue(out Data))
@@ -479,38 +483,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
 
             if (!local)
             {
-                // Multithreading the different mysql calls, so it goes much faster
-                Thread GetAllProductsThread = new Thread(new ThreadStart(GetAllProductsFromDatabase));
-                Thread GetAllGroupsThread = new Thread(new ThreadStart(GetAllGroupsFromDatabase));
-                Thread GetAllTempProductsThread = new Thread(new ThreadStart(GetAllTempProductsFromDatabase));
-                Thread GetAllStorageRoomsThread = new Thread(new ThreadStart(GetAllStorageRoomsFromDatabase));
-                Thread GetAllServiceProductsThread = new Thread(new ThreadStart(GetAllServiceProductsFromDatabase));
-                Thread GetAllStorageStatusThread = new Thread(new ThreadStart(UpdateStorageStatus));
-                Thread GetAllDisabledProductsThread = new Thread(new ThreadStart(GetAllDisabledProductsFromDatabase));
-                Thread GetAllDisabledServiceProductsThread = new Thread(new ThreadStart(GetAllDisabledServiceProductsFromDatabase));
-                Thread GetAllStorageTransactionsThread = new Thread(new ThreadStart(GetAllStorageTransactions));
-                Thread GetAllOrderTransactionsThread = new Thread(new ThreadStart(GetAllOrderTransactions));
-                GetAllProductsThread.Name = "GetAllProductsThread";
-                GetAllGroupsThread.Name = "GetAllGroupsThread";
-                GetAllTempProductsThread.Name = "GetAllTempProductsThread";
-                GetAllStorageRoomsThread.Name = "GetAllStorageRoomsThread";
-                GetAllServiceProductsThread.Name = "GetAllServiceProductsThread";
-                GetAllDisabledProductsThread.Name = "GetAllDisabledProductsThread";
-                GetAllStorageStatusThread.Name = "GetAllStorageStatusThread";
-                GetAllDisabledServiceProductsThread.Name = "GetAllDisabledServiceProductsThread";
-                GetAllStorageTransactionsThread.Name = "GetAllStorageTransactionsThread";
-                GetAllOrderTransactionsThread.Name = "GetAllOrderTransactionsThread";
-                GetAllProductsThread.Start();
-                GetAllGroupsThread.Start();
-                GetAllStorageRoomsThread.Start();
-                GetAllTempProductsThread.Start();
-                GetAllServiceProductsThread.Start();
-                GetAllDisabledProductsThread.Start();
-                GetAllDisabledServiceProductsThread.Start();
-                GetAllStorageStatusThread.Start();
-                GetAllStorageTransactionsThread.Start();
-                GetAllOrderTransactionsThread.Start();
-
+                StartSQLThreads();
                 while (!_productsLoaded || !_storageRoomLoaded || !_groupsLoaded || !_tempProductLoaded || !_storageStatusLoaded || !_serviceProductLoaded || !_disabledProductsLoaded || !_disabledServiceProductsLoaded || !_orderTransactionsLoaded || !_storageTransactionsLoaded)
                 {
                     Thread.Sleep(1);
@@ -518,33 +491,72 @@ namespace P3_Projekt_WPF.Classes.Utilities
             }
             else
             {
-                UpdateStorageStatus();
-                GetAllProductsFromDatabase();
-                GetAllServiceProductsFromDatabase();
-                GetAllTempProductsFromDatabase();
-                GetAllStorageRoomsFromDatabase();
-                GetAllGroupsFromDatabase();
-                GetAllDisabledProductsFromDatabase();
-                GetAllDisabledServiceProductsFromDatabase();
-                GetAllStorageTransactions();
-                GetAllOrderTransactions();
+                RunGetSQL();
             }
-
             foreach (var thread in _queueThreads)
             {
                 thread.Start();
             }
-
             HandleQueue();
+        }
 
+        public void RunGetSQL()
+        {
+            UpdateStorageStatus();
+            GetAllProductsFromDatabase();
+            GetAllServiceProductsFromDatabase();
+            GetAllTempProductsFromDatabase();
+            GetAllStorageRoomsFromDatabase();
+            GetAllGroupsFromDatabase();
+            GetAllDisabledProductsFromDatabase();
+            GetAllDisabledServiceProductsFromDatabase();
+            GetAllStorageTransactions();
+            GetAllOrderTransactions();
+        }
+
+        public void StartSQLThreads()
+        {
+            // Multithreading the different mysql calls, so it goes much faster
+            Thread GetAllProductsThread = new Thread(new ThreadStart(GetAllProductsFromDatabase));
+            Thread GetAllGroupsThread = new Thread(new ThreadStart(GetAllGroupsFromDatabase));
+            Thread GetAllTempProductsThread = new Thread(new ThreadStart(GetAllTempProductsFromDatabase));
+            Thread GetAllStorageRoomsThread = new Thread(new ThreadStart(GetAllStorageRoomsFromDatabase));
+            Thread GetAllServiceProductsThread = new Thread(new ThreadStart(GetAllServiceProductsFromDatabase));
+            Thread GetAllStorageStatusThread = new Thread(new ThreadStart(UpdateStorageStatus));
+            Thread GetAllDisabledProductsThread = new Thread(new ThreadStart(GetAllDisabledProductsFromDatabase));
+            Thread GetAllDisabledServiceProductsThread = new Thread(new ThreadStart(GetAllDisabledServiceProductsFromDatabase));
+            Thread GetAllStorageTransactionsThread = new Thread(new ThreadStart(GetAllStorageTransactions));
+            Thread GetAllOrderTransactionsThread = new Thread(new ThreadStart(GetAllOrderTransactions));
+            GetAllProductsThread.Name = "GetAllProductsThread";
+            GetAllGroupsThread.Name = "GetAllGroupsThread";
+            GetAllTempProductsThread.Name = "GetAllTempProductsThread";
+            GetAllStorageRoomsThread.Name = "GetAllStorageRoomsThread";
+            GetAllServiceProductsThread.Name = "GetAllServiceProductsThread";
+            GetAllDisabledProductsThread.Name = "GetAllDisabledProductsThread";
+            GetAllStorageStatusThread.Name = "GetAllStorageStatusThread";
+            GetAllDisabledServiceProductsThread.Name = "GetAllDisabledServiceProductsThread";
+            GetAllStorageTransactionsThread.Name = "GetAllStorageTransactionsThread";
+            GetAllOrderTransactionsThread.Name = "GetAllOrderTransactionsThread";
+            GetAllProductsThread.Start();
+            GetAllGroupsThread.Start();
+            GetAllStorageRoomsThread.Start();
+            GetAllTempProductsThread.Start();
+            GetAllServiceProductsThread.Start();
+            GetAllDisabledProductsThread.Start();
+            GetAllDisabledServiceProductsThread.Start();
+            GetAllStorageStatusThread.Start();
+            GetAllStorageTransactionsThread.Start();
+            GetAllOrderTransactionsThread.Start();
         }
 
         #endregion
 
         public void DeleteProduct(int ProductID)
         {
-            Product outVal = null;
-            ProductDictionary.TryRemove(ProductID, out outVal);
+            Product outVal1 = null;
+            BaseProduct outVal2 = null;
+            ProductDictionary.TryRemove(ProductID, out outVal1);
+            AllProductsDictionary.TryRemove(ProductID, out outVal2);
         }
 
         public void CreateGroup(string name, string description)
@@ -596,7 +608,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
         {
             Product newProduct = new Product(id, name, brand, purchasePrice, groupID, discount, salePrice, discountPrice);
             newProduct.StorageWithAmount = storageWithAmount;
-            if (!ProductDictionary.TryAdd(newProduct.ID, newProduct) && !AllProductsDictionary.TryAdd(newProduct.ID, newProduct))
+            if (!ProductDictionary.TryAdd(newProduct.ID, newProduct) || !AllProductsDictionary.TryAdd(newProduct.ID, newProduct))
             {
                 throw new Exception("This key already exists");
             }
@@ -643,7 +655,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
         public void CreateServiceProduct(int id, decimal salePrice, decimal groupPrice, int groupLimit, string name, int serviceProductGroupID, bool UploadToDatabase = true)
         {
             ServiceProduct newServiceProduct = new ServiceProduct(id, salePrice, groupPrice, groupLimit, name, serviceProductGroupID);
-            if (!ServiceProductDictionary.TryAdd(newServiceProduct.ID, newServiceProduct) && !AllProductsDictionary.TryAdd(newServiceProduct.ID, newServiceProduct))
+            if (!ServiceProductDictionary.TryAdd(newServiceProduct.ID, newServiceProduct) || !AllProductsDictionary.TryAdd(newServiceProduct.ID, newServiceProduct))
             {
                 throw new Exception("This key already exists");
             }
@@ -755,17 +767,38 @@ namespace P3_Projekt_WPF.Classes.Utilities
         //Removes storage room from dictionary, and all products
         public void DeleteStorageRoom(int id)
         {
-            foreach (Product product in ProductDictionary.Values)
+            if (id != 1)
             {
-                int h = 0;
-                product.StorageWithAmount.TryRemove(id, out h);
+                string CheckProductsStorageAmount = $"SELECT * FROM `storage_status` WHERE `amount` != '0' AND `storageroom` = '{id}'";
+                TableDecode Results = Mysql.RunQueryWithReturn(CheckProductsStorageAmount);
+                if (Results.RowCounter != 0)
+                {
+                    MessageBox.Show("Du kan ikke slette lager rum som stadig har varer på lager!");
+                }
+                else
+                {
+                    if (StorageRoomDictionary.ContainsKey(id))
+                    {
+                        StorageRoomDictionary[id].DeactivateStorageRoom();
+                        foreach (Product product in ProductDictionary.Values)
+                        {
+                            int h = 0;
+                            product.StorageWithAmount.TryRemove(id, out h);
+                        }
+                        StorageRoom outVal = null;
+                        StorageRoomDictionary.TryRemove(id, out outVal);
+                        string deleteQuery = $"DELETE FROM `storage_status` WHERE `storageroom` = '{id}'";
+                        Mysql.RunQuery(deleteQuery);
+                    } else
+                    {
+                        MessageBox.Show("Det lager du forsøger at slette, eksistere ikke...");
+                    }
+                }
             }
-            string sql = $"DELETE FROM `storage_status` where `storageroom` == '{id}'";
-            Mysql.RunQuery(sql);
-            StorageRoom outVal = null;
-            StorageRoomDictionary.TryRemove(id, out outVal);
-            string deleteQuery = $"DELETE FROM `storagerooms` WHERE `id` = '{id}'";
-            Mysql.RunQuery(deleteQuery);
+            else
+            {
+                MessageBox.Show("Du kan ikke slette butikken!");
+            }
         }
         /// <summary>
         /// Creates Icecream as a serviceproduct, then uploads it to the database, if not already in the system.
@@ -964,7 +997,6 @@ namespace P3_Projekt_WPF.Classes.Utilities
             charDifference = -1;
             return false;
         }
-
 
         private void GroupSearch(string searchString, BaseProduct product)
         {
