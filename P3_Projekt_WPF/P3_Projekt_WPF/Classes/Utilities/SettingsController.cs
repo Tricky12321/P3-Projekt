@@ -55,7 +55,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
 
         private void SaveFastButtons()
         {
-           
+
         }
 
         private void LoadFastButtons()

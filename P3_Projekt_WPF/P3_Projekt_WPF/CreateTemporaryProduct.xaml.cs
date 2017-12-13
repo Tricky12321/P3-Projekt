@@ -15,7 +15,7 @@ using P3_Projekt_WPF.Classes.Database;
 using P3_Projekt_WPF.Classes.Utilities;
 using P3_Projekt_WPF.Classes.Exceptions;
 using P3_Projekt_WPF.Classes;
-
+using System.Text.RegularExpressions;
 namespace P3_Projekt_WPF
 {
     /// <summary>
@@ -58,12 +58,11 @@ namespace P3_Projekt_WPF
 
         private void TextInputNoNumber(object sender, TextCompositionEventArgs e)
         {
-            // Only allows number in textfield
-            if (e.Text.Length > 0)
-            {
-                if (!char.IsDigit(e.Text, e.Text.Length - 1))
-                    e.Handled = true;
-            }
+            TextBox input = (sender as TextBox);
+            //The input string has the format: An unlimited amount of numbers, then 0-1 commas, then 0-2 numbers
+            var re = new Regex(@"^((\d+)(,{0,1})(\d{0,2}))$");
+
+            e.Handled = !re.IsMatch(input.Text.Insert(input.CaretIndex, e.Text));
         }
 
         private void btn_AddTempProduct_Click(object sender, RoutedEventArgs e)

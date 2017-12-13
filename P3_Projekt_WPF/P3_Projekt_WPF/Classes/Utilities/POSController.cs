@@ -208,7 +208,8 @@ namespace P3_Projekt_WPF.Classes.Utilities
                     {
                         CompletedPurchase = true;
                         return "Retur: " + Math.Round((PlacerholderReceipt.PaidPrice - PlacerholderReceipt.TotalPrice), 2).ToString().Replace('.', ',');
-                    } else
+                    }
+                    else
                     {
                         CompletedPurchase = true;
                         return "";

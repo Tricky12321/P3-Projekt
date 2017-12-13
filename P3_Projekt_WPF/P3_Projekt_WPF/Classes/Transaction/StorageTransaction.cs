@@ -33,16 +33,37 @@ namespace P3_Projekt_WPF.Classes
             if (!reference)
             {
                 CreateFromRow(Data);
-            } else
+            }
+            else
             {
                 CreateFromRowReference(Data);
             }
         }
 
+        public static int GetNextID()
+        {
+            if (Mysql.ConnectionWorking == false)
+            {
+                return 0;
+            }
+            string sql = "SHOW TABLE STATUS LIKE 'storage_transaction'";
+            TableDecode Results = Mysql.RunQueryWithReturn(sql);
+            return Convert.ToInt32(Results.RowData[0].Values[10]);
+        }
+
         public override void Execute()
         {
-            (Product as Product).StorageWithAmount[_source.ID] -= Amount;
-            (Product as Product).StorageWithAmount[_destination.ID] += Amount;
+            Product Prod = (Product as Product);
+            if (!Prod.StorageWithAmount.ContainsKey(_destination.ID))
+            {
+                Prod.StorageWithAmount.TryAdd(_destination.ID, 0);
+            }
+            if (!Prod.StorageWithAmount.ContainsKey(_source.ID))
+            {
+                Prod.StorageWithAmount.TryAdd(_source.ID, 0);
+            }
+            Prod.StorageWithAmount[_source.ID] -= Amount;
+            Prod.StorageWithAmount[_destination.ID] += Amount;
         }
 
         public override void GetFromDatabase()
@@ -80,7 +101,7 @@ namespace P3_Projekt_WPF.Classes
 
         public override void UploadToDatabase()
         {
-            string sql = "INSERT INTO `storage_transaction` (`id`, `product_id`, `amount`, `source_storageroom_id`, `destination_storageroom_id`)"+
+            string sql = "INSERT INTO `storage_transaction` (`id`, `product_id`, `amount`, `source_storageroom_id`, `destination_storageroom_id`)" +
                 $" VALUES (NULL, '{Product.ID}', '{Amount}', '{_source.ID}', '{_destination.ID}');";
             Mysql.RunQuery(sql);
             Product.UpdateInDatabase();

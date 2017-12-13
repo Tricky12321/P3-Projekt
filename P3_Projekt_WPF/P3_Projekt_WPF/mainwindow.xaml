@@ -210,7 +210,7 @@
                         </TextBlock.Style>
                     </TextBlock>
                     <Button x:Name="btn_search_Storage" Content="🔎" Background="#FFC5C5C5" Margin="0,5,5,0" VerticalAlignment="Top" Height="50" Style="{StaticResource Flat_Button}" FontSize="21" HorizontalAlignment="Right" Width="50" Grid.Column="1" Click="btn_search_Storage_Click"/>
-                    <Button x:Name="btn_EditProduct" Content="Rediger Produkt" Grid.Row="1" Margin="0,0,5,5" Style="{StaticResource Flat_Button}" Grid.Column="1" HorizontalAlignment="Right" Width="250" Height="50" VerticalAlignment="Bottom" Click="EditProductClick" Visibility="Hidden"/>
+                    <Button x:Name="btn_EditProduct" Content="Rediger Produkt" Grid.Row="1" Background="#FFC5C5C5" Margin="0,0,5,5" Style="{StaticResource Flat_Button}" Grid.Column="1" HorizontalAlignment="Right" Width="250" Height="50" VerticalAlignment="Bottom" Click="EditProductClick" Visibility="Hidden"/>
                     <Border BorderBrush="Black" BorderThickness="1" Margin="0,0,0,0" HorizontalAlignment="Right" Width="1" Grid.Row="1"/>
                     <Button x:Name="button_OrderTransaction" Style="{StaticResource Flat_Button}" Background="#FFC5C5C5" Content="Modtag produkter" HorizontalAlignment="Left" Height="50" Margin="260,5,0,0" VerticalAlignment="Top" Width="260" Click="button_OrderTransaction_Click"/>
                     <Border BorderBrush="Black" BorderThickness="1" Margin="-34,0,-79,0" Grid.ColumnSpan="2" Grid.Row="1" Height="1" VerticalAlignment="Top"/>
@@ -451,10 +451,7 @@
                     <Border BorderBrush="Black" BorderThickness="1" Margin="-34,60,-79,0" Grid.ColumnSpan="3" Height="1" VerticalAlignment="Top"/>
                 </Grid>
             </TabItem>
-
-
-            <TabItem x:Name="tab_Settings" Header="Indstillinger" Width="190" Margin="0,0,0,0" >
-
+            <TabItem x:Name="tab_Settings" GotFocus="tab_Settings_GotFocus" Header="Indstillinger" Width="190" Margin="0,0,0,0" >
                 <Grid Margin="0,0,0,0">
                     <TabControl x:Name="tab_WithSettings" TabStripPlacement="Left" Background="Transparent" Margin="0,60,0,0" SelectionChanged="TabControl_SelectionChanged">
                         <TabItem Header="Salg" Height="70" Margin="0" Width="300">
@@ -482,7 +479,6 @@
                                             </Style>
                                         </TextBlock.Style>
                                     </TextBlock>
-                                    <Button x:Name="btn_SettingFastBtnAdd" Content="Tilføj Hurtigknap" Margin="0,45,0,0" Background="#FFC5C5C5" Style="{StaticResource Flat_Button}" Height="50" VerticalAlignment="Top" Click="btn_SettingFastBtnAdd_Click"  Width="265" HorizontalAlignment="Right"/>
                                     <TextBox Padding="10,0,0,0" x:Name="textBox_CreateQuickBtnName" Margin="182,45,270,0" FontSize="33" Height="50" VerticalAlignment="Top" MaxLength="30">
                                         <TextBox.Resources>
                                             <Style TargetType="{x:Type Border}">
@@ -490,6 +486,7 @@
                                             </Style>
                                         </TextBox.Resources>
                                     </TextBox>
+                                    <Button x:Name="btn_SettingFastBtnAdd" Content="Tilføj Hurtigknap" Margin="0,45,0,0" Background="#FFC5C5C5" Style="{StaticResource Flat_Button}" Height="50" VerticalAlignment="Top" Click="btn_SettingFastBtnAdd_Click"  Width="265" HorizontalAlignment="Right"/>
                                     <TextBlock IsHitTestVisible="False" Text="Knappens Navn" Margin="196,46,0,0" Foreground="DarkGray" FontSize="33" HorizontalAlignment="Left" Width="272" Height="50" VerticalAlignment="Top">
                                         <TextBlock.Style>
                                             <Style TargetType="{x:Type TextBlock}">
@@ -730,8 +727,8 @@
                                         </ListView>
 
                                         <TextBlock HorizontalAlignment="Left" Margin="0,70,0,0" TextWrapping="Wrap" VerticalAlignment="Top"><Run Text="Oprettede Lagerrum"/></TextBlock>
-                                        <TextBlock HorizontalAlignment="Left" Margin="0,1285,0,0" TextWrapping="Wrap" VerticalAlignment="Top"><Run Text="Flyttede Produkter"/></TextBlock>
-                                        <TextBlock HorizontalAlignment="Left" Margin="0,675,0,0" TextWrapping="Wrap" VerticalAlignment="Top"><Run Text="Modtaget Produkter"/></TextBlock>
+                                        <TextBlock HorizontalAlignment="Left" Margin="0,1285,0,0" TextWrapping="Wrap" VerticalAlignment="Top"><Run Text="Flytninger af produkter"/></TextBlock>
+                                        <TextBlock HorizontalAlignment="Left" Margin="0,675,0,0" TextWrapping="Wrap" VerticalAlignment="Top"><Run Text="Indleveringer af produkter"/></TextBlock>
 
                                     </Grid>
                                 </ScrollViewer>

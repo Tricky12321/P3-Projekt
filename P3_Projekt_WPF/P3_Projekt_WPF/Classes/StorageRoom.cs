@@ -57,7 +57,7 @@ namespace P3_Projekt_WPF.Classes
 
         public void UploadToDatabase()
         {
-            string sql = "INSERT INTO `storagerooms` (`id`, `name`, `description`)"+
+            string sql = "INSERT INTO `storagerooms` (`id`, `name`, `description`)" +
                 $" VALUES (NULL, '{Name}', '{Description}');";
             Mysql.RunQuery(sql);
         }
@@ -68,6 +68,12 @@ namespace P3_Projekt_WPF.Classes
                $"`name` = '{Name}'," +
                $"`description` = '{Description}' " +
                $"WHERE `id` = {ID};";
+            Mysql.RunQuery(sql);
+        }
+
+        public void DeactivateStorageRoom()
+        {
+            string sql = $"UPDATE `storagerooms` SET `deactivated` = '1' WHERE `id` = '{ID}';";
             Mysql.RunQuery(sql);
         }
     }

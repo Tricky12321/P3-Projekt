@@ -12,21 +12,17 @@ namespace P3_Projekt_WPF.Classes
 {
     public class Receipt : MysqlObject
     {
-        private static int _idCounter = 0;
-        public static int IDCounter { get { return _idCounter; } set { _idCounter = value; } }
         public int ID;
         public List<SaleTransaction> Transactions = new List<SaleTransaction>();
         public List<Payment> Payments = new List<Payment>();
         public int NumberOfProducts;
         public decimal TotalPrice;
-        public DateTime Date;
+        public DateTime Date = DateTime.Now;
         public decimal PaidPrice => Payments.Sum(x => x.Amount);
         public decimal DiscountOnFullReceipt = 0m;
 
         public Receipt()
         {
-            ID = _idCounter++;
-            Date = DateTime.Now;
         }
 
         public Receipt(int ID)
@@ -122,6 +118,7 @@ namespace P3_Projekt_WPF.Classes
         public void DiscountOnSingleTransaction(int transID, string inputDiscount)
         {
             SaleTransaction currentSaleTransaction = Transactions.Where(x => x.GetID() == transID).First();
+            decimal customDiscount = 0;
 
             if (inputDiscount.Contains('%'))
             {
@@ -133,11 +130,21 @@ namespace P3_Projekt_WPF.Classes
             }
             else
             {
-                decimal customDiscount = Convert.ToDecimal(inputDiscount);
-                currentSaleTransaction.DiscountPrice = currentSaleTransaction.Price - (customDiscount / currentSaleTransaction.Amount);
-            }
+                if (inputDiscount.Length > 0)
+                {
+                    customDiscount = Convert.ToDecimal(inputDiscount);
+                }
+                if (customDiscount > 0m)
+                {
+                    currentSaleTransaction.DiscountPrice = currentSaleTransaction.Price - (customDiscount / currentSaleTransaction.Amount);
 
-            currentSaleTransaction.DiscountBool = true;
+                }
+
+            }
+            if (customDiscount > 0m)
+            {
+                currentSaleTransaction.DiscountBool = true;
+            }
             UpdateTotalPrice();
         }
 

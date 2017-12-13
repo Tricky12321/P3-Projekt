@@ -14,11 +14,10 @@ namespace P3_Projekt_WPF.Classes
         public int ReceiptID;
         public decimal Price;
         public bool DiscountBool;
-        public decimal DiscountPrice = 0m; 
+        public decimal DiscountPrice = 0m;
         public decimal TotalPrice => Price * Amount;
         private static StorageController _storageController = null;
         public string SoldBy = "";
-
         const int shopID = 1;
 
         public SaleTransaction(BaseProduct product, int amount, int receiptID) : base(product, amount)
@@ -71,12 +70,12 @@ namespace P3_Projekt_WPF.Classes
 
                     Text.Append("Produktet: " + prod.Name + "'s lagerstatus har fejl!\n");
 
-                    foreach (KeyValuePair<int,int> strorageWithAmount in prod.StorageWithAmount)
+                    foreach (KeyValuePair<int, int> strorageWithAmount in prod.StorageWithAmount)
                     {
                         string AppendString = "";
                         if (strorageWithAmount.Value < 0 && _storageController.StorageRoomDictionary.ContainsKey(strorageWithAmount.Key))
                         {
-                            AppendString = " **** - "+ _storageController.StorageRoomDictionary[strorageWithAmount.Key].Name + " har " + strorageWithAmount.Value.ToString() + " stk\n";
+                            AppendString = " **** - " + _storageController.StorageRoomDictionary[strorageWithAmount.Key].Name + " har " + strorageWithAmount.Value.ToString() + " stk\n";
                         }
                         else
                         {
@@ -176,7 +175,7 @@ namespace P3_Projekt_WPF.Classes
 
         public string GetBrand()
         {
-            if(Product is Product)
+            if (Product is Product)
             {
                 return (Product as Product).Brand;
             }
@@ -281,7 +280,7 @@ namespace P3_Projekt_WPF.Classes
 
         public void CheckIfGroupPrice()
         {
-            if(Product is ServiceProduct && Product.GetName() != "Is")
+            if (Product is ServiceProduct && Product.GetName() != "Is")
             {
                 Price = (Amount >= (Product as ServiceProduct).GroupLimit ? (Product as ServiceProduct).GroupPrice : (Product as ServiceProduct).SalePrice);
             }
@@ -300,7 +299,7 @@ namespace P3_Projekt_WPF.Classes
             Amount = Convert.ToInt32(Table.Values[3]);
             Date = Convert.ToDateTime(Table.Values[4]);
             ReceiptID = Convert.ToInt32(Table.Values[5]);
-            Price = Math.Round(Convert.ToDecimal(Table.Values[6]),2);
+            Price = Math.Round(Convert.ToDecimal(Table.Values[6]), 2);
             DiscountBool = Convert.ToBoolean(Table.Values[8]);
             SoldBy = Table.Values[9];
         }
@@ -324,7 +323,7 @@ namespace P3_Projekt_WPF.Classes
                 $"`price` = '{Price.ToString().Replace(',', '.')}'," +
                 $"`total_price` = '{TotalPrice.ToString().Replace(',', '.')}'," +
                 $"`discount` = '{Convert.ToInt32(DiscountBool)}'," +
-                $"`sold_by` = '{SoldBy}' "+
+                $"`sold_by` = '{SoldBy}' " +
                 $"WHERE `id` = {_id};";
             Mysql.RunQuery(sql);
         }

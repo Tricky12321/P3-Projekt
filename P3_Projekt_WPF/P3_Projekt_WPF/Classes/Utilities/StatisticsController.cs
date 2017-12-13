@@ -30,8 +30,6 @@ namespace P3_Projekt_WPF.Classes.Utilities
          * Hver dato-metode nulstiller TransactionsForStatistics ved at hente transaktioner ned fra databasen alt efter datoen
          * Derefter skal formen kalde RequestStatisticsWithParameters */
 
-
-
         private bool _allStatisticsDone = false;
         private ConcurrentQueue<SaleTransaction> _saleTransactions;
         private List<Thread> _saleTransactionThreads = new List<Thread>();
@@ -56,8 +54,13 @@ namespace P3_Projekt_WPF.Classes.Utilities
             Row data;
             while (_dataQueue.TryDequeue(out data))
             {
-                SaleTransaction NewTransaction = new SaleTransaction(data, _storageController);
-                _saleTransactions.Enqueue(NewTransaction);
+                int productID = Convert.ToInt32(data.Values[1]);
+                if (_storageController.AllProductsDictionary.ContainsKey(productID))
+                {
+                    SaleTransaction NewTransaction = new SaleTransaction(data, _storageController);
+                    _saleTransactions.Enqueue(NewTransaction);
+                }
+                Interlocked.Increment(ref _saleTransactionsCreated);
             }
         }
 
@@ -71,7 +74,15 @@ namespace P3_Projekt_WPF.Classes.Utilities
                 string serviceProductString = GetServiceProductsQueryString(searchProduct, productToSearch, searchGroup, groupToSearch, from, to);
                 RequestTransactionsDatabase(serviceProductString);
             }
-            string tempProductString = GetTempProductsQueryString(searchProduct, productToSearch, from, to);
+            string tempProductString;
+            if (searchGroup || searchBrand)
+            {
+                tempProductString = GetTempProductsQueryString(searchGroup, groupToSearch, searchBrand, brandToSearch, from, to);
+            }
+            else
+            {
+                tempProductString = GetTempProductsQueryString(searchProduct, productToSearch, from, to);
+            }
             RequestTransactionsDatabase(tempProductString);
         }
 
@@ -120,28 +131,24 @@ namespace P3_Projekt_WPF.Classes.Utilities
             return NewString.ToString();
         }
 
-        public string GetTempProductsQueryString(bool searchProduct, int productToSearch, bool searchGroup, int groupToSearch, bool searchBrand, string brandToSearch, DateTime from, DateTime to)
+        public string GetTempProductsQueryString(bool searchGroup, int groupToSearch, bool searchBrand, string brandToSearch, DateTime from, DateTime to)
         {
             StringBuilder NewString = new StringBuilder();
-            if (searchGroup || searchBrand)
+            NewString.Append("SELECT `sale_transactions`.*, `products`.`id` as 'PRODID',`products`.`groups`, `products`.`brand`, `temp_products`.`id` as 'TEMPID' " +
+                "FROM `sale_transactions`, `temp_products`, `products` " +
+                " WHERE " +
+                "(`sale_transactions`.`product_type` = 'temp_product') AND " +
+                "(`products`.`id` = `temp_products`.`resolved_product_id`)" +
+                $" AND UNIX_TIMESTAMP(`datetime`) >= '{Utils.GetUnixTime(from)}'" +
+                $" AND UNIX_TIMESTAMP(`datetime`) <= '{Utils.GetUnixTime(EndDate(to))}'");
+            if (searchGroup)
             {
-                NewString.Append("SELECT `sale_transactions`.*, `products`.`id` as 'PRODID',`products`.`groups`, `products`.`brand`, `temp_products`.`id` as 'TEMPID' "+
-                    "FROM `sale_transactions`, `temp_products`, `products` "+
-                    " WHERE "+
-                    "(`sale_transactions`.`product_type` = 'temp_product') AND "+
-                    "(`temp_products`.`resolved_product_id` = `products`.`id`) AND "+
-                    "(`products`.`id` = `temp_products`.`resolved_product_id`)" +
-                    $" AND UNIX_TIMESTAMP(`datetime`) >= '{Utils.GetUnixTime(from)}'" +
-                    $" AND UNIX_TIMESTAMP(`datetime`) <= '{Utils.GetUnixTime(EndDate(to))}'");
-                if (searchGroup)
-                {
-                    NewString.Append($" AND `products`.`groups` = '{groupToSearch}'");
-                }
+                NewString.Append($" AND `products`.`groups` = '{groupToSearch}'");
+            }
 
-                if (searchBrand)
-                {
-                    NewString.Append($" AND `products`.`brand` = '{brandToSearch}'");
-                }
+            if (searchBrand)
+            {
+                NewString.Append($" AND `products`.`brand` = '{brandToSearch}'");
             }
             return NewString.ToString();
         }
@@ -169,6 +176,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
             return date + dayEnd;
         }
 
+
         public void RequestTransactionsDatabase(string queryString)
         {
             Stopwatch Timer1 = new Stopwatch();
@@ -179,8 +187,9 @@ namespace P3_Projekt_WPF.Classes.Utilities
             int TransCount = _dataQueue.Count;
             CreateThreads();
             ThreadWork();
-            while (!_dataQueue.IsEmpty && _saleTransactions.Count() == TransCount)
+            while (!_dataQueue.IsEmpty && _saleTransactionsCreated == TransCount)
             {
+                ThreadWork();
                 Thread.Sleep(1);
             }
 

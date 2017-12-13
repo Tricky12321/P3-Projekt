@@ -9,12 +9,12 @@ namespace P3_Projekt_WPF.Classes.Utilities
     public static class Admin
     {
 
-        public static void CreateNewPassword (string passwordInput)
+        public static void CreateNewPassword(string passwordInput)
         {
             string setQuery = $"UPDATE `admin_password` SET `admin_password` = '{SaltAndHashPassword(passwordInput)}' WHERE `id` = '1'";
             Mysql.RunQuery(setQuery);
         }
-        
+
         // Generates a random salt
         /*
         public static byte[] GenerateSalt (string passwordInput)
@@ -34,7 +34,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
             return saltBytes;
         }
         */
-        public static bool VerifyPassword (string passwordInput)
+        public static bool VerifyPassword(string passwordInput)
         {
             string getQuery = $"SELECT `admin_password` FROM `admin_password` WHERE `id` = '1'";
             string storedPassword = Mysql.RunQueryWithReturn(getQuery).RowData[0].Values[0];
@@ -42,7 +42,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
             return SaltAndHashPassword(passwordInput).Equals(storedPassword);
         }
 
-        public static string SaltAndHashPassword (string passwordInput)
+        public static string SaltAndHashPassword(string passwordInput)
         {
             string pwdSaltedAndHashed;
 

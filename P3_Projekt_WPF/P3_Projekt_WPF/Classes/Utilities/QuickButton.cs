@@ -12,10 +12,10 @@ using System.Configuration;
 namespace P3_Projekt_WPF.Classes.Utilities
 {
     [SettingsSerializeAs(SettingsSerializeAs.Xml)]
-    
+
     public class QuickButton
     {
-        public FastButton ButtonToClick; 
-        
+        public FastButton ButtonToClick;
+
     }
 }
