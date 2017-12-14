@@ -9,6 +9,8 @@ using P3_Projekt_WPF.Classes.Utilities;
 using System.Windows;
 namespace P3_Projekt_WPF.Classes
 {
+    public delegate void ProductUpdatedEventDelegate(Product product);
+
     public class SaleTransaction : Transaction
     {
         public int ReceiptID;
@@ -51,6 +53,8 @@ namespace P3_Projekt_WPF.Classes
         }
         //If transaction contains Product, decrements the shop storage room(ID 0) by amount
         //If transaction contains Temporary- or ServiceProduct, does nothing, since these do not have storage amounts
+        public static event ProductUpdatedEventDelegate UpdateProductEvent;
+
         public override void Execute()
         {
             if (Product is Product)
@@ -66,8 +70,10 @@ namespace P3_Projekt_WPF.Classes
                 }
                 else
                 {
-                    (Product as Product).StorageWithAmount[shopID] -= Amount;
+                    prod.StorageWithAmount[shopID] -= Amount;
                 }
+
+                UpdateProductEvent?.Invoke(prod);
                 if (!HideMessageBox && prod.StorageWithAmount.Where(x => x.Value < 0).Count() > 0)
                 {
                     // Hvis det er nogle storageroom med negativ værdi
