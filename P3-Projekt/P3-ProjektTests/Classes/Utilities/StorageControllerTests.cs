@@ -31,7 +31,6 @@ namespace P3_Projekt_WPF.Classes.Utilities.Tests
             SaleTransaction.HideMessageBox = true;
             POS = new POSController(SC);
             Utils.GetIceCreameID();
-            Properties.Settings.Default.IcecreamProductID = 1;
         }
 
         [TestCase(ExpectedResult = true)]
@@ -40,7 +39,7 @@ namespace P3_Projekt_WPF.Classes.Utilities.Tests
             return Mysql.ConnectionWorking;
         }
 
-        [TestCase(11, ExpectedResult = "T-Shirt m. Kloster logo rød2")]
+        [TestCase(11, ExpectedResult = "T-Shirt m. Kloster logo rød")]
         [TestCase(4, ExpectedResult = "Blå Glas Fugl")]
         [TestCase(5, ExpectedResult = "Guld ring m. kloster logo")]
         [TestCase(8, ExpectedResult = "Blå Kjole")]
@@ -313,7 +312,8 @@ namespace P3_Projekt_WPF.Classes.Utilities.Tests
             if (POS.PlacerholderReceipt.TotalPrice == 10m)
             {
                 Assert.Pass();
-            } else
+            }
+            else
             {
                 Assert.Fail();
             }
@@ -334,8 +334,20 @@ namespace P3_Projekt_WPF.Classes.Utilities.Tests
             }
             int StorageCount = Prod.StorageWithAmount[1];
             POS.AddSaleTransaction(Prod, amount);
+            Receipt _receipt = POS.PlacerholderReceipt;
+            bool priceCheck = false;
+            if (Prod.DiscountBool)
+            {
+                decimal ExpectedTotalPrice = Prod.DiscountPrice * amount;
+                priceCheck = _receipt.TotalPrice == ExpectedTotalPrice;
+            }
+            else
+            {
+                decimal ExpectedTotalPrice = Prod.SalePrice * amount;
+                priceCheck = _receipt.TotalPrice == ExpectedTotalPrice;
+            }
             POS.ExecuteReceipt(false);
-            Assert.IsTrue(Prod.StorageWithAmount[1] == (StorageCount - amount));
+            Assert.IsTrue((Prod.StorageWithAmount[1] == (StorageCount - amount)) && (priceCheck));
         }
 
 

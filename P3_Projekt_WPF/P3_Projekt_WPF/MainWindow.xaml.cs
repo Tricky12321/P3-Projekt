@@ -380,9 +380,21 @@ namespace P3_Projekt_WPF
             EditProductForm.ShowDialog();
         }
 
+        private int _selectedProductID = -1;
+
         private void ShowSpecificInfoProductStorage(object sender, RoutedEventArgs e)
         {
-            ShowSpecificInfoProductStorage(int.Parse((sender as Button).Tag.ToString()));
+            int id = int.Parse((sender as Button).Tag.ToString());
+            _selectedProductID = id;
+            ShowSpecificInfoProductStorage(id);
+        }
+
+        public void ShowSPecificInfoProductStorage()
+        {
+            if (_selectedProductID != -1)
+            {
+                ShowSpecificInfoProductStorage(_selectedProductID);
+            }
         }
 
         public void ShowSpecificInfoProductStorage(int id)
@@ -1167,6 +1179,10 @@ namespace P3_Projekt_WPF
                 StartsToPay(CompletedPurchase);
                 _partlypaid = !CompletedPurchase;
                 ResetPOSController(CompletedPurchase);
+                if (CompletedPurchase)
+                {
+                    ShowSPecificInfoProductStorage();
+                }
             }
         }
 
@@ -1179,6 +1195,11 @@ namespace P3_Projekt_WPF
                 StartsToPay(CompletedPurchase);
                 _partlypaid = !CompletedPurchase;
                 ResetPOSController(CompletedPurchase);
+                if (CompletedPurchase)
+                {
+                    ReloadProducts();
+                    ShowSPecificInfoProductStorage();
+                }
             }
         }
 
@@ -1192,6 +1213,11 @@ namespace P3_Projekt_WPF
                 StartsToPay(CompletedPurchase);
                 _partlypaid = !CompletedPurchase;
                 ResetPOSController(CompletedPurchase);
+                if (CompletedPurchase)
+                {
+                    ReloadProducts();
+                    ShowSPecificInfoProductStorage();
+                }
             }
         }
 
