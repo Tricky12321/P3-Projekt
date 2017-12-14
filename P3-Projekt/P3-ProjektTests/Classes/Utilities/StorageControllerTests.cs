@@ -310,7 +310,7 @@ namespace P3_Projekt_WPF.Classes.Utilities.Tests
         public void IcecreameReceiptTest()
         {
             POS.AddIcecreamTransaction(10m);
-            if (POS.TotalPriceToPay == 10m)
+            if (POS.PlacerholderReceipt.TotalPrice == 10m)
             {
                 Assert.Pass();
             } else
