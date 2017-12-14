@@ -39,6 +39,16 @@ namespace P3_Projekt_WPF.Classes.Database
             }
         }
 
+        public static void UpdateSettings(Properties.Settings lcl_sett)
+        {
+            _username = lcl_sett.lcl_username;
+            _password = lcl_sett.lcl_password;
+            _ip = lcl_sett.lcl_ip;
+            _port = lcl_sett.lcl_port;
+            _database = lcl_sett.lcl_db;
+            _connectionString = $"Server={_ip};Port={_port};Database={_database};Uid={_username};Pwd={_password};";
+        }
+
         public static void UseMockDatabase()
         {
             _database = "P3_mock";

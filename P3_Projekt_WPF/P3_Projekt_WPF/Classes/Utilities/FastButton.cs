@@ -31,18 +31,6 @@ namespace P3_Projekt_WPF.Classes.Utilities
             Button_Name = button_name;
         }
 
-
-        private string SerializeFastButton()
-        {
-            string buttonString = Button_Name + ProductID.ToString();
-            return null;
-        }
-
-        static public void DeserializeFastButton(string buttonString)
-        {
-
-        }
-
         public string ToString()
         {
             return ProductID + "|" + Button_Name;

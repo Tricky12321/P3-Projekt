@@ -25,14 +25,14 @@ namespace P3_Projekt_WPF.Classes.Utilities
             button.Content = buttonText; ;
             button.Button_Name = buttonText;
             button.Height = gridHeight / 7;
-            button.Width = gridWidth / 2;
+            button.Width = gridWidth / 3;
 
             button.FontSize = 35;
             button.Background = Brushes.LightGray;
             button.Click += btn_FastButton_click;
 
-            button.SetValue(Grid.ColumnProperty, quickButtonList.Count % 2);
-            button.SetValue(Grid.RowProperty, quickButtonList.Count / 2);
+            button.SetValue(Grid.ColumnProperty, quickButtonList.Count % 3);
+            button.SetValue(Grid.RowProperty, quickButtonList.Count / 3);
 
             quickButtonList.Add(button);
         }

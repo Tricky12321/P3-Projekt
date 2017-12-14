@@ -65,6 +65,7 @@ namespace P3_Projekt_WPF
             {
                 Debug.WriteLine(item);
             }
+
             Utils.GetIceCreameID();
             Console.WriteLine("Username: " + Environment.UserName);
 
@@ -73,7 +74,12 @@ namespace P3_Projekt_WPF
             LoadingTimer.Stop();
             OutputList.Add("[TOTAL TIMER] took " + LoadingTimer.ElapsedMilliseconds + "ms");
             _storageController.AddInformation("Loading timer", LoadingTimer.ElapsedMilliseconds + "ms");
-
+            _POSController.LowStorageWarning += LowStorageTrigger;
+            if (!Mysql.ConnectionWorking)
+            {
+                tabControl.SelectedValue = tab_Settings;
+                tab_WithSettings.SelectedValue = tab_admin;
+            }
 
         }
 
@@ -83,6 +89,12 @@ namespace P3_Projekt_WPF
             LoadProductImages();
             LoadProductControlDictionary();
             LoadProductGrid(_storageController.AllProductsDictionary);
+        }
+
+        public void LowStorageTrigger(Product prod)
+        {
+            int storageLeft = prod.StorageWithAmount.Values.Sum();
+            MessageBox.Show("Lager antal er lavt for: " + prod.ToString() + ", der er kun " + storageLeft.ToString() + " tilbage");
         }
 
         private void KeyboardHook(object sender, KeyEventArgs e)
@@ -125,10 +137,17 @@ namespace P3_Projekt_WPF
             Settings.QuickButton8 = QuickButtonsCount >= 8 ? QuickButtons[7].ToString() : null;
             Settings.QuickButton9 = QuickButtonsCount >= 9 ? QuickButtons[8].ToString() : null;
             Settings.QuickButton10 = QuickButtonsCount >= 10 ? QuickButtons[9].ToString() : null;
-            Settings.QuickButton11 = QuickButtonsCount >= 12 ? QuickButtons[10].ToString() : null;
-            Settings.QuickButton12 = QuickButtonsCount >= 13 ? QuickButtons[11].ToString() : null;
-            Settings.QuickButton13 = QuickButtonsCount >= 14 ? QuickButtons[12].ToString() : null;
-            Settings.QuickButton14 = QuickButtonsCount >= 15 ? QuickButtons[13].ToString() : null;
+            Settings.QuickButton11 = QuickButtonsCount >= 11 ? QuickButtons[10].ToString() : null;
+            Settings.QuickButton12 = QuickButtonsCount >= 12 ? QuickButtons[11].ToString() : null;
+            Settings.QuickButton13 = QuickButtonsCount >= 13 ? QuickButtons[12].ToString() : null;
+            Settings.QuickButton14 = QuickButtonsCount >= 14 ? QuickButtons[13].ToString() : null;
+            Settings.QuickButton15 = QuickButtonsCount >= 15 ? QuickButtons[14].ToString() : null;
+            Settings.QuickButton16 = QuickButtonsCount >= 16 ? QuickButtons[15].ToString() : null;
+            Settings.QuickButton17 = QuickButtonsCount >= 17 ? QuickButtons[16].ToString() : null;
+            Settings.QuickButton18 = QuickButtonsCount >= 18 ? QuickButtons[17].ToString() : null;
+            Settings.QuickButton19 = QuickButtonsCount >= 19 ? QuickButtons[18].ToString() : null;
+            Settings.QuickButton20 = QuickButtonsCount >= 20 ? QuickButtons[19].ToString() : null;
+            Settings.QuickButton21 = QuickButtonsCount >= 21 ? QuickButtons[20].ToString() : null;
             Settings.Save();
 
         }
@@ -156,6 +175,13 @@ namespace P3_Projekt_WPF
             AddQuickButton(Settings.QuickButton12);
             AddQuickButton(Settings.QuickButton13);
             AddQuickButton(Settings.QuickButton14);
+            AddQuickButton(Settings.QuickButton15);
+            AddQuickButton(Settings.QuickButton16);
+            AddQuickButton(Settings.QuickButton17);
+            AddQuickButton(Settings.QuickButton18);
+            AddQuickButton(Settings.QuickButton19);
+            AddQuickButton(Settings.QuickButton20);
+            AddQuickButton(Settings.QuickButton21);
             UpdateGridQuickButtons();
         }
 
@@ -226,7 +252,7 @@ namespace P3_Projekt_WPF
         {
             grid_QuickButton.ColumnDefinitions.Add(new ColumnDefinition());
             grid_QuickButton.ColumnDefinitions.Add(new ColumnDefinition());
-
+            grid_QuickButton.ColumnDefinitions.Add(new ColumnDefinition());
             for (int i = 0; i < 7; ++i)
             {
                 grid_QuickButton.RowDefinitions.Add(new RowDefinition());
@@ -649,7 +675,7 @@ namespace P3_Projekt_WPF
         {
             int inputInt;
             int.TryParse(textBox_CreateQuickBtnID.Text, out inputInt);
-            int maxButtons = 14;
+            int maxButtons = 21;
 
             if (_POSController.GetProductFromID(inputInt) != null && !_settingsController.quickButtonList.Any(x => x.ProductID == inputInt) && checkIfTooManyQuickButtons(maxButtons))
             {
@@ -694,8 +720,8 @@ namespace P3_Projekt_WPF
                 {
                     button.Style = FindResource("Flat_Button") as Style;
 
-                    button.SetValue(Grid.ColumnProperty, i % 2);
-                    button.SetValue(Grid.RowProperty, i / 2);
+                    button.SetValue(Grid.ColumnProperty, i % 3);
+                    button.SetValue(Grid.RowProperty, i / 3);
                     grid_QuickButton.Children.Add(button);
                     ++i;
                 }
@@ -1281,6 +1307,7 @@ namespace P3_Projekt_WPF
 
         private void SaveDBSettings(object sender, RoutedEventArgs e)
         {
+
             Utils.SaveDBData(this);
         }
 
@@ -1380,6 +1407,10 @@ namespace P3_Projekt_WPF
                 _POSController.PlacerholderReceipt.UpdateTotalPrice();
                 if (textBox_discount.Text.Contains('%'))
                 {
+                    if (textBox_discount.Text == "%")
+                    {
+                        textBox_discount.Text = "0%";
+                    }
                     decimal percentage = Convert.ToDecimal(textBox_discount.Text.Replace("%", string.Empty));
                     _POSController.PlacerholderReceipt.DiscountOnFullReceipt = _POSController.PlacerholderReceipt.TotalPrice * (percentage / 100m);
                 }
@@ -1580,6 +1611,8 @@ namespace P3_Projekt_WPF
         private void btn_ReloadDatabase_Click(object sender, RoutedEventArgs e)
         {
             _storageController.ClearDictionarys();
+            
+            Mysql.CheckDatabaseConnection();
             _storageController.ReloadAllDictionarys(this);
         }
 
@@ -1595,9 +1628,12 @@ namespace P3_Projekt_WPF
             }
             else
             {
-                tab_Sale.Focus();
-                tab_Sale.IsSelected = true;
-                MessageBox.Show("Du skal være admin for at gå ind i indstillinger");
+                if (Mysql.ConnectionWorking)
+                {
+                    tab_Sale.Focus();
+                    tab_Sale.IsSelected = true;
+                    MessageBox.Show("Du skal være admin for at gå ind i indstillinger");
+                }
             }
 
         }

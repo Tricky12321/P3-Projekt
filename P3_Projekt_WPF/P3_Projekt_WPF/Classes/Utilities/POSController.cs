@@ -132,7 +132,12 @@ namespace P3_Projekt_WPF.Classes.Utilities
 
         public void ExecuteReceipt()
         {
-            PlacerholderReceipt.Execute();
+            ExecuteReceipt(true);
+        }
+
+        public void ExecuteReceipt(bool PrintReceipt = true)
+        {
+            PlacerholderReceipt.Execute(PrintReceipt);
             CheckStorageLevel();
             ReceiptList.Add(PlacerholderReceipt);
             StartPurchase();

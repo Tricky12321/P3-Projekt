@@ -148,10 +148,13 @@ namespace P3_Projekt_WPF.Classes
             UpdateTotalPrice();
         }
 
-        public void Execute()
+        public void Execute(bool PrintReceipt = true)
         {
             UpdateNumberOfProducts();
-            ReceiptPrinter.PrintReceipt(this);
+            if (PrintReceipt)
+            {
+                ReceiptPrinter.PrintReceipt(this);
+            }
 
             if (DiscountOnFullReceipt > 0m)
             {
@@ -164,14 +167,13 @@ namespace P3_Projekt_WPF.Classes
                     transaction.DiscountBool = true;
                 }
             }
-
             foreach (SaleTransaction transaction in Transactions)
             {
+                
                 if (transaction.DiscountBool)
                 {
                     transaction.Price = transaction.DiscountPrice;
                 }
-
                 transaction.Execute();
             }
 

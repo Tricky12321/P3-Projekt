@@ -33,7 +33,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
         private bool _allStatisticsDone = false;
         private ConcurrentQueue<SaleTransaction> _saleTransactions;
         private List<Thread> _saleTransactionThreads = new List<Thread>();
-        private int _threadCount = 4;
+        private int _threadCount = Utils.NumberOfCores;
         private int _saleTransactionsCreated = 0;
         private ConcurrentQueue<Row> _dataQueue;
         private StorageController _storageController = null;

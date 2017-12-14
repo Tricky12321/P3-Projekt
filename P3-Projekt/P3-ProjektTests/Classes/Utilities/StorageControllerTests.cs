@@ -18,6 +18,7 @@ namespace P3_Projekt_WPF.Classes.Utilities.Tests
     public class StorageControllerTests
     {
         StorageController SC;
+        POSController POS;
         [SetUp]
         public void Init()
         {
@@ -25,11 +26,12 @@ namespace P3_Projekt_WPF.Classes.Utilities.Tests
             Mysql.CheckDatabaseConnection();
             SC = new StorageController();
             SC.GetAll();
-            while (!SC.ThreadsDone)
-            {
-                Thread.Sleep(100);
-            }
-
+            SC.LoadAllProductsDictionary();
+            SaleTransaction.SetStorageController(SC);
+            SaleTransaction.HideMessageBox = true;
+            POS = new POSController(SC);
+            Utils.GetIceCreameID();
+            Properties.Settings.Default.IcecreamProductID = 1;
         }
 
         [TestCase(ExpectedResult = true)]
@@ -107,11 +109,8 @@ namespace P3_Projekt_WPF.Classes.Utilities.Tests
             int new_id = ServiceProduct.GetNextID();
             Assert.IsTrue(new_id > old_id);
         }
-        [TestCase(1, ExpectedResult = true)]
-        [TestCase(2, ExpectedResult = true)]
-        [TestCase(3, ExpectedResult = true)]
-        [TestCase(4, ExpectedResult = true)]
-        public bool CreateProductStorageControllerTest(int diff)
+        [Test()]
+        public void CreateProductStorageControllerTest()
         {
             int old_id = Product.GetNextID();
             ConcurrentDictionary<int, int> StorageWithAmount = new ConcurrentDictionary<int, int>();
@@ -121,52 +120,41 @@ namespace P3_Projekt_WPF.Classes.Utilities.Tests
             int new_id = Product.GetNextID();
             bool Identical = (SC.ProductDictionary[old_id] == SC.AllProductsDictionary[old_id]);
             bool Rest = (new_id > old_id) && SC.ProductDictionary.ContainsKey(old_id) && SC.AllProductsDictionary.ContainsKey(old_id);
-            return Identical && Rest;
+            Assert.IsTrue(Identical && Rest);
+
         }
-        [TestCase(1, ExpectedResult = true)]
-        [TestCase(2, ExpectedResult = true)]
-        [TestCase(3, ExpectedResult = true)]
-        [TestCase(4, ExpectedResult = true)]
-        public bool CreateServiceProductStorageControllerTest(int diff)
+        [Test()]
+        public void CreateServiceProductStorageControllerTest()
         {
             int old_id = Product.GetNextID();
             SC.CreateServiceProduct(old_id, 10m, 10m, 10, "TestProd", 1);
             int new_id = Product.GetNextID();
             bool Identical = (SC.ServiceProductDictionary[old_id] == SC.AllProductsDictionary[old_id]);
             bool Rest = (new_id > old_id) && SC.ServiceProductDictionary.ContainsKey(old_id) && SC.AllProductsDictionary.ContainsKey(old_id);
-            return Identical && Rest;
+            Assert.IsTrue(Identical && Rest);
         }
 
-        [TestCase(1, ExpectedResult = true)]
-        [TestCase(2, ExpectedResult = true)]
-        [TestCase(3, ExpectedResult = true)]
-        [TestCase(4, ExpectedResult = true)]
-        public bool CreateGroupStorageControllerTest(int diff)
+        [Test()]
+        public void CreateGroupStorageControllerTest()
         {
             int old_id = Group.GetNextID();
             SC.CreateGroup("TestGroup", "TestGroupDesc");
             int new_id = Group.GetNextID();
             bool Rest = (new_id > old_id) && SC.GroupDictionary.ContainsKey(old_id);
-            return Rest;
+            Assert.IsTrue(Rest);
         }
 
-        [TestCase(1, ExpectedResult = true)]
-        [TestCase(2, ExpectedResult = true)]
-        [TestCase(3, ExpectedResult = true)]
-        [TestCase(4, ExpectedResult = true)]
-        public bool CreateStorageRoomStorageControllerTest(int diff)
+        [Test()]
+        public void CreateStorageRoomStorageControllerTest()
         {
             int old_id = StorageRoom.GetNextID();
             SC.CreateStorageRoom("TestRoom", "Dette TestRum er kun til test");
             int new_id = StorageRoom.GetNextID();
-            return (new_id > old_id) && SC.StorageRoomDictionary.ContainsKey(old_id);
+            Assert.IsTrue((new_id > old_id) && SC.StorageRoomDictionary.ContainsKey(old_id));
         }
 
-        [TestCase(1, ExpectedResult = true)]
-        [TestCase(2, ExpectedResult = true)]
-        [TestCase(3, ExpectedResult = true)]
-        [TestCase(4, ExpectedResult = true)]
-        public bool DeleteStorageRoomStorageControllerTest(int diff)
+        [Test()]
+        public void DeleteStorageRoomStorageControllerTest()
         {
             int old_id = StorageRoom.GetNextID();
             SC.CreateStorageRoom("TestRoom", "Dette TestRum er kun til test");
@@ -175,20 +163,18 @@ namespace P3_Projekt_WPF.Classes.Utilities.Tests
             if (FirstStep)
             {
                 SC.DeleteStorageRoom(old_id);
-                return !SC.StorageRoomDictionary.ContainsKey(old_id);
+                Assert.IsTrue(!SC.StorageRoomDictionary.ContainsKey(old_id));
             }
             else
             {
-                return false;
+                Assert.Fail();
+
             }
 
         }
 
-        [TestCase(1, ExpectedResult = true)]
-        [TestCase(2, ExpectedResult = true)]
-        [TestCase(3, ExpectedResult = true)]
-        [TestCase(4, ExpectedResult = true)]
-        public bool DeleteProductStorageControllerTest(int diff)
+        [Test()]
+        public void DeleteProductStorageControllerTest()
         {
             int old_id = Product.GetNextID();
             ConcurrentDictionary<int, int> StorageWithAmount = new ConcurrentDictionary<int, int>();
@@ -202,19 +188,16 @@ namespace P3_Projekt_WPF.Classes.Utilities.Tests
             if (FirstStep)
             {
                 SC.DeleteProduct(old_id);
-                return !(SC.ProductDictionary.ContainsKey(old_id) || SC.AllProductsDictionary.ContainsKey(old_id));
+                Assert.IsTrue(!(SC.ProductDictionary.ContainsKey(old_id) || SC.AllProductsDictionary.ContainsKey(old_id)));
             }
             else
             {
-                return false;
+                Assert.Fail();
             }
         }
 
-        [TestCase(1, ExpectedResult = true)]
-        [TestCase(2, ExpectedResult = true)]
-        [TestCase(3, ExpectedResult = true)]
-        [TestCase(4, ExpectedResult = true)]
-        public bool DeleteGroupStorageControllerTest(int diff)
+        [Test()]
+        public void DeleteGroupStorageControllerTest()
         {
             int old_id = Group.GetNextID();
             SC.CreateGroup("TestGroup", "TestGroupDesc");
@@ -223,11 +206,11 @@ namespace P3_Projekt_WPF.Classes.Utilities.Tests
             if (First)
             {
                 SC.DeleteGroup(old_id);
-                return !SC.GroupDictionary.ContainsKey(old_id);
+                Assert.IsTrue(!SC.GroupDictionary.ContainsKey(old_id));
             }
             else
             {
-                return false;
+                Assert.Fail();
             }
         }
         [Test()]
@@ -240,11 +223,11 @@ namespace P3_Projekt_WPF.Classes.Utilities.Tests
             Assert.IsTrue(new_id > old_id);
         }
 
-        [TestCase(3, 5, ExpectedResult = true)]
-        [TestCase(4, 1, ExpectedResult = true)]
-        [TestCase(5, 20, ExpectedResult = true)]
-        [TestCase(7, 100, ExpectedResult = true)]
-        public bool CreateOrderTransactionTest(int prodID, int incrementAmount)
+        [TestCase(3, 5)]
+        [TestCase(4, 1)]
+        [TestCase(5, 20)]
+        [TestCase(7, 100)]
+        public void CreateOrderTransactionTest(int prodID, int incrementAmount)
         {
             int old_id = OrderTransaction.GetNextID();
             Product TestProd = SC.ProductDictionary[prodID] as Product;
@@ -261,14 +244,15 @@ namespace P3_Projekt_WPF.Classes.Utilities.Tests
             int product_amount2 = TestProd.StorageWithAmount[1];
             bool amount = product_amount + incrementAmount == product_amount2;
             bool first = (new_id > old_id) && SC.OrderTransactionDictionary.ContainsKey(old_id);
-            return amount && first;
+            Assert.IsTrue(amount && first);
         }
-        [TestCase(3, 5, 1, 2, ExpectedResult = true)]
-        [TestCase(5, 2, 5, 2, ExpectedResult = true)]
-        [TestCase(7, 1, 2, 3, ExpectedResult = true)]
-        [TestCase(11, 10, 2, 1, ExpectedResult = true)]
-        [TestCase(21, 9, 2, 4, ExpectedResult = true)]
-        public bool CreateStorageTransactionTest(int prodID, int amount, int storage1, int storage2)
+
+        [TestCase(3, 5, 1, 2)]
+        [TestCase(5, 2, 5, 2)]
+        [TestCase(7, 1, 2, 3)]
+        [TestCase(11, 10, 2, 1)]
+        [TestCase(21, 9, 2, 4)]
+        public void CreateStorageTransactionTest(int prodID, int amount, int storage1, int storage2)
         {
             int old_id = StorageTransaction.GetNextID();
             Product TestProd = SC.ProductDictionary[prodID];
@@ -289,9 +273,70 @@ namespace P3_Projekt_WPF.Classes.Utilities.Tests
             bool idCompare = new_id > old_id;
             bool storageCompare1 = TestProd.StorageWithAmount[storage1] == Storage1Count - amount;
             bool storageCompare2 = TestProd.StorageWithAmount[storage2] == Storage2Count + amount;
-            return idCompare && storageCompare1 && storageCompare2;
+            Assert.IsTrue(idCompare && storageCompare1 && storageCompare2);
         }
 
+        [Test()]
+        public void BigReceiptTest()
+        {
+            int[] ProdsToSell = { 3, 4, 5, 7, 11, 15 };
+            int[] AmountToSell = { 10, 5, 10, 30, 2, 1 };
+            int[] StorageCount = { 0, 0, 0, 0, 0, 0 };
+            int prod_count = ProdsToSell.Count();
+            bool Pass = true;
+            for (int i = 0; i < prod_count; i++)
+            {
+                Product Prod = SC.ProductDictionary[ProdsToSell[i]];
+                if (!Prod.StorageWithAmount.ContainsKey(1))
+                {
+                    Prod.StorageWithAmount.TryAdd(1, 0);
+                }
+                StorageCount[i] = Prod.StorageWithAmount[1];
+                POS.AddSaleTransaction(Prod, AmountToSell[i]);
+            }
+            POS.ExecuteReceipt(false);
+            for (int i = 0; i < prod_count; i++)
+            {
+                Product Prod = SC.ProductDictionary[ProdsToSell[i]];
+                if (!(Prod.StorageWithAmount[1] == (StorageCount[i] - AmountToSell[i])))
+                {
+                    Pass = false; ;
+                }
+            }
+            Assert.IsTrue(Pass);
+        }
+
+        [Test()]
+        public void IcecreameReceiptTest()
+        {
+            POS.AddIcecreamTransaction(10m);
+            if (POS.TotalPriceToPay == 10m)
+            {
+                Assert.Pass();
+            } else
+            {
+                Assert.Fail();
+            }
+            POS.ExecuteReceipt(false);
+        }
+
+        [TestCase(5, 1234)]
+        [TestCase(3, 100)]
+        [TestCase(11, 9)]
+        [TestCase(17, 3)]
+        [TestCase(22, 5)]
+        public void ReceiptTest(int prodID, int amount)
+        {
+            Product Prod = SC.ProductDictionary[prodID];
+            if (!Prod.StorageWithAmount.ContainsKey(1))
+            {
+                Prod.StorageWithAmount.TryAdd(1, 0);
+            }
+            int StorageCount = Prod.StorageWithAmount[1];
+            POS.AddSaleTransaction(Prod, amount);
+            POS.ExecuteReceipt(false);
+            Assert.IsTrue(Prod.StorageWithAmount[1] == (StorageCount - amount));
+        }
 
 
         /*[Test()]

@@ -19,13 +19,12 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using System.Text.RegularExpressions;
 using System.Windows.Input;
-
 namespace P3_Projekt_WPF.Classes.Utilities
 {
     public static class Utils
     {
         public static ImageSource NoImage = Utils.ImageSourceForBitmap(Properties.Resources.questionmark_png);
-
+        public static int NumberOfCores => Convert.ToInt32(System.Environment.GetEnvironmentVariable("NUMBER_OF_PROCESSORS"));
         public static void ShowErrorWarning(string text)
         {
             MessageBox.Show(text);
@@ -259,6 +258,9 @@ namespace P3_Projekt_WPF.Classes.Utilities
             sett.lcl_port = Convert.ToInt32(MainWin.cmb_lcl_port.Text);
             sett.lcl_password = MainWin.txt_lcl_password.Password;
             sett.lcl_username = MainWin.txt_lcl_username.Text;
+            sett.Save();
+            Mysql.UpdateSettings(sett);
+            Mysql.CheckDatabaseConnection();
             /*
             sett.rmt_db = MainWin.cmb_rmt_db.Text;
             sett.rmt_ip = MainWin.cmb_rmt_ip.Text;
@@ -266,7 +268,6 @@ namespace P3_Projekt_WPF.Classes.Utilities
             sett.rmt_password = MainWin.txt_rmt_password.Password;
             sett.rmt_username = MainWin.txt_rmt_username.Text;
             */
-            sett.Save();
         }
 
         public static void LoadDBSettingsData(MainWindow MainWin)

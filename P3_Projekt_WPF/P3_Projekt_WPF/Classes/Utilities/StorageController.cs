@@ -33,6 +33,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
 
         public StorageController()
         {
+            AddInformation("Core Antal", Utils.NumberOfCores);
             //GetAllProductsFromDatabase();
             //GetAllReceiptsFromDatabase();
         }
@@ -289,7 +290,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
         private ConcurrentQueue<Row> _orderTransactionsQueue;
 
         private List<Thread> _queueThreads;
-        private int _queueThreadsCount = 4;
+        private int _queueThreadsCount = Utils.NumberOfCores;
 
         private bool SecondQueueDone()
         {

@@ -20,6 +20,8 @@ namespace P3_Projekt_WPF.Classes
         public string SoldBy = "";
         const int shopID = 1;
 
+        public static bool HideMessageBox = false;
+
         public SaleTransaction(BaseProduct product, int amount, int receiptID) : base(product, amount)
         {
             ReceiptID = receiptID;
@@ -55,6 +57,9 @@ namespace P3_Projekt_WPF.Classes
             {
                 Product prod = (Product as Product);
                 prod.GetStorageStatus();
+                if (prod.StorageWithAmount == null) {
+                    throw new Exception("FAIL!");
+                }
                 if (!prod.StorageWithAmount.ContainsKey(shopID))
                 {
                     prod.StorageWithAmount.TryAdd(shopID, -Amount);
@@ -63,7 +68,7 @@ namespace P3_Projekt_WPF.Classes
                 {
                     (Product as Product).StorageWithAmount[shopID] -= Amount;
                 }
-                if (prod.StorageWithAmount.Where(x => x.Value < 0).Count() > 0)
+                if (!HideMessageBox && prod.StorageWithAmount.Where(x => x.Value < 0).Count() > 0)
                 {
                     // Hvis det er nogle storageroom med negativ værdi
                     StringBuilder Text = new StringBuilder();
