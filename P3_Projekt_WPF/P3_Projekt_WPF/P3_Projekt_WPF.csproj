@@ -193,8 +193,8 @@
     <Compile Include="ReceiptListItem.xaml.cs">
       <DependentUpon>ReceiptListItem.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ResovlveTempProduct.xaml.cs">
-      <DependentUpon>ResovlveTempProduct.xaml</DependentUpon>
+    <Compile Include="ResolveTempProduct.xaml.cs">
+      <DependentUpon>ResolveTempProduct.xaml</DependentUpon>
     </Compile>
     <Compile Include="SaleSearchResultItemControl.xaml.cs">
       <DependentUpon>SaleSearchResultItemControl.xaml</DependentUpon>
@@ -259,7 +259,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="ResovlveTempProduct.xaml">
+    <Page Include="ResolveTempProduct.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

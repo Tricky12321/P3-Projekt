@@ -17,9 +17,9 @@ using P3_Projekt_WPF.Classes.Utilities;
 namespace P3_Projekt_WPF
 {
     /// <summary>
-    /// Interaction logic for ResovleTempProduct.xaml
+    /// Interaction logic for ResolveTempProduct.xaml
     /// </summary>
-    public partial class ResovleTempProduct : Window
+    public partial class ResolveTempProduct : Window
     {
         private StorageController _storageController;
         private List<TempListItem> _unresolvedItemList = new List<TempListItem>();
@@ -28,7 +28,7 @@ namespace P3_Projekt_WPF
         private List<KeyValuePair<int, TempProduct>> _resolvedTempProducts = new List<KeyValuePair<int, TempProduct>>();
         private int _index = 0;
 
-        public ResovleTempProduct(StorageController storageController)
+        public ResolveTempProduct(StorageController storageController)
         {
             _storageController = storageController;
             InitializeComponent();

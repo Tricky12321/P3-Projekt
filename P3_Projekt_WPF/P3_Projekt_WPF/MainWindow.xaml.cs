@@ -937,13 +937,13 @@ namespace P3_Projekt_WPF
             InformationGrid.UpdateLayout();
         }
 
-        ResovleTempProduct _resolveTempProduct;
+        ResolveTempProduct _resolveTempProduct;
         private void btn_MergeTempProduct_Click(object sender, RoutedEventArgs e)
         {
             _storageController.ReloadAllDictionarys(this, false);
             if (_resolveTempProduct == null)
             {
-                _resolveTempProduct = new ResovleTempProduct(_storageController);
+                _resolveTempProduct = new ResolveTempProduct(_storageController);
                 _resolveTempProduct.Show();
                 _resolveTempProduct.Closed += delegate
                 {
