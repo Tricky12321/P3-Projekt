@@ -19,12 +19,15 @@ using System.Windows.Shapes;
 namespace P3_Projekt_WPF.Classes.Utilities
 {
     public delegate void LowStorageNotification(Product product);
+    public delegate void ReceiptExecuteDoneDelegate();
+
 
     public class POSController
     {
         /*
          * TODO: fiks metoden til at loade ID til transaction
          */
+
         public Receipt PlacerholderReceipt;
         private StorageController _storageController;
 
@@ -135,11 +138,14 @@ namespace P3_Projekt_WPF.Classes.Utilities
             ExecuteReceipt(true);
         }
 
+        public event ReceiptExecuteDoneDelegate ReceiptExecutingThreadDone;
+
         public void ExecuteReceipt(bool PrintReceipt = true)
         {
             PlacerholderReceipt.Execute(PrintReceipt);
             CheckStorageLevel();
             ReceiptList.Add(PlacerholderReceipt);
+            ReceiptExecutingThreadDone?.Invoke();
             StartPurchase();
         }
 

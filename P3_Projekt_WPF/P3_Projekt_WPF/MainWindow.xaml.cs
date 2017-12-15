@@ -61,6 +61,9 @@ namespace P3_Projekt_WPF
             this.KeyDown += new KeyEventHandler(EnterKeyPressedSearch);
             this.KeyUp += new KeyEventHandler(CtrlHookUp);
 
+            _POSController.ReceiptExecutingThreadDone += reloadProducts;
+            SaleTransaction.UpdateProductEvent += UpdateProductNewAmount;
+
             foreach (var item in OutputList)
             {
                 Debug.WriteLine(item);
@@ -83,11 +86,23 @@ namespace P3_Projekt_WPF
 
         }
 
+        public void UpdateProductNewAmount(Product product)
+        {
+            _storageController.ProductDictionary[product.ID] = product;
+        }
+
+        public void reloadProducts()
+        {
+            Dispatcher.Invoke(ReloadProducts);
+        }
+
         public void ReloadProducts()
         {
             _storageController.LoadAllProductsDictionary();
             LoadProductImages();
             LoadProductControlDictionary();
+            
+
             LoadProductGrid(_storageController.AllProductsDictionary);
         }
 
@@ -389,13 +404,6 @@ namespace P3_Projekt_WPF
             ShowSpecificInfoProductStorage(id);
         }
 
-        public void ShowSPecificInfoProductStorage()
-        {
-            if (_selectedProductID != -1)
-            {
-                ShowSpecificInfoProductStorage(_selectedProductID);
-            }
-        }
 
         public void ShowSpecificInfoProductStorage(int id)
         {
@@ -1166,7 +1174,6 @@ namespace P3_Projekt_WPF
                 BuildInformationTable();
                 LoadGroups();
                 DisableDiscountOnReceipt();
-
             }
         }
 
@@ -1179,10 +1186,6 @@ namespace P3_Projekt_WPF
                 StartsToPay(CompletedPurchase);
                 _partlypaid = !CompletedPurchase;
                 ResetPOSController(CompletedPurchase);
-                if (CompletedPurchase)
-                {
-                    ShowSPecificInfoProductStorage();
-                }
             }
         }
 
@@ -1195,11 +1198,6 @@ namespace P3_Projekt_WPF
                 StartsToPay(CompletedPurchase);
                 _partlypaid = !CompletedPurchase;
                 ResetPOSController(CompletedPurchase);
-                if (CompletedPurchase)
-                {
-                    ReloadProducts();
-                    ShowSPecificInfoProductStorage();
-                }
             }
         }
 
@@ -1213,11 +1211,6 @@ namespace P3_Projekt_WPF
                 StartsToPay(CompletedPurchase);
                 _partlypaid = !CompletedPurchase;
                 ResetPOSController(CompletedPurchase);
-                if (CompletedPurchase)
-                {
-                    ReloadProducts();
-                    ShowSPecificInfoProductStorage();
-                }
             }
         }
 
@@ -1611,16 +1604,6 @@ namespace P3_Projekt_WPF
             UpdateReceiptList();
         }
 
-        private void tempProductToDictionary()
-        {
-            foreach (TempProduct tempproduct in _storageController.TempTempProductList)
-            {
-                _storageController.TempProductDictionary.TryAdd(tempproduct.ID, tempproduct);
-            }
-            _storageController.TempTempProductList.Clear();
-        }
-
-
         private int checkIfNewOrderTrans = 0;
         private int checkIfNewStorageTrans = 0;
         private void settingsTab_GotFocus(object sender, RoutedEventArgs e)
@@ -1637,7 +1620,7 @@ namespace P3_Projekt_WPF
         private void btn_ReloadDatabase_Click(object sender, RoutedEventArgs e)
         {
             _storageController.ClearDictionarys();
-            
+
             Mysql.CheckDatabaseConnection();
             _storageController.ReloadAllDictionarys(this);
         }
