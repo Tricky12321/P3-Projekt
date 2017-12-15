@@ -104,8 +104,10 @@ namespace P3_Projekt_WPF.Classes
             }
             else if (Product is TempProduct)
             {
+                
                 Product.ID = TempProduct.GetNextID();
                 Product.UploadToDatabase();
+                _storageController.TempProductDictionary.TryAdd(Product.ID, Product as TempProduct);
             }
         }
 

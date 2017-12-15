@@ -10,6 +10,7 @@ using System.Collections.Concurrent;
 using System.Diagnostics;
 using System.Threading;
 using P3_Projekt_WPF.Classes.Database;
+using System.Collections.Concurrent;
 namespace P3_Projekt_WPF.Classes.Utilities.Tests
 {
 
@@ -19,6 +20,8 @@ namespace P3_Projekt_WPF.Classes.Utilities.Tests
     {
         StorageController SC;
         POSController POS;
+        ConcurrentDictionary<int, BaseProduct> ProductList;
+        ConcurrentDictionary<int, Group> GroupList;
         [SetUp]
         public void Init()
         {
@@ -31,6 +34,15 @@ namespace P3_Projekt_WPF.Classes.Utilities.Tests
             SaleTransaction.HideMessageBox = true;
             POS = new POSController(SC);
             Utils.GetIceCreameID();
+            ProductList = new ConcurrentDictionary<int, BaseProduct>();
+            GroupList = new ConcurrentDictionary<int, Group>();
+            for (int i = 0; i < 1000000; i++)
+            {
+                Product NewProduct = new Product(i, "Test", "Brand", 1m, 1, false, 1m, 1m);
+                ProductList.TryAdd(i, NewProduct);
+            }
+            GroupList.TryAdd(1, new Group("TestGruppe", "TestBeskrivelse"));
+
         }
 
         [TestCase(ExpectedResult = true)]
@@ -350,7 +362,11 @@ namespace P3_Projekt_WPF.Classes.Utilities.Tests
             Assert.IsTrue((Prod.StorageWithAmount[1] == (StorageCount - amount)) && (priceCheck));
         }
 
-        [TestCase(3,10)]
+        [TestCase(3, 10)]
+        [TestCase(7, 5)]
+        [TestCase(11, 1000)]
+        [TestCase(7, 10000)]
+        [TestCase(22, 1)]
         public void TempProductMergeTest(int resolveID, int amount)
         {
             // Creating temp product
@@ -377,25 +393,110 @@ namespace P3_Projekt_WPF.Classes.Utilities.Tests
             Assert.IsTrue(ID_Check && CheckResolvedProdID && CheckResolvedProdID_DB && priceCheck && CheckResolved);
         }
 
-        [Test()]
-        public void TempProductRemergeTest()
+        [TestCase(3, 7, 10)]
+        [TestCase(7, 3, 5)]
+        [TestCase(11, 3, 1000)]
+        [TestCase(7, 30, 10000)]
+        [TestCase(22, 3, 1)]
+        public void TempProductRemergeTest(int resolveID, int reResolveID, int amount)
         {
+            // Creating temp product
             int old_id = TempProduct.GetNextID();
-            SC.CreateTempProduct("Test", 1m, old_id);
-            TempProduct TestProd = SC.TempProductDictionary[old_id];
-            TestProd.UploadToDatabase();
+            TempProduct TestProd = new TempProduct("Test", 10m);
+            POS.AddSaleTransaction(TestProd, amount);
+            // Check if price on receipt is correct
+            bool priceCheck = POS.PlacerholderReceipt.TotalPrice == TestProd.SalePrice * amount;
+            // execute receipt, without printing it
+            POS.ExecuteReceipt(false);
+            // Check if the tempproduct can be found in the TempProductDictionary
+            bool DictionaryContains = SC.TempProductDictionary.ContainsKey(old_id);
             int new_id = TempProduct.GetNextID();
             bool ID_Check = new_id > old_id;
+            // download tempproduct form DB
             TempProduct TestProd_DB = new TempProduct(old_id);
-            SC.MergeTempProduct(TestProd_DB, 3);
-            bool CheckResolvedProdID = TestProd_DB.ResolvedProductID == 3;
+            // Merge temp product
+            SC.MergeTempProduct(TestProd_DB, resolveID);
+            // Getting the TempProduct from DB after merge to see if it has been resolved
             TempProduct TestProd_DB_AfterMerge = new TempProduct(old_id);
-            bool CheckResolvedProdID_DB = TestProd_DB_AfterMerge.ResolvedProductID == 3;
-            SC.RemergeTempProduct(TestProd_DB_AfterMerge, 7);
+            bool CheckResolved = TestProd_DB_AfterMerge.Resolved;
+            bool CheckResolvedProdID = TestProd_DB.ResolvedProductID == resolveID;
+            bool CheckResolvedProdID_DB = TestProd_DB_AfterMerge.ResolvedProductID == resolveID;
+            SC.RemergeTempProduct(TestProd_DB_AfterMerge, reResolveID);
             TempProduct TestProd_DB_AfterRemerge = new TempProduct(old_id);
-            bool CheckRemergedTempProduct = TestProd_DB_AfterRemerge.ResolvedProductID == 7;
-            Assert.IsTrue(ID_Check && CheckResolvedProdID && CheckResolvedProdID_DB && CheckRemergedTempProduct);
+            bool CheckRemergedTempProduct = TestProd_DB_AfterRemerge.ResolvedProductID == reResolveID;
+            Assert.IsTrue(ID_Check && CheckResolvedProdID && CheckResolvedProdID_DB && CheckRemergedTempProduct && priceCheck && CheckResolved);
         }
+
+
+        /*
+         * 5 forskellige søge strenge
+         * 10,100,500,1000,10000,100000 
+         * 
+         * 
+         */
+        
+
+        [TestCase("Test",1000)]
+        [TestCase("Test",10000)]
+        [TestCase("Test",100000)]
+        [TestCase("Test",1000000)]
+        [TestCase("Test",10000000)]
+        [TestCase("Testmegetlangtord", 1000)]
+        [TestCase("Testmegetlangtord", 10000)]
+        [TestCase("Testmegetlangtord", 100000)]
+        [TestCase("Testmegetlangtord", 1000000)]
+        [TestCase("Testmegetlangtord", 10000000)]
+        [TestCase("Test med", 1000)]
+        [TestCase("Test med", 10000)]
+        [TestCase("Test med", 100000)]
+        [TestCase("Test med", 1000000)]
+        [TestCase("Test med", 10000000)]
+        [TestCase("Testmegetlangtord Testmegetlangtord", 1000)]
+        [TestCase("Testmegetlangtord Testmegetlangtord", 10000)]
+        [TestCase("Testmegetlangtord Testmegetlangtord", 100000)]
+        [TestCase("Testmegetlangtord Testmegetlangtord", 1000000)]
+        [TestCase("Testmegetlangtord Testmegetlangtord", 10000000)]
+        [TestCase("Test med tre", 1000)]
+        [TestCase("Test med tre", 10000)]
+        [TestCase("Test med tre", 100000)]
+        [TestCase("Test med tre", 1000000)]
+        [TestCase("Test med tre", 10000000)]
+        [TestCase("Testmegetlangtord Testmegetlangtord Testmegetlangtord", 1000)]
+        [TestCase("Testmegetlangtord Testmegetlangtord Testmegetlangtord", 10000)]
+        [TestCase("Testmegetlangtord Testmegetlangtord Testmegetlangtord", 100000)]
+        [TestCase("Testmegetlangtord Testmegetlangtord Testmegetlangtord", 1000000)]
+        [TestCase("Testmegetlangtord Testmegetlangtord Testmegetlangtord", 10000000)]
+        [TestCase("Test med fire ord", 1000)]
+        [TestCase("Test med fire ord", 10000)]
+        [TestCase("Test med fire ord", 100000)]
+        [TestCase("Test med fire ord", 1000000)]
+        [TestCase("Test med fire ord", 10000000)]
+        [TestCase("Testmegetlangtord Testmegetlangtord Testmegetlangtord Testmegetlangtord", 1000)]
+        [TestCase("Testmegetlangtord Testmegetlangtord Testmegetlangtord Testmegetlangtord", 10000)]
+        [TestCase("Testmegetlangtord Testmegetlangtord Testmegetlangtord Testmegetlangtord", 100000)]
+        [TestCase("Testmegetlangtord Testmegetlangtord Testmegetlangtord Testmegetlangtord", 1000000)]
+        [TestCase("Testmegetlangtord Testmegetlangtord Testmegetlangtord Testmegetlangtord", 10000000)]
+        [TestCase("Test med fem ord YAY", 1000)]
+        [TestCase("Test med fem ord YAY", 10000)]
+        [TestCase("Test med fem ord YAY", 100000)]
+        [TestCase("Test med fem ord YAY", 1000000)]
+        [TestCase("Test med fem ord YAY", 10000000)]
+        [TestCase("Testmegetlangtord Testmegetlangtord Testmegetlangtord Testmegetlangtord Testmegetlangtord", 1000)]
+        [TestCase("Testmegetlangtord Testmegetlangtord Testmegetlangtord Testmegetlangtord Testmegetlangtord", 10000)]
+        [TestCase("Testmegetlangtord Testmegetlangtord Testmegetlangtord Testmegetlangtord Testmegetlangtord", 100000)]
+        [TestCase("Testmegetlangtord Testmegetlangtord Testmegetlangtord Testmegetlangtord Testmegetlangtord", 1000000)]
+        [TestCase("Testmegetlangtord Testmegetlangtord Testmegetlangtord Testmegetlangtord Testmegetlangtord", 10000000)]
+        public void SearchPerformanceTest(string SearchString, int number_of_products)
+        {
+
+            StorageController SC = new StorageController();
+            SC.AllProductsDictionary = new ConcurrentDictionary<int, BaseProduct>(ProductList.Take(number_of_products).ToDictionary(x=>x.Value.ID,x=>x.Value));
+            SC.GroupDictionary = GroupList;
+            SC.SearchForProduct(SearchString).Count();
+            Assert.Pass();
+
+        }
+             
 
         /*[Test()]
         public void ProductIDTest()
