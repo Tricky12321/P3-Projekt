@@ -73,7 +73,7 @@ namespace P3_Projekt_WPF
                 string description = textbox_Description.Text;
                 price = decimal.Parse(textbox_Price.Text);
                 int amount = int.Parse(textBox_ProductAmount.Text);
-                TempProduct NewTemp = _storageController.CreateTempProduct(description, price, _tempID);
+                TempProduct NewTemp = _storageController.CreateTempTempProduct(description, price, _tempID);
                 _storageController.TempTempProductList.Add(NewTemp);
                 _posController.AddSaleTransaction(NewTemp, amount);
                 UpdateReceiptEventHandler?.Invoke(this, null);

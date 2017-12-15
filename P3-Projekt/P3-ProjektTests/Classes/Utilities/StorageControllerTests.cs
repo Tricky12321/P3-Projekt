@@ -350,6 +350,52 @@ namespace P3_Projekt_WPF.Classes.Utilities.Tests
             Assert.IsTrue((Prod.StorageWithAmount[1] == (StorageCount - amount)) && (priceCheck));
         }
 
+        [TestCase(3,10)]
+        public void TempProductMergeTest(int resolveID, int amount)
+        {
+            // Creating temp product
+            int old_id = TempProduct.GetNextID();
+            TempProduct TestProd = new TempProduct("Test", 10m);
+            POS.AddSaleTransaction(TestProd, amount);
+            // Check if price on receipt is correct
+            bool priceCheck = POS.PlacerholderReceipt.TotalPrice == TestProd.SalePrice * amount;
+            // execute receipt, without printing it
+            POS.ExecuteReceipt(false);
+            // Check if the tempproduct can be found in the TempProductDictionary
+            bool DictionaryContains = SC.TempProductDictionary.ContainsKey(old_id);
+            int new_id = TempProduct.GetNextID();
+            bool ID_Check = new_id > old_id;
+            // download tempproduct form DB
+            TempProduct TestProd_DB = new TempProduct(old_id);
+            // Merge temp product
+            SC.MergeTempProduct(TestProd_DB, resolveID);
+            // Getting the TempProduct from DB after merge to see if it has been resolved
+            TempProduct TestProd_DB_AfterMerge = new TempProduct(old_id);
+            bool CheckResolved = TestProd_DB_AfterMerge.Resolved;
+            bool CheckResolvedProdID = TestProd_DB.ResolvedProductID == resolveID;
+            bool CheckResolvedProdID_DB = TestProd_DB_AfterMerge.ResolvedProductID == resolveID;
+            Assert.IsTrue(ID_Check && CheckResolvedProdID && CheckResolvedProdID_DB && priceCheck && CheckResolved);
+        }
+
+        [Test()]
+        public void TempProductRemergeTest()
+        {
+            int old_id = TempProduct.GetNextID();
+            SC.CreateTempProduct("Test", 1m, old_id);
+            TempProduct TestProd = SC.TempProductDictionary[old_id];
+            TestProd.UploadToDatabase();
+            int new_id = TempProduct.GetNextID();
+            bool ID_Check = new_id > old_id;
+            TempProduct TestProd_DB = new TempProduct(old_id);
+            SC.MergeTempProduct(TestProd_DB, 3);
+            bool CheckResolvedProdID = TestProd_DB.ResolvedProductID == 3;
+            TempProduct TestProd_DB_AfterMerge = new TempProduct(old_id);
+            bool CheckResolvedProdID_DB = TestProd_DB_AfterMerge.ResolvedProductID == 3;
+            SC.RemergeTempProduct(TestProd_DB_AfterMerge, 7);
+            TempProduct TestProd_DB_AfterRemerge = new TempProduct(old_id);
+            bool CheckRemergedTempProduct = TestProd_DB_AfterRemerge.ResolvedProductID == 7;
+            Assert.IsTrue(ID_Check && CheckResolvedProdID && CheckResolvedProdID_DB && CheckRemergedTempProduct);
+        }
 
         /*[Test()]
         public void ProductIDTest()
