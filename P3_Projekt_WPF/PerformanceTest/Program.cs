@@ -47,20 +47,20 @@ namespace PerformanceTest
             SC_1000000.GroupDictionary.TryAdd(1, NewGroup);
             SC_10000000.GroupDictionary.TryAdd(1, NewGroup);
             TestPerformance(SC_1000, "TEST");
-            TestPerformance(SC_1000, "TEST TEST");
-            TestPerformance(SC_1000, "TEST TEST TEST");
-            TestPerformance(SC_1000, "TEST TEST TEST TEST");
             TestPerformance(SC_10000, "TEST");
-            TestPerformance(SC_10000, "TEST TEST");
-            TestPerformance(SC_10000, "TEST TEST TEST");
-            TestPerformance(SC_10000, "TEST TEST TEST TEST");
             TestPerformance(SC_100000, "TEST");
-            TestPerformance(SC_100000, "TEST TEST");
-            TestPerformance(SC_100000, "TEST TEST TEST");
-            TestPerformance(SC_100000, "TEST TEST TEST TEST");
             TestPerformance(SC_1000000, "TEST");
+            TestPerformance(SC_1000, "TEST TEST");
+            TestPerformance(SC_10000, "TEST TEST");
+            TestPerformance(SC_100000, "TEST TEST");
             TestPerformance(SC_1000000, "TEST TEST");
+            TestPerformance(SC_1000, "TEST TEST TEST");
+            TestPerformance(SC_10000, "TEST TEST TEST");
+            TestPerformance(SC_100000, "TEST TEST TEST");
             TestPerformance(SC_1000000, "TEST TEST TEST");
+            TestPerformance(SC_1000, "TEST TEST TEST TEST");
+            TestPerformance(SC_10000, "TEST TEST TEST TEST");
+            TestPerformance(SC_100000, "TEST TEST TEST TEST");
             TestPerformance(SC_1000000, "TEST TEST TEST TEST");
             Console.WriteLine("DONE");
             Console.ReadKey();
@@ -75,13 +75,15 @@ namespace PerformanceTest
                 Timer.Start();
                 SC.SearchForProduct(SearchString);
                 Timer.Stop();
-                Console.WriteLine($"Time: {Timer.ElapsedMilliseconds}ms");
+                //Console.WriteLine($"Time: {Timer.ElapsedMilliseconds}ms");
                 _average += Timer.ElapsedMilliseconds;
                 TestPerformance(SC, SearchString, time + 1);
             } else
             {
                 _average = _average / 3;
-                Console.WriteLine($"C:{SC.AllProductsDictionary.Count()},A:{_average},WC:{SearchString.Split(' ').Count()},SL:{SearchString.Length}\n");
+                _average = Math.Round(_average, 0);
+                // C/A/WC/SL
+                Console.WriteLine($"{SC.AllProductsDictionary.Count()},{_average},{SearchString.Split(' ').Count()},{SearchString.Length}");
                 _average = 0m;
             }
 
