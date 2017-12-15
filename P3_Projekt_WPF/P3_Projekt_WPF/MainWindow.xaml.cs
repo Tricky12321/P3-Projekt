@@ -1604,16 +1604,6 @@ namespace P3_Projekt_WPF
             UpdateReceiptList();
         }
 
-        private void tempProductToDictionary()
-        {
-            foreach (TempProduct tempproduct in _storageController.TempTempProductList)
-            {
-                _storageController.TempProductDictionary.TryAdd(tempproduct.ID, tempproduct);
-            }
-            _storageController.TempTempProductList.Clear();
-        }
-
-
         private int checkIfNewOrderTrans = 0;
         private int checkIfNewStorageTrans = 0;
         private void settingsTab_GotFocus(object sender, RoutedEventArgs e)
