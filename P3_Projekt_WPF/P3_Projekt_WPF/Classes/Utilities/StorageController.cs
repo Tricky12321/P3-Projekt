@@ -894,7 +894,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
             // Levensteins Søge Algoritme 
             foreach (BaseProduct product in AllProductsDictionary.Values)
             {
-                ProductSearch(searchStringLower, product);
+                NameSearch(searchStringLower, product);
                 GroupSearch(searchStringLower, product);
                 BrandSearch(searchStringLower, product);
             }
@@ -911,152 +911,106 @@ namespace P3_Projekt_WPF.Classes.Utilities
             }
         }
 
-
-
-        private void ProductSearch(string searchStringElement, BaseProduct productToConvert)
+        private void NameSearch(string searchStringElement, BaseProduct productToConvert)
         {
             SearchProduct productToAdd = new SearchProduct(productToConvert);
 
             List<string> searchSplit = searchStringElement.Split(' ').ToList();
-            SpaceCounter(ref searchSplit);
-            if (ContainsSearch(searchStringElement, productToConvert.GetName()))
+            WordPairer(ref searchSplit);
+            List<string> nameSplit = productToConvert.GetName().ToLower().Split(' ').ToList();
+            WordPairer(ref nameSplit);
+            foreach (string searchWord in searchSplit)
             {
-                productToAdd.NameMatch += 100;
-            }
-            List<string> productSplit = productToConvert.GetName().ToLower().Split(' ').ToList();
-            SpaceCounter(ref productSplit);
-            foreach (string s in searchSplit)
-            {
-                foreach (string t in productSplit)
+                foreach (string nameWord in nameSplit)
                 {
-                    if (s == t)
+                    if (searchWord == nameWord)
                     {
-                        productToAdd.NameMatch += 100;
+                        productToAdd.NameMatch += 5;
                     }
-                    else if (LevenstheinProductSearch(s, t))
+                    else if (WithinLevenstheinLimit(searchWord, nameWord))
                     {
                         productToAdd.NameMatch += 1;
                     }
-
                 }
             }
-
             weigthedSearchList.Add(productToAdd);
         }
-        /*
-        private void SpecialCharsCounter(ref List<string> ListOfWords)
-        {
-            foreach (string item in ListOfWords)
-            {
-                if (item.Contains('ø') || item.Contains('æ') || item.Contains('å'))
-                {
-                    ListOfWords.Add(item.Replace("ø", "oe").Replace("æ", "ae").Replace("å", "aa"));
-                }
-            }
-        }
-        */
+
         // Complexity = (n*s)/2
-        private void SpaceCounter(ref List<string> ListOfWords)
+        private void WordPairer(ref List<string> listOfWords)
         {
-            int searchAmount = ListOfWords.Count();
+            int searchAmount = listOfWords.Count();
             if (searchAmount > 1)
             {
                 for (int i = 1; i <= searchAmount - 1; i++)
                 {
-                    ListOfWords.Add(ListOfWords[i] + ListOfWords[i - 1]);
-                    ListOfWords.Add(ListOfWords[i - 1] + ListOfWords[i]);
+                    listOfWords.Add(listOfWords[i] + listOfWords[i - 1]);
+                    listOfWords.Add(listOfWords[i - 1] + listOfWords[i]);
                 }
             }
-        }
-
-        private bool LevenshteinValidationChecker(string[] searchedString, string stringToCompare, out int charDifference)
-        {
-            string[] compareSplit = stringToCompare.ToLower().Split(' ');
-            foreach (string sString in searchedString)
-            {
-                foreach (string compareString in compareSplit)
-                {
-                    charDifference = ComputeLevenshteinsDistance(sString, compareString);
-                    if (EvaluateStringLimit(sString.Length, charDifference))
-                    {
-                        return true;
-                    }
-                }
-            }
-            charDifference = -1;
-            return false;
         }
 
         private void GroupSearch(string searchString, BaseProduct product)
         {
             //divides all the elements in the string, to evaluate each element
-            string[] dividedString = searchString.Split(' ');
+            List<string> searchSplit = searchString.Split(' ').ToList();
+            WordPairer(ref searchSplit);
             //matching on each element in the string
-            int MatchedValue;
             //if the string contains a name of a group, or the string is matched, each product with the same group 
             //is added to the list of products to show.
-            var SearchList = weigthedSearchList.Where(x => x.CurrentProduct.ID == product.ID);
+            SearchProduct currentProduct = weigthedSearchList.Where(x => x.CurrentProduct.ID == product.ID).First();
             int groupID = (product is Product) ? (product as Product).ProductGroupID : (product as ServiceProduct).ServiceProductGroupID;
+            List<string> groupSplit = GroupDictionary[groupID].Name.Split(' ').ToList();
+            WordPairer(ref groupSplit);
 
-            foreach (string searchedString in dividedString)
+            foreach (string searchWord in searchSplit)
             {
-                if (GroupDictionary[groupID].Name.Contains(searchedString))
+                foreach (string groupWord in groupSplit)
                 {
-                    SearchList.First().GroupMatch += 100;
+                    if (searchWord == groupWord)
+                    {
+                        currentProduct.GroupMatch += 5;
+                    }
+                    else if (WithinLevenstheinLimit(searchWord, groupWord))
+                    {
+                        currentProduct.GroupMatch += 1;
+                    }
                 }
-
-            }
-            if (LevenshteinValidationChecker(dividedString, GroupDictionary[groupID].Name, out MatchedValue) && SearchList.Count() > 0 && SearchList.First() != null)
-            {
-                SearchList.First().GroupMatch += 1;
             }
         }
 
         private void BrandSearch(string searchString, BaseProduct product)
         {
             //divides all the elements in the string, to evaluate each element
-            string[] dividedString = searchString.Split(' ');
+            List<string> searchSplit = searchString.Split(' ').ToList();
+            WordPairer(ref searchSplit);
             //checking all products to to match the brands with the searched string elements
-            int MatchedValues;
             //matching on each element in the string
             //if the string contains a product brand, or the string is matched, each product with the same brand
             //is added to the list of products to show.
-            var SearchList = weigthedSearchList.Where(x => x.CurrentProduct.ID == product.ID);
+            SearchProduct currentProduct = weigthedSearchList.Where(x => x.CurrentProduct.ID == product.ID).First();
             if (product is Product)
             {
-                foreach (string searchedString in dividedString)
+                List<string> brandSplit = (product as Product).Brand.Split(' ').ToList();
+                WordPairer(ref brandSplit);
+                foreach (string searchWord in searchSplit)
                 {
-                    if ((product as Product).Brand.Contains(searchedString))
+                    foreach (string brandWord in brandSplit)
                     {
-                        SearchList.First().BrandMatch += 100;
-                    }
-                }
-                if (LevenshteinValidationChecker(dividedString, (product as Product).Brand, out MatchedValues))
-                {
-                    if (SearchList.Count() > 0)
-                    {
-                        SearchList.First().BrandMatch += 1;
+                        if (searchWord == brandWord)
+                        {
+                            currentProduct.BrandMatch += 5;
+                        }
+                        else if (WithinLevenstheinLimit(searchWord, brandWord))
+                        {
+                            currentProduct.BrandMatch += 1;
+                        }
                     }
                 }
             }
         }
 
-        public bool ContainsSearch(string searchString, string CheckString)
-        {
-            string StringToSearch = CheckString.ToLower();
-            if (searchString.Length < 4)
-            {
-                return false;
-            }
-            if (StringToSearch.Contains(searchString.ToLower()))
-            {
-                return true;
-            }
-            return false;
-        }
-
-
-        private bool LevenstheinProductSearch(string searchEle, string ProductEle)
+        private bool WithinLevenstheinLimit(string searchEle, string ProductEle)
         {
             int charDifference = ComputeLevenshteinsDistance(searchEle, ProductEle);
             return EvaluateStringLimit(searchEle.Length, charDifference);

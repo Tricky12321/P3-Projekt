@@ -516,7 +516,7 @@ namespace P3_Projekt_WPF.Classes.Utilities.Tests
         [Test()]
         public void GroupSearchTest()
         {
-            StorageController strContr = new StorageController();
+            StorageController strContr = new StorageController();C:\Users\lasse\Source\Repos\P3-Projekt\P3-Projekt\P3-ProjektTests\Classes\Utilities\StorageControllerTests.cs
             Group testGroup = new Group("Adidas", "shoes and clothes");
             strContr.GroupDictionary.Add(101, testGroup);
             Product productToBeCompared = new Product("Running trousers", "Adidas", 100, testGroup.ID, false, 20, 50, null);
@@ -543,76 +543,6 @@ namespace P3_Projekt_WPF.Classes.Utilities.Tests
             Assert.IsTrue(productList.Contains(productToBeCompared));
         }
         */
-        [Test()]
-        public void ContainsSearchTest()
-        {
-            StorageController SC = new StorageController();
-            BaseProduct TestProduct = new Product(1, "TestProductMedSlagI", "Aner det ikke", 10m, 1, false, 0m, 0m);
-            if (SC.ContainsSearch("sLaG", TestProduct.GetName()))
-            {
-                Assert.Pass();
-            }
-            else
-            {
-                Assert.Fail();
-            }
-        }
-        [Test()]
-        public void ContainsSearchTest5()
-        {
-            StorageController SC = new StorageController();
-            BaseProduct TestProduct = new Product(1, "TestProductMedSlagI", "Aner det ikke", 10m, 1, false, 0m, 0m);
-            if (SC.ContainsSearch("asdf", TestProduct.GetName()))
-            {
-                Assert.Fail();
-            }
-            else
-            {
-                Assert.Pass();
-            }
-        }
-        [Test()]
-        public void ContainsSearchTest2()
-        {
-            StorageController SC = new StorageController();
-            BaseProduct TestProduct = new Product(1, "TestProductMedSlagI", "Aner det ikke", 10m, 1, false, 0m, 0m);
-            if (SC.ContainsSearch("Product", TestProduct.GetName()))
-            {
-                Assert.Pass();
-            }
-            else
-            {
-                Assert.Fail();
-            }
-        }
-        [Test()]
-        public void ContainsSearchTest3()
-        {
-            StorageController SC = new StorageController();
-            BaseProduct TestProduct = new Product(1, "asdf", "Aner det ikke", 10m, 1, false, 0m, 0m);
-            if (SC.ContainsSearch("Product", TestProduct.GetName()))
-            {
-                Assert.Fail();
-            }
-            else
-            {
-                Assert.Pass();
-            }
-        }
-        [Test()]
-        public void ContainsSearchTest4()
-        {
-            StorageController SC = new StorageController();
-            BaseProduct TestProduct = new Product(1, "TestProductTing", "Aner det ikke", 10m, 1, false, 0m, 0m);
-            if (SC.ContainsSearch("", TestProduct.GetName()))
-            {
-                Assert.Fail();
-            }
-            else
-            {
-                Assert.Pass();
-            }
-        }
-
+        
     }
 }
