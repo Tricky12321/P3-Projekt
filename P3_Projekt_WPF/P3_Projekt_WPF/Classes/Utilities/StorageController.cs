@@ -344,16 +344,15 @@ namespace P3_Projekt_WPF.Classes.Utilities
             {
                 while (_storageStatusQueue.TryDequeue(out Data))
                 {
-                    int id = Convert.ToInt32(Data.Values[1]);
+                    int id = Convert.ToInt32(Data.Values[0]);
                     if (ProductDictionary.ContainsKey(id))
                     {
-                        ProductDictionary[id].StorageWithAmount.TryAdd(Convert.ToInt32(Data.Values[2]), Convert.ToInt32(Data.Values[3]));
+                        ProductDictionary[id].StorageWithAmount.TryAdd(Convert.ToInt32(Data.Values[1]), Convert.ToInt32(Data.Values[2]));
                     }
                     else
                     {
-                        DisabledProducts[id].StorageWithAmount.TryAdd(Convert.ToInt32(Data.Values[2]), Convert.ToInt32(Data.Values[3]));
+                        DisabledProducts[id].StorageWithAmount.TryAdd(Convert.ToInt32(Data.Values[1]), Convert.ToInt32(Data.Values[2]));
                     }
-
                     Interlocked.Increment(ref _doneStorageStatusCount);
                 }
                 while (_storageTransactionsQueue.TryDequeue(out Data))
@@ -742,8 +741,11 @@ namespace P3_Projekt_WPF.Classes.Utilities
             tempProductToMatch.Resolve(MatchedProduct);
             SaleTransaction tempProductsTransaction = tempProductToMatch.GetTempProductsSaleTransaction();
             //Gets the Shop storage room, which has = 1, but if it doesn't exist, gets the next one
-            KeyValuePair<int, int> StorageRoomStatus = MatchedProduct.StorageWithAmount.Where(x => x.Key != 0).First();
-
+            if (MatchedProduct.StorageWithAmount.Count == 0)
+            {
+                MatchedProduct.StorageWithAmount.TryAdd(1, 0);
+            }
+            KeyValuePair<int, int> StorageRoomStatus = MatchedProduct.StorageWithAmount.First();
             MatchedProduct.StorageWithAmount[StorageRoomStatus.Key] = StorageRoomStatus.Value - tempProductsTransaction.Amount;
             MatchedProduct.UpdateInDatabase();
         }

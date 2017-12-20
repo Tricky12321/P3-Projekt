@@ -31,7 +31,6 @@ namespace P3_Projekt_WPF.Classes.Utilities.Tests
 
         }
 
-        [TestCase(3, 10, PaymentMethod_Enum.Card, 100)]
         [TestCase(3, 100, PaymentMethod_Enum.Cash, 1337)]
         [TestCase(3, 1000, PaymentMethod_Enum.MobilePay, 4000)]
         public void TestStatistics(int ProductID, int Amount, PaymentMethod_Enum PaymentMethod, decimal PaidAmount)

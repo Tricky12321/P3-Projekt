@@ -1604,7 +1604,7 @@ namespace P3_Projekt_WPF
                 {
                     product = _storageController.DisabledProducts[storageTrans.Value.Product.ID];
                 }
-                listview_SettingsStorageStorageTransaction.Items.Add(new { Received = product.Name, Amount = storageTrans.Value.Amount, StorageRoomSource = storageTrans.Value._source.Name, StorageRoomDest = storageTrans.Value._source.Name });
+                listview_SettingsStorageStorageTransaction.Items.Add(new { Received = product.Name, Amount = storageTrans.Value.Amount, StorageRoomSource = storageTrans.Value.Source.Name, StorageRoomDest = storageTrans.Value.Source.Name });
             }
 
         }

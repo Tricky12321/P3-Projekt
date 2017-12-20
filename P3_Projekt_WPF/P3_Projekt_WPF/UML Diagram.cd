@@ -43,7 +43,7 @@
   <Class Name="P3_Projekt_WPF.CreateStorageRoom" BaseTypeListCollapsed="true">
     <Position X="3" Y="50.75" Width="2.25" />
     <TypeIdentifier>
-      <HashCode>ABAAAEAAAAAAACAAAAABAAAAAAAEAAAAAAAAABAAAAA=</HashCode>
+      <HashCode>ABAAAEAAAAAAACAAAAAAAAAAAAAEAAAAAAAAABAAAAA=</HashCode>
       <FileName>CreateStorageRoom.xaml.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" Collapsed="true" />
@@ -57,7 +57,7 @@
     <Lollipop Position="0.877" Collapsed="true" />
   </Class>
   <Class Name="P3_Projekt_WPF.MainWindow" BaseTypeListCollapsed="true">
-    <Position X="16.5" Y="43" Width="1.5" />
+    <Position X="35.75" Y="17.5" Width="4" />
     <Members>
       <Field Name="_createGroup" Hidden="true" />
       <Field Name="_createStorageRoom" Hidden="true" />
@@ -84,7 +84,7 @@
       <Field Name="runLoading" Hidden="true" />
     </Members>
     <TypeIdentifier>
-      <HashCode>4yKtICkLBBnkAI4QpJbDhzGsIcZfSYsCrQJTz/oKoBQ=</HashCode>
+      <HashCode>4yKtICkLBBnkAI4QpJbDhzGsIUZfSYsCrQpTz/oKoBQ=</HashCode>
       <FileName>MainWindow.xaml.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" Collapsed="true" />
@@ -158,63 +158,63 @@
     </TypeIdentifier>
   </Class>
   <Class Name="P3_Projekt_WPF.Classes.Exceptions.EmptyTableException">
-    <Position X="14.75" Y="35.5" Width="1.75" />
+    <Position X="1.25" Y="29.75" Width="1.75" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Classes\Exceptions\EmptyTableException.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="P3_Projekt_WPF.Classes.Exceptions.NoInternetConnectionException">
-    <Position X="16.75" Y="35.5" Width="2.5" />
+    <Position X="3.25" Y="29.75" Width="2.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Classes\Exceptions\NoInternetConnectionException.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="P3_Projekt_WPF.Classes.Exceptions.NotConnectedException">
-    <Position X="14.75" Y="37" Width="1.75" />
+    <Position X="1.25" Y="31.25" Width="1.75" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Classes\Exceptions\NotConnectedException.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="P3_Projekt_WPF.Classes.Exceptions.ProductAlreadyActivated">
-    <Position X="14.75" Y="40" Width="2.5" />
+    <Position X="1.25" Y="34.25" Width="2.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Classes\Exceptions\ProductAlreadyActivated.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="P3_Projekt_WPF.Classes.Exceptions.ProductAlreadyDeActivated">
-    <Position X="16.75" Y="37" Width="2.5" />
+    <Position X="3.25" Y="31.25" Width="2.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Classes\Exceptions\ProductAlreadyDeActivated.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="P3_Projekt_WPF.Classes.Exceptions.ProductDiscountException">
-    <Position X="17.5" Y="40" Width="1.75" />
+    <Position X="4" Y="34.25" Width="1.75" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Classes\Exceptions\ProductDiscountException.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="P3_Projekt_WPF.Classes.Exceptions.TempProductResolvedException">
-    <Position X="14.75" Y="38.5" Width="2.5" />
+    <Position X="1.25" Y="32.75" Width="2.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Classes\Exceptions\TempProductResolvedException.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="P3_Projekt_WPF.Classes.Exceptions.UnknownProductTypeException">
-    <Position X="17.5" Y="38.5" Width="1.75" />
+    <Position X="4" Y="32.75" Width="1.75" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Classes\Exceptions\UnknownProductTypeException.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="P3_Projekt_WPF.Classes.Exceptions.WrongProductTypeException">
-    <Position X="14.75" Y="34" Width="2.25" />
+    <Position X="1.25" Y="28.25" Width="2.25" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Classes\Exceptions\WrongProductTypeException.cs</FileName>
@@ -229,7 +229,7 @@
     <Lollipop Position="0.2" Collapsed="true" />
   </Class>
   <Class Name="P3_Projekt_WPF.Classes.Payment" BaseTypeListCollapsed="true">
-    <Position X="18.25" Y="25.5" Width="1.5" />
+    <Position X="18.25" Y="24.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>QAABAAAAAAAAgAAAASAAAACAQAAAAAAAAAABAAAAAAA=</HashCode>
       <FileName>Classes\Payment.cs</FileName>
@@ -239,7 +239,7 @@
   <Class Name="P3_Projekt_WPF.Classes.BaseProduct">
     <Position X="3" Y="1.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAACAAggAAAASAAAAAAQgAAAAAAAAABAAAABAA=</HashCode>
+      <HashCode>AAAAAAAACAAggAAAASAAAAAAQgAAAAAAAAABAAAABAE=</HashCode>
       <FileName>Classes\Product\BaseProduct.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
@@ -247,12 +247,12 @@
   <Class Name="P3_Projekt_WPF.Classes.Product">
     <Position X="0.5" Y="6" Width="2" />
     <TypeIdentifier>
-      <HashCode>QAAAAGAAAAAAABAEASBABgQAQAAAABAiAAAVIgABBAE=</HashCode>
+      <HashCode>QAAAAGAAAAAAABAEASBABgQAQAAAABAiAAAVIgABBAA=</HashCode>
       <FileName>Classes\Product\Product.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="P3_Projekt_WPF.Classes.SearchProduct" BaseTypeListCollapsed="true">
-    <Position X="18.25" Y="22.75" Width="1.5" />
+    <Position X="18.25" Y="22" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAgAAAAAAAIAAQAAAAAAAAAAAAAAAAACBACAAAAAAA=</HashCode>
       <FileName>Classes\Product\SearchedProduct.cs</FileName>
@@ -262,7 +262,7 @@
   <Class Name="P3_Projekt_WPF.Classes.ServiceProduct">
     <Position X="2.75" Y="6" Width="2" />
     <TypeIdentifier>
-      <HashCode>AAQAECAAAAQAABAEASAABAQAQAAAABAgAgARAAAABAA=</HashCode>
+      <HashCode>AAQAECAAAAQAABAEASAABAQAQAAAABAgAAARAAAABAA=</HashCode>
       <FileName>Classes\Product\ServiceProduct.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -281,7 +281,7 @@
     </TypeIdentifier>
   </Class>
   <Class Name="P3_Projekt_WPF.Classes.Receipt" BaseTypeListCollapsed="true">
-    <Position X="20" Y="26" Width="2" />
+    <Position X="20" Y="22.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAmgAAAAAABAsBwAASAAAAAAQEAAQAABwAQDAAACAAA=</HashCode>
       <FileName>Classes\Receipt.cs</FileName>
@@ -328,7 +328,7 @@
   <Class Name="P3_Projekt_WPF.Classes.StorageTransaction">
     <Position X="9.25" Y="6" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAEAAgDQAASAAEAAAQAACAAAAAAABAAAAAAA=</HashCode>
+      <HashCode>AAAAAAAAAgAAgBQAASAAEAAAQAACAAAEAAABAAAAAAA=</HashCode>
       <FileName>Classes\Transaction\StorageTransaction.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -348,28 +348,28 @@
     </TypeIdentifier>
   </Class>
   <Class Name="P3_Projekt_WPF.Classes.Utilities.POSController">
-    <Position X="20" Y="17.75" Width="1.5" />
+    <Position X="20" Y="17.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>YAAAAQAEAAAAAEAAABACAAAAAAAAAAASAIhQAAACABg=</HashCode>
       <FileName>Classes\Utilities\POSController.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="P3_Projekt_WPF.Classes.Utilities.SettingsController">
-    <Position X="20" Y="23" Width="1.5" />
+    <Position X="21.75" Y="26.25" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAEAAABAAAAEAAAAAAAAAAAAQAAAAAgAAAAAQBAAAAA=</HashCode>
       <FileName>Classes\Utilities\SettingsController.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="P3_Projekt_WPF.Classes.Utilities.StatisticsController">
-    <Position X="21.75" Y="17.75" Width="1.5" />
+    <Position X="21.75" Y="17.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>EBIERggQCARAAAQEQAAAQKAgAIABAQQSQAIIQAGDQBA=</HashCode>
+      <HashCode>ERIERggQCARAAAQEQAAgQKAgAIABAQQSQAIIQAGDQBA=</HashCode>
       <FileName>Classes\Utilities\StatisticsController.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="P3_Projekt_WPF.Classes.Utilities.StorageController">
-    <Position X="16.5" Y="17.75" Width="1.5" />
+    <Position X="27" Y="17.5" Width="1.5" />
     <Members>
       <Field Name="_disabledProductsCount" Hidden="true" />
       <Field Name="_disabledProductsLoaded" Hidden="true" />
@@ -416,7 +416,7 @@
       <Field Name="_tempProductQueue" Hidden="true" />
     </Members>
     <TypeIdentifier>
-      <HashCode>4cACASLrLhIKFkMYJKAGC2ikgszjVupKZwQ4GaYmolQ=</HashCode>
+      <HashCode>4cACATLrLhIKFkEYJKAGC2ikkszjVupKZwQYGaYmolQ=</HashCode>
       <FileName>Classes\Utilities\StorageController.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -435,7 +435,7 @@
     </TypeIdentifier>
   </Class>
   <Class Name="P3_Projekt_WPF.Classes.Utilities.Utils">
-    <Position X="18.25" Y="17.75" Width="1.5" />
+    <Position X="18.25" Y="17.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>QAAAgAIAIABAAQAACAIAgAAAAAEAAQAAEACAAQAAAAA=</HashCode>
       <FileName>Classes\Utilities\Utils.cs</FileName>
