@@ -19,7 +19,6 @@ namespace P3_Projekt_WPF.Classes
         public Image Image;
         private bool _active = true;
         public bool Active => _active;
-        public DateTime CreatedTime;
         public ConcurrentDictionary<int, int> StorageWithAmount = new ConcurrentDictionary<int, int>();
 
         public Product(int id, string name, string brand, decimal purchasePrice, int groupID, bool discount, decimal salePrice, decimal discountPrice) : base(salePrice)

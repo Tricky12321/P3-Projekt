@@ -469,7 +469,7 @@ namespace P3_Projekt_WPF
                 textBlock_ChosenProduct.Text = $"ID: {product.ID}\n" +
                                                 $"Navn: {product.Name}\n" +
                                                 $"Gruppe: {_storageController.GroupDictionary[product.ServiceProductGroupID].Name}\n" +
-                                                $"Oprettet d. {(_productToEdit as ServiceProduct).CreatedDate.ToShortDateString()}\n" +
+                                                $"Oprettet d. {(_productToEdit as ServiceProduct).CreatedTime.ToShortDateString()}\n" +
                                                 $"{((product.SalePrice == product.GroupPrice) ? $"Pris: {product.SalePrice}\n" : $"Pris: {product.SalePrice}\nGruppepris: {product.GroupPrice}\nGruppe grænse: {product.GroupLimit}")}";
             }
             else
