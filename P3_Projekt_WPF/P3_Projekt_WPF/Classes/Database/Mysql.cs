@@ -158,7 +158,6 @@ namespace P3_Projekt_WPF.Classes.Database
             TableDecodeQueue TableContent;
             lock (connection)
             {
-
                 using (MySqlCommand cmd = connection.CreateCommand())
                 {
                     if (_debug)

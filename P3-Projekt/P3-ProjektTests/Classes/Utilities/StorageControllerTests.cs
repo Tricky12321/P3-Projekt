@@ -10,7 +10,6 @@ using System.Collections.Concurrent;
 using System.Diagnostics;
 using System.Threading;
 using P3_Projekt_WPF.Classes.Database;
-using System.Collections.Concurrent;
 namespace P3_Projekt_WPF.Classes.Utilities.Tests
 {
 
@@ -34,15 +33,6 @@ namespace P3_Projekt_WPF.Classes.Utilities.Tests
             SaleTransaction.HideMessageBox = true;
             POS = new POSController(SC);
             Utils.GetIceCreameID();
-            ProductList = new ConcurrentDictionary<int, BaseProduct>();
-            GroupList = new ConcurrentDictionary<int, Group>();
-            for (int i = 0; i < 1000000; i++)
-            {
-                Product NewProduct = new Product(i, "Test", "Brand", 1m, 1, false, 1m, 1m);
-                ProductList.TryAdd(i, NewProduct);
-            }
-            GroupList.TryAdd(1, new Group("TestGruppe", "TestBeskrivelse"));
-
         }
 
         [TestCase(ExpectedResult = true)]
@@ -426,78 +416,6 @@ namespace P3_Projekt_WPF.Classes.Utilities.Tests
             bool CheckRemergedTempProduct = TestProd_DB_AfterRemerge.ResolvedProductID == reResolveID;
             Assert.IsTrue(ID_Check && CheckResolvedProdID && CheckResolvedProdID_DB && CheckRemergedTempProduct && priceCheck && CheckResolved);
         }
-
-
-        /*
-         * 5 forskellige søge strenge
-         * 10,100,500,1000,10000,100000 
-         * 
-         * 
-         */
-        
-
-        [TestCase("Test",1000)]
-        [TestCase("Test",10000)]
-        [TestCase("Test",100000)]
-        [TestCase("Test",1000000)]
-        [TestCase("Test",10000000)]
-        [TestCase("Testmegetlangtord", 1000)]
-        [TestCase("Testmegetlangtord", 10000)]
-        [TestCase("Testmegetlangtord", 100000)]
-        [TestCase("Testmegetlangtord", 1000000)]
-        [TestCase("Testmegetlangtord", 10000000)]
-        [TestCase("Test med", 1000)]
-        [TestCase("Test med", 10000)]
-        [TestCase("Test med", 100000)]
-        [TestCase("Test med", 1000000)]
-        [TestCase("Test med", 10000000)]
-        [TestCase("Testmegetlangtord Testmegetlangtord", 1000)]
-        [TestCase("Testmegetlangtord Testmegetlangtord", 10000)]
-        [TestCase("Testmegetlangtord Testmegetlangtord", 100000)]
-        [TestCase("Testmegetlangtord Testmegetlangtord", 1000000)]
-        [TestCase("Testmegetlangtord Testmegetlangtord", 10000000)]
-        [TestCase("Test med tre", 1000)]
-        [TestCase("Test med tre", 10000)]
-        [TestCase("Test med tre", 100000)]
-        [TestCase("Test med tre", 1000000)]
-        [TestCase("Test med tre", 10000000)]
-        [TestCase("Testmegetlangtord Testmegetlangtord Testmegetlangtord", 1000)]
-        [TestCase("Testmegetlangtord Testmegetlangtord Testmegetlangtord", 10000)]
-        [TestCase("Testmegetlangtord Testmegetlangtord Testmegetlangtord", 100000)]
-        [TestCase("Testmegetlangtord Testmegetlangtord Testmegetlangtord", 1000000)]
-        [TestCase("Testmegetlangtord Testmegetlangtord Testmegetlangtord", 10000000)]
-        [TestCase("Test med fire ord", 1000)]
-        [TestCase("Test med fire ord", 10000)]
-        [TestCase("Test med fire ord", 100000)]
-        [TestCase("Test med fire ord", 1000000)]
-        [TestCase("Test med fire ord", 10000000)]
-        [TestCase("Testmegetlangtord Testmegetlangtord Testmegetlangtord Testmegetlangtord", 1000)]
-        [TestCase("Testmegetlangtord Testmegetlangtord Testmegetlangtord Testmegetlangtord", 10000)]
-        [TestCase("Testmegetlangtord Testmegetlangtord Testmegetlangtord Testmegetlangtord", 100000)]
-        [TestCase("Testmegetlangtord Testmegetlangtord Testmegetlangtord Testmegetlangtord", 1000000)]
-        [TestCase("Testmegetlangtord Testmegetlangtord Testmegetlangtord Testmegetlangtord", 10000000)]
-        [TestCase("Test med fem ord YAY", 1000)]
-        [TestCase("Test med fem ord YAY", 10000)]
-        [TestCase("Test med fem ord YAY", 100000)]
-        [TestCase("Test med fem ord YAY", 1000000)]
-        [TestCase("Test med fem ord YAY", 10000000)]
-        [TestCase("Testmegetlangtord Testmegetlangtord Testmegetlangtord Testmegetlangtord Testmegetlangtord", 1000)]
-        [TestCase("Testmegetlangtord Testmegetlangtord Testmegetlangtord Testmegetlangtord Testmegetlangtord", 10000)]
-        [TestCase("Testmegetlangtord Testmegetlangtord Testmegetlangtord Testmegetlangtord Testmegetlangtord", 100000)]
-        [TestCase("Testmegetlangtord Testmegetlangtord Testmegetlangtord Testmegetlangtord Testmegetlangtord", 1000000)]
-        [TestCase("Testmegetlangtord Testmegetlangtord Testmegetlangtord Testmegetlangtord Testmegetlangtord", 10000000)]
-        public void SearchPerformanceTest(string SearchString, int number_of_products)
-        {
-
-            StorageController SC = new StorageController();
-            SC.AllProductsDictionary = new ConcurrentDictionary<int, BaseProduct>(ProductList.Take(number_of_products).ToDictionary(x=>x.Value.ID,x=>x.Value));
-            SC.GroupDictionary = GroupList;
-            SC.SearchForProduct(SearchString).Count();
-            Assert.Pass();
-
-        }
-             
-
         /*[Test()]
         public void ProductIDTest()
         {
@@ -644,7 +562,7 @@ namespace P3_Projekt_WPF.Classes.Utilities.Tests
         {
             StorageController SC = new StorageController();
             BaseProduct TestProduct = new Product(1, "TestProductMedSlagI", "Aner det ikke", 10m, 1, false, 0m, 0m);
-            if (SC.ContainsSearch("sLaG", TestProduct))
+            if (SC.ContainsSearch("sLaG", TestProduct.GetName()))
             {
                 Assert.Pass();
             }
@@ -658,7 +576,7 @@ namespace P3_Projekt_WPF.Classes.Utilities.Tests
         {
             StorageController SC = new StorageController();
             BaseProduct TestProduct = new Product(1, "TestProductMedSlagI", "Aner det ikke", 10m, 1, false, 0m, 0m);
-            if (SC.ContainsSearch("asdf", TestProduct))
+            if (SC.ContainsSearch("asdf", TestProduct.GetName()))
             {
                 Assert.Fail();
             }
@@ -672,7 +590,7 @@ namespace P3_Projekt_WPF.Classes.Utilities.Tests
         {
             StorageController SC = new StorageController();
             BaseProduct TestProduct = new Product(1, "TestProductMedSlagI", "Aner det ikke", 10m, 1, false, 0m, 0m);
-            if (SC.ContainsSearch("Product", TestProduct))
+            if (SC.ContainsSearch("Product", TestProduct.GetName()))
             {
                 Assert.Pass();
             }
@@ -686,7 +604,7 @@ namespace P3_Projekt_WPF.Classes.Utilities.Tests
         {
             StorageController SC = new StorageController();
             BaseProduct TestProduct = new Product(1, "asdf", "Aner det ikke", 10m, 1, false, 0m, 0m);
-            if (SC.ContainsSearch("Product", TestProduct))
+            if (SC.ContainsSearch("Product", TestProduct.GetName()))
             {
                 Assert.Fail();
             }
@@ -700,7 +618,7 @@ namespace P3_Projekt_WPF.Classes.Utilities.Tests
         {
             StorageController SC = new StorageController();
             BaseProduct TestProduct = new Product(1, "TestProductTing", "Aner det ikke", 10m, 1, false, 0m, 0m);
-            if (SC.ContainsSearch("", TestProduct))
+            if (SC.ContainsSearch("", TestProduct.GetName()))
             {
                 Assert.Fail();
             }

@@ -29,8 +29,6 @@ namespace P3_Projekt_WPF.Classes.Utilities
         public ConcurrentDictionary<int, ServiceProduct> DisabledServiceProducts = new ConcurrentDictionary<int, ServiceProduct>();
         public List<TempProduct> TempTempProductList = new List<TempProduct>();
 
-
-
         public StorageController()
         {
             AddInformation("Core Antal", Utils.NumberOfCores);
@@ -292,7 +290,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
         private List<Thread> _queueThreads;
         private int _queueThreadsCount = Utils.NumberOfCores;
 
-        private bool SecondQueueDone()
+        private bool SecondPoolDone()
         {
             if (_doneStorageTransactionCount != _storageTransactionCount)
             {
@@ -309,7 +307,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
             return true;
         }
 
-        private bool FirstQueueDone()
+        private bool FirstPoolDone()
         {
             if (_doneProductsCount != _productsCount)
             {
@@ -342,14 +340,14 @@ namespace P3_Projekt_WPF.Classes.Utilities
             return true;
         }
 
-        private void HandleSecondQueue()
+        private void HandleSecondPool()
         {
             Row Data;
-            if (FirstQueueDone())
+            if (FirstPoolDone())
             {
                 Debug.WriteLine("First Queue is [DONE] going to second queue");
             }
-            while (!SecondQueueDone())
+            while (!SecondPoolDone())
             {
                 while (_storageStatusQueue.TryDequeue(out Data))
                 {
@@ -411,16 +409,16 @@ namespace P3_Projekt_WPF.Classes.Utilities
 
         }
 
-        private void HandleQueue()
+        private void HandlePools()
         {
-            HandleFirstQueue();
-            HandleSecondQueue();
+            HandleFirstPool();
+            HandleSecondPool();
         }
 
-        private void HandleFirstQueue()
+        private void HandleFirstPool()
         {
             Row Data;
-            while (!FirstQueueDone())
+            while (!FirstPoolDone())
             {
                 while (_serviceProductQueue.TryDequeue(out Data))
                 {
@@ -477,9 +475,9 @@ namespace P3_Projekt_WPF.Classes.Utilities
         {
             bool local = Properties.Settings.Default.local_or_remote;
             _queueThreads = new List<Thread>();
-            for (int i = 0; i < _queueThreadsCount; i++)
+            for (int i = 0; i < _queueThreadsCount - 1; i++)
             {
-                _queueThreads.Add(new Thread(new ThreadStart(HandleQueue)));
+                _queueThreads.Add(new Thread(new ThreadStart(HandlePools)));
             }
 
             if (!local)
@@ -498,7 +496,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
             {
                 thread.Start();
             }
-            HandleQueue();
+            HandlePools();
         }
 
         public void RunGetSQL()
@@ -666,6 +664,28 @@ namespace P3_Projekt_WPF.Classes.Utilities
             }
         }
 
+        public string ActivateProduct(int ID)
+        {
+            if (DisabledProducts.ContainsKey(ID))
+            {
+                Product ProductToActivate;
+                DisabledProducts.TryRemove(ID, out ProductToActivate);
+                ProductToActivate.ActivateProduct();
+                AllProductsDictionary.TryAdd(ID, ProductToActivate);
+                ProductDictionary.TryAdd(ID, ProductToActivate);
+                return ProductToActivate.ToString();
+            }
+            else
+            {
+                ServiceProduct ServiceProductToActivate;
+                DisabledServiceProducts.TryRemove(ID, out ServiceProductToActivate);
+                ServiceProductToActivate.ActivateProduct();
+                AllProductsDictionary.TryAdd(ID, ServiceProductToActivate);
+                ServiceProductDictionary.TryAdd(ID, ServiceProductToActivate);
+                return ServiceProductToActivate.ToString();
+            }
+        }
+
         public void UpdateDeactivatedServiceProduct(int id, decimal salePrice, decimal groupPrice, int groupLimit, string name, int serviceProductGroupID, bool UpdateInDatabase = true)
         {
             ServiceProduct newServiceProduct = new ServiceProduct(id, salePrice, groupPrice, groupLimit, name, serviceProductGroupID);
@@ -797,7 +817,8 @@ namespace P3_Projekt_WPF.Classes.Utilities
                         StorageRoomDictionary.TryRemove(id, out outVal);
                         string deleteQuery = $"DELETE FROM `storage_status` WHERE `storageroom` = '{id}'";
                         Mysql.RunQuery(deleteQuery);
-                    } else
+                    }
+                    else
                     {
                         MessageBox.Show("Det lager du forsøger at slette, eksistere ikke...");
                     }
@@ -905,54 +926,26 @@ namespace P3_Projekt_WPF.Classes.Utilities
 
             List<string> searchSplit = searchStringElement.Split(' ').ToList();
             SpaceCounter(ref searchSplit);
-            if (ContainsSearch(searchStringElement, productToConvert))
+            if (ContainsSearch(searchStringElement, productToConvert.GetName()))
             {
-                productToAdd.NameMatch += searchStringElement.Length * 2;
+                productToAdd.NameMatch += 100;
             }
-
-
-            if (productToConvert is Product)
+            List<string> productSplit =productToConvert.GetName().ToLower().Split(' ').ToList();
+            SpaceCounter(ref productSplit);
+            foreach (string s in searchSplit)
             {
-                List<string> productSplit = (productToConvert as Product).Name.ToLower().Split(' ').ToList();
-                SpaceCounter(ref productSplit);
-                foreach (string s in searchSplit)
+                foreach (string t in productSplit)
                 {
-                    foreach (string t in productSplit)
+                    if (s == t)
                     {
-                        if (s == t)
-                        {
-                            productToAdd.NameMatch += 100;
-                        }
-                        else if (LevenstheinProductSearch(s, t))
-                        {
-                            productToAdd.NameMatch += 1;
-                        }
+                        productToAdd.NameMatch += 100;
+                    }
+                    else if (LevenstheinProductSearch(s, t))
+                    {
+                        productToAdd.NameMatch += 1;
+                    }
 
-                    }
                 }
-            }
-            else if (productToConvert is ServiceProduct)
-            {
-                List<string> productSplit = (productToConvert as ServiceProduct).Name.ToLower().Split(' ').ToList();
-                SpaceCounter(ref productSplit);
-                foreach (string s in searchSplit)
-                {
-                    foreach (string t in productSplit)
-                    {
-                        if (s == t)
-                        {
-                            productToAdd.NameMatch += 100;
-                        }
-                        else if (LevenstheinProductSearch(s, t))
-                        {
-                            productToAdd.NameMatch += 1;
-                        }
-                    }
-                }
-            }
-            else
-            {
-                throw new WrongProductTypeException("Produktet der søges efter er af forkert type");
             }
 
             weigthedSearchList.Add(productToAdd);
@@ -1023,6 +1016,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
                     {
                         SearchList.First().GroupMatch += 100;
                     }
+                    
                 }
                 if (LevenshteinsGroupAndProductSearch(dividedString, GroupDictionary[(product as Product).ProductGroupID].Name, out MatchedValue))
                 {
@@ -1086,9 +1080,9 @@ namespace P3_Projekt_WPF.Classes.Utilities
             }
         }
 
-        public bool ContainsSearch(string searchString, BaseProduct product)
+        public bool ContainsSearch(string searchString, string CheckString)
         {
-            string StringToSearch = product.GetName().ToLower();
+            string StringToSearch = CheckString.ToLower();
             if (searchString.Length < 4)
             {
                 return false;

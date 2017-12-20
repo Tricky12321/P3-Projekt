@@ -1502,28 +1502,7 @@ namespace P3_Projekt_WPF
             {
                 char[] seperator = new char[] { ',', ' ' };
                 int ID = Convert.ToInt32(datagrid_deactivated_products.SelectedCells[0].Item.ToString().Split(seperator)[7]);
-                string ProductString = "";
-                if (_storageController.DisabledProducts.ContainsKey(ID))
-                {
-                    Product ProductToActivate;
-                    _storageController.DisabledProducts.TryRemove(ID, out ProductToActivate);
-                    ProductToActivate.ActivateProduct();
-                    _storageController.AllProductsDictionary.TryAdd(ID, ProductToActivate);
-                    _storageController.ProductDictionary.TryAdd(ID, ProductToActivate);
-                    datagrid_deactivated_products.Items.Remove(datagrid_deactivated_products.SelectedItem);
-                    ProductString = ProductToActivate.ToString();
-                }
-                else
-                {
-                    ServiceProduct ServiceProductToActivate;
-                    _storageController.DisabledServiceProducts.TryRemove(ID, out ServiceProductToActivate);
-                    ServiceProductToActivate.ActivateProduct();
-                    _storageController.AllProductsDictionary.TryAdd(ID, ServiceProductToActivate);
-                    _storageController.ServiceProductDictionary.TryAdd(ID, ServiceProductToActivate);
-                    datagrid_deactivated_products.Items.Remove(datagrid_deactivated_products.SelectedItem);
-                    ProductString = ServiceProductToActivate.ToString();
-                }
-
+                string ProductString = _storageController.ActivateProduct(ID);
                 MessageBox.Show("Du har genaktiveret " + ProductString);
                 ReloadDisabledProducts();
                 ReloadProducts();
