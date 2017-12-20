@@ -16,6 +16,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
         public Dictionary<int, decimal> SalesPerGroup;
         public Dictionary<string, decimal> SalesPerBrand;
         public int ReceiptTotalCount;
+        public decimal AverageProductPerReceipt;
         public decimal ReceiptTotalPrice;
         public decimal TotalRevenueToday;
         public Dictionary<int, StatisticsProduct> SalesPerProduct;
@@ -179,8 +180,6 @@ namespace P3_Projekt_WPF.Classes.Utilities
 
         public void RequestTransactionsDatabase(string queryString)
         {
-            Stopwatch Timer1 = new Stopwatch();
-            Timer1.Start();
             _saleTransactionsCreated = 0;
             _saleTransactions = new ConcurrentQueue<SaleTransaction>();
             _dataQueue = Mysql.RunQueryWithReturnQueue(queryString).RowData;
@@ -195,8 +194,15 @@ namespace P3_Projekt_WPF.Classes.Utilities
 
             _allStatisticsDone = true;
             TransactionsForStatistics = TransactionsForStatistics.Concat(_saleTransactions).ToList<SaleTransaction>();
-            Timer1.Stop();
-            Debug.WriteLine("[StatisticsController] took " + Timer1.ElapsedMilliseconds + "ms to fetch");
+        }
+
+        public void AverageItemsPerReceipt(DateTime Start, DateTime End)
+        {
+            Int64 from = Utils.GetUnixTime(Start);
+            Int64 to = Utils.GetUnixTime(EndDate(End));
+            string sql = $"SELECT AVG(`number_of_products`) FROM `receipt` WHERE UNIX_TIMESTAMP(`datetime`) >= '{from}' AND UNIX_TIMESTAMP(`datetime`) <= '{to}'";
+            TableDecode Results = Mysql.RunQueryWithReturn(sql);
+            AverageProductPerReceipt =  Convert.ToDecimal(Results.RowData[0].Values[0]);
         }
 
         public void RequestTodayReceipts()
@@ -262,9 +268,9 @@ namespace P3_Projekt_WPF.Classes.Utilities
         {
             if (ReceiptTotalCount > 0)
             {
-                return new StatisticsListItem("", "Gennemsnitlig kvitteringspris", $"{ ReceiptTotalCount}", $"{Math.Round(ReceiptTotalPrice / ReceiptTotalCount, 2)}");
+                return new StatisticsListItem("", "Gennemsnitlig kvitterings størrelse", $"{ Math.Round(AverageProductPerReceipt, 2)}", $"{Math.Round(ReceiptTotalPrice / ReceiptTotalCount, 2)}");
             }
-            return new StatisticsListItem("", "Gennemsnitlig kvitteringspris", "0", "0");
+            return new StatisticsListItem("", "Gennemsnitlig kvitterings størrelse", "0", "0");
         }
 
         public void GenerateProductSalesAndTotalRevenue()

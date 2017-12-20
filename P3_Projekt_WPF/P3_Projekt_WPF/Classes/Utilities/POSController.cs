@@ -24,9 +24,6 @@ namespace P3_Projekt_WPF.Classes.Utilities
 
     public class POSController
     {
-        /*
-         * TODO: fiks metoden til at loade ID til transaction
-         */
 
         public Receipt PlacerholderReceipt;
         private StorageController _storageController;

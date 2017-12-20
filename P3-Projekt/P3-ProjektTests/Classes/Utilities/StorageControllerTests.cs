@@ -19,8 +19,6 @@ namespace P3_Projekt_WPF.Classes.Utilities.Tests
     {
         StorageController SC;
         POSController POS;
-        ConcurrentDictionary<int, BaseProduct> ProductList;
-        ConcurrentDictionary<int, Group> GroupList;
         [SetUp]
         public void Init()
         {
@@ -357,7 +355,7 @@ namespace P3_Projekt_WPF.Classes.Utilities.Tests
         [TestCase(11, 1000)]
         [TestCase(7, 10000)]
         [TestCase(22, 1)]
-        public void TempProductMergeTest(int resolveID, int amount)
+        public void TempProductMatchTest(int resolveID, int amount)
         {
             // Creating temp product
             int old_id = TempProduct.GetNextID();
@@ -373,13 +371,13 @@ namespace P3_Projekt_WPF.Classes.Utilities.Tests
             bool ID_Check = new_id > old_id;
             // download tempproduct form DB
             TempProduct TestProd_DB = new TempProduct(old_id);
-            // Merge temp product
-            SC.MergeTempProduct(TestProd_DB, resolveID);
+            // Match temp product
+            SC.MatchTempProduct(TestProd_DB, resolveID);
             // Getting the TempProduct from DB after merge to see if it has been resolved
-            TempProduct TestProd_DB_AfterMerge = new TempProduct(old_id);
-            bool CheckResolved = TestProd_DB_AfterMerge.Resolved;
+            TempProduct TestProd_DB_AfterMatch = new TempProduct(old_id);
+            bool CheckResolved = TestProd_DB_AfterMatch.Resolved;
             bool CheckResolvedProdID = TestProd_DB.ResolvedProductID == resolveID;
-            bool CheckResolvedProdID_DB = TestProd_DB_AfterMerge.ResolvedProductID == resolveID;
+            bool CheckResolvedProdID_DB = TestProd_DB_AfterMatch.ResolvedProductID == resolveID;
             Assert.IsTrue(ID_Check && CheckResolvedProdID && CheckResolvedProdID_DB && priceCheck && CheckResolved);
         }
 
@@ -388,7 +386,7 @@ namespace P3_Projekt_WPF.Classes.Utilities.Tests
         [TestCase(11, 3, 1000)]
         [TestCase(7, 30, 10000)]
         [TestCase(22, 3, 1)]
-        public void TempProductRemergeTest(int resolveID, int reResolveID, int amount)
+        public void TempProductRematchTest(int resolveID, int reResolveID, int amount)
         {
             // Creating temp product
             int old_id = TempProduct.GetNextID();
@@ -404,17 +402,17 @@ namespace P3_Projekt_WPF.Classes.Utilities.Tests
             bool ID_Check = new_id > old_id;
             // download tempproduct form DB
             TempProduct TestProd_DB = new TempProduct(old_id);
-            // Merge temp product
-            SC.MergeTempProduct(TestProd_DB, resolveID);
+            // Match temp product
+            SC.MatchTempProduct(TestProd_DB, resolveID);
             // Getting the TempProduct from DB after merge to see if it has been resolved
-            TempProduct TestProd_DB_AfterMerge = new TempProduct(old_id);
-            bool CheckResolved = TestProd_DB_AfterMerge.Resolved;
+            TempProduct TestProd_DB_AfterMatch = new TempProduct(old_id);
+            bool CheckResolved = TestProd_DB_AfterMatch.Resolved;
             bool CheckResolvedProdID = TestProd_DB.ResolvedProductID == resolveID;
-            bool CheckResolvedProdID_DB = TestProd_DB_AfterMerge.ResolvedProductID == resolveID;
-            SC.RemergeTempProduct(TestProd_DB_AfterMerge, reResolveID);
-            TempProduct TestProd_DB_AfterRemerge = new TempProduct(old_id);
-            bool CheckRemergedTempProduct = TestProd_DB_AfterRemerge.ResolvedProductID == reResolveID;
-            Assert.IsTrue(ID_Check && CheckResolvedProdID && CheckResolvedProdID_DB && CheckRemergedTempProduct && priceCheck && CheckResolved);
+            bool CheckResolvedProdID_DB = TestProd_DB_AfterMatch.ResolvedProductID == resolveID;
+            SC.RematchTempProduct(TestProd_DB_AfterMatch, reResolveID);
+            TempProduct TestProd_DB_AfterRematch = new TempProduct(old_id);
+            bool CheckRematchdTempProduct = TestProd_DB_AfterRematch.ResolvedProductID == reResolveID;
+            Assert.IsTrue(ID_Check && CheckResolvedProdID && CheckResolvedProdID_DB && CheckRematchdTempProduct && priceCheck && CheckResolved);
         }
         /*[Test()]
         public void ProductIDTest()
@@ -543,18 +541,6 @@ namespace P3_Projekt_WPF.Classes.Utilities.Tests
             List<Product> productList = new List<Product>();
             strContr.BrandSearch(searchedString, ref productList);
             Assert.IsTrue(productList.Contains(productToBeCompared));
-        }
-        */
-        /*
-        [Test()]
-        public void CreateTempProductTest()
-        {
-            StorageController strContr = new StorageController();
-            string productDescription = "A blue shirt with yellow bananas";
-            decimal sellPrice = 100;
-            strContr.CreateTempProduct(productDescription, sellPrice);
-            //TODO: Exists does not exist
-            //Assert.IsTrue(strContr.TempProductList.Exists(x => x.Description == "A blue shirt with yellow bananas"));
         }
         */
         [Test()]

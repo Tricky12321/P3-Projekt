@@ -105,13 +105,9 @@ namespace P3_Projekt_WPF.Classes.Database
         public static MySqlConnection Connect(int fails = 0)
         {
             //CheckInternet();
-            Stopwatch ConnectionTimer = new Stopwatch();
-            ConnectionTimer.Start();
             MySqlConnection connection = null;
             connection = new MySqlConnection(_connectionString);
             connection.Open();
-            ////ConnectionTimer.Stop();
-            Debug.WriteLine("[DATABASE] Database ConnectionTimer = " + ConnectionTimer.ElapsedMilliseconds + "ms");
             if (connection == null)
             {
                 if (fails < 5)
@@ -151,10 +147,7 @@ namespace P3_Projekt_WPF.Classes.Database
             {
                 return null;
             }
-            Stopwatch DatabaseTimer = new Stopwatch();
-            DatabaseTimer.Start();
             MySqlConnection connection = Connect();
-            DatabaseTimer.Stop();
             TableDecodeQueue TableContent;
             lock (connection)
             {
@@ -173,8 +166,6 @@ namespace P3_Projekt_WPF.Classes.Database
                     }
                 }
             }
-
-            Debug.WriteLine("[DATABASE] Det tog " + DatabaseTimer.ElapsedMilliseconds + "ms at oprette mysql forbindelse");
             return TableContent;
         }
 

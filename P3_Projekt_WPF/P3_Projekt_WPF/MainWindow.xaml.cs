@@ -42,20 +42,13 @@ namespace P3_Projekt_WPF
         {
             Mysql.CheckDatabaseConnection();
             List<string> OutputList = new List<string>();
-            Stopwatch LoadingTimer = new Stopwatch();
-            LoadingTimer.Start();
             _storageController = new StorageController();
             _POSController = new POSController(_storageController);
             _settingsController = new SettingsController();
             _statisticsController = new StatisticsController(_storageController);
-            OutputList.Add("[1. TIMER] took " + LoadingTimer.ElapsedMilliseconds + "ms");
             InitializeComponent();
-            OutputList.Add("[2. TIMER] took " + LoadingTimer.ElapsedMilliseconds + "ms");
             LoadDatabase();
-            OutputList.Add("[3. TIMER] took " + LoadingTimer.ElapsedMilliseconds + "ms");
             InitComponents();
-            OutputList.Add("[4. TIMER] took " + LoadingTimer.ElapsedMilliseconds + "ms");
-            //TODO: Thek om OrderTrans og StorageTrans er blevet fjernet
             this.KeyDown += new KeyEventHandler(KeyboardHook);
             this.KeyDown += new KeyEventHandler(CtrlHookDown);
             this.KeyDown += new KeyEventHandler(EnterKeyPressedSearch);
@@ -70,13 +63,9 @@ namespace P3_Projekt_WPF
             }
 
             Utils.GetIceCreameID();
-            Console.WriteLine("Username: " + Environment.UserName);
 
             _storageController.MakeSureIcecreamExists();
             this.WindowState = WindowState.Maximized;
-            LoadingTimer.Stop();
-            OutputList.Add("[TOTAL TIMER] took " + LoadingTimer.ElapsedMilliseconds + "ms");
-            _storageController.AddInformation("Loading timer", LoadingTimer.ElapsedMilliseconds + "ms");
             _POSController.LowStorageWarning += LowStorageTrigger;
             if (!Mysql.ConnectionWorking)
             {
@@ -101,7 +90,7 @@ namespace P3_Projekt_WPF
             _storageController.LoadAllProductsDictionary();
             LoadProductImages();
             LoadProductControlDictionary();
-            
+
 
             LoadProductGrid(_storageController.AllProductsDictionary);
         }
@@ -235,32 +224,68 @@ namespace P3_Projekt_WPF
 
         private void InitComponents()
         {
-            Stopwatch GridButtonTimer = new Stopwatch();
-            GridButtonTimer.Start();
             InitGridQuickButtons();
-            GridButtonTimer.Stop();
-            Debug.WriteLine("[InitGridQuickButtons] took " + GridButtonTimer.ElapsedMilliseconds + "ms");
-            Stopwatch StorageGridTimer = new Stopwatch();
-            StorageGridTimer.Start();
             InitStorageGridProducts();
-            StorageGridTimer.Stop();
-            Debug.WriteLine("[InitStorageGridProductsF] took " + StorageGridTimer.ElapsedMilliseconds + "ms");
             AddProductButton();
-            Stopwatch Timer1 = new Stopwatch();
-            Timer1.Start();
             ReloadProducts();
-            Timer1.Stop();
-            Debug.WriteLine("[LoadProductImages] took " + Timer1.ElapsedMilliseconds + "ms");
             LoadProductGrid(_storageController.AllProductsDictionary);
             InitStatisticsTab();
             InitAdminLogin();
-            Utils.LoadDatabaseSettings(this);
+            LoadDatabaseSettings();
             FillDeactivatedProductsIntoGrid();
             image_DeleteFullReceiptDiscount.Source = Utils.ImageSourceForBitmap(Properties.Resources.DeleteIcon);
             BuildInformationTable();
             LoadGroups();
-
             LoadQuickButtons();
+        }
+
+        private void FlipRemoteLocal()
+        {
+            var sett = Properties.Settings.Default;
+            sett.local_or_remote = !sett.local_or_remote;
+            sett.Save();
+            LoadDatabaseSettings();
+        }
+
+        private void LoadDatabaseSettings()
+        {
+            var sett = Properties.Settings.Default;
+            bool Local = false;
+            bool Remote = false;
+            if (sett.local_or_remote == true)
+            {
+                btn_RmtLcl.Content = "Butikkens PC";
+                Local = true;
+            }
+            else
+            {
+                btn_RmtLcl.Content = "Anden PC";
+                Remote = true;
+            }
+            //UpdateDisabledFields(true, true, MainWin);
+            LoadDBSettingsData();
+        }
+        private void SaveDBData()
+        {
+            var sett = Properties.Settings.Default;
+            sett.lcl_db = cmb_lcl_db.Text;
+            sett.lcl_ip = cmb_lcl_ip.Text;
+            sett.lcl_port = Convert.ToInt32(cmb_lcl_port.Text);
+            sett.lcl_password = txt_lcl_password.Password;
+            sett.lcl_username = txt_lcl_username.Text;
+            sett.Save();
+            Mysql.UpdateSettings(sett);
+            Mysql.CheckDatabaseConnection();
+        }
+
+        private void LoadDBSettingsData()
+        {
+            var sett = Properties.Settings.Default;
+            cmb_lcl_db.Text = sett.lcl_db;
+            cmb_lcl_ip.Text = sett.lcl_ip;
+            cmb_lcl_port.Text = sett.lcl_port.ToString();
+            txt_lcl_password.Password = sett.lcl_password;
+            txt_lcl_username.Text = sett.lcl_username;
         }
 
         private void InitGridQuickButtons()
@@ -332,8 +357,6 @@ namespace P3_Projekt_WPF
             if (Mysql.ConnectionWorking)
             {
 
-                Stopwatch TimeTester = new Stopwatch();
-                TimeTester.Start();
                 Thread GetAllThread = new Thread(new ThreadStart(_storageController.GetAll));
                 GetAllThread.Name = "GetAllThread";
                 GetAllThread.Start();
@@ -342,13 +365,6 @@ namespace P3_Projekt_WPF
                     Thread.Sleep(10);
                 }
                 runLoading = false;
-                TimeTester.Stop();
-                string Output = "";
-                while (_storageController.TimerStrings.TryDequeue(out Output))
-                {
-                    Debug.WriteLine(Output);
-                }
-                Debug.WriteLine("[P3] Det tog " + TimeTester.ElapsedMilliseconds + "ms at hente alt fra databasen");
             }
 
         }
@@ -368,9 +384,10 @@ namespace P3_Projekt_WPF
 
         public void AddProductDialogOpener(object sender, RoutedEventArgs e)
         {
-            CreateProduct addProductWindow = new CreateProduct(_storageController, this);
+            CreateProduct addProductWindow = new CreateProduct(_storageController);
             addProductWindow.Closed += delegate { ReloadProducts(); };
             addProductWindow.ShowDialog();
+
         }
 
         private bool _firstClick = true;
@@ -380,18 +397,20 @@ namespace P3_Projekt_WPF
             CreateProduct EditProductForm;
             if (_productToEdit is Product)
             {
-                EditProductForm = new CreateProduct(_productToEdit as Product, _storageController, this, _settingsController.isAdmin);
+                EditProductForm = new CreateProduct(_productToEdit as Product, _storageController, _settingsController.isAdmin);
             }
             else if (_productToEdit is ServiceProduct)
             {
-                EditProductForm = new CreateProduct(_productToEdit as ServiceProduct, _storageController, this, _settingsController.isAdmin);
+                EditProductForm = new CreateProduct(_productToEdit as ServiceProduct, _storageController, _settingsController.isAdmin);
             }
             else
             {
                 throw new WrongProductTypeException("Fejl i forsøg på at redigere produkt");
+
             }
             EditProductForm.Closed += delegate { ReloadProducts(); };
             EditProductForm.Closed += delegate { LoadQuickButtons(); };
+            EditProductForm.Closed += delegate { ReloadDisabledProducts(); };
             EditProductForm.ShowDialog();
         }
 
@@ -466,8 +485,6 @@ namespace P3_Projekt_WPF
 
         private void LoadProductControlDictionary()
         {
-            Stopwatch Timer2 = new Stopwatch();
-            Timer2.Start();
             _productControlDictionary.Clear();
 
             IOrderedEnumerable<KeyValuePair<int, BaseProduct>> ProductList = _storageController.AllProductsDictionary.OrderBy(x => x.Key);
@@ -479,8 +496,6 @@ namespace P3_Projekt_WPF
 
                 _productControlDictionary.Add(product.Value.ID, productControl);
             }
-            Timer2.Stop();
-            Debug.WriteLine("[LoadProductControlDictionary] took " + Timer2.ElapsedMilliseconds + "ms");
         }
 
         public void LoadProductGrid(ConcurrentDictionary<int, BaseProduct> productDictionary)
@@ -828,6 +843,7 @@ namespace P3_Projekt_WPF
             bool filterGroup = checkBox_Group.IsChecked.Value;
             _statisticsController.RequestStatistics(filterProduct, productID, filterGroup, groupID, filterBrand, brand, datePicker_StartDate.SelectedDate.Value, datePicker_EndDate.SelectedDate.Value);
             _statisticsController.GetReceiptTotalCount(datePicker_StartDate.SelectedDate.Value, datePicker_EndDate.SelectedDate.Value);
+            _statisticsController.AverageItemsPerReceipt(datePicker_StartDate.SelectedDate.Value, datePicker_EndDate.SelectedDate.Value);
             _statisticsController.GetReceiptTotalPrice(datePicker_StartDate.SelectedDate.Value, datePicker_EndDate.SelectedDate.Value);
 
             DisplayStatistics();
@@ -897,6 +913,7 @@ namespace P3_Projekt_WPF
             {
                 listView_GroupStatistics.Items.Add(_statisticsController.GroupSalesStrings(groupID, _statisticsController.TotalRevenueToday));
             }
+
             foreach (string brand in _statisticsController.SalesPerBrand.Keys)
             {
                 listView_BrandStatistics.Items.Add(_statisticsController.BrandSalesStrings(brand, _statisticsController.TotalRevenueToday));
@@ -958,9 +975,13 @@ namespace P3_Projekt_WPF
         }
 
         ResolveTempProduct _resolveTempProduct;
-        private void btn_MergeTempProduct_Click(object sender, RoutedEventArgs e)
+        private void btn_MatchTempProduct_Click(object sender, RoutedEventArgs e)
         {
-            _storageController.ReloadAllDictionarys(this, false);
+            _storageController.ReloadAllDictionarys();
+            ReloadProducts();
+            ReloadDisabledProducts();
+            LoadQuickButtons();
+            SaveQuickButtons();
             if (_resolveTempProduct == null)
             {
                 _resolveTempProduct = new ResolveTempProduct(_storageController);
@@ -1067,8 +1088,8 @@ namespace P3_Projekt_WPF
         private void btn_newStorageRoom_Click(object sender, RoutedEventArgs e)
         {
 
-            _createStorageRoom = new CreateStorageRoom(_storageController, this);
-
+            _createStorageRoom = new CreateStorageRoom(_storageController);
+            _createStorageRoom.Closed += delegate { LoadStorageRooms(); };
             _createStorageRoom.Activate();
             _createStorageRoom.Show();
         }
@@ -1078,7 +1099,8 @@ namespace P3_Projekt_WPF
             //int storageID = Convert.ToInt32(comboBox_storageRoomSelect.Text.Split(' ').First());
             int storageID = Convert.ToInt32((sender as Button).Tag);
             StorageRoom chosenStorage = _storageController.StorageRoomDictionary[storageID];
-            _createStorageRoom = new CreateStorageRoom(_storageController, this, chosenStorage);
+            _createStorageRoom = new CreateStorageRoom(_storageController, chosenStorage);
+            _createStorageRoom.Closed += delegate { LoadStorageRooms(); };
             _createStorageRoom.Activate();
             _createStorageRoom.Show();
         }
@@ -1089,14 +1111,16 @@ namespace P3_Projekt_WPF
             //int storageID = Convert.ToInt32(comboBox_storageRoomSelect.Text.Split(' ').First());
             int groupID = Convert.ToInt32((sender as Button).Tag);
             Group chosenGroup = _storageController.GroupDictionary[groupID];
-            _createGroup = new CreateGroup(_storageController, this, chosenGroup);
+            _createGroup = new CreateGroup(_storageController, chosenGroup);
             _createGroup.Activate();
+            _createGroup.Closed += delegate { LoadGroups(); };
             _createGroup.Show();
         }
 
         private void btn_AddGroup_Click(object sender, RoutedEventArgs e)
         {
-            _createGroup = new CreateGroup(_storageController, this);
+            _createGroup = new CreateGroup(_storageController);
+            _createGroup.Closed += delegate { LoadGroups(); };
             _createGroup.Activate();
             _createGroup.Show();
         }
@@ -1170,7 +1194,11 @@ namespace P3_Projekt_WPF
                 button_DeleteFulReceiptDiscount.Visibility = Visibility.Hidden;
                 image_DeleteFullReceiptDiscount.Visibility = Visibility.Hidden;
                 text_FullReceiptDiscount.Text = string.Empty;
-                _storageController.ReloadAllDictionarys(this, false);
+                _storageController.ReloadAllDictionarys();
+                ReloadProducts();
+                ReloadDisabledProducts();
+                LoadQuickButtons();
+                SaveQuickButtons();
                 BuildInformationTable();
                 LoadGroups();
                 DisableDiscountOnReceipt();
@@ -1293,6 +1321,7 @@ namespace P3_Projekt_WPF
             label_TotalPrice.Content = "Total";
             PayWithAmount.Clear();
             StartsToPay(true);
+            DisableDiscountOnReceipt();
         }
 
         private MoveProduct _productMove;
@@ -1316,7 +1345,7 @@ namespace P3_Projekt_WPF
 
         private void btn_RmtLcl_Click(object sender, RoutedEventArgs e)
         {
-            Utils.FlipRemoteLocal(this);
+            FlipRemoteLocal();
         }
 
         private void button_Click(object sender, RoutedEventArgs e)
@@ -1327,7 +1356,7 @@ namespace P3_Projekt_WPF
         private void SaveDBSettings(object sender, RoutedEventArgs e)
         {
 
-            Utils.SaveDBData(this);
+            SaveDBData();
         }
 
         private void PortNumberControl(object sender, TextCompositionEventArgs e)
@@ -1509,6 +1538,7 @@ namespace P3_Projekt_WPF
 
             }
         }
+
         private void EditDisabledProduct(object sender, RoutedEventArgs e)
         {
             if (datagrid_deactivated_products.SelectedIndex != -1)
@@ -1518,18 +1548,24 @@ namespace P3_Projekt_WPF
                 if (_storageController.DisabledProducts.ContainsKey(ID))
                 {
                     Product ProductToActivate = _storageController.DisabledProducts[ID];
-                    CreateProduct EditDiabledProduct = new CreateProduct(ProductToActivate, _storageController, this, _settingsController.isAdmin, true);
-                    EditDiabledProduct.Show();
+                    CreateProduct EditDisabledProduct = new CreateProduct(ProductToActivate, _storageController, _settingsController.isAdmin, true);
+                    EditDisabledProduct.SaveAndQuitEvent += SaveAndQuitClick;
+                    EditDisabledProduct.Show();
                 }
                 else
                 {
                     ServiceProduct ServiceProductToActivate = _storageController.DisabledServiceProducts[ID];
-                    CreateProduct EditDiabledServiceProduct = new CreateProduct(ServiceProductToActivate, _storageController, this, _settingsController.isAdmin, true);
+                    CreateProduct EditDiabledServiceProduct = new CreateProduct(ServiceProductToActivate, _storageController, _settingsController.isAdmin, true);
                     EditDiabledServiceProduct.Show();
                 }
                 ReloadDisabledProducts();
                 ReloadProducts();
             }
+        }
+
+        private void SaveAndQuitClick(int ID)
+        {
+            ShowSpecificInfoProductStorage(ID);
         }
 
         private void StorageTransactionsHistory()
@@ -1601,7 +1637,11 @@ namespace P3_Projekt_WPF
             _storageController.ClearDictionarys();
 
             Mysql.CheckDatabaseConnection();
-            _storageController.ReloadAllDictionarys(this);
+            _storageController.ReloadAllDictionarys();
+            ReloadProducts();
+            ReloadDisabledProducts();
+            LoadQuickButtons();
+            SaveQuickButtons();
         }
 
         private void tab_Settings_GotFocus(object sender, RoutedEventArgs e)

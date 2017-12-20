@@ -27,7 +27,7 @@
   <Class Name="P3_Projekt_WPF.CreateGroup" BaseTypeListCollapsed="true">
     <Position X="7.75" Y="49.75" Width="2" />
     <TypeIdentifier>
-      <HashCode>AAAAAEAAAAAAACAAAAABAIAAAAAAAAAAAgAAABAAAAA=</HashCode>
+      <HashCode>AAAAAEAAAAAAACAAAAAAAIAAAAAAAAAAAgAAABAAAAA=</HashCode>
       <FileName>CreateGroup.xaml.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" Collapsed="true" />
@@ -35,7 +35,7 @@
   <Class Name="P3_Projekt_WPF.CreateProduct" BaseTypeListCollapsed="true">
     <Position X="5.5" Y="47" Width="2" />
     <TypeIdentifier>
-      <HashCode>AFAIEAAAAACOyQECFAAQQqKAgECAQABBAAAAgAICADg=</HashCode>
+      <HashCode>AFAIEAAAAACOyQECFAAQQqKAgEAAQABBAAAAgAICIDg=</HashCode>
       <FileName>CreateProduct.xaml.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" Collapsed="true" />
@@ -84,7 +84,7 @@
       <Field Name="runLoading" Hidden="true" />
     </Members>
     <TypeIdentifier>
-      <HashCode>4yKtICsLBBmkAI4QpJTDhxGsIcJdSYsCLQJTz/oKoBQ=</HashCode>
+      <HashCode>4yKtICkLBBnkAI4QpJbDhzGsIcZfSYsCrQJTz/oKoBQ=</HashCode>
       <FileName>MainWindow.xaml.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" Collapsed="true" />
@@ -132,7 +132,7 @@
   <Class Name="P3_Projekt_WPF.Classes.Database.Mysql">
     <Position X="9" Y="15.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAyAAAAAAAAAAClAAEBIkIAAAAAAAARYAAIAAgEABAA=</HashCode>
+      <HashCode>AAyAAgAAAAAAAClAAEBIkIAAAAAAAARYAAIAAgEABAA=</HashCode>
       <FileName>Classes\Database\Mysql.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -321,7 +321,7 @@
   <Class Name="P3_Projekt_WPF.Classes.SaleTransaction">
     <Position X="11" Y="6" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>QIAAAAAAAQQgACQAATAAgAQAQgAQSABAEAABAUBAABE=</HashCode>
+      <HashCode>QIAAAAAAAQQgACQAATAAwAQAQgAQSABAEAABAUBAABE=</HashCode>
       <FileName>Classes\Transaction\SaleTransaction.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -350,7 +350,7 @@
   <Class Name="P3_Projekt_WPF.Classes.Utilities.POSController">
     <Position X="20" Y="17.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>YAAAAQAEAAAAAAAAABACAAAAAAAAAAASAIhQAAACABg=</HashCode>
+      <HashCode>YAAAAQAEAAAAAEAAABACAAAAAAAAAAASAIhQAAACABg=</HashCode>
       <FileName>Classes\Utilities\POSController.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -416,7 +416,7 @@
       <Field Name="_tempProductQueue" Hidden="true" />
     </Members>
     <TypeIdentifier>
-      <HashCode>4cACBSLrLhAKFkMYJKAGS2ikgszjVupaZwQ4GaYmglQ=</HashCode>
+      <HashCode>4cACASLrLhIKFkMYJKAGC2ikgszjVupKZwQ4GaYmolQ=</HashCode>
       <FileName>Classes\Utilities\StorageController.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -437,7 +437,7 @@
   <Class Name="P3_Projekt_WPF.Classes.Utilities.Utils">
     <Position X="18.25" Y="17.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>QAAAgAIAIABAAQAACAIAACAAAAEAAQAAsACAAQAAIAA=</HashCode>
+      <HashCode>QAAAgAIAIABAAQAACAIAgAAAAAEAAQAAEACAAQAAAAA=</HashCode>
       <FileName>Classes\Utilities\Utils.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -450,7 +450,7 @@
   <Class Name="P3_Projekt_WPF.Properties.Settings">
     <Position X="5.75" Y="36.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AABAAAEAAAAAAAAAAAAA8ATAJAABIAQAAAAAIIAAAIA=</HashCode>
+      <HashCode>AABAAAEAAAAAAAAAAAAA8M/AJAABIAQAAAAAIIAAAIA=</HashCode>
     </TypeIdentifier>
   </Class>
   <Class Name="P3_Projekt_WPF.App">
@@ -471,7 +471,7 @@
   <Class Name="P3_Projekt_WPF.Classes.Utilities.FastButton">
     <Position X="4" Y="36.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>NAAAAAAAAAAAAAAEAAAABAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>MAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Classes\Utilities\FastButton.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -503,13 +503,6 @@
       <FileName>Classes\Utilities\PaymentMethod_Enum.cs</FileName>
     </TypeIdentifier>
   </Enum>
-  <Delegate Name="P3_Projekt_WPF.ImageChosen">
-    <Position X="2.25" Y="36.5" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAAAAAAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>CreateProduct.xaml.cs</FileName>
-    </TypeIdentifier>
-  </Delegate>
   <Delegate Name="P3_Projekt_WPF.Classes.Utilities.LowStorageNotification">
     <Position X="2.25" Y="37.5" Width="1.5" />
     <TypeIdentifier>

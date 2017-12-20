@@ -56,22 +56,16 @@ namespace P3_Projekt_WPF.Classes.Utilities
             ResetCounters();
         }
 
-        public void ReloadAllDictionarys(MainWindow MainWin, bool ShowMessageBox = true)
+        public void ReloadAllDictionarys()
         {
-            if (ShowMessageBox)
-            {
-                MessageBox.Show("Alt data vil nu blive hentet fra databasen igen, og kan godt tage lidt tid");
-            }
+
             ClearDictionarys();
             GetAll();
             while (!ThreadsDone)
             {
                 Thread.Sleep(10);
             }
-            MainWin.ReloadProducts();
-            MainWin.ReloadDisabledProducts();
-            MainWin.LoadQuickButtons();
-            MainWin.SaveQuickButtons();
+
         }
 
         public void LoadAllProductsDictionary()
@@ -96,7 +90,6 @@ namespace P3_Projekt_WPF.Classes.Utilities
         public List<Thread> Threads = new List<Thread>();
         public object ThreadLock = new object();
         // For at holde garbage collector fra at dræbe tråde
-        public ConcurrentQueue<string> TimerStrings = new ConcurrentQueue<string>();
         public bool ThreadsDone
         {
             get
@@ -743,27 +736,27 @@ namespace P3_Projekt_WPF.Classes.Utilities
         /* User has already found the matching product ID.
          * First line findes the store storage
          * Second line subtracts the amount sold from Shop storage*/
-        public void MergeTempProduct(TempProduct tempProductToMerge, int matchedProductID)
+        public void MatchTempProduct(TempProduct tempProductToMatch, int matchedProductID)
         {
-            Product MergedProduct = ProductDictionary[matchedProductID];
-            tempProductToMerge.Resolve(MergedProduct);
-            SaleTransaction tempProductsTransaction = tempProductToMerge.GetTempProductsSaleTransaction();
+            Product MatchedProduct = ProductDictionary[matchedProductID];
+            tempProductToMatch.Resolve(MatchedProduct);
+            SaleTransaction tempProductsTransaction = tempProductToMatch.GetTempProductsSaleTransaction();
             //Gets the Shop storage room, which has = 1, but if it doesn't exist, gets the next one
-            KeyValuePair<int, int> StorageRoomStatus = MergedProduct.StorageWithAmount.Where(x => x.Key != 0).First();
+            KeyValuePair<int, int> StorageRoomStatus = MatchedProduct.StorageWithAmount.Where(x => x.Key != 0).First();
 
-            MergedProduct.StorageWithAmount[StorageRoomStatus.Key] = StorageRoomStatus.Value - tempProductsTransaction.Amount;
-            MergedProduct.UpdateInDatabase();
+            MatchedProduct.StorageWithAmount[StorageRoomStatus.Key] = StorageRoomStatus.Value - tempProductsTransaction.Amount;
+            MatchedProduct.UpdateInDatabase();
         }
 
-        public void RemergeTempProduct(TempProduct tempProductToMerge, int matchedProductID)
+        public void RematchTempProduct(TempProduct tempProductToMatch, int matchedProductID)
         {
-            Product PreviouslyMergedProduct = ProductDictionary[tempProductToMerge.ResolvedProductID];
-            KeyValuePair<int, int> StorageRoomStatus = PreviouslyMergedProduct.StorageWithAmount.Where(x => x.Key != 0).First();
+            Product PreviouslyMatchdProduct = ProductDictionary[tempProductToMatch.ResolvedProductID];
+            KeyValuePair<int, int> StorageRoomStatus = PreviouslyMatchdProduct.StorageWithAmount.Where(x => x.Key != 0).First();
 
-            PreviouslyMergedProduct.StorageWithAmount[StorageRoomStatus.Key] = StorageRoomStatus.Value + tempProductToMerge.GetTempProductsSaleTransaction().Amount;
-            PreviouslyMergedProduct.UpdateInDatabase();
+            PreviouslyMatchdProduct.StorageWithAmount[StorageRoomStatus.Key] = StorageRoomStatus.Value + tempProductToMatch.GetTempProductsSaleTransaction().Amount;
+            PreviouslyMatchdProduct.UpdateInDatabase();
 
-            MergeTempProduct(tempProductToMerge, matchedProductID);
+            MatchTempProduct(tempProductToMatch, matchedProductID);
         }
 
         public void EditTempProduct(TempProduct tempProductToEdit, string description, decimal salePrice)
@@ -930,7 +923,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
             {
                 productToAdd.NameMatch += 100;
             }
-            List<string> productSplit =productToConvert.GetName().ToLower().Split(' ').ToList();
+            List<string> productSplit = productToConvert.GetName().ToLower().Split(' ').ToList();
             SpaceCounter(ref productSplit);
             foreach (string s in searchSplit)
             {
@@ -976,21 +969,16 @@ namespace P3_Projekt_WPF.Classes.Utilities
             }
         }
 
-        private bool LevenshteinsGroupAndProductSearch(string[] searchedString, string stringToCompare, out int charDifference)
-        {//setup for levenshteins
+        private bool LevenshteinValidationChecker(string[] searchedString, string stringToCompare, out int charDifference)
+        {
             string[] compareSplit = stringToCompare.ToLower().Split(' ');
-
             foreach (string sString in searchedString)
             {
                 foreach (string compareString in compareSplit)
                 {
-
-                    //getting the chardifference between the searchedstring and the productname
                     charDifference = ComputeLevenshteinsDistance(sString, compareString);
-                    //Evaluate if the chardifference is in between the changelimit of the string
                     if (EvaluateStringLimit(sString.Length, charDifference))
                     {
-                        //only returns true of it is matching
                         return true;
                     }
                 }
@@ -1008,46 +996,19 @@ namespace P3_Projekt_WPF.Classes.Utilities
             //if the string contains a name of a group, or the string is matched, each product with the same group 
             //is added to the list of products to show.
             var SearchList = weigthedSearchList.Where(x => x.CurrentProduct.ID == product.ID);
-            if (product is Product)
+            int groupID = (product is Product) ? (product as Product).ProductGroupID : (product as ServiceProduct).ServiceProductGroupID;
+
+            foreach (string searchedString in dividedString)
             {
-                foreach (string searchedString in dividedString)
+                if (GroupDictionary[groupID].Name.Contains(searchedString))
                 {
-                    if (GroupDictionary[(product as Product).ProductGroupID].Name.Contains(searchedString))
-                    {
-                        SearchList.First().GroupMatch += 100;
-                    }
-                    
+                    SearchList.First().GroupMatch += 100;
                 }
-                if (LevenshteinsGroupAndProductSearch(dividedString, GroupDictionary[(product as Product).ProductGroupID].Name, out MatchedValue))
-                {
-                    if (SearchList.Count() > 0)
-                    {
-                        if (SearchList.First() != null)
-                        {
-                            SearchList.First().GroupMatch += 1;
-                        }
-                    }
-                }
+
             }
-            else if (product is ServiceProduct)
+            if (LevenshteinValidationChecker(dividedString, GroupDictionary[groupID].Name, out MatchedValue) && SearchList.Count() > 0 && SearchList.First() != null)
             {
-                foreach (string searchedString in dividedString)
-                {
-                    if (GroupDictionary[(product as ServiceProduct).ServiceProductGroupID].Name.Contains(searchedString))
-                    {
-                        SearchList.First().GroupMatch += 100;
-                    }
-                }
-                if (LevenshteinsGroupAndProductSearch(dividedString, GroupDictionary[(product as ServiceProduct).ServiceProductGroupID].Name, out MatchedValue))
-                {
-                    if (SearchList.Count() > 0)
-                    {
-                        if (SearchList.First() != null)
-                        {
-                            SearchList.First().GroupMatch += 1;
-                        }
-                    }
-                }
+                SearchList.First().GroupMatch += 1;
             }
         }
 
@@ -1070,7 +1031,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
                         SearchList.First().BrandMatch += 100;
                     }
                 }
-                if (LevenshteinsGroupAndProductSearch(dividedString, (product as Product).Brand, out MatchedValues))
+                if (LevenshteinValidationChecker(dividedString, (product as Product).Brand, out MatchedValues))
                 {
                     if (SearchList.Count() > 0)
                     {

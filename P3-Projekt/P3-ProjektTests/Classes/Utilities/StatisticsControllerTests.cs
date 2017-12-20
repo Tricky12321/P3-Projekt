@@ -15,8 +15,6 @@ namespace P3_Projekt_WPF.Classes.Utilities.Tests
         StorageController SC;
         POSController POS;
         StatisticsController StatCon;
-        ConcurrentDictionary<int, BaseProduct> ProductList;
-        ConcurrentDictionary<int, Group> GroupList;
         [SetUp]
         public void Init()
         {

@@ -41,7 +41,7 @@ namespace P3_Projekt_WPF
 
             _unresolvedTempProducts = _storageController.TempProductDictionary.Where(x => x.Value.Resolved == false).ToList();
             _resolvedTempProducts = _storageController.TempProductDictionary.Where(x => x.Value.Resolved == true).ToList();
-            button_Merge.IsEnabled = false;
+            button_Match.IsEnabled = false;
             
             foreach (KeyValuePair<int,TempProduct> unresolvedTempProduct in _unresolvedTempProducts)
             {
@@ -51,8 +51,8 @@ namespace P3_Projekt_WPF
             {
                 _resolvedItemList.Add(new TempListItem { Description = resolvedTempProduct.Value.Description, Price = resolvedTempProduct.Value.SalePrice });
             }
-            listview_ProductsToMerge.ItemsSource = _unresolvedItemList;
-            listview_resolvedProductsToMerge.ItemsSource = _resolvedItemList;
+            listview_ProductsToMatch.ItemsSource = _unresolvedItemList;
+            listview_resolvedProductsToMatch.ItemsSource = _resolvedItemList;
             Show();
             Activate();
         }
@@ -67,98 +67,98 @@ namespace P3_Projekt_WPF
             }
         }
 
-        private Product IDToMerge()
+        private Product IDToMatch()
         {
             int validInput = 0;
             bool input = true;
-            if (int.TryParse(textBox_IDToMerge.Text, out validInput))
+            if (int.TryParse(textBox_IDToMatch.Text, out validInput))
             {
                 try
                 {
-                    var productToMerge = _storageController.ProductDictionary[int.Parse(textBox_IDToMerge.Text)];
-                    Label_MergeInfo.Text = productToMerge.Name;
-                    button_Merge.IsEnabled = true;
-                    return productToMerge;
+                    var productToMatch = _storageController.ProductDictionary[int.Parse(textBox_IDToMatch.Text)];
+                    Label_MatchInfo.Text = productToMatch.Name;
+                    button_Match.IsEnabled = true;
+                    return productToMatch;
                 }
                 catch (KeyNotFoundException)
                 {
-                    Label_MergeInfo.Text = "Ugyldigt Produkt ID";
-                    button_Merge.IsEnabled = false;
+                    Label_MatchInfo.Text = "Ugyldigt Produkt ID";
+                    button_Match.IsEnabled = false;
                 }
             }
             else
             {
-                Label_MergeInfo.Text = "Forkert Input";
-                button_Merge.IsEnabled = false;
+                Label_MatchInfo.Text = "Forkert Input";
+                button_Match.IsEnabled = false;
             }
             return null;
         }
 
-        private Product resolvedIDToMerge()
+        private Product resolvedIDToMatch()
         {
             int validInput = 0;
             bool input = true;
-            if (int.TryParse(textBox_resolvedIDToMerge.Text, out validInput))
+            if (int.TryParse(textBox_resolvedIDToMatch.Text, out validInput))
             {
                 try
                 {
-                    var productToMerge = _storageController.ProductDictionary[int.Parse(textBox_resolvedIDToMerge.Text)];
-                    Label_resolvedMergeInfo.Text = productToMerge.Name;
-                    button_resolvedMerge.IsEnabled = true;
-                    return productToMerge;
+                    var productToMatch = _storageController.ProductDictionary[int.Parse(textBox_resolvedIDToMatch.Text)];
+                    Label_resolvedMatchInfo.Text = productToMatch.Name;
+                    button_resolvedMatch.IsEnabled = true;
+                    return productToMatch;
                 }
                 catch (KeyNotFoundException)
                 {
-                    Label_resolvedMergeInfo.Text = "Ugyldigt Produkt ID";
-                    button_resolvedMerge.IsEnabled = false;
+                    Label_resolvedMatchInfo.Text = "Ugyldigt Produkt ID";
+                    button_resolvedMatch.IsEnabled = false;
                 }
             }
             else
             {
-                Label_resolvedMergeInfo.Text = "Forkert Input";
-                button_resolvedMerge.IsEnabled = false;
+                Label_resolvedMatchInfo.Text = "Forkert Input";
+                button_resolvedMatch.IsEnabled = false;
             }
             return null;
         }
 
-        private void textBox_IDToMerge_KeyUp(object sender, KeyEventArgs e)
+        private void textBox_IDToMatch_KeyUp(object sender, KeyEventArgs e)
         {
-            Label_MergeInfo.Foreground = Brushes.Black;
-            IDToMerge();
+            Label_MatchInfo.Foreground = Brushes.Black;
+            IDToMatch();
         }
 
-        private void textBox_resolvedIDToMerge_KeyUp(object sender, KeyEventArgs e)
+        private void textBox_resolvedIDToMatch_KeyUp(object sender, KeyEventArgs e)
         {
-            Label_resolvedMergeInfo.Foreground = Brushes.Black;
-            resolvedIDToMerge();
+            Label_resolvedMatchInfo.Foreground = Brushes.Black;
+            resolvedIDToMatch();
         }
 
-        private void button_Merge_Click(object sender, RoutedEventArgs e)
+        private void button_Match_Click(object sender, RoutedEventArgs e)
         {
-            _storageController.MergeTempProduct(_unresolvedTempProducts[_index].Value, IDToMerge().ID);
+            _storageController.MatchTempProduct(_unresolvedTempProducts[_index].Value, IDToMatch().ID);
             Close();
-            MessageBox.Show($"Midlertidigt produkt: {_unresolvedTempProducts[_index].Value.Description}\nEr rettet til at være produktet: {IDToMerge().Name}");
+            MessageBox.Show($"Midlertidigt produkt: {_unresolvedTempProducts[_index].Value.Description}\nEr rettet til at være produktet: {IDToMatch().Name}");
         }
 
-        private void button_resolvedMerge_Click(object sender, RoutedEventArgs e)
+        private void button_resolvedMatch_Click(object sender, RoutedEventArgs e)
         {
-            _storageController.RemergeTempProduct(_resolvedTempProducts[_index].Value, resolvedIDToMerge().ID);
+            _storageController.RematchTempProduct(_resolvedTempProducts[_index].Value, resolvedIDToMatch().ID);
             Close();
-            MessageBox.Show($"Midlertidigt produkt: {_resolvedTempProducts[_index].Value.Description}\nEr rettet til at være produktet: {resolvedIDToMerge().Name}");
+            MessageBox.Show($"Midlertidigt produkt: {_resolvedTempProducts[_index].Value.Description}\nEr rettet til at være produktet: {resolvedIDToMatch().Name}");
         }
 
-        private void listview_ProductsToMerge_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void listview_ProductsToMatch_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            _index = listview_ProductsToMerge.SelectedIndex;
+            _index = listview_ProductsToMatch.SelectedIndex;
             if (_index <= _unresolvedTempProducts.Count() && _index >= 0)
             {
                 textBox_TempProductInfo.Text = _unresolvedTempProducts[_index].Value.Description;
             }
         }
 
-        private void listview_resolvedProductsToMerge_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void listview_resolvedProductsToMatch_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            _index = listview_resolvedProductsToMerge.SelectedIndex;
+            _index = listview_resolvedProductsToMatch.SelectedIndex;
             if (_index <= _resolvedTempProducts.Count() && _index >= 0)
             {
                 textBox_resolvedTempProductInfo.Text = _resolvedTempProducts[_index].Value.Description;
