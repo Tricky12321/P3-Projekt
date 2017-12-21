@@ -101,13 +101,13 @@ namespace P3_Projekt_WPF.Classes
 
                 if (transaction.DiscountBool)
                 {
-                    textToPrint.Append($"|  {transaction.Amount} x { Math.Round(transaction.Price, 2).ToString().PadRight(21)} {((Math.Round(transaction.Price * transaction.Amount, 2)).ToString().PadRight(2)).PadLeft(15)}  |\n");
+                    textToPrint.Append($"|  {transaction.Amount.ToString().PadRight(3)} x {Math.Round(transaction.Price, 2).ToString().PadRight(22)} {((Math.Round(transaction.Price * transaction.Amount, 2)).ToString().PadRight(2)).PadLeft(12)}  |\n");
                     textToPrint.Append($"|  {("- " + (Math.Round(transaction.TotalPrice - (transaction.DiscountPrice * transaction.Amount), 2)).ToString().PadRight(2)).PadLeft(41)}  |\n");
                     textToPrint.Append($"|  {("= " + (Math.Round(transaction.DiscountPrice * transaction.Amount, 2)).ToString().PadRight(2)).PadLeft(41)}  |\n");
                 }
                 else
                 {
-                    textToPrint.Append($"|  {transaction.Amount} x { Math.Round(transaction.Price, 2).ToString().PadRight(21)} {("= " + (Math.Round(transaction.TotalPrice, 2)).ToString().PadRight(2)).PadLeft(15)}  |\n");
+                    textToPrint.Append($"|  {transaction.Amount.ToString().PadRight(3)} x {Math.Round(transaction.Price, 2).ToString().PadRight(22)} {("= " + (Math.Round(transaction.TotalPrice, 2)).ToString().PadRight(2)).PadLeft(12)}  |\n");
                 }
 
                 textToPrint.Append($"|                                             |\n");
