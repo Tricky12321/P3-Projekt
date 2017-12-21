@@ -22,15 +22,6 @@ namespace P3_Projekt_WPF.Classes.Utilities
         public Dictionary<int, StatisticsProduct> SalesPerProduct;
         public decimal[] Payments = { 0, 0, 0 };
 
-        public StatisticsController(StorageController storageController)
-        {
-            _storageController = storageController;
-        }
-
-        /* Man anmoder altid om dato først, men kun én af dato-metoderne af gangen.
-         * Hver dato-metode nulstiller TransactionsForStatistics ved at hente transaktioner ned fra databasen alt efter datoen
-         * Derefter skal formen kalde RequestStatisticsWithParameters */
-
         private bool _allStatisticsDone = false;
         private ConcurrentQueue<SaleTransaction> _saleTransactions;
         private List<Thread> _saleTransactionThreads = new List<Thread>();
@@ -38,6 +29,11 @@ namespace P3_Projekt_WPF.Classes.Utilities
         private int _saleTransactionsCreated = 0;
         private ConcurrentQueue<Row> _dataQueue;
         private StorageController _storageController = null;
+
+        public StatisticsController(StorageController storageController)
+        {
+            _storageController = storageController;
+        }
 
         private void CreateThreads()
         {
@@ -176,7 +172,6 @@ namespace P3_Projekt_WPF.Classes.Utilities
             TimeSpan dayEnd = new TimeSpan(23, 59, 59);
             return date + dayEnd;
         }
-
 
         public void RequestTransactionsDatabase(string queryString)
         {

@@ -21,16 +21,15 @@ namespace P3_Projekt_WPF.Classes.Utilities
     public delegate void LowStorageNotification(Product product);
     public delegate void ReceiptExecuteDoneDelegate();
 
-
     public class POSController
     {
-
         public Receipt PlacerholderReceipt;
         private StorageController _storageController;
-
         public List<Receipt> ReceiptList = new List<Receipt>();
         public int ReceiptID = 0;
         public decimal TotalPriceToPay = -1m;
+        private const int _storageWarningLimit = 5;
+
         public POSController(StorageController storageController)
         {
             _storageController = storageController;
@@ -40,12 +39,6 @@ namespace P3_Projekt_WPF.Classes.Utilities
         public void StartPurchase()
         {
             PlacerholderReceipt = new Receipt();
-        }
-
-        public void EditReceipt(int receiptID)
-        {
-            PlacerholderReceipt = ReceiptList.First(x => x.ID == receiptID);
-            //PlacerholderReceipt.Delete();
         }
 
         public BaseProduct GetProductFromID(int id)
@@ -72,26 +65,16 @@ namespace P3_Projekt_WPF.Classes.Utilities
             }
             else
             {
-                Utils.GetIceCreameID();
+                Utils.GetIceCreamID();
                 if (Properties.Settings.Default.IcecreamID == -1)
                 {
                     MessageBox.Show("Du skal oprette en gruppen med navnet \"is\", for at kunne sælge is.");
-
                 }
                 else
                 {
                     AddIcecreamTransaction(price);
                 }
             }
-
-        }
-
-        public void AddFreeSaleTransaction(BaseProduct product, int amount)
-        {
-            SaleTransaction transaction = new SaleTransaction(product, amount, PlacerholderReceipt.ID);
-            transaction.Price = 0;
-            PlacerholderReceipt.AddTransaction(transaction);
-
         }
 
         public void ChangeTransactionAmount(object sender, EventArgs e, int amount)
@@ -156,8 +139,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
             {
                 if (product is Product)
                 {
-                    //Limit??
-                    if ((product as Product).StorageWithAmount.Values.Sum() < 5)
+                    if ((product as Product).StorageWithAmount.Values.Sum() < _storageWarningLimit)
                     {
                         if (LowStorageWarning != null)
                         {
@@ -203,7 +185,6 @@ namespace P3_Projekt_WPF.Classes.Utilities
                     CompletedPurchase = true;
                     SaleTransaction.SetStorageController(_storageController);
 
-                    //_POSController.PlacerholderReceipt.PaymentMethod = PaymentMethod;
                     Thread NewThread = new Thread(new ThreadStart(ExecuteReceipt));
                     NewThread.Name = "ExecuteReceipt Thread";
                     NewThread.Start();
@@ -222,7 +203,6 @@ namespace P3_Projekt_WPF.Classes.Utilities
                         CompletedPurchase = true;
                         return "";
                     }
-
                 }
                 if (TotalPriceToPay != -1m)
                 {

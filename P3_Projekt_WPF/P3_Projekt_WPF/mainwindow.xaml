@@ -17,6 +17,8 @@
     
         Background="#FF919191"
     
+        WindowState="Maximized"
+    
         >
     <Grid>
         <TabControl x:Name="tabControl" FontSize="30" Grid.ColumnSpan="3" Grid.RowSpan="2">
@@ -453,7 +455,7 @@
             </TabItem>
             <TabItem x:Name="tab_Settings" GotFocus="tab_Settings_GotFocus" Header="Indstillinger" Width="190" Margin="0,0,0,0" >
                 <Grid Margin="0,0,0,0">
-                    <TabControl x:Name="tab_WithSettings" TabStripPlacement="Left" Background="Transparent" Margin="0,60,0,0" SelectionChanged="TabControl_SelectionChanged">
+                    <TabControl x:Name="tab_WithSettings" TabStripPlacement="Left" Background="Transparent" Margin="0,60,0,0">
                         <TabItem Header="Salg" Height="70" Margin="0" Width="300">
                             <Grid>
                                 <Grid.RowDefinitions>
