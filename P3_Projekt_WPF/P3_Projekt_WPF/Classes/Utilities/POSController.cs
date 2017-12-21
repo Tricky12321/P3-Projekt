@@ -72,7 +72,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
             }
             else
             {
-                Utils.GetIceCreameID();
+                Utils.GetIceCreamID();
                 if (Properties.Settings.Default.IcecreamID == -1)
                 {
                     MessageBox.Show("Du skal oprette en gruppen med navnet \"is\", for at kunne sælge is.");

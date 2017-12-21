@@ -148,7 +148,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
             Mysql.RunQuery(sql);
         }
 
-        public static void GetIceCreameID()
+        public static void GetIceCreamID()
         {
             if (Mysql.ConnectionWorking)
             {
