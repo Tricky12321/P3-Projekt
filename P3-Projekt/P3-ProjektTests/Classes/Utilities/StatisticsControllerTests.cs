@@ -72,7 +72,6 @@ namespace P3_Projekt_WPF.Classes.Utilities.Tests
 
         [TestCase(3, 10, PaymentMethod_Enum.Card, 100)]
         [TestCase(100,2,PaymentMethod_Enum.Cash,30)]
-        [TestCase(1000,2,PaymentMethod_Enum.MobilePay,100)]
         [TestCase(10,10,PaymentMethod_Enum.Card,100)]
         [TestCase(10,1000,PaymentMethod_Enum.Cash,100)]
         [TestCase(100, 1000,PaymentMethod_Enum.MobilePay,100)]
