@@ -369,7 +369,7 @@
     </TypeIdentifier>
   </Class>
   <Class Name="P3_Projekt_WPF.Classes.Utilities.StorageController">
-    <Position X="27" Y="17.5" Width="1.5" />
+    <Position X="27" Y="17.5" Width="2.75" />
     <Members>
       <Field Name="_disabledProductsCount" Hidden="true" />
       <Field Name="_disabledProductsLoaded" Hidden="true" />
@@ -416,7 +416,7 @@
       <Field Name="_tempProductQueue" Hidden="true" />
     </Members>
     <TypeIdentifier>
-      <HashCode>4cACATLrLhIKFkEYJKAGC2ikkszjVupKZwQYGaYmolQ=</HashCode>
+      <HashCode>4cACASLrLhIKFkEYJKAGC2mkkszjVupKZwQYGaYmolQ=</HashCode>
       <FileName>Classes\Utilities\StorageController.cs</FileName>
     </TypeIdentifier>
   </Class>
