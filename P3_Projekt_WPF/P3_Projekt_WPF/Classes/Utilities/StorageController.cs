@@ -22,7 +22,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
         public ConcurrentDictionary<int, StorageTransaction> StorageTransactionDictionary = new ConcurrentDictionary<int, StorageTransaction>();
         public ConcurrentDictionary<int, OrderTransaction> OrderTransactionDictionary = new ConcurrentDictionary<int, OrderTransaction>();
         public List<string[]> InformationGridData = new List<string[]>();
-        private object InformationGridLock = new object();
+        private object _informationGridLock = new object();
         private ConcurrentQueue<Product> _productResults = new ConcurrentQueue<Product>();
         public ConcurrentDictionary<int, BaseProduct> AllProductsDictionary = new ConcurrentDictionary<int, BaseProduct>();
         public ConcurrentDictionary<int, Product> DisabledProducts = new ConcurrentDictionary<int, Product>();
@@ -32,11 +32,9 @@ namespace P3_Projekt_WPF.Classes.Utilities
         public StorageController()
         {
             AddInformation("Core Antal", Utils.NumberOfCores);
-            //GetAllProductsFromDatabase();
-            //GetAllReceiptsFromDatabase();
         }
 
-        public void ClearDictionarys()
+        public void ClearDictionaries()
         {
             if (_queueThreads != null)
             {
@@ -56,16 +54,14 @@ namespace P3_Projekt_WPF.Classes.Utilities
             ResetCounters();
         }
 
-        public void ReloadAllDictionarys()
+        public void ReloadAllDictionaries()
         {
-
-            ClearDictionarys();
+            ClearDictionaries();
             GetAll();
             while (!ThreadsDone)
             {
-                Thread.Sleep(10);
+                Thread.Sleep(1);
             }
-
         }
 
         public void LoadAllProductsDictionary()
@@ -104,7 +100,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
 
         public void AddInformation(string name, object value)
         {
-            lock (InformationGridLock)
+            lock (_informationGridLock)
             {
                 string[] result = { name, value.ToString() };
                 InformationGridData.Add(result);
@@ -578,7 +574,6 @@ namespace P3_Projekt_WPF.Classes.Utilities
                 Mysql.RunQuery(updateProductsSQL);
                 string updateServiceProductsSQL = $"UPDATE `service_products` SET `groups` = '{GroupDictionary[0].ID}' WHERE `groups` = '{GroupID}'";
                 Mysql.RunQuery(updateServiceProductsSQL);
-
             }
             Group outVal = null;
             string sql = $"DELETE FROM `groups` WHERE `id` = '{GroupID}' ";
@@ -588,7 +583,6 @@ namespace P3_Projekt_WPF.Classes.Utilities
 
         //Assign new group to products left with no group
         //Removes group from dictionary
-
         public IEnumerable<string> GetProductBrands()
         {
             return ProductDictionary.Values.Select(x => x.Brand).Distinct();
@@ -611,14 +605,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
 
         public void UpdateProduct(int id, string name, string brand, decimal purchasePrice, int groupID, bool discount, decimal discountPrice, decimal salePrice, ConcurrentDictionary<int, int> storageWithAmount, bool UploadToDatabase = true)
         {
-            if (discountPrice > 0)
-            {
-                discount = true;
-            }
-            else
-            {
-                discount = false;
-            }
+            discount = discountPrice > 0;
             Product newProduct = new Product(id, name, brand, purchasePrice, groupID, discount, salePrice, discountPrice);
             newProduct.StorageWithAmount = new ConcurrentDictionary<int, int>(storageWithAmount.Where(x => x.Value != 0));
             ProductDictionary[newProduct.ID] = newProduct;
@@ -628,14 +615,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
 
         public void UpdateDeactivatedProduct(int id, string name, string brand, decimal purchasePrice, int groupID, bool discount, decimal discountPrice, decimal salePrice, ConcurrentDictionary<int, int> storageWithAmount, bool UploadToDatabase = true)
         {
-            if (discountPrice > 0)
-            {
-                discount = true;
-            }
-            else
-            {
-                discount = false;
-            }
+            discount = discountPrice > 0;
             Product newProduct = new Product(id, name, brand, purchasePrice, groupID, discount, salePrice, discountPrice);
             newProduct.DeactivateProduct();
             newProduct.StorageWithAmount = new ConcurrentDictionary<int, int>(storageWithAmount.Where(x => x.Value != 0));
@@ -761,11 +741,6 @@ namespace P3_Projekt_WPF.Classes.Utilities
             MatchTempProduct(tempProductToMatch, matchedProductID);
         }
 
-        public void EditTempProduct(TempProduct tempProductToEdit, string description, decimal salePrice)
-        {
-            tempProductToEdit.Edit(description, salePrice);
-        }
-
         //Adds new storage room to dictionary, and to all products
         public void CreateStorageRoom(string name, string description)
         {
@@ -824,6 +799,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
                 MessageBox.Show("Du kan ikke slette butikken!");
             }
         }
+
         /// <summary>
         /// Creates Icecream as a serviceproduct, then uploads it to the database, if not already in the system.
         /// </summary>

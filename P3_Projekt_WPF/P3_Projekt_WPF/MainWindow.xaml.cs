@@ -923,7 +923,7 @@ namespace P3_Projekt_WPF
         ResolveTempProduct _resolveTempProduct;
         private void btn_MatchTempProduct_Click(object sender, RoutedEventArgs e)
         {
-            _storageController.ReloadAllDictionarys();
+            _storageController.ReloadAllDictionaries();
             if (_resolveTempProduct == null)
             {
                 _resolveTempProduct = new ResolveTempProduct(_storageController);
@@ -1128,7 +1128,7 @@ namespace P3_Projekt_WPF
                 button_DeleteFulReceiptDiscount.Visibility = Visibility.Hidden;
                 image_DeleteFullReceiptDiscount.Visibility = Visibility.Hidden;
                 text_FullReceiptDiscount.Text = string.Empty;
-                _storageController.ReloadAllDictionarys();
+                _storageController.ReloadAllDictionaries();
                 ReloadProducts();
                 ReloadDisabledProducts();
                 LoadQuickButtons();
@@ -1448,7 +1448,6 @@ namespace P3_Projekt_WPF
             FillDeactivatedProductsIntoGrid();
         }
 
-
         private void ActivateProduct(object sender, RoutedEventArgs e)
         {
             if (datagrid_deactivated_products.SelectedIndex != -1)
@@ -1459,7 +1458,6 @@ namespace P3_Projekt_WPF
                 MessageBox.Show("Du har genaktiveret " + ProductString);
                 ReloadDisabledProducts();
                 ReloadProducts();
-
             }
         }
 
@@ -1530,7 +1528,6 @@ namespace P3_Projekt_WPF
                 }
                 listview_SettingsStorageStorageTransaction.Items.Add(new { Received = product.Name, Amount = storageTrans.Value.Amount, StorageRoomSource = storageTrans.Value.Source.Name, StorageRoomDest = storageTrans.Value.Source.Name });
             }
-
         }
 
         private void button_DeleteFulReceiptDiscount_Click(object sender, EventArgs e)
@@ -1558,10 +1555,10 @@ namespace P3_Projekt_WPF
 
         private void btn_ReloadDatabase_Click(object sender, RoutedEventArgs e)
         {
-            _storageController.ClearDictionarys();
+            _storageController.ClearDictionaries();
 
             Mysql.CheckDatabaseConnection();
-            _storageController.ReloadAllDictionarys();
+            _storageController.ReloadAllDictionaries();
             ReloadProducts();
             ReloadDisabledProducts();
             LoadQuickButtons();
@@ -1588,7 +1585,6 @@ namespace P3_Projekt_WPF
                     MessageBox.Show("Du skal være admin for at gå ind i indstillinger");
                 }
             }
-
         }
     }
 }
