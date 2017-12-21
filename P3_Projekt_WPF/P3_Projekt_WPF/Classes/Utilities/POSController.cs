@@ -110,6 +110,38 @@ namespace P3_Projekt_WPF.Classes.Utilities
             PlacerholderReceipt.UpdateTotalPrice();
         }
 
+        public void ChangeTransactionAmount(int ID, int amount)
+        {
+            string IDTag = ID.ToString();
+            SaleTransaction placeholderTransaction;
+            if (IDTag.Contains("t"))
+            {
+                int productID = Convert.ToInt32(IDTag.Replace("t", string.Empty));
+                placeholderTransaction = PlacerholderReceipt.Transactions.Where(x => x.Product.ID == productID).First();
+                placeholderTransaction.Amount += amount;
+                placeholderTransaction.CheckIfGroupPrice();
+                PlacerholderReceipt.UpdateTotalPrice();
+            }
+            else if (Convert.ToInt32(IDTag) == Properties.Settings.Default.IcecreamProductID)
+            {
+                int productID = Convert.ToInt32(IDTag);
+                decimal SalesPrice = _storageController.AllProductsDictionary[productID].SalePrice;
+                placeholderTransaction = PlacerholderReceipt.Transactions.Where(x => x.Product.ID == productID).First();
+                placeholderTransaction.Amount += amount;
+                PlacerholderReceipt.UpdateTotalPrice();
+            }
+            else
+            {
+                int productID = Convert.ToInt32(IDTag);
+                placeholderTransaction = PlacerholderReceipt.Transactions.Where(x => x.Product.ID == productID).First();
+                placeholderTransaction.Amount += amount;
+                placeholderTransaction.CheckIfGroupPrice();
+                PlacerholderReceipt.UpdateTotalPrice();
+            }
+            PlacerholderReceipt.RemoveDiscountFromDiscount(placeholderTransaction);
+            PlacerholderReceipt.UpdateTotalPrice();
+        }
+
         public void RemoveTransactionFromReceipt(int productID)
         {
             PlacerholderReceipt.RemoveTransaction(productID);

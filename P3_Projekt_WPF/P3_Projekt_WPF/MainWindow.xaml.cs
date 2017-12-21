@@ -22,6 +22,7 @@ using System.Collections;
 using System.IO;
 using System.Collections.Concurrent;
 using System.ComponentModel;
+using System.Globalization;
 //using System.Drawing;
 
 namespace P3_Projekt_WPF
@@ -47,6 +48,9 @@ namespace P3_Projekt_WPF
             _statisticsController = new StatisticsController(_storageController);
             InitializeComponent();
             InitComponents();
+            CultureInfo ci = new CultureInfo("da-DK");
+            Thread.CurrentThread.CurrentCulture = ci;
+            Thread.CurrentThread.CurrentUICulture = ci;
         }
 
         public void UpdateProductNewAmount(Product product)
@@ -385,7 +389,6 @@ namespace P3_Projekt_WPF
                 _firstClick = false;
                 btn_EditProduct.Visibility = Visibility.Visible;
             }
-
             _productToEdit = _storageController.AllProductsDictionary[id];
             image_ChosenProduct.Source = Utils.ImageSourceForBitmap(Properties.Resources.questionmark_png);
 
@@ -623,7 +626,14 @@ namespace P3_Projekt_WPF
             BaseProduct ProductToAdd = _POSController.GetProductFromID(inputInt);
             if (ProductToAdd != null && ProductToAdd.GetName() != "Is")
             {
-                _POSController.AddSaleTransaction(ProductToAdd, int.Parse(textBox_ProductAmount.Text));
+                if (_POSController.PlacerholderReceipt.Transactions.Where(x => x.Product.ID == ProductToAdd.ID).Count() > 0)
+                {
+                    _POSController.ChangeTransactionAmount(ProductToAdd.ID, int.Parse(textBox_ProductAmount.Text));
+                }
+                else
+                {
+                    _POSController.AddSaleTransaction(ProductToAdd, int.Parse(textBox_ProductAmount.Text));
+                }
                 UpdateReceiptList();
 
                 textBox_AddProductID.Text = string.Empty;
@@ -920,23 +930,10 @@ namespace P3_Projekt_WPF
             InformationGrid.UpdateLayout();
         }
 
-        ResolveTempProduct _resolveTempProduct;
         private void btn_MatchTempProduct_Click(object sender, RoutedEventArgs e)
         {
-            _storageController.ReloadAllDictionaries();
-            if (_resolveTempProduct == null)
-            {
-                _resolveTempProduct = new ResolveTempProduct(_storageController);
-                _resolveTempProduct.Show();
-                _resolveTempProduct.Closed += delegate
-                {
-                    _resolveTempProduct = null;
-                };
-            }
-            else
-            {
-                MessageBox.Show("Der findes ingen midlertidige produkter");
-            }
+            ResolveTempProduct ResolveTempProduct = new ResolveTempProduct(_storageController);
+            ResolveTempProduct.Show();
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
@@ -1528,7 +1525,10 @@ namespace P3_Projekt_WPF
                 {
                     product = _storageController.DisabledProducts[storageTrans.Value.Product.ID];
                 }
-                listview_SettingsStorageStorageTransaction.Items.Add(new { Received = product.Name, Amount = storageTrans.Value.Amount, StorageRoomSource = storageTrans.Value.Source.Name, StorageRoomDest = storageTrans.Value.Source.Name });
+                if (storageTrans.Value.Source != null && storageTrans.Value.Destination != null)
+                {
+                    listview_SettingsStorageStorageTransaction.Items.Add(new { Received = product.Name, Amount = storageTrans.Value.Amount, StorageRoomSource = storageTrans.Value.Source.Name, StorageRoomDest = storageTrans.Value.Source.Name });
+                }
             }
         }
 

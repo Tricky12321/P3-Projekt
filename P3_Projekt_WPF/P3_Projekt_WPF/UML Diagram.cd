@@ -70,7 +70,6 @@
       <Field Name="_productControlDictionary" Hidden="true" />
       <Field Name="_productMove" Hidden="true" />
       <Field Name="_productToEdit" Hidden="true" />
-      <Field Name="_resolveTempProduct" Hidden="true" />
       <Field Name="_settingsController" Hidden="true" />
       <Field Name="_statisticsController" Hidden="true" />
       <Field Name="_storageController" Hidden="true" />
