@@ -1122,20 +1122,21 @@ namespace P3_Projekt_WPF
 
         public void ResetPOSController(bool completedPurchase)
         {
-            if (completedPurchase)
+            if (completedPurchase || _statisticsController.Payments.Count() == 0)
             {
                 Mysql.CheckDatabaseConnection();
                 button_DeleteFulReceiptDiscount.Visibility = Visibility.Hidden;
                 image_DeleteFullReceiptDiscount.Visibility = Visibility.Hidden;
                 text_FullReceiptDiscount.Text = string.Empty;
                 _storageController.ReloadAllDictionaries();
+                _partlypaid = false;
                 ReloadProducts();
                 ReloadDisabledProducts();
                 LoadQuickButtons();
                 SaveQuickButtons();
-                BuildInformationTable();
                 LoadGroups();
                 DisableDiscountOnReceipt();
+                _POSController.StartPurchase();
             }
         }
 
@@ -1256,6 +1257,7 @@ namespace P3_Projekt_WPF
             PayWithAmount.Clear();
             StartsToPay(true);
             DisableDiscountOnReceipt();
+            ResetPOSController(true);
         }
 
         private MoveProduct _productMove;

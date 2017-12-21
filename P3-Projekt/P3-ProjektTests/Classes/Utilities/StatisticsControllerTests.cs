@@ -26,7 +26,7 @@ namespace P3_Projekt_WPF.Classes.Utilities.Tests
             SaleTransaction.SetStorageController(SC);
             SaleTransaction.HideMessageBox = true;
             POS = new POSController(SC);
-            Utils.GetIceCreameID();
+            Utils.GetIceCreamID();
             StatCon = new StatisticsController(SC);
 
         }

@@ -39,6 +39,8 @@ namespace P3_Projekt_WPF.Classes.Utilities
         public void StartPurchase()
         {
             PlacerholderReceipt = new Receipt();
+            TotalPriceToPay = -1m;
+            ReceiptID = 0;
         }
 
         public BaseProduct GetProductFromID(int id)
@@ -152,6 +154,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
 
         public string CompletePurchase(PaymentMethod_Enum PaymentMethod, TextBox PayWithAmount, ListView ReceiptListView, out bool CompletedPurchase)
         {
+            CompletedPurchase = false;
             if (ReceiptListView.HasItems)
             {
                 if (TotalPriceToPay == -1m)
@@ -179,7 +182,6 @@ namespace P3_Projekt_WPF.Classes.Utilities
 
                 PayWithAmount.Text = string.Empty;
                 TotalPriceToPay -= NewPayment.Amount;
-                CompletedPurchase = false;
                 if (PlacerholderReceipt.PaidPrice >= PlacerholderReceipt.TotalPrice)
                 {
                     CompletedPurchase = true;
@@ -195,21 +197,25 @@ namespace P3_Projekt_WPF.Classes.Utilities
                     ReceiptID = 0;
                     if (PlacerholderReceipt.PaidPrice > PlacerholderReceipt.TotalPrice)
                     {
-                        CompletedPurchase = true;
                         return "Retur: " + Math.Round((PlacerholderReceipt.PaidPrice - PlacerholderReceipt.TotalPrice), 2).ToString().Replace('.', ',');
                     }
                     else
                     {
-                        CompletedPurchase = true;
                         return "";
                     }
                 }
-                if (TotalPriceToPay != -1m)
+                if (TotalPriceToPay != -1m) 
                 {
+                    if (TotalPriceToPay == 0)
+                    {
+                        PlacerholderReceipt.Payments.Clear();
+                        PlacerholderReceipt.TotalPrice = 0;
+                        CompletedPurchase = true;
+                        return string.Empty;
+                    }
                     return Math.Round(TotalPriceToPay, 2).ToString().Replace('.', ',');
                 }
             }
-            CompletedPurchase = false;
             return string.Empty;
         }
     }
