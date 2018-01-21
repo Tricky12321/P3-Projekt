@@ -1309,7 +1309,7 @@ namespace P3_Projekt_WPF
             }
             listBox_SearchResultsSaleTab.Visibility = Visibility.Hidden;
         }
-    
+        //TODO
         //TODO
         //?????
         private void SelectAddress(object sender, RoutedEventArgs e)
@@ -1320,7 +1320,7 @@ namespace P3_Projekt_WPF
                 textbox.SelectAll();
             }
         }
-
+        //TODO
         //TODO
         //?????
         private void SelectivelyIgnoreMouseButton(object sender, MouseButtonEventArgs e)
