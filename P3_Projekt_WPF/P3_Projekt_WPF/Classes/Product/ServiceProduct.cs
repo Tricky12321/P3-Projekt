@@ -29,6 +29,7 @@ namespace P3_Projekt_WPF.Classes
             ServiceProductGroupID = serviceProductGroupID;
         }
 
+        //TODO
         public ServiceProduct(Row Data) : base(0)
         {
             CreateFromRow(Data);
@@ -39,6 +40,7 @@ namespace P3_Projekt_WPF.Classes
             return ID + " - " + Name;
         }
 
+        //TODO
         public static int GetNextID()
         {
             if (Mysql.ConnectionWorking == false)

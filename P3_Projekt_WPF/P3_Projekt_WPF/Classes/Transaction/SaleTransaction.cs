@@ -41,6 +41,7 @@ namespace P3_Projekt_WPF.Classes
             CreateFromRow(RowData);
         }
 
+        //TODO
         public SaleTransaction(int id) : base(null, 1)
         {
             _id = id;
@@ -72,7 +73,7 @@ namespace P3_Projekt_WPF.Classes
                 {
                     prod.StorageWithAmount[shopID] -= Amount;
                 }
-
+                //TODO
                 UpdateProductEvent?.Invoke(prod);
                 if (!HideMessageBox && prod.StorageWithAmount.Where(x => x.Value < 0).Count() > 0)
                 {
@@ -219,6 +220,7 @@ namespace P3_Projekt_WPF.Classes
             }
         }
 
+        //TODO
         private BaseProduct _getProduct(int id, string Type)
         {
             if (Type == "product")
@@ -285,7 +287,7 @@ namespace P3_Projekt_WPF.Classes
             Product = productToResolve;
             UpdateInDatabase();
         }
-
+        
         public StatisticsListItem StatisticsStrings()
         {
             return new StatisticsListItem(Date.ToString("dd/MM/yy"), Product.GetName(), Amount.ToString(), Math.Round(TotalPrice, 2).ToString());

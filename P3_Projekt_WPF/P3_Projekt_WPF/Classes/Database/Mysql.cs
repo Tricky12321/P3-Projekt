@@ -102,6 +102,7 @@ namespace P3_Projekt_WPF.Classes.Database
             }
         }
 
+        //TODO
         public static MySqlConnection Connect(int fails = 0)
         {
             //CheckInternet();
@@ -141,6 +142,7 @@ namespace P3_Projekt_WPF.Classes.Database
             }
         }
 
+        //TODO forskel
         public static TableDecodeQueue RunQueryWithReturnQueue(string Query)
         {
             if (!ConnectionWorking)

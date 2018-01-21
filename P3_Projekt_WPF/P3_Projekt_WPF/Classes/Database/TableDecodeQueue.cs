@@ -12,6 +12,7 @@ namespace P3_Projekt_WPF.Classes.Database
 {
     public class TableDecodeQueue
     {
+        //TODO
         public int RowCounter = 0;
         public ConcurrentQueue<Row> RowData = new ConcurrentQueue<Row>();
         public TableDecodeQueue(Task<DbDataReader> Reader)

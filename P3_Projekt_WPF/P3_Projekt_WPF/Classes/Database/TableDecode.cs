@@ -10,6 +10,7 @@ namespace P3_Projekt_WPF.Classes.Database
 {
     public class TableDecode
     {
+        //TODO
         public List<Row> RowData = new List<Row>();
         public int RowCounter = 0;
         public TableDecode(Task<DbDataReader> Reader)
