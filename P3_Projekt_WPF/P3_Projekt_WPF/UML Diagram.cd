@@ -70,7 +70,6 @@
       <Field Name="_productControlDictionary" Hidden="true" />
       <Field Name="_productMove" Hidden="true" />
       <Field Name="_productToEdit" Hidden="true" />
-      <Field Name="_resolveTempProduct" Hidden="true" />
       <Field Name="_settingsController" Hidden="true" />
       <Field Name="_statisticsController" Hidden="true" />
       <Field Name="_storageController" Hidden="true" />
@@ -89,7 +88,7 @@
     <Lollipop Position="0.2" Collapsed="true" />
   </Class>
   <Class Name="P3_Projekt_WPF.MoveProduct" BaseTypeListCollapsed="true">
-    <Position X="12.25" Y="47" Width="1.5" />
+    <Position X="10" Y="49.5" Width="2" />
     <TypeIdentifier>
       <HashCode>gAACgBAABAIAAEACAQgAIAAQAAJJAAAIAADRQAAAABA=</HashCode>
       <FileName>MoveProduct.xaml.cs</FileName>
@@ -109,14 +108,6 @@
     <TypeIdentifier>
       <HashCode>ABAAASAAAQAAGAAAgAAAAACEAgAAAAAAAAAAAKAAAAA=</HashCode>
       <FileName>ReceiptListItem.xaml.cs</FileName>
-    </TypeIdentifier>
-    <Lollipop Position="0.2" Collapsed="true" />
-  </Class>
-  <Class Name="P3_Projekt_WPF.ResovleTempProduct" BaseTypeListCollapsed="true">
-    <Position X="10" Y="49.5" Width="2" />
-    <TypeIdentifier>
-      <HashCode>AAAAAAAAACIAAACgAAAigQgAAAoEAAAAAAACAAgAABI=</HashCode>
-      <FileName>ResovlveTempProduct.xaml.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" Collapsed="true" />
   </Class>

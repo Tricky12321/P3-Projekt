@@ -30,6 +30,8 @@ namespace P3_Projekt_WPF.Classes.Database
 
                     for (int i = 0; i < fieldCount; i++)
                     {
+                        //TODO
+                        //hvorfor er columns kommenteret ud? P.S Det staves columNs
                         //NewRow.Colums.Add(Reader.Result[i].Equals(DBNull.Value) ? String.Empty : Reader.GetName(i));
                         NewRow.Values.Add(Reader.Result[i].Equals(DBNull.Value) ? String.Empty : Reader.Result.GetString(i));
                     }
