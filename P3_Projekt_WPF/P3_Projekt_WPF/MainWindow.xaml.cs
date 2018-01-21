@@ -373,6 +373,8 @@ namespace P3_Projekt_WPF
             EditProductForm.ShowDialog();
         }
 
+        //TODO
+        //_selectedProductID bliver ikke brugt.
         private int _selectedProductID = -1;
         private void ShowSpecificInfoProductStorage(object sender, RoutedEventArgs e)
         {
@@ -1061,6 +1063,8 @@ namespace P3_Projekt_WPF
             _createGroup.Show();
         }
 
+        //TODO
+        //Hvor bliver de loadet groups og storagerooms vist?
         public void LoadGroups()
         {
             listView_Groups.Items.Clear();
@@ -1282,6 +1286,8 @@ namespace P3_Projekt_WPF
             SaveDBData();
         }
 
+        //TODO
+        //Bliver den brugt?
         private void PortNumberControl(object sender, TextCompositionEventArgs e)
         {
             TextBox input = (e.OriginalSource as TextBox);
@@ -1303,7 +1309,9 @@ namespace P3_Projekt_WPF
             }
             listBox_SearchResultsSaleTab.Visibility = Visibility.Hidden;
         }
-
+    
+        //TODO
+        //?????
         private void SelectAddress(object sender, RoutedEventArgs e)
         {
             TextBox textbox = (sender as TextBox);
@@ -1313,6 +1321,8 @@ namespace P3_Projekt_WPF
             }
         }
 
+        //TODO
+        //?????
         private void SelectivelyIgnoreMouseButton(object sender, MouseButtonEventArgs e)
         {
             TextBox textbox = (sender as TextBox);
@@ -1442,6 +1452,9 @@ namespace P3_Projekt_WPF
             }
         }
 
+
+        //TODO
+        //Nice Method
         public void ReloadDisabledProducts()
         {
             FillDeactivatedProductsIntoGrid();
@@ -1563,6 +1576,9 @@ namespace P3_Projekt_WPF
             _storageController.ReloadAllDictionaries();
             ReloadProducts();
             ReloadDisabledProducts();
+
+            //TODO
+            //Hvorfor skal de reloades?
             LoadQuickButtons();
             SaveQuickButtons();
         }

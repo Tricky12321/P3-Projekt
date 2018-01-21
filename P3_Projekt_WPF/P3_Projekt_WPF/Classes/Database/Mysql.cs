@@ -135,6 +135,8 @@ namespace P3_Projekt_WPF.Classes.Database
                             Debug.WriteLine("SQL: " + Query);
                         }
                         cmd.CommandText = Query;
+                        //TODO
+                        //ExecuteScalarAsync?
                         cmd.ExecuteScalarAsync();
                     }
                 }
@@ -168,6 +170,9 @@ namespace P3_Projekt_WPF.Classes.Database
             }
             return TableContent;
         }
+
+        //TODO
+        //Hvad er forskellen på TableDecodeQueue og TableDecode
 
         public static TableDecode RunQueryWithReturn(string Query)
         {
