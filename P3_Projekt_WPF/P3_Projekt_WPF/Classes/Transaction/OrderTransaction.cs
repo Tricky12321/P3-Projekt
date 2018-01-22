@@ -20,6 +20,7 @@ namespace P3_Projekt_WPF.Classes
             _storageRoomID = storageRoomID;
         }
 
+        //TODO
         public OrderTransaction(int id) : base(null, 0)
         {
             _id = id;
@@ -78,6 +79,8 @@ namespace P3_Projekt_WPF.Classes
             Product = Prod;
         }
 
+
+        //TODO forskellen?
         public void CreateFromRowReference(Row Table)
         {
             _id = Convert.ToInt32(Table.Values[0]);

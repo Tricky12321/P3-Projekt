@@ -102,6 +102,7 @@ namespace P3_Projekt_WPF.Classes.Database
             }
         }
 
+        //TODO
         public static MySqlConnection Connect(int fails = 0)
         {
             //CheckInternet();
@@ -135,12 +136,15 @@ namespace P3_Projekt_WPF.Classes.Database
                             Debug.WriteLine("SQL: " + Query);
                         }
                         cmd.CommandText = Query;
+                        //TODO
+                        //ExecuteScalarAsync?
                         cmd.ExecuteScalarAsync();
                     }
                 }
             }
         }
 
+        //TODO forskel
         public static TableDecodeQueue RunQueryWithReturnQueue(string Query)
         {
             if (!ConnectionWorking)
@@ -168,6 +172,9 @@ namespace P3_Projekt_WPF.Classes.Database
             }
             return TableContent;
         }
+
+        //TODO
+        //Hvad er forskellen på TableDecodeQueue og TableDecode
 
         public static TableDecode RunQueryWithReturn(string Query)
         {
