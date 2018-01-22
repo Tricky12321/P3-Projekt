@@ -128,6 +128,9 @@ namespace P3_Projekt_WPF.Classes.Utilities
             }
             FixReceiptInDatabase();
         }
+
+        //TODO
+        //Wtf
         [DllImport("gdi32.dll", EntryPoint = "DeleteObject")]
         [return: MarshalAs(UnmanagedType.Bool)]
         public static extern bool DeleteObject([In] IntPtr hObject);

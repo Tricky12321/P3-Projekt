@@ -58,6 +58,8 @@ namespace P3_Projekt_WPF
             _storageController.ProductDictionary[product.ID] = product;
         }
 
+        //TODO
+        //Dispatcher?
         public void reloadProducts()
         {
             Dispatcher?.Invoke(ReloadProducts);
@@ -77,6 +79,8 @@ namespace P3_Projekt_WPF
             MessageBox.Show("Lager antal er lavt for: " + prod.ToString() + ", der er kun " + storageLeft.ToString() + " tilbage");
         }
 
+        //TODO
+        //counter aldrig brugt
         public void SaveQuickButtons()
         {
             int[] QuickButtonsValues;
@@ -112,7 +116,6 @@ namespace P3_Projekt_WPF
             Settings.QuickButton20 = QuickButtonsCount >= 20 ? QuickButtons[19].ToString() : null;
             Settings.QuickButton21 = QuickButtonsCount >= 21 ? QuickButtons[20].ToString() : null;
             Settings.Save();
-
         }
 
         public void LoadQuickButtons()
@@ -242,6 +245,8 @@ namespace P3_Projekt_WPF
             txt_lcl_username.Text = settings.lcl_username;
         }
 
+        //TODO
+        //i++
         private void InitGridQuickButtons()
         {
             grid_QuickButton.ColumnDefinitions.Add(new ColumnDefinition());
@@ -1473,6 +1478,8 @@ namespace P3_Projekt_WPF
             }
         }
 
+        //TODO
+        //Det skal vel ikke være muligt?
         private void EditDisabledProduct(object sender, RoutedEventArgs e)
         {
             if (datagrid_deactivated_products.SelectedIndex != -1)
@@ -1502,6 +1509,8 @@ namespace P3_Projekt_WPF
             ShowSpecificInfoProductStorage(ID);
         }
 
+        //TODO
+        //Er det ikke både storage og order? Navn
         private void StorageTransactionsHistory()
         {
             listview_SettingsStorage.Height = 500;
