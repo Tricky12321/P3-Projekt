@@ -119,10 +119,10 @@ namespace P3_Projekt_WPF.Classes
         {
             SaleTransaction currentSaleTransaction = Transactions.Where(x => x.GetID() == transID).First();
             decimal customDiscount = 0;
-
+            decimal percentage = 0m;
             if (inputDiscount.Contains('%'))
             {
-                decimal percentage = Convert.ToDecimal(inputDiscount.Replace("%", string.Empty));
+                percentage = Convert.ToDecimal(inputDiscount.Replace("%", string.Empty));
                 decimal priceInDiscountPrProduct = currentSaleTransaction.Price * (percentage / 100m);
                 currentSaleTransaction.DiscountPrice = currentSaleTransaction.Price - priceInDiscountPrProduct;
 
@@ -137,11 +137,10 @@ namespace P3_Projekt_WPF.Classes
                 if (customDiscount > 0m)
                 {
                     currentSaleTransaction.DiscountPrice = currentSaleTransaction.Price - (customDiscount / currentSaleTransaction.Amount);
-
                 }
 
             }
-            if (customDiscount > 0m)
+            if (customDiscount > 0m || percentage > 0m)
             {
                 currentSaleTransaction.DiscountBool = true;
             }

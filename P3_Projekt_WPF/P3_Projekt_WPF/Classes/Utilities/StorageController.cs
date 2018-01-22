@@ -70,6 +70,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
             foreach (KeyValuePair<int, Product> productWithID in ProductDictionary.Where(x => x.Value.Active == true))
             {
                 AllProductsDictionary.TryAdd(productWithID.Key, productWithID.Value);
+
             }
 
             foreach (KeyValuePair<int, ServiceProduct> serviceProductWithID in ServiceProductDictionary)
