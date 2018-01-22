@@ -60,7 +60,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
                 Interlocked.Increment(ref _saleTransactionsCreated);
             }
         }
-
+        
         public void RequestStatistics(bool searchProduct, int productToSearch, bool searchGroup, int groupToSearch, bool searchBrand, string brandToSearch, DateTime from, DateTime to)
         {
             TransactionsForStatistics = new List<SaleTransaction>();

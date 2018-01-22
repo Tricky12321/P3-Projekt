@@ -59,6 +59,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
 
         public void AddIcecreamTransaction(decimal price)
         {
+            //TODO
             if (Properties.Settings.Default.IcecreamID != -1)
             {
                 var Icecream = new SaleTransaction(_storageController.ServiceProductDictionary[Properties.Settings.Default.IcecreamProductID], 1, PlacerholderReceipt.ID);
@@ -183,12 +184,13 @@ namespace P3_Projekt_WPF.Classes.Utilities
                 }
             }
         }
-
+        
         public string CompletePurchase(PaymentMethod_Enum PaymentMethod, TextBox PayWithAmount, ListView ReceiptListView, out bool CompletedPurchase)
         {
             CompletedPurchase = false;
             if (ReceiptListView.HasItems)
             {
+                //TODO
                 if (TotalPriceToPay == -1m)
                 {
                     TotalPriceToPay = PlacerholderReceipt.TotalPrice;
@@ -217,6 +219,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
                 if (PlacerholderReceipt.PaidPrice >= PlacerholderReceipt.TotalPrice)
                 {
                     CompletedPurchase = true;
+                    //TODO
                     SaleTransaction.SetStorageController(_storageController);
 
                     Thread NewThread = new Thread(new ThreadStart(ExecuteReceipt));

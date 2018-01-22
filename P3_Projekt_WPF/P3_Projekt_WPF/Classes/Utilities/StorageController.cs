@@ -231,6 +231,8 @@ namespace P3_Projekt_WPF.Classes.Utilities
             _storageTransactionsLoaded = false;
             _orderTransactionsLoaded = false;
         }
+        //TODO
+        //Hader at de er erklæret efter de nævnes ovenover
         private int _productsCount;
         private int _serviceProductCount;
         private int _groupsCount;
@@ -412,6 +414,8 @@ namespace P3_Projekt_WPF.Classes.Utilities
                 {
                     ServiceProduct NewServiceProduct = new ServiceProduct(Data);
                     ServiceProductDictionary.TryAdd(NewServiceProduct.ID, NewServiceProduct);
+                    //TODO
+                    //Interlocked? Atomic operation??
                     Interlocked.Increment(ref _doneServiceProductCount);
                 }
                 while (_tempProductQueue.TryDequeue(out Data))
