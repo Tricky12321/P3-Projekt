@@ -231,8 +231,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
             _storageTransactionsLoaded = false;
             _orderTransactionsLoaded = false;
         }
-        //TODO
-        //Hader at de er erklæret efter de nævnes ovenover
+
         private int _productsCount;
         private int _serviceProductCount;
         private int _groupsCount;
@@ -243,7 +242,6 @@ namespace P3_Projekt_WPF.Classes.Utilities
         private int _orderTransactionCount;
         private int _storageTransactionCount;
         private int _storageStatusCount;
-
 
         private int _doneProductsCount = 0;
         private int _doneServiceProductCount = 0;
@@ -414,8 +412,6 @@ namespace P3_Projekt_WPF.Classes.Utilities
                 {
                     ServiceProduct NewServiceProduct = new ServiceProduct(Data);
                     ServiceProductDictionary.TryAdd(NewServiceProduct.ID, NewServiceProduct);
-                    //TODO
-                    //Interlocked? Atomic operation??
                     Interlocked.Increment(ref _doneServiceProductCount);
                 }
                 while (_tempProductQueue.TryDequeue(out Data))
@@ -540,7 +536,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
             GetAllOrderTransactionsThread.Start();
         }
 
-        #endregion
+        #endregion 
 
         public void DeleteProduct(int ProductID)
         {

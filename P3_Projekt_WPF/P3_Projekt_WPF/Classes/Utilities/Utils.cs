@@ -47,8 +47,6 @@ namespace P3_Projekt_WPF.Classes.Utilities
         public static bool CheckInternetConnection()
         {
             Ping ping = new Ping();
-            //TODO
-            //hvad pinger vi?
             PingReply pingStatus = ping.Send(IPAddress.Parse("172.217.19.195"));
             if (pingStatus.Status == IPStatus.Success)
             {
@@ -65,9 +63,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
             }
         }
 
-
-        //TODO
-        //Hvad er denne metodes formål?
+        // Bruges ikke mere
         private static void _FixReceiptInDatabase()
         {
             string sql = "SELECT * FROM `receipt`";
@@ -131,13 +127,12 @@ namespace P3_Projekt_WPF.Classes.Utilities
             }
             FixReceiptInDatabase();
         }
-        //TODO
-        //what
+
         [DllImport("gdi32.dll", EntryPoint = "DeleteObject")]
         [return: MarshalAs(UnmanagedType.Bool)]
+
         public static extern bool DeleteObject([In] IntPtr hObject);
-        //TODO
-        //what
+
         public static ImageSource ImageSourceForBitmap(Bitmap bmp)
         {
             var handle = bmp.GetHbitmap();

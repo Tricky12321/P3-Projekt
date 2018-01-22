@@ -31,13 +31,13 @@ namespace P3_Projekt_WPF.Classes
             DiscountBool = discount;
             DiscountPrice = discountPrice;
         }
-        //TODO
+
         public Product(int id) : base(0)
         {
             ID = id;
             GetFromDatabase();
         }
-        //TODO
+
         public Product(Row information) : base(0m)
         {
             CreateFromRow(information);
@@ -69,7 +69,7 @@ namespace P3_Projekt_WPF.Classes
             DiscountPrice = discountPrice;
             SalePrice = salePrice;
         }
-        //TODO EH
+
         public static int GetNextID()
         {
             return ServiceProduct.GetNextID();

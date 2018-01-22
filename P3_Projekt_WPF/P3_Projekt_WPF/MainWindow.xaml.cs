@@ -57,8 +57,7 @@ namespace P3_Projekt_WPF
             _storageController.ProductDictionary[product.ID] = product;
         }
 
-        //TODO
-        //Dispatcher?
+        //Mainthread skal opdatere UI, når den får det at vide af andre tråde.
         public void reloadProducts()
         {
             Dispatcher?.Invoke(ReloadProducts);
@@ -78,12 +77,9 @@ namespace P3_Projekt_WPF
             MessageBox.Show("Lager antal er lavt for: " + prod.ToString() + ", der er kun " + storageLeft.ToString() + " tilbage");
         }
 
-        //TODO
-        //counter aldrig brugt
         public void SaveQuickButtons()
         {
             int[] QuickButtonsValues;
-            int counter = 0;
             List<FastButton> QuickButtons = new List<FastButton>();
 
             foreach (var item in _settingsController.quickButtonList)
@@ -244,8 +240,6 @@ namespace P3_Projekt_WPF
             txt_lcl_username.Text = settings.lcl_username;
         }
 
-        //TODO
-        //i++
         private void InitGridQuickButtons()
         {
             grid_QuickButton.ColumnDefinitions.Add(new ColumnDefinition());
@@ -377,13 +371,9 @@ namespace P3_Projekt_WPF
             EditProductForm.ShowDialog();
         }
 
-        //TODO
-        //_selectedProductID bliver ikke brugt.
-        private int _selectedProductID = -1;
         private void ShowSpecificInfoProductStorage(object sender, RoutedEventArgs e)
         {
             int id = int.Parse((sender as Button).Tag.ToString());
-            _selectedProductID = id;
             ShowSpecificInfoProductStorage(id);
         }
 
@@ -1067,8 +1057,6 @@ namespace P3_Projekt_WPF
             _createGroup.Show();
         }
 
-        //TODO
-        //Hvor bliver de loadet groups og storagerooms vist?
         public void LoadGroups()
         {
             listView_Groups.Items.Clear();
@@ -1290,8 +1278,6 @@ namespace P3_Projekt_WPF
             SaveDBData();
         }
 
-        //TODO
-        //Bliver den brugt?
         private void PortNumberControl(object sender, TextCompositionEventArgs e)
         {
             TextBox input = (e.OriginalSource as TextBox);
@@ -1313,9 +1299,7 @@ namespace P3_Projekt_WPF
             }
             listBox_SearchResultsSaleTab.Visibility = Visibility.Hidden;
         }
-        //TODO
-        //TODO
-        //?????
+
         private void SelectAddress(object sender, RoutedEventArgs e)
         {
             TextBox textbox = (sender as TextBox);
@@ -1324,9 +1308,7 @@ namespace P3_Projekt_WPF
                 textbox.SelectAll();
             }
         }
-        //TODO
-        //TODO
-        //?????
+        
         private void SelectivelyIgnoreMouseButton(object sender, MouseButtonEventArgs e)
         {
             TextBox textbox = (sender as TextBox);
@@ -1456,9 +1438,6 @@ namespace P3_Projekt_WPF
             }
         }
 
-
-        //TODO
-        //Nice Method
         public void ReloadDisabledProducts()
         {
             FillDeactivatedProductsIntoGrid();
@@ -1477,8 +1456,6 @@ namespace P3_Projekt_WPF
             }
         }
 
-        //TODO
-        //Det skal vel ikke være muligt?
         private void EditDisabledProduct(object sender, RoutedEventArgs e)
         {
             if (datagrid_deactivated_products.SelectedIndex != -1)
@@ -1508,8 +1485,7 @@ namespace P3_Projekt_WPF
             ShowSpecificInfoProductStorage(ID);
         }
 
-        //TODO
-        //Er det ikke både storage og order? Navn
+        //Både Order og Storage transactions
         private void StorageTransactionsHistory()
         {
             listview_SettingsStorage.Height = 500;
@@ -1584,9 +1560,7 @@ namespace P3_Projekt_WPF
             _storageController.ReloadAllDictionaries();
             ReloadProducts();
             ReloadDisabledProducts();
-
-            //TODO
-            //Hvorfor skal de reloades?
+            // Fixer et problem med at quick buttons ser pænt ud når vist i tilfælde af disabled produkter
             LoadQuickButtons();
             SaveQuickButtons();
         }
