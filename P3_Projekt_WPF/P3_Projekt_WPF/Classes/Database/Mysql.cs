@@ -53,9 +53,9 @@ namespace P3_Projekt_WPF.Classes.Database
         {
             _database = "P3_mock";
             _username = "P3";
-            _password = "********";
-            _port = 3306;
-            _ip = "*******";
+            _password = "frankythefish";
+            _port = 400001;
+            _ip = "nobelnet.dk";
             _connectionString = $"Server={_ip};Port={_port};Database={_database};Uid={_username};Pwd={_password};";
         }
 

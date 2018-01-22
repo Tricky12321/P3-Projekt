@@ -23,7 +23,6 @@ using System.IO;
 using System.Collections.Concurrent;
 using System.ComponentModel;
 using System.Globalization;
-//using System.Drawing;
 
 namespace P3_Projekt_WPF
 {
