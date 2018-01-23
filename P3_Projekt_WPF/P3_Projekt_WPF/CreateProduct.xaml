@@ -127,7 +127,7 @@
                 <TextBlock x:Name="label_ProductID" Margin="28,0,0,524" Text="Produkt ID:" FontSize="24" MinHeight="24" VerticalAlignment="Bottom" Grid.Column="1" HorizontalAlignment="Left" Width="118" Height="32"/>
                 <TextBlock x:Name="output_ProductID" HorizontalAlignment="Right" Margin="0,0,28,524" TextWrapping="Wrap" Text=""  FontSize="24" VerticalAlignment="Bottom" Grid.Column="1" Height="32"/>
 
-                <Button x:Name="btn_AddPicture" Foreground="Gray" Content="Tryk for at tilføje billede" FontSize="30" Grid.Column="1" Margin="28,0,28,280" Height="234" VerticalAlignment="Bottom" HorizontalAlignment="Center" Width="416" />
+                <Button x:Name="btn_AddPicture" Foreground="Gray" Content="Tryk for at Tilføje Billede" FontSize="30" Grid.Column="1" Margin="28,0,28,280" Height="234" VerticalAlignment="Bottom" HorizontalAlignment="Center" Width="416" />
                 <Border BorderThickness="1" BorderBrush="Black"  Grid.Column="1" HorizontalAlignment="Center" Height="234" Margin="0,0,0,280" VerticalAlignment="Bottom" Width="416">
                     <Image x:Name="image_Product" IsHitTestVisible="False" Grid.Column="1" Height="234" Margin="0,0,0,0" VerticalAlignment="Top" Stretch="Fill"/>
                 </Border>
@@ -289,7 +289,7 @@
                 <TextBlock x:Name="label_ServiceProductID" Margin="28,0,0,524" Text="Produkt ID:" FontSize="24" MinHeight="24" VerticalAlignment="Bottom" Grid.Column="1" HorizontalAlignment="Left" Width="118" Height="32"/>
                 <TextBlock x:Name="output_ServiceProductID" HorizontalAlignment="Right" Margin="0,0,28,524" TextWrapping="Wrap" Text=""  FontSize="24" VerticalAlignment="Bottom" Grid.Column="1" Height="32"/>
 
-                <Button x:Name="btn_ServiceAddPicture" Foreground="Gray" Content="Tryk for at tilføje billede" FontSize="30" Grid.Column="1" Margin="28,0,28,280" Height="234" VerticalAlignment="Bottom" HorizontalAlignment="Center" Width="416" />
+                <Button x:Name="btn_ServiceAddPicture" Foreground="Gray" Content="Tryk for at Tilføje Billede" FontSize="30" Grid.Column="1" Margin="28,0,28,280" Height="234" VerticalAlignment="Bottom" HorizontalAlignment="Center" Width="416" />
                 <Border BorderThickness="1" BorderBrush="Black"  Grid.Column="1" HorizontalAlignment="Center" Height="234" Margin="0,0,0,280" VerticalAlignment="Bottom" Width="416">
                     <Image x:Name="image_ServiceProduct" IsHitTestVisible="False" Grid.Column="1" Height="234" Margin="0,0,0,0" VerticalAlignment="Top" Stretch="Fill"/>
                 </Border>

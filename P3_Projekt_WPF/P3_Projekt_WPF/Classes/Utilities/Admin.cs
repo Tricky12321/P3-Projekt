@@ -46,11 +46,11 @@ namespace P3_Projekt_WPF.Classes.Utilities
         {
             string pwdSaltedAndHashed;
 
-            string _salt = "ds312e17frankythefishøæå!#salt";
+            string salt = "ds312e17frankythefishøæå!#salt";
 
-            string pwdWithSalt = passwordInput + _salt;
+            string pwdWithSalt = passwordInput + salt;
 
-            byte[] pwdWithSaltBytes = System.Text.Encoding.UTF8.GetBytes(pwdWithSalt);
+            byte[] pwdWithSaltBytes = Encoding.UTF8.GetBytes(pwdWithSalt);
 
             /* Now that the password has been prepared by being salted, we will hash it */
             using (var hash = System.Security.Cryptography.SHA512.Create())
@@ -59,7 +59,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
 
                 //Converts hashed bytes to text
                 //Size is 128, because 512 bits / 8 bits per byte * 2 symbols
-                var hashedInputStringBuilder = new System.Text.StringBuilder(128);
+                StringBuilder hashedInputStringBuilder = new StringBuilder(128);
                 foreach (byte b in hashedInputBytes)
                 {
                     //X2 means, that it formats the bytes into hexidecimal

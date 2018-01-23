@@ -63,8 +63,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
             }
         }
 
-
-
+        // Bruges ikke mere
         private static void _FixReceiptInDatabase()
         {
             string sql = "SELECT * FROM `receipt`";
@@ -128,8 +127,10 @@ namespace P3_Projekt_WPF.Classes.Utilities
             }
             FixReceiptInDatabase();
         }
+
         [DllImport("gdi32.dll", EntryPoint = "DeleteObject")]
         [return: MarshalAs(UnmanagedType.Bool)]
+
         public static extern bool DeleteObject([In] IntPtr hObject);
 
         public static ImageSource ImageSourceForBitmap(Bitmap bmp)
@@ -148,7 +149,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
             Mysql.RunQuery(sql);
         }
 
-        public static void GetIceCreameID()
+        public static void GetIceCreamID()
         {
             if (Mysql.ConnectionWorking)
             {
@@ -183,25 +184,6 @@ namespace P3_Projekt_WPF.Classes.Utilities
         {
             Regex reg = new Regex(@"^(\d+)$");
             return !reg.IsMatch(input);
-        }
-
-        public static void LoadDatabaseSettings(MainWindow MainWin)
-        {
-            var sett = Properties.Settings.Default;
-            bool Local = false;
-            bool Remote = false;
-            if (sett.local_or_remote == true)
-            {
-                MainWin.btn_RmtLcl.Content = "Butikkens PC";
-                Local = true;
-            }
-            else
-            {
-                MainWin.btn_RmtLcl.Content = "Anden PC";
-                Remote = true;
-            }
-            //UpdateDisabledFields(true, true, MainWin);
-            LoadDBSettingsData(MainWin);
         }
 
         /*public static void UpdateDisabledFields(bool Local, bool Remote, MainWindow MainWin)
@@ -239,51 +221,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
             {
                 MainWin.GroupRemote.Background = DiabledColor;
             }
-        }*/
+        }*/      
 
-        public static void FlipRemoteLocal(MainWindow MainWin)
-        {
-            var sett = Properties.Settings.Default;
-            sett.local_or_remote = !sett.local_or_remote;
-            sett.Save();
-            LoadDatabaseSettings(MainWin);
-        }
-
-
-        public static void SaveDBData(MainWindow MainWin)
-        {
-            var sett = Properties.Settings.Default;
-            sett.lcl_db = MainWin.cmb_lcl_db.Text;
-            sett.lcl_ip = MainWin.cmb_lcl_ip.Text;
-            sett.lcl_port = Convert.ToInt32(MainWin.cmb_lcl_port.Text);
-            sett.lcl_password = MainWin.txt_lcl_password.Password;
-            sett.lcl_username = MainWin.txt_lcl_username.Text;
-            sett.Save();
-            Mysql.UpdateSettings(sett);
-            Mysql.CheckDatabaseConnection();
-            /*
-            sett.rmt_db = MainWin.cmb_rmt_db.Text;
-            sett.rmt_ip = MainWin.cmb_rmt_ip.Text;
-            sett.rmt_port = Convert.ToInt32(MainWin.cmb_rmt_port.Text);
-            sett.rmt_password = MainWin.txt_rmt_password.Password;
-            sett.rmt_username = MainWin.txt_rmt_username.Text;
-            */
-        }
-
-        public static void LoadDBSettingsData(MainWindow MainWin)
-        {
-            var sett = Properties.Settings.Default;
-
-            /*MainWin.cmb_rmt_db.Text = sett.rmt_db;
-            MainWin.cmb_rmt_ip.Text = sett.rmt_ip;
-            MainWin.cmb_rmt_port.Text = sett.rmt_port.ToString();
-            MainWin.txt_rmt_password.Password = sett.rmt_password;
-            MainWin.txt_rmt_username.Text = sett.rmt_username;*/
-            MainWin.cmb_lcl_db.Text = sett.lcl_db;
-            MainWin.cmb_lcl_ip.Text = sett.lcl_ip;
-            MainWin.cmb_lcl_port.Text = sett.lcl_port.ToString();
-            MainWin.txt_lcl_password.Password = sett.lcl_password;
-            MainWin.txt_lcl_username.Text = sett.lcl_username;
-        }
     }
 }

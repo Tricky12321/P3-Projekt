@@ -19,12 +19,15 @@ using System.Diagnostics;
 namespace P3_Projekt_WPF
 {
     public delegate void ImageChosen(string ImageName);
+    public delegate void SaveAndQuitClick(int ID);
     /// <summary>
     /// Interaction logic for CreateProduct.xaml
     /// </summary>
     public partial class CreateProduct : Window
     {
+        
         public event ImageChosen ImageChosenEvent;
+        public event SaveAndQuitClick SaveAndQuitEvent;
         public string ChosenFilePath;
         private ConcurrentDictionary<int, int> _storageWithAmount = new ConcurrentDictionary<int, int>();
         private ConcurrentDictionary<int, StorageRoom> _storageRooms;
@@ -33,14 +36,13 @@ namespace P3_Projekt_WPF
         private bool UpdateProductSec = false;
         private bool UpdateServiceProductSec = false;
         private int UpdateProductID = 0;
-        private MainWindow MainWin = null;
         private bool _isAdmin = false;
         public CreateProduct() { }
         private bool _deactivatedProd = false;
         //Creating new product
-        public CreateProduct(StorageController storageController, MainWindow MainWin)
+        public CreateProduct(StorageController storageController)
         {
-            Initialize(storageController, MainWin);
+            Initialize(storageController);
             output_ProductID.Text = Product.GetNextID().ToString();
             output_ServiceProductID.Text = ServiceProduct.GetNextID().ToString();
             btn_disableProduct.Visibility = Visibility.Hidden;
@@ -49,9 +51,9 @@ namespace P3_Projekt_WPF
         }
 
         //Editing normal product
-        public CreateProduct(Product prod, StorageController storageController, MainWindow MainWin, bool adminEdit, bool deactivated = false)
+        public CreateProduct(Product prod, StorageController storageController, bool adminEdit, bool deactivated = false)
         {
-            Initialize(storageController, MainWin);
+            Initialize(storageController);
             UpdateProductSec = true;
             FillBoxesWithExistingProduct(prod);
             UpdateProductID = prod.ID;
@@ -77,9 +79,9 @@ namespace P3_Projekt_WPF
         }
 
         //Editing service product
-        public CreateProduct(ServiceProduct prod, StorageController storageController, MainWindow MainWin, bool adminEdit, bool deactivated = false)
+        public CreateProduct(ServiceProduct prod, StorageController storageController, bool adminEdit, bool deactivated = false)
         {
-            Initialize(storageController, MainWin);
+            Initialize(storageController);
             UpdateServiceProductSec = true;
             output_ProductID.Text = Product.GetNextID().ToString();
             output_ServiceProductID.Text = prod.ID.ToString();
@@ -106,10 +108,9 @@ namespace P3_Projekt_WPF
         }
 
 
-        private void Initialize(StorageController storageController, MainWindow MainWin)
+        private void Initialize(StorageController storageController)
         {
 
-            this.MainWin = MainWin;
             InitializeComponent();
 
             _storageRooms = storageController.StorageRoomDictionary;
@@ -354,6 +355,7 @@ namespace P3_Projekt_WPF
             ReloadAddedStorageRooms();
         }
 
+
         private void btn_SaveAndQuit_Click(object sender, RoutedEventArgs e)
         {
             if (IsProductInputValid())
@@ -362,14 +364,12 @@ namespace P3_Projekt_WPF
                 {
                     UpdateProduct();
                     AddProductImage(this, UpdateProductID);
-                    MainWin.ReloadProducts();
-                    MainWin.ShowSpecificInfoProductStorage(UpdateProductID);
+                    SaveAndQuitEvent?.Invoke(UpdateProductID);
                 }
                 else
                 {
                     AddProductImage(this, Product.GetNextID());
                     AddProduct();
-                    MainWin.ReloadProducts();
                 }
                 this.Close();
             }
@@ -510,7 +510,6 @@ namespace P3_Projekt_WPF
                     _storageController.ProductDictionary.TryRemove(UpdateProductID, out ProductToDisable_Product);
                     _storageController.DisabledProducts.TryAdd(ProductToDisable_Product.ID, ProductToDisable_Product);
                     ProductToDisable_Product.DeactivateProduct();
-                    MainWin.ReloadDisabledProducts();
                     if (UpdateProductSec)
                     {
                         UpdateProduct();
@@ -520,7 +519,6 @@ namespace P3_Projekt_WPF
                     {
                         AddProductImage(this, Product.GetNextID());
                     }
-                    MainWin.ReloadProducts();
                     MessageBox.Show("Du har deaktiveret produkt " + ProductToDisable_Product.ToString());
                     this.Close();
                 }
@@ -549,7 +547,6 @@ namespace P3_Projekt_WPF
                     _storageController.ServiceProductDictionary.TryRemove(UpdateProductID, out ProductToDisable_Product);
                     _storageController.DisabledServiceProducts.TryAdd(ProductToDisable_Product.ID, ProductToDisable_Product);
                     ProductToDisable_Product.DeactivateProduct();
-                    MainWin.ReloadDisabledProducts();
                     if (UpdateProductSec)
                     {
                         UpdateProduct();
@@ -559,7 +556,6 @@ namespace P3_Projekt_WPF
                     {
                         AddProductImage(this, Product.GetNextID());
                     }
-                    MainWin.ReloadProducts();
                     MessageBox.Show("Du har deaktiveret produkt " + ProductToDisable_Product.ToString());
                     this.Close();
                 }
@@ -586,7 +582,6 @@ namespace P3_Projekt_WPF
                     Product_To_Activate.ActivateProduct();
                     _storageController.ServiceProductDictionary.TryAdd(Product_To_Activate.ID, Product_To_Activate);
                     _storageController.AllProductsDictionary.TryAdd(Product_To_Activate.ID, Product_To_Activate);
-                    MainWin.ReloadDisabledProducts();
                     if (UpdateProductSec)
                     {
                         UpdateProduct();
@@ -596,7 +591,6 @@ namespace P3_Projekt_WPF
                     {
                         AddProductImage(this, Product.GetNextID());
                     }
-                    MainWin.ReloadProducts();
                     MessageBox.Show("Du har aktiveret produkt " + Product_To_Activate.ToString());
                     this.Close();
                 }
@@ -623,7 +617,6 @@ namespace P3_Projekt_WPF
                     Product_To_Activate.ActivateProduct();
                     _storageController.ProductDictionary.TryAdd(Product_To_Activate.ID,Product_To_Activate);
                     _storageController.AllProductsDictionary.TryAdd(Product_To_Activate.ID,Product_To_Activate);
-                    MainWin.ReloadDisabledProducts();
                     if (UpdateProductSec)
                     {
                         UpdateProduct();
@@ -633,7 +626,6 @@ namespace P3_Projekt_WPF
                     {
                         AddProductImage(this, Product.GetNextID());
                     }
-                    MainWin.ReloadProducts();
                     MessageBox.Show("Du har aktiveret produkt " + Product_To_Activate.ToString());
                     this.Close();
                 }

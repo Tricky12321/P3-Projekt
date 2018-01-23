@@ -41,7 +41,7 @@ namespace P3_Projekt_WPF
                 }
                 else
                 {
-                    throw new WrongProductTypeException("Fejl i indsættelse af billede");
+                    throw new WrongProductTypeException("Fejl i indsættelse af Billede");
                 }
             }
             set
@@ -90,7 +90,7 @@ namespace P3_Projekt_WPF
             }
             else
             {
-                throw new WrongProductTypeException("Fejl i forsøg på at vise info om produkt");
+                throw new WrongProductTypeException("Fejl i forsøg på at vise info om Produkt");
             }
 
         }

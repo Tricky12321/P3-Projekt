@@ -11,15 +11,15 @@ namespace P3_Projekt_WPF.Classes
 {
     public class StorageTransaction : Transaction
     {
-        public StorageRoom _source;
-        public StorageRoom _destination;
+        public StorageRoom Source;
+        public StorageRoom Destination;
 
         public int ID => _id;
 
         public StorageTransaction(Product product, int amount, int sourceInt, int destinationInt, ConcurrentDictionary<int, StorageRoom> storageWithAmountDictionary) : base(product, amount)
         {
-            _source = storageWithAmountDictionary[sourceInt];
-            _destination = storageWithAmountDictionary[destinationInt];
+            Source = storageWithAmountDictionary[sourceInt];
+            Destination = storageWithAmountDictionary[destinationInt];
         }
 
         public StorageTransaction(int id) : base(null, 0)
@@ -54,16 +54,16 @@ namespace P3_Projekt_WPF.Classes
         public override void Execute()
         {
             Product Prod = (Product as Product);
-            if (!Prod.StorageWithAmount.ContainsKey(_destination.ID))
+            if (!Prod.StorageWithAmount.ContainsKey(Destination.ID))
             {
-                Prod.StorageWithAmount.TryAdd(_destination.ID, 0);
+                Prod.StorageWithAmount.TryAdd(Destination.ID, 0);
             }
-            if (!Prod.StorageWithAmount.ContainsKey(_source.ID))
+            if (!Prod.StorageWithAmount.ContainsKey(Source.ID))
             {
-                Prod.StorageWithAmount.TryAdd(_source.ID, 0);
+                Prod.StorageWithAmount.TryAdd(Source.ID, 0);
             }
-            Prod.StorageWithAmount[_source.ID] -= Amount;
-            Prod.StorageWithAmount[_destination.ID] += Amount;
+            Prod.StorageWithAmount[Source.ID] -= Amount;
+            Prod.StorageWithAmount[Destination.ID] += Amount;
         }
 
         public override void GetFromDatabase()
@@ -75,8 +75,8 @@ namespace P3_Projekt_WPF.Classes
         public void SetInformation(StorageRoom Source, StorageRoom Destination, BaseProduct Prod)
         {
             Product = Prod;
-            _source = Source;
-            _destination = Destination;
+            Source = Source;
+            Destination = Destination;
         }
 
         public void CreateFromRowReference(Row Table)
@@ -95,14 +95,14 @@ namespace P3_Projekt_WPF.Classes
             Product = new Product(Convert.ToInt32(Table.Values[1]));
             Amount = Convert.ToInt32(Table.Values[2]);
             Date = Convert.ToDateTime(Table.Values[3]);
-            _source = new StorageRoom(Convert.ToInt32(Table.Values[4]));
-            _destination = new StorageRoom(Convert.ToInt32(Table.Values[5]));
+            Source = new StorageRoom(Convert.ToInt32(Table.Values[4]));
+            Destination = new StorageRoom(Convert.ToInt32(Table.Values[5]));
         }
 
         public override void UploadToDatabase()
         {
             string sql = "INSERT INTO `storage_transaction` (`id`, `product_id`, `amount`, `source_storageroom_id`, `destination_storageroom_id`)" +
-                $" VALUES (NULL, '{Product.ID}', '{Amount}', '{_source.ID}', '{_destination.ID}');";
+                $" VALUES (NULL, '{Product.ID}', '{Amount}', '{Source.ID}', '{Destination.ID}');";
             Mysql.RunQuery(sql);
             Product.UpdateInDatabase();
         }
@@ -113,8 +113,8 @@ namespace P3_Projekt_WPF.Classes
             string sql = $"UPDATE `storage_transaction` SET " +
                $"`product_id` = '{Product.ID}'," +
                $"`amount` = '{Amount}'," +
-               $"`source_storageroom_id` = '{_source.ID}'," +
-               $"`destination_storageroom_id` = '{_destination.ID}' " +
+               $"`source_storageroom_id` = '{Source.ID}'," +
+               $"`destination_storageroom_id` = '{Destination.ID}' " +
                $"WHERE `id` = {_id};";
             Mysql.RunQuery(sql);
         }

@@ -26,21 +26,18 @@ namespace P3_Projekt_WPF
     {
         public StorageController ControllerSto;
         private ConcurrentDictionary<int, Group> _groups;
-        private MainWindow _mainWindow = null;
         private Group groupToEdit;
 
-        public CreateGroup(StorageController stoController, MainWindow mainWin)
+        public CreateGroup(StorageController stoController)
         {
-            this._mainWindow = mainWin;
             ControllerSto = stoController;
             InitializeComponent();
             SetupCreate();
             btn_deleteGroup.Visibility = Visibility.Hidden;
         }
 
-        public CreateGroup(StorageController stoController, MainWindow mainWin, Group groupToEdit)
+        public CreateGroup(StorageController stoController, Group groupToEdit)
         {
-            this._mainWindow = mainWin;
             ControllerSto = stoController;
             this.groupToEdit = groupToEdit;
             InitializeComponent();
@@ -71,7 +68,6 @@ namespace P3_Projekt_WPF
                     string groupName = textBox_Name.Text;
                     string groupDescr = textBox_descr.Text;
                     ControllerSto.CreateGroup(groupName, groupDescr);
-                    _mainWindow.LoadGroups();
                     this.Close();
                 }
             };
@@ -104,7 +100,6 @@ namespace P3_Projekt_WPF
                     string GroupName = textBox_Name.Text;
                     string GroupDesc = textBox_descr.Text;
                     ControllerSto.EditGroup(groupToEdit.ID, GroupName, GroupDesc);
-                    _mainWindow.LoadGroups();
                     this.Close();
                 }
 
@@ -115,7 +110,6 @@ namespace P3_Projekt_WPF
                 if (results == MessageBoxResult.Yes)
                 {
                     ControllerSto.DeleteGroup(groupToEdit.ID);
-                    _mainWindow.LoadGroups();
                     this.Close();
                 }
             };

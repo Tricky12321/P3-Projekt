@@ -20,7 +20,6 @@ namespace P3_Projekt_WPF.Classes
         public Image Image;
         private bool _active = true;
         public bool Active => _active;
-        public DateTime CreatedDate;
         public ServiceProduct(int id, decimal salePrice, decimal groupPrice, int groupLimit, string name, int serviceProductGroupID) : base(salePrice)
         {
             ID = id;
@@ -93,14 +92,14 @@ namespace P3_Projekt_WPF.Classes
 
         public override void CreateFromRow(Row results)
         {
-            ID = Convert.ToInt32(results.Values[0]);                         // id
-            Name = results.Values[1];                                        // name
+            ID = Convert.ToInt32(results.Values[0]);                            // id
+            Name = results.Values[1];                                           // name
             ServiceProductGroupID = Convert.ToInt32(results.Values[2]);         // group id
-            SalePrice = Math.Round(Convert.ToDecimal(results.Values[3]), 2);                  // price
-            GroupPrice = Math.Round(Convert.ToDecimal(results.Values[4]), 2);                 // group price
-            GroupLimit = Convert.ToInt32(results.Values[5]);                 // grouplimit
-            _active = Convert.ToBoolean(results.Values[6]);                 // active
-            CreatedDate = Convert.ToDateTime(results.Values[7]);
+            SalePrice = Math.Round(Convert.ToDecimal(results.Values[3]), 2);    // price
+            GroupPrice = Math.Round(Convert.ToDecimal(results.Values[4]), 2);   // group price
+            GroupLimit = Convert.ToInt32(results.Values[5]);                    // grouplimit
+            _active = Convert.ToBoolean(results.Values[6]);                     // active
+            CreatedTime = Convert.ToDateTime(results.Values[7]);
         }
 
         public override void UploadToDatabase()

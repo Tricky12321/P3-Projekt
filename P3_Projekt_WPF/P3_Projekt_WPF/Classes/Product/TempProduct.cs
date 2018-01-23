@@ -86,6 +86,7 @@ namespace P3_Projekt_WPF.Classes
             Description = Table.Values[2];
             Resolved = Convert.ToBoolean(Table.Values[3]);
             ResolvedProductID = Convert.ToInt32(Table.Values[4]);
+            CreatedTime = Convert.ToDateTime(Table.Values[5]);
         }
 
         public override void UploadToDatabase()

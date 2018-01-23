@@ -22,23 +22,19 @@ namespace P3_Projekt_WPF.Classes.Utilities
         public ConcurrentDictionary<int, StorageTransaction> StorageTransactionDictionary = new ConcurrentDictionary<int, StorageTransaction>();
         public ConcurrentDictionary<int, OrderTransaction> OrderTransactionDictionary = new ConcurrentDictionary<int, OrderTransaction>();
         public List<string[]> InformationGridData = new List<string[]>();
-        private object InformationGridLock = new object();
+        private object _informationGridLock = new object();
         private ConcurrentQueue<Product> _productResults = new ConcurrentQueue<Product>();
         public ConcurrentDictionary<int, BaseProduct> AllProductsDictionary = new ConcurrentDictionary<int, BaseProduct>();
         public ConcurrentDictionary<int, Product> DisabledProducts = new ConcurrentDictionary<int, Product>();
         public ConcurrentDictionary<int, ServiceProduct> DisabledServiceProducts = new ConcurrentDictionary<int, ServiceProduct>();
         public List<TempProduct> TempTempProductList = new List<TempProduct>();
 
-
-
         public StorageController()
         {
             AddInformation("Core Antal", Utils.NumberOfCores);
-            //GetAllProductsFromDatabase();
-            //GetAllReceiptsFromDatabase();
         }
 
-        public void ClearDictionarys()
+        public void ClearDictionaries()
         {
             if (_queueThreads != null)
             {
@@ -58,22 +54,14 @@ namespace P3_Projekt_WPF.Classes.Utilities
             ResetCounters();
         }
 
-        public void ReloadAllDictionarys(MainWindow MainWin, bool ShowMessageBox = true)
+        public void ReloadAllDictionaries()
         {
-            if (ShowMessageBox)
-            {
-                MessageBox.Show("Alt data vil nu blive hentet fra databasen igen, og kan godt tage lidt tid");
-            }
-            ClearDictionarys();
+            ClearDictionaries();
             GetAll();
             while (!ThreadsDone)
             {
-                Thread.Sleep(10);
+                Thread.Sleep(1);
             }
-            MainWin.ReloadProducts();
-            MainWin.ReloadDisabledProducts();
-            MainWin.LoadQuickButtons();
-            MainWin.SaveQuickButtons();
         }
 
         public void LoadAllProductsDictionary()
@@ -82,6 +70,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
             foreach (KeyValuePair<int, Product> productWithID in ProductDictionary.Where(x => x.Value.Active == true))
             {
                 AllProductsDictionary.TryAdd(productWithID.Key, productWithID.Value);
+
             }
 
             foreach (KeyValuePair<int, ServiceProduct> serviceProductWithID in ServiceProductDictionary)
@@ -98,7 +87,6 @@ namespace P3_Projekt_WPF.Classes.Utilities
         public List<Thread> Threads = new List<Thread>();
         public object ThreadLock = new object();
         // For at holde garbage collector fra at dræbe tråde
-        public ConcurrentQueue<string> TimerStrings = new ConcurrentQueue<string>();
         public bool ThreadsDone
         {
             get
@@ -113,7 +101,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
 
         public void AddInformation(string name, object value)
         {
-            lock (InformationGridLock)
+            lock (_informationGridLock)
             {
                 string[] result = { name, value.ToString() };
                 InformationGridData.Add(result);
@@ -244,6 +232,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
             _storageTransactionsLoaded = false;
             _orderTransactionsLoaded = false;
         }
+
         private int _productsCount;
         private int _serviceProductCount;
         private int _groupsCount;
@@ -254,7 +243,6 @@ namespace P3_Projekt_WPF.Classes.Utilities
         private int _orderTransactionCount;
         private int _storageTransactionCount;
         private int _storageStatusCount;
-
 
         private int _doneProductsCount = 0;
         private int _doneServiceProductCount = 0;
@@ -292,7 +280,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
         private List<Thread> _queueThreads;
         private int _queueThreadsCount = Utils.NumberOfCores;
 
-        private bool SecondQueueDone()
+        private bool SecondPoolDone()
         {
             if (_doneStorageTransactionCount != _storageTransactionCount)
             {
@@ -309,7 +297,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
             return true;
         }
 
-        private bool FirstQueueDone()
+        private bool FirstPoolDone()
         {
             if (_doneProductsCount != _productsCount)
             {
@@ -342,27 +330,26 @@ namespace P3_Projekt_WPF.Classes.Utilities
             return true;
         }
 
-        private void HandleSecondQueue()
+        private void HandleSecondPool()
         {
             Row Data;
-            if (FirstQueueDone())
+            if (FirstPoolDone())
             {
                 Debug.WriteLine("First Queue is [DONE] going to second queue");
             }
-            while (!SecondQueueDone())
+            while (!SecondPoolDone())
             {
                 while (_storageStatusQueue.TryDequeue(out Data))
                 {
-                    int id = Convert.ToInt32(Data.Values[1]);
+                    int id = Convert.ToInt32(Data.Values[0]);
                     if (ProductDictionary.ContainsKey(id))
                     {
-                        ProductDictionary[id].StorageWithAmount.TryAdd(Convert.ToInt32(Data.Values[2]), Convert.ToInt32(Data.Values[3]));
+                        ProductDictionary[id].StorageWithAmount.TryAdd(Convert.ToInt32(Data.Values[1]), Convert.ToInt32(Data.Values[2]));
                     }
                     else
                     {
-                        DisabledProducts[id].StorageWithAmount.TryAdd(Convert.ToInt32(Data.Values[2]), Convert.ToInt32(Data.Values[3]));
+                        DisabledProducts[id].StorageWithAmount.TryAdd(Convert.ToInt32(Data.Values[1]), Convert.ToInt32(Data.Values[2]));
                     }
-
                     Interlocked.Increment(ref _doneStorageStatusCount);
                 }
                 while (_storageTransactionsQueue.TryDequeue(out Data))
@@ -411,16 +398,16 @@ namespace P3_Projekt_WPF.Classes.Utilities
 
         }
 
-        private void HandleQueue()
+        private void HandlePools()
         {
-            HandleFirstQueue();
-            HandleSecondQueue();
+            HandleFirstPool();
+            HandleSecondPool();
         }
 
-        private void HandleFirstQueue()
+        private void HandleFirstPool()
         {
             Row Data;
-            while (!FirstQueueDone())
+            while (!FirstPoolDone())
             {
                 while (_serviceProductQueue.TryDequeue(out Data))
                 {
@@ -477,9 +464,9 @@ namespace P3_Projekt_WPF.Classes.Utilities
         {
             bool local = Properties.Settings.Default.local_or_remote;
             _queueThreads = new List<Thread>();
-            for (int i = 0; i < _queueThreadsCount; i++)
+            for (int i = 0; i < _queueThreadsCount - 1; i++)
             {
-                _queueThreads.Add(new Thread(new ThreadStart(HandleQueue)));
+                _queueThreads.Add(new Thread(new ThreadStart(HandlePools)));
             }
 
             if (!local)
@@ -498,7 +485,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
             {
                 thread.Start();
             }
-            HandleQueue();
+            HandlePools();
         }
 
         public void RunGetSQL()
@@ -550,7 +537,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
             GetAllOrderTransactionsThread.Start();
         }
 
-        #endregion
+        #endregion 
 
         public void DeleteProduct(int ProductID)
         {
@@ -588,7 +575,6 @@ namespace P3_Projekt_WPF.Classes.Utilities
                 Mysql.RunQuery(updateProductsSQL);
                 string updateServiceProductsSQL = $"UPDATE `service_products` SET `groups` = '{GroupDictionary[0].ID}' WHERE `groups` = '{GroupID}'";
                 Mysql.RunQuery(updateServiceProductsSQL);
-
             }
             Group outVal = null;
             string sql = $"DELETE FROM `groups` WHERE `id` = '{GroupID}' ";
@@ -598,7 +584,6 @@ namespace P3_Projekt_WPF.Classes.Utilities
 
         //Assign new group to products left with no group
         //Removes group from dictionary
-
         public IEnumerable<string> GetProductBrands()
         {
             return ProductDictionary.Values.Select(x => x.Brand).Distinct();
@@ -621,14 +606,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
 
         public void UpdateProduct(int id, string name, string brand, decimal purchasePrice, int groupID, bool discount, decimal discountPrice, decimal salePrice, ConcurrentDictionary<int, int> storageWithAmount, bool UploadToDatabase = true)
         {
-            if (discountPrice > 0)
-            {
-                discount = true;
-            }
-            else
-            {
-                discount = false;
-            }
+            discount = discountPrice > 0;
             Product newProduct = new Product(id, name, brand, purchasePrice, groupID, discount, salePrice, discountPrice);
             newProduct.StorageWithAmount = new ConcurrentDictionary<int, int>(storageWithAmount.Where(x => x.Value != 0));
             ProductDictionary[newProduct.ID] = newProduct;
@@ -638,14 +616,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
 
         public void UpdateDeactivatedProduct(int id, string name, string brand, decimal purchasePrice, int groupID, bool discount, decimal discountPrice, decimal salePrice, ConcurrentDictionary<int, int> storageWithAmount, bool UploadToDatabase = true)
         {
-            if (discountPrice > 0)
-            {
-                discount = true;
-            }
-            else
-            {
-                discount = false;
-            }
+            discount = discountPrice > 0;
             Product newProduct = new Product(id, name, brand, purchasePrice, groupID, discount, salePrice, discountPrice);
             newProduct.DeactivateProduct();
             newProduct.StorageWithAmount = new ConcurrentDictionary<int, int>(storageWithAmount.Where(x => x.Value != 0));
@@ -663,6 +634,28 @@ namespace P3_Projekt_WPF.Classes.Utilities
             if (UploadToDatabase)
             {
                 newServiceProduct.UploadToDatabase();
+            }
+        }
+
+        public string ActivateProduct(int ID)
+        {
+            if (DisabledProducts.ContainsKey(ID))
+            {
+                Product ProductToActivate;
+                DisabledProducts.TryRemove(ID, out ProductToActivate);
+                ProductToActivate.ActivateProduct();
+                AllProductsDictionary.TryAdd(ID, ProductToActivate);
+                ProductDictionary.TryAdd(ID, ProductToActivate);
+                return ProductToActivate.ToString();
+            }
+            else
+            {
+                ServiceProduct ServiceProductToActivate;
+                DisabledServiceProducts.TryRemove(ID, out ServiceProductToActivate);
+                ServiceProductToActivate.ActivateProduct();
+                AllProductsDictionary.TryAdd(ID, ServiceProductToActivate);
+                ServiceProductDictionary.TryAdd(ID, ServiceProductToActivate);
+                return ServiceProductToActivate.ToString();
             }
         }
 
@@ -723,32 +716,30 @@ namespace P3_Projekt_WPF.Classes.Utilities
         /* User has already found the matching product ID.
          * First line findes the store storage
          * Second line subtracts the amount sold from Shop storage*/
-        public void MergeTempProduct(TempProduct tempProductToMerge, int matchedProductID)
+        public void MatchTempProduct(TempProduct tempProductToMatch, int matchedProductID)
         {
-            Product MergedProduct = ProductDictionary[matchedProductID];
-            tempProductToMerge.Resolve(MergedProduct);
-            SaleTransaction tempProductsTransaction = tempProductToMerge.GetTempProductsSaleTransaction();
+            Product MatchedProduct = ProductDictionary[matchedProductID];
+            tempProductToMatch.Resolve(MatchedProduct);
+            SaleTransaction tempProductsTransaction = tempProductToMatch.GetTempProductsSaleTransaction();
             //Gets the Shop storage room, which has = 1, but if it doesn't exist, gets the next one
-            KeyValuePair<int, int> StorageRoomStatus = MergedProduct.StorageWithAmount.Where(x => x.Key != 0).First();
-
-            MergedProduct.StorageWithAmount[StorageRoomStatus.Key] = StorageRoomStatus.Value - tempProductsTransaction.Amount;
-            MergedProduct.UpdateInDatabase();
+            if (MatchedProduct.StorageWithAmount.Count == 0)
+            {
+                MatchedProduct.StorageWithAmount.TryAdd(1, 0);
+            }
+            KeyValuePair<int, int> StorageRoomStatus = MatchedProduct.StorageWithAmount.First();
+            MatchedProduct.StorageWithAmount[StorageRoomStatus.Key] = StorageRoomStatus.Value - tempProductsTransaction.Amount;
+            MatchedProduct.UpdateInDatabase();
         }
 
-        public void RemergeTempProduct(TempProduct tempProductToMerge, int matchedProductID)
+        public void RematchTempProduct(TempProduct tempProductToMatch, int matchedProductID)
         {
-            Product PreviouslyMergedProduct = ProductDictionary[tempProductToMerge.ResolvedProductID];
-            KeyValuePair<int, int> StorageRoomStatus = PreviouslyMergedProduct.StorageWithAmount.Where(x => x.Key != 0).First();
+            Product PreviouslyMatchdProduct = ProductDictionary[tempProductToMatch.ResolvedProductID];
+            KeyValuePair<int, int> StorageRoomStatus = PreviouslyMatchdProduct.StorageWithAmount.Where(x => x.Key != 0).First();
 
-            PreviouslyMergedProduct.StorageWithAmount[StorageRoomStatus.Key] = StorageRoomStatus.Value + tempProductToMerge.GetTempProductsSaleTransaction().Amount;
-            PreviouslyMergedProduct.UpdateInDatabase();
+            PreviouslyMatchdProduct.StorageWithAmount[StorageRoomStatus.Key] = StorageRoomStatus.Value + tempProductToMatch.GetTempProductsSaleTransaction().Amount;
+            PreviouslyMatchdProduct.UpdateInDatabase();
 
-            MergeTempProduct(tempProductToMerge, matchedProductID);
-        }
-
-        public void EditTempProduct(TempProduct tempProductToEdit, string description, decimal salePrice)
-        {
-            tempProductToEdit.Edit(description, salePrice);
+            MatchTempProduct(tempProductToMatch, matchedProductID);
         }
 
         //Adds new storage room to dictionary, and to all products
@@ -797,7 +788,8 @@ namespace P3_Projekt_WPF.Classes.Utilities
                         StorageRoomDictionary.TryRemove(id, out outVal);
                         string deleteQuery = $"DELETE FROM `storage_status` WHERE `storageroom` = '{id}'";
                         Mysql.RunQuery(deleteQuery);
-                    } else
+                    }
+                    else
                     {
                         MessageBox.Show("Det lager du forsøger at slette, eksistere ikke...");
                     }
@@ -808,6 +800,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
                 MessageBox.Show("Du kan ikke slette butikken!");
             }
         }
+
         /// <summary>
         /// Creates Icecream as a serviceproduct, then uploads it to the database, if not already in the system.
         /// </summary>
@@ -880,7 +873,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
             // Levensteins Søge Algoritme 
             foreach (BaseProduct product in AllProductsDictionary.Values)
             {
-                ProductSearch(searchStringLower, product);
+                NameSearch(searchStringLower, product);
                 GroupSearch(searchStringLower, product);
                 BrandSearch(searchStringLower, product);
             }
@@ -897,161 +890,69 @@ namespace P3_Projekt_WPF.Classes.Utilities
             }
         }
 
-
-
-        private void ProductSearch(string searchStringElement, BaseProduct productToConvert)
+        private void NameSearch(string searchStringElement, BaseProduct productToConvert)
         {
             SearchProduct productToAdd = new SearchProduct(productToConvert);
 
             List<string> searchSplit = searchStringElement.Split(' ').ToList();
-            SpaceCounter(ref searchSplit);
-            if (ContainsSearch(searchStringElement, productToConvert))
+            WordPairer(ref searchSplit);
+            List<string> nameSplit = productToConvert.GetName().ToLower().Split(' ').ToList();
+            WordPairer(ref nameSplit);
+            foreach (string searchWord in searchSplit)
             {
-                productToAdd.NameMatch += searchStringElement.Length * 2;
-            }
-
-
-            if (productToConvert is Product)
-            {
-                List<string> productSplit = (productToConvert as Product).Name.ToLower().Split(' ').ToList();
-                SpaceCounter(ref productSplit);
-                foreach (string s in searchSplit)
+                foreach (string nameWord in nameSplit)
                 {
-                    foreach (string t in productSplit)
+                    if (searchWord == nameWord)
                     {
-                        if (s == t)
-                        {
-                            productToAdd.NameMatch += 100;
-                        }
-                        else if (LevenstheinProductSearch(s, t))
-                        {
-                            productToAdd.NameMatch += 1;
-                        }
-
+                        productToAdd.NameMatch += 5;
+                    }
+                    else if (WithinLevenstheinLimit(searchWord, nameWord))
+                    {
+                        productToAdd.NameMatch += 1;
                     }
                 }
             }
-            else if (productToConvert is ServiceProduct)
-            {
-                List<string> productSplit = (productToConvert as ServiceProduct).Name.ToLower().Split(' ').ToList();
-                SpaceCounter(ref productSplit);
-                foreach (string s in searchSplit)
-                {
-                    foreach (string t in productSplit)
-                    {
-                        if (s == t)
-                        {
-                            productToAdd.NameMatch += 100;
-                        }
-                        else if (LevenstheinProductSearch(s, t))
-                        {
-                            productToAdd.NameMatch += 1;
-                        }
-                    }
-                }
-            }
-            else
-            {
-                throw new WrongProductTypeException("Produktet der søges efter er af forkert type");
-            }
-
             weigthedSearchList.Add(productToAdd);
         }
-        /*
-        private void SpecialCharsCounter(ref List<string> ListOfWords)
-        {
-            foreach (string item in ListOfWords)
-            {
-                if (item.Contains('ø') || item.Contains('æ') || item.Contains('å'))
-                {
-                    ListOfWords.Add(item.Replace("ø", "oe").Replace("æ", "ae").Replace("å", "aa"));
-                }
-            }
-        }
-        */
+
         // Complexity = (n*s)/2
-        private void SpaceCounter(ref List<string> ListOfWords)
+        private void WordPairer(ref List<string> listOfWords)
         {
-            int searchAmount = ListOfWords.Count();
+            int searchAmount = listOfWords.Count();
             if (searchAmount > 1)
             {
                 for (int i = 1; i <= searchAmount - 1; i++)
                 {
-                    ListOfWords.Add(ListOfWords[i] + ListOfWords[i - 1]);
-                    ListOfWords.Add(ListOfWords[i - 1] + ListOfWords[i]);
+                    listOfWords.Add(listOfWords[i] + listOfWords[i - 1]);
+                    listOfWords.Add(listOfWords[i - 1] + listOfWords[i]);
                 }
             }
-        }
-
-        private bool LevenshteinsGroupAndProductSearch(string[] searchedString, string stringToCompare, out int charDifference)
-        {//setup for levenshteins
-            string[] compareSplit = stringToCompare.ToLower().Split(' ');
-
-            foreach (string sString in searchedString)
-            {
-                foreach (string compareString in compareSplit)
-                {
-
-                    //getting the chardifference between the searchedstring and the productname
-                    charDifference = ComputeLevenshteinsDistance(sString, compareString);
-                    //Evaluate if the chardifference is in between the changelimit of the string
-                    if (EvaluateStringLimit(sString.Length, charDifference))
-                    {
-                        //only returns true of it is matching
-                        return true;
-                    }
-                }
-            }
-            charDifference = -1;
-            return false;
         }
 
         private void GroupSearch(string searchString, BaseProduct product)
         {
             //divides all the elements in the string, to evaluate each element
-            string[] dividedString = searchString.Split(' ');
+            List<string> searchSplit = searchString.Split(' ').ToList();
+            WordPairer(ref searchSplit);
             //matching on each element in the string
-            int MatchedValue;
             //if the string contains a name of a group, or the string is matched, each product with the same group 
             //is added to the list of products to show.
-            var SearchList = weigthedSearchList.Where(x => x.CurrentProduct.ID == product.ID);
-            if (product is Product)
+            SearchProduct currentProduct = weigthedSearchList.Where(x => x.CurrentProduct.ID == product.ID).First();
+            int groupID = (product is Product) ? (product as Product).ProductGroupID : (product as ServiceProduct).ServiceProductGroupID;
+            List<string> groupSplit = GroupDictionary[groupID].Name.Split(' ').ToList();
+            WordPairer(ref groupSplit);
+
+            foreach (string searchWord in searchSplit)
             {
-                foreach (string searchedString in dividedString)
+                foreach (string groupWord in groupSplit)
                 {
-                    if (GroupDictionary[(product as Product).ProductGroupID].Name.Contains(searchedString))
+                    if (searchWord == groupWord)
                     {
-                        SearchList.First().GroupMatch += 100;
+                        currentProduct.GroupMatch += 5;
                     }
-                }
-                if (LevenshteinsGroupAndProductSearch(dividedString, GroupDictionary[(product as Product).ProductGroupID].Name, out MatchedValue))
-                {
-                    if (SearchList.Count() > 0)
+                    else if (WithinLevenstheinLimit(searchWord, groupWord))
                     {
-                        if (SearchList.First() != null)
-                        {
-                            SearchList.First().GroupMatch += 1;
-                        }
-                    }
-                }
-            }
-            else if (product is ServiceProduct)
-            {
-                foreach (string searchedString in dividedString)
-                {
-                    if (GroupDictionary[(product as ServiceProduct).ServiceProductGroupID].Name.Contains(searchedString))
-                    {
-                        SearchList.First().GroupMatch += 100;
-                    }
-                }
-                if (LevenshteinsGroupAndProductSearch(dividedString, GroupDictionary[(product as ServiceProduct).ServiceProductGroupID].Name, out MatchedValue))
-                {
-                    if (SearchList.Count() > 0)
-                    {
-                        if (SearchList.First() != null)
-                        {
-                            SearchList.First().GroupMatch += 1;
-                        }
+                        currentProduct.GroupMatch += 1;
                     }
                 }
             }
@@ -1060,48 +961,35 @@ namespace P3_Projekt_WPF.Classes.Utilities
         private void BrandSearch(string searchString, BaseProduct product)
         {
             //divides all the elements in the string, to evaluate each element
-            string[] dividedString = searchString.Split(' ');
+            List<string> searchSplit = searchString.Split(' ').ToList();
+            WordPairer(ref searchSplit);
             //checking all products to to match the brands with the searched string elements
-            int MatchedValues;
             //matching on each element in the string
             //if the string contains a product brand, or the string is matched, each product with the same brand
             //is added to the list of products to show.
-            var SearchList = weigthedSearchList.Where(x => x.CurrentProduct.ID == product.ID);
+            SearchProduct currentProduct = weigthedSearchList.Where(x => x.CurrentProduct.ID == product.ID).First();
             if (product is Product)
             {
-                foreach (string searchedString in dividedString)
+                List<string> brandSplit = (product as Product).Brand.Split(' ').ToList();
+                WordPairer(ref brandSplit);
+                foreach (string searchWord in searchSplit)
                 {
-                    if ((product as Product).Brand.Contains(searchedString))
+                    foreach (string brandWord in brandSplit)
                     {
-                        SearchList.First().BrandMatch += 100;
-                    }
-                }
-                if (LevenshteinsGroupAndProductSearch(dividedString, (product as Product).Brand, out MatchedValues))
-                {
-                    if (SearchList.Count() > 0)
-                    {
-                        SearchList.First().BrandMatch += 1;
+                        if (searchWord == brandWord)
+                        {
+                            currentProduct.BrandMatch += 5;
+                        }
+                        else if (WithinLevenstheinLimit(searchWord, brandWord))
+                        {
+                            currentProduct.BrandMatch += 1;
+                        }
                     }
                 }
             }
         }
 
-        public bool ContainsSearch(string searchString, BaseProduct product)
-        {
-            string StringToSearch = product.GetName().ToLower();
-            if (searchString.Length < 4)
-            {
-                return false;
-            }
-            if (StringToSearch.Contains(searchString.ToLower()))
-            {
-                return true;
-            }
-            return false;
-        }
-
-
-        private bool LevenstheinProductSearch(string searchEle, string ProductEle)
+        private bool WithinLevenstheinLimit(string searchEle, string ProductEle)
         {
             int charDifference = ComputeLevenshteinsDistance(searchEle, ProductEle);
             return EvaluateStringLimit(searchEle.Length, charDifference);

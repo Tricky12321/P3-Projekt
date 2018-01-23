@@ -10,7 +10,6 @@ using System.Collections.Concurrent;
 using System.Diagnostics;
 using System.Threading;
 using P3_Projekt_WPF.Classes.Database;
-using System.Collections.Concurrent;
 namespace P3_Projekt_WPF.Classes.Utilities.Tests
 {
 
@@ -20,8 +19,6 @@ namespace P3_Projekt_WPF.Classes.Utilities.Tests
     {
         StorageController SC;
         POSController POS;
-        ConcurrentDictionary<int, BaseProduct> ProductList;
-        ConcurrentDictionary<int, Group> GroupList;
         [SetUp]
         public void Init()
         {
@@ -33,16 +30,7 @@ namespace P3_Projekt_WPF.Classes.Utilities.Tests
             SaleTransaction.SetStorageController(SC);
             SaleTransaction.HideMessageBox = true;
             POS = new POSController(SC);
-            Utils.GetIceCreameID();
-            ProductList = new ConcurrentDictionary<int, BaseProduct>();
-            GroupList = new ConcurrentDictionary<int, Group>();
-            for (int i = 0; i < 1000000; i++)
-            {
-                Product NewProduct = new Product(i, "Test", "Brand", 1m, 1, false, 1m, 1m);
-                ProductList.TryAdd(i, NewProduct);
-            }
-            GroupList.TryAdd(1, new Group("TestGruppe", "TestBeskrivelse"));
-
+            Utils.GetIceCreamID();
         }
 
         [TestCase(ExpectedResult = true)]
@@ -367,7 +355,7 @@ namespace P3_Projekt_WPF.Classes.Utilities.Tests
         [TestCase(11, 1000)]
         [TestCase(7, 10000)]
         [TestCase(22, 1)]
-        public void TempProductMergeTest(int resolveID, int amount)
+        public void TempProductMatchTest(int resolveID, int amount)
         {
             // Creating temp product
             int old_id = TempProduct.GetNextID();
@@ -383,13 +371,13 @@ namespace P3_Projekt_WPF.Classes.Utilities.Tests
             bool ID_Check = new_id > old_id;
             // download tempproduct form DB
             TempProduct TestProd_DB = new TempProduct(old_id);
-            // Merge temp product
-            SC.MergeTempProduct(TestProd_DB, resolveID);
+            // Match temp product
+            SC.MatchTempProduct(TestProd_DB, resolveID);
             // Getting the TempProduct from DB after merge to see if it has been resolved
-            TempProduct TestProd_DB_AfterMerge = new TempProduct(old_id);
-            bool CheckResolved = TestProd_DB_AfterMerge.Resolved;
+            TempProduct TestProd_DB_AfterMatch = new TempProduct(old_id);
+            bool CheckResolved = TestProd_DB_AfterMatch.Resolved;
             bool CheckResolvedProdID = TestProd_DB.ResolvedProductID == resolveID;
-            bool CheckResolvedProdID_DB = TestProd_DB_AfterMerge.ResolvedProductID == resolveID;
+            bool CheckResolvedProdID_DB = TestProd_DB_AfterMatch.ResolvedProductID == resolveID;
             Assert.IsTrue(ID_Check && CheckResolvedProdID && CheckResolvedProdID_DB && priceCheck && CheckResolved);
         }
 
@@ -398,7 +386,7 @@ namespace P3_Projekt_WPF.Classes.Utilities.Tests
         [TestCase(11, 3, 1000)]
         [TestCase(7, 30, 10000)]
         [TestCase(22, 3, 1)]
-        public void TempProductRemergeTest(int resolveID, int reResolveID, int amount)
+        public void TempProductRematchTest(int resolveID, int reResolveID, int amount)
         {
             // Creating temp product
             int old_id = TempProduct.GetNextID();
@@ -414,90 +402,18 @@ namespace P3_Projekt_WPF.Classes.Utilities.Tests
             bool ID_Check = new_id > old_id;
             // download tempproduct form DB
             TempProduct TestProd_DB = new TempProduct(old_id);
-            // Merge temp product
-            SC.MergeTempProduct(TestProd_DB, resolveID);
+            // Match temp product
+            SC.MatchTempProduct(TestProd_DB, resolveID);
             // Getting the TempProduct from DB after merge to see if it has been resolved
-            TempProduct TestProd_DB_AfterMerge = new TempProduct(old_id);
-            bool CheckResolved = TestProd_DB_AfterMerge.Resolved;
+            TempProduct TestProd_DB_AfterMatch = new TempProduct(old_id);
+            bool CheckResolved = TestProd_DB_AfterMatch.Resolved;
             bool CheckResolvedProdID = TestProd_DB.ResolvedProductID == resolveID;
-            bool CheckResolvedProdID_DB = TestProd_DB_AfterMerge.ResolvedProductID == resolveID;
-            SC.RemergeTempProduct(TestProd_DB_AfterMerge, reResolveID);
-            TempProduct TestProd_DB_AfterRemerge = new TempProduct(old_id);
-            bool CheckRemergedTempProduct = TestProd_DB_AfterRemerge.ResolvedProductID == reResolveID;
-            Assert.IsTrue(ID_Check && CheckResolvedProdID && CheckResolvedProdID_DB && CheckRemergedTempProduct && priceCheck && CheckResolved);
+            bool CheckResolvedProdID_DB = TestProd_DB_AfterMatch.ResolvedProductID == resolveID;
+            SC.RematchTempProduct(TestProd_DB_AfterMatch, reResolveID);
+            TempProduct TestProd_DB_AfterRematch = new TempProduct(old_id);
+            bool CheckRematchdTempProduct = TestProd_DB_AfterRematch.ResolvedProductID == reResolveID;
+            Assert.IsTrue(ID_Check && CheckResolvedProdID && CheckResolvedProdID_DB && CheckRematchdTempProduct && priceCheck && CheckResolved);
         }
-
-
-        /*
-         * 5 forskellige søge strenge
-         * 10,100,500,1000,10000,100000 
-         * 
-         * 
-         */
-        
-
-        [TestCase("Test",1000)]
-        [TestCase("Test",10000)]
-        [TestCase("Test",100000)]
-        [TestCase("Test",1000000)]
-        [TestCase("Test",10000000)]
-        [TestCase("Testmegetlangtord", 1000)]
-        [TestCase("Testmegetlangtord", 10000)]
-        [TestCase("Testmegetlangtord", 100000)]
-        [TestCase("Testmegetlangtord", 1000000)]
-        [TestCase("Testmegetlangtord", 10000000)]
-        [TestCase("Test med", 1000)]
-        [TestCase("Test med", 10000)]
-        [TestCase("Test med", 100000)]
-        [TestCase("Test med", 1000000)]
-        [TestCase("Test med", 10000000)]
-        [TestCase("Testmegetlangtord Testmegetlangtord", 1000)]
-        [TestCase("Testmegetlangtord Testmegetlangtord", 10000)]
-        [TestCase("Testmegetlangtord Testmegetlangtord", 100000)]
-        [TestCase("Testmegetlangtord Testmegetlangtord", 1000000)]
-        [TestCase("Testmegetlangtord Testmegetlangtord", 10000000)]
-        [TestCase("Test med tre", 1000)]
-        [TestCase("Test med tre", 10000)]
-        [TestCase("Test med tre", 100000)]
-        [TestCase("Test med tre", 1000000)]
-        [TestCase("Test med tre", 10000000)]
-        [TestCase("Testmegetlangtord Testmegetlangtord Testmegetlangtord", 1000)]
-        [TestCase("Testmegetlangtord Testmegetlangtord Testmegetlangtord", 10000)]
-        [TestCase("Testmegetlangtord Testmegetlangtord Testmegetlangtord", 100000)]
-        [TestCase("Testmegetlangtord Testmegetlangtord Testmegetlangtord", 1000000)]
-        [TestCase("Testmegetlangtord Testmegetlangtord Testmegetlangtord", 10000000)]
-        [TestCase("Test med fire ord", 1000)]
-        [TestCase("Test med fire ord", 10000)]
-        [TestCase("Test med fire ord", 100000)]
-        [TestCase("Test med fire ord", 1000000)]
-        [TestCase("Test med fire ord", 10000000)]
-        [TestCase("Testmegetlangtord Testmegetlangtord Testmegetlangtord Testmegetlangtord", 1000)]
-        [TestCase("Testmegetlangtord Testmegetlangtord Testmegetlangtord Testmegetlangtord", 10000)]
-        [TestCase("Testmegetlangtord Testmegetlangtord Testmegetlangtord Testmegetlangtord", 100000)]
-        [TestCase("Testmegetlangtord Testmegetlangtord Testmegetlangtord Testmegetlangtord", 1000000)]
-        [TestCase("Testmegetlangtord Testmegetlangtord Testmegetlangtord Testmegetlangtord", 10000000)]
-        [TestCase("Test med fem ord YAY", 1000)]
-        [TestCase("Test med fem ord YAY", 10000)]
-        [TestCase("Test med fem ord YAY", 100000)]
-        [TestCase("Test med fem ord YAY", 1000000)]
-        [TestCase("Test med fem ord YAY", 10000000)]
-        [TestCase("Testmegetlangtord Testmegetlangtord Testmegetlangtord Testmegetlangtord Testmegetlangtord", 1000)]
-        [TestCase("Testmegetlangtord Testmegetlangtord Testmegetlangtord Testmegetlangtord Testmegetlangtord", 10000)]
-        [TestCase("Testmegetlangtord Testmegetlangtord Testmegetlangtord Testmegetlangtord Testmegetlangtord", 100000)]
-        [TestCase("Testmegetlangtord Testmegetlangtord Testmegetlangtord Testmegetlangtord Testmegetlangtord", 1000000)]
-        [TestCase("Testmegetlangtord Testmegetlangtord Testmegetlangtord Testmegetlangtord Testmegetlangtord", 10000000)]
-        public void SearchPerformanceTest(string SearchString, int number_of_products)
-        {
-
-            StorageController SC = new StorageController();
-            SC.AllProductsDictionary = new ConcurrentDictionary<int, BaseProduct>(ProductList.Take(number_of_products).ToDictionary(x=>x.Value.ID,x=>x.Value));
-            SC.GroupDictionary = GroupList;
-            SC.SearchForProduct(SearchString).Count();
-            Assert.Pass();
-
-        }
-             
-
         /*[Test()]
         public void ProductIDTest()
         {
@@ -600,7 +516,7 @@ namespace P3_Projekt_WPF.Classes.Utilities.Tests
         [Test()]
         public void GroupSearchTest()
         {
-            StorageController strContr = new StorageController();
+            StorageController strContr = new StorageController();C:\Users\lasse\Source\Repos\P3-Projekt\P3-Projekt\P3-ProjektTests\Classes\Utilities\StorageControllerTests.cs
             Group testGroup = new Group("Adidas", "shoes and clothes");
             strContr.GroupDictionary.Add(101, testGroup);
             Product productToBeCompared = new Product("Running trousers", "Adidas", 100, testGroup.ID, false, 20, 50, null);
@@ -627,88 +543,6 @@ namespace P3_Projekt_WPF.Classes.Utilities.Tests
             Assert.IsTrue(productList.Contains(productToBeCompared));
         }
         */
-        /*
-        [Test()]
-        public void CreateTempProductTest()
-        {
-            StorageController strContr = new StorageController();
-            string productDescription = "A blue shirt with yellow bananas";
-            decimal sellPrice = 100;
-            strContr.CreateTempProduct(productDescription, sellPrice);
-            //TODO: Exists does not exist
-            //Assert.IsTrue(strContr.TempProductList.Exists(x => x.Description == "A blue shirt with yellow bananas"));
-        }
-        */
-        [Test()]
-        public void ContainsSearchTest()
-        {
-            StorageController SC = new StorageController();
-            BaseProduct TestProduct = new Product(1, "TestProductMedSlagI", "Aner det ikke", 10m, 1, false, 0m, 0m);
-            if (SC.ContainsSearch("sLaG", TestProduct))
-            {
-                Assert.Pass();
-            }
-            else
-            {
-                Assert.Fail();
-            }
-        }
-        [Test()]
-        public void ContainsSearchTest5()
-        {
-            StorageController SC = new StorageController();
-            BaseProduct TestProduct = new Product(1, "TestProductMedSlagI", "Aner det ikke", 10m, 1, false, 0m, 0m);
-            if (SC.ContainsSearch("asdf", TestProduct))
-            {
-                Assert.Fail();
-            }
-            else
-            {
-                Assert.Pass();
-            }
-        }
-        [Test()]
-        public void ContainsSearchTest2()
-        {
-            StorageController SC = new StorageController();
-            BaseProduct TestProduct = new Product(1, "TestProductMedSlagI", "Aner det ikke", 10m, 1, false, 0m, 0m);
-            if (SC.ContainsSearch("Product", TestProduct))
-            {
-                Assert.Pass();
-            }
-            else
-            {
-                Assert.Fail();
-            }
-        }
-        [Test()]
-        public void ContainsSearchTest3()
-        {
-            StorageController SC = new StorageController();
-            BaseProduct TestProduct = new Product(1, "asdf", "Aner det ikke", 10m, 1, false, 0m, 0m);
-            if (SC.ContainsSearch("Product", TestProduct))
-            {
-                Assert.Fail();
-            }
-            else
-            {
-                Assert.Pass();
-            }
-        }
-        [Test()]
-        public void ContainsSearchTest4()
-        {
-            StorageController SC = new StorageController();
-            BaseProduct TestProduct = new Product(1, "TestProductTing", "Aner det ikke", 10m, 1, false, 0m, 0m);
-            if (SC.ContainsSearch("", TestProduct))
-            {
-                Assert.Fail();
-            }
-            else
-            {
-                Assert.Pass();
-            }
-        }
-
+        
     }
 }

@@ -72,7 +72,6 @@ namespace P3_Projekt_WPF.Classes
                 {
                     prod.StorageWithAmount[shopID] -= Amount;
                 }
-
                 UpdateProductEvent?.Invoke(prod);
                 if (!HideMessageBox && prod.StorageWithAmount.Where(x => x.Value < 0).Count() > 0)
                 {
@@ -114,6 +113,11 @@ namespace P3_Projekt_WPF.Classes
         public int GetID()
         {
             return _id;
+        }
+
+        public void SetID(int id)
+        {
+            _id = id;
         }
 
         //Returns the correct price according to discount, groups etc.
@@ -285,7 +289,7 @@ namespace P3_Projekt_WPF.Classes
             Product = productToResolve;
             UpdateInDatabase();
         }
-
+        
         public StatisticsListItem StatisticsStrings()
         {
             return new StatisticsListItem(Date.ToString("dd/MM/yy"), Product.GetName(), Amount.ToString(), Math.Round(TotalPrice, 2).ToString());

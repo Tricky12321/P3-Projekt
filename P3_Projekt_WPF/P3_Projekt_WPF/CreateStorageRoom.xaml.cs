@@ -26,21 +26,18 @@ namespace P3_Projekt_WPF
     {
         public StorageController ControllerSto;
         private ConcurrentDictionary<int, StorageRoom> _storageRooms;
-        private MainWindow _mainWindow = null;
         private StorageRoom storageRoomToEdit;
 
-        public CreateStorageRoom(StorageController stoController, MainWindow mainWin)
+        public CreateStorageRoom(StorageController stoController)
         {
-            this._mainWindow = mainWin;
             ControllerSto = stoController;
             InitializeComponent();
             SetupCreate();
             btn_deleteStorageRoom.Visibility = Visibility.Hidden;
         }
 
-        public CreateStorageRoom(StorageController stoController, MainWindow mainWin, StorageRoom stoRoom)
+        public CreateStorageRoom(StorageController stoController, StorageRoom stoRoom)
         {
-            this._mainWindow = mainWin;
             ControllerSto = stoController;
             storageRoomToEdit = stoRoom;
             InitializeComponent();
@@ -71,7 +68,6 @@ namespace P3_Projekt_WPF
                     string storageRoomName = textBox_Name.Text;
                     string storageRoomDescr = textBox_descr.Text;
                     ControllerSto.CreateStorageRoom(storageRoomName, storageRoomDescr);
-                    _mainWindow.LoadStorageRooms();
                     this.Close();
                 }
             };
@@ -104,7 +100,6 @@ namespace P3_Projekt_WPF
                     string storageRoomName = textBox_Name.Text;
                     string storageRoomDescr = textBox_descr.Text;
                     ControllerSto.EditStorageRoom(storageRoomToEdit.ID, storageRoomName, storageRoomDescr);
-                    _mainWindow.LoadStorageRooms();
                     this.Close();
                 }
 
@@ -115,7 +110,6 @@ namespace P3_Projekt_WPF
                 if (results == MessageBoxResult.Yes)
                 {
                     ControllerSto.DeleteStorageRoom(storageRoomToEdit.ID);
-                    _mainWindow.LoadStorageRooms();
                     this.Close();
                 }
             };

@@ -87,18 +87,5 @@ namespace P3_Projekt_WPF.Classes.Utilities.Tests
 
             Assert.IsTrue(b1 && b2 && b3 && b4 && b5 && b6);
         }
-
-        [Test()]
-        public void AddFreeSaleTransactionTest()
-        {
-            StorageController SC = new StorageController();
-            POSController POSC = new POSController(SC);
-
-            POSC.StartPurchase();
-
-            POSC.AddFreeSaleTransaction(new TempProduct("Hello", 3.6M),7);
-
-            Assert.IsTrue((POSC.PlacerholderReceipt.Transactions.First().TotalPrice == 0));
-        }
     }
 }

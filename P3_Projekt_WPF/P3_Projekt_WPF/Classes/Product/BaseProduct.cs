@@ -13,6 +13,7 @@ namespace P3_Projekt_WPF.Classes
         public decimal SalePrice;
         public decimal DiscountPrice;
         public bool DiscountBool;
+        public DateTime CreatedTime;
         //protected static int _idCounter = 0;
         //public static int IDCounter { get { return _idCounter; } set { _idCounter = value; } }
 

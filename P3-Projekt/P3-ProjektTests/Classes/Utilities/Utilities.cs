@@ -60,17 +60,12 @@ namespace P3_ProjektTests.Classes.Utilities
         [TestCase("ød  Fuel", ExpectedResult = 2)]
         [TestCase("ød     Fuel", ExpectedResult = 2)]
         [TestCase("FUGL", ExpectedResult = 2)]
-        [TestCase("pind", ExpectedResult = 2)]
-        [TestCase("SLIK", ExpectedResult = 2)]
-        [TestCase("slIk", ExpectedResult = 2)]
         [TestCase("snacks", ExpectedResult = 3)]
         [TestCase("smag", ExpectedResult = 1)]
         [TestCase("Slikke pind", ExpectedResult = 2)]
         [TestCase("shoppen", ExpectedResult = 0)]
-        [TestCase(".dk", ExpectedResult = 3)]
         [TestCase("folket", ExpectedResult = 0)]
         [TestCase("til folket", ExpectedResult = 0)]
-        [TestCase("A/S", ExpectedResult = 2)]
         [TestCase("græs", ExpectedResult = 1)]
 
         public int SearchAlgorithm(string SearchString)

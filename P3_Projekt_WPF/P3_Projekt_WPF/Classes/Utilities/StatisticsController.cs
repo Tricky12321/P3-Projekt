@@ -16,19 +16,11 @@ namespace P3_Projekt_WPF.Classes.Utilities
         public Dictionary<int, decimal> SalesPerGroup;
         public Dictionary<string, decimal> SalesPerBrand;
         public int ReceiptTotalCount;
+        public decimal AverageProductPerReceipt;
         public decimal ReceiptTotalPrice;
         public decimal TotalRevenueToday;
         public Dictionary<int, StatisticsProduct> SalesPerProduct;
         public decimal[] Payments = { 0, 0, 0 };
-
-        public StatisticsController(StorageController storageController)
-        {
-            _storageController = storageController;
-        }
-
-        /* Man anmoder altid om dato først, men kun én af dato-metoderne af gangen.
-         * Hver dato-metode nulstiller TransactionsForStatistics ved at hente transaktioner ned fra databasen alt efter datoen
-         * Derefter skal formen kalde RequestStatisticsWithParameters */
 
         private bool _allStatisticsDone = false;
         private ConcurrentQueue<SaleTransaction> _saleTransactions;
@@ -37,6 +29,11 @@ namespace P3_Projekt_WPF.Classes.Utilities
         private int _saleTransactionsCreated = 0;
         private ConcurrentQueue<Row> _dataQueue;
         private StorageController _storageController = null;
+
+        public StatisticsController(StorageController storageController)
+        {
+            _storageController = storageController;
+        }
 
         private void CreateThreads()
         {
@@ -63,7 +60,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
                 Interlocked.Increment(ref _saleTransactionsCreated);
             }
         }
-
+        
         public void RequestStatistics(bool searchProduct, int productToSearch, bool searchGroup, int groupToSearch, bool searchBrand, string brandToSearch, DateTime from, DateTime to)
         {
             TransactionsForStatistics = new List<SaleTransaction>();
@@ -176,11 +173,8 @@ namespace P3_Projekt_WPF.Classes.Utilities
             return date + dayEnd;
         }
 
-
         public void RequestTransactionsDatabase(string queryString)
         {
-            Stopwatch Timer1 = new Stopwatch();
-            Timer1.Start();
             _saleTransactionsCreated = 0;
             _saleTransactions = new ConcurrentQueue<SaleTransaction>();
             _dataQueue = Mysql.RunQueryWithReturnQueue(queryString).RowData;
@@ -195,8 +189,15 @@ namespace P3_Projekt_WPF.Classes.Utilities
 
             _allStatisticsDone = true;
             TransactionsForStatistics = TransactionsForStatistics.Concat(_saleTransactions).ToList<SaleTransaction>();
-            Timer1.Stop();
-            Debug.WriteLine("[StatisticsController] took " + Timer1.ElapsedMilliseconds + "ms to fetch");
+        }
+
+        public void AverageItemsPerReceipt(DateTime Start, DateTime End)
+        {
+            Int64 from = Utils.GetUnixTime(Start);
+            Int64 to = Utils.GetUnixTime(EndDate(End));
+            string sql = $"SELECT AVG(`number_of_products`) FROM `receipt` WHERE UNIX_TIMESTAMP(`datetime`) >= '{from}' AND UNIX_TIMESTAMP(`datetime`) <= '{to}'";
+            TableDecode Results = Mysql.RunQueryWithReturn(sql);
+            AverageProductPerReceipt =  Convert.ToDecimal(Results.RowData[0].Values[0]);
         }
 
         public void RequestTodayReceipts()
@@ -262,9 +263,9 @@ namespace P3_Projekt_WPF.Classes.Utilities
         {
             if (ReceiptTotalCount > 0)
             {
-                return new StatisticsListItem("", "Gennemsnitlig kvitteringspris", $"{ ReceiptTotalCount}", $"{Math.Round(ReceiptTotalPrice / ReceiptTotalCount, 2)}");
+                return new StatisticsListItem("", "Gennemsnitlig kvitterings størrelse", $"{ Math.Round(AverageProductPerReceipt, 2)}", $"{Math.Round(ReceiptTotalPrice / ReceiptTotalCount, 2)}");
             }
-            return new StatisticsListItem("", "Gennemsnitlig kvitteringspris", "0", "0");
+            return new StatisticsListItem("", "Gennemsnitlig kvitterings størrelse", "0", "0");
         }
 
         public void GenerateProductSalesAndTotalRevenue()

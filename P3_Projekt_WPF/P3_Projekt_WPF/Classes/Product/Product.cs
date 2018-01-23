@@ -19,7 +19,6 @@ namespace P3_Projekt_WPF.Classes
         public Image Image;
         private bool _active = true;
         public bool Active => _active;
-        public DateTime CreatedTime;
         public ConcurrentDictionary<int, int> StorageWithAmount = new ConcurrentDictionary<int, int>();
 
         public Product(int id, string name, string brand, decimal purchasePrice, int groupID, bool discount, decimal salePrice, decimal discountPrice) : base(salePrice)
@@ -124,8 +123,8 @@ namespace P3_Projekt_WPF.Classes
                 TableDecode Results = Mysql.RunQueryWithReturn(sql);
                 foreach (var row in Results.RowData)
                 {
-                    int StorageRoomID = Convert.ToInt32(row.Values[2]);
-                    int Amount = Convert.ToInt32(row.Values[3]);
+                    int StorageRoomID = Convert.ToInt32(row.Values[1]);
+                    int Amount = Convert.ToInt32(row.Values[2]);
                     StorageRoom storgeRoom = new StorageRoom(StorageRoomID);
                     StorageWithAmount.TryAdd(storgeRoom.ID, Amount);
                 }
@@ -149,8 +148,8 @@ namespace P3_Projekt_WPF.Classes
             var StorageRoomsTotal = StorageWithAmount.Where(x => x.Key >= 1).Where(x => x.Value != 0);
             foreach (var Storage_Room in StorageRoomsTotal)
             {
-                string sql = "INSERT INTO `storage_status` (`id`, `product_id`, `storageroom`, `amount`)" +
-                        $" VALUES (NULL, '{ID}', '{Storage_Room.Key}', '{Storage_Room.Value}');";
+                string sql = "INSERT INTO `storage_status` (`product_id`, `storageroom`, `amount`)" +
+                        $" VALUES ('{ID}', '{Storage_Room.Key}', '{Storage_Room.Value}');";
                 Mysql.RunQuery(sql);
             }
         }

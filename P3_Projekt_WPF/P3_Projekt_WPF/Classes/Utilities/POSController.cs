@@ -21,19 +21,15 @@ namespace P3_Projekt_WPF.Classes.Utilities
     public delegate void LowStorageNotification(Product product);
     public delegate void ReceiptExecuteDoneDelegate();
 
-
     public class POSController
     {
-        /*
-         * TODO: fiks metoden til at loade ID til transaction
-         */
-
         public Receipt PlacerholderReceipt;
         private StorageController _storageController;
-
         public List<Receipt> ReceiptList = new List<Receipt>();
         public int ReceiptID = 0;
         public decimal TotalPriceToPay = -1m;
+        private const int _storageWarningLimit = 5;
+
         public POSController(StorageController storageController)
         {
             _storageController = storageController;
@@ -43,12 +39,8 @@ namespace P3_Projekt_WPF.Classes.Utilities
         public void StartPurchase()
         {
             PlacerholderReceipt = new Receipt();
-        }
-
-        public void EditReceipt(int receiptID)
-        {
-            PlacerholderReceipt = ReceiptList.First(x => x.ID == receiptID);
-            //PlacerholderReceipt.Delete();
+            TotalPriceToPay = -1m;
+            ReceiptID = 0;
         }
 
         public BaseProduct GetProductFromID(int id)
@@ -59,10 +51,12 @@ namespace P3_Projekt_WPF.Classes.Utilities
             }
             return null;
         }
-
+        private int SaleTransIDCounter = 0;
         public void AddSaleTransaction(BaseProduct product, int amount = 1)
         {
-            PlacerholderReceipt.AddTransaction(new SaleTransaction(product, amount, PlacerholderReceipt.ID));
+            SaleTransaction SaleTrans = new SaleTransaction(product, amount, PlacerholderReceipt.ID);
+            SaleTrans.SetID(SaleTransIDCounter++);
+            PlacerholderReceipt.AddTransaction(SaleTrans);
         }
 
         public void AddIcecreamTransaction(decimal price)
@@ -75,26 +69,16 @@ namespace P3_Projekt_WPF.Classes.Utilities
             }
             else
             {
-                Utils.GetIceCreameID();
+                Utils.GetIceCreamID();
                 if (Properties.Settings.Default.IcecreamID == -1)
                 {
                     MessageBox.Show("Du skal oprette en gruppen med navnet \"is\", for at kunne sælge is.");
-
                 }
                 else
                 {
                     AddIcecreamTransaction(price);
                 }
             }
-
-        }
-
-        public void AddFreeSaleTransaction(BaseProduct product, int amount)
-        {
-            SaleTransaction transaction = new SaleTransaction(product, amount, PlacerholderReceipt.ID);
-            transaction.Price = 0;
-            PlacerholderReceipt.AddTransaction(transaction);
-
         }
 
         public void ChangeTransactionAmount(object sender, EventArgs e, int amount)
@@ -113,6 +97,38 @@ namespace P3_Projekt_WPF.Classes.Utilities
             {
                 int productID = Convert.ToInt32(IDTag);
                 placeholderTransaction = PlacerholderReceipt.Transactions.Where(x => x.Product.ID == productID && (x.TotalPrice == (sender as ReceiptListItem).Price)).First();
+                placeholderTransaction.Amount += amount;
+                PlacerholderReceipt.UpdateTotalPrice();
+            }
+            else
+            {
+                int productID = Convert.ToInt32(IDTag);
+                placeholderTransaction = PlacerholderReceipt.Transactions.Where(x => x.Product.ID == productID).First();
+                placeholderTransaction.Amount += amount;
+                placeholderTransaction.CheckIfGroupPrice();
+                PlacerholderReceipt.UpdateTotalPrice();
+            }
+            PlacerholderReceipt.RemoveDiscountFromDiscount(placeholderTransaction);
+            PlacerholderReceipt.UpdateTotalPrice();
+        }
+
+        public void ChangeTransactionAmount(int ID, int amount)
+        {
+            string IDTag = ID.ToString();
+            SaleTransaction placeholderTransaction;
+            if (IDTag.Contains("t"))
+            {
+                int productID = Convert.ToInt32(IDTag.Replace("t", string.Empty));
+                placeholderTransaction = PlacerholderReceipt.Transactions.Where(x => x.Product.ID == productID).First();
+                placeholderTransaction.Amount += amount;
+                placeholderTransaction.CheckIfGroupPrice();
+                PlacerholderReceipt.UpdateTotalPrice();
+            }
+            else if (Convert.ToInt32(IDTag) == Properties.Settings.Default.IcecreamProductID)
+            {
+                int productID = Convert.ToInt32(IDTag);
+                decimal SalesPrice = _storageController.AllProductsDictionary[productID].SalePrice;
+                placeholderTransaction = PlacerholderReceipt.Transactions.Where(x => x.Product.ID == productID).First();
                 placeholderTransaction.Amount += amount;
                 PlacerholderReceipt.UpdateTotalPrice();
             }
@@ -159,8 +175,7 @@ namespace P3_Projekt_WPF.Classes.Utilities
             {
                 if (product is Product)
                 {
-                    //Limit??
-                    if ((product as Product).StorageWithAmount.Values.Sum() < 5)
+                    if ((product as Product).StorageWithAmount.Values.Sum() < _storageWarningLimit)
                     {
                         if (LowStorageWarning != null)
                         {
@@ -170,9 +185,10 @@ namespace P3_Projekt_WPF.Classes.Utilities
                 }
             }
         }
-
+        
         public string CompletePurchase(PaymentMethod_Enum PaymentMethod, TextBox PayWithAmount, ListView ReceiptListView, out bool CompletedPurchase)
         {
+            CompletedPurchase = false;
             if (ReceiptListView.HasItems)
             {
                 if (TotalPriceToPay == -1m)
@@ -200,13 +216,11 @@ namespace P3_Projekt_WPF.Classes.Utilities
 
                 PayWithAmount.Text = string.Empty;
                 TotalPriceToPay -= NewPayment.Amount;
-                CompletedPurchase = false;
                 if (PlacerholderReceipt.PaidPrice >= PlacerholderReceipt.TotalPrice)
                 {
                     CompletedPurchase = true;
                     SaleTransaction.SetStorageController(_storageController);
 
-                    //_POSController.PlacerholderReceipt.PaymentMethod = PaymentMethod;
                     Thread NewThread = new Thread(new ThreadStart(ExecuteReceipt));
                     NewThread.Name = "ExecuteReceipt Thread";
                     NewThread.Start();
@@ -217,22 +231,25 @@ namespace P3_Projekt_WPF.Classes.Utilities
                     ReceiptID = 0;
                     if (PlacerholderReceipt.PaidPrice > PlacerholderReceipt.TotalPrice)
                     {
-                        CompletedPurchase = true;
                         return "Retur: " + Math.Round((PlacerholderReceipt.PaidPrice - PlacerholderReceipt.TotalPrice), 2).ToString().Replace('.', ',');
                     }
                     else
                     {
-                        CompletedPurchase = true;
                         return "";
                     }
-
                 }
-                if (TotalPriceToPay != -1m)
+                if (TotalPriceToPay != -1m) 
                 {
+                    if (TotalPriceToPay == 0)
+                    {
+                        PlacerholderReceipt.Payments.Clear();
+                        PlacerholderReceipt.TotalPrice = 0;
+                        CompletedPurchase = true;
+                        return string.Empty;
+                    }
                     return Math.Round(TotalPriceToPay, 2).ToString().Replace('.', ',');
                 }
             }
-            CompletedPurchase = false;
             return string.Empty;
         }
     }

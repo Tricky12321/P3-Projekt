@@ -22,8 +22,6 @@ namespace P3_Projekt_WPF.Classes.Database
                 {
                     Thread.Sleep(1);
                 }
-                Stopwatch Timer = new Stopwatch();
-                Timer.Start();
                 while (Reader.Result.Read())
                 {
                     int fieldCount = Reader.Result.FieldCount;
@@ -31,16 +29,12 @@ namespace P3_Projekt_WPF.Classes.Database
 
                     for (int i = 0; i < fieldCount; i++)
                     {
-                        //NewRow.Colums.Add(Reader.Result[i].Equals(DBNull.Value) ? String.Empty : Reader.GetName(i));
                         NewRow.Values.Add(Reader.Result[i].Equals(DBNull.Value) ? String.Empty : Reader.Result.GetString(i));
                     }
                     RowData.Enqueue(NewRow);
                     RowCounter++;
                 }
-                Timer.Stop();
-                Debug.WriteLine("Database call took " + Timer.ElapsedMilliseconds + "ms to process");
             }
-
         }
     }
 }
